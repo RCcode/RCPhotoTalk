@@ -61,8 +61,17 @@ public class Friend implements Serializable {
 
 	private boolean isNew=false;
 	
+	private int isFriend;
 	
 	
+	public int getIsFriend() {
+		return isFriend;
+	}
+
+	public void setIsFriend(int isFriend) {
+		this.isFriend = isFriend;
+	}
+
 	public boolean isNew() {
 		return isNew;
 	}
@@ -203,7 +212,7 @@ public class Friend implements Serializable {
 
 	/* 获取朋友状态。1表示已添加，0表示未添加。 */
 	public int getStatus() {
-		return status;
+		return isFriend;
 	}
 
 	/*

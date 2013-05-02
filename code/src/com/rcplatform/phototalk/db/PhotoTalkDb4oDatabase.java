@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.db4o.Db4oEmbedded;
@@ -16,26 +17,23 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	private ObjectContainer db;
 
 	public PhotoTalkDb4oDatabase(UserInfo userInfo) {
-		// TODO Auto-generated constructor stub
-		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DatabaseUtils.getDatabasePath(userInfo));
+		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(),
+				DatabaseUtils.getDatabasePath(userInfo));
 	}
 
 	@Override
 	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends) {
-		// TODO Auto-generated method stub
 		db.store(thirdPartFriends);
 		db.commit();
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
 		db.close();
 	}
 
 	@Override
 	public List<Friend> getThirdPartFriends(int type) {
-		// TODO Auto-generated method stub
 		ThirdPartFriend example = new ThirdPartFriend();
 		example.setType(type);
 		ObjectSet<ThirdPartFriend> friends = db.queryByExample(example);
@@ -50,8 +48,12 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public List<Information> getRecordInfos() {
-		// TODO Auto-generated method stub
-		return db.query(Information.class);
+		ObjectSet<Information> infos = db.query(Information.class);
+		List<Information> result = new ArrayList<Information>();
+		for (Information info : infos) {
+			result.add(info);
+		}
+		return result;
 	}
 
 }
