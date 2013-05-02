@@ -3,6 +3,7 @@ package com.rcplatform.phototalk;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -11,6 +12,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -30,8 +32,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rcplatform.phototalk.views.AudioRecordButton;
+import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
+import com.rcplatform.phototalk.views.AudioShowView;
 import com.rcplatform.phototalk.views.ColorPicker.OnColorChangeListener;
 import com.rcplatform.phototalk.views.ColorPickerDialog;
 import com.rcplatform.phototalk.views.EditPictureView;
@@ -56,11 +63,8 @@ import com.rcplatform.phototalk.views.wheel.adapter.AbstractWheelTextAdapter;
 public class EditPictureActivity extends Activity {
 
 	private static final int UNDO_ON_CLICK = 0;
-
-	private static final int REDO_ON_CLICK = 1;
-
-	private static final int ADDTEXT_ON_CLICK = 2;
-
+	private static final int PLAY_VOICE = 1;
+	private static final int DELETE_VOICE = 2;
 	private static final int TUYA_ON_CLICK = 3;
 
 	private static final int TIMELIMIT_ON_CLICK = 4;
@@ -82,9 +86,11 @@ public class EditPictureActivity extends Activity {
 
 	private Button mButtonUndo;
 
-	// private Button mButtonRedo;
+	private RelativeLayout make_voice;
 
-	// private Button mButtonAddText;
+	private TextView voice_size;
+	private Button play_voice;
+	private Button delete_voice;
 
 	private ImageView mButtonTuya;
 
@@ -100,11 +106,7 @@ public class EditPictureActivity extends Activity {
 
 	private LinearLayout mEditText;
 
-	private boolean isShowTimeLimit;
-
 	private MenueApplication app;
-
-	private TimeChooseDialog timeChooseDialog;
 
 	private ColorPickerDialog colorPickerDialog;
 
@@ -116,6 +118,8 @@ public class EditPictureActivity extends Activity {
 
 	private boolean enableSave = true;
 	private WheelView mWheel;
+	private AudioRecordButton audioBtn;
+	private String voicePath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,16 +128,48 @@ public class EditPictureActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.edit_picture_view2);
+		audioBtn = (AudioRecordButton) findViewById(R.id.audioBtn);
+		AudioShowView view = new AudioShowView(this);
+		audioBtn.setAttentionView(getWindowManager(), view,
+				new OnRecordingListener() {
+
+					@Override
+					public void onRecording(int recordedSecord, int amplitude) {
+						// TODO Auto-generated method stub
+
+					}
+
+					@Override
+					public void endRecord(String savePath,int n) {
+						// TODO Auto-generated method stub
+						voicePath = savePath;
+						audioBtn.setVisibility(4);
+						make_voice.setVisibility(0);
+						voice_size.setText(n+"s");
+						
+					}
+				});
+
 		mEditableViewGroup = (EditableViewGroup) findViewById(R.id.edit_group);
 		mEditableViewGroup.setDrawingCacheEnabled(true);
 		app = (MenueApplication) getApplication();
+		audioBtn.setSavePath(app.getSendFileCachePath());
 		// mEditePicView = (EditPictureView) findViewById(R.id.sf_edite_pic);
 		mEditePicView = new EditPictureView(this);
 		mEditableViewGroup.addView(mEditePicView, LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
-		// mButtonRedo = (Button) findViewById(R.id.btn_edit_pic_redo);
+
+		make_voice = (RelativeLayout) findViewById(R.id.make_voice);
+		voice_size = (TextView) findViewById(R.id.voice_size);
+		play_voice = (Button) findViewById(R.id.play_voice);
+		play_voice.setTag(PLAY_VOICE);
+		play_voice.setOnClickListener(clickListener);
+		delete_voice = (Button) findViewById(R.id.delete_voice);
+		delete_voice.setTag(DELETE_VOICE);
+		delete_voice.setOnClickListener(clickListener);
+		
+		
 		mButtonUndo = (Button) findViewById(R.id.btn_edit_pic_undo);
-		// mButtonAddText = (Button) findViewById(R.id.btn_edit_pic_addText);
 		mButtonTuya = (ImageView) findViewById(R.id.btn_edit_pic_tuya);
 		mButtonTimeLimit = (Button) findViewById(R.id.btn_edit_pic_timelimit);
 		mButtonSend = (Button) findViewById(R.id.btn_edit_pic_send);
@@ -148,7 +184,8 @@ public class EditPictureActivity extends Activity {
 			public void onItemClicked(WheelView wheel, int itemIndex) {
 				// TODO Auto-generated method stub
 				if (itemIndex == getCurrentItem()) {
-					handler.obtainMessage(SET_LIMIT,itemIndex+1).sendToTarget();
+					handler.obtainMessage(SET_LIMIT, itemIndex + 1)
+							.sendToTarget();
 				} else {
 					mWheel.setCurrentItem(itemIndex);
 				}
@@ -161,9 +198,7 @@ public class EditPictureActivity extends Activity {
 		mButtonSave.setTag(SAVE_PICTURE_ON_CLICK);
 		mButtonSend.setTag(SEND_ON_CLICK);
 		mButtonClose.setTag(CLOSE_ON_CLICK);
-		// mButtonRedo.setOnClickListener(clickListener);
 		mButtonUndo.setOnClickListener(clickListener);
-		// mButtonAddText.setOnClickListener(clickListener);
 		mButtonTuya.setOnClickListener(clickListener);
 		mButtonTimeLimit.setOnClickListener(clickListener);
 		mButtonSave.setOnClickListener(clickListener);
@@ -197,7 +232,6 @@ public class EditPictureActivity extends Activity {
 								mEditText.getChildAt(0).clearFocus();
 							}
 						}
-						// boolean visible = heightDiff > screenHeight / 3;
 					}
 				});
 	}
@@ -211,6 +245,38 @@ public class EditPictureActivity extends Activity {
 			case UNDO_ON_CLICK:
 				setSaveable(true);
 				mEditePicView.undo();
+				break;
+				
+			case PLAY_VOICE:
+				MediaPlayer player = new MediaPlayer();
+				try {
+					player.setDataSource(voicePath);
+					player.prepare();
+				}
+				catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				player.start();
+				
+				
+				break;
+			case DELETE_VOICE:
+				File file = new File(voicePath);
+				if (file.exists()) {
+					file.delete();
+				}
+				audioBtn.setVisibility(0);
+				make_voice.setVisibility(4);
 				break;
 			case TUYA_ON_CLICK:
 
@@ -244,6 +310,10 @@ public class EditPictureActivity extends Activity {
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
 				app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
+				// 点击发送后实时保存
+				mEditableViewGroup.setDrawingCacheEnabled(true);
+				mEditableViewGroup.buildDrawingCache();
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
 				startSelectFriendActivity();
 				break;
 			case CLOSE_ON_CLICK:
@@ -327,28 +397,16 @@ public class EditPictureActivity extends Activity {
 
 	private void showTimeLimitView() {
 		// if (timeChooseDialog == null) {
-		final String timers[] = new String[] { "1s", "2s", "3s", "4s", "5s", "6s",
-				"7s", "8s", "9s", "10s" };
+		final String timers[] = new String[] { "1s", "2s", "3s", "4s", "5s",
+				"6s", "7s", "8s", "9s", "10s" };
 		TimeChooseAdapter adapter = new TimeChooseAdapter(this, timers);
 		adapter.setTextSize(20);
 		mWheel.setVisibleItems(3);
 		mWheel.setViewAdapter(adapter);
 		mWheel.setVisibility(View.VISIBLE);
-		// timeChooseDialog = new TimeChooseDialog(this, timers);
-		// timeChooseDialog.showTimeChooseDialog(mEditableViewGroup);
-		// timeChooseDialog.setOnDissmissListener(new
-		// TimeChooseDialog.OnDissmissListener(timeChooseDialog) {
-		//
-		// @Override
-		// public void onDismiss(int lastSelectItem) {
-		// mButtonTimeLimit.setText(timers[lastSelectItem]);
-		// mEditePicView.setTimeLimit(timers[lastSelectItem]);
-		// }
-		// });
-		// }
-		// timeChooseDialog.showTimeChooseDialog(mEditableViewGroup);
 
 	}
+
 	private class TimeChooseAdapter extends AbstractWheelTextAdapter {
 
 		private String[] mTimes;
@@ -372,10 +430,11 @@ public class EditPictureActivity extends Activity {
 		}
 
 	}
-	
+
 	public int getCurrentItem() {
 		return mWheel.getCurrentItem();
 	}
+
 	public void saveEditedPictrue(final Bitmap bitmap) {
 		showDialog();
 		new Thread(new Runnable() {
@@ -447,8 +506,9 @@ public class EditPictureActivity extends Activity {
 				break;
 			case SET_LIMIT:
 				int n = (Integer) msg.obj;
-				mButtonTimeLimit.setText(n+"");
+				mButtonTimeLimit.setText(n + "");
 				mEditePicView.setTimeLimit(n);
+				audioBtn.setMaxRecoedSize(n);
 				mWheel.setVisibility(View.GONE);
 				break;
 			}

@@ -194,11 +194,9 @@ public class MenueApplication extends Application {
 		File file = new File(getSendFileCachePath());
 		if (file.exists()) {
 			File file2 = new File(file, fileName);
-			Log.i("MENUE", file2.exists() + "、" + fileName);
 			if (file2.exists()) {
 				file2.delete();
 			}
-			Log.i("MENUE", file2.exists() + "、" + fileName);
 		}
 	}
 

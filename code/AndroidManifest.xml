@@ -40,9 +40,8 @@
 
         <!-- android:name="com.menue.photochat.TestInterfaceMainActivity" -->
         <activity
-            android:name="com.rcplatform.phototalk.WelcomeActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppBG" >
+            android:name="com.rcplatform.phototalk.TakePhotoActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -173,11 +172,11 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
-        <activity
+       <!--  <activity
             android:name="com.rcplatform.phototalk.TakePhotoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity" >
-        </activity>
+        </activity> -->
         <activity
             android:name="com.rcplatform.phototalk.EditPictureActivity"
             android:screenOrientation="portrait"

@@ -71,10 +71,40 @@
             android:layout_height="wrap_content"
             android:background="@drawable/timelimit_button_selector" />
 
+        <RelativeLayout
+            android:id="@+id/make_voice"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/btn_edit_pic_send"
+            android:layout_toRightOf="@+id/btn_edit_pic_timelimit"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/voice_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:id="@+id/play_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="播放" />
+
+            <Button
+                android:id="@+id/delete_voice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="删除" />
+        </RelativeLayout>
+
         <com.rcplatform.phototalk.views.AudioRecordButton
+            android:id="@+id/audioBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_download_n"
             android:text="按住录音" />
 
         <Button

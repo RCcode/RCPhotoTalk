@@ -59,6 +59,7 @@ import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadT
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PinyinComparator;
+import com.rcplatform.phototalk.utils.ZipUtil;
 
 public class SelectFriendsActivity extends Activity implements OnClickListener {
 
@@ -181,13 +182,13 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
                         file.createNewFile();
 
                     os = openFileOutput(file.getName(), MODE_WORLD_WRITEABLE);
-                    tempFilePath = file.getName();
                     bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
                     os.flush();
                     os.close();
                     isCached = true;
+                    ZipUtil.ZipFolder(app.getSendFileCachePath(), app.getSendFileCachePath()+".zip");
+                    tempFilePath = app.getSendFileCachePath()+".zip";
                     sendStringMessage(MSG_CACHE_FINISH, "");
-                    Log.i("MENUE", "cache " + tempFilePath);
                 }
                 catch (Exception e) {
                     isCached = true;
@@ -205,6 +206,8 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
                 }
             }
         }).start();
+        
+        
     }
 
     private void loadFriends() {
