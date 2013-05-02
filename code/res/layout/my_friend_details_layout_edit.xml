@@ -1,0 +1,65 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#b0000000"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical" >
+
+        <!-- line1 auto add -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#abc"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_gap_2x"
+                android:layout_marginRight="@dimen/default_gap_2x"
+                android:text="@string/forget_password_text_hint"
+                android:textStyle="bold" />
+        </LinearLayout>
+        <!-- line2 -->
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@id/login_id"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/ui_element_unit"
+                android:background="@null"
+                android:hint="@string/forget_password_email_address_text"
+                android:inputType="textEmailAddress"
+                android:maxLength="60"
+                android:padding="@dimen/default_gap"
+                android:textColor="@android:color/black" />
+        </LinearLayout>
+        <!-- line3 -->
+
+        <Button
+            android:id="@id/forget_password_confirm_button"
+            style="@style/LandingPageButton"
+            android:layout_below="@id/login_fields"
+            android:layout_marginLeft="@dimen/default_gap_2x"
+            android:layout_marginRight="@dimen/default_gap_2x"
+            android:layout_marginTop="@dimen/default_gap_2x"
+            android:background="@drawable/button_selector_yellow"
+            android:text="@string/ok"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+</RelativeLayout>

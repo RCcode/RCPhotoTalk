@@ -1,0 +1,250 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        Base application theme, dependent on API level. This theme is replaced
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Light">
+        <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+        -->
+    </style>
+
+    <!-- Application theme. -->
+    <style name="AppTheme" parent="AppBaseTheme">
+        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+
+    </style>
+
+    <style name="StandardButtonsAndBoxesLayout">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">@dimen/default_gap_2x</item>
+        <item name="android:layout_marginRight">@dimen/default_gap_2x</item>
+    </style>
+
+    <style name="LandingPageButton">
+        <item name="android:textSize">22.0sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">48.0dip</item>
+    </style>
+
+    <style name="DetailPageButton">
+        <item name="android:textSize">22.0sp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">48.0dip</item>
+    </style>
+
+    <style name="timerlimitdialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="titleBtnStlye">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:background">@drawable/button_bg_</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <!--
+              标题头文字 
+              
+        	       字体颜色为  白色
+        	       字体样式为  加粗
+        	       字体大小为  16sp
+        	       距离左边距  14dp
+    -->
+    <style name="titleTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:paddingLeft">0dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="ContentOverlay" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="PopupAnimation" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/popu_timelimit_enter</item>
+        <item name="android:windowExitAnimation">@anim/popu_timelimit_outer</item>
+    </style>
+
+    <!--
+              文本内容3
+                                               字体颜色为   黑色
+                                               字体大小为   12sp
+    	                   距离左边距  14dp                                                                                        
+                                              字体垂直居中
+    -->
+    <style name="contentInfoTextStyle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <!-- added by jelly.xiong -->
+
+
+    <!--
+	输入框样式
+	    
+	    字体颜色   黑色   
+	    提示字体颜色    灰色 #a5a5a5
+	    字体大小  14sp
+	    字体垂直居中
+    -->
+    <style name="editTextStlye">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">2dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColorHint">@color/gray</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:background">@null</item>
+    </style>
+
+    <style name="AppBG" parent="@android:style/Theme.Light.NoTitleBar">
+        <item name="android:background">@drawable/loading720_1280</item>
+    </style>
+    <!--
+              文本内容1
+                                               字体颜色为   黑色
+                                               字体大小为   14sp
+    	                   距离左边距  14dp                                                                                        
+                                              字体垂直居中
+    -->
+    <style name="contentTextStyle">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:paddingLeft">14dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- added end -->
+
+    <style name="AnimationActivity" mce_bogus="1" parent="@android:style/Animation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_enter_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_outer_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_enter_left</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_outer_right</item>
+    </style>
+
+    <style name="dialogWindowAnim" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/push_up_in</item>
+        <item name="android:windowExitAnimation">@anim/push_up_out</item>
+    </style>
+
+    <drawable name="translucent_background">#AA000000</drawable>
+
+    <style name="waiting_dialog" parent="@android:style/Theme.Dialog">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@drawable/translucent_background</item>
+    </style>
+    <!-- facebook styles -->
+    <color name="com_facebook_blue">#A13B5998</color>
+    <color name="com_facebook_usersettingsfragment_connected_text_color">#FFFFFF</color>
+    <color name="com_facebook_usersettingsfragment_connected_shadow_color">#000000</color>
+    <color name="com_facebook_usersettingsfragment_not_connected_text_color">#A6AED7</color>
+
+    <dimen name="com_facebook_usersettingsfragment_profile_picture_width">64dp</dimen>
+    <dimen name="com_facebook_usersettingsfragment_profile_picture_height">64dp</dimen>
+    <dimen name="com_facebook_loginview_padding_left">42dp</dimen>
+    <dimen name="com_facebook_loginview_padding_right">0dp</dimen>
+    <dimen name="com_facebook_loginview_padding_top">0dp</dimen>
+    <dimen name="com_facebook_loginview_padding_bottom">0dp</dimen>
+    <dimen name="com_facebook_loginview_width">205dp</dimen>
+    <dimen name="com_facebook_loginview_height">44dp</dimen>
+
+    <color name="com_facebook_loginview_text_color">#FFFFFF</color>
+
+    <dimen name="com_facebook_loginview_text_size">16.0sp</dimen>
+    <dimen name="com_facebook_profilepictureview_preset_size_small">50dp</dimen>
+    <dimen name="com_facebook_profilepictureview_preset_size_normal">100dp</dimen>
+    <dimen name="com_facebook_profilepictureview_preset_size_large">180dp</dimen>
+
+    <style name="com_facebook_loginview_default_style" parent="@android:style/Widget.Button">
+        <item name="android:width">@dimen/com_facebook_loginview_width</item>
+        <item name="android:height">@dimen/com_facebook_loginview_height</item>
+        <item name="android:background">@drawable/com_facebook_loginbutton_blue</item>
+        <item name="android:textColor">@color/com_facebook_loginview_text_color</item>
+        <item name="android:textSize">@dimen/com_facebook_loginview_text_size</item>
+        <item name="android:paddingLeft">@dimen/com_facebook_loginview_padding_left</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="com_facebook_loginview_silver_style" parent="@android:style/Widget.Button">
+        <item name="android:width">205dp</item>
+        <item name="android:height">44dp</item>
+        <item name="android:background">@drawable/com_facebook_loginbutton_silver</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#4B5164</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <!-- facebook end -->
+    <style name="text_base">
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="login_edittext" parent="text_base">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">@null</item>
+        <item name="android:padding">@dimen/default_gap</item>
+    </style>
+
+    <style name="listview_base">
+        <item name="android:dividerHeight">1dp</item>
+        <item name="android:cacheColorHint">@null</item>
+    </style>
+
+    <style name="expand_listview_base" parent="listview_base">
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:groupIndicator">@null</item>
+    </style>
+
+    <style name="pageIndicator">
+        <item name="dotDrawable">@drawable/gd_page_indicator_dot</item>
+    </style>
+
+    <style name="Theme.Friend_Detail" parent="android:Theme.NoTitleBar">
+
+        <!--
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.6</item>
+        -->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@drawable/translucent_background</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:colorForeground">#AA000000</item>
+    </style>
+
+</resources>

@@ -1,0 +1,52 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_transparent"
+    tools:context=".MainActivity" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/yellow"
+        android:orientation="vertical" >
+
+        <ImageButton
+            android:id="@id/picker_head_source_camera"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/default_gap"
+            android:layout_marginRight="@dimen/default_gap"
+            android:layout_marginTop="@dimen/default_gap_2x"
+            android:background="@drawable/button_selector_grey"
+            android:padding="@dimen/default_gap"
+            android:src="@drawable/settings_camera_btn_backgroud" />
+
+        <ImageButton
+            android:id="@id/picker_head_source_gallary"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="@dimen/default_gap"
+            android:layout_marginRight="@dimen/default_gap"
+            android:layout_marginTop="@dimen/default_gap_2x"
+            android:background="@drawable/button_selector_grey"
+            android:padding="@dimen/default_gap"
+            android:src="@drawable/settings_gallery_btn_background" />
+
+        <Button
+            android:id="@id/picker_head_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginBottom="@dimen/default_gap_2x"
+            android:layout_marginLeft="@dimen/default_gap"
+            android:layout_marginRight="@dimen/default_gap"
+            android:layout_marginTop="@dimen/default_gap_2x"
+            android:background="@drawable/button_selector_grey"
+            android:text="取消"
+            android:textSize="20sp"
+            android:padding="@dimen/default_gap"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+
+</RelativeLayout>

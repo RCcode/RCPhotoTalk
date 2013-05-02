@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <com.rcplatform.phototalk.views.EditableViewGroup
+        android:id="@+id/edit_group"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </com.rcplatform.phototalk.views.EditableViewGroup>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="13dip"
+        android:paddingRight="13dip"
+        android:paddingTop="21dip" >
+
+        <Button
+            android:id="@+id/btn_edit_pic_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/close_edit_button_selector" />
+
+        <Button
+            android:id="@+id/btn_edit_pic_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/save_button_selector" />
+
+        <Button
+            android:id="@+id/btn_edit_pic_undo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_toLeftOf="@id/btn_edit_pic_tuya"
+            android:background="@drawable/undo_button_selector" />
+
+        <ImageView
+            android:id="@+id/btn_edit_pic_tuya"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/scrawl_button_selector" />
+    </RelativeLayout>
+
+    <com.rcplatform.phototalk.views.wheel.WheelView
+        android:id="@+id/wv_hours"
+        android:layout_width="70dp"
+        android:layout_height="90dp"
+        android:layout_above="@id/ll"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="20dp"
+        android:background="#ffffff" />
+
+    <RelativeLayout
+        android:id="@+id/ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:paddingBottom="19dip"
+        android:paddingLeft="13dip"
+        android:paddingRight="25dip" >
+
+        <Button
+            android:id="@+id/btn_edit_pic_timelimit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/timelimit_button_selector" />
+
+        <com.rcplatform.phototalk.views.AudioRecordButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="按住录音" />
+
+        <Button
+            android:id="@+id/btn_edit_pic_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/send_edit_button_selector" />
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    
+    >
+    <ImageView 
+        android:id="@+id/iv_record_item_head"
+        android:layout_width="56dip"
+        android:layout_height="56dip"
+        android:layout_marginLeft="13dip"
+        android:layout_marginTop="16dip"
+        android:layout_marginBottom="16dip"
+        android:scaleType="fitXY"
+        android:background="@drawable/default_head"
+        android:layout_alignParentLeft="true"
+        />
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/iv_record_item_head"
+        >
+	<LinearLayout
+	    android:id="@+id/ll"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_marginTop="10dip"
+	    android:layout_marginBottom="18dip"
+	    android:layout_marginLeft="16dip"
+	    android:orientation="vertical" >
+
+	    <TextView 
+	        android:id="@+id/tv_record_item_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textSize="24sp"
+	        android:textColor="#6a6c6c"
+	        android:text="@string/sightseer"
+	        />
+	    <TextView 
+	        android:id="@+id/tv_record_item_statu"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:textColor="#747476"
+	        android:layout_marginTop="5dip"
+	        android:textSize="17sp"
+	        />
+	</LinearLayout>
+	
+	 <ProgressBar
+        android:id="@+id/progress_home_record"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+	<FrameLayout 
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentRight="true"
+	    >
+	<com.rcplatform.phototalk.views.RecordTimerLimitView 
+	    android:id="@+id/btn_record_item_statu_button"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:textSize="24sp"
+	    android:textColor="#ff000000"
+	    android:layout_marginTop="13dip"
+	    android:layout_marginRight="13dip"
+	    android:background="@drawable/receive_arrows_opened"
+	    />
+	</FrameLayout>
+	</RelativeLayout>
+</RelativeLayout>

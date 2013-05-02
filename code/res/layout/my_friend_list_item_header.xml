@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_013"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/title_bg_color" >
+
+    <TextView android:id="@+id/content_title"
+        android:layout_width="fill_parent"
+        android:layout_height="41dip"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/default_gap_2x"
+        android:text="推荐好友"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+       />
+
+
+</LinearLayout>

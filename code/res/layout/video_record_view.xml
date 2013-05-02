@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ff000000"
+    android:orientation="vertical" >
+	
+    <RelativeLayout 
+         android:id="@+id/rl_video_record_record_group"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        >
+       <com.rcplatform.phototalk.views.VideoRecordView 
+        android:id="@+id/sf_video_record_record"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_centerVertical="true"
+        />
+        <LinearLayout 
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    >
+	     <LinearLayout 
+	        android:id="@+id/ll_video_record_timer"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:visibility="gone"
+	        >
+	    <TextView 
+	        android:id="@+id/tv_video_record_timer_minute"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/video_record_timer_minutes"
+	        android:textColor="#ff0000"
+	        android:textSize="24sp"
+	        />
+	   
+	    <TextView 
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text=" : "
+	        android:textColor="#ff0000"
+	        android:textSize="24sp"
+	        />
+	     <TextView 
+	        android:id="@+id/tv_video_record_timer_second"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/video_record_timer_seconds"
+	        android:textColor="#ff0000"
+	        android:textSize="24sp"
+	        />
+	     </LinearLayout>
+	     <LinearLayout 
+	         android:layout_width="fill_parent"
+	         android:layout_height="wrap_content"
+	         android:layout_weight="1"
+	         ></LinearLayout>
+	     <Button 
+	         android:id="@+id/btn_video_record_change_camera"
+	         android:layout_width="wrap_content"
+	         android:layout_height="wrap_content"
+	         android:layout_marginRight="21dp"
+	    	android:layout_marginTop="19dip"
+	         android:background="@drawable/change_camera_button_selector"
+         />
+	   	 
+	</LinearLayout>
+    <Button 
+        android:id="@+id/btn_video_record_start_stop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/record_button_selector"
+        />
+    <Button 
+	        android:id="@+id/btn_video_record_sure"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="@string/video_record_sure"
+	        android:layout_alignParentBottom="true"
+	        android:layout_alignParentRight="true"
+	        android:visibility="gone"
+	       	
+	        />
+    </RelativeLayout>
+ 
+    <RelativeLayout 
+        android:id="@+id/rl_video_record_preview_group"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:visibility="gone"
+        >
+     <com.rcplatform.phototalk.views.PlayVidoeView 
+        android:id="@+id/sf_video_record_preview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
+     <Button 
+         android:id="@+id/btn_video_record_preview"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/video_preview"
+         android:layout_centerInParent="true"
+         />
+     </RelativeLayout>
+	
+</RelativeLayout>

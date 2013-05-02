@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/white">
+
+    <include layout="@layout/base_top_navigate" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="5dp"
+        android:orientation="vertical" >
+
+        <TextView
+            style="@style/text_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/use_new_info" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/iv_head"
+                android:layout_width="@dimen/head_image_width"
+                android:layout_height="@dimen/head_image_width"
+                android:scaleType="centerCrop" />
+
+            <EditText
+                android:id="@+id/et_nick"
+                style="@style/text_base"
+                android:maxLength="20"
+                android:layout_width="fill_parent"
+                android:hint="@string/register_nick_hint"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/text_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/use_info_below" />
+
+        <GridView
+            android:id="@+id/gv_accounts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:horizontalSpacing="10dp"
+            android:numColumns="2" >
+        </GridView>
+    </LinearLayout>
+
+</LinearLayout>

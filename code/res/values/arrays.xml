@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="all_apps_package_name_for_rcplatform">
+        <item>com.example.appa</item>
+        <item>com.example.appb</item>
+    </array>
+</resources>

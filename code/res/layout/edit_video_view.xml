@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.rcplatform.phototalk.views.EditableViewGroup   xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+	
+    <RelativeLayout 
+        android:layout_width="fill_parent"
+    	android:layout_height="fill_parent"
+    	android:background="#ff000000"
+        >
+    <com.rcplatform.phototalk.views.PlayVidoeView 
+        android:id="@+id/sf_edit_video"
+         android:layout_width="fill_parent"
+         android:layout_height="fill_parent"
+         android:layout_centerVertical="true"
+        />
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingLeft="13dip"
+        android:paddingRight="13dip"
+        android:paddingTop="21dip"
+        >
+        <Button 
+           android:id="@+id/btn_edit_video_close"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/close_edit_button_selector"
+            />
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            ></LinearLayout>
+        <Button 
+            android:id="@+id/btn_edit_video_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/addtext"
+            
+            />
+        <Button 
+            android:id="@+id/btn_edit_video_scrawl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/scrawl_button_selector"
+            />
+        
+         
+    </LinearLayout>
+    
+     <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="13dip"
+        android:paddingRight="25dip"
+        android:paddingBottom="19dip"
+        >
+        <Button 
+           android:id="@+id/btn_edit_video_mute"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:background="@drawable/mute"
+            />
+        <Button 
+            android:id="@+id/btn_edit_video_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+             android:layout_marginLeft="13dp"
+            android:background="@drawable/save_button_selector"
+            
+            />
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            ></LinearLayout>
+        <Button 
+            android:id="@+id/btn_edit_video_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/send_edit_button_selector"
+            />
+    </LinearLayout>
+    </RelativeLayout>
+</com.rcplatform.phototalk.views.EditableViewGroup>

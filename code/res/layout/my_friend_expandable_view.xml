@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/my_friend_expandable_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="44dp"
+    android:padding="2px" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_centerInParent="true" >
+        <TextView
+            android:id="@id/my_friend_expandable_view_name"
+            style="@style/contentInfoTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/my_friend_expandable_down_arrow"
+            android:text="好友推荐" />  
+
+        <ImageView
+            android:id="@id/my_friend_expandable_down_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="7dp"
+            android:background="@drawable/my_friend_expander_ic_minimized" />
+    </RelativeLayout>
+
+</RelativeLayout>

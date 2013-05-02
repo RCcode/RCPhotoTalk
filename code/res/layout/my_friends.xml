@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" android:background="@color/white">
+
+    <include layout="@layout/base_top_navigate" />
+
+    <EditText
+        android:id="@+id/et_search"
+        style="@style/text_base"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ExpandableListView
+            android:id="@+id/elv_friends"
+            style="@style/expand_listview_base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:groupIndicator="@null" >
+        </ExpandableListView>
+
+        <ExpandableListView
+            android:id="@+id/elv_search"
+            style="@style/expand_listview_base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:groupIndicator="@null" >
+        </ExpandableListView>
+    </FrameLayout>
+	
+</LinearLayout>
