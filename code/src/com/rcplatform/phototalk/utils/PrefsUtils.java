@@ -222,26 +222,4 @@ public class PrefsUtils {
 			return sh.getInt(PREF_KEY_MAX_RECORDINFO_ID, 0);
 		}
 	}
-
-	public static void savaNoticeId(Context context, String noticeId) {
-		String currentUserId = String.valueOf(MenueApplication
-				.getUserInfoInstall(context).getSuid());
-		SharedPreferences sharedPreferences = context.getSharedPreferences(
-				Contract.HOME_RECORD_INFO + currentUserId,
-				Context.MODE_WORLD_READABLE);
-		sharedPreferences.edit().putString(MenueApiFactory.NOTICE_ID, noticeId)
-				.commit();
-	}
-
-	public static String getNoticeId(Context context) {
-		if (context == null) {
-			return null;
-		}
-		String currentUserId = String.valueOf(MenueApplication
-				.getUserInfoInstall(context).getSuid());
-		SharedPreferences sp = context.getSharedPreferences(
-				Contract.HOME_RECORD_INFO + currentUserId,
-				Context.MODE_WORLD_READABLE);
-		return sp.getString(MenueApiFactory.NOTICE_ID, "0");
-	}
 }

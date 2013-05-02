@@ -17,4 +17,10 @@ public class JSONConver {
 		return new Gson().fromJson(json, new TypeToken<List<Friend>>() {
 		}.getType());
 	}
+
+	public static Friend jsonToFriend(String json) {
+		return new Gson().fromJson(json, new TypeToken<Friend>() {
+		}.getType());
+	}
+
 }

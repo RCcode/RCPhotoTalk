@@ -31,8 +31,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -40,30 +38,28 @@ import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.HomeUserRecordAdapter;
+import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.bean.DetailFriend;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceRecordInfo;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
 import com.rcplatform.phototalk.db.DatabaseFactory;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
-import com.rcplatform.phototalk.galhttprequest.RCLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.utils.Contract;
-import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.TimerLimitUtil;
@@ -85,6 +81,8 @@ import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
  */
 public class HomeActivity extends BaseActivity {
 	private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
+
+	private static final int REQUEST_CODE_DETAIL = 100;
 
 	private static final int LOAD_MORE_FAIL = 4;
 
@@ -156,14 +154,10 @@ public class HomeActivity extends BaseActivity {
 			public void run() {
 				try {
 					JSONObject obj = new JSONObject(serviceContent);
-					int newNoticeId = obj.getInt(MenueApiFactory.NOTICE_ID);
-					int oldNoticeId = Integer.parseInt(PrefsUtils
-							.getNoticeId(HomeActivity.this));
-					if (newNoticeId > oldNoticeId) {
-						PrefsUtils.savaNoticeId(HomeActivity.this,
-								String.valueOf(newNoticeId));
-					}
-
+					int noticeId = obj.getInt("noticeId");
+					PrefsUtils.User.setUserMaxRecordInfoId(HomeActivity.this,
+							getPhotoTalkApplication().getCurrentUser()
+									.getEmail(), noticeId);
 					@SuppressWarnings("unchecked")
 					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson()
 							.fromJson(obj.getJSONArray("mainUserNotice")
@@ -175,6 +169,7 @@ public class HomeActivity extends BaseActivity {
 					filterList(listinfo);
 				} catch (Exception e) {
 					e.printStackTrace();
+					sendDataLoadedMessage(null);
 				}
 			}
 		};
@@ -184,7 +179,39 @@ public class HomeActivity extends BaseActivity {
 	private void searchFriendDetailById(String atUserId,
 			final Information record) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		
+		FriendsProxy.getFriendDetail(this, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				try {
+					JSONObject jObj = new JSONObject(content);
+					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject(
+							"friendInfo").toString());
+					startFriendDetailActivity(friend);
+				} catch (JSONException e) {
+					showErrorConfirmDialog(R.string.net_error);
+				}
+				dismissLoadingDialog();
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		}, atUserId);
+	}
+
+	private void startFriendDetailActivity(Friend friend) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(this, FriendDetailActivity.class);
+		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
+		if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
+			intent.setAction(Contract.Action.ACTION_RECOMMEND_DETAIL);
+		} else {
+			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
+		}
+		startActivityForResult(intent, REQUEST_CODE_DETAIL);
 	}
 
 	@Override
@@ -270,11 +297,20 @@ public class HomeActivity extends BaseActivity {
 			public void run() {
 				List<Information> data = PhotoTalkDatabaseFactory.getDatabase()
 						.getRecordInfos();
-				if (data != null && data.size() > 0) {
-					initOrRefreshListView(data);
-				}
+				sendDataLoadedMessage(data);
 			}
 		}).start();
+	}
+
+	private void sendDataLoadedMessage(List<Information> infos) {
+		if (infos != null && infos.size() > 0) {
+			Message msg = myHandler.obtainMessage();
+			msg.what = MSG_WHAT_GET_SERVICE_RECORD_SUCCESS;
+			msg.obj = infos;
+			myHandler.sendMessage(msg);
+		} else {
+			myHandler.sendEmptyMessage(MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
+		}
 	}
 
 	private void initViewAndListener() {
@@ -380,7 +416,8 @@ public class HomeActivity extends BaseActivity {
 				int position = getPostionFromTouch(e, mRecordListView);
 				Information record = (Information) adapter.getItem(position);
 				if (record != null
-						&& (record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record
+						&& (record.getType() != InformationType.TYPE_SYSTEM_NOTICE
+								&& record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record
 								.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
 					String sUid = null;
 					if (PhotoTalkUtils.isOwnerForReocrd(HomeActivity.this,
@@ -613,12 +650,6 @@ public class HomeActivity extends BaseActivity {
 				index_of_childview = 0;
 			}
 		}
-
-		/* 这即是触摸的那个list item view. */
-		// ViewGroup child_view = (ViewGroup)
-		// listview.getChildAt(index_of_childview);
-		/* index_in_adapter即是触摸的子item view在adapter中对应的数据项 */
-		/* index_of_childview即是触摸的item view在listview中的索引 */
 		return index_in_adapter;
 	}
 
@@ -917,15 +948,9 @@ public class HomeActivity extends BaseActivity {
 				newNotices.add(record);
 			}
 		}
-		if (newNotices.size() > 0) {
+		if (newNotices != null && newNotices.size() > 0)
 			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(newNotices);
-			Message msg = myHandler.obtainMessage();
-			msg.what = MSG_WHAT_GET_SERVICE_RECORD_SUCCESS;
-			msg.obj = newNotices;
-			myHandler.sendMessage(msg);
-		} else {
-			myHandler.sendEmptyMessage(MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
-		}
+		sendDataLoadedMessage(newNotices);
 	}
 
 	private void sortList(List<Information> list) {
@@ -969,7 +994,11 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final Map<String, String> params = new HashMap<String, String>();
-		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.getNoticeId(this));
+		params.put(
+				MenueApiFactory.NOTICE_ID,
+				PrefsUtils.User.getUserMaxRecordInfoId(this,
+						getPhotoTalkApplication().getCurrentUser().getEmail())
+						+ "");
 		notifyServiceDeleteAll(params);
 		PhotoTalkDao.getInstance().deleteCurrentUserTable(this);
 		((HomeUserRecordAdapter) mRecordListView.getAdapter()).getData()

@@ -21,6 +21,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.AppAdapter;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.AddFriendTask;
@@ -110,8 +111,9 @@ public class FriendDetailActivity extends BaseActivity {
 		tvSexAge.setText(getString(R.string.friend_sex_age,
 				PhotoTalkUtils.getSexString(this, mFriend.getSex()),
 				mFriend.getAge()));
-		tvSource.setText(mFriend.getSource().getAttrType() == FriendType.CONTACT ? mFriend
-				.getSource().getValue() : mFriend.getSource().getName());
+		if (mFriend.getSource() != null) {
+			setFriendSource(mFriend.getSource());
+		}
 		btnPerform = (Button) findViewById(R.id.btn_perform);
 		hlvApps.setAdapter(new AppAdapter(this, mFriend.getAppList(),
 				mImageLoader));
@@ -120,6 +122,14 @@ public class FriendDetailActivity extends BaseActivity {
 			coverToFriendView();
 		} else if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL)) {
 			coverToRecommendView();
+		}
+	}
+
+	private void setFriendSource(FriendSourse source) {
+		if (source.getAttrType() == FriendType.CONTACT) {
+			tvSource.setText(source.getName() + ":" + source.getValue());
+		} else {
+			tvSource.setText(source.getName());
 		}
 	}
 

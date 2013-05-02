@@ -42,7 +42,8 @@ public class MenueApiUrl {
 
 	public static final String HOME_USER_NOTICE_ADD_FRIEND = USER_URL
 			+ "addFriendFromMain.do";
-
+	public static final String CONTACT_RECOMMEND_URL = USER_URL
+			+ "queryUsersByPhones.do";
 	public static final String HOME_USER_NOTICE_DELETE = NOTICE_URL
 			+ "deleteTheNotice.do";
 
@@ -74,19 +75,17 @@ public class MenueApiUrl {
 	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
 
 	public static final String ASYNC_INVITE_URL = USER_URL + "inviteUserLog.do";
+
+	public static final String FRIEND_DETAIL_URL = USER_URL + "getUserInfo.do";
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	private static final String BASE_URL_FOR_USER = BASE_URL + "useraccess/";
 
-	public static final String FRIEND_DETAIL_URL = BASE_URL_FOR_USER
-			+ "getUserInfo.do";
-	
 	public static final String RCPLATFORM_ACCOUNT_LOGIN_URL = BASE_URL_FOR_USER
 			+ "login/createUserInfo.do";
 	private static final String COMM_URL = BASE_URL_FOR_USER + "comm/";
 	public static final String SYNC_CONTACT_URL = COMM_URL
 			+ "synchroContacts.do";
-	public static final String CONTACT_RECOMMEND_URL = USER_URL
-			+ "queryUsersByPhones.do";
+
 	public static final String GET_FRIENDS_URL = USER_URL + "queryMyFriends.do";
 
 	public static final String SEND_PICTURE_URL = FILE_URL + "upload.do";
