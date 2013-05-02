@@ -17,14 +17,15 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.bean.FriendChat;
+import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 
 public class SelectedFriendsListAdapter extends BaseAdapter {
 
-    private final List<FriendChat> data;
+    private final List<Friend> data;
 
     private final Context context;
 
@@ -40,10 +41,10 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 
     public interface OnCheckBoxChangedListener {
 
-        void onChange(FriendChat friend, boolean isChecked);
+        void onChange(Friend friend, boolean isChecked);
     }
 
-    public SelectedFriendsListAdapter(Context context, List<FriendChat> data) {
+    public SelectedFriendsListAdapter(Context context, List<Friend> data) {
         this.data = data;
         this.context = context;
         mLetters = new String[data.size()];
@@ -74,8 +75,8 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Log.i("Futao", "statu =" + statu.size() + "position = " + position);
-        FriendChat friend = data.get(position);
-        friend.setPostion(position);
+        Friend friend = data.get(position);
+//        friend.setPostion(position);
         final int index = position;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.selected_friends_list_item, null);
@@ -151,7 +152,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
         return statu;
     }
 
-    public List<FriendChat> getData() {
+    public List<Friend> getData() {
         return data;
     }
 }

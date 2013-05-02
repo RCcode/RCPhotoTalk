@@ -45,10 +45,12 @@ import com.google.gson.Gson;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
+import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendChat;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
@@ -57,6 +59,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PinyinComparator;
@@ -102,7 +105,7 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
 
     private boolean isCached;
 
-    private List<FriendChat> data;
+    private List<Friend> data;
 
     protected boolean needRefresh;
 
@@ -127,7 +130,8 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         // TODO Auto-generated method stub
         super.onResume();
         progressBar.setVisibility(View.VISIBLE);
-        loadFriends();
+//        loadFriends();
+        getFriends();
     }
 
     private void initViewOrListener() {
@@ -142,16 +146,16 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                final List<FriendChat> list = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
-                FriendChat friendChat = list.get(position);
-                list.remove(friendChat);
+                final List<Friend> list = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
+                Friend Friend = list.get(position);
+                list.remove(Friend);
                 ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).notifyDataSetChanged();
-                ((SelectedFriendsListAdapter) mFriendListView.getAdapter()).getStatu().put(friendChat.getPostion(), false);
+//                ((SelectedFriendsListAdapter) mFriendListView.getAdapter()).getStatu().put(Friend.getPostion(), false);
                 ((SelectedFriendsListAdapter) mFriendListView.getAdapter()).notifyDataSetChanged();
                 mGallery.setNextFocusRightId(mGallery.getNextFocusLeftId());
             }
         });
-        SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(this, new ArrayList<FriendChat>());
+        SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(this, new ArrayList<Friend>());
         mGallery.setAdapter(adapter);
         alignGalleryToLeft(mGallery);
 
@@ -211,41 +215,41 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         
     }
 
-    private void loadFriends() {
-        PhotoCharRequestService.getInstence().postRequest(this, mLoadFriendCallBack, null, MenueApiUrl.GET_FRIENDS_URL);
-    }
+//    private void loadFriends() {
+//        PhotoCharRequestService.getInstence().postRequest(this, mLoadFriendCallBack, null, MenueApiUrl.GET_FRIENDS_URL);
+//    }
 
-    private final GalHttpLoadTextCallBack mLoadFriendCallBack = new GalHttpLoadTextCallBack() {
+//    private final GalHttpLoadTextCallBack mLoadFriendCallBack = new GalHttpLoadTextCallBack() {
+//
+//        @Override
+//        public void textLoaded(String text) {
+//            try {
+//                List<Friend> friends = jsonToFriends(text);
+//                if (friends != null && friends.size() > 0) {
+//                    data = friends;
+//                    if (isCached) {
+//                        initFriendListView(data);
+//                        data = null;
+//                        needRefresh = false;
+//                    } else {
+//                        needRefresh = true;
+//                    }
+//                }
+//            }
+//            catch (JSONException e) {
+//                e.printStackTrace();
+//                sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
+//            }
+//
+//        }
+//
+//        @Override
+//        public void loadFail() {
+//            sendStringMessage(MSG_WHAT_ERROR, getString(R.string.net_error));
+//        }
+//    };
 
-        @Override
-        public void textLoaded(String text) {
-            try {
-                List<FriendChat> friends = jsonToFriends(text);
-                if (friends != null && friends.size() > 0) {
-                    data = friends;
-                    if (isCached) {
-                        initFriendListView(data);
-                        data = null;
-                        needRefresh = false;
-                    } else {
-                        needRefresh = true;
-                    }
-                }
-            }
-            catch (JSONException e) {
-                e.printStackTrace();
-                sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
-            }
-
-        }
-
-        @Override
-        public void loadFail() {
-            sendStringMessage(MSG_WHAT_ERROR, getString(R.string.net_error));
-        }
-    };
-
-    private void initFriendListView(List<FriendChat> list) {
+    private void initFriendListView(List<Friend> list) {
         progressBar.setVisibility(View.GONE);
         SelectedFriendsListAdapter adapter = (SelectedFriendsListAdapter) mFriendListView.getAdapter();
         if (adapter == null) {
@@ -255,7 +259,7 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
                 initFriendListAdapter(list);
                 Map<Integer, Boolean> statu = ((SelectedFriendsListAdapter) mFriendListView.getAdapter()).getStatu();
                 // 获取已经选择了的联系人
-                List<FriendChat> selectedFriends = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
+                List<Friend> selectedFriends = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
                 for (Friend friend : selectedFriends) {
                     for (int i = 0; i < list.size(); i++) {
                         Friend chat = list.get(i);
@@ -268,14 +272,14 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void initFriendListAdapter(List<FriendChat> list) {
+    private void initFriendListAdapter(List<Friend> list) {
         SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(this, list);
         mFriendListView.setAdapter(adapter);
         adapter.setOnCheckBoxChangedListener(new OnCheckBoxChangedListener() {
 
             @Override
-            public void onChange(FriendChat friend, boolean isChecked) {
-                List<FriendChat> list = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
+            public void onChange(Friend friend, boolean isChecked) {
+                List<Friend> list = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
                 if (isChecked) {
                     if (!list.contains(friend))
                         list.add(friend);
@@ -292,14 +296,14 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         });
     }
 
-    private List<FriendChat> jsonToFriends(String json) throws JSONException {
+    private List<Friend> jsonToFriends(String json) throws JSONException {
         JSONObject jsonObject = new JSONObject(json);
         if (isRequestStatusOK(jsonObject)) {
             JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
             Gson gson = new Gson();
-            List<FriendChat> friends = gson.fromJson(myFriendsArray.toString(), new com.google.gson.reflect.TypeToken<ArrayList<FriendChat>>() {
+            List<Friend> friends = gson.fromJson(myFriendsArray.toString(), new com.google.gson.reflect.TypeToken<ArrayList<Friend>>() {
             }.getType());
-            TreeSet<FriendChat> fs = new TreeSet<FriendChat>(new PinyinComparator());
+            TreeSet<Friend> fs = new TreeSet<Friend>(new PinyinComparator());
             fs.addAll(friends);
             friends.clear();
             friends.addAll(fs);
@@ -350,7 +354,7 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
 
     private long timeSnap;
 
-    private void sendPicture(String desc, String imagePath, int timeLimit, List<FriendChat> friends) {
+    private void sendPicture(String desc, String imagePath, int timeLimit, List<Friend> friends) {
         timeSnap = System.currentTimeMillis();
         Map<String, String> params = new HashMap<String, String>();
         params.put(MenueApiFactory.COUNTRY, Locale.getDefault().getCountry());
@@ -388,7 +392,7 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         return jsonObject.getInt(MenueApiFactory.RESPONSE_KEY_STATUS) == MenueApiFactory.RESPONSE_STATE_SUCCESS;
     }
 
-    private String buildUserArray(List<FriendChat> friends, long time) {
+    private String buildUserArray(List<Friend> friends, long time) {
         try {
             JSONArray array = new JSONArray();
             List<Information> infoRecords = new ArrayList<Information>();
@@ -435,7 +439,7 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         // TODO Auto-generated method stub
         switch (v.getId()) {
             case R.id.btn_sfl_send:
-                List<FriendChat> data = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
+                List<Friend> data = ((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).getData();
                 if (data == null || data.size() <= 0) {
                     Toast.makeText(SelectFriendsActivity.this, R.string.please_select_contact, 1).show();
                     return;
@@ -509,4 +513,36 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
         }
         return super.onKeyDown(keyCode, event);
     }
+	private void getFriends() {
+		FriendsProxy.getMyFriendlist(this,
+				new RCPlatformResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						  try {
+				                List<Friend> friends = jsonToFriends(content);
+				                if (friends != null && friends.size() > 0) {
+				                    data = friends;
+				                    if (isCached) {
+				                        initFriendListView(data);
+				                        data = null;
+				                        needRefresh = false;
+				                    } else {
+				                        needRefresh = true;
+				                    }
+				                }
+				            }
+				            catch (JSONException e) {
+				                e.printStackTrace();
+				                sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
+				            }
+					}
+
+					@Override
+					public void onFailure(int errorCode, String content) {
+						 sendStringMessage(MSG_WHAT_ERROR, getString(R.string.net_error));
+					}
+				});
+
+	}
 }

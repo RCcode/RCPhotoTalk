@@ -52,6 +52,14 @@ public class FriendsProxy {
 		client.post(context, MenueApiUrl.GET_MY_FRIENDS_URL, responseHandler);
 		return null;
 	}
+	//田镇源 发送图片时 请求好友列表 
+	public static void getMyFriendlist(Context context,
+			RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.post(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
+	}
 
 	public static void deleteFriend(Context context,
 			RCPlatformResponseHandler responseHandler, String friendSuid) {
