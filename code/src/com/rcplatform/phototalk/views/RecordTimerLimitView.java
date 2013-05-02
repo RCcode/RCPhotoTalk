@@ -7,14 +7,14 @@ import android.os.Handler;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 
 public class RecordTimerLimitView extends TextView {
 
     private int mSeconds;
 
-    private InfoRecord infoRecord;
+    private Information infoRecord;
 
     private OnTimeEndListener endListener;
 
@@ -54,7 +54,7 @@ public class RecordTimerLimitView extends TextView {
         super.onWindowVisibilityChanged(visibility);
     }
 
-    public void scheuleTask(InfoRecord info) {
+    public void scheuleTask(Information info) {
         handler.removeCallbacks(timerTask);
         this.infoRecord = info;
         mSeconds = info.getLimitTime();

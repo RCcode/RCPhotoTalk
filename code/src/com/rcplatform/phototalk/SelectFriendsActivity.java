@@ -46,11 +46,12 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiRecordType;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendChat;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
+import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
@@ -390,8 +391,8 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
     private String buildUserArray(List<FriendChat> friends, long time) {
         try {
             JSONArray array = new JSONArray();
-            List<InfoRecord> infoRecords = new ArrayList<InfoRecord>();
-            InfoRecord record;
+            List<Information> infoRecords = new ArrayList<Information>();
+            Information record;
             for (Friend f : friends) {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("userId", f.getSuid());
@@ -399,7 +400,7 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
                 jsonObject.put("nick", f.getNick());
                 array.put(jsonObject);
 
-                record = new InfoRecord();
+                record = new Information();
                 record.setRecordId(record.hashCode() + "");
                 record.setNoticeId(MenueApiFactory.ERROR_NOTICE);
                 record.setCreatetime(time);
@@ -413,8 +414,8 @@ public class SelectFriendsActivity extends Activity implements OnClickListener {
                 record.setReceiver(user);
                 record.setUrl(tempFilePath);
                 record.setLimitTime(Integer.parseInt(this.timeLimit));
-                record.setType(MenueApiRecordType.TYPE_PICTURE_OR_VIDEO);
-                record.setStatu(MenueApiRecordType.STATU_NOTICE_SENDING);
+                record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
+                record.setStatu(InformationState.STATU_NOTICE_SENDING);
                 infoRecords.add(record);
 
             }

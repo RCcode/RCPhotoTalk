@@ -19,8 +19,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +28,6 @@ import android.view.View.OnCreateContextMenuListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
-import android.widget.ExpandableListView.ExpandableListContextMenuInfo;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
@@ -46,7 +45,7 @@ import com.rcplatform.phototalk.utils.Utils;
 
 public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private static final int MSG_WHAT_SORT_COMPLETE = 911;
-	private static final int REQUEST_KEY_RECOMMEND = 110;
+	private static final int REQUEST_KEY_DETAIL = 110;
 	private static final int REQUEST_KEY_ADD_FRIEND = 111;
 
 	private ExpandableListView mList;
@@ -67,30 +66,33 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void getFriends() {
-		List<Friend>[] friends = FriendsProxy.getMyFriend(this, new RCPlatformResponseHandler() {
+		List<Friend>[] friends = FriendsProxy.getMyFriend(this,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					JSONObject jObj = new JSONObject(content);
-					mFriends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
-					mRecommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
-					sortFriends();
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					dismissLoadingDialog();
-					showErrorConfirmDialog(R.string.net_error);
-				}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						try {
+							JSONObject jObj = new JSONObject(content);
+							mFriends = JSONConver.jsonToFriends(jObj
+									.getJSONArray("myUsers").toString());
+							mRecommends = JSONConver.jsonToFriends(jObj
+									.getJSONArray("recommendUsers").toString());
+							sortFriends();
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+							dismissLoadingDialog();
+							showErrorConfirmDialog(R.string.net_error);
+						}
 
-			}
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				});
 		if (friends != null) {
 			mFriends = friends[1];
 			mRecommends = friends[0];
@@ -99,7 +101,9 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		}
 
 	}
-	private static final int ITEM_ID=101;
+
+	private static final int ITEM_ID = 101;
+
 	private void initView() {
 		initBackButton(R.string.my_firend_title, this);
 		initForwordButton(R.string.add_friend_title, this);
@@ -112,23 +116,32 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		mList.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
 
 			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+			public void onCreateContextMenu(ContextMenu menu, View v,
+					ContextMenuInfo menuInfo) {
 				ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
-				int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-				final int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
-				final int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
+				int type = ExpandableListView
+						.getPackedPositionType(info.packedPosition);
+				final int group = ExpandableListView
+						.getPackedPositionGroup(info.packedPosition);
+				final int child = ExpandableListView
+						.getPackedPositionChild(info.packedPosition);
 				if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 					menu.setHeaderTitle(R.string.delete_friend);
-					menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-						
-						@Override
-						public boolean onMenuItemClick(MenuItem item) {
-							// TODO Auto-generated method stub
-							Friend friend=(Friend) ((PhotoTalkFriendsAdapter)mList.getExpandableListAdapter()).getChild(group, child);
-							deleteFriend(friend);
-							return false;
-						}
-					});
+					menu.add(0, ITEM_ID, 0, getString(R.string.delete))
+							.setOnMenuItemClickListener(
+									new OnMenuItemClickListener() {
+
+										@Override
+										public boolean onMenuItemClick(
+												MenuItem item) {
+											// TODO Auto-generated method stub
+											Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList
+													.getExpandableListAdapter())
+													.getChild(group, child);
+											deleteFriend(friend);
+											return false;
+										}
+									});
 				}
 			}
 		});
@@ -137,11 +150,13 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		etSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
 			}
 
 			@Override
@@ -179,8 +194,10 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private OnGroupClickListener mGroupClickListener = new OnGroupClickListener() {
 
 		@Override
-		public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-			long groupId = parent.getExpandableListAdapter().getGroupId(groupPosition);
+		public boolean onGroupClick(ExpandableListView parent, View v,
+				int groupPosition, long id) {
+			long groupId = parent.getExpandableListAdapter().getGroupId(
+					groupPosition);
 			if (groupId == PhotoTalkFriendsAdapter.TYPE_RECOMMENDS) {
 				return false;
 			}
@@ -190,9 +207,12 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private OnChildClickListener mChildClickListener = new OnChildClickListener() {
 
 		@Override
-		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+		public boolean onChildClick(ExpandableListView parent, View v,
+				int groupPosition, int childPosition, long id) {
 			// TODO Auto-generated method stub
-			Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
+			Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent
+					.getExpandableListAdapter()).getChild(groupPosition,
+					childPosition);
 			showDetail(friend);
 			return false;
 		}
@@ -204,11 +224,10 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
 			intent.setAction(Contract.Action.ACTION_RECOMMEND_DETAIL);
-			startActivityForResult(intent, REQUEST_KEY_RECOMMEND);
 		} else {
 			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
-			startActivity(intent);
 		}
+		startActivityForResult(intent, REQUEST_KEY_DETAIL);
 	}
 
 	private void sortFriends() {
@@ -230,7 +249,8 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 
 	};
 
-	private void setListData(List<Friend> mFriends, List<Friend> mRecommends, ExpandableListView list) {
+	private void setListData(List<Friend> mFriends, List<Friend> mRecommends,
+			ExpandableListView list) {
 		Map<Integer, List<Friend>> listData = new HashMap<Integer, List<Friend>>();
 		if (mFriends != null && mFriends.size() > 0) {
 			List<Friend> newFriends = new ArrayList<Friend>();
@@ -241,7 +261,8 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				}
 			}
 			if (newFriends.size() > 0) {
-				listData.put(PhotoTalkFriendsAdapter.TYPE_FRIEND_NEW, newFriends);
+				listData.put(PhotoTalkFriendsAdapter.TYPE_FRIEND_NEW,
+						newFriends);
 			}
 			listData.put(PhotoTalkFriendsAdapter.TYPE_FRIEND_ADDED, mFriends);
 
@@ -250,10 +271,12 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 			listData.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS, mRecommends);
 		}
 		if (list.getExpandableListAdapter() != null) {
-			PhotoTalkFriendsAdapter adapter = (PhotoTalkFriendsAdapter) list.getExpandableListAdapter();
+			PhotoTalkFriendsAdapter adapter = (PhotoTalkFriendsAdapter) list
+					.getExpandableListAdapter();
 			adapter.setListData(listData);
 		} else {
-			PhotoTalkFriendsAdapter adapter = new PhotoTalkFriendsAdapter(this, listData, new HashSet<Friend>(), mImageLoader);
+			PhotoTalkFriendsAdapter adapter = new PhotoTalkFriendsAdapter(this,
+					listData, new HashSet<Friend>(), mImageLoader);
 			adapter.setOnFriendAddListener(mFriendAddListener);
 			list.setAdapter(adapter);
 		}
@@ -275,31 +298,34 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private void doAddFriend(final Friend friend) {
 		// TODO Auto-generated method stub
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new RCPlatformResponseHandler() {
+		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(),
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
-				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
-				refreshList();
-				dismissLoadingDialog();
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						// TODO Auto-generated method stub
+						friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+						refreshList();
+						dismissLoadingDialog();
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				// TODO Auto-generated method stub
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		}, friend).execute();
+					@Override
+					public void onFailure(int errorCode, String content) {
+						// TODO Auto-generated method stub
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				}, friend).execute();
 	}
 
 	private void refreshList() {
 		if (mList.getExpandableListAdapter() != null) {
-			((BaseExpandableListAdapter) mList.getExpandableListAdapter()).notifyDataSetChanged();
+			((BaseExpandableListAdapter) mList.getExpandableListAdapter())
+					.notifyDataSetChanged();
 		}
 		if (mSearchList.getExpandableListAdapter() != null) {
-			((BaseExpandableListAdapter) mSearchList.getExpandableListAdapter()).notifyDataSetChanged();
+			((BaseExpandableListAdapter) mSearchList.getExpandableListAdapter())
+					.notifyDataSetChanged();
 		}
 	}
 
@@ -310,7 +336,8 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.choosebutton:
-			Intent intent = new Intent(MyFriendsActivity.this, AddFriendsActivity.class);
+			Intent intent = new Intent(MyFriendsActivity.this,
+					AddFriendsActivity.class);
 			startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
 			break;
 		}
@@ -321,11 +348,15 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			if (requestCode == REQUEST_KEY_RECOMMEND) {
-				mFriendShowDetail.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+			if (requestCode == REQUEST_KEY_DETAIL) {
+				Friend result = (Friend) data
+						.getSerializableExtra(FriendDetailActivity.RESULT_PARAM_FRIEND);
+				mFriendShowDetail.setStatus(result.getStatus());
+				mFriendShowDetail.setMark(result.getMark());
 				refreshList();
 			} else if (requestCode == REQUEST_KEY_ADD_FRIEND) {
-				List<Friend> newFriends = (List<Friend>) data.getSerializableExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
+				List<Friend> newFriends = (List<Friend>) data
+						.getSerializableExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
 				handlerAddResult(newFriends);
 			}
 
@@ -370,15 +401,16 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private void showDeleteDialog(final Friend friend) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle(R.string.delete_friend);
-		builder.setItems(new String[] { getString(R.string.delete) }, new DialogInterface.OnClickListener() {
+		builder.setItems(new String[] { getString(R.string.delete) },
+				new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
-				deleteFriend(friend);
-				dialog.dismiss();
-			}
-		});
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						deleteFriend(friend);
+						dialog.dismiss();
+					}
+				});
 		builder.show();
 	}
 

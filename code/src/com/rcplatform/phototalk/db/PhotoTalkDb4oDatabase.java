@@ -6,6 +6,7 @@ import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
@@ -39,6 +40,18 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		example.setType(type);
 		ObjectSet<ThirdPartFriend> friends = db.queryByExample(example);
 		return ThirdPartUtils.parserToFriends(friends, type);
+	}
+
+	@Override
+	public void saveRecordInfos(List<Information> recordInfos) {
+		db.store(recordInfos);
+		db.commit();
+	}
+
+	@Override
+	public List<Information> getRecordInfos() {
+		// TODO Auto-generated method stub
+		return db.query(Information.class);
 	}
 
 }

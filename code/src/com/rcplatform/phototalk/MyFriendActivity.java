@@ -70,7 +70,6 @@ import com.rcplatform.phototalk.utils.PhoneBookUtils;
 import com.rcplatform.phototalk.utils.PinyinComparator;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ShowToast;
-import com.rcplatform.phototalk.views.PVPopupWindow;
 
 /**
  * 标题、简要说明. <br>
@@ -250,7 +249,7 @@ public class MyFriendActivity extends Activity implements View.OnClickListener {
 					});
 					break;
 				case RESPONSE_FRIEND_DETAIL_SUCCESS:
-					PVPopupWindow.show(MyFriendActivity.this, mShowView, detailFriend,null);
+//					PVPopupWindow.show(MyFriendActivity.this, mShowView, detailFriend,null);
 					break;
 				case RESPONSE_FRIEND_ADD_SUCCESS:
 					sync();

@@ -19,14 +19,15 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = "000000";
-	public static String PARAM_VALUE_LANGUAGE = Locale.getDefault().getLanguage();
+	public static String PARAM_VALUE_LANGUAGE = Locale.getDefault()
+			.getLanguage();
 	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
 	public static String PARAM_VALUE_APP_ID = "1";
 
-	public static class SearchFriends{
-		public static final String PARAM_KEY_KEYWORDS="keyword";
+	public static class SearchFriends {
+		public static final String PARAM_KEY_KEYWORDS = "keyword";
 	}
-	
+
 	public static class UploadContacts {
 		public static String PARAM_KEY_NAME = "friendName";
 		public static String PARAM_KEY_PHONE_NUMBER = "friendPhone";
@@ -47,7 +48,8 @@ public class PhotoTalkParams {
 	}
 
 	public static void buildBasicParams(Context context, GalHttpRequest request) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		UserInfo userInfo = ((MenueApplication) context.getApplicationContext())
+				.getCurrentUser();
 		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getSuid());
 		request.setPostValueForKey(PARAM_KEY_TOKEN, userInfo.getToken());
 		request.setPostValueForKey(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
@@ -55,8 +57,10 @@ public class PhotoTalkParams {
 		request.setPostValueForKey(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
 	}
 
-	public static void buildBasicParams(Context context, RCPlatformAsyncHttpClient client) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+	public static void buildBasicParams(Context context,
+			RCPlatformAsyncHttpClient client) {
+		UserInfo userInfo = ((MenueApplication) context.getApplicationContext())
+				.getCurrentUser();
 		if (userInfo != null) {
 			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getSuid());
 			client.putRequestParam(PARAM_KEY_TOKEN, userInfo.getToken());
@@ -93,8 +97,21 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_FRIEND_HEAD_URL = "rhead";
 		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
 	}
-	
-	public static class DelFriends{
-		public static final String PARAM_KEY_FRIEND_ID="atUserId";
+
+	public static class DelFriends {
+		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+	}
+
+	public static class UpdateFriendRemark {
+		public static final String PARAM_KEY_REMARK = "mark";
+		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+	}
+
+	public static class RecordInfo {
+		public static final String PARAM_MAX_RECORD_ID = "noticeId";
+	}
+
+	public static class FriendDetail {
+		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
 	}
 }

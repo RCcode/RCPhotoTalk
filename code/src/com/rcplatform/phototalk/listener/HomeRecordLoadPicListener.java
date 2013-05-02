@@ -18,9 +18,9 @@ import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiRecordType;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
@@ -36,9 +36,9 @@ public class HomeRecordLoadPicListener implements ImageLoadingListener {
 
     private final Context context;
 
-    private final InfoRecord record;
+    private final Information record;
 
-    public HomeRecordLoadPicListener(ListView listView, ProgressBar bar, TextView textView, Context context, InfoRecord record) {
+    public HomeRecordLoadPicListener(ListView listView, ProgressBar bar, TextView textView, Context context, Information record) {
         super();
         this.listView = listView;
         this.bar = bar;
@@ -49,20 +49,20 @@ public class HomeRecordLoadPicListener implements ImageLoadingListener {
 
     @Override
     public void onLoadingStarted(String imageUri, View view) {
-        record.setStatu(MenueApiRecordType.STATU_NOTICE_LOADING);
+        record.setStatu(InformationState.STATU_NOTICE_LOADING);
         updateView(View.VISIBLE, context.getResources().getString(R.string.home_record_pic_loading));
     }
 
     @Override
     public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-        record.setStatu(MenueApiRecordType.STATU_NOTICE_LOAD_FAIL);
+        record.setStatu(InformationState.STATU_NOTICE_LOAD_FAIL);
         PhotoTalkDao.getInstance().updateRecordStatu(context,record);
         updateView(View.GONE, context.getResources().getString(R.string.home_record_load_fail));
     }
 
     @Override
     public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-        record.setStatu(MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED);
+        record.setStatu(InformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
         record.setLastUpdateTime(System.currentTimeMillis());
         // 把本地数据的这条记录改为2
         PhotoTalkDao.getInstance().updateRecordStatu(context,record);
@@ -78,7 +78,7 @@ public class HomeRecordLoadPicListener implements ImageLoadingListener {
 
     }
 
-    private static void notifyServer(Context context, InfoRecord record) {
+    private static void notifyServer(Context context, Information record) {
         Gson gson = new Gson();
         ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId() + "", record.getType() + "");
         List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
