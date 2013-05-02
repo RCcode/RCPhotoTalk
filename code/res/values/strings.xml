@@ -243,4 +243,6 @@
 	<string name="invite_fail">取消好友邀请</string>
 	<string name="add_friend_title">添加好友</string>
 	<string name="delete_friend">删除好友</string>
+	<string name="set_friend_remark">设置好友备注名称</string>
+	<string name="remark_hint">输入备注名</string>
 </resources>

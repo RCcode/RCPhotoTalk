@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.api.PhotoTalkParams;
 import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.task.ContactUploadTask;
@@ -69,13 +70,14 @@ public class PTBackgroundService extends Service {
 	}
 
 	public void setCurrentUser(UserInfo currentUser) {
-		if (mCurrentUser == null || (currentUser.getSuid() != mCurrentUser.getSuid())) {
+		if (mCurrentUser == null
+				|| (currentUser.getSuid() != mCurrentUser.getSuid())) {
 			cancelCurrentBindCheckTask();
 			cancelCurrentThirdAsync();
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
 			startThirdpartAsync();
-			
+
 		}
 	}
 
@@ -99,19 +101,27 @@ public class PTBackgroundService extends Service {
 		// TODO Auto-generated method stub
 		if (FacebookUtil.isFacebookVlidate(getApplicationContext())) {
 			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~facebook has authorized~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			long lastRefreshTime = PrefsUtils.User.getFacebookLastAsyncTime(getApplicationContext(), mCurrentUser.getEmail());
+			long lastRefreshTime = PrefsUtils.User.getFacebookLastAsyncTime(
+					getApplicationContext(), mCurrentUser.getEmail());
 			if (mFacebookAsyncPI == null) {
 				Intent intent = new Intent(ACTION_ASYNC_THIRDPART);
-				intent.putExtra(INTENT_PARAM_KEY_THIRD_PART, Contract.THIRD_PART_TYPE_FACEBOOK);
-				mFacebookAsyncPI = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+				intent.putExtra(INTENT_PARAM_KEY_THIRD_PART,
+						FriendType.FACEBOOK);
+				mFacebookAsyncPI = PendingIntent.getBroadcast(
+						getApplicationContext(), 0, intent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
 			}
 			registeThirdAsyncReceiver();
 			AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 			if ((System.currentTimeMillis() - lastRefreshTime) >= MAX_THIRD_PART_ASYNC_SPACING_TIME) {
-				manager.setRepeating(AlarmManager.RTC_WAKEUP, 0, MAX_THIRD_PART_ASYNC_SPACING_TIME, mFacebookAsyncPI);
+				manager.setRepeating(AlarmManager.RTC_WAKEUP, 0,
+						MAX_THIRD_PART_ASYNC_SPACING_TIME, mFacebookAsyncPI);
 			} else {
-				long delay = MAX_THIRD_PART_ASYNC_SPACING_TIME - (System.currentTimeMillis() - lastRefreshTime);
-				manager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, MAX_THIRD_PART_ASYNC_SPACING_TIME, mFacebookAsyncPI);
+				long delay = MAX_THIRD_PART_ASYNC_SPACING_TIME
+						- (System.currentTimeMillis() - lastRefreshTime);
+				manager.setRepeating(AlarmManager.RTC_WAKEUP,
+						System.currentTimeMillis() + delay,
+						MAX_THIRD_PART_ASYNC_SPACING_TIME, mFacebookAsyncPI);
 			}
 		}
 	}
@@ -127,8 +137,10 @@ public class PTBackgroundService extends Service {
 
 		if (isUserNeedToBindPhone(mCurrentUser)) {
 			// 如果号码没有绑定，而且绑定短信发送成功过
-			boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), mCurrentUser.getEmail());
-			long lastBindTime = PrefsUtils.User.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getEmail());
+			boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(
+					getApplicationContext(), mCurrentUser.getEmail());
+			long lastBindTime = PrefsUtils.User.getLastBindPhoneTryTime(
+					getApplicationContext(), mCurrentUser.getEmail());
 			if (lastBindTime == 0) {
 				// 一次都没有发送成功过
 				bindSuidByPhone(Contract.BIND_PHONE_NUMBER, mCurrentUser);
@@ -145,7 +157,8 @@ public class PTBackgroundService extends Service {
 	}
 
 	private boolean isUserNeedToBindPhone(UserInfo userInfo) {
-		return userInfo != null && userInfo.getPhone() == null && android.os.Build.SERIAL.equals(userInfo.getDeviceId());
+		return userInfo != null && userInfo.getPhone() == null
+				&& android.os.Build.SERIAL.equals(userInfo.getDeviceId());
 	}
 
 	@Override
@@ -156,13 +169,15 @@ public class PTBackgroundService extends Service {
 	}
 
 	private void registeNetConnectionReceiver() {
-		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+		IntentFilter filter = new IntentFilter(
+				ConnectivityManager.CONNECTIVITY_ACTION);
 		mConnectivityReceiver = new ConnectivityReceiver();
 		registerReceiver(mConnectivityReceiver, filter);
 	}
 
 	private void startUploadContact() {
-		ContactUploadTask task = ContactUploadTask.getInstance(getApplicationContext());
+		ContactUploadTask task = ContactUploadTask
+				.getInstance(getApplicationContext());
 		if (task.getStatus() == Status.STATUS_FINISH) {
 			task = ContactUploadTask.createNewTask(getApplicationContext());
 			task.startUpload();
@@ -209,12 +224,17 @@ public class PTBackgroundService extends Service {
 	 * @param number
 	 */
 	private void sendSMS(String number) {
-		LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+		LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number
+				+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
-		PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
+		PendingIntent sendPI = PendingIntent.getBroadcast(this, 0,
+				deliveryIntent, 0);
 		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendTextMessage(number, null, RCPlatformTextUtil.getSMSMessage(mCurrentUser.getSuid(), Contract.APP_ID), sendPI, null);
-		PrefsUtils.User.setLastBindNumber(getApplicationContext(), mCurrentUser.getEmail(), number);
+		smsManager.sendTextMessage(number, null, RCPlatformTextUtil
+				.getSMSMessage(mCurrentUser.getSuid(), Contract.APP_ID),
+				sendPI, null);
+		PrefsUtils.User.setLastBindNumber(getApplicationContext(),
+				mCurrentUser.getEmail(), number);
 	}
 
 	/**
@@ -243,7 +263,7 @@ public class PTBackgroundService extends Service {
 			// TODO Auto-generated method stub
 			int type = intent.getIntExtra(INTENT_PARAM_KEY_THIRD_PART, -1);
 			switch (type) {
-			case Contract.THIRD_PART_TYPE_FACEBOOK:
+			case FriendType.FACEBOOK:
 				uploadFacebookInfo();
 				break;
 			default:
@@ -261,19 +281,27 @@ public class PTBackgroundService extends Service {
 			String actionName = intent.getAction();
 			int resultCode = getResultCode();
 
-			if (isUserNeedToBindPhone(mCurrentUser) && actionName.equals(ACTION_SMS_SEND)) {
+			if (isUserNeedToBindPhone(mCurrentUser)
+					&& actionName.equals(ACTION_SMS_SEND)) {
 				switch (resultCode) {
 				case Activity.RESULT_OK:
 					LogUtil.i("sms send success");
 					long time = System.currentTimeMillis();
-					PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), time, mCurrentUser.getEmail());
-					getBindPhoneNumberFromService(BIND_STATE_CHECK_DELAY_TIME, mCurrentUser);
+					PrefsUtils.User.setLastBindPhoneTime(
+							getApplicationContext(), time,
+							mCurrentUser.getEmail());
+					getBindPhoneNumberFromService(BIND_STATE_CHECK_DELAY_TIME,
+							mCurrentUser);
 					unregisterReceiver(this);
-					sendSMSStateToService(PrefsUtils.User.getLastBindNumber(getApplicationContext(), mCurrentUser.getEmail()), time);
+					sendSMSStateToService(PrefsUtils.User.getLastBindNumber(
+							getApplicationContext(), mCurrentUser.getEmail()),
+							time);
 					break;
 				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
 					if (isUserNeedToBindPhone(mCurrentUser)) {
-						sendSMS(PrefsUtils.User.getLastBindNumber(getApplicationContext(), mCurrentUser.getEmail()));
+						sendSMS(PrefsUtils.User.getLastBindNumber(
+								getApplicationContext(),
+								mCurrentUser.getEmail()));
 					}
 					break;
 				case SmsManager.RESULT_ERROR_NO_SERVICE:
@@ -301,15 +329,20 @@ public class PTBackgroundService extends Service {
 		registerReceiver(mBindPhoneStateReceiver, filter);
 
 		Intent intent = new Intent(ACTION_CHECK_BIND_PHONE);
-		mCheckBindStatePI = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		mCheckBindStatePI = PendingIntent.getBroadcast(getApplicationContext(),
+				0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), userInfo.getEmail());
+		boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(
+				getApplicationContext(), userInfo.getEmail());
 		if (willTryToBind) {
 			LogUtil.e("~~~~~~~~~~~~~~now try to bind first sms number start get state from service~~~~~~~~~~~~~~");
-			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, BIND_STATE_CHECK_SPACING_TIME, mCheckBindStatePI);
+			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+					System.currentTimeMillis() + delay,
+					BIND_STATE_CHECK_SPACING_TIME, mCheckBindStatePI);
 		} else {
 			LogUtil.e("~~~~~~~~~~~~~~now try to bind second sms number start get state from service~~~~~~~~~~~~~~");
-			alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, mCheckBindStatePI);
+			alarmManager.set(AlarmManager.RTC_WAKEUP,
+					System.currentTimeMillis() + delay, mCheckBindStatePI);
 		}
 	}
 
@@ -318,39 +351,49 @@ public class PTBackgroundService extends Service {
 		@Override
 		public void onReceive(final Context context, Intent intent) {
 			LogUtil.e("~~~~~~~~~~~~~~start request service to get bind phone number~~~~~~~~~~~~~~");
-			mGetBindPhoneTask = new GetBindPhoneTask(getApplicationContext(), new OnBindSuccessListener() {
+			mGetBindPhoneTask = new GetBindPhoneTask(getApplicationContext(),
+					new OnBindSuccessListener() {
 
-				@Override
-				public void onBindSuccess(String phoneNumber) {
-					LogUtil.e("~~~~~~~~~~~~~~already bind phone number~~~~~~~~~~~~~~");
+						@Override
+						public void onBindSuccess(String phoneNumber) {
+							LogUtil.e("~~~~~~~~~~~~~~already bind phone number~~~~~~~~~~~~~~");
 
-					if (isUserNeedToBindPhone(mCurrentUser)) {
-						PrefsUtils.User.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mCurrentUser.getEmail());
-					}
-					cancelCurrentBindCheckTask();
-				}
+							if (isUserNeedToBindPhone(mCurrentUser)) {
+								PrefsUtils.User.saveBindedPhoneNumber(
+										getApplicationContext(), phoneNumber,
+										mCurrentUser.getEmail());
+							}
+							cancelCurrentBindCheckTask();
+						}
 
-				@Override
-				public void onBindFail() {
-					// TODO Auto-generated method stub
-					LogUtil.e("~~~~~~~~~~~~~~haven't binded phone number~~~~~~~~~~~~~~");
-					boolean willTry = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), mCurrentUser.getEmail());
-					if (isUserNeedToBindPhone(mCurrentUser) && isOverBindWaitingTime() && willTry) {
-						// 判断，如果距离上次发短信时间已经大于一天，而且仍要进行绑定，同时当前有登陆的用户，同时该用户需要绑定手机号，则使用备用短信平台发送短信
-						LogUtil.e("~~~~~~~~~~~~~~over max wait time try second sms number~~~~~~~~~~~~~~");
-						cancelCurrentBindCheckTask();
-						bindSuidByPhone(Contract.BIND_PHONE_NUMBER_BACKUP, mCurrentUser);
-					} else if (!willTry) {
-						cancelCurrentBindCheckTask();
-					}
-				}
-			});
+						@Override
+						public void onBindFail() {
+							// TODO Auto-generated method stub
+							LogUtil.e("~~~~~~~~~~~~~~haven't binded phone number~~~~~~~~~~~~~~");
+							boolean willTry = PrefsUtils.User
+									.willTryToBindPhone(
+											getApplicationContext(),
+											mCurrentUser.getEmail());
+							if (isUserNeedToBindPhone(mCurrentUser)
+									&& isOverBindWaitingTime() && willTry) {
+								// 判断，如果距离上次发短信时间已经大于一天，而且仍要进行绑定，同时当前有登陆的用户，同时该用户需要绑定手机号，则使用备用短信平台发送短信
+								LogUtil.e("~~~~~~~~~~~~~~over max wait time try second sms number~~~~~~~~~~~~~~");
+								cancelCurrentBindCheckTask();
+								bindSuidByPhone(
+										Contract.BIND_PHONE_NUMBER_BACKUP,
+										mCurrentUser);
+							} else if (!willTry) {
+								cancelCurrentBindCheckTask();
+							}
+						}
+					});
 			mGetBindPhoneTask.start();
 		}
 	};
 
 	private boolean isOverBindWaitingTime() {
-		long lastSendTime = PrefsUtils.User.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getEmail());
+		long lastSendTime = PrefsUtils.User.getLastBindPhoneTryTime(
+				getApplicationContext(), mCurrentUser.getEmail());
 		return (System.currentTimeMillis() - lastSendTime) > MAX_BIND_WAITING_TIME;
 	}
 
@@ -360,7 +403,8 @@ public class PTBackgroundService extends Service {
 			mBindPhoneStateReceiver = null;
 		}
 		if (mCheckBindStatePI != null) {
-			AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+			AlarmManager alarmManager = (AlarmManager) getApplicationContext()
+					.getSystemService(Context.ALARM_SERVICE);
 			alarmManager.cancel(mCheckBindStatePI);
 			mCheckBindStatePI = null;
 		}
@@ -369,24 +413,30 @@ public class PTBackgroundService extends Service {
 	}
 
 	private void sendSMSStateToService(String number, long time) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
 		PhotoTalkParams.buildBasicParams(getApplicationContext(), client);
-		client.putRequestParam(PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_TIME, time + "");
-		client.putRequestParam(PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_NUMBER, number);
-		client.post(getApplicationContext(), MenueApiUrl.UPDATE_PHONE_BIND_STATE_URL, new RCPlatformResponseHandler() {
+		client.putRequestParam(
+				PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_TIME, time + "");
+		client.putRequestParam(
+				PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_NUMBER, number);
+		client.post(getApplicationContext(),
+				MenueApiUrl.UPDATE_PHONE_BIND_STATE_URL,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
-				LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~response is " + content + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						// TODO Auto-generated method stub
+						LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~response is "
+								+ content + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				// TODO Auto-generated method stub
-				LogUtil.e(content + "");
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						// TODO Auto-generated method stub
+						LogUtil.e(content + "");
+					}
+				});
 	}
 
 	private List<ThirdPartFriend> mFriends;
@@ -395,52 +445,60 @@ public class PTBackgroundService extends Service {
 	private boolean hasFriendsLoaded = false;
 
 	public void uploadFacebookInfo() {
-		boolean vlidate = FacebookUtil.isFacebookVlidate(getApplicationContext());
+		boolean vlidate = FacebookUtil
+				.isFacebookVlidate(getApplicationContext());
 		if (vlidate) {
-			hasUserInfoLoaed=false;
-			hasFriendsLoaded=false;
-			Session session = Session.openActiveSessionFromCache(getApplicationContext());
+			hasUserInfoLoaed = false;
+			hasFriendsLoaded = false;
+			Session session = Session
+					.openActiveSessionFromCache(getApplicationContext());
 			Request.executeMeRequestAsync(session, new GraphUserCallback() {
 
 				@Override
 				public void onCompleted(GraphUser user, Response response) {
 					mUser = user;
-					if(mUser==null)
+					if (mUser == null)
 						return;
-					hasUserInfoLoaed=true;
+					hasUserInfoLoaed = true;
 					if (hasFriendsLoaded) {
 						onFacebookInfoloaded(mUser, mFriends);
 					}
 				}
 			});
-			Request request = Request.newMyFriendsRequest(session, new GraphUserListCallback() {
+			Request request = Request.newMyFriendsRequest(session,
+					new GraphUserListCallback() {
 
-				@Override
-				public void onCompleted(List<GraphUser> users, Response response) {
-					if(users==null){
-						return;
-					}else{
-						hasFriendsLoaded=true;
-					}
-					mFriends = FacebookUtil.buildFriends(users);
-					if (hasUserInfoLoaed) {
-						hasFriendsLoaded = true;
-						onFacebookInfoloaded(mUser, mFriends);
-					}
-				}
-			});
+						@Override
+						public void onCompleted(List<GraphUser> users,
+								Response response) {
+							if (users == null) {
+								return;
+							} else {
+								hasFriendsLoaded = true;
+							}
+							mFriends = FacebookUtil.buildFriends(users);
+							if (hasUserInfoLoaed) {
+								hasFriendsLoaded = true;
+								onFacebookInfoloaded(mUser, mFriends);
+							}
+						}
+					});
 			request.executeAsync();
 		}
 	}
 
-	private void onFacebookInfoloaded(GraphUser user, List<ThirdPartFriend> friends) {
-		mFacebookAsyncTask = new FacebookUploadTask(getApplicationContext(), friends, user);
+	private void onFacebookInfoloaded(GraphUser user,
+			List<ThirdPartFriend> friends) {
+		mFacebookAsyncTask = new FacebookUploadTask(getApplicationContext(),
+				friends, user);
 		mFacebookAsyncTask.setResponseListener(new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				// TODO Auto-generated method stub
-				PrefsUtils.User.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getEmail(), System.currentTimeMillis());
+				PrefsUtils.User.refreshFacebookAsyncTime(
+						getApplicationContext(), mCurrentUser.getEmail(),
+						System.currentTimeMillis());
 				LogUtil.e("upload facebook success");
 			}
 

@@ -1,6 +1,6 @@
 package com.rcplatform.phototalk.bean;
 
-public class InfoRecord {
+public class Information {
 
     protected String recordId;
 
@@ -34,11 +34,11 @@ public class InfoRecord {
 
     protected boolean loading = false;
 
-    public InfoRecord() {
+    public Information() {
         // TODO Auto-generated constructor stub
     }
 
-    public InfoRecord(String id, int statu, long lastUpdateTime) {
+    public Information(String id, int statu, long lastUpdateTime) {
         this.recordId = id;
         this.statu = statu;
         this.lastUpdateTime = lastUpdateTime;
@@ -178,9 +178,9 @@ public class InfoRecord {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof InfoRecord))
+        if (!(o instanceof Information))
             return false;
-        InfoRecord info = (InfoRecord) o;
+        Information info = (Information) o;
         return this.recordId.equals(info.getRecordId()) && this.type == info.getType();
 
     }

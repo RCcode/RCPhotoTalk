@@ -10,13 +10,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
 
 public class GLTimer extends TextView {
 
     private int mSeconds;
 
-    private InfoRecord infoRecord;
+    private Information infoRecord;
 
     private OnTimeEndListener endListener;
 
@@ -52,7 +52,7 @@ public class GLTimer extends TextView {
         super.onWindowVisibilityChanged(visibility);
     }
 
-    public void scheuleTask(InfoRecord info) {
+    public void scheuleTask(Information info) {
         this.infoRecord = info;
         // setVisibility(View.VISIBLE);
         handler.removeCallbacks(timerTask);

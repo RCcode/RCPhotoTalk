@@ -22,7 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
@@ -54,7 +54,7 @@ public class MenueApplication extends Application {
 
 	private int mScreentHeight;
 
-	public Map<Long, List<InfoRecord>> sendRecords;
+	public Map<Long, List<Information>> sendRecords;
 
 	private static UserInfo userInfo;
 
@@ -159,21 +159,21 @@ public class MenueApplication extends Application {
 		mActivityMap.remove(key);
 	}
 
-	public void addSendRecords(long key, List<InfoRecord> list) {
+	public void addSendRecords(long key, List<Information> list) {
 		if (sendRecords == null)
-			sendRecords = new HashMap<Long, List<InfoRecord>>();
+			sendRecords = new HashMap<Long, List<Information>>();
 		sendRecords.put(key, list);
 
 	}
 
-	public List<InfoRecord> getSendRecordsList(long key) {
+	public List<Information> getSendRecordsList(long key) {
 		if (sendRecords == null)
 			return null;
 		else
 			return sendRecords.get(key);
 	}
 
-	public Map<Long, List<InfoRecord>> getSendRecords() {
+	public Map<Long, List<Information>> getSendRecords() {
 		if (sendRecords == null)
 			return null;
 		else

@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteStatement;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.bean.DetailFriend;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.utils.SQLiteUtil;
@@ -76,13 +76,13 @@ public class PhotoTalkDao {
 		return mDao;
 	}
 
-	public synchronized List<InfoRecord> loadTMoreInfoRecord(Context context,
+	public synchronized List<Information> loadTMoreInfoRecord(Context context,
 			int count, String createTime) {
 		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
 				context).getSuid());
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
-		List<InfoRecord> list = new ArrayList<InfoRecord>();
-		InfoRecord record;
+		List<Information> list = new ArrayList<Information>();
+		Information record;
 		RecordUser sender;
 		RecordUser receicer;
 		Cursor cursor = null;
@@ -100,7 +100,7 @@ public class PhotoTalkDao {
 					+ createTime + " ORDER BY create_time DESC limit " + count,
 					null);
 			while (cursor.moveToNext()) {
-				record = new InfoRecord();
+				record = new Information();
 				record.setRecordId(cursor.getString(0));
 
 				sender = new RecordUser();
@@ -134,13 +134,13 @@ public class PhotoTalkDao {
 		return list;
 	}
 
-	public synchronized List<InfoRecord> loadTopCountInfoRecord(
+	public synchronized List<Information> loadTopCountInfoRecord(
 			Context context, int count) {
 		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
 				context).getSuid());
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
-		List<InfoRecord> list = new ArrayList<InfoRecord>();
-		InfoRecord record;
+		List<Information> list = new ArrayList<Information>();
+		Information record;
 		RecordUser sender;
 		RecordUser receicer;
 		Cursor cursor = null;
@@ -157,7 +157,7 @@ public class PhotoTalkDao {
 					+ USER_RECORD + " ORDER BY create_time DESC limit " + count;
 			cursor = db.rawQuery(querySql, null);
 			while (cursor.moveToNext()) {
-				record = new InfoRecord();
+				record = new Information();
 				record.setRecordId(cursor.getString(0));
 
 				sender = new RecordUser();
@@ -197,7 +197,7 @@ public class PhotoTalkDao {
 	// private SQLiteStatement myInsertRecordUserStatement;
 
 	public synchronized void insertInfoRecord(Context context,
-			List<InfoRecord> data) {
+			List<Information> data) {
 		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
 				context).getSuid());
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
@@ -214,7 +214,7 @@ public class PhotoTalkDao {
 					+ RECORD_URL + "," + RECORD_NOTICE_ID + ")"
 					+ " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
 			db.beginTransaction();
-			InfoRecord record;
+			Information record;
 			for (int i = 0; i < data.size(); i++) {
 				record = data.get(i);
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 1,
@@ -267,7 +267,7 @@ public class PhotoTalkDao {
 	private SQLiteStatement myUpdateRecordStatement;
 
 	public synchronized void updateRecordStatu(Context context,
-			InfoRecord infoRecord) {
+			Information infoRecord) {
 		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
 				context).getSuid());
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
@@ -289,20 +289,20 @@ public class PhotoTalkDao {
 
 	}
 
-	public synchronized InfoRecord findRecordByRecordId(Context context,
+	public synchronized Information findRecordByRecordId(Context context,
 			String id) {
 		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
 				context).getSuid());
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		Cursor cursor = null;
-		InfoRecord record = null;
+		Information record = null;
 		try {
 			cursor = db.rawQuery("SELECT " + RECORD_ID + ", " + RECORD_STATU
 					+ " FROM " + USER_RECORD + " WHERE " + RECORD_ID + " = "
 					+ id, null);
 			while (cursor.moveToNext()) {
-				record = new InfoRecord();
+				record = new Information();
 				record.setRecordId(cursor.getString(0));
 				record.setStatu(cursor.getInt(1));
 			}
@@ -352,13 +352,13 @@ public class PhotoTalkDao {
 		}
 	}
 
-	public synchronized List<InfoRecord> findInfoRecordByType(Context context,
+	public synchronized List<Information> findInfoRecordByType(Context context,
 			int type) {
 		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
 				context).getSuid());
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
-		List<InfoRecord> list = new ArrayList<InfoRecord>();
-		InfoRecord record;
+		List<Information> list = new ArrayList<Information>();
+		Information record;
 		RecordUser sender;
 		RecordUser receicer;
 		Cursor cursor = null;
@@ -375,7 +375,7 @@ public class PhotoTalkDao {
 					+ USER_RECORD + " WHERE " + RECORD_TYPE + " = " + type;
 			cursor = db.rawQuery(querySql, null);
 			while (cursor.moveToNext()) {
-				record = new InfoRecord();
+				record = new Information();
 				record.setRecordId(cursor.getString(0));
 
 				sender = new RecordUser();

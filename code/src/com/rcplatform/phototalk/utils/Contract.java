@@ -87,9 +87,7 @@ public class Contract {
 	public static final String KEY_BIRTHDAY = "birthday";
 
 	public static final String KEY_DEVICE_ID = "deviceid";
+	
+	public static final String KEY_MAX_RECORD_ID="max_record_id";
 
-	/**
-	 * 第三方类型
-	 */
-	public static final int THIRD_PART_TYPE_FACEBOOK = 1;
 }

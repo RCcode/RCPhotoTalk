@@ -22,7 +22,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.bean.DetailFriend;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
@@ -31,7 +30,6 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
-import com.rcplatform.phototalk.views.PVPopupWindow;
 
 /**
  * 好友搜索页面
@@ -75,10 +73,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		mAdapter = new SearchFriendsAdapter();
 		mListView.setAdapter(mAdapter);
 
-	}
-
-	protected void showDetail(DetailFriend detailFriend2) {
-		PVPopupWindow.show(this, mShowView, detailFriend2, null);
 	}
 
 	@Override

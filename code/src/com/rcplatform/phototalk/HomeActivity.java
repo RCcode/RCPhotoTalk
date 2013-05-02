@@ -18,6 +18,7 @@ import android.graphics.Rect;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
@@ -33,7 +34,6 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -41,10 +41,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.HomeUserRecordAdapter;
 import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiRecordType;
 import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.DetailFriend;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
+import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceRecordInfo;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
@@ -52,12 +54,14 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
 import com.rcplatform.phototalk.db.DatabaseFactory;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.RCLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -66,7 +70,6 @@ import com.rcplatform.phototalk.utils.TimerLimitUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
-import com.rcplatform.phototalk.views.PVPopupWindow;
 import com.rcplatform.phototalk.views.PullToRefreshView;
 import com.rcplatform.phototalk.views.PullToRefreshView.OnFooterRefreshListener;
 import com.rcplatform.phototalk.views.PullToRefreshView.OnHeaderRefreshListener;
@@ -77,24 +80,11 @@ import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
  * 主界面. <br>
  * 主界面记录了用户最近的一些记录，包括给哪些好友发送了图片，收到了哪些好友的发送的图片或者好友添加通知，通过主界面可以进入拍照界面，
  * 拍照完成后后可以进行编辑和发送给好友
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-13 下午2:09:14
- * <p>
- * Team:Menue Beijing
- * <p>
  * 
- * @author tao.fu@menue.com.cn
  * @version 1.0.0
  */
 public class HomeActivity extends BaseActivity {
-
-	private static final int OPENDE = 0;
-
-	private static final int ENSURE_ADD = 1;
-
-	private static final int LOAD_SUCCESS = 2;
-
-	private static final int LOAD_FAIL = 3;
+	private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
 
 	private static final int LOAD_MORE_FAIL = 4;
 
@@ -130,8 +120,6 @@ public class HomeActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		// insertData();
-
 		app = (MenueApplication) getApplication();
 		app.addActivity(this.getClass().getName(), this);
 		// 如果当前账号是第一次登陆就会去为当前用户创建相关表
@@ -141,66 +129,62 @@ public class HomeActivity extends BaseActivity {
 		initViewAndListener();
 		// 进来后首先从数据库里面查找记录
 		loadDataFromDataBase();
-		// 查出记录后，开始去服务器去最新消息和状态
-		mRefreshView.setRefreshing();
-		loadDataFromService();
+		loadRecords();
 
 	}
 
-	private void searchFriendDetailById(String atUserId, final InfoRecord record) {
-		/*
-		 * {"token":"000000","userId":"DcZTw+RZVA8=","keyword":"xxxx","language":
-		 * "zh_CN","deviceId":"123456"}
-		 */
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		GalHttpRequest request = GalHttpRequest.requestWithURL(this,
-				MenueApiUrl.FRIEND_DETAIL_URL);
-		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
-		request.setPostValueForKey(MenueApiFactory.USERID, userInfo.getSuid());
-		request.setPostValueForKey(MenueApiFactory.TOKEN, userInfo.getToken());
-		request.setPostValueForKey(MenueApiFactory.ATUSERID, atUserId);
-		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale
-				.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.DEVICE_ID,
-				android.os.Build.DEVICE);
-		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
-		request.startAsynRequestString(new RCLoadTextCallBack(this) {
+	private void loadRecords() {
+		mRefreshView.setRefreshing();
+		RecordInfoProxy.getAllRecordInfos(this,
+				new RCPlatformResponseHandler() {
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						handleServiceRecordInfo(content);
+					}
 
+					@Override
+					public void onFailure(int errorCode, String content) {
+						showErrorConfirmDialog(content);
+						mRefreshView.onHeaderRefreshComplete();
+					}
+				});
+	}
+
+	private void handleServiceRecordInfo(final String serviceContent) {
+		Thread thread = new Thread() {
 			@Override
-			public void onSuccess(int statusCode, String text) {
-				// TODO Auto-generated method stub
+			public void run() {
 				try {
-					JSONObject obj = new JSONObject(text);
-					DetailFriend detailFriend = new Gson().fromJson(obj
-							.getJSONObject("userDetail").toString(),
-							new TypeToken<DetailFriend>() {
-							}.getType());
-					PopupWindow window = PVPopupWindow.show(HomeActivity.this,
-							mRecordListView, detailFriend, record);
-					window.setOnDismissListener(new OnDismissListener() {
+					JSONObject obj = new JSONObject(serviceContent);
+					int newNoticeId = obj.getInt(MenueApiFactory.NOTICE_ID);
+					int oldNoticeId = Integer.parseInt(PrefsUtils
+							.getNoticeId(HomeActivity.this));
+					if (newNoticeId > oldNoticeId) {
+						PrefsUtils.savaNoticeId(HomeActivity.this,
+								String.valueOf(newNoticeId));
+					}
 
-						@Override
-						public void onDismiss() {
-							// TODO Auto-generated method stub
-							adapter.notifyDataSetChanged();
-						}
-					});
+					@SuppressWarnings("unchecked")
+					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson()
+							.fromJson(obj.getJSONArray("mainUserNotice")
+									.toString(),
+									new TypeToken<List<ServiceRecordInfo>>() {
+									}.getType());
+
+					List<Information> listinfo = convertData(recordInfo);
+					filterList(listinfo);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
-					DialogUtil.createMsgDialog(HomeActivity.this,
-							getString(R.string.net_error),
-							getString(android.R.string.ok)).show();
 				}
 			}
+		};
+		thread.start();
+	}
 
-			@Override
-			public void onError(int errorCode, String error) {
-				// TODO Auto-generated method stub
-				DialogUtil.createMsgDialog(HomeActivity.this, error,
-						getString(android.R.string.ok)).show();
-			}
-		});
+	private void searchFriendDetailById(String atUserId,
+			final Information record) {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		
 	}
 
 	@Override
@@ -215,21 +199,9 @@ public class HomeActivity extends BaseActivity {
 		}
 	}
 
-	private void loadDataFromService() {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(MenueApiFactory.PAGE, "1");
-		params.put(MenueApiFactory.SIZE, "20");
-		params.put(MenueApiFactory.SORT, "1");
-		params.put(MenueApiFactory.RECEIVESET, "0");
-		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.getNoticeId(this));
-		PhotoCharRequestService service = PhotoCharRequestService.getInstence();
-		service.postRequest(this, loadFromServiceCallBack, params,
-				MenueApiUrl.HOME_USER_NOTICE);
-	}
-
-	private void reSendNotifyToService(InfoRecord record) {
+	private void reSendNotifyToService(Information record) {
 		//
-		List<InfoRecord> sendList = app.getSendRecordsList(record
+		List<Information> sendList = app.getSendRecordsList(record
 				.getCreatetime());
 		if (sendList != null) {
 			sendList.remove(record);
@@ -239,9 +211,9 @@ public class HomeActivity extends BaseActivity {
 
 		long time = System.currentTimeMillis();
 		record.setCreatetime(time);
-		record.setStatu(MenueApiRecordType.STATU_NOTICE_SENDING);
+		record.setStatu(InformationState.STATU_NOTICE_SENDING);
 		PhotoTalkDao.getInstance().deleteRecordById(this, record.getRecordId());
-		List<InfoRecord> newSendlist = new ArrayList<InfoRecord>();
+		List<Information> newSendlist = new ArrayList<Information>();
 		newSendlist.add(record);
 		app.addSendRecords(time, newSendlist);
 		Map<String, String> params = new HashMap<String, String>();
@@ -296,12 +268,11 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void run() {
-				List<InfoRecord> data = PhotoTalkDao.getInstance()
-						.loadTopCountInfoRecord(HomeActivity.this, 20);
+				List<Information> data = PhotoTalkDatabaseFactory.getDatabase()
+						.getRecordInfos();
 				if (data != null && data.size() > 0) {
 					initOrRefreshListView(data);
 				}
-
 			}
 		}).start();
 	}
@@ -379,7 +350,7 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void onHeaderRefresh(PullToRefreshView view) {
-				loadDataFromService();
+				loadRecords();
 			}
 		});
 
@@ -407,10 +378,10 @@ public class HomeActivity extends BaseActivity {
 		public boolean onSingleTapUp(MotionEvent e) {
 			if (mRecordListView.getChildCount() > 0) {
 				int position = getPostionFromTouch(e, mRecordListView);
-				InfoRecord record = (InfoRecord) adapter.getItem(position);
+				Information record = (Information) adapter.getItem(position);
 				if (record != null
-						&& (record.getStatu() != MenueApiRecordType.STATU_NOTICE_SHOWING && record
-								.getStatu() != MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED)) {
+						&& (record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record
+								.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
 					String sUid = null;
 					if (PhotoTalkUtils.isOwnerForReocrd(HomeActivity.this,
 							record)) {
@@ -427,11 +398,11 @@ public class HomeActivity extends BaseActivity {
 
 	protected void showLongClickDialog(int position) {
 		if (adapter != null) {
-			InfoRecord record = adapter.getData().get(position);
+			Information record = adapter.getData().get(position);
 			if (record != null) {
-				if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_LOADING
-						|| record.getStatu() == MenueApiRecordType.STATU_NOTICE_SENDING
-						|| record.getStatu() == MenueApiRecordType.STATU_NOTICE_SHOWING) {
+				if (record.getStatu() == InformationState.STATU_NOTICE_LOADING
+						|| record.getStatu() == InformationState.STATU_NOTICE_SENDING
+						|| record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 					return;
 				} else {
 					if (mLongPressDialog == null) {
@@ -444,7 +415,7 @@ public class HomeActivity extends BaseActivity {
 									@Override
 									public void onClick(int listPostion,
 											int itemIndex) {
-										InfoRecord record = adapter.getData()
+										Information record = adapter.getData()
 												.get(listPostion);
 										switch (itemIndex) {
 										case 0:
@@ -458,7 +429,8 @@ public class HomeActivity extends BaseActivity {
 											break;
 
 										case 2:
-											PhotoTalkDao.getInstance()
+											PhotoTalkDao
+													.getInstance()
 													.deleteRecordById(
 															HomeActivity.this,
 															record.getRecordId());
@@ -473,83 +445,38 @@ public class HomeActivity extends BaseActivity {
 								});
 					}
 
-					if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_LOAD_FAIL) {
+					if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 						mLongPressDialog.show(position, 0);
-					} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SEND_FAIL) {
+					} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
 						mLongPressDialog.show(position, 1);
 					} else {
 						mLongPressDialog.show(position, 0, 1);
 					}
 				}
-				// if (record.getStatu() ==
-				// MenueApiRecordType.STATU_NOTICE_OPENED || record.getStatu()
-				// == MenueApiRecordType.STATU_NOTICE_LOAD_FAIL
-				// || record.getStatu() ==
-				// MenueApiRecordType.STATU_NOTICE_SEND_FAIL) {
-				// if (mLongPressDialog == null) {
-				// mLongPressDialog = new LongPressDialog(this, new String[] {
-				// "重新发送", "重新下载", "删除" }, new OnLongPressItemClickListener() {
-				//
-				// @Override
-				// public void onClick(int listPostion, int itemIndex) {
-				// InfoRecord record = adapter.getData().get(listPostion);
-				// switch (itemIndex) {
-				// case 0:
-				// reSendNotifyToService(record);
-				// mLongPressDialog.hide();
-				// break;
-				// // 重新下载
-				// case 1:
-				// reLoadPictrue(record);
-				// mLongPressDialog.hide();
-				// break;
-				//
-				// case 2:
-				// GalDBHelper.getInstance(HomeActivity.this).deleteRecordById(record.getRecordId());
-				// adapter.getData().remove(record);
-				// adapter.notifyDataSetChanged();
-				// notifyServiceDelete(record);
-				// mLongPressDialog.hide();
-				// break;
-				// }
-				//
-				// }
-				// });
-				// }
-				//
-				// if (record.getStatu() ==
-				// MenueApiRecordType.STATU_NOTICE_OPENED) {
-				// mLongPressDialog.show(position, 0, 1);
-				// } else if (record.getStatu() ==
-				// MenueApiRecordType.STATU_NOTICE_LOAD_FAIL) {
-				// mLongPressDialog.show(position, 0);
-				// } else {
-				// mLongPressDialog.show(position, 1);
-				// }
-				// }
 			}
 		}
 	}
 
-	protected void reLoadPictrue(InfoRecord record) {
-		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView,
-				ImageLoader.getInstance(),
+	protected void reLoadPictrue(Information record) {
+		RCPlatformImageLoader.LoadPictureForList(this, null, null,
+				mRecordListView, ImageLoader.getInstance(),
 				ImageOptionsFactory.getReceiveImageOption(), record);
 	}
 
 	protected void loadMoreFromDatabase(final int i) {
 
-		new AsyncTask<Integer, Integer, List<InfoRecord>>() {
+		new AsyncTask<Integer, Integer, List<Information>>() {
 
 			@Override
-			protected List<InfoRecord> doInBackground(Integer... params) {
-				List<InfoRecord> list = null;
+			protected List<Information> doInBackground(Integer... params) {
+				List<Information> list = null;
 				if (getAdapterData() != null && getAdapterData().size() > 0) {
 					list = PhotoTalkDao.getInstance().loadTMoreInfoRecord(
-							HomeActivity.this, i, String
-									.valueOf(getAdapterData().get(
-											getAdapterData().size() - 1)
-											.getCreatetime()));
+							HomeActivity.this,
+							i,
+							String.valueOf(getAdapterData().get(
+									getAdapterData().size() - 1)
+									.getCreatetime()));
 				} else {
 					loadDataFromDataBase();
 				}
@@ -557,7 +484,7 @@ public class HomeActivity extends BaseActivity {
 			}
 
 			@Override
-			protected void onPostExecute(List<InfoRecord> result) {
+			protected void onPostExecute(List<Information> result) {
 				if (result != null && result.size() > 0) {
 					initOrRefreshListView(result);
 					myHandler.sendEmptyMessage(LOAD_MORE_SUCCESS);
@@ -569,17 +496,17 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void show(final int position) {
-		final InfoRecord infoRecord = ((InfoRecord) mRecordListView
+		final Information infoRecord = ((Information) mRecordListView
 				.getAdapter().getItem(position));
 
-		if (infoRecord.getType() == MenueApiRecordType.TYPE_PICTURE_OR_VIDEO
+		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
 				&& infoRecord
 						.getReceiver()
 						.getSuid()
 						.equals(String.valueOf(MenueApplication
 								.getUserInfoInstall(this).getSuid()))) {
 			// 表示还未查看
-			if (infoRecord.getStatu() == MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED) {
+			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 				// 这句还给View里面联合起作用，这边加入任务每一秒钟去setLimitTime改变值，然后RecordTimerLimitView在每秒钟显示下新的值
 				TimerLimitUtil.getInstence().addTask(infoRecord);
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView
@@ -620,7 +547,7 @@ public class HomeActivity extends BaseActivity {
 				mShowDialog.ShowDialog(infoRecord);
 				isShow = true;
 				// 把数据里面的状态更改为3，已查看
-			} else if (infoRecord.getStatu() == MenueApiRecordType.STATU_NOTICE_SHOWING) {
+			} else if (infoRecord.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(
 							HomeActivity.this, R.layout.receice_to_show_view);
@@ -712,11 +639,21 @@ public class HomeActivity extends BaseActivity {
 		return super.dispatchTouchEvent(event);
 	}
 
+	private void asyncRecordInfoAnalyze() {
+
+	}
+
 	private final Handler myHandler = new Handler() {
 
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
+			case MSG_WHAT_GET_SERVICE_RECORD_SUCCESS:
+				if (msg.obj != null) {
+					initOrRefreshListView((List<Information>) msg.obj);
+				}
+				mRefreshView.onHeaderRefreshComplete();
+				break;
 			case LOAD_MORE_SUCCESS:
 				mRefreshView.onFooterRefreshComplete();
 				break;
@@ -724,14 +661,14 @@ public class HomeActivity extends BaseActivity {
 				mRefreshView.onFooterRefreshComplete();
 				break;
 			case REFRESH_FAIL:
-				Toast.makeText(HomeActivity.this, "加载失败..", 1).show();
+				// Toast.makeText(HomeActivity.this, "加载失败..", 1).show();
 				mRefreshView.onHeaderRefreshComplete();
 				break;
 			}
 		};
 	};
 
-	private void initOrRefreshListView(List<InfoRecord> data) {
+	private void initOrRefreshListView(List<Information> data) {
 		if (data == null || data.isEmpty()) {
 			adapter.notifyDataSetChanged();
 			return;
@@ -746,19 +683,18 @@ public class HomeActivity extends BaseActivity {
 			sortList(getAdapterData());
 			adapter.notifyDataSetChanged();
 		}
-		// adapter = new HomeRecordAdapter(this, data);
 	}
 
-	private void notifyService(InfoRecord record) {
-		if (record.getType() == MenueApiRecordType.TYPE_PICTURE_OR_VIDEO) {
-			record.setStatu(MenueApiRecordType.STATU_NOTICE_OPENED);
+	private void notifyService(Information record) {
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
+			record.setStatu(InformationState.STATU_NOTICE_OPENED);
 			notifyServiceOpenedPic(record);
 			PhotoTalkDao.getInstance().updateRecordStatu(this, record);
 		}
 
 	}
 
-	private void notifyServiceOpenedPic(InfoRecord record) {
+	private void notifyServiceOpenedPic(Information record) {
 		Gson gson = new Gson();
 		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu()
 				+ "", record.getRecordId() + "", record.getType() + "");
@@ -774,7 +710,7 @@ public class HomeActivity extends BaseActivity {
 				MenueApiUrl.HOME_USER_NOTICE_CHANGE);
 	}
 
-	private void notifyServiceDelete(InfoRecord record) {
+	private void notifyServiceDelete(Information record) {
 		Gson gson = new Gson();
 		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu()
 				+ "", record.getRecordId() + "", record.getType() + "");
@@ -790,47 +726,6 @@ public class HomeActivity extends BaseActivity {
 				MenueApiUrl.HOME_USER_NOTICE_DELETE);
 	}
 
-	// private void openedNotice(InfoRecord record) {
-	// Gson gson = new Gson();
-	// ServiceSimpleNotice notice = new
-	// ServiceSimpleNotice(record.getNoticeId(), record.getStatu() + "",
-	// record.getRecordId() + "",
-	// record.getType() + "");
-	// List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
-	// list.add(notice);
-	// String s = gson.toJson(list, new TypeToken<List<ServiceSimpleNotice>>() {
-	// }.getType());
-	//
-	// GalHttpRequest request = GalHttpRequest.requestWithURL(this,
-	// MenueApiUrl.HOME_USER_NOTICE_DELETE);
-	// // request.setPostValueForKey(MenueApiFactory.USER, email);
-	// request.setPostValueForKey(MenueApiFactory.TOKEN,
-	// MenueApplication.getUserInfoInstall(this).getToken());
-	// request.setPostValueForKey(MenueApiFactory.USERID,
-	// MenueApplication.getUserInfoInstall(this).getSuid());
-	// request.setPostValueForKey(MenueApiFactory.LANGUAGE,
-	// Locale.getDefault().getLanguage());
-	// request.setPostValueForKey(MenueApiFactory.DEVICE_ID,
-	// android.os.Build.DEVICE);
-	// request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
-	//
-	// request.setPostValueForKey(MenueApiFactory.NOTICES, s);
-	//
-	// request.startAsynRequestString(new GalHttpLoadTextCallBack() {
-	//
-	// @Override
-	// public void textLoaded(String text) {
-	// Log.i("AAA", "openedNotice" + text.toString());
-	// }
-	//
-	// @Override
-	// public void loadFail() {
-	// Log.i("AAA", "openedNotice fail");
-	// }
-	// });
-	//
-	// }
-
 	/**
 	 * 把服务器返回的数据list 转换为本地需要的list
 	 * 
@@ -838,11 +733,11 @@ public class HomeActivity extends BaseActivity {
 	 *            服务器的list
 	 * @return 本地需要的list
 	 */
-	private List<InfoRecord> convertData(List<ServiceRecordInfo> list) {
-		List<InfoRecord> data = new ArrayList<InfoRecord>();
-		InfoRecord infoRecord;
+	private List<Information> convertData(List<ServiceRecordInfo> list) {
+		List<Information> data = new ArrayList<Information>();
+		Information infoRecord;
 		for (ServiceRecordInfo info : list) {
-			infoRecord = new InfoRecord();
+			infoRecord = new Information();
 			infoRecord.setRecordId(info.getId().trim());
 			infoRecord.setNoticeId(info.getNoticeId());
 			infoRecord.setCreatetime(info.getCrtTime());
@@ -865,8 +760,8 @@ public class HomeActivity extends BaseActivity {
 	public void callBackForSend(long time, String text) {
 		if (text == null || text.length() <= 0) {
 			if (app.getSendRecordsList(time) != null) {
-				for (InfoRecord info : app.getSendRecordsList(time)) {
-					info.setStatu(MenueApiRecordType.STATU_NOTICE_SEND_FAIL);
+				for (Information info : app.getSendRecordsList(time)) {
+					info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
 				}
 				// 把当前这次发送错误的信息写入数据库保存，并删除app中的引用
 				PhotoTalkDao.getInstance().insertInfoRecord(this,
@@ -897,16 +792,16 @@ public class HomeActivity extends BaseActivity {
 						// 删除 list列表里面的
 						clearListDataByTime(getAdapterData(), time);
 
-						List<InfoRecord> listinfo = convertData(recordInfo);
+						List<Information> listinfo = convertData(recordInfo);
 
 						filterList(listinfo);
 					}
 				}
 			} else {
 				if (app.getSendRecordsList(time) != null) {
-					for (InfoRecord info : app.getSendRecordsList(time)) {
+					for (Information info : app.getSendRecordsList(time)) {
 						if (info.getCreatetime() == time) {
-							info.setStatu(MenueApiRecordType.STATU_NOTICE_SEND_FAIL);
+							info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
 						}
 					}
 
@@ -921,10 +816,10 @@ public class HomeActivity extends BaseActivity {
 		}
 	}
 
-	private void clearListDataByTime(List<InfoRecord> data2, long time) {
-		Iterator<InfoRecord> iterator = data2.iterator();
+	private void clearListDataByTime(List<Information> data2, long time) {
+		Iterator<Information> iterator = data2.iterator();
 		while (iterator.hasNext()) {
-			InfoRecord infoRecord = iterator.next();
+			Information infoRecord = iterator.next();
 			if (infoRecord.getCreatetime() == time
 					&& (infoRecord.getNoticeId()
 							.equals(MenueApiFactory.ERROR_NOTICE))) {
@@ -940,58 +835,51 @@ public class HomeActivity extends BaseActivity {
 	 * @param listinfo
 	 *            ： 服务器取回的数据
 	 */
-	protected void filterList(List<InfoRecord> listinfo) {
+	protected void filterList(List<Information> listinfo) {
 		boolean isNeedRefreshAdpter = false;
-		List<InfoRecord> newNotices = new ArrayList<InfoRecord>();
-		Iterator<InfoRecord> iterator = listinfo.iterator();
-		List<InfoRecord> data = getAdapterData();
+		List<Information> newNotices = new ArrayList<Information>();
+		Iterator<Information> iterator = listinfo.iterator();
+		List<Information> data = getAdapterData();
 		while (iterator.hasNext()) {
-			InfoRecord record = iterator.next();
+			Information record = iterator.next();
 			// 如果是通知
 			if (data != null && data.contains(record)) {
-				// 如果当前list包含了这个notcie 即 record_id ，type 一样
-
-				// 那么判断当前这条notice的statu 和集合里面有同样 record_id 和type的 statu
-				// 是否一样
-
-				// 如果一样，说明这条notice没有发生任何变化，就删除，不做任何操作
 				if (record.getStatu() == data.get(data.indexOf(record))
 						.getStatu()) {
+					// 状态没有改变
 					iterator.remove();
-				}
-				// 如果不一样,说明当前list 里面 的这条notice
-				else {
-
-					if (record.getType() == MenueApiRecordType.TYPE_FRIEND_REQUEST_NOTICE) {
+				} else {
+					// 状态改变
+					if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 						data.get(data.indexOf(record)).setStatu(
 								record.getStatu());
 						isNeedRefreshAdpter = true;
-					} else if (record.getType() == MenueApiRecordType.TYPE_PICTURE_OR_VIDEO) {
+					} else if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 
 						// 判断 当前本地notice的状态是否等于其他几种特殊状态（0：正在发送，4，正在查看，5
 						// 正在下载）,由于0是本地临时的，在服务器是没有这种状态的，所以比考虑
 
-						if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+						if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 							// 如果状态为1，表示需要去下载，但是我们得去判断是否正在下载，
 							// 对于发送者来说什么都不做，只有接受者会有操作
-							if (data.get(data.indexOf(record)).getStatu() == MenueApiRecordType.STATU_NOTICE_LOADING
+							if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_LOADING
 									|| data.get(data.indexOf(record))
-											.getStatu() == MenueApiRecordType.STATU_NOTICE_SHOWING) {
+											.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 								// 状态为5或者4
 								// 表示是正在下载或者正在查看，说明已经下载下来了，那么就不需要去下载了
 							} else if (data.get(data.indexOf(record))
-									.getStatu() == MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED
+									.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED
 									|| data.get(data.indexOf(record))
-											.getStatu() == MenueApiRecordType.STATU_NOTICE_OPENED) {
+											.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 								// 如果本地的notice
 								// 是2或者3了，表示已经下载下来了，但是服务器还是一，说明通知服务器改状态没有成功，那么的通知服务器改状态，本地什么都不做
 								notifyService(data.get(data.indexOf(record)));
-							} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_LOAD_FAIL) {
+							} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 								data.get(data.indexOf(record)).setStatu(
 										record.getStatu());
 								isNeedRefreshAdpter = true;
 							}
-						} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED) {
+						} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 							// 对发送者来说，只需要改变状态，并通知界面刷新就OK
 							if (String.valueOf(
 									MenueApplication.getUserInfoInstall(
@@ -1003,13 +891,13 @@ public class HomeActivity extends BaseActivity {
 							} else {
 								// 对于接收者来说，图片一已经下载完成了，那就要判断本地的状态时候为3，如果为3，那说明本地查看后
 								// 只改了本地的状态，通知服务器改状态失败了，得再次通知，其他的就不用做任何操作
-								if (data.get(data.indexOf(record)).getStatu() == MenueApiRecordType.STATU_NOTICE_OPENED) {
+								if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_OPENED) {
 									notifyService(data
 											.get(data.indexOf(record)));
 								}
 							}
 
-						} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_OPENED) {
+						} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 							if (String.valueOf(
 									MenueApplication.getUserInfoInstall(
 											HomeActivity.this).getSuid())
@@ -1018,56 +906,36 @@ public class HomeActivity extends BaseActivity {
 										record.getStatu());
 								isNeedRefreshAdpter = true;
 							}
-
 						}
 
 						// 为什么没有状态为3的情况，因为状态为3，不管是发送者还是接收者，这条记录生命线已经完了，不需要做任何操作了
-					} else if (record.getType() == MenueApiRecordType.TYPE_SYSTEM_NOTICE) {
+					} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 						// 什么都不做，没有任何操作
 					}
 				}
 			} else {
-				// 如果当前list里面不包含这个notice的话 那么又分为以下几种情况
-				// 1,判断数据库里面是否有这条notice
-				InfoRecord dbInfoRecord = PhotoTalkDao.getInstance()
-						.findRecordByRecordId(this, record.getRecordId());
-				// 如果有，
-				if (dbInfoRecord != null) {
-					// 判断状态是否发生变化
-					if (dbInfoRecord.getStatu() != record.getStatu()) {
-						// 发生了变化
-						dbInfoRecord.setStatu(record.getStatu());
-						PhotoTalkDao.getInstance()
-								.updateRecordStatu(this, dbInfoRecord);
-					}
-					// 相等则什么都不做，
-				} else {
-					// 如果数据里面 没有,假如缓存list，和插入数据库
-					newNotices.add(record);
-				}
-
-				// 如果没有，说明是新的notice ，那么添加当一个缓存list里面 ，并插入数据库
+				newNotices.add(record);
 			}
-
 		}
-
-		if (isNeedRefreshAdpter == true || newNotices.size() > 0) {
-			initOrRefreshListView(newNotices);
-			// 并且把新数据插入数据库
-			PhotoTalkDao.getInstance().insertInfoRecord(this, newNotices);
+		if (newNotices.size() > 0) {
+			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(newNotices);
+			Message msg = myHandler.obtainMessage();
+			msg.what = MSG_WHAT_GET_SERVICE_RECORD_SUCCESS;
+			msg.obj = newNotices;
+			myHandler.sendMessage(msg);
+		} else {
+			myHandler.sendEmptyMessage(MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
 		}
-		mRefreshView.onHeaderRefreshComplete();
-
 	}
 
-	private void sortList(List<InfoRecord> list) {
+	private void sortList(List<Information> list) {
 		Collections.sort(list, comparator);
 	}
 
-	Comparator<InfoRecord> comparator = new Comparator<InfoRecord>() {
+	Comparator<Information> comparator = new Comparator<Information>() {
 
 		@Override
-		public int compare(InfoRecord lhs, InfoRecord rhs) {
+		public int compare(Information lhs, Information rhs) {
 
 			return (int) (rhs.getCreatetime() - lhs.getCreatetime());
 		}
@@ -1083,47 +951,6 @@ public class HomeActivity extends BaseActivity {
 		@Override
 		public void loadFail() {
 
-		}
-	};
-
-	private final GalHttpLoadTextCallBack loadFromServiceCallBack = new GalHttpLoadTextCallBack() {
-
-		@Override
-		public void textLoaded(String text) {
-			JSONObject obj;
-			try {
-				obj = new JSONObject(text);
-				int state = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-				if (state == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-					int newNoticeId = obj.getInt(MenueApiFactory.NOTICE_ID);
-					int oldNoticeId = Integer.parseInt(PrefsUtils
-							.getNoticeId(HomeActivity.this));
-					if (newNoticeId > oldNoticeId) {
-						PrefsUtils.savaNoticeId(HomeActivity.this,
-								String.valueOf(newNoticeId));
-					}
-
-					@SuppressWarnings("unchecked")
-					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson()
-							.fromJson(obj.getJSONArray("mainUserNotice")
-									.toString(),
-									new TypeToken<List<ServiceRecordInfo>>() {
-									}.getType());
-
-					List<InfoRecord> listinfo = convertData(recordInfo);
-					filterList(listinfo);
-				} else {
-					myHandler.sendEmptyMessage(REFRESH_FAIL);
-				}
-			} catch (Exception e) {
-				myHandler.sendEmptyMessage(REFRESH_FAIL);
-				e.printStackTrace();
-			}
-		}
-
-		@Override
-		public void loadFail() {
-			myHandler.sendEmptyMessage(REFRESH_FAIL);
 		}
 	};
 
@@ -1167,7 +994,8 @@ public class HomeActivity extends BaseActivity {
 								String jsonParams = new Gson().toJson(params,
 										new TypeToken<Map<String, String>>() {
 										}.getType());
-								PhotoTalkDao.getInstance()
+								PhotoTalkDao
+										.getInstance()
 										.insertFailRequestInfo(
 												HomeActivity.this,
 												MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL,
@@ -1215,7 +1043,7 @@ public class HomeActivity extends BaseActivity {
 		}
 	}
 
-	private List<InfoRecord> getAdapterData() {
+	private List<Information> getAdapterData() {
 		if (adapter == null)
 			return null;
 		return adapter.getData();

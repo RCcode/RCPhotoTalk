@@ -1,6 +1,6 @@
 package com.rcplatform.phototalk.bean;
 
-public class ReceiveInfoRecord extends InfoRecord {
+public class ReceiveInfoRecord extends Information {
 
     private String tempFilePath;
 

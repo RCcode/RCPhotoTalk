@@ -22,8 +22,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.DiscCacheUtil;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.MenueApiRecordType;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
@@ -112,7 +112,7 @@ public class LongClickShowView extends Dialog {
 
     private String url = "";
 
-    public void ShowDialog(InfoRecord info) {
+    public void ShowDialog(Information info) {
         if (info.getUrl() == null)
             return;
         if (glTimer == null) {
@@ -140,7 +140,7 @@ public class LongClickShowView extends Dialog {
         }
 
         if (!info.getUrl().equals(mLastFilePath)) {
-            if (info.getType() == MenueApiRecordType.TYPE_PICTURE_OR_VIDEO) {// 图片
+            if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {// 图片
                 glTimer.setVisibility(View.VISIBLE);
                 String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/1111.jpg";
                 Bitmap b = BitmapFactory.decodeFile(filePath);

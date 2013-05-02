@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
 
 public class PhotoTalkUtils {
 
@@ -15,7 +15,7 @@ public class PhotoTalkUtils {
 	 * @param record
 	 * @return true表示当前用户是发送者，false表示当前用户是接受者
 	 */
-	public static boolean isOwnerForReocrd(Context context, InfoRecord record) {
+	public static boolean isOwnerForReocrd(Context context, Information record) {
 
 		if (String.valueOf(MenueApplication.getUserInfoInstall(context).getSuid()).equals(record.getSender().getSuid())) {
 			return true;
@@ -39,4 +39,5 @@ public class PhotoTalkUtils {
 		}
 		return result;
 	}
+	
 }

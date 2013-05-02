@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.listener.HomeRecordLoadPicListener;
 
@@ -40,7 +40,7 @@ public class RCPlatformImageLoader {
 	public static void displayImage(Context context,ImageView imageView,String url,ImageLoader imageLoader){
 		imageLoader.displayImage(url, imageView);
 	}
-	public static synchronized void LoadPictureForList(final Context context, final ProgressBar bar, final TextView statu, ListView listView, ImageLoader imageLoader, DisplayImageOptions options, final InfoRecord record) {
+	public static synchronized void LoadPictureForList(final Context context, final ProgressBar bar, final TextView statu, ListView listView, ImageLoader imageLoader, DisplayImageOptions options, final Information record) {
 
 		imageLoader.loadImage(record.getUrl(), options, new HomeRecordLoadPicListener(listView, bar, statu, context, record));
 	}

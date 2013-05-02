@@ -25,9 +25,10 @@ import com.rcplatform.phototalk.AddFriendAdapter.OnFriendPortraitListener;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiRecordType;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.bean.InfoRecord;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
+import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
@@ -41,7 +42,7 @@ import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
 
 public class HomeUserRecordAdapter extends BaseAdapter {
 
-	private final List<InfoRecord> data;
+	private final List<Information> data;
 
 	private final Context context;
 
@@ -55,7 +56,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	private OnFriendPortraitListener friendPortraitListener;
 
-	public HomeUserRecordAdapter(Context context, List<InfoRecord> data,
+	public HomeUserRecordAdapter(Context context, List<Information> data,
 			ListView ls) {
 		this.data = data;
 		this.context = context;
@@ -82,7 +83,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		//
-		final InfoRecord record = data.get(position);
+		final Information record = data.get(position);
 		final int index = position;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(
@@ -109,12 +110,12 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 		holder.bar.setTag(record.getRecordId() + ProgressBar.class.getName());
 
-		if (record.getType() == MenueApiRecordType.TYPE_PICTURE_OR_VIDEO) {
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 
 			// 如果当前用户是接收者
 			if (!isOwnerForReocrd(record)) {
 				// 状态为1，表示需要去下载
-				if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 					holder.bar.setVisibility(View.VISIBLE);
 					holder.statu.setText(R.string.home_record_pic_loading);
 					// MenueImageLoader.loadImageForList(context, holder.bar,
@@ -136,7 +137,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							.setBackgroundResource(R.drawable.receive_arrows_unread);
 
 					// 状态为2，表示已经下载了，但是未查看，
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.receive_arrows_unread);
@@ -148,7 +149,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 									getStringfromResource(R.string.statu_press_to_show),
 									record.getLastUpdateTime()));
 					// 状态为4.表示正在查看
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SHOWING) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton.setBackgroundDrawable(null);
 					holder.statuButton.scheuleTask(record);
@@ -170,10 +171,10 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 									if (statu != null) {
 										statu.setText(R.string.statu_opened_1s_ago);
 									}
-									record.setStatu(MenueApiRecordType.STATU_NOTICE_OPENED);
+									record.setStatu(InformationState.STATU_NOTICE_OPENED);
 									openedNotice(context, record);
-									PhotoTalkDao.getInstance().updateRecordStatu(
-											context, record);
+									PhotoTalkDao.getInstance()
+											.updateRecordStatu(context, record);
 								}
 							}, statuTag, buttonTag);
 					holder.statu
@@ -182,7 +183,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 									getStringfromResource(R.string.statu_press_to_show),
 									record.getLastUpdateTime()));
 					// 状态为3 表示 已经查看，
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_OPENED) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.receive_arrows_opened);
@@ -193,7 +194,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							record.getLastUpdateTime()));
 
 					// 状态为5 表示正在下载
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_LOADING) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_LOADING) {
 					holder.bar.setVisibility(View.VISIBLE);
 					holder.statu.setText(R.string.home_record_pic_loading);
 					holder.statuButton.setText("");
@@ -201,7 +202,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 					holder.statuButton
 							.setBackgroundResource(R.drawable.receive_arrows_unread);
 					// 7 下载失败
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_LOAD_FAIL) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statu.setText(R.string.home_record_load_fail);
 					holder.statuButton.setText("");
@@ -211,7 +212,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 				}
 			} else { // 如果当前用户是发送者
 						// 状态为1 表示已经发送到服务器
-				if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.send_arrows);
@@ -221,7 +222,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							getStringfromResource(R.string.statu_send), "",
 							record.getLastUpdateTime()));
 					// 状态为2表示对方已经下载
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_DELIVERED_OR_LOADED) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.send_arrows);
@@ -231,7 +232,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							getStringfromResource(R.string.statu_delivered),
 							"", record.getLastUpdateTime()));
 					// 状态为3 表示已经查看
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_OPENED) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.send_arrows);
@@ -241,7 +242,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							getStringfromResource(R.string.statu_opened), "",
 							record.getLastUpdateTime()));
 					// 0 表示正在发送
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SENDING) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_SENDING) {
 					holder.bar.setVisibility(View.VISIBLE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.send_arrows);
@@ -249,7 +250,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 					holder.statuButton.stopTask();
 					holder.statu.setText(R.string.home_record_pic_sending);
 					// 6 表示发送失败
-				} else if (record.getStatu() == MenueApiRecordType.STATU_NOTICE_SEND_FAIL) {
+				} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton
 							.setBackgroundResource(R.drawable.send_arrows);
@@ -260,12 +261,12 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 			}
 
-		} else if (record.getType() == MenueApiRecordType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
+		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
 			holder.bar.setVisibility(View.GONE);
 			// 如果是对方添加我
 			if (!isOwnerForReocrd(record)) {
 				// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
-				if (record.getStatu() == MenueApiRecordType.STATU_QEQUEST_ADD_NO_CONFIRM) {
+				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
 					holder.statuButton
 							.setBackgroundResource(R.drawable.addfriend);
 					holder.statuButton.stopTask();
@@ -274,7 +275,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							.setText(getStringfromResource(R.string.home_record_added_you_as_friend));
 				}
 				// 2,如果更多里面设置了只有好友可以给我发送图片，那么item里面 状态显示： XX 将加我为好友，并显示添加按钮
-				else if (record.getStatu() == MenueApiRecordType.STATU_QEQUEST_ADD_NEED_CONFIRM) {
+				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
 					holder.statuButton
 							.setBackgroundResource(R.drawable.addfriend);
 					holder.statuButton.stopTask();
@@ -283,7 +284,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							.setText(getStringfromResource(R.string.home_record_will_add_you_as_friend));
 				}
 				// 2.1 点击了确认添加对方为好友好友后， 添加 XX为好友，隐藏添加按钮
-				else if (record.getStatu() == MenueApiRecordType.STATU_QEQUEST_ADDED) {
+				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setBackgroundResource(R.drawable.added);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
@@ -293,7 +294,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 									+ getStringfromResource(R.string.home_record_as_friend));
 				}
 
-				if (record.getStatu() != MenueApiRecordType.STATU_QEQUEST_ADDED) {
+				if (record.getStatu() != InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton
 							.setOnClickListener(new OnClickListener() {
 
@@ -306,7 +307,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 			} else { // 我添加别人为好友
 				// 1 如果对方设置了所有人都可以发送图片，那么item里面显示 状态显示：添加 XX为好友，隐藏按钮， 对应上面 1
-				if (record.getStatu() == MenueApiRecordType.STATU_QEQUEST_ADD_NO_CONFIRM) {
+				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
 					holder.statu
 							.setText(getStringfromResource(R.string.home_record_added)
 									+ record.getReceiver().getNick()
@@ -317,7 +318,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 				}
 				// 2 如果对方更多里面内设置了只有好友可以发送图片，那么item 里面状态显示，等待 XX 确认好友请求 ，隐藏按钮
-				else if (record.getStatu() == MenueApiRecordType.STATU_QEQUEST_ADD_NEED_CONFIRM) {
+				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
 					holder.statuButton.setBackgroundDrawable(null);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
@@ -325,7 +326,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 							.setText(getStringfromResource(R.string.home_record_waitting_and_confirm));
 				}
 				// 2.1 如果对方确认了请求，那么那么item 里面状态显示，添加 xx 为好友，按钮显示为已添加
-				else if (record.getStatu() == MenueApiRecordType.STATU_QEQUEST_ADDED) {
+				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setBackgroundResource(R.drawable.added);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
@@ -335,14 +336,14 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 									+ getStringfromResource(R.string.home_record_as_friend));
 				}
 			}
-		} else if (record.getType() == MenueApiRecordType.TYPE_SYSTEM_NOTICE) {
+		} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
 		if (String.valueOf(
-				MenueApplication.getUserInfoInstall(context).getSuid())
-				.equals(record.getSender().getSuid())) {
+				MenueApplication.getUserInfoInstall(context).getSuid()).equals(
+				record.getSender().getSuid())) {
 			Log.i("ABC", "URL " + position + " , "
 					+ record.getReceiver().getHeadUrl());
 			RCPlatformImageLoader.loadImage(context, mImageLoader,
@@ -399,7 +400,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void addAsFriend(final InfoRecord record, final int index) {
+	private void addAsFriend(final Information record, final int index) {
 		GalHttpRequest request = GalHttpRequest.requestWithURL(context,
 				MenueApiUrl.HOME_USER_NOTICE_ADD_FRIEND);
 		// request.setPostValueForKey(MenueApiFactory.USER, email);
@@ -427,7 +428,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 			@Override
 			public void textLoaded(String text) {
-				record.setStatu(MenueApiRecordType.STATU_QEQUEST_ADDED);
+				record.setStatu(InformationState.STATU_QEQUEST_ADDED);
 				PhotoTalkDao.getInstance().updateRecordStatu(context, record);
 				if (listView.findViewWithTag(record.getRecordId()
 						+ Button.class.getName()) != null)
@@ -453,11 +454,11 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	}
 
-	private boolean isOwnerForReocrd(InfoRecord record) {
+	private boolean isOwnerForReocrd(Information record) {
 
 		if (String.valueOf(
-				MenueApplication.getUserInfoInstall(context).getSuid())
-				.equals(record.getSender().getSuid())) {
+				MenueApplication.getUserInfoInstall(context).getSuid()).equals(
+				record.getSender().getSuid())) {
 			return true;
 		} else {
 			return false;
@@ -501,7 +502,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	}
 
-	private void openedNotice(Context context, InfoRecord record) {
+	private void openedNotice(Context context, Information record) {
 		Gson gson = new Gson();
 		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu()
 				+ "", record.getRecordId() + "", record.getType() + "");
@@ -556,7 +557,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 		ProgressBar bar;
 	}
 
-	public List<InfoRecord> getData() {
+	public List<Information> getData() {
 		return data;
 	}
 

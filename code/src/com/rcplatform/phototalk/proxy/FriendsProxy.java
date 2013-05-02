@@ -14,39 +14,78 @@ import com.rcplatform.phototalk.bean.FriendType;
 
 public class FriendsProxy {
 
-	public static List<Friend> getFacebookRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+	public static List<Friend> getFacebookRecommendFriendsAsync(
+			Context context, RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.putRequestParam("attrType", FriendType.FACEBOOK + "");
-		client.post(context, MenueApiUrl.FACEBOOK_RECOMMENDS_URL, responseHandler);
+		client.post(context, MenueApiUrl.FACEBOOK_RECOMMENDS_URL,
+				responseHandler);
 		return null;
 	}
 
-	public static List<Friend> getContactRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+	public static List<Friend> getContactRecommendFriendsAsync(Context context,
+			RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.post(context, MenueApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
 		return null;
 	}
 
-	public static void searchFriendsAsync(Context context, RCPlatformResponseHandler responseHandler, String keyWords) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+	public static void searchFriendsAsync(Context context,
+			RCPlatformResponseHandler responseHandler, String keyWords) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
 		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.SearchFriends.PARAM_KEY_KEYWORDS, keyWords);
+		client.putRequestParam(
+				PhotoTalkParams.SearchFriends.PARAM_KEY_KEYWORDS, keyWords);
 		client.post(context, MenueApiUrl.SEARCH_FRIENDS_URL, responseHandler);
 	}
 
-	public static List<Friend>[] getMyFriend(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+	public static List<Friend>[] getMyFriend(Context context,
+			RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.post(context, MenueApiUrl.GET_MY_FRIENDS_URL, responseHandler);
 		return null;
 	}
-	
-	public static void deleteFriend(Context context,RCPlatformResponseHandler responseHandler,String friendSuid){
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+
+	public static void deleteFriend(Context context,
+			RCPlatformResponseHandler responseHandler, String friendSuid) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
 		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.DelFriends.PARAM_KEY_FRIEND_ID, friendSuid);
+		client.putRequestParam(PhotoTalkParams.DelFriends.PARAM_KEY_FRIEND_ID,
+				friendSuid);
 		client.post(context, MenueApiUrl.DELETE_FRIEND_URL, responseHandler);
+	}
+
+	public static void updateFriendRemark(Context context,
+			RCPlatformResponseHandler responseHandler, String friendSuid,
+			String remark) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.putRequestParam(
+				PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_REMARK, remark);
+		client.putRequestParam(
+				PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_FRIEND_ID,
+				friendSuid);
+		client.post(context, MenueApiUrl.UPDATE_FRIEND_REMARK_URL,
+				responseHandler);
+	}
+
+	public static Friend getFriendDetail(Context context,
+			RCPlatformResponseHandler responseHandler, String friendSuid) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.putRequestParam(
+				PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendSuid);
+		client.post(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
+		return null;
 	}
 }

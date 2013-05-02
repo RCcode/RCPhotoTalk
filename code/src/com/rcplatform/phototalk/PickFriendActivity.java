@@ -57,7 +57,6 @@ import com.rcplatform.phototalk.utils.PhoneBookUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.views.HorizontalListView;
-import com.rcplatform.phototalk.views.PVPopupWindow;
 
 /**
  * 推荐好友列表 <br>
@@ -204,7 +203,6 @@ public class PickFriendActivity extends Activity implements View.OnClickListener
 					mBottomHScrollListView.setAdapter(mBHAdapter);
 					break;
 				case RESPONSE_FRIEND_DETAIL_SUCCESS:
-					PVPopupWindow.show(PickFriendActivity.this, mShowView, detailFriend,null);
 					break;
 
 				// 密码错误
