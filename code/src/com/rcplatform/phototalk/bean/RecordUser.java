@@ -4,8 +4,6 @@ public class RecordUser {
 
     private String suid;
 
-    private String suUserId;
-
     private String nick;
 
     private String headUrl;
@@ -14,10 +12,8 @@ public class RecordUser {
         // TODO Auto-generated constructor stub
     }
 
-    public RecordUser(String suid, String suUserId, String nick, String headUrl) {
-        super();
+    public RecordUser(String suid,String nick, String headUrl) {
         this.suid = suid;
-        this.suUserId = suUserId;
         this.nick = nick;
         this.headUrl = headUrl;
     }
@@ -30,14 +26,6 @@ public class RecordUser {
 	public void setSuid(String suid) {
 		this.suid = suid;
 	}
-
-	public String getSuUserId() {
-        return suUserId;
-    }
-
-    public void setSuUserId(String suUserId) {
-        this.suUserId = suUserId;
-    }
 
     public String getNick() {
         return nick;

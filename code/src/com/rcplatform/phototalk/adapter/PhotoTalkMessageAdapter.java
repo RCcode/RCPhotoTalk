@@ -31,6 +31,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
@@ -55,8 +56,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private final ImageLoader mImageLoader;
 
-	public PhotoTalkMessageAdapter(Context context, List<Information> data,
-			ListView ls) {
+	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView ls) {
 		this.data = data;
 		this.context = context;
 		this.mImageLoader = ImageLoader.getInstance();
@@ -83,19 +83,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		//
 		final Information record = data.get(position);
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.home_user_record_list_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.home_user_record_list_item, null);
 			holder = new ViewHolder();
-			holder.head = (ImageView) convertView
-					.findViewById(R.id.iv_record_item_head);
-			holder.name = (TextView) convertView
-					.findViewById(R.id.tv_record_item_name);
-			holder.statu = (TextView) convertView
-					.findViewById(R.id.tv_record_item_statu);
-			holder.bar = (ProgressBar) convertView
-					.findViewById(R.id.progress_home_record);
-			holder.statuButton = (RecordTimerLimitView) convertView
-					.findViewById(R.id.btn_record_item_statu_button);
+			holder.head = (ImageView) convertView.findViewById(R.id.iv_record_item_head);
+			holder.name = (TextView) convertView.findViewById(R.id.tv_record_item_name);
+			holder.statu = (TextView) convertView.findViewById(R.id.tv_record_item_statu);
+			holder.bar = (ProgressBar) convertView.findViewById(R.id.progress_home_record);
+			holder.statuButton = (RecordTimerLimitView) convertView.findViewById(R.id.btn_record_item_statu_button);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -105,84 +99,56 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		String statuTag = record.getRecordId() + TextView.class.getName();
 		holder.statu.setTag(statuTag);
 		holder.bar.setTag(record.getRecordId() + ProgressBar.class.getName());
-		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-				|| record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO || record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			// 如果当前用户是接收者
 			if (!PhotoTalkUtils.isSender(context, record)) {
 				// 状态为1，表示需要去下载
 				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 					holder.bar.setVisibility(View.VISIBLE);
 					holder.statu.setText(R.string.home_record_pic_loading);
-					RCPlatformImageLoader
-							.LoadPictureForList(
-									context,
-									holder.bar,
-									holder.statu,
-									null,
-									mImageLoader,
-									ImageOptionsFactory.getReceiveImageOption(),
-									record);
+					RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statuButton
-							.setBackgroundResource(R.drawable.receive_arrows_unread);
+					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 
 					// 状态为2，表示已经下载了，但是未查看，
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 					holder.bar.setVisibility(View.GONE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.receive_arrows_unread);
+					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statu
-							.setText(getStatuTime(
-									getStringfromResource(R.string.statu_received),
-									getStringfromResource(R.string.statu_press_to_show),
-									record.getLastUpdateTime()));
+					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
 					// 状态为4.表示正在查看
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statuButton.setBackgroundDrawable(null);
 					holder.statuButton.scheuleTask(record);
-					holder.statuButton.setOnTimeEndListener(
-							new OnTimeEndListener() {
+					holder.statuButton.setOnTimeEndListener(new OnTimeEndListener() {
 
-								@Override
-								public void onEnd(Object statuTag,
-										Object buttonTag) {
-									RecordTimerLimitView timerLimitView = (RecordTimerLimitView) listView
-											.findViewWithTag(buttonTag);
-									if (timerLimitView != null) {
-										timerLimitView
-												.setBackgroundResource(R.drawable.receive_arrows_opened);
-										timerLimitView.setText("");
-									}
-									TextView statu = ((TextView) listView
-											.findViewWithTag(statuTag));
-									if (statu != null) {
-										statu.setText(R.string.statu_opened_1s_ago);
-									}
-									record.setStatu(InformationState.STATU_NOTICE_OPENED);
-									openedNotice(context, record);
-									PhotoTalkDao.getInstance()
-											.updateRecordStatu(context, record);
-								}
-							}, statuTag, buttonTag);
-					holder.statu
-							.setText(getStatuTime(
-									getStringfromResource(R.string.statu_received),
-									getStringfromResource(R.string.statu_press_to_show),
-									record.getLastUpdateTime()));
+						@Override
+						public void onEnd(Object statuTag, Object buttonTag) {
+							RecordTimerLimitView timerLimitView = (RecordTimerLimitView) listView.findViewWithTag(buttonTag);
+							if (timerLimitView != null) {
+								timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+								timerLimitView.setText("");
+							}
+							TextView statu = ((TextView) listView.findViewWithTag(statuTag));
+							if (statu != null) {
+								statu.setText(R.string.statu_opened_1s_ago);
+							}
+							record.setStatu(InformationState.STATU_NOTICE_OPENED);
+							openedNotice(context, record);
+							PhotoTalkDao.getInstance().updateRecordStatu(context, record);
+						}
+					}, statuTag, buttonTag);
+					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
 					// 状态为3 表示 已经查看，
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 					holder.bar.setVisibility(View.GONE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.receive_arrows_opened);
+					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_opened);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(
-							getStringfromResource(R.string.statu_opened), "",
-							record.getLastUpdateTime()));
+					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
 
 					// 状态为5 表示正在下载
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_LOADING) {
@@ -190,61 +156,48 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 					holder.statu.setText(R.string.home_record_pic_loading);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
-					holder.statuButton
-							.setBackgroundResource(R.drawable.receive_arrows_unread);
+					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 					// 7 下载失败
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 					holder.bar.setVisibility(View.GONE);
 					holder.statu.setText(R.string.home_record_load_fail);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
-					holder.statuButton
-							.setBackgroundResource(R.drawable.receive_arrows_unread);
+					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 				}
 			} else { // 如果当前用户是发送者
 						// 状态为1 表示已经发送到服务器
 				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 					holder.bar.setVisibility(View.GONE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.send_arrows);
+					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(
-							getStringfromResource(R.string.statu_send), "",
-							record.getLastUpdateTime()));
+					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_send), "", record.getLastUpdateTime()));
 					// 状态为2表示对方已经下载
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 					holder.bar.setVisibility(View.GONE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.send_arrows);
+					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(
-							getStringfromResource(R.string.statu_delivered),
-							"", record.getLastUpdateTime()));
+					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_delivered), "", record.getLastUpdateTime()));
 					// 状态为3 表示已经查看
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 					holder.bar.setVisibility(View.GONE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.send_arrows);
+					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(
-							getStringfromResource(R.string.statu_opened), "",
-							record.getLastUpdateTime()));
+					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
 					// 0 表示正在发送
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_SENDING) {
 					holder.bar.setVisibility(View.VISIBLE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.send_arrows);
+					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
 					holder.statu.setText(R.string.home_record_pic_sending);
 					// 6 表示发送失败
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
 					holder.bar.setVisibility(View.GONE);
-					holder.statuButton
-							.setBackgroundResource(R.drawable.send_arrows);
+					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 					holder.statuButton.setText("");
 					holder.statuButton.stopTask();
 					holder.statu.setText(R.string.home_record_pic_send_fail);
@@ -258,51 +211,40 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			if (!PhotoTalkUtils.isSender(context, record)) {
 				// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
-					holder.statuButton
-							.setBackgroundResource(R.drawable.addfriend);
+					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statu
-							.setText(getStringfromResource(R.string.home_record_added_you_as_friend));
+					holder.statu.setText(getStringfromResource(R.string.home_record_added_you_as_friend));
 				}
 				// 2,如果更多里面设置了只有好友可以给我发送图片，那么item里面 状态显示： XX 将加我为好友，并显示添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
-					holder.statuButton
-							.setBackgroundResource(R.drawable.addfriend);
+					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statu
-							.setText(getStringfromResource(R.string.home_record_will_add_you_as_friend));
+					holder.statu.setText(getStringfromResource(R.string.home_record_will_add_you_as_friend));
 				}
 				// 2.1 点击了确认添加对方为好友好友后， 添加 XX为好友，隐藏添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setBackgroundResource(R.drawable.added);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statu
-							.setText(getStringfromResource(R.string.home_record_added)
-									+ record.getSender().getNick()
-									+ getStringfromResource(R.string.home_record_as_friend));
+					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getSender().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}
 
 				if (record.getStatu() != InformationState.STATU_QEQUEST_ADDED) {
-					holder.statuButton
-							.setOnClickListener(new OnClickListener() {
+					holder.statuButton.setOnClickListener(new OnClickListener() {
 
-								@Override
-								public void onClick(View v) {
-									addAsFriend(record);
-								}
-							});
+						@Override
+						public void onClick(View v) {
+							addAsFriend(record);
+						}
+					});
 				}
 
 			} else { // 我添加别人为好友
 				// 1 如果对方设置了所有人都可以发送图片，那么item里面显示 状态显示：添加 XX为好友，隐藏按钮， 对应上面 1
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
-					holder.statu
-							.setText(getStringfromResource(R.string.home_record_added)
-									+ record.getReceiver().getNick()
-									+ getStringfromResource(R.string.home_record_as_friend));
+					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getReceiver().getNick() + getStringfromResource(R.string.home_record_as_friend));
 					holder.statuButton.setBackgroundResource(R.drawable.added);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
@@ -313,18 +255,14 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 					holder.statuButton.setBackgroundDrawable(null);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statu
-							.setText(getStringfromResource(R.string.home_record_waitting_and_confirm));
+					holder.statu.setText(getStringfromResource(R.string.home_record_waitting_and_confirm));
 				}
 				// 2.1 如果对方确认了请求，那么那么item 里面状态显示，添加 xx 为好友，按钮显示为已添加
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setBackgroundResource(R.drawable.added);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
-					holder.statu
-							.setText(getStringfromResource(R.string.home_record_added)
-									+ record.getReceiver().getNick()
-									+ getStringfromResource(R.string.home_record_as_friend));
+					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getReceiver().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}
 			}
 		} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
@@ -333,17 +271,9 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statu.setText("system notice");
 		}
 		if (PhotoTalkUtils.isSender(context, record)) {
-			RCPlatformImageLoader.loadImage(context, mImageLoader,
-					ImageOptionsFactory.getListHeadOption(), record
-							.getReceiver().getHeadUrl(),
-					AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head,
-					R.drawable.default_head);
+			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getReceiver().getHeadUrl(), AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
 		} else {
-			RCPlatformImageLoader.loadImage(context, mImageLoader,
-					ImageOptionsFactory.getListHeadOption(), record.getSender()
-							.getHeadUrl(),
-					AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head,
-					R.drawable.default_head);
+			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getSender().getHeadUrl(), AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
 		}
 
 		if (!PhotoTalkUtils.isSender(context, record)) {
@@ -355,41 +285,28 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void addAsFriend(final Information record) {
-		((BaseActivity) context).showLoadingDialog(BaseActivity.LOADING_NO_MSG,
-				BaseActivity.LOADING_NO_MSG, false);
-		FriendsProxy.addFriendFromInformation(context,
-				new RCPlatformResponseHandler() {
+		((BaseActivity) context).showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
+		FriendsProxy.addFriendFromInformation(context, new RCPlatformResponseHandler() {
 
-					@Override
-					public void onSuccess(int statusCode, String content) {
+			@Override
+			public void onSuccess(int statusCode, String content) {
 
-						record.setStatu(InformationState.STATU_QEQUEST_ADDED);
-						PhotoTalkDao.getInstance().updateRecordStatu(context,
-								record);
-						if (listView.findViewWithTag(record.getRecordId()
-								+ Button.class.getName()) != null)
-							listView.findViewWithTag(
-									record.getRecordId()
-											+ Button.class.getName())
-									.setBackgroundResource(R.drawable.added);
-						if (listView.findViewWithTag(record.getRecordId()
-								+ TextView.class.getName()) != null) {
-							((TextView) listView.findViewWithTag(record
-									.getRecordId() + TextView.class.getName()))
-									.setText(getStringfromResource(R.string.home_record_added)
-											+ record.getSender().getNick()
-											+ getStringfromResource(R.string.home_record_as_friend));
-						}
-						((BaseActivity) context).dismissLoadingDialog();
-					}
+				record.setStatu(InformationState.STATU_QEQUEST_ADDED);
+				PhotoTalkDao.getInstance().updateRecordStatu(context, record);
+				if (listView.findViewWithTag(record.getRecordId() + Button.class.getName()) != null)
+					listView.findViewWithTag(record.getRecordId() + Button.class.getName()).setBackgroundResource(R.drawable.added);
+				if (listView.findViewWithTag(record.getRecordId() + TextView.class.getName()) != null) {
+					((TextView) listView.findViewWithTag(record.getRecordId() + TextView.class.getName())).setText(getStringfromResource(R.string.home_record_added) + record.getSender().getNick() + getStringfromResource(R.string.home_record_as_friend));
+				}
+				((BaseActivity) context).dismissLoadingDialog();
+			}
 
-					@Override
-					public void onFailure(int errorCode, String content) {
-						((BaseActivity) context).dismissLoadingDialog();
-						((BaseActivity) context)
-								.showErrorConfirmDialog(content);
-					}
-				}, record);
+			@Override
+			public void onFailure(int errorCode, String content) {
+				((BaseActivity) context).dismissLoadingDialog();
+				((BaseActivity) context).showErrorConfirmDialog(content);
+			}
+		}, record);
 	}
 
 	private String getStringfromResource(int id) {
@@ -431,24 +348,17 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private void openedNotice(Context context, Information record) {
 		Gson gson = new Gson();
-		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu()
-				+ "", record.getRecordId() + "", record.getType() + "");
+		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId() + "", record.getType() + "");
 		List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
 		list.add(notice);
-		String s = gson.toJson(list,
-				new TypeToken<List<ServiceSimpleNotice>>() {
-				}.getType());
-
-		GalHttpRequest request = GalHttpRequest.requestWithURL(context,
-				MenueApiUrl.HOME_USER_NOTICE_CHANGE);
-		request.setPostValueForKey(MenueApiFactory.TOKEN, MenueApplication
-				.getUserInfoInstall(context).getToken());
-		request.setPostValueForKey(MenueApiFactory.USERID, MenueApplication
-				.getUserInfoInstall(context).getSuid());
-		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale
-				.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.DEVICE_ID,
-				android.os.Build.DEVICE);
+		String s = gson.toJson(list, new TypeToken<List<ServiceSimpleNotice>>() {
+		}.getType());
+		UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		GalHttpRequest request = GalHttpRequest.requestWithURL(context, MenueApiUrl.HOME_USER_NOTICE_CHANGE);
+		request.setPostValueForKey(MenueApiFactory.TOKEN, currentUser.getToken());
+		request.setPostValueForKey(MenueApiFactory.USERID, currentUser.getSuid());
+		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
+		request.setPostValueForKey(MenueApiFactory.DEVICE_ID, android.os.Build.DEVICE);
 		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
 
 		request.setPostValueForKey(MenueApiFactory.NOTICES, s);

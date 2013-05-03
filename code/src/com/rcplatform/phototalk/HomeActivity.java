@@ -28,6 +28,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -113,20 +115,17 @@ public class HomeActivity extends BaseActivity {
 
 	private PhotoTalkMessageAdapter adapter;
 
-	private Friend mFriendRequestDetail;
+	private Information mShowDetailInformation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		app = (MenueApplication) getApplication();
+		app = getPhotoTalkApplication();
 		app.addActivity(this.getClass().getName(), this);
-		// 如果当前账号是第一次登陆就会去为当前用户创建相关表
 		DatabaseFactory.getInstance(this).createTables(this);
-		// 检查当前用户是是否有请求失败的记录，有的话就会向服务器提交
 		checkFialRequest();
 		initViewAndListener();
-		// 进来后首先从数据库里面查找记录
 		loadDataFromDataBase();
 		loadRecords();
 	}
@@ -137,7 +136,8 @@ public class HomeActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_DETAIL) {
-
+				mShowDetailInformation.setStatu(InformationState.STATU_QEQUEST_ADDED);
+				adapter.notifyDataSetChanged();
 			}
 		}
 	}
@@ -190,6 +190,7 @@ public class HomeActivity extends BaseActivity {
 				try {
 					JSONObject jObj = new JSONObject(content);
 					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject("friendInfo").toString());
+					mShowDetailInformation = record;
 					startFriendDetailActivity(friend);
 				} catch (JSONException e) {
 					showErrorConfirmDialog(R.string.net_error);
@@ -246,9 +247,9 @@ public class HomeActivity extends BaseActivity {
 		app.addSendRecords(time, newSendlist);
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.COUNTRY, Locale.getDefault().getCountry());
-		params.put(MenueApiFactory.HEAD_URL, MenueApplication.getUserInfoInstall(this).getHeadUrl());
+		params.put(MenueApiFactory.HEAD_URL, getPhotoTalkApplication().getCurrentUser().getHeadUrl());
 		params.put(MenueApiFactory.TIME, String.valueOf(record.getCreatetime()));
-		params.put(MenueApiFactory.NICK, MenueApplication.getUserInfoInstall(this).getNick());
+		params.put(MenueApiFactory.NICK, getPhotoTalkApplication().getCurrentUser().getNick());
 		params.put(MenueApiFactory.IMAGE_TYPE, "jpg");
 		params.put(MenueApiFactory.DESC, "");
 		params.put(MenueApiFactory.TIME_LIMIT, String.valueOf(record.getLimitTime()));
@@ -274,7 +275,7 @@ public class HomeActivity extends BaseActivity {
 		try {
 			JSONArray array = new JSONArray();
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("userId", receiver.getSuUserId());
+			jsonObject.put("userId", receiver.getSuid());
 			jsonObject.put("headUrl", receiver.getHeadUrl());
 			jsonObject.put("nick", receiver.getNick());
 			array.put(jsonObject);
@@ -360,6 +361,14 @@ public class HomeActivity extends BaseActivity {
 				return gestureDetector.onTouchEvent(event);
 			}
 		});
+		mRecordListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				showLongClickDialog(arg2);
+				return false;
+			}
+		});
 		mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
 
 			@Override
@@ -382,20 +391,13 @@ public class HomeActivity extends BaseActivity {
 		public boolean onDown(MotionEvent e) {
 			if (mRecordListView.getChildCount() > 0) {
 				int position = getPostionFromTouch(e, mRecordListView);
-				if (position != -1)
+				if (position != -1) {
 					show(position);
+				}
 			}
 			return super.onDown(e);
 		}
-		@Override
-		public void onLongPress(MotionEvent e) {
-			// TODO Auto-generated method stub
-			if (mRecordListView.getChildCount() > 0) {
-				int position = getPostionFromTouch(e, mRecordListView);
-				showLongClickDialog(position);
-			}
-			super.onLongPress(e);
-		}
+
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			if (mRecordListView.getChildCount() > 0) {
@@ -404,9 +406,9 @@ public class HomeActivity extends BaseActivity {
 				if (record != null && (record.getType() != InformationType.TYPE_SYSTEM_NOTICE && record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
 					String sUid = null;
 					if (PhotoTalkUtils.isSender(HomeActivity.this, record)) {
-						sUid = record.getReceiver().getSuUserId();
+						sUid = record.getReceiver().getSuid();
 					} else {
-						sUid = record.getSender().getSuUserId();
+						sUid = record.getSender().getSuid();
 					}
 					searchFriendDetailById(sUid, record);
 				}
@@ -616,10 +618,6 @@ public class HomeActivity extends BaseActivity {
 		return super.dispatchTouchEvent(event);
 	}
 
-	private void asyncRecordInfoAnalyze() {
-
-	}
-
 	private final Handler myHandler = new Handler() {
 
 		@Override
@@ -710,9 +708,10 @@ public class HomeActivity extends BaseActivity {
 			infoRecord.setRecordId(info.getId().trim());
 			infoRecord.setNoticeId(info.getNoticeId());
 			infoRecord.setCreatetime(info.getCrtTime());
+			infoRecord.setTotleLength(info.getTime());
 			infoRecord.setLimitTime(info.getTime());
-			infoRecord.setSender(new RecordUser(info.getSeUserId(), info.getSeSuid(), info.getSnick(), info.getShead()));
-			infoRecord.setReceiver(new RecordUser(info.getReUserId(), info.getReSuid(), info.getRnick(), info.getRhead()));
+			infoRecord.setSender(new RecordUser(info.getSeSuid(), info.getSnick(), info.getShead()));
+			infoRecord.setReceiver(new RecordUser(info.getReSuid(), info.getRnick(), info.getRhead()));
 			infoRecord.setStatu(info.getState());
 			infoRecord.setType(info.getType());
 			infoRecord.setUrl(info.getPicUrl());
@@ -794,7 +793,6 @@ public class HomeActivity extends BaseActivity {
 	 *            ： 服务器取回的数据
 	 */
 	protected void filterList(List<Information> listinfo) {
-		boolean isNeedRefreshAdpter = false;
 		List<Information> newNotices = new ArrayList<Information>();
 		Iterator<Information> iterator = listinfo.iterator();
 		List<Information> data = getAdapterData();
@@ -809,7 +807,6 @@ public class HomeActivity extends BaseActivity {
 					// 状态改变
 					if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 						data.get(data.indexOf(record)).setStatu(record.getStatu());
-						isNeedRefreshAdpter = true;
 					} else if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 
 						// 判断 当前本地notice的状态是否等于其他几种特殊状态（0：正在发送，4，正在查看，5
@@ -827,13 +824,11 @@ public class HomeActivity extends BaseActivity {
 								notifyService(data.get(data.indexOf(record)));
 							} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 								data.get(data.indexOf(record)).setStatu(record.getStatu());
-								isNeedRefreshAdpter = true;
 							}
 						} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 							// 对发送者来说，只需要改变状态，并通知界面刷新就OK
-							if (String.valueOf(MenueApplication.getUserInfoInstall(HomeActivity.this).getSuid()).equals(record.getSender().getSuid())) {
+							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
 								data.get(data.indexOf(record)).setStatu(record.getStatu());
-								isNeedRefreshAdpter = true;
 							} else {
 								// 对于接收者来说，图片一已经下载完成了，那就要判断本地的状态时候为3，如果为3，那说明本地查看后
 								// 只改了本地的状态，通知服务器改状态失败了，得再次通知，其他的就不用做任何操作
@@ -843,9 +838,8 @@ public class HomeActivity extends BaseActivity {
 							}
 
 						} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
-							if (String.valueOf(MenueApplication.getUserInfoInstall(HomeActivity.this).getSuid()).equals(record.getSender().getSuid())) {
+							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
 								data.get(data.indexOf(record)).setStatu(record.getStatu());
-								isNeedRefreshAdpter = true;
 							}
 						}
 

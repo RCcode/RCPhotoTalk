@@ -41,7 +41,7 @@ public class PhotoTalkUtils {
 
 	public static String getFilePath(Context context, String url) {
 		StringBuilder sbPath = new StringBuilder();
-		sbPath.append(context.getFilesDir().getPath()).append("/").append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
+		sbPath.append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
 		return sbPath.toString();
 	}
 }

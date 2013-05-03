@@ -78,8 +78,7 @@ public class PhotoTalkDao {
 
 	public synchronized List<Information> loadTMoreInfoRecord(Context context,
 			int count, String createTime) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		List<Information> list = new ArrayList<Information>();
 		Information record;
@@ -105,14 +104,12 @@ public class PhotoTalkDao {
 
 				sender = new RecordUser();
 				sender.setSuid(cursor.getString(1));
-				sender.setSuUserId(cursor.getString(2));
 				sender.setNick(cursor.getString(3));
 				sender.setHeadUrl(cursor.getString(4));
 				record.setSender(sender);
 
 				receicer = new RecordUser();
 				receicer.setSuid(cursor.getString(5));
-				receicer.setSuUserId(cursor.getString(6));
 				receicer.setNick(cursor.getString(7));
 				receicer.setHeadUrl(cursor.getString(8));
 				record.setReceiver(receicer);
@@ -136,8 +133,7 @@ public class PhotoTalkDao {
 
 	public synchronized List<Information> loadTopCountInfoRecord(
 			Context context, int count) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		List<Information> list = new ArrayList<Information>();
 		Information record;
@@ -162,14 +158,12 @@ public class PhotoTalkDao {
 
 				sender = new RecordUser();
 				sender.setSuid(cursor.getString(1));
-				sender.setSuUserId(cursor.getString(2));
 				sender.setNick(cursor.getString(3));
 				sender.setHeadUrl(cursor.getString(4));
 				record.setSender(sender);
 
 				receicer = new RecordUser();
 				receicer.setSuid(cursor.getString(5));
-				receicer.setSuUserId(cursor.getString(6));
 				receicer.setNick(cursor.getString(7));
 				receicer.setHeadUrl(cursor.getString(8));
 				record.setReceiver(receicer);
@@ -198,8 +192,7 @@ public class PhotoTalkDao {
 
 	public synchronized void insertInfoRecord(Context context,
 			List<Information> data) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		try {
@@ -222,8 +215,6 @@ public class PhotoTalkDao {
 
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 2, record
 						.getSender().getSuid());
-				SQLiteUtil.bindString(myInsertRecordInfoStatement, 3, record
-						.getSender().getSuUserId());
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 4, record
 						.getSender().getNick());
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 5, record
@@ -231,8 +222,6 @@ public class PhotoTalkDao {
 
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 6, record
 						.getReceiver().getSuid());
-				SQLiteUtil.bindString(myInsertRecordInfoStatement, 7, record
-						.getReceiver().getSuUserId());
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 8, record
 						.getReceiver().getNick());
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 9, record
@@ -268,8 +257,7 @@ public class PhotoTalkDao {
 
 	public synchronized void updateRecordStatu(Context context,
 			Information infoRecord) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		try {
@@ -291,8 +279,7 @@ public class PhotoTalkDao {
 
 	public synchronized Information findRecordByRecordId(Context context,
 			String id) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		Cursor cursor = null;
@@ -319,8 +306,7 @@ public class PhotoTalkDao {
 	private SQLiteStatement myDeleteRecordStatement;
 
 	public synchronized void deleteRecordById(Context context, String recordId) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		try {
@@ -337,8 +323,7 @@ public class PhotoTalkDao {
 
 	public synchronized void deleteCurrentUserTable(Context context) {
 		SQLiteDatabase db = null;
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		try {
 			db = DatabaseFactory.getInstance(context).getDatabase();
@@ -354,8 +339,7 @@ public class PhotoTalkDao {
 
 	public synchronized List<Information> findInfoRecordByType(Context context,
 			int type) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		List<Information> list = new ArrayList<Information>();
 		Information record;
@@ -380,14 +364,14 @@ public class PhotoTalkDao {
 
 				sender = new RecordUser();
 				sender.setSuid(cursor.getString(1));
-				sender.setSuUserId(cursor.getString(2));
+//				sender.setSuUserId(cursor.getString(2));
 				sender.setNick(cursor.getString(3));
 				sender.setHeadUrl(cursor.getString(4));
 				record.setSender(sender);
 
 				receicer = new RecordUser();
 				receicer.setSuid(cursor.getString(5));
-				receicer.setSuUserId(cursor.getString(6));
+//				receicer.setSuUserId(cursor.getString(6));
 				receicer.setNick(cursor.getString(7));
 				receicer.setHeadUrl(cursor.getString(8));
 				record.setReceiver(receicer);
@@ -414,8 +398,7 @@ public class PhotoTalkDao {
 
 	public synchronized void insertFailRequestInfo(Context context, String url,
 			String params) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		String FAIL_REQUEST_TABLE = FAIL_REQUEST + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		try {
@@ -443,8 +426,7 @@ public class PhotoTalkDao {
 			Context context) {
 		List<Map<String, String>> list = new ArrayList<Map<String, String>>();
 		Map<String, String> map = null;
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		String FAIL_REQUEST_TABLE = FAIL_REQUEST + "_" + userId;
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
 		Cursor cursor = null;
@@ -471,8 +453,7 @@ public class PhotoTalkDao {
 	public synchronized void deleteFailRequestInfoById(Context context,
 			String id) {
 		SQLiteDatabase db = DatabaseFactory.getInstance(context).getDatabase();
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(
-				context).getSuid());
+		String userId ="";
 		String FAIL_REQUEST_TABLE = FAIL_REQUEST + "_" + userId;
 		try {
 			if (deleteFailRequestStatement == null) {
@@ -527,7 +508,7 @@ public class PhotoTalkDao {
 	}
 
 	private UserInfo getCurrentUser(Context context) {
-		return MenueApplication.getUserInfoInstall(context);
+		return null;
 	}
 
 	private String getTableName(Context context, String tableBaseName) {
