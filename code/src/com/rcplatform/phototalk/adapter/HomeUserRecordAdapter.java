@@ -30,6 +30,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
@@ -54,12 +55,15 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	private final MenueApplication app;
 
+	private UserInfo currentUser;
 	private OnFriendPortraitListener friendPortraitListener;
 
 	public HomeUserRecordAdapter(Context context, List<Information> data,
 			ListView ls) {
 		this.data = data;
 		this.context = context;
+		currentUser = ((MenueApplication) context.getApplicationContext())
+				.getCurrentUser();
 		this.mImageLoader = ImageLoader.getInstance();
 		this.listView = ls;
 		this.app = (MenueApplication) context.getApplicationContext();
@@ -110,8 +114,8 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 		holder.bar.setTag(record.getRecordId() + ProgressBar.class.getName());
 
-		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
-
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+				|| record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			// 如果当前用户是接收者
 			if (!isOwnerForReocrd(record)) {
 				// 状态为1，表示需要去下载
@@ -341,19 +345,13 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
-		if (String.valueOf(
-				MenueApplication.getUserInfoInstall(context).getSuid()).equals(
-				record.getSender().getSuid())) {
-			Log.i("ABC", "URL " + position + " , "
-					+ record.getReceiver().getHeadUrl());
+		if (isOwnerForReocrd(record)) {
 			RCPlatformImageLoader.loadImage(context, mImageLoader,
 					ImageOptionsFactory.getListHeadOption(), record
 							.getReceiver().getHeadUrl(),
 					AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head,
 					R.drawable.default_head);
 		} else {
-			Log.i("ABC", "URL " + position + " , "
-					+ record.getSender().getHeadUrl());
 			RCPlatformImageLoader.loadImage(context, mImageLoader,
 					ImageOptionsFactory.getListHeadOption(), record.getSender()
 							.getHeadUrl(),
@@ -373,30 +371,12 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 			name = "Nanjing";
 
 		}
-		// holder.head.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// Friend friend = new Friend();
-		// if (isOwnerForReocrd(record)) {
-		// friend.setUserId(Integer.parseInt(record.getReceiver().getUserId().trim()));
-		// friend.setSuid(record.getReceiver().getSuUserId());
-		//
-		// } else {
-		// friend.setUserId(Integer.parseInt(record.getSender().getUserId().trim()));
-		// friend.setSuid(record.getSender().getSuUserId());
-		// }
-		// if (friendPortraitListener != null)
-		// friendPortraitListener.showFriendDetail(v, friend);
-		// }
-		// });
 
 		if (!isOwnerForReocrd(record)) {
 			holder.name.setText(record.getSender().getNick());
 		} else {
 			holder.name.setText(record.getReceiver().getNick());
 		}
-		// holder.statu.setText(text);
 		return convertView;
 	}
 
@@ -456,9 +436,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	private boolean isOwnerForReocrd(Information record) {
 
-		if (String.valueOf(
-				MenueApplication.getUserInfoInstall(context).getSuid()).equals(
-				record.getSender().getSuid())) {
+		if (currentUser.getSuid().equals(record.getSender().getSuid())) {
 			return true;
 		} else {
 			return false;
@@ -565,5 +543,4 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 			OnFriendPortraitListener friendPortraitListener) {
 		this.friendPortraitListener = friendPortraitListener;
 	}
-
 }

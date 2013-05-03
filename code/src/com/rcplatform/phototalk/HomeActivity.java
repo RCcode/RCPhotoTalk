@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -113,6 +114,8 @@ public class HomeActivity extends BaseActivity {
 	private LongPressDialog mLongPressDialog;
 
 	private HomeUserRecordAdapter adapter;
+	
+	private Friend mFriendRequestDetail;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +131,17 @@ public class HomeActivity extends BaseActivity {
 		// 进来后首先从数据库里面查找记录
 		loadDataFromDataBase();
 		loadRecords();
-
 	}
-
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode==Activity.RESULT_OK){
+			if(requestCode==REQUEST_CODE_DETAIL){
+				
+			}
+		}
+	}
 	private void loadRecords() {
 		mRefreshView.setRefreshing();
 		RecordInfoProxy.getAllRecordInfos(this,
@@ -362,17 +373,17 @@ public class HomeActivity extends BaseActivity {
 						VideoRecordActivity.class));
 			}
 		});
-		mRecordListView
-				.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-					@Override
-					public boolean onItemLongClick(AdapterView<?> parent,
-							View view, int position, long id) {
-						// show(position);
-						showLongClickDialog(position);
-						return false;
-					}
-				});
+//		mRecordListView
+//				.setOnItemLongClickListener(new OnItemLongClickListener() {
+//
+//					@Override
+//					public boolean onItemLongClick(AdapterView<?> parent,
+//							View view, int position, long id) {
+//						// show(position);
+//						showLongClickDialog(position);
+//						return false;
+//					}
+//				});
 		final GestureDetector gestureDetector = new GestureDetector(
 				new HomeGestureListener());
 		mRecordListView.setOnTouchListener(new OnTouchListener() {
@@ -409,7 +420,15 @@ public class HomeActivity extends BaseActivity {
 			}
 			return super.onDown(e);
 		}
-
+		@Override
+		public void onLongPress(MotionEvent e) {
+			// TODO Auto-generated method stub
+			if (mRecordListView.getChildCount() > 0) {
+				int position = getPostionFromTouch(e, mRecordListView);
+				showLongClickDialog(position);
+			}
+			super.onLongPress(e);
+		}
 		@Override
 		public boolean onSingleTapUp(MotionEvent e) {
 			if (mRecordListView.getChildCount() > 0) {
