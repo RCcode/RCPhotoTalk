@@ -132,21 +132,6 @@ public class MenueApplication extends Application {
 		return wmParams;
 	}
 
-	public static UserInfo getUserInfoInstall(Context context) {
-		if (context == null) {
-			return null;
-		}
-		if (userInfo == null) {
-			userInfo = new UserInfo();
-			SharedPreferences sp = context.getSharedPreferences(Contract.PREFS_FILE_USER_INFO, Context.MODE_PRIVATE);
-			userInfo.setSuid(sp.getString(Contract.KEY_SUID, "0"));
-			userInfo.setEmail(sp.getString(Contract.KEY_EMAIL, ""));
-			userInfo.setPassWord(sp.getString(Contract.KEY_PASSWORD, ""));
-			userInfo.setToken(sp.getString(Contract.KEY_USER_TOKEN, ""));
-		}
-		return userInfo;
-	}
-
 	public void addActivity(String key, Activity value) {
 		mActivityMap.put(key, value);
 	}

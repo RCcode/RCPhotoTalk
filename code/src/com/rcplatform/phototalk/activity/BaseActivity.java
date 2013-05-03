@@ -16,7 +16,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class BaseActivity extends Activity {
-	protected final int LOADING_NO_MSG = -1;
+	public static  final int LOADING_NO_MSG = -1;
 	ProgressDialog mProgressDialog;
 	protected RCPlatformAsyncHttpClient httpClient;
 	protected InputMethodManager mInputMethodManager;
@@ -69,7 +69,7 @@ public class BaseActivity extends Activity {
 			mProgressDialog.dismiss();
 	}
 
-	protected MenueApplication getPhotoTalkApplication() {
+	public MenueApplication getPhotoTalkApplication() {
 		return (MenueApplication) getApplication();
 	}
 
@@ -89,10 +89,10 @@ public class BaseActivity extends Activity {
 		findViewById(R.id.back).setVisibility(View.VISIBLE);
 	}
 	
-	protected void showErrorConfirmDialog(String msg) {
+	public void showErrorConfirmDialog(String msg) {
 		DialogUtil.createErrorInfoDialog(this, msg).show();
 	}
-	protected void showErrorConfirmDialog(int msgResId) {
+	public void showErrorConfirmDialog(int msgResId) {
 		DialogUtil.createErrorInfoDialog(this, msgResId).show();
 	}
 	

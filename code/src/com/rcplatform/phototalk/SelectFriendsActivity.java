@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.TreeSet;
 
@@ -14,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,7 +19,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -47,20 +43,14 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
-import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
@@ -237,15 +227,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 					new com.google.gson.reflect.TypeToken<ArrayList<Friend>>() {
 					}.getType());
 //			.add(;)friends
-//			Friend user = new Friend();
-			System.out.println("-------"+app.getUserInfoInstall(this).getNick());
-			System.out.println("-------"+app.getUserInfoInstall(this).getSuid());
-			System.out.println("-------"+app.getUserInfoInstall(this).getHeadUrl());
-//			user.setNick(app.getUserInfoInstall(this).getNick());
-//			user.setSuid(app.getUserInfoInstall(this).getSuid());
-//			user.setHeadUrl(app.getUserInfoInstall(this).getHeadUrl());
-//			user.setLetter("t");
-//			friends.add(user);
+			Friend user = new Friend();
+			user.setNick(app.getCurrentUser().getNick());
+			user.setSuid(app.getCurrentUser().getSuid());
+			user.setHeadUrl(app.getCurrentUser().getHeadUrl());
+			friends.add(user);
 			
 			
 			TreeSet<Friend> fs = new TreeSet<Friend>(new PinyinComparator());
@@ -348,11 +334,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 				record.setNoticeId(MenueApiFactory.ERROR_NOTICE);
 				record.setCreatetime(time);
 				RecordUser user = new RecordUser();
-				user.setSuUserId(MenueApplication.getUserInfoInstall(this)
-						.getSuid());
 				record.setSender(user);
 				user = new RecordUser();
-				user.setSuUserId(f.getSuid());
 				user.setNick(f.getNick());
 				user.setHeadUrl(f.getHeadUrl());
 				record.setReceiver(user);

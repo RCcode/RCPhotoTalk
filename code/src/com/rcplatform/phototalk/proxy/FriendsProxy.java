@@ -13,6 +13,7 @@ import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.bean.Information;
 
 public class FriendsProxy {
 
@@ -120,5 +121,25 @@ public class FriendsProxy {
 				PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendSuid);
 		client.post(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
 		return null;
+	}
+
+	public static void addFriendFromInformation(Context context,
+			RCPlatformResponseHandler responseHandler, Information info) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.putRequestParam(
+				PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_INFORMATION_ID,
+				info.getNoticeId());
+		client.putRequestParam(
+				PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_INFORMATION_TYPE,
+				info.getType() + "");
+		client.putRequestParam(
+				PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_INFORMATION_STATE,
+				info.getStatu() + "");
+		client.putRequestParam(
+				PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_FRIEND_SUID,
+				info.getSender().getSuid());
+		client.post(context, MenueApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
 	}
 }

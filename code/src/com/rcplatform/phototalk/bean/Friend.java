@@ -221,7 +221,7 @@ public class Friend implements Serializable {
 	 * @param status
 	 */
 	public void setStatus(int status) {
-		this.status = status;
+		isFriend=status;
 	}
 
 	public FriendSourse getSource() {

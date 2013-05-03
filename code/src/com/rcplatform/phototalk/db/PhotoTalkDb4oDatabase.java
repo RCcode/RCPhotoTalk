@@ -17,8 +17,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	private ObjectContainer db;
 
 	public PhotoTalkDb4oDatabase(UserInfo userInfo) {
-		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(),
-				DatabaseUtils.getDatabasePath(userInfo));
+		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DatabaseUtils.getDatabasePath(userInfo));
 	}
 
 	@Override
@@ -54,6 +53,17 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			result.add(info);
 		}
 		return result;
+	}
+
+	@Override
+	public boolean hasFriend(String suid) {
+		Friend example = new Friend();
+		example.setSuid(suid);
+		ObjectSet<Friend> result = db.queryByExample(example);
+		if (result.size() > 0) {
+			return true;
+		}
+		return false;
 	}
 
 }

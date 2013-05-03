@@ -16,39 +16,38 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-public class VideoDownloader {
+public class FileDownloader {
 	public static final int MSG_DOWNLOAD_SUCCESS = 100;
 	public static final int MSG_DOWNLOAD_FAIL = 101;
-	private static final int TIME_OUT = 10*1000;
-	private static final int READ_TIME_OUT=30*1000;
+	private static final int TIME_OUT = 10 * 1000;
+	private static final int READ_TIME_OUT = 30 * 1000;
 
-	private static VideoDownloader mDownloader;
+	private static FileDownloader mDownloader;
 	private ThreadPoolExecutor mPool;
-	private Map<String, OnVideoDownloadListener> mTaskStore = new HashMap<String, VideoDownloader.OnVideoDownloadListener>();
+	private Map<String, OnLoadingListener> mTaskStore = new HashMap<String, FileDownloader.OnLoadingListener>();
 
-	private VideoDownloader() {
+	private FileDownloader() {
 		// TODO Auto-generated constructor stub
 		mPool = (ThreadPoolExecutor) Executors.newScheduledThreadPool(5);
 	}
 
-	public static VideoDownloader getInstance() {
+	public synchronized static FileDownloader getInstance() {
 		if (mDownloader == null)
-			mDownloader = new VideoDownloader();
+			mDownloader = new FileDownloader();
 		return mDownloader;
 	}
 
-	public void downloadVideo(String videoPath, String savePath,
-			OnVideoDownloadListener listener) {
+	public void loadFile(String videoPath, String savePath, OnLoadingListener listener) {
 		if (!mTaskStore.containsKey(videoPath)) {
 			addTask(videoPath, savePath, listener);
 		}
 	}
 
-	private void addTask(String videoPath, String savePath,
-			OnVideoDownloadListener listener) {
+	private void addTask(String videoPath, String savePath, OnLoadingListener listener) {
+		listener.onStartLoad();
 		mTaskStore.put(videoPath, listener);
 		mPool.execute(new DownloadTask(videoPath, savePath));
-		
+
 	}
 
 	private Handler mHandler = new Handler() {
@@ -117,36 +116,38 @@ public class VideoDownloader {
 		conn.setReadTimeout(READ_TIME_OUT);
 		if (conn.getResponseCode() == 200) {
 			InputStream in = conn.getInputStream();
-			readStream(in,savePath);
-		}else{
+			readStream(in, savePath);
+		} else {
 			conn.disconnect();
 			throw new IOException();
 		}
 		conn.disconnect();
 	}
-	private void readStream(InputStream in,String savePath) throws IOException{
+
+	private void readStream(InputStream in, String savePath) throws IOException {
 		ByteArrayOutputStream byteOS = new ByteArrayOutputStream();
 		byte[] buffered = new byte[1024];
-		int len=0;
-		while ((len=in.read(buffered)) != -1) {
-			byteOS.write(buffered,0,len);
+		int len = 0;
+		while ((len = in.read(buffered)) != -1) {
+			byteOS.write(buffered, 0, len);
 		}
 		byteOS.flush();
 		in.close();
 		writeFile(savePath, byteOS);
 		byteOS.close();
 	}
-	
-	private void writeFile(String savePath,ByteArrayOutputStream byteOS) throws IOException{
-		File file=new File(savePath);
-		File parent=file.getParentFile();
-		if(!parent.exists())
+
+	private void writeFile(String savePath, ByteArrayOutputStream byteOS) throws IOException {
+		File file = new File(savePath);
+		File parent = file.getParentFile();
+		if (!parent.exists())
 			parent.mkdirs();
 		FileOutputStream fos = new FileOutputStream(file);
 		fos.write(byteOS.toByteArray());
 		fos.flush();
 		fos.close();
 	}
+
 	private void sendSuccessMessage(String videoPath) {
 		Message msg = mHandler.obtainMessage();
 		msg.what = MSG_DOWNLOAD_SUCCESS;
@@ -161,7 +162,9 @@ public class VideoDownloader {
 		mHandler.sendMessage(msg);
 	}
 
-	public static interface OnVideoDownloadListener {
+	public static interface OnLoadingListener {
+		public void onStartLoad();
+
 		public void onDownloadSuccess();
 
 		public void onDownloadFail();

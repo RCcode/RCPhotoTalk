@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.AsyncTask;
@@ -37,7 +38,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.adapter.HomeUserRecordAdapter;
+import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
@@ -112,40 +113,49 @@ public class HomeActivity extends BaseActivity {
 
 	private LongPressDialog mLongPressDialog;
 
-	private HomeUserRecordAdapter adapter;
+	private PhotoTalkMessageAdapter adapter;
+
+	private Information mShowDetailInformation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		app = (MenueApplication) getApplication();
+		app = getPhotoTalkApplication();
 		app.addActivity(this.getClass().getName(), this);
-		// 如果当前账号是第一次登陆就会去为当前用户创建相关表
 		DatabaseFactory.getInstance(this).createTables(this);
-		// 检查当前用户是是否有请求失败的记录，有的话就会向服务器提交
 		checkFialRequest();
 		initViewAndListener();
-		// 进来后首先从数据库里面查找记录
 		loadDataFromDataBase();
 		loadRecords();
+	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == REQUEST_CODE_DETAIL) {
+				mShowDetailInformation.setStatu(InformationState.STATU_QEQUEST_ADDED);
+				adapter.notifyDataSetChanged();
+			}
+		}
 	}
 
 	private void loadRecords() {
 		mRefreshView.setRefreshing();
-		RecordInfoProxy.getAllRecordInfos(this,
-				new RCPlatformResponseHandler() {
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						handleServiceRecordInfo(content);
-					}
+		RecordInfoProxy.getAllRecordInfos(this, new RCPlatformResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				handleServiceRecordInfo(content);
+			}
 
-					@Override
-					public void onFailure(int errorCode, String content) {
-						showErrorConfirmDialog(content);
-						mRefreshView.onHeaderRefreshComplete();
-					}
-				});
+			@Override
+			public void onFailure(int errorCode, String content) {
+				showErrorConfirmDialog(content);
+				mRefreshView.onHeaderRefreshComplete();
+			}
+		});
 	}
 
 	private void handleServiceRecordInfo(final String serviceContent) {
@@ -155,15 +165,10 @@ public class HomeActivity extends BaseActivity {
 				try {
 					JSONObject obj = new JSONObject(serviceContent);
 					int noticeId = obj.getInt("noticeId");
-					PrefsUtils.User.setUserMaxRecordInfoId(HomeActivity.this,
-							getPhotoTalkApplication().getCurrentUser()
-									.getEmail(), noticeId);
+					PrefsUtils.User.setUserMaxRecordInfoId(HomeActivity.this, getPhotoTalkApplication().getCurrentUser().getEmail(), noticeId);
 					@SuppressWarnings("unchecked")
-					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson()
-							.fromJson(obj.getJSONArray("mainUserNotice")
-									.toString(),
-									new TypeToken<List<ServiceRecordInfo>>() {
-									}.getType());
+					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(obj.getJSONArray("mainUserNotice").toString(), new TypeToken<List<ServiceRecordInfo>>() {
+					}.getType());
 
 					List<Information> listinfo = convertData(recordInfo);
 					filterList(listinfo);
@@ -176,8 +181,7 @@ public class HomeActivity extends BaseActivity {
 		thread.start();
 	}
 
-	private void searchFriendDetailById(String atUserId,
-			final Information record) {
+	private void searchFriendDetailById(String atUserId, final Information record) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		FriendsProxy.getFriendDetail(this, new RCPlatformResponseHandler() {
 
@@ -185,8 +189,8 @@ public class HomeActivity extends BaseActivity {
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jObj = new JSONObject(content);
-					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject(
-							"friendInfo").toString());
+					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject("friendInfo").toString());
+					mShowDetailInformation = record;
 					startFriendDetailActivity(friend);
 				} catch (JSONException e) {
 					showErrorConfirmDialog(R.string.net_error);
@@ -217,8 +221,7 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		if (SelectFriendsActivity.class.getName().equals(
-				intent.getStringExtra("from"))) {
+		if (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from"))) {
 			long time = intent.getLongExtra("time", 0);
 			if (app.getSendRecordsList(time) != null) {
 				initOrRefreshListView(app.getSendRecordsList(time));
@@ -228,8 +231,7 @@ public class HomeActivity extends BaseActivity {
 
 	private void reSendNotifyToService(Information record) {
 		//
-		List<Information> sendList = app.getSendRecordsList(record
-				.getCreatetime());
+		List<Information> sendList = app.getSendRecordsList(record.getCreatetime());
 		if (sendList != null) {
 			sendList.remove(record);
 			if (sendList.size() == 0)
@@ -245,33 +247,27 @@ public class HomeActivity extends BaseActivity {
 		app.addSendRecords(time, newSendlist);
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.COUNTRY, Locale.getDefault().getCountry());
-		params.put(MenueApiFactory.HEAD_URL, MenueApplication
-				.getUserInfoInstall(this).getHeadUrl());
+		params.put(MenueApiFactory.HEAD_URL, getPhotoTalkApplication().getCurrentUser().getHeadUrl());
 		params.put(MenueApiFactory.TIME, String.valueOf(record.getCreatetime()));
-		params.put(MenueApiFactory.NICK,
-				MenueApplication.getUserInfoInstall(this).getNick());
+		params.put(MenueApiFactory.NICK, getPhotoTalkApplication().getCurrentUser().getNick());
 		params.put(MenueApiFactory.IMAGE_TYPE, "jpg");
 		params.put(MenueApiFactory.DESC, "");
-		params.put(MenueApiFactory.TIME_LIMIT,
-				String.valueOf(record.getLimitTime()));
-		params.put(MenueApiFactory.USER_ARRAY,
-				buildUserArray(record.getReceiver()));
+		params.put(MenueApiFactory.TIME_LIMIT, String.valueOf(record.getLimitTime()));
+		params.put(MenueApiFactory.USER_ARRAY, buildUserArray(record.getReceiver()));
 		params.put(MenueApiFactory.FILE, record.getUrl());
 
-		PhotoCharRequestService.getInstence().postRequestByTimestamp(this,
-				new PhotoChatHttpLoadTextCallBack() {
+		PhotoCharRequestService.getInstence().postRequestByTimestamp(this, new PhotoChatHttpLoadTextCallBack() {
 
-					@Override
-					public void textLoaded(String text, long time) {
-						callBackForSend(time, text);
-					}
+			@Override
+			public void textLoaded(String text, long time) {
+				callBackForSend(time, text);
+			}
 
-					@Override
-					public void loadFail(long time) {
-						callBackForSend(time, "");
-					}
-				}, params, MenueApiUrl.SEND_PICTURE_URL,
-				record.getCreatetime(), null);
+			@Override
+			public void loadFail(long time) {
+				callBackForSend(time, "");
+			}
+		}, params, MenueApiUrl.SEND_PICTURE_URL, record.getCreatetime(), null);
 
 	}
 
@@ -279,7 +275,7 @@ public class HomeActivity extends BaseActivity {
 		try {
 			JSONArray array = new JSONArray();
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("userId", receiver.getSuUserId());
+			jsonObject.put("userId", receiver.getSuid());
 			jsonObject.put("headUrl", receiver.getHeadUrl());
 			jsonObject.put("nick", receiver.getNick());
 			array.put(jsonObject);
@@ -295,8 +291,7 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void run() {
-				List<Information> data = PhotoTalkDatabaseFactory.getDatabase()
-						.getRecordInfos();
+				List<Information> data = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
 				sendDataLoadedMessage(data);
 			}
 		}).start();
@@ -330,8 +325,7 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(HomeActivity.this,
-						MyFriendsActivity.class));
+				startActivity(new Intent(HomeActivity.this, MyFriendsActivity.class));
 			}
 		});
 
@@ -342,44 +336,37 @@ public class HomeActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(HomeActivity.this,
-						SettingsActivity.class));
+				startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
 			}
 		});
 		mTakePhoto.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(HomeActivity.this,
-						TakePhotoActivity.class));
+				startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
 			}
 		});
 		mRecord.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				startActivity(new Intent(HomeActivity.this,
-						VideoRecordActivity.class));
+				startActivity(new Intent(HomeActivity.this, VideoRecordActivity.class));
 			}
 		});
-		mRecordListView
-				.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-					@Override
-					public boolean onItemLongClick(AdapterView<?> parent,
-							View view, int position, long id) {
-						// show(position);
-						showLongClickDialog(position);
-						return false;
-					}
-				});
-		final GestureDetector gestureDetector = new GestureDetector(
-				new HomeGestureListener());
+		final GestureDetector gestureDetector = new GestureDetector(new HomeGestureListener());
 		mRecordListView.setOnTouchListener(new OnTouchListener() {
 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				return gestureDetector.onTouchEvent(event);
+			}
+		});
+		mRecordListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				showLongClickDialog(arg2);
+				return false;
 			}
 		});
 		mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
@@ -404,8 +391,9 @@ public class HomeActivity extends BaseActivity {
 		public boolean onDown(MotionEvent e) {
 			if (mRecordListView.getChildCount() > 0) {
 				int position = getPostionFromTouch(e, mRecordListView);
-				if (position != -1)
+				if (position != -1) {
 					show(position);
+				}
 			}
 			return super.onDown(e);
 		}
@@ -415,16 +403,12 @@ public class HomeActivity extends BaseActivity {
 			if (mRecordListView.getChildCount() > 0) {
 				int position = getPostionFromTouch(e, mRecordListView);
 				Information record = (Information) adapter.getItem(position);
-				if (record != null
-						&& (record.getType() != InformationType.TYPE_SYSTEM_NOTICE
-								&& record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record
-								.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
+				if (record != null && (record.getType() != InformationType.TYPE_SYSTEM_NOTICE && record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
 					String sUid = null;
-					if (PhotoTalkUtils.isOwnerForReocrd(HomeActivity.this,
-							record)) {
-						sUid = record.getReceiver().getSuUserId();
+					if (PhotoTalkUtils.isSender(HomeActivity.this, record)) {
+						sUid = record.getReceiver().getSuid();
 					} else {
-						sUid = record.getSender().getSuUserId();
+						sUid = record.getSender().getSuid();
 					}
 					searchFriendDetailById(sUid, record);
 				}
@@ -437,49 +421,37 @@ public class HomeActivity extends BaseActivity {
 		if (adapter != null) {
 			Information record = adapter.getData().get(position);
 			if (record != null) {
-				if (record.getStatu() == InformationState.STATU_NOTICE_LOADING
-						|| record.getStatu() == InformationState.STATU_NOTICE_SENDING
-						|| record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+				if (record.getStatu() == InformationState.STATU_NOTICE_LOADING || record.getStatu() == InformationState.STATU_NOTICE_SENDING || record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 					return;
 				} else {
 					if (mLongPressDialog == null) {
-						mLongPressDialog = new LongPressDialog(this,
-								new String[] { getString(R.string.resend),
-										getString(R.string.reload),
-										getString(R.string.delete) },
-								new OnLongPressItemClickListener() {
+						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload), getString(R.string.delete) }, new OnLongPressItemClickListener() {
 
-									@Override
-									public void onClick(int listPostion,
-											int itemIndex) {
-										Information record = adapter.getData()
-												.get(listPostion);
-										switch (itemIndex) {
-										case 0:
-											reSendNotifyToService(record);
-											mLongPressDialog.hide();
-											break;
-										// 重新下载
-										case 1:
-											reLoadPictrue(record);
-											mLongPressDialog.hide();
-											break;
+							@Override
+							public void onClick(int listPostion, int itemIndex) {
+								Information record = adapter.getData().get(listPostion);
+								switch (itemIndex) {
+								case 0:
+									reSendNotifyToService(record);
+									mLongPressDialog.hide();
+									break;
+								// 重新下载
+								case 1:
+									reLoadPictrue(record);
+									mLongPressDialog.hide();
+									break;
 
-										case 2:
-											PhotoTalkDao
-													.getInstance()
-													.deleteRecordById(
-															HomeActivity.this,
-															record.getRecordId());
-											adapter.getData().remove(record);
-											adapter.notifyDataSetChanged();
-											notifyServiceDelete(record);
-											mLongPressDialog.hide();
-											break;
-										}
+								case 2:
+									PhotoTalkDao.getInstance().deleteRecordById(HomeActivity.this, record.getRecordId());
+									adapter.getData().remove(record);
+									adapter.notifyDataSetChanged();
+									notifyServiceDelete(record);
+									mLongPressDialog.hide();
+									break;
+								}
 
-									}
-								});
+							}
+						});
 					}
 
 					if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
@@ -495,9 +467,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, null, null,
-				mRecordListView, ImageLoader.getInstance(),
-				ImageOptionsFactory.getReceiveImageOption(), record);
+		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
 
 	protected void loadMoreFromDatabase(final int i) {
@@ -508,12 +478,7 @@ public class HomeActivity extends BaseActivity {
 			protected List<Information> doInBackground(Integer... params) {
 				List<Information> list = null;
 				if (getAdapterData() != null && getAdapterData().size() > 0) {
-					list = PhotoTalkDao.getInstance().loadTMoreInfoRecord(
-							HomeActivity.this,
-							i,
-							String.valueOf(getAdapterData().get(
-									getAdapterData().size() - 1)
-									.getCreatetime()));
+					list = PhotoTalkDao.getInstance().loadTMoreInfoRecord(HomeActivity.this, i, String.valueOf(getAdapterData().get(getAdapterData().size() - 1).getCreatetime()));
 				} else {
 					loadDataFromDataBase();
 				}
@@ -533,52 +498,38 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void show(final int position) {
-		final Information infoRecord = ((Information) mRecordListView
-				.getAdapter().getItem(position));
+		final Information infoRecord = ((Information) mRecordListView.getAdapter().getItem(position));
 
-		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-				&& infoRecord
-						.getReceiver()
-						.getSuid()
-						.equals(String.valueOf(MenueApplication
-								.getUserInfoInstall(this).getSuid()))) {
+		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !PhotoTalkUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 				// 这句还给View里面联合起作用，这边加入任务每一秒钟去setLimitTime改变值，然后RecordTimerLimitView在每秒钟显示下新的值
 				TimerLimitUtil.getInstence().addTask(infoRecord);
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView
-						.findViewWithTag(infoRecord.getRecordId()
-								+ Button.class.getName());
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
-				limitView.setOnTimeEndListener(
-						new OnTimeEndListener() {
+				limitView.setOnTimeEndListener(new OnTimeEndListener() {
 
-							@Override
-							public void onEnd(Object statuTag, Object buttonTag) {
+					@Override
+					public void onEnd(Object statuTag, Object buttonTag) {
 
-								RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView
-										.findViewWithTag(buttonTag);
-								if (timerLimitView != null) {
-									timerLimitView
-											.setBackgroundResource(R.drawable.receive_arrows_opened);
-									timerLimitView.setText("");
-								}
-								TextView statu = ((TextView) mRecordListView
-										.findViewWithTag(statuTag));
-								if (statu != null) {
-									statu.setText(R.string.statu_opened_1s_ago);
-								}
-								// 通知服务器改变状态为3，表示已经查看
-								notifyService(infoRecord);
+						RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
+						if (timerLimitView != null) {
+							timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+							timerLimitView.setText("");
+						}
+						TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
+						if (statu != null) {
+							statu.setText(R.string.statu_opened_1s_ago);
+						}
+						// 通知服务器改变状态为3，表示已经查看
+						notifyService(infoRecord);
 
-							}
-						}, infoRecord.getRecordId() + TextView.class.getName(),
-						infoRecord.getRecordId() + Button.class.getName());
+					}
+				}, infoRecord.getRecordId() + TextView.class.getName(), infoRecord.getRecordId() + Button.class.getName());
 
 				if (mShowDialog == null) {
-					LongClickShowView.Builder builder = new LongClickShowView.Builder(
-							HomeActivity.this, R.layout.receice_to_show_view);
+					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
 				mShowDialog.ShowDialog(infoRecord);
@@ -586,8 +537,7 @@ public class HomeActivity extends BaseActivity {
 				// 把数据里面的状态更改为3，已查看
 			} else if (infoRecord.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
-					LongClickShowView.Builder builder = new LongClickShowView.Builder(
-							HomeActivity.this, R.layout.receice_to_show_view);
+					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
 				mShowDialog.ShowDialog(infoRecord);
@@ -627,8 +577,7 @@ public class HomeActivity extends BaseActivity {
 		if (0 == first) {
 			if (eY > firstR.bottom) {
 				/* 触摸不在listview header上，根据触摸的Y坐标和listitem的高度计算索引 */
-				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0)
-						.getHeight());
+				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
 				count++;
 				index_of_childview = count;
 				index_in_adapter += count;
@@ -641,8 +590,7 @@ public class HomeActivity extends BaseActivity {
 		else {
 			if (eY > firstR.bottom) {
 				/* 用触摸点坐标和item高度相除来计算索引 */
-				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0)
-						.getHeight());
+				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
 				count++;
 				index_of_childview = count;
 				index_in_adapter += count;
@@ -668,10 +616,6 @@ public class HomeActivity extends BaseActivity {
 			return true;
 		}
 		return super.dispatchTouchEvent(event);
-	}
-
-	private void asyncRecordInfoAnalyze() {
-
 	}
 
 	private final Handler myHandler = new Handler() {
@@ -705,7 +649,7 @@ public class HomeActivity extends BaseActivity {
 			return;
 		}
 		if (adapter == null) {
-			adapter = new HomeUserRecordAdapter(this, data, mRecordListView);
+			adapter = new PhotoTalkMessageAdapter(this, data, mRecordListView);
 			sortList(getAdapterData());
 			mRecordListView.setAdapter(adapter);
 
@@ -727,34 +671,26 @@ public class HomeActivity extends BaseActivity {
 
 	private void notifyServiceOpenedPic(Information record) {
 		Gson gson = new Gson();
-		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu()
-				+ "", record.getRecordId() + "", record.getType() + "");
+		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId() + "", record.getType() + "");
 		List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
 		list.add(notice);
-		String s = gson.toJson(list,
-				new TypeToken<List<ServiceSimpleNotice>>() {
-				}.getType());
+		String s = gson.toJson(list, new TypeToken<List<ServiceSimpleNotice>>() {
+		}.getType());
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.NOTICES, s);
-		PhotoCharRequestService.getInstence().postRequest(this,
-				notifyRecordOpenedCallBack, params,
-				MenueApiUrl.HOME_USER_NOTICE_CHANGE);
+		PhotoCharRequestService.getInstence().postRequest(this, notifyRecordOpenedCallBack, params, MenueApiUrl.HOME_USER_NOTICE_CHANGE);
 	}
 
 	private void notifyServiceDelete(Information record) {
 		Gson gson = new Gson();
-		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu()
-				+ "", record.getRecordId() + "", record.getType() + "");
+		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId() + "", record.getType() + "");
 		List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
 		list.add(notice);
-		String s = gson.toJson(list,
-				new TypeToken<List<ServiceSimpleNotice>>() {
-				}.getType());
+		String s = gson.toJson(list, new TypeToken<List<ServiceSimpleNotice>>() {
+		}.getType());
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.NOTICES, s);
-		PhotoCharRequestService.getInstence().postRequest(this,
-				notifyRecordOpenedCallBack, params,
-				MenueApiUrl.HOME_USER_NOTICE_DELETE);
+		PhotoCharRequestService.getInstence().postRequest(this, notifyRecordOpenedCallBack, params, MenueApiUrl.HOME_USER_NOTICE_DELETE);
 	}
 
 	/**
@@ -772,11 +708,10 @@ public class HomeActivity extends BaseActivity {
 			infoRecord.setRecordId(info.getId().trim());
 			infoRecord.setNoticeId(info.getNoticeId());
 			infoRecord.setCreatetime(info.getCrtTime());
+			infoRecord.setTotleLength(info.getTime());
 			infoRecord.setLimitTime(info.getTime());
-			infoRecord.setSender(new RecordUser(info.getSeUserId(), info
-					.getSeSuid(), info.getSnick(), info.getShead()));
-			infoRecord.setReceiver(new RecordUser(info.getReUserId(), info
-					.getReSuid(), info.getRnick(), info.getRhead()));
+			infoRecord.setSender(new RecordUser(info.getSeSuid(), info.getSnick(), info.getShead()));
+			infoRecord.setReceiver(new RecordUser(info.getReSuid(), info.getRnick(), info.getRhead()));
 			infoRecord.setStatu(info.getState());
 			infoRecord.setType(info.getType());
 			infoRecord.setUrl(info.getPicUrl());
@@ -795,8 +730,7 @@ public class HomeActivity extends BaseActivity {
 					info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
 				}
 				// 把当前这次发送错误的信息写入数据库保存，并删除app中的引用
-				PhotoTalkDao.getInstance().insertInfoRecord(this,
-						app.getSendRecordsList(time));
+				PhotoTalkDao.getInstance().insertInfoRecord(this, app.getSendRecordsList(time));
 			}
 			initOrRefreshListView(null);
 			return;
@@ -806,17 +740,12 @@ public class HomeActivity extends BaseActivity {
 			jsonObject = new JSONObject(text);
 			int state = jsonObject.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
 			if (state == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-				List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson()
-						.fromJson(jsonObject.getJSONArray("noticeList")
-								.toString(),
-								new TypeToken<List<ServiceRecordInfo>>() {
-								}.getType());
+				List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(jsonObject.getJSONArray("noticeList").toString(), new TypeToken<List<ServiceRecordInfo>>() {
+				}.getType());
 				if (recordInfo != null && recordInfo.size() > 0) {
-					if (app.getSendRecordsList(time) != null
-							&& app.getSendRecordsList(time).size() > 0) {
+					if (app.getSendRecordsList(time) != null && app.getSendRecordsList(time).size() > 0) {
 						// 删除 本地缓存的图片
-						String fileName = app.getSendRecordsList(time).get(0)
-								.getUrl();
+						String fileName = app.getSendRecordsList(time).get(0).getUrl();
 						app.deleteSendFileCache(fileName);
 						// 删除app 中的记录
 						app.getSendRecords().remove(time);
@@ -836,8 +765,7 @@ public class HomeActivity extends BaseActivity {
 						}
 					}
 
-					PhotoTalkDao.getInstance().insertInfoRecord(this,
-							app.getSendRecordsList(time));
+					PhotoTalkDao.getInstance().insertInfoRecord(this, app.getSendRecordsList(time));
 					// app.getSendRecords().remove(time);
 				}
 				initOrRefreshListView(null);
@@ -851,9 +779,7 @@ public class HomeActivity extends BaseActivity {
 		Iterator<Information> iterator = data2.iterator();
 		while (iterator.hasNext()) {
 			Information infoRecord = iterator.next();
-			if (infoRecord.getCreatetime() == time
-					&& (infoRecord.getNoticeId()
-							.equals(MenueApiFactory.ERROR_NOTICE))) {
+			if (infoRecord.getCreatetime() == time && (infoRecord.getNoticeId().equals(MenueApiFactory.ERROR_NOTICE))) {
 				iterator.remove();
 			}
 
@@ -867,7 +793,6 @@ public class HomeActivity extends BaseActivity {
 	 *            ： 服务器取回的数据
 	 */
 	protected void filterList(List<Information> listinfo) {
-		boolean isNeedRefreshAdpter = false;
 		List<Information> newNotices = new ArrayList<Information>();
 		Iterator<Information> iterator = listinfo.iterator();
 		List<Information> data = getAdapterData();
@@ -875,16 +800,13 @@ public class HomeActivity extends BaseActivity {
 			Information record = iterator.next();
 			// 如果是通知
 			if (data != null && data.contains(record)) {
-				if (record.getStatu() == data.get(data.indexOf(record))
-						.getStatu()) {
+				if (record.getStatu() == data.get(data.indexOf(record)).getStatu()) {
 					// 状态没有改变
 					iterator.remove();
 				} else {
 					// 状态改变
 					if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-						data.get(data.indexOf(record)).setStatu(
-								record.getStatu());
-						isNeedRefreshAdpter = true;
+						data.get(data.indexOf(record)).setStatu(record.getStatu());
 					} else if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 
 						// 判断 当前本地notice的状态是否等于其他几种特殊状态（0：正在发送，4，正在查看，5
@@ -893,49 +815,31 @@ public class HomeActivity extends BaseActivity {
 						if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 							// 如果状态为1，表示需要去下载，但是我们得去判断是否正在下载，
 							// 对于发送者来说什么都不做，只有接受者会有操作
-							if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_LOADING
-									|| data.get(data.indexOf(record))
-											.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+							if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_LOADING || data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 								// 状态为5或者4
 								// 表示是正在下载或者正在查看，说明已经下载下来了，那么就不需要去下载了
-							} else if (data.get(data.indexOf(record))
-									.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED
-									|| data.get(data.indexOf(record))
-											.getStatu() == InformationState.STATU_NOTICE_OPENED) {
+							} else if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED || data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_OPENED) {
 								// 如果本地的notice
 								// 是2或者3了，表示已经下载下来了，但是服务器还是一，说明通知服务器改状态没有成功，那么的通知服务器改状态，本地什么都不做
 								notifyService(data.get(data.indexOf(record)));
 							} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
-								data.get(data.indexOf(record)).setStatu(
-										record.getStatu());
-								isNeedRefreshAdpter = true;
+								data.get(data.indexOf(record)).setStatu(record.getStatu());
 							}
 						} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 							// 对发送者来说，只需要改变状态，并通知界面刷新就OK
-							if (String.valueOf(
-									MenueApplication.getUserInfoInstall(
-											HomeActivity.this).getSuid())
-									.equals(record.getSender().getSuid())) {
-								data.get(data.indexOf(record)).setStatu(
-										record.getStatu());
-								isNeedRefreshAdpter = true;
+							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
+								data.get(data.indexOf(record)).setStatu(record.getStatu());
 							} else {
 								// 对于接收者来说，图片一已经下载完成了，那就要判断本地的状态时候为3，如果为3，那说明本地查看后
 								// 只改了本地的状态，通知服务器改状态失败了，得再次通知，其他的就不用做任何操作
 								if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_OPENED) {
-									notifyService(data
-											.get(data.indexOf(record)));
+									notifyService(data.get(data.indexOf(record)));
 								}
 							}
 
 						} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
-							if (String.valueOf(
-									MenueApplication.getUserInfoInstall(
-											HomeActivity.this).getSuid())
-									.equals(record.getSender().getSuid())) {
-								data.get(data.indexOf(record)).setStatu(
-										record.getStatu());
-								isNeedRefreshAdpter = true;
+							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
+								data.get(data.indexOf(record)).setStatu(record.getStatu());
 							}
 						}
 
@@ -994,78 +898,54 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final Map<String, String> params = new HashMap<String, String>();
-		params.put(
-				MenueApiFactory.NOTICE_ID,
-				PrefsUtils.User.getUserMaxRecordInfoId(this,
-						getPhotoTalkApplication().getCurrentUser().getEmail())
-						+ "");
+		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail()) + "");
 		notifyServiceDeleteAll(params);
 		PhotoTalkDao.getInstance().deleteCurrentUserTable(this);
-		((HomeUserRecordAdapter) mRecordListView.getAdapter()).getData()
-				.clear();
-		((HomeUserRecordAdapter) mRecordListView.getAdapter())
-				.notifyDataSetChanged();
+		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
+		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		PhotoCharRequestService.getInstence().postRequest(this,
-				new GalHttpLoadTextCallBack() {
+		PhotoCharRequestService.getInstence().postRequest(this, new GalHttpLoadTextCallBack() {
 
-					@Override
-					public void textLoaded(String text) {
-						JSONObject obj;
-						try {
-							obj = new JSONObject(text);
-							int state = obj
-									.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-							if (state != MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-								String jsonParams = new Gson().toJson(params,
-										new TypeToken<Map<String, String>>() {
-										}.getType());
-								PhotoTalkDao
-										.getInstance()
-										.insertFailRequestInfo(
-												HomeActivity.this,
-												MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL,
-												jsonParams);
-							} else {
-								String request_id = params.get("id");
-								if (request_id != null
-										&& request_id.length() > 0) {
-									PhotoTalkDao.getInstance()
-											.deleteFailRequestInfoById(
-													HomeActivity.this,
-													request_id);
-								}
-							}
-						} catch (Exception ex) {
-
+			@Override
+			public void textLoaded(String text) {
+				JSONObject obj;
+				try {
+					obj = new JSONObject(text);
+					int state = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
+					if (state != MenueApiFactory.RESPONSE_STATE_SUCCESS) {
+						String jsonParams = new Gson().toJson(params, new TypeToken<Map<String, String>>() {
+						}.getType());
+						PhotoTalkDao.getInstance().insertFailRequestInfo(HomeActivity.this, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL, jsonParams);
+					} else {
+						String request_id = params.get("id");
+						if (request_id != null && request_id.length() > 0) {
+							PhotoTalkDao.getInstance().deleteFailRequestInfoById(HomeActivity.this, request_id);
 						}
 					}
+				} catch (Exception ex) {
 
-					@Override
-					public void loadFail() {
-						String jsonParams = new Gson().toJson(params,
-								new TypeToken<Map<String, String>>() {
-								}.getType());
-						PhotoTalkDao.getInstance().insertFailRequestInfo(
-								HomeActivity.this,
-								MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL,
-								jsonParams);
-					}
-				}, params, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL);
+				}
+			}
+
+			@Override
+			public void loadFail() {
+				String jsonParams = new Gson().toJson(params, new TypeToken<Map<String, String>>() {
+				}.getType());
+				PhotoTalkDao.getInstance().insertFailRequestInfo(HomeActivity.this, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL, jsonParams);
+			}
+		}, params, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL);
 	}
 
 	private void checkFialRequest() {
-		List<Map<String, String>> requests = PhotoTalkDao.getInstance()
-				.findAllFailRequestInfo(this);
+		List<Map<String, String>> requests = PhotoTalkDao.getInstance().findAllFailRequestInfo(this);
 		if (requests != null && requests.size() > 0) {
 			Map<String, String> params;
 			for (Map<String, String> info : requests) {
-				params = new Gson().fromJson(info.get("params"),
-						new TypeToken<Map<String, String>>() {
-						}.getType());
+				params = new Gson().fromJson(info.get("params"), new TypeToken<Map<String, String>>() {
+				}.getType());
 				params.put("id", info.get("id"));
 				notifyServiceDeleteAll(params);
 			}

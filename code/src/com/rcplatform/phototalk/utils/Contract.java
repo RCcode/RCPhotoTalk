@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.utils;
 
 import android.app.Activity;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 
 public class Contract {
@@ -9,6 +10,9 @@ public class Contract {
 	public static int SCREEN_HEIGHT;
 	public static int HEAD_IMAGE_WIDTH;
 	public static String DATABASE_PATH;
+	public static String FILE_PATH;
+	public static final String IMAGE_FORMAT = ".jpg";
+	public static final String AUDIO_FORMAT = ".amr";
 
 	public static void init(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -17,13 +21,14 @@ public class Contract {
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		DATABASE_PATH = context.getFilesDir().getAbsolutePath();
+		FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + "rcplatform/phototalk";
 	}
 
 	public static class Action {
 		public static final String ACTION_RECOMMEND_DETAIL = "com.rcplatform.phototalk.action.FRIEND_RECOMMEND";
 		public static final String ACTION_FRIEND_DETAIL = "com.rcplatform.phototalk.action.FRIEND";
-		public static final String ACTION_UPLOAD_INTITE_CONTACT="com.rcplatform.phototalk.action.INVITE_CONTACT";
-		public static final String ACTION_UPLOAD_INTITE_THIRDPART="com.rcplatform.phototalk.action.INVITE_THIRDPART";
+		public static final String ACTION_UPLOAD_INTITE_CONTACT = "com.rcplatform.phototalk.action.INVITE_CONTACT";
+		public static final String ACTION_UPLOAD_INTITE_THIRDPART = "com.rcplatform.phototalk.action.INVITE_THIRDPART";
 	}
 
 	public static final String PROVIDER_AUTHORITY = "com.rcplatform.phototalk.provider";
@@ -87,7 +92,7 @@ public class Contract {
 	public static final String KEY_BIRTHDAY = "birthday";
 
 	public static final String KEY_DEVICE_ID = "deviceid";
-	
-	public static final String KEY_MAX_RECORD_ID="max_record_id";
+
+	public static final String KEY_MAX_RECORD_ID = "max_record_id";
 
 }

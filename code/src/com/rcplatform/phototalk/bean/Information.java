@@ -33,8 +33,18 @@ public class Information {
     protected boolean isLoaded = false;
 
     protected boolean loading = false;
+    
+    private int totleLength;
 
-    public Information() {
+    public int getTotleLength() {
+		return totleLength;
+	}
+
+	public void setTotleLength(int totleLength) {
+		this.totleLength = totleLength;
+	}
+
+	public Information() {
         // TODO Auto-generated constructor stub
     }
 
@@ -43,7 +53,6 @@ public class Information {
         this.statu = statu;
         this.lastUpdateTime = lastUpdateTime;
     }
-
     public int getLimitTime() {
         return limitTime;
     }
@@ -184,11 +193,4 @@ public class Information {
         return this.recordId.equals(info.getRecordId()) && this.type == info.getType();
 
     }
-
-    @Override
-    public String toString() {
-        return "InfoRecord [recordId=" + recordId + ", limitTime=" + limitTime + ", opened=" + opened + ", showing=" + showing + ", destroyed="
-                + destroyed + "]";
-    }
-
 }

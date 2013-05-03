@@ -73,7 +73,7 @@ public class DatabaseFactory {
 	}
 
 	public synchronized void createTables(Context context) {
-		String userId = String.valueOf(MenueApplication.getUserInfoInstall(context).getSuid());
+		String userId = "";
 		String USER_RECORD = USER_RECORD_TABLE_NAME + "_" + userId;
 		// 为每个用户创建单独的消息记录表
 		mDatabase.execSQL("CREATE TABLE IF NOT EXISTS " + USER_RECORD + "(" + RECORD_ID + " TEXT PRIMARY KEY," + RECORD_S_USER_ID + " TEXT NOT NULL," + RECORD_S_USER_SUID + " TEXT NOT NULL," + RECORD_S_USER_NICK + " TEXT," + RECORD_S_USER_HEAD + " TEXT," + RECORD_R_USER_ID + " TEXT NOT NULL," + RECORD_R_USER_SUID + " TEXT NOT NULL," + RECORD_R_USER_NICK + " TEXT," + RECORD_R_USER_HEAD + " TEXT," + RECORD_TYPE + " TEXT NOT NULL," + RECORD_CREATE_TIME + " TEXT NOT NULL," + RECORD_UPDATE_TIME + " TEXT," + RECORD_STATU + " TEXT NOT NULL," + RECORD_URL + " TEXT," + RECORD_LIMIT_TIME + " TEXT," + RECORD_NOTICE_ID + " TEXT)");
