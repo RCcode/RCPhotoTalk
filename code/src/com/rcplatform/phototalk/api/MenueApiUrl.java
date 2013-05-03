@@ -76,7 +76,6 @@ public class MenueApiUrl {
 	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
 
 	public static final String ASYNC_INVITE_URL = USER_URL + "inviteUserLog.do";
-
 	public static final String FRIEND_DETAIL_URL = USER_URL + "getUserInfo.do";
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	private static final String BASE_URL_FOR_USER = BASE_URL + "useraccess/";
@@ -127,4 +126,5 @@ public class MenueApiUrl {
 	public static final String UPDATE_PHONE_BIND_STATE_URL = COMM_URL
 			+ "phoneLog.do";
 	public static final String SYNCHRO_THIRD_URL = THIRD_URL + "thirdBind.do";
+	public static final String GET_USER_INFO = USER_URL + "getUserSelfInfo.do";
 }

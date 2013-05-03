@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import org.json.JSONException;
@@ -30,13 +31,16 @@ import com.rcplatform.phototalk.adapter.AppsAdapter;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.api.PhotoTalkParams;
+import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.AppBean;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -248,10 +252,6 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
 
 	@Override
 	public void onClick(View v) {
@@ -318,38 +318,74 @@ public class SettingsActivity extends Activity implements View.OnClickListener {
 	}
 
 	public void syncUserInfo() {
-		GalHttpRequest request = GalHttpRequest.requestWithURL(this, MenueApiUrl.USER_INFO_URL);
-		PhotoTalkParams.buildBasicParams(this, request);
-		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
+		
+		
+		FriendsProxy.getUserInfo(this,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void textLoaded(String text) {
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						try {
+							System.out.println("----- user content------>"+content);
+							JSONObject obj = new JSONObject(content);
+							final int status = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
+							if (status == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
 
-				try {
-					System.out.println(text);
-					JSONObject obj = new JSONObject(text);
-					final int status = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-					if (status == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-
-						Gson gson = new Gson();
-						JSONObject uiObj = obj.getJSONObject("userInfo");
-						userDetailInfo = gson.fromJson(uiObj.toString(), UserInfo.class);
-						appLists = gson.fromJson(uiObj.getJSONArray("appList").toString(), new TypeToken<ArrayList<AppBean>>() {
-						}.getType());
-						mHandler2.sendMessage(mHandler2.obtainMessage());
-					} else {
-						failure(obj);
+								Gson gson = new Gson();
+								JSONObject uiObj = obj.getJSONObject("userInfo");
+								userDetailInfo = gson.fromJson(uiObj.toString(), UserInfo.class);
+								appLists = gson.fromJson(uiObj.getJSONArray("appList").toString(), new TypeToken<ArrayList<AppBean>>() {
+								}.getType());
+								mHandler2.sendMessage(mHandler2.obtainMessage());
+							} else {
+								failure(obj);
+							}
+						} catch (Exception e) {
+							// TODO: handle exception
+						}
+						
 					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
 
-			@Override
-			public void loadFail() {
-				LogUtil.e(TAG, getResources().getString(R.string.net_error));
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						LogUtil.e(TAG, getResources().getString(R.string.net_error));
+					}
+				});
+
+		
+		
+//		GalHttpRequest request = GalHttpRequest.requestWithURL(this, MenueApiUrl.USER_INFO_URL);
+//		PhotoTalkParams.buildBasicParams(this, request);
+//		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
+//
+//			@Override
+//			public void textLoaded(String text) {
+//
+//				try {
+//					System.out.println(text);
+//					JSONObject obj = new JSONObject(text);
+//					final int status = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
+//					if (status == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
+//
+//						Gson gson = new Gson();
+//						JSONObject uiObj = obj.getJSONObject("userInfo");
+//						userDetailInfo = gson.fromJson(uiObj.toString(), UserInfo.class);
+//						appLists = gson.fromJson(uiObj.getJSONArray("appList").toString(), new TypeToken<ArrayList<AppBean>>() {
+//						}.getType());
+//						mHandler2.sendMessage(mHandler2.obtainMessage());
+//					} else {
+//						failure(obj);
+//					}
+//				} catch (JSONException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//
+//			@Override
+//			public void loadFail() {
+//				LogUtil.e(TAG, getResources().getString(R.string.net_error));
+//			}
+//		});
 
 	}
 

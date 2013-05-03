@@ -194,7 +194,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 				if (file.exists()) {
 					getFriends();
 				} else {
-					System.out.println("--->");
+					sendStringMessage(MSG_WHAT_ERROR,
+							getString(R.string.receive_data_error));
 				}
 			}
 		}).start();
@@ -235,6 +236,18 @@ public class SelectFriendsActivity extends BaseActivity implements
 			List<Friend> friends = gson.fromJson(myFriendsArray.toString(),
 					new com.google.gson.reflect.TypeToken<ArrayList<Friend>>() {
 					}.getType());
+//			.add(;)friends
+//			Friend user = new Friend();
+			System.out.println("-------"+app.getUserInfoInstall(this).getNick());
+			System.out.println("-------"+app.getUserInfoInstall(this).getSuid());
+			System.out.println("-------"+app.getUserInfoInstall(this).getHeadUrl());
+//			user.setNick(app.getUserInfoInstall(this).getNick());
+//			user.setSuid(app.getUserInfoInstall(this).getSuid());
+//			user.setHeadUrl(app.getUserInfoInstall(this).getHeadUrl());
+//			user.setLetter("t");
+//			friends.add(user);
+			
+			
 			TreeSet<Friend> fs = new TreeSet<Friend>(new PinyinComparator());
 			fs.addAll(friends);
 			friends.clear();
@@ -285,36 +298,31 @@ public class SelectFriendsActivity extends BaseActivity implements
 	private long timeSnap;
 
 	private void sendPicture(final String desc, String imagePath,
-			final int timeLimit, final List<Friend> friends) {
+			final String timeLimit, final List<Friend> friends) {
 		timeSnap = System.currentTimeMillis();
 
 		final File file = new File(imagePath);
-		new Thread() {
-			public void run() {
-				FriendsProxy.postZip(
-						SelectFriendsActivity.this,
-						file,
-						new RCPlatformResponseHandler() {
+		FriendsProxy.postZip(
+				SelectFriendsActivity.this,
+				file,
+				new RCPlatformResponseHandler() {
 
-							@Override
-							public void onSuccess(int statusCode, String content) {
-								// TODO Auto-generated method stub
-								mHandler.obtainMessage(MSG_SEND_SUCCESS)
-										.sendToTarget();
-							}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						// TODO Auto-generated method stub
+						mHandler.obtainMessage(MSG_SEND_SUCCESS).sendToTarget();
+					}
 
-							@Override
-							public void onFailure(int errorCode, String content) {
-								// TODO Auto-generated method stub
-								sendStringMessage(MSG_WHAT_ERROR,
-										getString(R.string.net_error));
-							}
-						}, getPhotoTalkApplication().getCurrentUser()
-								.getHeadUrl(), String.valueOf(timeSnap),
-						getPhotoTalkApplication().getCurrentUser().getNick(),
-						desc, timeLimit, buildUserArray(friends, timeSnap));
-			};
-		}.start();
+					@Override
+					public void onFailure(int errorCode, String content) {
+						// TODO Auto-generated method stub
+						sendStringMessage(MSG_WHAT_ERROR,
+								getString(R.string.net_error));
+					}
+				}, getPhotoTalkApplication().getCurrentUser().getHeadUrl(),
+				String.valueOf(timeSnap), getPhotoTalkApplication()
+						.getCurrentUser().getNick(), desc, timeLimit,
+				buildUserArray(friends, timeSnap));
 
 	}
 
@@ -375,7 +383,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 						R.string.please_select_contact, 1).show();
 				return;
 			} else {
-				sendPicture("123", tempFilePath, 10, sendData);
+				sendPicture("123", tempFilePath, timeLimit, sendData);
 			}
 			break;
 		case R.id.back:

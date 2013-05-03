@@ -54,6 +54,13 @@ public class FriendsProxy {
 		client.post(context, MenueApiUrl.GET_MY_FRIENDS_URL, responseHandler);
 		return null;
 	}
+	public static void getUserInfo(Context context,
+			RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.post(context, MenueApiUrl.GET_USER_INFO, responseHandler);
+	}
 	//田镇源 发送图片时 请求好友列表 
 	public static void getMyFriendlist(Context context,
 			RCPlatformResponseHandler responseHandler) {
@@ -62,9 +69,9 @@ public class FriendsProxy {
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.post(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
 	}
-//	上传zip方法
+//	田镇源 上传zip方法
 	public static void postZip(Context context,File file,
-			RCPlatformResponseHandler responseHandler,String head_url,String time,String nick,String desc,int timeLimit,String user_appary) {
+			RCPlatformResponseHandler responseHandler,String head_url,String time,String nick,String desc,String timeLimit,String user_appary) {
 		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
 				RequestAction.FILE);
 		PhotoTalkParams.buildBasicParams(context, client);
@@ -73,7 +80,7 @@ public class FriendsProxy {
 		client.putRequestParam(MenueApiFactory.NICK, nick);
 //		client.putRequestParam(MenueApiFactory.IMAGE_TYPE, "jpg");
 		client.putRequestParam(MenueApiFactory.DESC, desc);
-		client.putRequestParam(MenueApiFactory.TIME_LIMIT, timeLimit+"");
+		client.putRequestParam(MenueApiFactory.TIME_LIMIT, timeLimit);
 		client.putRequestParam(MenueApiFactory.USER_ARRAY, user_appary);
 //		client.putRequestParam(key, value)
 		client.postFile(context, MenueApiUrl.SEND_PICTURE_URL, file, responseHandler);
