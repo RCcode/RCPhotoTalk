@@ -311,9 +311,9 @@ public class EditPictureActivity extends Activity {
 				mEditableViewGroup.buildDrawingCache();
 				app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
 				// 点击发送后实时保存
-				mEditableViewGroup.setDrawingCacheEnabled(true);
-				mEditableViewGroup.buildDrawingCache();
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+//				mEditableViewGroup.setDrawingCacheEnabled(true);
+//				mEditableViewGroup.buildDrawingCache();
+//				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
 				startSelectFriendActivity();
 				break;
 			case CLOSE_ON_CLICK:
@@ -446,8 +446,7 @@ public class EditPictureActivity extends Activity {
 					handler.sendEmptyMessage(NO_SDC);
 					return;
 				}
-				tempFilePath = app.getCacheFilePath() + "/Photochat_"
-						+ System.currentTimeMillis() + ".jpg";
+				tempFilePath = app.getCacheFilePath() + "/Photochat.jpg";
 				File file = new File(tempFilePath);
 				try {
 
