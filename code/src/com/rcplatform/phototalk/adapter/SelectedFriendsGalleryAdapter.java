@@ -13,14 +13,14 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendChat;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 
 public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 
-    private final List<FriendChat> data;
+    private final List<Friend> data;
 
     private final Context context;
 
@@ -35,7 +35,7 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
         void onClick(int positon);
     }
 
-    public SelectedFriendsGalleryAdapter(Context context, List<FriendChat> data) {
+    public SelectedFriendsGalleryAdapter(Context context, List<Friend> data) {
         this.data = data;
         this.context = context;
         this.mImageLoader = ImageLoader.getInstance();
@@ -88,7 +88,7 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 
     }
 
-    public List<FriendChat> getData() {
+    public List<Friend> getData() {
         return data;
     }
 

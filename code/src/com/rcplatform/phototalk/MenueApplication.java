@@ -181,24 +181,46 @@ public class MenueApplication extends Application {
 	}
 
 	public String getSendFileCachePath() {
-		if (sendFileCachePath == null || sendFileCachePath.length() <= 0) {
-			File file = new File(getFilesDir(), "temp");
-			if (!file.exists())
-				file.mkdir();
-			sendFileCachePath = file.getAbsolutePath();
-		}
-		return sendFileCachePath;
+			String imagePath = "";
+			File sdDir = null;
+			boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+			if (sdCardExist) {
+				sdDir = Environment.getExternalStorageDirectory();
+				// 获取根目录
+				// Logger.d(Constant.RcAdTag, "SD卡存在! ", null);
+				String sdUrl = sdDir.toString()+"/temp";
+				File dir = new File(sdUrl);
+				if (!dir.exists())
+					dir.mkdir();
+				imagePath = sdUrl;
+			} else {
+				// Logger.d(Constant.RcAdTag, "SD卡不存在! ", null);
+				File file = new File(getFilesDir(), "temp");
+				if (!file.exists())
+					file.mkdir();
+				imagePath = file.getAbsolutePath();
+			}
+			// Logger.d(Constant.RcAdTag, "自主广告 图片保存路径为 ：  " + imagePath, null);
+			return imagePath;
+		
+		
+		
+//		if (sendFileCachePath == null || sendFileCachePath.length() <= 0) {
+//			File file = new File(getFilesDir(), "temp");
+//			if (!file.exists())
+//				file.mkdir();
+//			sendFileCachePath = file.getAbsolutePath();
+//		}
+//		return sendFileCachePath;
 	}
 
 	public void deleteSendFileCache(String fileName) {
 		File file = new File(getSendFileCachePath());
 		if (file.exists()) {
 			File file2 = new File(file, fileName);
-			Log.i("MENUE", file2.exists() + "、" + fileName);
 			if (file2.exists()) {
 				file2.delete();
 			}
-			Log.i("MENUE", file2.exists() + "、" + fileName);
 		}
 	}
 

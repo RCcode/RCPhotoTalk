@@ -247,7 +247,6 @@ public class GalHttpRequest {
 
                             @Override
                             public void run() {
-                                Log.w("MENUE", "rsps=" + content);
                                 textLoadCallBack.textLoaded(content);
                             }
                         });
@@ -632,8 +631,7 @@ public class GalHttpRequest {
         }
         try {
             int statusCode = response.getStatusLine().getStatusCode();
-
-            Log.d("MENUE", "statusCode=" + statusCode);
+            System.out.println("statusCode--->"+statusCode);
             switch (statusCode) {
                 case 200: {
                     InputStream is = getISFromRespone(response);
@@ -739,10 +737,11 @@ public class GalHttpRequest {
                 JSONObject jObj = new JSONObject();
                 for (String key : keyset) {
                     String value = params.get(key);
-                    // nameValuePairs.add(new BasicNameValuePair(key, value));
                     jObj.put(key, value);
                 }
                 String entity = jObj.toString();
+                System.out.println("entity--->"+entity);
+                
                 if (!GalStringUtil.isEmpty(galurl.getLastModified()) && haveLastModified) {
                     request.addHeader("If-Modified-Since", galurl.getLastModified());
                 }
@@ -756,8 +755,6 @@ public class GalHttpRequest {
                 }
 
                 request.setEntity(new StringEntity(entity, "UTF-8"));
-                Log.v("MENUE", "rstp action=" + request.getURI().getPath());
-                Log.v("MENUE", "rstp " + entity.toString());
 
                 response = MyHttpClient.execute(mContext, request);
             } else {
