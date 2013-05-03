@@ -140,13 +140,13 @@ public class EditPictureActivity extends Activity {
 					}
 
 					@Override
-					public void endRecord(String savePath,int n) {
+					public void endRecord(String savePath, int n) {
 						// TODO Auto-generated method stub
 						voicePath = savePath;
 						audioBtn.setVisibility(4);
 						make_voice.setVisibility(0);
-						voice_size.setText(n+"s");
-						
+						voice_size.setText(n + "s");
+
 					}
 				});
 
@@ -167,8 +167,7 @@ public class EditPictureActivity extends Activity {
 		delete_voice = (Button) findViewById(R.id.delete_voice);
 		delete_voice.setTag(DELETE_VOICE);
 		delete_voice.setOnClickListener(clickListener);
-		
-		
+
 		mButtonUndo = (Button) findViewById(R.id.btn_edit_pic_undo);
 		mButtonTuya = (ImageView) findViewById(R.id.btn_edit_pic_tuya);
 		mButtonTimeLimit = (Button) findViewById(R.id.btn_edit_pic_timelimit);
@@ -246,29 +245,25 @@ public class EditPictureActivity extends Activity {
 				setSaveable(true);
 				mEditePicView.undo();
 				break;
-				
+
 			case PLAY_VOICE:
 				MediaPlayer player = new MediaPlayer();
 				try {
 					player.setDataSource(voicePath);
 					player.prepare();
-				}
-				catch (IllegalArgumentException e) {
+				} catch (IllegalArgumentException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				catch (IllegalStateException e) {
+				} catch (IllegalStateException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				catch (IOException e) {
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 				player.start();
-				
-				
+
 				break;
 			case DELETE_VOICE:
 				File file = new File(voicePath);
@@ -311,9 +306,9 @@ public class EditPictureActivity extends Activity {
 				mEditableViewGroup.buildDrawingCache();
 				app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
 				// 点击发送后实时保存
-//				mEditableViewGroup.setDrawingCacheEnabled(true);
-//				mEditableViewGroup.buildDrawingCache();
-//				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+				// mEditableViewGroup.setDrawingCacheEnabled(true);
+				// mEditableViewGroup.buildDrawingCache();
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
 				startSelectFriendActivity();
 				break;
 			case CLOSE_ON_CLICK:
@@ -446,10 +441,12 @@ public class EditPictureActivity extends Activity {
 					handler.sendEmptyMessage(NO_SDC);
 					return;
 				}
-				tempFilePath = app.getCacheFilePath() + "/Photochat.jpg";
+				tempFilePath = app.getSendFileCachePath() + "/Photochat.jpg";
 				File file = new File(tempFilePath);
 				try {
-
+					if (file.exists()) {
+						file.delete();
+					}
 					if (!file.exists())
 						file.createNewFile();
 					BufferedOutputStream os = new BufferedOutputStream(

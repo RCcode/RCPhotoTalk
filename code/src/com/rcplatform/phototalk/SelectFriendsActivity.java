@@ -90,7 +90,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private final int MSG_CACHE_FINISH = 200;
 
-	private final int MSG_CACHE_FAIL = 300;
+	private final int MSG_SEND_SUCCESS = 300;
 
 	private String tempFilePath;
 
@@ -106,17 +106,12 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private TextView mBtAddFriend;
 
-	private boolean isCached;
-
-	private List<Friend> data;
-
-	protected boolean needRefresh;
-	private Context context;
+	private List<Friend> sendData = new ArrayList<Friend>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		context = getApplicationContext();
+		// context = getApplicationContext();
 		app = (MenueApplication) getApplication();
 		timeLimit = getIntent().getStringExtra("timeLimit");
 		if (timeLimit == null) {
@@ -124,9 +119,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 		}
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
-		catchBitampOnSDC(app.getEditeBitmap());
-		// 初始化view 和 listener
 		initViewOrListener();
+		catchBitampOnSDC();
+		// 初始化view 和 listener
 
 	}
 
@@ -135,8 +130,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		super.onResume();
 		progressBar.setVisibility(View.VISIBLE);
-		// loadFriends();
-		getFriends();
 	}
 
 	private void initViewOrListener() {
@@ -152,22 +145,16 @@ public class SelectFriendsActivity extends BaseActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					final int position, long id) {
-				final List<Friend> list = ((SelectedFriendsGalleryAdapter) mGallery
-						.getAdapter()).getData();
-				Friend Friend = list.get(position);
-				list.remove(Friend);
+				sendData.remove(position);
 				((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
 						.notifyDataSetChanged();
-				// ((SelectedFriendsListAdapter)
-				// mFriendListView.getAdapter()).getStatu().put(Friend.getPostion(),
-				// false);
 				((SelectedFriendsListAdapter) mFriendListView.getAdapter())
 						.notifyDataSetChanged();
 				mGallery.setNextFocusRightId(mGallery.getNextFocusLeftId());
 			}
 		});
 		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(
-				this, new ArrayList<Friend>());
+				this, sendData);
 		mGallery.setAdapter(adapter);
 		alignGalleryToLeft(mGallery);
 
@@ -185,129 +172,54 @@ public class SelectFriendsActivity extends BaseActivity implements
 		mBtAddFriend.setOnClickListener(this);
 	}
 
-	private void catchBitampOnSDC(final Bitmap bitmap) {
+	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				File file = new File(app.getSendFileCachePath(), "/"
-						+ System.currentTimeMillis() + ".jpg");
-				FileOutputStream os = null;
+				File file = new File(app.getSendFileCachePath() + ".zip");
 				try {
-
-					if (!file.exists())
-						file.createNewFile();
-
-					os = openFileOutput(file.getName(), MODE_WORLD_WRITEABLE);
-					bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-					os.flush();
-					os.close();
-					isCached = true;
+					if (file.exists()) {
+						file.delete();
+					}
 					ZipUtil.ZipFolder(app.getSendFileCachePath(),
 							app.getSendFileCachePath() + ".zip");
 					tempFilePath = app.getSendFileCachePath() + ".zip";
-					sendStringMessage(MSG_CACHE_FINISH, "");
 				} catch (Exception e) {
-					isCached = true;
-					sendStringMessage(MSG_CACHE_FINISH, e.getMessage());
+					System.out.println("压缩失败" + e.getMessage());
 					e.printStackTrace();
-				} finally {
-					if (os != null)
-						try {
-							os.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+				}
+
+				if (file.exists()) {
+					getFriends();
+				} else {
+					System.out.println("--->");
 				}
 			}
 		}).start();
 
 	}
 
-	// private void loadFriends() {
-	// PhotoCharRequestService.getInstence().postRequest(this,
-	// mLoadFriendCallBack, null, MenueApiUrl.GET_FRIENDS_URL);
-	// }
-
-	// private final GalHttpLoadTextCallBack mLoadFriendCallBack = new
-	// GalHttpLoadTextCallBack() {
-	//
-	// @Override
-	// public void textLoaded(String text) {
-	// try {
-	// List<Friend> friends = jsonToFriends(text);
-	// if (friends != null && friends.size() > 0) {
-	// data = friends;
-	// if (isCached) {
-	// initFriendListView(data);
-	// data = null;
-	// needRefresh = false;
-	// } else {
-	// needRefresh = true;
-	// }
-	// }
-	// }
-	// catch (JSONException e) {
-	// e.printStackTrace();
-	// sendStringMessage(MSG_WHAT_ERROR,
-	// getString(R.string.receive_data_error));
-	// }
-	//
-	// }
-	//
-	// @Override
-	// public void loadFail() {
-	// sendStringMessage(MSG_WHAT_ERROR, getString(R.string.net_error));
-	// }
-	// };
-
-	private void initFriendListView(List<Friend> list) {
-		progressBar.setVisibility(View.GONE);
-		SelectedFriendsListAdapter adapter = (SelectedFriendsListAdapter) mFriendListView
-				.getAdapter();
-		if (adapter == null) {
-			initFriendListAdapter(list);
-		} else {
-			if (adapter.getData().size() != list.size()) {
-				initFriendListAdapter(list);
-				Map<Integer, Boolean> statu = ((SelectedFriendsListAdapter) mFriendListView
-						.getAdapter()).getStatu();
-				// 获取已经选择了的联系人
-				List<Friend> selectedFriends = ((SelectedFriendsGalleryAdapter) mGallery
-						.getAdapter()).getData();
-				for (Friend friend : selectedFriends) {
-					for (int i = 0; i < list.size(); i++) {
-						Friend chat = list.get(i);
-						if (chat.getSuid().equals(friend.getSuid())) {
-							statu.put(i, true);
-						}
-					}
-				}
-			}
-		}
-	}
-
 	private void initFriendListAdapter(List<Friend> list) {
+		System.out.println("set adapter");
 		SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(
-				this, list);
+				SelectFriendsActivity.this, list);
 		mFriendListView.setAdapter(adapter);
 		adapter.setOnCheckBoxChangedListener(new OnCheckBoxChangedListener() {
 
 			@Override
 			public void onChange(Friend friend, boolean isChecked) {
-				List<Friend> list = ((SelectedFriendsGalleryAdapter) mGallery
-						.getAdapter()).getData();
 				if (isChecked) {
-					if (!list.contains(friend))
-						list.add(friend);
+					if (!sendData.contains(friend))
+						sendData.add(friend);
 				} else
-					list.remove(friend);
+					sendData.remove(friend);
 
 				((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
 						.notifyDataSetChanged();
-				if (list.size() > mDisplayableCount)
-					mGallery.setSelection(list.size() - mDisplayableCount);
+				if (sendData.size() > mDisplayableCount)
+					mGallery.setSelection(sendData.size() - mDisplayableCount);
 				else {
 					mGallery.setSelection(0);
 				}
@@ -355,21 +267,16 @@ public class SelectFriendsActivity extends BaseActivity implements
 				break;
 
 			case MSG_CACHE_FINISH:
-				if (needRefresh) {
-					initFriendListView(data);
-					data = null;
-					needRefresh = false;
-				}
+				List<Friend> list = (List<Friend>) msg.obj;
+				initFriendListAdapter(list);
+				progressBar.setVisibility(View.GONE);
 				break;
-
-			case MSG_CACHE_FAIL:
-				if (needRefresh) {
-					initFriendListView(data);
-					data = null;
-					needRefresh = false;
-				}
-				DialogUtil.showToast(getApplicationContext(), (String) msg.obj,
-						Toast.LENGTH_SHORT);
+			case MSG_SEND_SUCCESS:
+				Intent intent = new Intent(SelectFriendsActivity.this,
+						HomeActivity.class);
+				intent.putExtra("from", this.getClass().getName());
+				intent.putExtra("time", timeSnap);
+				startActivity(intent);
 				break;
 			}
 		};
@@ -385,21 +292,22 @@ public class SelectFriendsActivity extends BaseActivity implements
 		new Thread() {
 			public void run() {
 				FriendsProxy.postZip(
-						context,
+						SelectFriendsActivity.this,
 						file,
 						new RCPlatformResponseHandler() {
 
 							@Override
 							public void onSuccess(int statusCode, String content) {
 								// TODO Auto-generated method stub
+								mHandler.obtainMessage(MSG_SEND_SUCCESS)
+										.sendToTarget();
 							}
 
 							@Override
 							public void onFailure(int errorCode, String content) {
 								// TODO Auto-generated method stub
-								sendStringMessage(MSG_WHAT_ERROR,getString(R.string.net_error));
-								System.out.println("----------------"
-										+ errorCode + "  " + content);
+								sendStringMessage(MSG_WHAT_ERROR,
+										getString(R.string.net_error));
 							}
 						}, getPhotoTalkApplication().getCurrentUser()
 								.getHeadUrl(), String.valueOf(timeSnap),
@@ -407,45 +315,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 						desc, timeLimit, buildUserArray(friends, timeSnap));
 			};
 		}.start();
-
-		// Map<String, String> params = new HashMap<String, String>();
-		// // params.put(MenueApiFactory.COUNTRY,
-		// // Locale.getDefault().getCountry());
-		// params.put(MenueApiFactory.HEAD_URL, getPhotoTalkApplication()
-		// .getCurrentUser().getHeadUrl());
-		// params.put(MenueApiFactory.TIME, String.valueOf(timeSnap));
-		// params.put(MenueApiFactory.NICK, getPhotoTalkApplication()
-		// .getCurrentUser().getNick());
-		// params.put(MenueApiFactory.IMAGE_TYPE, "jpg");
-		// params.put(MenueApiFactory.DESC, desc);
-		// params.put(MenueApiFactory.TIME_LIMIT, this.timeLimit);
-		// params.put(MenueApiFactory.USER_ARRAY,
-		// buildUserArray(friends, timeSnap));
-		// params.put(MenueApiFactory.FILE, imagePath);
-		//
-		// PhotoCharRequestService.getInstence().postRequestByTimestamp(this,
-		// new PhotoChatHttpLoadTextCallBack() {
-		//
-		// @Override
-		// public void textLoaded(String text, long time) {
-		// HomeActivity activity = (HomeActivity) app
-		// .getActivity(HomeActivity.class.getName());
-		// if (!activity.isFinishing()) {
-		// activity.callBackForSend(time, text);
-		// }
-		// }
-		//
-		// @Override
-		// public void loadFail(long time) {
-		// HomeActivity activity = (HomeActivity) app
-		// .getActivity(HomeActivity.class.getName());
-		// if (!activity.isFinishing()) {
-		// activity.callBackForSend(time, "");
-		// }
-		// sendStringMessage(MSG_WHAT_ERROR,
-		// getString(R.string.net_error));
-		// }
-		// }, params, MenueApiUrl.SEND_PICTURE_URL, timeSnap, null);
 
 	}
 
@@ -501,19 +370,12 @@ public class SelectFriendsActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.btn_sfl_send:
-			List<Friend> data = ((SelectedFriendsGalleryAdapter) mGallery
-					.getAdapter()).getData();
-			if (data == null || data.size() <= 0) {
+			if (sendData == null || sendData.size() <= 0) {
 				Toast.makeText(SelectFriendsActivity.this,
 						R.string.please_select_contact, 1).show();
 				return;
 			} else {
-				sendPicture("123", tempFilePath, 10, data);
-				Intent intent = new Intent(SelectFriendsActivity.this,
-						HomeActivity.class);
-				intent.putExtra("from", this.getClass().getName());
-				intent.putExtra("time", this.timeSnap);
-				startActivity(intent);
+				sendPicture("123", tempFilePath, 10, sendData);
 			}
 			break;
 		case R.id.back:
@@ -591,42 +453,30 @@ public class SelectFriendsActivity extends BaseActivity implements
 	}
 
 	private void getFriends() {
-		new Thread() {
-			public void run() {
-				FriendsProxy.getMyFriendlist(context,
-						new RCPlatformResponseHandler() {
+		FriendsProxy.getMyFriendlist(SelectFriendsActivity.this,
+				new RCPlatformResponseHandler() {
 
-							@Override
-							public void onSuccess(int statusCode, String content) {
-								try {
-									List<Friend> friends = jsonToFriends(content);
-									if (friends != null && friends.size() > 0) {
-										data = friends;
-										if (isCached) {
-											initFriendListView(data);
-											data = null;
-											needRefresh = false;
-										} else {
-											needRefresh = true;
-										}
-									}
-								} catch (JSONException e) {
-									e.printStackTrace();
-									sendStringMessage(
-											MSG_WHAT_ERROR,
-											getString(R.string.receive_data_error));
-								}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						try {
+							List<Friend> friends = jsonToFriends(content);
+							if (friends != null && friends.size() > 0) {
+								mHandler.obtainMessage(MSG_CACHE_FINISH,
+										friends).sendToTarget();
 							}
+						} catch (JSONException e) {
+							e.printStackTrace();
+							sendStringMessage(MSG_WHAT_ERROR,
+									getString(R.string.receive_data_error));
+						}
+					}
 
-							@Override
-							public void onFailure(int errorCode, String content) {
-								sendStringMessage(MSG_WHAT_ERROR,
-										getString(R.string.net_error));
-							}
-						});
-
-			};
-		}.start();
+					@Override
+					public void onFailure(int errorCode, String content) {
+						sendStringMessage(MSG_WHAT_ERROR,
+								getString(R.string.net_error));
+					}
+				});
 
 	}
 }
