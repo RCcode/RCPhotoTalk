@@ -5,6 +5,7 @@ import android.content.Context;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {
 
@@ -15,13 +16,11 @@ public class PhotoTalkUtils {
 	 * @param record
 	 * @return true表示当前用户是发送者，false表示当前用户是接受者
 	 */
-	public static boolean isOwnerForReocrd(Context context, Information record) {
+	public static boolean isSender(Context context, Information record) {
 
-		if (String.valueOf(MenueApplication.getUserInfoInstall(context).getSuid()).equals(record.getSender().getSuid())) {
+		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getSuid().equals(record.getSender().getSuid()))
 			return true;
-		} else {
-			return false;
-		}
+		return false;
 	}
 
 	public static String getSexString(Context context, int sex) {
@@ -39,5 +38,10 @@ public class PhotoTalkUtils {
 		}
 		return result;
 	}
-	
+
+	public static String getFilePath(Context context, String url) {
+		StringBuilder sbPath = new StringBuilder();
+		sbPath.append(context.getFilesDir().getPath()).append("/").append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
+		return sbPath.toString();
+	}
 }

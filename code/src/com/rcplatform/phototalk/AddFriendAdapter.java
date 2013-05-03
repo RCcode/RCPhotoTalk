@@ -159,7 +159,6 @@ public class AddFriendAdapter extends BaseFriendAdapter<Friend> {
 		 * @param friend
 		 */
 		void showFriendDetail(View view, Friend friend);
-
 	}
 
 	public void setOnFriendPortraitListener(OnFriendPortraitListener onFriendPortraitListener) {

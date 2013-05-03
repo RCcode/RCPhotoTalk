@@ -21,27 +21,29 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.AddFriendAdapter.OnFriendPortraitListener;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
 
-public class HomeUserRecordAdapter extends BaseAdapter {
+public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private final List<Information> data;
 
@@ -53,20 +55,12 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	private final ImageLoader mImageLoader;
 
-	private final MenueApplication app;
-
-	private UserInfo currentUser;
-	private OnFriendPortraitListener friendPortraitListener;
-
-	public HomeUserRecordAdapter(Context context, List<Information> data,
+	public PhotoTalkMessageAdapter(Context context, List<Information> data,
 			ListView ls) {
 		this.data = data;
 		this.context = context;
-		currentUser = ((MenueApplication) context.getApplicationContext())
-				.getCurrentUser();
 		this.mImageLoader = ImageLoader.getInstance();
 		this.listView = ls;
-		this.app = (MenueApplication) context.getApplicationContext();
 	}
 
 	@Override
@@ -88,7 +82,6 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		//
 		final Information record = data.get(position);
-		final int index = position;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.home_user_record_list_item, null);
@@ -111,21 +104,15 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 		holder.statuButton.setTag(buttonTag);
 		String statuTag = record.getRecordId() + TextView.class.getName();
 		holder.statu.setTag(statuTag);
-
 		holder.bar.setTag(record.getRecordId() + ProgressBar.class.getName());
-
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
 				|| record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			// 如果当前用户是接收者
-			if (!isOwnerForReocrd(record)) {
+			if (!PhotoTalkUtils.isSender(context, record)) {
 				// 状态为1，表示需要去下载
 				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 					holder.bar.setVisibility(View.VISIBLE);
 					holder.statu.setText(R.string.home_record_pic_loading);
-					// MenueImageLoader.loadImageForList(context, holder.bar,
-					// holder.statu, mImageLoader,
-					// ImageOptionsFactory.getReceiveImageOption(),
-					// record, holder.bar.getTag(), holder.statu.getTag());
 					RCPlatformImageLoader
 							.LoadPictureForList(
 									context,
@@ -268,7 +255,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
 			holder.bar.setVisibility(View.GONE);
 			// 如果是对方添加我
-			if (!isOwnerForReocrd(record)) {
+			if (!PhotoTalkUtils.isSender(context, record)) {
 				// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
 					holder.statuButton
@@ -304,7 +291,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 								@Override
 								public void onClick(View v) {
-									addAsFriend(record, index);
+									addAsFriend(record);
 								}
 							});
 				}
@@ -345,7 +332,7 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
-		if (isOwnerForReocrd(record)) {
+		if (PhotoTalkUtils.isSender(context, record)) {
 			RCPlatformImageLoader.loadImage(context, mImageLoader,
 					ImageOptionsFactory.getListHeadOption(), record
 							.getReceiver().getHeadUrl(),
@@ -358,21 +345,8 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 					AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head,
 					R.drawable.default_head);
 		}
-		String text = "";
-		String name = "";
-		if ((1 + position) % 3 == 0) {
-			text = "Received 10s ago -- press to show";
-			name = "Menue";
-		} else if ((1 + position) % 3 == 1) {
-			text = "Opened 2s ago ";
-			name = "Shanghai";
-		} else if ((1 + position) % 3 == 2) {
-			text = "Received 8 ago -- press to show";
-			name = "Nanjing";
 
-		}
-
-		if (!isOwnerForReocrd(record)) {
+		if (!PhotoTalkUtils.isSender(context, record)) {
 			holder.name.setText(record.getSender().getNick());
 		} else {
 			holder.name.setText(record.getReceiver().getNick());
@@ -380,67 +354,42 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void addAsFriend(final Information record, final int index) {
-		GalHttpRequest request = GalHttpRequest.requestWithURL(context,
-				MenueApiUrl.HOME_USER_NOTICE_ADD_FRIEND);
-		// request.setPostValueForKey(MenueApiFactory.USER, email);
-		request.setPostValueForKey(MenueApiFactory.TOKEN, MenueApplication
-				.getUserInfoInstall(context).getToken());
-		request.setPostValueForKey(MenueApiFactory.USERID, MenueApplication
-				.getUserInfoInstall(context).getSuid());
-		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale
-				.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.DEVICE_ID,
-				android.os.Build.DEVICE);
-		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
+	private void addAsFriend(final Information record) {
+		((BaseActivity) context).showLoadingDialog(BaseActivity.LOADING_NO_MSG,
+				BaseActivity.LOADING_NO_MSG, false);
+		FriendsProxy.addFriendFromInformation(context,
+				new RCPlatformResponseHandler() {
 
-		request.setPostValueForKey(MenueApiFactory.RECORD_NOTICE_FRIEND_ID,
-				record.getSender().getSuUserId());
-		request.setPostValueForKey(
-				MenueApiFactory.RECORD_NOTICE_NOTICE_NOTICEID,
-				record.getNoticeId());
-		request.setPostValueForKey(MenueApiFactory.RECORD_NOTICE_STATU,
-				record.getStatu() + "");
-		request.setPostValueForKey(MenueApiFactory.RECORD_NOTICE_TYPE,
-				record.getType() + "");
-		request.getPostData().toString();
-		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
+					@Override
+					public void onSuccess(int statusCode, String content) {
 
-			@Override
-			public void textLoaded(String text) {
-				record.setStatu(InformationState.STATU_QEQUEST_ADDED);
-				PhotoTalkDao.getInstance().updateRecordStatu(context, record);
-				if (listView.findViewWithTag(record.getRecordId()
-						+ Button.class.getName()) != null)
-					listView.findViewWithTag(
-							record.getRecordId() + Button.class.getName())
-							.setBackgroundResource(R.drawable.added);
-				if (listView.findViewWithTag(record.getRecordId()
-						+ TextView.class.getName()) != null) {
-					((TextView) listView.findViewWithTag(record.getRecordId()
-							+ TextView.class.getName()))
-							.setText(getStringfromResource(R.string.home_record_added)
-									+ record.getSender().getNick()
-									+ getStringfromResource(R.string.home_record_as_friend));
-				}
+						record.setStatu(InformationState.STATU_QEQUEST_ADDED);
+						PhotoTalkDao.getInstance().updateRecordStatu(context,
+								record);
+						if (listView.findViewWithTag(record.getRecordId()
+								+ Button.class.getName()) != null)
+							listView.findViewWithTag(
+									record.getRecordId()
+											+ Button.class.getName())
+									.setBackgroundResource(R.drawable.added);
+						if (listView.findViewWithTag(record.getRecordId()
+								+ TextView.class.getName()) != null) {
+							((TextView) listView.findViewWithTag(record
+									.getRecordId() + TextView.class.getName()))
+									.setText(getStringfromResource(R.string.home_record_added)
+											+ record.getSender().getNick()
+											+ getStringfromResource(R.string.home_record_as_friend));
+						}
+						((BaseActivity) context).dismissLoadingDialog();
+					}
 
-			}
-
-			@Override
-			public void loadFail() {
-				Log.i("AAA", "add friend fail");
-			}
-		});
-
-	}
-
-	private boolean isOwnerForReocrd(Information record) {
-
-		if (currentUser.getSuid().equals(record.getSender().getSuid())) {
-			return true;
-		} else {
-			return false;
-		}
+					@Override
+					public void onFailure(int errorCode, String content) {
+						((BaseActivity) context).dismissLoadingDialog();
+						((BaseActivity) context)
+								.showErrorConfirmDialog(content);
+					}
+				}, record);
 	}
 
 	private String getStringfromResource(int id) {
@@ -492,7 +441,6 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 		GalHttpRequest request = GalHttpRequest.requestWithURL(context,
 				MenueApiUrl.HOME_USER_NOTICE_CHANGE);
-		// request.setPostValueForKey(MenueApiFactory.USER, email);
 		request.setPostValueForKey(MenueApiFactory.TOKEN, MenueApplication
 				.getUserInfoInstall(context).getToken());
 		request.setPostValueForKey(MenueApiFactory.USERID, MenueApplication
@@ -537,10 +485,5 @@ public class HomeUserRecordAdapter extends BaseAdapter {
 
 	public List<Information> getData() {
 		return data;
-	}
-
-	public void setFriendPortraitListener(
-			OnFriendPortraitListener friendPortraitListener) {
-		this.friendPortraitListener = friendPortraitListener;
 	}
 }

@@ -9,7 +9,7 @@ public class Contract {
 	public static int SCREEN_HEIGHT;
 	public static int HEAD_IMAGE_WIDTH;
 	public static String DATABASE_PATH;
-
+	public static String FILE_PATH="rcplatform/phototalk";
 	public static void init(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
