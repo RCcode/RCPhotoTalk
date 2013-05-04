@@ -1,10 +1,13 @@
 package com.rcplatform.phototalk.utils;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
+import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {
@@ -43,5 +46,11 @@ public class PhotoTalkUtils {
 		StringBuilder sbPath = new StringBuilder();
 		sbPath.append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
 		return sbPath.toString();
+	}
+	
+	public static void updateInformationState(Context context,ServiceSimpleNotice...infos){
+		Intent intent = new Intent(context, InformationStateChangeService.class);
+		intent.putExtra(InformationStateChangeService.PARAM_KEY_INFORMATION, infos);
+		context.startService(intent);
 	}
 }

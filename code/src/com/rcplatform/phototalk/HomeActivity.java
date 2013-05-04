@@ -50,7 +50,7 @@ import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceRecordInfo;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.clienservice.PhotoCharRequestService;
+import com.rcplatform.phototalk.clienservice.PhotoTalkInformationStateService;
 import com.rcplatform.phototalk.db.DatabaseFactory;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
@@ -256,7 +256,7 @@ public class HomeActivity extends BaseActivity {
 		params.put(MenueApiFactory.USER_ARRAY, buildUserArray(record.getReceiver()));
 		params.put(MenueApiFactory.FILE, record.getUrl());
 
-		PhotoCharRequestService.getInstence().postRequestByTimestamp(this, new PhotoChatHttpLoadTextCallBack() {
+		PhotoTalkInformationStateService.getInstence().postRequestByTimestamp(this, new PhotoChatHttpLoadTextCallBack() {
 
 			@Override
 			public void textLoaded(String text, long time) {
@@ -498,8 +498,8 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void show(final int position) {
+		
 		final Information infoRecord = ((Information) mRecordListView.getAdapter().getItem(position));
-
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !PhotoTalkUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
@@ -523,8 +523,8 @@ public class HomeActivity extends BaseActivity {
 							statu.setText(R.string.statu_opened_1s_ago);
 						}
 						// 通知服务器改变状态为3，表示已经查看
+						infoRecord.setStatu(InformationState.STATU_NOTICE_OPENED);
 						notifyService(infoRecord);
-
 					}
 				}, infoRecord.getRecordId() + TextView.class.getName(), infoRecord.getRecordId() + Button.class.getName());
 
@@ -661,24 +661,8 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void notifyService(Information record) {
-		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
-			record.setStatu(InformationState.STATU_NOTICE_OPENED);
-			notifyServiceOpenedPic(record);
-			PhotoTalkDao.getInstance().updateRecordStatu(this, record);
-		}
-
-	}
-
-	private void notifyServiceOpenedPic(Information record) {
-		Gson gson = new Gson();
-		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId() + "", record.getType() + "");
-		List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
-		list.add(notice);
-		String s = gson.toJson(list, new TypeToken<List<ServiceSimpleNotice>>() {
-		}.getType());
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(MenueApiFactory.NOTICES, s);
-		PhotoCharRequestService.getInstence().postRequest(this, notifyRecordOpenedCallBack, params, MenueApiUrl.HOME_USER_NOTICE_CHANGE);
+		ServiceSimpleNotice info = new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + "");
+		PhotoTalkUtils.updateInformationState(this, info);
 	}
 
 	private void notifyServiceDelete(Information record) {
@@ -690,7 +674,7 @@ public class HomeActivity extends BaseActivity {
 		}.getType());
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.NOTICES, s);
-		PhotoCharRequestService.getInstence().postRequest(this, notifyRecordOpenedCallBack, params, MenueApiUrl.HOME_USER_NOTICE_DELETE);
+		PhotoTalkInformationStateService.getInstence().postRequest(this, notifyRecordOpenedCallBack, params, MenueApiUrl.HOME_USER_NOTICE_DELETE);
 	}
 
 	/**
@@ -800,48 +784,53 @@ public class HomeActivity extends BaseActivity {
 			Information record = iterator.next();
 			// 如果是通知
 			if (data != null && data.contains(record)) {
-				if (record.getStatu() == data.get(data.indexOf(record)).getStatu()) {
+				Information localInfo = data.get(data.indexOf(record));
+				if (record.getStatu() == localInfo.getStatu()) {
 					// 状态没有改变
 					iterator.remove();
 				} else {
 					// 状态改变
 					if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-						data.get(data.indexOf(record)).setStatu(record.getStatu());
+						// 好友请求信息
+						localInfo.setStatu(record.getStatu());
 					} else if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
-
+						// 图片信息
 						// 判断 当前本地notice的状态是否等于其他几种特殊状态（0：正在发送，4，正在查看，5
 						// 正在下载）,由于0是本地临时的，在服务器是没有这种状态的，所以比考虑
-
-						if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
-							// 如果状态为1，表示需要去下载，但是我们得去判断是否正在下载，
-							// 对于发送者来说什么都不做，只有接受者会有操作
-							if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_LOADING || data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_SHOWING) {
-								// 状态为5或者4
-								// 表示是正在下载或者正在查看，说明已经下载下来了，那么就不需要去下载了
-							} else if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED || data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_OPENED) {
-								// 如果本地的notice
-								// 是2或者3了，表示已经下载下来了，但是服务器还是一，说明通知服务器改状态没有成功，那么的通知服务器改状态，本地什么都不做
-								notifyService(data.get(data.indexOf(record)));
-							} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
-								data.get(data.indexOf(record)).setStatu(record.getStatu());
-							}
-						} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-							// 对发送者来说，只需要改变状态，并通知界面刷新就OK
-							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
-								data.get(data.indexOf(record)).setStatu(record.getStatu());
-							} else {
-								// 对于接收者来说，图片一已经下载完成了，那就要判断本地的状态时候为3，如果为3，那说明本地查看后
-								// 只改了本地的状态，通知服务器改状态失败了，得再次通知，其他的就不用做任何操作
-								if (data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_OPENED) {
-									notifyService(data.get(data.indexOf(record)));
-								}
-							}
-
-						} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
-							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
-								data.get(data.indexOf(record)).setStatu(record.getStatu());
-							}
+						if (InformationState.isServiceState(localInfo.getStatu()) && localInfo.getStatu() > record.getStatu()) {
+							notifyService(localInfo);
+						} else {
+							localInfo.setStatu(record.getStatu());
 						}
+//						if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+//							// 如果状态为1，表示需要去下载，但是我们得去判断是否正在下载，
+//							// 对于发送者来说什么都不做，只有接受者会有操作
+//							if (localInfo.getStatu() == InformationState.STATU_NOTICE_LOADING || data.get(data.indexOf(record)).getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+//								// 状态为5或者4
+//								// 表示是正在下载或者正在查看，说明已经下载下来了，那么就不需要去下载了
+//							} else if (localInfo.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED || localInfo.getStatu() == InformationState.STATU_NOTICE_OPENED) {
+//								// 如果本地的notice
+//								// 是2或者3了，表示已经下载下来了，但是服务器还是一，说明通知服务器改状态没有成功，那么的通知服务器改状态，本地什么都不做
+//								notifyService(localInfo);
+//							} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
+//								localInfo.setStatu(record.getStatu());
+//							}
+//						} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+//							// 对发送者来说，只需要改变状态，并通知界面刷新就OK
+//							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
+//								localInfo.setStatu(record.getStatu());
+//							} else {
+//								// 对于接收者来说，图片一已经下载完成了，那就要判断本地的状态时候为3，如果为3，那说明本地查看后
+//								// 只改了本地的状态，通知服务器改状态失败了，得再次通知，其他的就不用做任何操作
+//								if (localInfo.getStatu() == InformationState.STATU_NOTICE_OPENED) {
+//									notifyService(localInfo);
+//								}
+//							}
+//						} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
+//							if (String.valueOf(getPhotoTalkApplication().getCurrentUser().getSuid()).equals(record.getSender().getSuid())) {
+//								localInfo.setStatu(record.getStatu());
+//							}
+//						}
 
 						// 为什么没有状态为3的情况，因为状态为3，不管是发送者还是接收者，这条记录生命线已经完了，不需要做任何操作了
 					} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
@@ -907,7 +896,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		PhotoCharRequestService.getInstence().postRequest(this, new GalHttpLoadTextCallBack() {
+		PhotoTalkInformationStateService.getInstence().postRequest(this, new GalHttpLoadTextCallBack() {
 
 			@Override
 			public void textLoaded(String text) {
