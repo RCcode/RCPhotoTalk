@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -26,7 +27,7 @@ import com.rcplatform.phototalk.views.Rotate3dAnimation;
  * @author tao.fu@menue.com.cn
  * @version 1.0.0
  */
-public class TakePhotoActivity extends BaseMediaActivity {
+public class TakePhotoActivity extends Activity {
 
     private static final int TAKE_ON_CLICK = 0;
 
@@ -49,6 +50,8 @@ public class TakePhotoActivity extends BaseMediaActivity {
     private float mFromDegrees = 0;
 
     private float mToDegrees = 180;
+    
+    private Intent intent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +60,7 @@ public class TakePhotoActivity extends BaseMediaActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.take_photo_view);
-
+        intent = getIntent();
         mButtonTake = (Button) findViewById(R.id.btn_take_photo_take);
         mButtonOpenFlashLight = (Button) findViewById(R.id.btn_take_photo_flashlight);
         mButtonChangeCamera = (Button) findViewById(R.id.btn_take_photo_change_camera);
@@ -117,7 +120,7 @@ public class TakePhotoActivity extends BaseMediaActivity {
     };
 
     public void startOtherActivity() {
-        Intent intent = new Intent(this, EditPictureActivity.class);
+    	intent.setClass(this, EditPictureActivity.class);
         startActivity(intent);
     }
 

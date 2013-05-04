@@ -36,6 +36,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
 import com.rcplatform.phototalk.views.AudioShowView;
@@ -121,6 +122,8 @@ public class EditPictureActivity extends Activity {
 	private AudioRecordButton audioBtn;
 	private String voicePath;
 	private boolean isSave =false;
+	
+	private Friend friend;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +132,8 @@ public class EditPictureActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.edit_picture_view2);
+		Intent intent = getIntent();
+//		friend = intent.get
 		audioBtn = (AudioRecordButton) findViewById(R.id.audioBtn);
 		AudioShowView view = new AudioShowView(this);
 		audioBtn.setAttentionView(getWindowManager(), view,

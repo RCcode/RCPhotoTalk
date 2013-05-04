@@ -166,6 +166,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	private void setBirthday() {
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			mBirthday.setText(userDetailInfo.getBirthday());
+			isChance = true;
 		} else {
 			mBirthday.setText(null);
 		}
@@ -350,6 +351,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
 		// TODO Auto-generated method stub
 		super.onImageReceive(imageBaseUri, imagePath);
+		isChance = true;
 		new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
 	}
 
@@ -389,24 +391,13 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 	private void updateUserInfo() {
 		// 资料发生改变 上传服务器
-		 File file = null;
-		 UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
-		 if (isHeadChange && !TextUtils.isEmpty(headPath)) {
-			 file = new File(headPath);
-//		 request.setPostValueForKey(MenueApiFactory.FILE, headPath);
-//		 request.setPostValueForKey(MenueApiFactory.IMGTYPE,
-//		 Contract.META_DATA);
-		 }
-		 if (userInfo.getSex() != userDetailInfo.getSex()) {
-		 }
-//		 if (userInfo.getBirthday() != userDetailInfo.getBirthday()) {
-//		 request.setPostValueForKey(MenueApiFactory.BIRTHDAY,
-//		 userDetailInfo.getBirthday());
-//		 }
-//		 if (!userInfo.getNick().equals(userDetailInfo.getNick())) {
-//		 request.setPostValueForKey(MenueApiFactory.NICK,
-//		 userDetailInfo.getNick());
-//		 }
+		if (isChance) {
+
+			File file = null;
+			UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
+			if (isHeadChange && !TextUtils.isEmpty(headPath)) {
+				file = new File(headPath);
+			}
 			FriendsProxy.upUserInfo(
 					this,
 					file,
@@ -437,7 +428,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 						}
 					}, userDetailInfo.getNick(), userDetailInfo.getBirthday(),
 					userDetailInfo.getSex() + "");
-		 
+		}
 		//
 		// if (isSigntureChanged(userInfo, userDetailInfo)) {
 		// request.setPostValueForKey(MenueApiFactory.SIGNATURE,
