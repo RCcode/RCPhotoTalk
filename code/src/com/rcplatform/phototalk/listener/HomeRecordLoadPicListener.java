@@ -12,6 +12,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
+import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -63,7 +64,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	private static void notifyServer(Context context, Information record) {
 		if (record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)
-			PhotoTalkUtils.updateInformationState(context, new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId(), record.getType() + ""));
+			PhotoTalkUtils.updateInformationState(context, Contract.Action.ACTION_INFORMATION_STATE_CHANGE, new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId(), record.getType() + ""));
 	}
 
 	private void updateView(int visibitity, String text) {

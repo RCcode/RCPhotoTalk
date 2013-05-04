@@ -22,6 +22,7 @@ import com.rcplatform.phototalk.api.PhotoTalkParams;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
+import com.rcplatform.phototalk.utils.Contract;
 
 public class InformationStateChangeService extends IntentService {
 
@@ -40,7 +41,29 @@ public class InformationStateChangeService extends IntentService {
 			ServiceSimpleNotice info = (ServiceSimpleNotice) infos[i];
 			simpleInfo[i] = info;
 		}
-		updateState(simpleInfo);
+		String action = intent.getAction();
+		if (action.equals(Contract.Action.ACTION_INFORMATION_STATE_CHANGE)) {
+			updateState(simpleInfo);
+		} else if (action.equals(Contract.Action.ACTION_INFORMATION_DELETE)) {
+			deleteInformation(simpleInfo);
+		}
+
+	}
+
+	private void deleteInformation(ServiceSimpleNotice... simpleInfo) {
+		try {
+			HttpPost post = new HttpPost(MenueApiUrl.NOTICE_DELETE_URL);
+			post.setEntity(getEntity(simpleInfo));
+			HttpClient client = new DefaultHttpClient();
+			HttpResponse res = client.execute(post);
+			if (res.getStatusLine().getStatusCode() == 200) {
+				LogUtil.e("DELETE state success");
+			} else {
+				LogUtil.e("delete state fail");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void updateState(ServiceSimpleNotice... simpleInfo) {

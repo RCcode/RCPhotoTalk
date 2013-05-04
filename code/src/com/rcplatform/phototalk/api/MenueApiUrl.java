@@ -36,7 +36,7 @@ public class MenueApiUrl {
 
 	public static final String HOME_USER_NOTICE_ADD_FRIEND = USER_URL + "addFriendFromMain.do";
 	public static final String CONTACT_RECOMMEND_URL = USER_URL + "queryUsersByPhones.do";
-	public static final String HOME_USER_NOTICE_DELETE = NOTICE_URL + "deleteTheNotice.do";
+	public static final String NOTICE_DELETE_URL = NOTICE_URL + "deleteTheNotice.do";
 
 	public static final String HOME_USER_NOTICE_DELETE_ALL = NOTICE_URL + "clearAllNotice.do";
 

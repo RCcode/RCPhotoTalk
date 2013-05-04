@@ -40,6 +40,7 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
@@ -356,7 +357,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void openedNotice(Context context, Information record) {
-		PhotoTalkUtils.updateInformationState(context, new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + ""));
+		PhotoTalkUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + ""));
 	}
 
 	class ViewHolder {

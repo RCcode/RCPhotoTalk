@@ -47,10 +47,11 @@ public class PhotoTalkUtils {
 		sbPath.append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
 		return sbPath.toString();
 	}
-	
-	public static void updateInformationState(Context context,ServiceSimpleNotice...infos){
+
+	public static void updateInformationState(Context context, String action, ServiceSimpleNotice... infos) {
 		Intent intent = new Intent(context, InformationStateChangeService.class);
 		intent.putExtra(InformationStateChangeService.PARAM_KEY_INFORMATION, infos);
+		intent.setAction(action);
 		context.startService(intent);
 	}
 }
