@@ -71,30 +71,41 @@ public class FriendDetailActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-				new AddFriendTask(FriendDetailActivity.this,
-						getPhotoTalkApplication().getCurrentUser(),
-						new RCPlatformResponseHandler() {
+				new AddFriendTask(FriendDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new RCPlatformResponseHandler() {
 
-							@Override
-							public void onSuccess(int statusCode, String content) {
-								mFriend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
-								coverToFriendView();
-								dismissLoadingDialog();
-							}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						mFriend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+						coverToFriendView();
+						dismissLoadingDialog();
+					}
 
-							@Override
-							public void onFailure(int errorCode, String content) {
-								showErrorConfirmDialog(content);
-								dismissLoadingDialog();
-							}
-						}, mFriend).execute();
+					@Override
+					public void onFailure(int errorCode, String content) {
+						showErrorConfirmDialog(content);
+						dismissLoadingDialog();
+					}
+				}, mFriend).execute();
 			}
 		});
 	}
 
 	private void coverToFriendView() {
 		btnPerform.setText(R.string.friend_detail_send_photo_hint_text);
+		btnPerform.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				startTakePhotoActivity();
+			}
+		});
 		btnEdit.setVisibility(View.VISIBLE);
+	}
+
+	private void startTakePhotoActivity() {
+		Intent intent = new Intent(this, TakePhotoActivity.class);
+		intent.putExtra("friend", mFriend);
+		startActivity(intent);
 	}
 
 	private void initView() {
@@ -108,15 +119,12 @@ public class FriendDetailActivity extends BaseActivity {
 		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead);
 		mImageLoader.displayImage(mFriend.getBackground(), ivBackground);
 		btnEdit.setOnClickListener(mOnClickListener);
-		tvSexAge.setText(getString(R.string.friend_sex_age,
-				PhotoTalkUtils.getSexString(this, mFriend.getSex()),
-				mFriend.getAge()));
+		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getSex()), mFriend.getAge()));
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
 		btnPerform = (Button) findViewById(R.id.btn_perform);
-		hlvApps.setAdapter(new AppAdapter(this, mFriend.getAppList(),
-				mImageLoader));
+		hlvApps.setAdapter(new AppAdapter(this, mFriend.getAppList(), mImageLoader));
 		setFriendName();
 		if (mAction.equals(Contract.Action.ACTION_FRIEND_DETAIL)) {
 			coverToFriendView();
@@ -134,8 +142,7 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendName() {
-		tvName.setText(!TextUtils.isEmpty(mFriend.getMark()) ? mFriend
-				.getMark() : mFriend.getNick());
+		tvName.setText(!TextUtils.isEmpty(mFriend.getMark()) ? mFriend.getMark() : mFriend.getNick());
 	}
 
 	private OnClickListener mOnClickListener = new OnClickListener() {
@@ -165,8 +172,7 @@ public class FriendDetailActivity extends BaseActivity {
 	};
 
 	private boolean hasChangeUserInfo() {
-		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL)
-				&& mFriend.getStatus() == Friend.USER_STATUS_FRIEND_ADDED) {
+		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL) && mFriend.getStatus() == Friend.USER_STATUS_FRIEND_ADDED) {
 			return true;
 		}
 		if (mLastRemark != null && !mLastRemark.equals(mFriend.getMark())) {
@@ -179,12 +185,9 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void showRemaikWindow(View v) {
 		if (mRemarkEditWindow == null) {
-			View editView = getLayoutInflater().inflate(
-					R.layout.my_friend_details_layout_edit, null, false);
-			Button btnConfirm = (Button) editView
-					.findViewById(R.id.btn_remark_confirm);
-			final EditText etRemark = (EditText) editView
-					.findViewById(R.id.et_remark);
+			View editView = getLayoutInflater().inflate(R.layout.my_friend_details_layout_edit, null, false);
+			Button btnConfirm = (Button) editView.findViewById(R.id.btn_remark_confirm);
+			final EditText etRemark = (EditText) editView.findViewById(R.id.et_remark);
 			etRemark.setText(mFriend.getMark());
 			btnConfirm.setOnClickListener(new OnClickListener() {
 
@@ -194,9 +197,7 @@ public class FriendDetailActivity extends BaseActivity {
 					updateRemark(remark);
 				}
 			});
-			mRemarkEditWindow = new PopupWindow(editView,
-					WindowManager.LayoutParams.MATCH_PARENT,
-					WindowManager.LayoutParams.WRAP_CONTENT);
+			mRemarkEditWindow = new PopupWindow(editView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
 			mRemarkEditWindow.setFocusable(true);
 			mRemarkEditWindow.setOutsideTouchable(true);

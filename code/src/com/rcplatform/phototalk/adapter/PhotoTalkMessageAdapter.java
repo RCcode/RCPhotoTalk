@@ -40,6 +40,7 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
@@ -113,11 +114,20 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 					// 状态为2，表示已经下载了，但是未查看，
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
+					if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
+						holder.bar.setVisibility(View.GONE);
+						holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+						holder.statuButton.stopTask();
+						holder.statuButton.setText(null);
+						holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
+					} else {
+						holder.bar.setVisibility(View.VISIBLE);
+						holder.statu.setText(R.string.home_record_pic_loading);
+						RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
+						holder.statuButton.stopTask();
+						holder.statuButton.setText(null);
+						holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+					}
 					// 状态为4.表示正在查看
 				} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 					holder.bar.setVisibility(View.GONE);
@@ -138,7 +148,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 							}
 							record.setStatu(InformationState.STATU_NOTICE_OPENED);
 							openedNotice(context, record);
-							PhotoTalkDao.getInstance().updateRecordStatu(context, record);
+							// PhotoTalkDao.getInstance().updateRecordStatu(context,
+							// record);
 						}
 					}, statuTag, buttonTag);
 					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
@@ -202,7 +213,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 					holder.statuButton.stopTask();
 					holder.statu.setText(R.string.home_record_pic_send_fail);
 				}
-
 			}
 
 		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
@@ -347,35 +357,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void openedNotice(Context context, Information record) {
-		Gson gson = new Gson();
-		ServiceSimpleNotice notice = new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId() + "", record.getType() + "");
-		List<ServiceSimpleNotice> list = new ArrayList<ServiceSimpleNotice>();
-		list.add(notice);
-		String s = gson.toJson(list, new TypeToken<List<ServiceSimpleNotice>>() {
-		}.getType());
-		UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
-		GalHttpRequest request = GalHttpRequest.requestWithURL(context, MenueApiUrl.HOME_USER_NOTICE_CHANGE);
-		request.setPostValueForKey(MenueApiFactory.TOKEN, currentUser.getToken());
-		request.setPostValueForKey(MenueApiFactory.USERID, currentUser.getSuid());
-		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.DEVICE_ID, android.os.Build.DEVICE);
-		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
-
-		request.setPostValueForKey(MenueApiFactory.NOTICES, s);
-
-		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
-
-			@Override
-			public void textLoaded(String text) {
-				Log.i("AAA", "openedNotice" + text.toString());
-			}
-
-			@Override
-			public void loadFail() {
-				Log.i("AAA", "openedNotice fail");
-			}
-		});
-
+		PhotoTalkUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + ""));
 	}
 
 	class ViewHolder {

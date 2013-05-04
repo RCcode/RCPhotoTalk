@@ -1,5 +1,7 @@
 package com.rcplatform.phototalk.image.downloader;
 
+import java.io.File;
+
 import android.content.Context;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -11,7 +13,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.listener.HomeRecordLoadPicListener;
-import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.FileDownloader;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 
@@ -46,4 +47,8 @@ public class RCPlatformImageLoader {
 		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(context, url), new HomeRecordLoadPicListener(listView, bar, statu, context, record));
 	}
 
+	public static boolean isFileExist(Context context, String url) {
+		File file = new File(PhotoTalkUtils.getFilePath(context, url));
+		return file.exists();
+	}
 }

@@ -3,7 +3,7 @@ package com.rcplatform.phototalk.api;
 public class MenueApiUrl {
 
 	private static final String BASE_URL = "http://192.168.0.86:8083/";
-//	private static final String BASE_URL = "http://103.247.169.150:8083/";
+	// private static final String BASE_URL = "http://103.247.169.150:8083/";
 	// private static final String BASE_URL = "http://192.168.0.116/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "photochat/";
@@ -15,6 +15,8 @@ public class MenueApiUrl {
 	private static final String FILE_URL = BASE_URL_FOR_PHOTOTALK + "file/";
 
 	private static final String NOTICE_URL = BASE_URL_FOR_PHOTOTALK + "notice/";
+
+	public static final String REMOVE_NOTICE_ITEM = NOTICE_URL + "lookedTheNotice.do";
 
 	public static final String FRIEND_QUERY_BY_PHONENUM_URL = USER_URL + "queryUsersByPhones.do";
 
@@ -30,11 +32,11 @@ public class MenueApiUrl {
 
 	public static final String USER_NOTICES_URL = NOTICE_URL + "mainUserNoticeList.do";
 
-	public static final String HOME_USER_NOTICE_CHANGE = NOTICE_URL + "downLoadOrLookNotice.do";
+	public static final String NOTICE_STATE_CHANGE_URL = NOTICE_URL + "downLoadOrLookNotice.do";
 
 	public static final String HOME_USER_NOTICE_ADD_FRIEND = USER_URL + "addFriendFromMain.do";
 	public static final String CONTACT_RECOMMEND_URL = USER_URL + "queryUsersByPhones.do";
-	public static final String HOME_USER_NOTICE_DELETE = NOTICE_URL + "deleteTheNotice.do";
+	public static final String NOTICE_DELETE_URL = NOTICE_URL + "deleteTheNotice.do";
 
 	public static final String HOME_USER_NOTICE_DELETE_ALL = NOTICE_URL + "clearAllNotice.do";
 

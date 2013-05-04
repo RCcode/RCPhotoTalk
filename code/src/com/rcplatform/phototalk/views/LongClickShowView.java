@@ -1,8 +1,6 @@
 package com.rcplatform.phototalk.views;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -22,7 +20,6 @@ import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -35,8 +32,6 @@ public class LongClickShowView extends Dialog {
 
 	public boolean invalidTouch;
 
-	private String mLastFilePath = "";
-
 	private RecordTimerLimitView glTimer;
 
 	private LayoutParams params;
@@ -45,13 +40,12 @@ public class LongClickShowView extends Dialog {
 
 	private RelativeLayout contentView;
 
-	private ZipUtil mZipUtil;
+	private Bitmap currentBitmap;
 
 	public LongClickShowView(Context context, int theme) {
 		super(context, theme);
 		this.getWindow().setWindowAnimations(R.style.ContentOverlay);
 		app = (MenueApplication) context.getApplicationContext();
-		this.mZipUtil = new ZipUtil();
 	}
 
 	public LongClickShowView(Context context) {
@@ -97,8 +91,6 @@ public class LongClickShowView extends Dialog {
 				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);
 				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
 				mPlayVidoeView = (PlayVidoeView) dialog.contentView.findViewById(R.id.pv_rts_video);
-
-				// contentView.setBackgroundColor(Color.parseColor("#00000000"));
 				dialog.setContentView(dialog.contentView);
 			} else {
 				dialog.setContentView(dialog.contentView);
@@ -132,7 +124,6 @@ public class LongClickShowView extends Dialog {
 			Builder.mImageView.setVisibility(View.GONE);
 		}
 		glTimer.scheuleTask(info);
-		mLastFilePath = info.getUrl();
 		show();
 	}
 
@@ -178,8 +169,8 @@ public class LongClickShowView extends Dialog {
 	}
 
 	private void showImage(File file) {
-		Bitmap image = BitmapFactory.decodeFile(file.getPath());
-		Builder.mImageView.setImageBitmap(image);
+		currentBitmap = BitmapFactory.decodeFile(file.getPath());
+		Builder.mImageView.setImageBitmap(currentBitmap);
 	}
 
 	private boolean isImage(String fileName) {
@@ -193,6 +184,10 @@ public class LongClickShowView extends Dialog {
 	public void hideDialog() {
 		hide();
 		Builder.mAudioPlayer.stop();
+		if (currentBitmap != null && !currentBitmap.isRecycled()) {
+			currentBitmap.recycle();
+			currentBitmap = null;
+		}
 	}
 
 	public void initTimer() {

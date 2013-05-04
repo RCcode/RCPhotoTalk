@@ -19,13 +19,16 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = "000000";
-	public static String PARAM_VALUE_LANGUAGE = Locale.getDefault()
-			.getLanguage();
+	public static String PARAM_VALUE_LANGUAGE = Locale.getDefault().getLanguage();
 	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
 	public static String PARAM_VALUE_APP_ID = "1";
 
 	public static class SearchFriends {
 		public static final String PARAM_KEY_KEYWORDS = "keyword";
+	}
+
+	public static class InformationStateChange {
+		public static final String PARAM_KEY_INFOS = "notices";
 	}
 
 	public static class UploadContacts {
@@ -48,8 +51,7 @@ public class PhotoTalkParams {
 	}
 
 	public static void buildBasicParams(Context context, GalHttpRequest request) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext())
-				.getCurrentUser();
+		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getSuid());
 		request.setPostValueForKey(PARAM_KEY_TOKEN, userInfo.getToken());
 		request.setPostValueForKey(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
@@ -57,10 +59,8 @@ public class PhotoTalkParams {
 		request.setPostValueForKey(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
 	}
 
-	public static void buildBasicParams(Context context,
-			RCPlatformAsyncHttpClient client) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext())
-				.getCurrentUser();
+	public static void buildBasicParams(Context context, RCPlatformAsyncHttpClient client) {
+		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		if (userInfo != null) {
 			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getSuid());
 			client.putRequestParam(PARAM_KEY_TOKEN, userInfo.getToken());
@@ -114,11 +114,11 @@ public class PhotoTalkParams {
 	public static class FriendDetail {
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
 	}
-	
-	public static class AddFriendFromInformation{
-		public static final String PARAM_KEY_INFORMATION_ID="noticeId";
-		public static final String PARAM_KEY_INFORMATION_TYPE="noType";
-		public static final String PARAM_KEY_INFORMATION_STATE="state";
-		public static final String PARAM_KEY_FRIEND_SUID="friendId";
+
+	public static class AddFriendFromInformation {
+		public static final String PARAM_KEY_INFORMATION_ID = "noticeId";
+		public static final String PARAM_KEY_INFORMATION_TYPE = "noType";
+		public static final String PARAM_KEY_INFORMATION_STATE = "state";
+		public static final String PARAM_KEY_FRIEND_SUID = "friendId";
 	}
 }

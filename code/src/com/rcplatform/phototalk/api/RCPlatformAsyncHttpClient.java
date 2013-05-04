@@ -150,6 +150,15 @@ public class RCPlatformAsyncHttpClient {
 			mParams.put(key, value);
 	}
 
+	public void putAllRequestParams(Map<String, String> params) {
+		if (mAction == RequestAction.FILE) {
+			for (String key : params.keySet()) {
+				mRequestParams.put(key, params.get(key));
+			}
+		} else if (mAction == RequestAction.JSON)
+			mParams.putAll(params);
+	}
+
 	public void cancel(Context context) {
 		mClient.cancelRequests(context, true);
 	}
@@ -160,6 +169,6 @@ public class RCPlatformAsyncHttpClient {
 			jsonObject.put(key, mParams.get(key));
 		}
 		LogUtil.e("request params is :" + jsonObject.toString());
-		return new StringEntity(jsonObject.toString(),"UTF-8");
+		return new StringEntity(jsonObject.toString(), "UTF-8");
 	}
 }

@@ -1,6 +1,10 @@
 package com.rcplatform.phototalk.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class InformationState {
+
 	public static final int STATU_QEQUEST_ADD_NO_CONFIRM = 1;
 
 	public static final int STATU_QEQUEST_ADD_NEED_CONFIRM = 2;
@@ -25,7 +29,21 @@ public class InformationState {
 	// 表示正在发送（此状态和服务器和数据库都没关系，只是一个用来临时记录正在查看中的一个变量）
 	public static final int STATU_NOTICE_SENDING = 0;
 
+	public static final int STATU_NOTICE_OVER = 8;
+
 	public static final int STATU_NOTICE_SEND_FAIL = 6;
 
 	public static final int STATU_NOTICE_LOAD_FAIL = 7;
+
+	private static List<Integer> servicePhotoStates;
+	static {
+		servicePhotoStates = new ArrayList<Integer>();
+		servicePhotoStates.add(STATU_NOTICE_SENDED_OR_NEED_LOADD);
+		servicePhotoStates.add(STATU_NOTICE_DELIVERED_OR_LOADED);
+		servicePhotoStates.add(STATU_NOTICE_OPENED);
+	}
+
+	public static boolean isServiceState(Integer state) {
+		return servicePhotoStates.contains(state);
+	}
 }

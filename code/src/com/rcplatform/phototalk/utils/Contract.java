@@ -29,6 +29,9 @@ public class Contract {
 		public static final String ACTION_FRIEND_DETAIL = "com.rcplatform.phototalk.action.FRIEND";
 		public static final String ACTION_UPLOAD_INTITE_CONTACT = "com.rcplatform.phototalk.action.INVITE_CONTACT";
 		public static final String ACTION_UPLOAD_INTITE_THIRDPART = "com.rcplatform.phototalk.action.INVITE_THIRDPART";
+		
+		public static final String ACTION_INFORMATION_DELETE="com.rcplatform.phototalk.action.INFORMATION_DELETE";
+		public static final String ACTION_INFORMATION_STATE_CHANGE="com.rcplatform.phototalk.action.INFORMATION_STATE_CHANGE";
 	}
 
 	public static final String PROVIDER_AUTHORITY = "com.rcplatform.phototalk.provider";

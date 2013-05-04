@@ -1,8 +1,15 @@
 package com.rcplatform.phototalk.bean;
 
-public class ServiceSimpleNotice {
+import java.io.Serializable;
 
-    public String state;
+public class ServiceSimpleNotice implements Serializable{
+
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public String state;
 
     public String id;
 
