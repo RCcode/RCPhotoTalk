@@ -352,14 +352,14 @@ public class HomeActivity extends BaseActivity {
 				startActivity(new Intent(HomeActivity.this, VideoRecordActivity.class));
 			}
 		});
-		final GestureDetector gestureDetector = new GestureDetector(new HomeGestureListener());
-		mRecordListView.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return gestureDetector.onTouchEvent(event);
-			}
-		});
+//		final GestureDetector gestureDetector = new GestureDetector(new HomeGestureListener());
+//		mRecordListView.setOnTouchListener(new OnTouchListener() {
+//
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				return gestureDetector.onTouchEvent(event);
+//			}
+//		});
 		mRecordListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
@@ -854,4 +854,55 @@ public class HomeActivity extends BaseActivity {
 			return null;
 		return adapter.getData();
 	}
+	
+	
+	
+	boolean willShowSnap = false;
+	boolean showSnap = false;
+	long	willShowSnapStartTime = 0l;
+	float		startTapPointY = 0;
+	final long TAP_LONG_TIME = 500l;
+	final float	TAP_POINT_MAX_Y_LEN = 10;
+	
+	@Override 
+    public boolean onTouchEvent(MotionEvent event) { 
+        final int action = event.getAction(); 
+        switch (action) { 
+            case MotionEvent.ACTION_DOWN: 
+                break; 
+   
+            case MotionEvent.ACTION_MOVE: 
+            	if(!willShowSnap){
+            		willShowSnap = true;
+            		willShowSnapStartTime = System.currentTimeMillis();
+            		startTapPointY = event.getY();
+            	}
+            	
+            	long currentTime = System.currentTimeMillis();
+            	long time = currentTime - willShowSnapStartTime;
+            	float currentY =  event.getY();
+            	float len = currentY - startTapPointY;
+            	
+            	if(len > TAP_POINT_MAX_Y_LEN && !showSnap ){
+                	willShowSnap = false;
+            	}
+            	
+            	if ( time> TAP_LONG_TIME && willShowSnap  && !showSnap){
+            		showSnap = true;
+            		
+            	}
+            	
+                break; 
+   
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL: 
+            	willShowSnap = false;
+            	showSnap = false;
+                break; 
+   
+            default: 
+                break; 
+        } 
+        return super.onTouchEvent(event); 
+    } 
 }
