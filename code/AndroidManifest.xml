@@ -66,6 +66,12 @@
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
+            android:name="com.rcplatform.phototalk.ChangePasswordActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
             android:name="com.rcplatform.phototalk.FacebookFriendRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
