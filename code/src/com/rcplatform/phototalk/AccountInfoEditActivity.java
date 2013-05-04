@@ -61,7 +61,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private TextView mNameView;
 	private TextView mSexView;
 	private TextView mBirthday;
-	private TextView mSignatureView;
+//	private TextView mSignatureView;
 	private View mBackView;
 	private DatePicker mBirthDayPicker;
 	private TextView mTitleView;
@@ -81,7 +81,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_edit_account_info);
 		userDetailInfo = PrefsUtils.LoginState.getLoginUser(this);
-		sex = new String[] { getString(R.string.sex_secret), getString(R.string.male), getString(R.string.famale) };
+		sex = new String[] {getString(R.string.male), getString(R.string.famale) };
+//		sex = new String[] { getString(R.string.sex_secret), getString(R.string.male), getString(R.string.famale) };
 		initView();
 	}
 
@@ -108,7 +109,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 					mBirthday.setText("" + userDetailInfo.getBirthday());
 
-					mSignatureView.setText("" + userDetailInfo.getSignature());
+//					mSignatureView.setText("" + userDetailInfo.getSignature());
 				}
 				break;
 			case MenueApiFactory.LOGIN_PASSWORD_ERROR:
@@ -135,11 +136,11 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		mNameView = (TextView) findViewById(R.id.settings_modify_name);
 		mSexView = (TextView) findViewById(R.id.settings_modify_sex);
 		mBirthday = (TextView) findViewById(R.id.settings_modify_age);
-		mSignatureView = (TextView) findViewById(R.id.settings_modify_signature);
+//		mSignatureView = (TextView) findViewById(R.id.settings_modify_signature);
 		findViewById(R.id.rela_edit_sex).setOnClickListener(this);
 		findViewById(R.id.rela_edit_birthday).setOnClickListener(this);
 		findViewById(R.id.rela_edit_nick).setOnClickListener(this);
-		findViewById(R.id.rela_edit_signture).setOnClickListener(this);
+//		findViewById(R.id.rela_edit_signture).setOnClickListener(this);
 		mMyHeadView.setOnClickListener(this);
 		setUserInfo();
 	}
@@ -148,7 +149,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		setNick();
 		setSex();
 		setBirthday();
-		setSignture();
+//		setSignture();
 		loadHeadPicture();
 	}
 
@@ -170,10 +171,10 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	}
 
-	private void setSignture() {
-		// TODO Auto-generated method stub
-		mSignatureView.setText(userDetailInfo.getSignature());
-	}
+//	private void setSignture() {
+//		// TODO Auto-generated method stub
+//		mSignatureView.setText(userDetailInfo.getSignature());
+//	}
 
 	private void setNick() {
 		mNameView.setText(userDetailInfo.getNick());
@@ -220,12 +221,12 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getNick());
 			startActivityForResult(intentName, REQUESTCODE_NAME);
 			break;
-		case R.id.rela_edit_signture:
-			Intent intentSignature = new Intent(this, UpdateNameActivity.class);
-			intentSignature.setAction("setting_update_signature");
-			intentSignature.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getSignature());
-			startActivityForResult(intentSignature, REQUESTCODE_SIGNATURE);
-			break;
+//		case R.id.rela_edit_signture:
+//			Intent intentSignature = new Intent(this, UpdateNameActivity.class);
+//			intentSignature.setAction("setting_update_signature");
+//			intentSignature.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getSignature());
+//			startActivityForResult(intentSignature, REQUESTCODE_SIGNATURE);
+//			break;
 		case R.id.rela_edit_sex:
 			showSexChooseDialog();
 			break;
@@ -315,7 +316,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			} else if (REQUESTCODE_SIGNATURE == requestCode) {
 				String signature = data.getStringExtra("result");
 				userDetailInfo.setSignature(signature);
-				setSignture();
+//				setSignture();
 			}
 		}
 	}

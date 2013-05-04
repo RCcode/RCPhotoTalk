@@ -42,15 +42,6 @@
                 android:isScrollContainer="false"
                 android:clickable="false"
                 />
-               <!--   <com.menue.photochat.views.HorizontalListView
-                 android:id="@+id/hl_sfl_added_friends" 
-                android:layout_width="fill_parent"
-                android:layout_height="56dip"
-                android:layout_alignParentLeft="true"
-                android:layout_weight="1"
-                android:layout_marginTop="15dip"
-                android:layout_marginBottom="15dip"
-                /> -->
             <Button 
                 android:id="@+id/btn_sfl_send"
                 android:layout_width="wrap_content"

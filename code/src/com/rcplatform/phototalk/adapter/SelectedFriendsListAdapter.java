@@ -74,7 +74,6 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.i("Futao", "statu =" + statu.size() + "position = " + position);
         Friend friend = data.get(position);
 //        friend.setPostion(position);
         final int index = position;
