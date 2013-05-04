@@ -76,7 +76,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener{
 			
 			break;
 		case R.id.login_out_btn:
-			
+			Intent intent  = new Intent(this, HomeActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			startActivity(intent);
+			//清楚数据操作
+			this.finish();
 			break;
 		case R.id.back:
 			startActivity(new Intent(this, SettingsActivity.class));
