@@ -307,20 +307,14 @@ public class EditPictureActivity extends BaseActivity {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
 					saveEditedPictrue(mEditableViewGroup.getDrawingCache());
-					isSave = true;
+
 				}
 				break;
 			case SEND_ON_CLICK:
-				if (isSave) {
-					if (friend == null) {
-						startSelectFriendActivity();
-					} else {
-						send();
-					}
-				} else {
-					Toast.makeText(EditPictureActivity.this, "请先点击保存",
-							Toast.LENGTH_SHORT).show();
-				}
+				mEditableViewGroup.setDrawingCacheEnabled(true);
+				mEditableViewGroup.buildDrawingCache();
+				isSave = true;
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
 				// mEditableViewGroup.setDrawingCacheEnabled(true);
 				// mEditableViewGroup.buildDrawingCache();
 				// app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
@@ -504,8 +498,16 @@ public class EditPictureActivity extends BaseActivity {
 				if (waitDialog != null && waitDialog.isShowing())
 					waitDialog.hide();
 				setSaveable(false);
-				Toast.makeText(EditPictureActivity.this, R.string.save_success,
-						Toast.LENGTH_SHORT).show();
+				if (isSave) {
+					if (friend == null) {
+						startSelectFriendActivity();
+					} else {
+						send();
+					}
+				} else {
+					Toast.makeText(EditPictureActivity.this,
+							R.string.save_success, Toast.LENGTH_SHORT).show();
+				}
 				break;
 			case SAVE_FAIL:
 				if (waitDialog != null && waitDialog.isShowing())
@@ -564,7 +566,7 @@ public class EditPictureActivity extends BaseActivity {
 			e.printStackTrace();
 		}
 		String timelimit = (String) mButtonTimeLimit.getText();
-		sendPicture("",tempPath,timelimit,friend);
+		sendPicture("", tempPath, timelimit, friend);
 	}
 
 	private void sendPicture(final String desc, String imagePath,
@@ -586,12 +588,13 @@ public class EditPictureActivity extends BaseActivity {
 					}
 				}, getPhotoTalkApplication().getCurrentUser().getHeadUrl(),
 				String.valueOf(timeSnap), getPhotoTalkApplication()
-						.getCurrentUser().getNick(), desc, timeLimit, buildUserArray(friend,timeSnap,timeLimit));
+						.getCurrentUser().getNick(), desc, timeLimit,
+				buildUserArray(friend, timeSnap, timeLimit));
 
-	this.finish();
+		this.finish();
 	}
 
-	private String buildUserArray(Friend friend, long time,String timeLimit) {
+	private String buildUserArray(Friend friend, long time, String timeLimit) {
 		try {
 			JSONArray array = new JSONArray();
 			List<Information> infoRecords = new ArrayList<Information>();
