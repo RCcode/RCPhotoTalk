@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f3f3f3" >
+
+    <include
+        android:id="@+id/top_layout"
+        layout="@layout/base_top_navigate" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/top_layout"
+        android:layout_above="@+id/login_out_btn" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/init_page_login_button_selector" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:gravity="center_vertical"
+                    android:text="邮箱地址" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/user_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/init_page_login_button_selector" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:gravity="center_vertical"
+                    android:text="电话号码" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/user_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/init_page_login_button_selector" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:gravity="center_vertical"
+                    android:text="RC ID" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/user_rcid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/user_facebook_layout"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/init_page_login_button_selector" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:gravity="center_vertical"
+                    android:text="Facebook" >
+                </TextView>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/user_vk_layout"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/init_page_login_button_selector" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="7dp"
+                    android:gravity="center_vertical"
+                    android:text="VKontakte" >
+                </TextView>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/right_arrow" />
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/reset_pw_btn"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:paddingLeft="7dp"
+                android:text="修改登陆密码"
+                android:gravity="left|center_vertical"
+                android:background="@drawable/init_page_login_button_selector" >
+
+            </Button>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/login_out_btn"
+        style="@style/LandingPageButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/default_gap"
+        android:layout_marginRight="@dimen/default_gap"
+        android:layout_marginTop="@dimen/default_gap_2x"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/button_selector_red"
+        android:text="注销"
+        android:textColor="@android:color/white" />
+
+</RelativeLayout>
