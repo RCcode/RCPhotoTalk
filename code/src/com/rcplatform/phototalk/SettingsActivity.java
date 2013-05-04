@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
@@ -33,6 +34,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.phototalk.AccountInfoEditActivity.LoadImageTask;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
@@ -60,7 +62,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	private Button mCleanBtn;
 	private Button editBtn;
 	private UserInfo userInfo;
-	private RelativeLayout edit_rcId;
+	private RelativeLayout edit_rcId, use_account_message;
 	private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
@@ -70,7 +72,6 @@ public class SettingsActivity extends ImagePickActivity implements
 	private ImageView user_bg_View;
 	private PopupWindow mImageSelectPopupWindow;
 	private Uri mImageUri;
-	private Bitmap bitmap = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,8 @@ public class SettingsActivity extends ImagePickActivity implements
 		editBtn.setOnClickListener(this);
 		edit_rcId = (RelativeLayout) findViewById(R.id.settings_user_edit_rc_id_action);
 		edit_rcId.setOnClickListener(this);
+		use_account_message = (RelativeLayout) findViewById(R.id.use_account_message);
+		use_account_message.setOnClickListener(this);
 		mHrzListView = (HorizontalListView) findViewById(R.id.my_friend_details_apps_listview);
 		mCleanBtn = (Button) findViewById(R.id.settings_clean_history_record_btn);
 		mCleanBtn.setOnClickListener(this);
@@ -132,8 +135,9 @@ public class SettingsActivity extends ImagePickActivity implements
 			startActivityForResult(new Intent(this,
 					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
-		case R.id.settings_user_edit_tacoty_id_action:
-
+		case R.id.use_account_message:
+			startActivity(new Intent(this, UserInfoActivity.class));
+			this.finish();
 			break;
 		case R.id.choosebutton:
 			startActivity(new Intent(this, AddFriendActivity.class));
@@ -148,8 +152,58 @@ public class SettingsActivity extends ImagePickActivity implements
 		}
 	}
 
+	@Override
+	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
+		// TODO Auto-generated method stub
+		super.onImageReceive(imageBaseUri, imagePath);
+		new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
+		postImage(imagePath);
+
+	}
+
+	class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
+
+		@Override
+		protected void onPreExecute() {
+			// TODO Auto-generated method stub
+			super.onPreExecute();
+			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		}
+
+		@Override
+		protected Bitmap doInBackground(Uri... params) {
+			// TODO Auto-generated method stub
+			Uri imageUri = params[0];
+			String headPath = params[1].getPath();
+			Bitmap bitmap = null;
+			try {
+				int rotateAngel = Utils.getUriImageAngel(SettingsActivity.this,
+						imageUri);
+				int nWidth = 0, nHeight = 0;
+				nHeight = user_bg_View.getHeight();
+				nWidth = user_bg_View.getWidth();
+				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
+						nHeight, rotateAngel);
+			} catch (OutOfMemoryError e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return bitmap;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap result) {
+			// TODO Auto-generated method stub
+			super.onPostExecute(result);
+			dismissLoadingDialog();
+			user_bg_View.setBackgroundDrawable(new BitmapDrawable(result));
+		}
+	}
+
 	private void doCleanDistory() {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
+		PhotoTalkUtils.updateInformationState(this,
+				Action.ACTION_INFORMATION_DELETE);
 	}
 
 	@Override
@@ -160,71 +214,6 @@ public class SettingsActivity extends ImagePickActivity implements
 			if (requestCode == REQUEST_CODE_EDIT_INFO) {
 				setUserInfo((UserInfo) data
 						.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
-			} else if (REQUEST_CODE_CAMERA == requestCode) {
-				Uri tmpUri = mImageUri;
-				if (data != null && data.getData() != null) {
-					tmpUri = data.getData();
-				}
-				String realPath = Utils.getRealPath(this, tmpUri);
-				if (realPath != null) {
-					System.out.println("-----realPath------>" + realPath);
-					myHandler.obtainMessage(1, realPath).sendToTarget();
-					postImage(realPath);
-				} else {
-				}
-
-			} else if (REQUEST_CODE_GALLARY == requestCode) {
-				try {
-					Uri tmpUri = null;
-					if (data != null && data.getData() != null) {
-						tmpUri = data.getData();
-					}
-					String realPath = Utils.getRealPath(this, tmpUri);
-					if (realPath != null) {
-						myHandler.obtainMessage(1, realPath).sendToTarget();
-						System.out.println("---realPath-->" + realPath);
-						postImage(realPath);
-					} else {
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-
-	Handler myHandler = new Handler() {
-		public void handleMessage(android.os.Message msg) {
-			String url = (String) msg.obj;
-			bitmap = getLocalBitmap(url);
-			if(bitmap!=null){
-				user_bg_View.setBackgroundDrawable(new BitmapDrawable(bitmap));
-			}
-		};
-	};
-
-	public Bitmap getLocalBitmap(String url) {
-		Bitmap bitmap = null;
-		InputStream in = null;
-		BufferedOutputStream out = null;
-		try {
-			in = new BufferedInputStream(new URL(url).openStream(), 2 * 1024);
-			final ByteArrayOutputStream dataStream = new ByteArrayOutputStream();
-			out = new BufferedOutputStream(dataStream, 2 * 1024);
-			out.flush();
-			byte[] data = dataStream.toByteArray();
-			bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-			data = null;
-			return bitmap;
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}finally{
-			try {
-				out.close();
-				in.close();
-			} catch (Exception e2) {
-				// TODO: handle exception
 			}
 		}
 	}
@@ -256,14 +245,5 @@ public class SettingsActivity extends ImagePickActivity implements
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-	}
-	@Override
-	protected void onDestroy() {
-		// TODO Auto-generated method stub
-		super.onDestroy();
-		if(bitmap!=null&&!bitmap.isRecycled()){
-			bitmap.isRecycled();
-			bitmap=null;
-		};
 	}
 }

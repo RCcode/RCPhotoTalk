@@ -70,6 +70,7 @@
     <string name="my_friends_added">我的好友</string>
     <string name="my_friends_new">新的好友</string>
     <string name="my_firend_setting_more_title">更多</string>
+    <string name="user_message">RC帐号信息</string>
     <string name="my_firend_suggested_title">好友推荐</string>
     <string name="my_firend_invite_send_short_msg"> 邀请你加入，和好友分享私密有趣图片，绝对安全！</string>
     <string name="my_firend_no_friend_hint">\t\t  No friends here!\nFind some friends now.</string>
