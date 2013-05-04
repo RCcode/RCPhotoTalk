@@ -164,10 +164,10 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
+//		new Thread(new Runnable() {
+//
+//			@Override
+//			public void run() {
 				File file = new File(app.getSendFileCachePath() + ".zip");
 				try {
 					if (file.exists()) {
@@ -187,8 +187,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 					sendStringMessage(MSG_WHAT_ERROR,
 							getString(R.string.receive_data_error));
 				}
-			}
-		}).start();
+//			}
+//		}).start();
 
 	}
 

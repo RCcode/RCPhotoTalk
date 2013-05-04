@@ -397,11 +397,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 //		 request.setPostValueForKey(MenueApiFactory.IMGTYPE,
 //		 Contract.META_DATA);
 		 }
-//		 if (userInfo.getSex() != userDetailInfo.getSex()) {
-//		 request.setPostValueForKey(MenueApiFactory.SEX,
-//		 userDetailInfo.getSex() + "");
-//		 }
-//		
+		 if (userInfo.getSex() != userDetailInfo.getSex()) {
+		 }
 //		 if (userInfo.getBirthday() != userDetailInfo.getBirthday()) {
 //		 request.setPostValueForKey(MenueApiFactory.BIRTHDAY,
 //		 userDetailInfo.getBirthday());
@@ -410,37 +407,36 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 //		 request.setPostValueForKey(MenueApiFactory.NICK,
 //		 userDetailInfo.getNick());
 //		 }
-//		 File file = new File(headPath);
-//			FriendsProxy.upUserInfo(
-//					this,
-//					file,
-//					new RCPlatformResponseHandler() {
-//
-//						@Override
-//						public void onSuccess(int statusCode, String content) {
-//							// TODO Auto-generated method stub
-//							Gson gson = new Gson();
-//							try {
-//								JSONObject obj = new JSONObject(content);
-//								UserInfo userInfo = gson.fromJson(obj
-//										.getJSONObject("userInfo").toString(),
-//										UserInfo.class);
-//								PrefsUtils.User.saveUserInfo(
-//										getApplicationContext(),
-//										userDetailInfo.getEmail(), userInfo);
-//							} catch (Exception e) {
-//								// TODO Auto-generated catch block
-//								e.printStackTrace();
-//							}
-//						}
-//
-//						@Override
-//						public void onFailure(int errorCode, String content) {
-//							// TODO Auto-generated method stub
-//
-//						}
-//					}, userDetailInfo.getNick(), userDetailInfo.getBirthday(),
-//					userDetailInfo.getSex() + "");
+			FriendsProxy.upUserInfo(
+					this,
+					file,
+					new RCPlatformResponseHandler() {
+
+						@Override
+						public void onSuccess(int statusCode, String content) {
+							// TODO Auto-generated method stub
+							Gson gson = new Gson();
+							try {
+								JSONObject obj = new JSONObject(content);
+								UserInfo userInfo = gson.fromJson(obj
+										.getJSONObject("userInfo").toString(),
+										UserInfo.class);
+								PrefsUtils.User.saveUserInfo(
+										getApplicationContext(),
+										userDetailInfo.getEmail(), userInfo);
+							} catch (Exception e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+
+						@Override
+						public void onFailure(int errorCode, String content) {
+							// TODO Auto-generated method stub
+
+						}
+					}, userDetailInfo.getNick(), userDetailInfo.getBirthday(),
+					userDetailInfo.getSex() + "");
 		 
 		//
 		// if (isSigntureChanged(userInfo, userDetailInfo)) {

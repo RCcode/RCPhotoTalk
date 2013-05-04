@@ -120,6 +120,7 @@ public class EditPictureActivity extends Activity {
 	private WheelView mWheel;
 	private AudioRecordButton audioBtn;
 	private String voicePath;
+	private boolean isSave =false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -299,17 +300,23 @@ public class EditPictureActivity extends Activity {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
 					saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+					isSave = true;
 				}
 				break;
 			case SEND_ON_CLICK:
-				mEditableViewGroup.setDrawingCacheEnabled(true);
-				mEditableViewGroup.buildDrawingCache();
-				app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
-				// 点击发送后实时保存
-				// mEditableViewGroup.setDrawingCacheEnabled(true);
-				// mEditableViewGroup.buildDrawingCache();
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
-				startSelectFriendActivity();
+				if(isSave){
+					startSelectFriendActivity();
+				}else{
+					Toast.makeText(EditPictureActivity.this,"请先点击保存", Toast.LENGTH_SHORT).show();
+				}
+//				mEditableViewGroup.setDrawingCacheEnabled(true);
+//				mEditableViewGroup.buildDrawingCache();
+//				app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
+//				// 点击发送后实时保存
+//				// mEditableViewGroup.setDrawingCacheEnabled(true);
+//				// mEditableViewGroup.buildDrawingCache();
+////				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+//				startSelectFriendActivity();
 				break;
 			case CLOSE_ON_CLICK:
 				mEditePicView.recyle();
