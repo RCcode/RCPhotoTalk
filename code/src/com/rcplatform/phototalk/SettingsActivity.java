@@ -47,8 +47,7 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HorizontalListView;
 
-public class SettingsActivity extends ImagePickActivity implements
-		View.OnClickListener {
+public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
 	private static final String TAG = "MyFriendsActivity";
 
@@ -95,12 +94,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	}
 
 	private void setUserInfo(UserInfo userInfo) {
-		RCPlatformImageLoader.loadImage(SettingsActivity.this,
-				ImageLoader.getInstance(),
-				ImageOptionsFactory.getHeadImageOptions(),
-				userInfo.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView,
-				R.drawable.default_head);
+		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getHeadImageOptions(), userInfo.getHeadUrl(), AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView, R.drawable.default_head);
 		mNickView.setText("" + userInfo.getNick());
 		userRcId.setText("" + userInfo.getRcId());
 	}
@@ -111,15 +105,12 @@ public class SettingsActivity extends ImagePickActivity implements
 		mBack.setOnClickListener(this);
 		//
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
-		mTitleTextView.setText(getResources().getString(
-				R.string.my_firend_setting_more_title));
+		mTitleTextView.setText(getResources().getString(R.string.my_firend_setting_more_title));
 		mTitleTextView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this,
-				getResources().getString(R.string.login_error),
-				getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
 	}
 
 	@Override
@@ -129,8 +120,7 @@ public class SettingsActivity extends ImagePickActivity implements
 			finish();
 			break;
 		case R.id.settings_user_info_edit_action:
-			startActivityForResult(new Intent(this,
-					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
+			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
 		case R.id.settings_user_edit_tacoty_id_action:
 
@@ -145,6 +135,9 @@ public class SettingsActivity extends ImagePickActivity implements
 			// 点击更改背景图片
 			showImagePickMenu(user_bg_View);
 			break;
+		case R.id.settings_user_edit_rc_id_action:
+			startActivity(SystemSettingActivity.class);
+			break;
 		}
 	}
 
@@ -158,8 +151,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EDIT_INFO) {
-				setUserInfo((UserInfo) data
-						.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
+				setUserInfo((UserInfo) data.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
 			} else if (REQUEST_CODE_CAMERA == requestCode) {
 				Uri tmpUri = mImageUri;
 				if (data != null && data.getData() != null) {
@@ -197,7 +189,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		public void handleMessage(android.os.Message msg) {
 			String url = (String) msg.obj;
 			bitmap = getLocalBitmap(url);
-			if(bitmap!=null){
+			if (bitmap != null) {
 				user_bg_View.setBackgroundDrawable(new BitmapDrawable(bitmap));
 			}
 		};
@@ -219,7 +211,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;
-		}finally{
+		} finally {
 			try {
 				out.close();
 				in.close();
@@ -234,36 +226,37 @@ public class SettingsActivity extends ImagePickActivity implements
 		try {
 			file = new File(imageUrl);
 			if (file != null) {
-				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file,
-						new RCPlatformResponseHandler() {
+				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
 
-							@Override
-							public void onSuccess(int statusCode, String content) {
-								// TODO Auto-generated method stub
-								// 上传成功
-								System.out.println("content--->" + content);
-							}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						// TODO Auto-generated method stub
+						// 上传成功
+						System.out.println("content--->" + content);
+					}
 
-							@Override
-							public void onFailure(int errorCode, String content) {
-								// TODO Auto-generated method stub
-								// 上传失败
-								System.out.println("content--->" + content);
-							}
-						});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						// TODO Auto-generated method stub
+						// 上传失败
+						System.out.println("content--->" + content);
+					}
+				});
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 	}
+
 	@Override
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
-		if(bitmap!=null&&!bitmap.isRecycled()){
+		if (bitmap != null && !bitmap.isRecycled()) {
 			bitmap.isRecycled();
-			bitmap=null;
-		};
+			bitmap = null;
+		}
+		;
 	}
 }

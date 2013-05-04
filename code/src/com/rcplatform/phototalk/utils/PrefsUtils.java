@@ -148,6 +148,16 @@ public class PrefsUtils {
 			sharedPreferences.edit().clear().commit();
 		}
 
+		public static void setUserReceiveSet(Context context, String pref, int set) {
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putInt(Contract.KEY_RECEIVESET, set).commit();
+		}
+
+		public static void setUserTrendSet(Context context, String pref, int set) {
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putInt(Contract.KEY_TRENDSET, set).commit();
+		}
+
 		public static void saveBindedPhoneNumber(Context context, String phoneNumber, String pref) {
 			SharedPreferences sharedPreferences = getPreference(context, pref);
 			sharedPreferences.edit().putString(Contract.KEY_PHONE, phoneNumber).commit();
