@@ -4,6 +4,12 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -36,7 +42,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.api.MenueApiFactory;
+import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
+import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.RecordUser;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
 import com.rcplatform.phototalk.views.AudioShowView;
@@ -49,19 +64,7 @@ import com.rcplatform.phototalk.views.wheel.OnWheelClickedListener;
 import com.rcplatform.phototalk.views.wheel.WheelView;
 import com.rcplatform.phototalk.views.wheel.adapter.AbstractWheelTextAdapter;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-2-27 上午11:36:04
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author tao.fu@menue.com.cn
- * @version 1.0.0
- */
-public class EditPictureActivity extends Activity {
+public class EditPictureActivity extends BaseActivity {
 
 	private static final int UNDO_ON_CLICK = 0;
 	private static final int PLAY_VOICE = 1;
@@ -121,9 +124,9 @@ public class EditPictureActivity extends Activity {
 	private WheelView mWheel;
 	private AudioRecordButton audioBtn;
 	private String voicePath;
-	private boolean isSave =false;
-	
-	private Friend friend;
+	private boolean isSave = false;
+
+	private Friend friend = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,8 +135,7 @@ public class EditPictureActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.edit_picture_view2);
-		Intent intent = getIntent();
-//		friend = intent.get
+		friend = (Friend) getIntent().getSerializableExtra("friend");
 		audioBtn = (AudioRecordButton) findViewById(R.id.audioBtn);
 		AudioShowView view = new AudioShowView(this);
 		audioBtn.setAttentionView(getWindowManager(), view,
@@ -309,19 +311,24 @@ public class EditPictureActivity extends Activity {
 				}
 				break;
 			case SEND_ON_CLICK:
-				if(isSave){
-					startSelectFriendActivity();
-				}else{
-					Toast.makeText(EditPictureActivity.this,"请先点击保存", Toast.LENGTH_SHORT).show();
+				if (isSave) {
+					if (friend == null) {
+						startSelectFriendActivity();
+					} else {
+						send();
+					}
+				} else {
+					Toast.makeText(EditPictureActivity.this, "请先点击保存",
+							Toast.LENGTH_SHORT).show();
 				}
-//				mEditableViewGroup.setDrawingCacheEnabled(true);
-//				mEditableViewGroup.buildDrawingCache();
-//				app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
-//				// 点击发送后实时保存
-//				// mEditableViewGroup.setDrawingCacheEnabled(true);
-//				// mEditableViewGroup.buildDrawingCache();
-////				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
-//				startSelectFriendActivity();
+				// mEditableViewGroup.setDrawingCacheEnabled(true);
+				// mEditableViewGroup.buildDrawingCache();
+				// app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
+				// // 点击发送后实时保存
+				// // mEditableViewGroup.setDrawingCacheEnabled(true);
+				// // mEditableViewGroup.buildDrawingCache();
+				// // saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+				// startSelectFriendActivity();
 				break;
 			case CLOSE_ON_CLICK:
 				mEditePicView.recyle();
@@ -541,5 +548,81 @@ public class EditPictureActivity extends Activity {
 
 	public boolean getSaveable() {
 		return this.enableSave;
+	}
+
+	public void send() {
+		String tempPath = null;
+		File file = new File(app.getSendFileCachePath() + ".zip");
+		try {
+			if (file.exists()) {
+				file.delete();
+			}
+			ZipUtil.ZipFolder(app.getSendFileCachePath(),
+					app.getSendFileCachePath() + ".zip");
+			tempPath = app.getSendFileCachePath() + ".zip";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String timelimit = (String) mButtonTimeLimit.getText();
+		sendPicture("",tempPath,timelimit,friend);
+	}
+
+	private void sendPicture(final String desc, String imagePath,
+			final String timeLimit, final Friend friend) {
+		Long timeSnap = System.currentTimeMillis();
+
+		final File file = new File(imagePath);
+		FriendsProxy.postZip(EditPictureActivity.this, file,
+				new RCPlatformResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						// TODO Auto-generated method stub
+					}
+
+					@Override
+					public void onFailure(int errorCode, String content) {
+						// TODO Auto-generated method stub
+					}
+				}, getPhotoTalkApplication().getCurrentUser().getHeadUrl(),
+				String.valueOf(timeSnap), getPhotoTalkApplication()
+						.getCurrentUser().getNick(), desc, timeLimit, buildUserArray(friend,timeSnap,timeLimit));
+
+	this.finish();
+	}
+
+	private String buildUserArray(Friend friend, long time,String timeLimit) {
+		try {
+			JSONArray array = new JSONArray();
+			List<Information> infoRecords = new ArrayList<Information>();
+			Information record;
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("userId", friend.getSuid());
+			jsonObject.put("headUrl", friend.getHeadUrl());
+			jsonObject.put("nick", friend.getNick());
+			array.put(jsonObject);
+
+			record = new Information();
+			record.setRecordId(record.hashCode() + "");
+			record.setNoticeId(MenueApiFactory.ERROR_NOTICE);
+			record.setCreatetime(time);
+			RecordUser user = new RecordUser();
+			record.setSender(user);
+			user = new RecordUser();
+			user.setNick(friend.getNick());
+			user.setHeadUrl(friend.getHeadUrl());
+			record.setReceiver(user);
+			record.setUrl(tempFilePath);
+			record.setLimitTime(Integer.parseInt(timeLimit));
+			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
+			record.setStatu(InformationState.STATU_NOTICE_SENDING);
+			infoRecords.add(record);
+			app.addSendRecords(time, infoRecords);
+			return array.toString();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 }
