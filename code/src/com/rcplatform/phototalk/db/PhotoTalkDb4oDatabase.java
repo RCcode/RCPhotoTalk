@@ -9,6 +9,7 @@ import com.db4o.ObjectSet;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 
@@ -66,4 +67,23 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		return false;
 	}
 
+	private void updateInformationState(Information information) {
+		Information infoExample = new Information();
+		infoExample.setRecordId(information.getRecordId());
+		ObjectSet<Information> result = db.queryByExample(infoExample);
+		if (result.size() > 0) {
+			Information infoLocal = result.next();
+			infoLocal.setStatu(information.getStatu());
+			db.store(infoLocal);
+		}
+	}
+
+	@Override
+	public void updateInformationState(Information... informations) {
+		for (Information info : informations) {
+			updateInformationState(info);
+		}
+		if (informations.length > 0)
+			db.commit();
+	}
 }

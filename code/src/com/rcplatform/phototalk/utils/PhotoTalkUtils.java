@@ -21,7 +21,7 @@ public class PhotoTalkUtils {
 	 */
 	public static boolean isSender(Context context, Information record) {
 
-		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getSuid().equals(record.getSender().getSuid()))
+		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getSuid().equals(record.getSender().getSuid()) && !record.getReceiver().getSuid().equals(record.getSender().getSuid()))
 			return true;
 		return false;
 	}
@@ -48,9 +48,16 @@ public class PhotoTalkUtils {
 		return sbPath.toString();
 	}
 
-	public static void updateInformationState(Context context, String action, ServiceSimpleNotice... infos) {
+	public static void updateInformationState(Context context, String action, Information... infos) {
 		Intent intent = new Intent(context, InformationStateChangeService.class);
-		intent.putExtra(InformationStateChangeService.PARAM_KEY_INFORMATION, infos);
+		if (infos.length > 0) {
+			ServiceSimpleNotice[] ssns = new ServiceSimpleNotice[infos.length];
+			for (int i = 0; i < infos.length; i++) {
+				Information info = infos[i];
+				ssns[i] = new ServiceSimpleNotice(info.getStatu() + "", info.getRecordId(), info.getType() + "");
+			}
+			intent.putExtra(InformationStateChangeService.PARAM_KEY_INFORMATION, ssns);
+		}
 		intent.setAction(action);
 		context.startService(intent);
 	}

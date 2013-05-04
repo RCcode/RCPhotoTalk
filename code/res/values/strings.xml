@@ -245,4 +245,10 @@
 	<string name="delete_friend">删除好友</string>
 	<string name="set_friend_remark">设置好友备注名称</string>
 	<string name="remark_hint">输入备注名</string>
+	<string name="receive_setting">谁可以给我发图片</string>
+	<string name="dynamic_setting">在好友中共享我的动态</string>
+	<string name="trends_share">是</string>
+	<string name="trends_hide">否</string>
+	<string name="receive_all">所有人</string>
+	<string name="receive_friend">我的好友</string>
 </resources>

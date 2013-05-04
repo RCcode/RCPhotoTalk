@@ -1,11 +1,8 @@
 package com.rcplatform.phototalk.adapter;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,28 +15,20 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
-import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
@@ -104,117 +93,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			// 如果当前用户是接收者
 			if (!PhotoTalkUtils.isSender(context, record)) {
 				// 状态为1，表示需要去下载
-				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
-					holder.bar.setVisibility(View.VISIBLE);
-					holder.statu.setText(R.string.home_record_pic_loading);
-					RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
-
-					// 状态为2，表示已经下载了，但是未查看，
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-					if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
-						holder.bar.setVisibility(View.GONE);
-						holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
-						holder.statuButton.stopTask();
-						holder.statuButton.setText(null);
-						holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
-					} else {
-						holder.bar.setVisibility(View.VISIBLE);
-						holder.statu.setText(R.string.home_record_pic_loading);
-						RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
-						holder.statuButton.stopTask();
-						holder.statuButton.setText(null);
-						holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
-					}
-					// 状态为4.表示正在查看
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundDrawable(null);
-					holder.statuButton.scheuleTask(record);
-					holder.statuButton.setOnTimeEndListener(new OnTimeEndListener() {
-
-						@Override
-						public void onEnd(Object statuTag, Object buttonTag) {
-							RecordTimerLimitView timerLimitView = (RecordTimerLimitView) listView.findViewWithTag(buttonTag);
-							if (timerLimitView != null) {
-								timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
-								timerLimitView.setText("");
-							}
-							TextView statu = ((TextView) listView.findViewWithTag(statuTag));
-							if (statu != null) {
-								statu.setText(R.string.statu_opened_1s_ago);
-							}
-							record.setStatu(InformationState.STATU_NOTICE_OPENED);
-							openedNotice(context, record);
-							// PhotoTalkDao.getInstance().updateRecordStatu(context,
-							// record);
-						}
-					}, statuTag, buttonTag);
-					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
-					// 状态为3 表示 已经查看，
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_opened);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
-
-					// 状态为5 表示正在下载
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_LOADING) {
-					holder.bar.setVisibility(View.VISIBLE);
-					holder.statu.setText(R.string.home_record_pic_loading);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
-					// 7 下载失败
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statu.setText(R.string.home_record_load_fail);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
-				}
-			} else { // 如果当前用户是发送者
-						// 状态为1 表示已经发送到服务器
-				if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_send), "", record.getLastUpdateTime()));
-					// 状态为2表示对方已经下载
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_delivered), "", record.getLastUpdateTime()));
-					// 状态为3 表示已经查看
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
-					// 0 表示正在发送
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_SENDING) {
-					holder.bar.setVisibility(View.VISIBLE);
-					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statu.setText(R.string.home_record_pic_sending);
-					// 6 表示发送失败
-				} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
-					holder.bar.setVisibility(View.GONE);
-					holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-					holder.statuButton.setText("");
-					holder.statuButton.stopTask();
-					holder.statu.setText(R.string.home_record_pic_send_fail);
-				}
+				initReceiverView(record, statuTag, buttonTag);
+			} else {
+				initSenderView(record);
 			}
-
 		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
 			holder.bar.setVisibility(View.GONE);
 			// 如果是对方添加我
@@ -294,6 +176,122 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		return convertView;
 	}
 
+	private void initReceiverView(final Information record, String statuTag, String buttonTag) {
+		if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+			holder.bar.setVisibility(View.VISIBLE);
+			holder.statu.setText(R.string.home_record_pic_loading);
+			RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
+			holder.statuButton.stopTask();
+			holder.statuButton.setText("");
+			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+
+			// 状态为2，表示已经下载了，但是未查看，
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+			if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
+				holder.bar.setVisibility(View.GONE);
+				holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+				holder.statuButton.stopTask();
+				holder.statuButton.setText(null);
+				holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
+			} else {
+				holder.bar.setVisibility(View.VISIBLE);
+				holder.statu.setText(R.string.home_record_pic_loading);
+				RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
+				holder.statuButton.stopTask();
+				holder.statuButton.setText(null);
+				holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+			}
+			// 状态为4.表示正在查看
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundDrawable(null);
+			holder.statuButton.scheuleTask(record);
+			holder.statuButton.setOnTimeEndListener(new OnTimeEndListener() {
+
+				@Override
+				public void onEnd(Object statuTag, Object buttonTag) {
+					RecordTimerLimitView timerLimitView = (RecordTimerLimitView) listView.findViewWithTag(buttonTag);
+					if (timerLimitView != null) {
+						timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+						timerLimitView.setText("");
+					}
+					TextView statu = ((TextView) listView.findViewWithTag(statuTag));
+					if (statu != null) {
+						statu.setText(R.string.statu_opened_1s_ago);
+					}
+					record.setStatu(InformationState.STATU_NOTICE_OPENED);
+					openedNotice(context, record);
+					PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
+				}
+			}, statuTag, buttonTag);
+			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
+			// 状态为3 表示 已经查看，
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_opened);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
+
+			// 状态为5 表示正在下载
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_LOADING) {
+			holder.bar.setVisibility(View.VISIBLE);
+			holder.statu.setText(R.string.home_record_pic_loading);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+			// 7 下载失败
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statu.setText(R.string.home_record_load_fail);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+		}
+
+	}
+
+	private void initSenderView(Information record) {
+		// 如果当前用户是发送者
+		// 状态为1 表示已经发送到服务器
+		if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_send), "", record.getLastUpdateTime()));
+			// 状态为2表示对方已经下载
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_delivered), "", record.getLastUpdateTime()));
+			// 状态为3 表示已经查看
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
+			// 0 表示正在发送
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_SENDING) {
+			holder.bar.setVisibility(View.VISIBLE);
+			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statu.setText(R.string.home_record_pic_sending);
+			// 6 表示发送失败
+		} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
+			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+			holder.statuButton.setText("");
+			holder.statuButton.stopTask();
+			holder.statu.setText(R.string.home_record_pic_send_fail);
+		}
+
+	}
+
 	private void addAsFriend(final Information record) {
 		((BaseActivity) context).showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
 		FriendsProxy.addFriendFromInformation(context, new RCPlatformResponseHandler() {
@@ -357,7 +355,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void openedNotice(Context context, Information record) {
-		PhotoTalkUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + ""));
+		PhotoTalkUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	class ViewHolder {

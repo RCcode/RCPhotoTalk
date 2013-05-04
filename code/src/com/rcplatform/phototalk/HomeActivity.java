@@ -16,7 +16,6 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -61,15 +60,14 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.TimerLimitUtil;
-import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
 import com.rcplatform.phototalk.views.PullToRefreshView;
-import com.rcplatform.phototalk.views.PullToRefreshView.OnFooterRefreshListener;
 import com.rcplatform.phototalk.views.PullToRefreshView.OnHeaderRefreshListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
@@ -442,7 +440,7 @@ public class HomeActivity extends BaseActivity {
 									mLongPressDialog.hide();
 									break;
 								}
- 							}
+							}
 						});
 					}
 
@@ -461,7 +459,6 @@ public class HomeActivity extends BaseActivity {
 	protected void reLoadPictrue(Information record) {
 		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
-
 
 	private void show(final int position) {
 
@@ -490,6 +487,7 @@ public class HomeActivity extends BaseActivity {
 						}
 						// 通知服务器改变状态为3，表示已经查看
 						infoRecord.setStatu(InformationState.STATU_NOTICE_OPENED);
+						PhotoTalkDatabaseFactory.getDatabase().updateInformationState(infoRecord);
 						notifyServiceUpdateState(infoRecord);
 					}
 				}, infoRecord.getRecordId() + TextView.class.getName(), infoRecord.getRecordId() + Button.class.getName());
@@ -627,8 +625,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void notifyServiceUpdateState(Information record) {
-		ServiceSimpleNotice info = new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + "");
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, info);
+		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	/**
@@ -639,7 +636,7 @@ public class HomeActivity extends BaseActivity {
 	 * @param record
 	 */
 	private void notifyServiceDelete(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, new ServiceSimpleNotice(record.getStatu() + "", record.getNoticeId(), record.getType() + ""));
+		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
 	}
 
 	/**
@@ -655,7 +652,6 @@ public class HomeActivity extends BaseActivity {
 		for (ServiceRecordInfo info : list) {
 			infoRecord = new Information();
 			infoRecord.setRecordId(info.getId().trim());
-			infoRecord.setNoticeId(info.getNoticeId());
 			infoRecord.setCreatetime(info.getCrtTime());
 			infoRecord.setTotleLength(info.getTime());
 			infoRecord.setLimitTime(info.getTime());
@@ -728,7 +724,7 @@ public class HomeActivity extends BaseActivity {
 		Iterator<Information> iterator = data2.iterator();
 		while (iterator.hasNext()) {
 			Information infoRecord = iterator.next();
-			if (infoRecord.getCreatetime() == time && (infoRecord.getNoticeId().equals(MenueApiFactory.ERROR_NOTICE))) {
+			if (infoRecord.getCreatetime() == time && (infoRecord.getRecordId().equals(MenueApiFactory.ERROR_NOTICE))) {
 				iterator.remove();
 			}
 		}
@@ -742,40 +738,47 @@ public class HomeActivity extends BaseActivity {
 	 */
 	protected void filterList(List<Information> listinfo) {
 		List<Information> newNotices = new ArrayList<Information>();
+		List<Information> updateInfos = new ArrayList<Information>();
 		Iterator<Information> iterator = listinfo.iterator();
 		List<Information> data = getAdapterData();
 		while (iterator.hasNext()) {
-			Information record = iterator.next();
+			Information serviceInfo = iterator.next();
 			// 如果是通知
-			if (data != null && data.contains(record)) {
-				Information localInfo = data.get(data.indexOf(record));
-				if (record.getStatu() == localInfo.getStatu()) {
+			if (data != null && data.contains(serviceInfo)) {
+				Information localInfo = data.get(data.indexOf(serviceInfo));
+				if (serviceInfo.getStatu() == localInfo.getStatu()) {
 					// 状态没有改变
 					iterator.remove();
 				} else {
 					// 状态改变
-					if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
+					if (serviceInfo.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 						// 好友请求信息
-						localInfo.setStatu(record.getStatu());
-					} else if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
+						localInfo.setStatu(serviceInfo.getStatu());
+					} else if (serviceInfo.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 						// 图片信息
-						// 判断 当前本地notice的状态是否等于其他几种特殊状态（0：正在发送，4，正在查看，5
-						// 正在下载）,由于0是本地临时的，在服务器是没有这种状态的，所以比考虑
-						if (InformationState.isServiceState(localInfo.getStatu()) && localInfo.getStatu() > record.getStatu()) {
+						if (InformationState.isServiceState(localInfo.getStatu()) && localInfo.getStatu() > serviceInfo.getStatu()) {
 							notifyServiceUpdateState(localInfo);
 						} else {
-							localInfo.setStatu(record.getStatu());
+							localInfo.setStatu(serviceInfo.getStatu());
+							updateInfos.add(localInfo);
 						}
 						// 为什么没有状态为3的情况，因为状态为3，不管是发送者还是接收者，这条记录生命线已经完了，不需要做任何操作了
-					} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
-						// 什么都不做，没有任何操作
+					} else if (serviceInfo.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 					}
 				}
 			} else {
-				newNotices.add(record);
+				newNotices.add(serviceInfo);
 			}
 		}
-		if (newNotices != null && newNotices.size() > 0)
+		if (updateInfos.size() > 0) {
+			Information[] infos = new Information[updateInfos.size()];
+			for (int i = 0; i < updateInfos.size(); i++) {
+				infos[i] = updateInfos.get(i);
+			}
+			updateInfos.clear();
+			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(infos);
+		}
+		if (newNotices.size() > 0)
 			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(newNotices);
 		sendDataLoadedMessage(newNotices);
 	}
@@ -830,36 +833,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		PhotoTalkInformationStateService.getInstence().postRequest(this, new GalHttpLoadTextCallBack() {
-
-			@Override
-			public void textLoaded(String text) {
-				JSONObject obj;
-				try {
-					obj = new JSONObject(text);
-					int state = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-					if (state != MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-						String jsonParams = new Gson().toJson(params, new TypeToken<Map<String, String>>() {
-						}.getType());
-						PhotoTalkDao.getInstance().insertFailRequestInfo(HomeActivity.this, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL, jsonParams);
-					} else {
-						String request_id = params.get("id");
-						if (request_id != null && request_id.length() > 0) {
-							PhotoTalkDao.getInstance().deleteFailRequestInfoById(HomeActivity.this, request_id);
-						}
-					}
-				} catch (Exception ex) {
-
-				}
-			}
-
-			@Override
-			public void loadFail() {
-				String jsonParams = new Gson().toJson(params, new TypeToken<Map<String, String>>() {
-				}.getType());
-				PhotoTalkDao.getInstance().insertFailRequestInfo(HomeActivity.this, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL, jsonParams);
-			}
-		}, params, MenueApiUrl.HOME_USER_NOTICE_DELETE_ALL);
+		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	private void checkFialRequest() {

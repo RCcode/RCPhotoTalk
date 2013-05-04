@@ -11,6 +11,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -45,12 +46,12 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	@Override
 	public void onDownloadSuccess() {
-		record.setStatu(InformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
+		if (record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+			record.setStatu(InformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
+			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
+			notifyServer(context, record);
+		}
 		record.setLastUpdateTime(System.currentTimeMillis());
-		// 把本地数据的这条记录改为2
-		// PhotoTalkDao.getInstance().updateRecordStatu(context, record);
-		// 通知服务器该表状态
-		notifyServer(context, record);
 		String text = Utils.getStatuTime(context.getResources().getString(R.string.statu_received), context.getResources().getString(R.string.statu_press_to_show), record.getLastUpdateTime());
 		updateView(View.GONE, text);
 	}
@@ -58,13 +59,12 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 	@Override
 	public void onDownloadFail() {
 		record.setStatu(InformationState.STATU_NOTICE_LOAD_FAIL);
-		// PhotoTalkDao.getInstance().updateRecordStatu(context, record);
+		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 		updateView(View.GONE, context.getResources().getString(R.string.home_record_load_fail));
 	}
 
 	private static void notifyServer(Context context, Information record) {
-		if (record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)
-			PhotoTalkUtils.updateInformationState(context, Contract.Action.ACTION_INFORMATION_STATE_CHANGE, new ServiceSimpleNotice(record.getStatu() + "", record.getRecordId(), record.getType() + ""));
+		PhotoTalkUtils.updateInformationState(context, Contract.Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	private void updateView(int visibitity, String text) {
