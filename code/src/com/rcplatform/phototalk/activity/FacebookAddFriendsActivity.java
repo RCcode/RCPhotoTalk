@@ -28,7 +28,7 @@ import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
-public class FacebookActivity extends BaseActivity {
+public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	private static final int MSG_DEAUTHORIZE_SUCCESS = 100;
 	private static final int MSG_DEAUTHORIZE_ERROR = 101;
 	private static final int MSG_NET_ERROR = 102;
@@ -237,7 +237,7 @@ public class FacebookActivity extends BaseActivity {
 			dismissLoadingDialog();
 			switch (msg.what) {
 			case MSG_DEAUTHORIZE_SUCCESS:
-				Dialog dialog = DialogUtil.createMsgDialog(FacebookActivity.this, getString(R.string.deauthorize_complete), getString(R.string.confirm));
+				Dialog dialog = DialogUtil.createMsgDialog(FacebookAddFriendsActivity.this, getString(R.string.deauthorize_complete), getString(R.string.confirm));
 				dialog.setOnDismissListener(new OnDismissListener() {
 
 					@Override
@@ -250,10 +250,10 @@ public class FacebookActivity extends BaseActivity {
 				break;
 			case MSG_DEAUTHORIZE_ERROR:
 				String message = (String) msg.obj;
-				DialogUtil.createMsgDialog(FacebookActivity.this, message, getString(R.string.confirm)).show();
+				DialogUtil.createMsgDialog(FacebookAddFriendsActivity.this, message, getString(R.string.confirm)).show();
 				break;
 			case MSG_NET_ERROR:
-				DialogUtil.createMsgDialog(FacebookActivity.this, getString(R.string.net_error), getString(R.string.confirm)).show();
+				DialogUtil.createMsgDialog(FacebookAddFriendsActivity.this, getString(R.string.net_error), getString(R.string.confirm)).show();
 				break;
 			}
 		};

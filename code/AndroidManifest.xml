@@ -164,6 +164,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
+            android:name="com.rcplatform.phototalk.SystemSettingActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
             android:name="com.rcplatform.phototalk.UpdateLoginPasswordActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"

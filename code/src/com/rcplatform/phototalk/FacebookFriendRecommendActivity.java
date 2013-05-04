@@ -13,7 +13,7 @@ import android.os.Bundle;
 import com.facebook.model.GraphUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.rcplatform.phototalk.activity.FacebookActivity;
+import com.rcplatform.phototalk.activity.FacebookAddFriendsActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
@@ -29,7 +29,7 @@ import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
-public class FacebookFriendRecommendActivity extends FacebookActivity {
+public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

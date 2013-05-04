@@ -18,6 +18,11 @@ public interface PhotoTalkDatabase {
 	public List<Information> getRecordInfos();
 
 	public void updateInformationState(Information...informations);
+	
+	public void deleteInformation(Information information);
+	
+	public void clearInformation();
+	
 	public void close();
 
 }

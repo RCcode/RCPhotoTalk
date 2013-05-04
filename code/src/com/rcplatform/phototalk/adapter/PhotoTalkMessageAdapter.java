@@ -4,8 +4,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -22,9 +24,9 @@ import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
@@ -38,6 +40,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private final List<Information> data;
 
+	private OnInformationPressListener mInformationPressListener;
+
 	private final Context context;
 
 	private ViewHolder holder;
@@ -45,6 +49,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	private final ListView listView;
 
 	private final ImageLoader mImageLoader;
+
+	private Information mPressedInformation;
 
 	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView ls) {
 		this.data = data;
@@ -84,6 +90,17 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
+		convertView.setOnTouchListener(new OnTouchListener() {
+
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					LogUtil.e("item down");
+					mPressedInformation = record;
+				}
+				return false;
+			}
+		});
 		String buttonTag = record.getRecordId() + Button.class.getName();
 		holder.statuButton.setTag(buttonTag);
 		String statuTag = record.getRecordId() + TextView.class.getName();
@@ -375,5 +392,21 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	public List<Information> getData() {
 		return data;
+	}
+
+	public static interface OnInformationPressListener {
+		public void onPress(Information information);
+	}
+
+	public void setOnInformationPressListener(OnInformationPressListener listener) {
+		this.mInformationPressListener = listener;
+	}
+
+	public Information getPressedInformation() {
+		return mPressedInformation;
+	}
+
+	public void resetPressedInformation() {
+		mPressedInformation = null;
 	}
 }

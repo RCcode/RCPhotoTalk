@@ -23,6 +23,12 @@ public class PhotoTalkParams {
 	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
 	public static String PARAM_VALUE_APP_ID = "1";
 
+	
+	public static class UserSetting{
+		public static final String PARAM_KEY_TREND_SETTING="tset";
+		public static final String PARAM_KEY_RECEIVE_SETTING="rset";
+	}
+	
 	public static class SearchFriends {
 		public static final String PARAM_KEY_KEYWORDS = "keyword";
 	}
