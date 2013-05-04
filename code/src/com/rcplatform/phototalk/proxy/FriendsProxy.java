@@ -86,7 +86,7 @@ public class FriendsProxy {
 //		client.putRequestParam(key, value)
 		client.postFile(context, MenueApiUrl.SEND_PICTURE_URL, file, responseHandler);
 	}
-//	田镇源 上传zip方法
+//	田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context,File file,
 			RCPlatformResponseHandler responseHandler,String nick,String birthday,String sex) {
 		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
@@ -95,7 +95,13 @@ public class FriendsProxy {
 		client.putRequestParam(MenueApiFactory.NICK, nick);
 		client.putRequestParam(MenueApiFactory.BIRTHDAY, birthday);
 		client.putRequestParam(MenueApiFactory.SEX, sex);
-//		client.putRequestParam(key, value)
+		client.postFile(context, MenueApiUrl.USER_INFO_UPDATE_URL, file, responseHandler);
+	}
+	public static void upUserBackgroundImage(Context context,File file,
+			RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.FILE);
+		PhotoTalkParams.buildBasicParams(context, client);
 		client.postFile(context, MenueApiUrl.USER_INFO_UPDATE_URL, file, responseHandler);
 	}
 
