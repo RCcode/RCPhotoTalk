@@ -51,6 +51,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	private final ImageLoader mImageLoader;
 
 	private Information mPressedInformation;
+	private int mPressedPosition=-1;
 
 	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView ls) {
 		this.data = data;
@@ -75,7 +76,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		//
 		final Information record = data.get(position);
 		if (convertView == null) {
@@ -97,6 +98,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
 					LogUtil.e("item down");
 					mPressedInformation = record;
+					mPressedPosition=position;
 				}
 				return false;
 			}
@@ -408,5 +410,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	public void resetPressedInformation() {
 		mPressedInformation = null;
+		mPressedPosition=-1;
+	}
+	
+	public int getPressedPosition(){
+		return mPressedPosition;
 	}
 }

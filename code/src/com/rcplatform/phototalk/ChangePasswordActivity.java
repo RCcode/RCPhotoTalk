@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,13 +46,26 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_confirm_password:
-			
+			commitCurrentPassword(etPassword.getText().toString().trim());
 			break;
 		case R.id.tv_forget_password:
 			startActivity(ForgetPasswordActivity.class);
 			break;
 		case R.id.btn_current_confirm:
+			commitNewPassword(etNewPassword.getText().toString().trim(), etConfirmPassword.getText().toString());
 			break;
 		}
+	}
+
+	private void commitCurrentPassword(String currentPassword) {
+		if(TextUtils.isEmpty(currentPassword)){
+			showErrorConfirmDialog(R.string.registe_password_empty);
+			return;
+		}
+		
+	}
+
+	private void commitNewPassword(String newPassword, String passwordConfirm) {
+
 	}
 }
