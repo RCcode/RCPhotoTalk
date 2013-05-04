@@ -26,7 +26,9 @@ public class PhotoTalkParams {
 	public static class SearchFriends {
 		public static final String PARAM_KEY_KEYWORDS = "keyword";
 	}
-
+	public static class ClearInformation{
+		public static final String PARAM_KEY_NOTICE_ID="noticeId";
+	}
 	public static class InformationStateChange {
 		public static final String PARAM_KEY_INFOS = "notices";
 	}

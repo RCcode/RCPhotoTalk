@@ -331,7 +331,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 				record = new Information();
 				record.setRecordId(record.hashCode() + "");
-				record.setNoticeId(MenueApiFactory.ERROR_NOTICE);
 				record.setCreatetime(time);
 				RecordUser user = new RecordUser();
 				record.setSender(user);

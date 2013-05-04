@@ -114,6 +114,7 @@ public class RCPlatformAsyncHttpClient {
 			public void onSuccess(int statusCode, String content) {
 				// TODO Auto-generated method stub
 				super.onSuccess(statusCode, content);
+				LogUtil.e(content);
 				if (responseHandler != null && !isCancel) {
 					try {
 						JSONObject jsonObject = new JSONObject(content);
@@ -135,6 +136,7 @@ public class RCPlatformAsyncHttpClient {
 			public void onFailure(Throwable error, String content) {
 				// TODO Auto-generated method stub
 				super.onFailure(error, content);
+				LogUtil.e(content);
 				if (responseHandler != null) {
 					onIOException(context, responseHandler);
 				}

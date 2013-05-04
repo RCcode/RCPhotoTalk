@@ -120,7 +120,6 @@ public class PhotoTalkDao {
 				record.setLastUpdateTime(cursor.getLong(12));
 				record.setLimitTime(cursor.getInt(13));
 				record.setUrl(cursor.getString(14));
-				record.setNoticeId(cursor.getString(15));
 				list.add(record);
 			}
 		} catch (Exception ex) {
@@ -174,7 +173,6 @@ public class PhotoTalkDao {
 				record.setLastUpdateTime(cursor.getLong(12));
 				record.setLimitTime(cursor.getInt(13));
 				record.setUrl(cursor.getString(14));
-				record.setNoticeId(cursor.getString(15));
 
 				list.add(record);
 			}
@@ -239,8 +237,6 @@ public class PhotoTalkDao {
 						String.valueOf(record.getLimitTime()));
 				SQLiteUtil.bindString(myInsertRecordInfoStatement, 15,
 						record.getUrl());
-				SQLiteUtil.bindString(myInsertRecordInfoStatement, 16,
-						record.getNoticeId());
 
 				myInsertRecordInfoStatement.executeInsert();
 
@@ -382,7 +378,6 @@ public class PhotoTalkDao {
 				record.setLastUpdateTime(cursor.getLong(12));
 				record.setLimitTime(cursor.getInt(13));
 				record.setUrl(cursor.getString(14));
-				record.setNoticeId(cursor.getString(15));
 
 				list.add(record);
 			}

@@ -148,7 +148,7 @@ public class FriendsProxy {
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.putRequestParam(
 				PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_INFORMATION_ID,
-				info.getNoticeId());
+				info.getRecordId());
 		client.putRequestParam(
 				PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_INFORMATION_TYPE,
 				info.getType() + "");

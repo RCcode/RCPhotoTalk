@@ -17,5 +17,7 @@ public interface PhotoTalkDatabase {
 
 	public List<Information> getRecordInfos();
 
+	public void updateInformationState(Information...informations);
 	public void close();
+
 }

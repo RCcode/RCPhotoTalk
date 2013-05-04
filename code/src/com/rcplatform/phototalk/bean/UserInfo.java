@@ -25,6 +25,10 @@ public class UserInfo implements Serializable {
 	public static final int SEX_FAMALE = 2;
 
 	public static final int FIRST_TIME = 0;
+	
+	public static final int RECEIVE_ALL=0;
+	public static final int RECEIVE_FRIEND=1;
+	
 	public static final int TRENDS_SHOW=0;
 	public static final int TRENDS_HIDE=1;
 

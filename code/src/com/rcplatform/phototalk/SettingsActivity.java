@@ -34,17 +34,20 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HorizontalListView;
 
-public class SettingsActivity extends BaseActivity implements
+public class SettingsActivity extends ImagePickActivity implements
 		View.OnClickListener {
 
 	private static final String TAG = "MyFriendsActivity";
@@ -146,7 +149,7 @@ public class SettingsActivity extends BaseActivity implements
 	}
 
 	private void doCleanDistory() {
-
+		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	@Override
@@ -201,16 +204,6 @@ public class SettingsActivity extends BaseActivity implements
 	};
 
 	public Bitmap getLocalBitmap(String url) {
-//		Bitmap bitmap = null;
-//		FileInputStream fis = null;
-//		try {
-//			fis = new FileInputStream(url);
-//			bitmap  = BitmapFactory.decodeStream(fis);
-//		} catch (FileNotFoundException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
 		Bitmap bitmap = null;
 		InputStream in = null;
 		BufferedOutputStream out = null;
@@ -234,81 +227,6 @@ public class SettingsActivity extends BaseActivity implements
 				// TODO: handle exception
 			}
 		}
-	}
-
-	protected void showImagePickMenu(View view) {
-		if (mImageSelectPopupWindow == null) {
-			View detailsView = LayoutInflater.from(this).inflate(
-					R.layout.picker_head_source_layout, null, false);
-
-			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow()
-					.getWindowManager().getDefaultDisplay().getWidth(),
-					((Activity) this).getWindow().getWindowManager()
-							.getDefaultDisplay().getHeight());
-
-			mImageSelectPopupWindow.setFocusable(true);
-			mImageSelectPopupWindow.setOutsideTouchable(true);
-			mImageSelectPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-			ImageButton cameraBtn = (ImageButton) detailsView
-					.findViewById(R.id.picker_head_source_camera);
-			cameraBtn.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (!Utils.isExternalStorageUsable()) {
-						DialogUtil.showToast(getApplicationContext(),
-								R.string.no_sdc, Toast.LENGTH_SHORT);
-						return;
-					}
-					mImageSelectPopupWindow.dismiss();
-					startCamera();
-				}
-			});
-			ImageButton gallaryBtn = (ImageButton) detailsView
-					.findViewById(R.id.picker_head_source_gallary);
-			gallaryBtn.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (!Utils.isExternalStorageUsable()) {
-						DialogUtil.showToast(getApplicationContext(),
-								R.string.no_sdc, Toast.LENGTH_SHORT);
-						return;
-					}
-					mImageSelectPopupWindow.dismiss();
-					startGallary();
-				}
-			});
-			Button cancelBtn = (Button) detailsView
-					.findViewById(R.id.picker_head_cancel);
-			cancelBtn.setOnClickListener(new View.OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (mImageSelectPopupWindow.isShowing()) {
-						mImageSelectPopupWindow.dismiss();
-					}
-				}
-			});
-		}
-		mImageSelectPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
-	}
-
-	public void startCamera() {
-		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-		ContentValues values = new ContentValues();
-		mImageUri = getContentResolver().insert(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
-		intent.putExtra(MediaStore.Images.Media.ORIENTATION, 0);
-		intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-		startActivityForResult(intent, REQUEST_CODE_CAMERA);
-	}
-
-	public void startGallary() {
-		Intent intent = new Intent();
-		intent.setType("image/*");
-		intent.setAction(Intent.ACTION_GET_CONTENT);
-		startActivityForResult(intent, REQUEST_CODE_GALLARY);
 	}
 
 	public void postImage(String imageUrl) {

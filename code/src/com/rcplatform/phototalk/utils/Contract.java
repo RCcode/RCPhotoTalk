@@ -84,6 +84,8 @@ public class Contract {
 
 	public static final String KEY_RECEIVESET = "receiveSet";
 
+	public static final String KEY_TRENDSET="trendset";
+	
 	public static final String KEY_RCID = "rcId";
 
 	public static final String KEY_PHONE = "phone";

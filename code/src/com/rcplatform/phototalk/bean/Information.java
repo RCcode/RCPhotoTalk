@@ -4,8 +4,6 @@ public class Information {
 
     protected String recordId;
 
-    protected String noticeId;
-
     protected long createtime;
 
     protected long lastUpdateTime;
@@ -175,14 +173,6 @@ public class Information {
 
     public void setLoading(boolean loading) {
         this.loading = loading;
-    }
-
-    public String getNoticeId() {
-        return noticeId;
-    }
-
-    public void setNoticeId(String noticeId) {
-        this.noticeId = noticeId;
     }
 
     @Override

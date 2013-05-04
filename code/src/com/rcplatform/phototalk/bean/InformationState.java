@@ -21,19 +21,19 @@ public class InformationState {
 	public static final int STATU_NOTICE_OPENED = 3;
 
 	// 表示正在查看（此状态和服务器和数据库都没关系，只是一个用来临时记录正在查看中的一个变量）
-	public static final int STATU_NOTICE_SHOWING = 4;
+	public static final int STATU_NOTICE_SHOWING = -2;
 
 	// 表示正在下载（此状态和服务器和数据库都没关系，只是一个用来临时记录正在查看中的一个变量）
-	public static final int STATU_NOTICE_LOADING = 5;
+	public static final int STATU_NOTICE_LOADING = 0;
 
 	// 表示正在发送（此状态和服务器和数据库都没关系，只是一个用来临时记录正在查看中的一个变量）
 	public static final int STATU_NOTICE_SENDING = 0;
 
 	public static final int STATU_NOTICE_OVER = 8;
 
-	public static final int STATU_NOTICE_SEND_FAIL = 6;
+	public static final int STATU_NOTICE_SEND_FAIL = -1;
 
-	public static final int STATU_NOTICE_LOAD_FAIL = 7;
+	public static final int STATU_NOTICE_LOAD_FAIL = -1;
 
 	private static List<Integer> servicePhotoStates;
 	static {

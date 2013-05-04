@@ -106,5 +106,5 @@ public class PhoneBookUtils {
 		}
 		return contactsOnChat;
 	}
-
+	
 }
