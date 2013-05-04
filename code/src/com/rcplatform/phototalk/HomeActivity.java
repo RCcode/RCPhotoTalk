@@ -888,6 +888,8 @@ public class HomeActivity extends BaseActivity {
             	
             	if ( time> TAP_LONG_TIME && willShowSnap  && !showSnap){
             		showSnap = true;
+//            		int pos = mRecordListView.getAdapter()
+//            		show（）;
             		
             	}
             	
