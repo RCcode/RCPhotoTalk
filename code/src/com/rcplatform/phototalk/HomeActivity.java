@@ -14,21 +14,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -124,10 +121,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private CheckUpdateTask mCheckUpdateTask;
 
-	private AlertDialog mUpdateDialog;
-
-	
-	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -181,14 +174,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 					int noticeId = obj.getInt("noticeId");
 					PrefsUtils.User.setUserMaxRecordInfoId(HomeActivity.this, getPhotoTalkApplication().getCurrentUser().getEmail(), noticeId);
 					@SuppressWarnings("unchecked")
-					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(obj.getJSONArray("mainUserNotice").toString(),
-					                                                                                   new TypeToken<List<ServiceRecordInfo>>() {
-					                                                                                   }.getType());
+					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(obj.getJSONArray("mainUserNotice").toString(), new TypeToken<List<ServiceRecordInfo>>() {
+					}.getType());
 
 					List<Information> listinfo = convertData(recordInfo);
 					filterList(listinfo);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					sendDataLoadedMessage(null);
 				}
@@ -208,8 +199,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject("friendInfo").toString());
 					mShowDetailInformation = record;
 					startFriendDetailActivity(friend);
-				}
-				catch (JSONException e) {
+				} catch (JSONException e) {
 					showErrorConfirmDialog(R.string.net_error);
 				}
 				dismissLoadingDialog();
@@ -307,8 +297,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			jsonObject.put("nick", receiver.getNick());
 			array.put(jsonObject);
 			return array.toString();
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return "";
@@ -400,6 +389,15 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				return false;
 			}
 		});
+		mRecordListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Information information = (Information) adapter.getItem(arg2);
+				showFriendDetail(information);
+
+			}
+		});
 		mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
 
 			@Override
@@ -409,41 +407,51 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		});
 	}
 
-	
+	private void showFriendDetail(Information information) {
+		if (information.getSender().getSuid().equals(information.getReceiver().getSuid())) {
+			startActivity(SettingsActivity.class);
+			return;
+		}
+		String friendSuid = null;
+		if (PhotoTalkUtils.isSender(HomeActivity.this, information)) {
+			friendSuid = information.getReceiver().getSuid();
+		} else {
+			friendSuid = information.getSender().getSuid();
+		}
+		searchFriendDetailById(friendSuid, information);
+	}
 
 	protected void showLongClickDialog(int position) {
 		if (adapter != null) {
 			Information record = adapter.getData().get(position);
 			if (record != null) {
-				if (record.getStatu() == InformationState.STATU_NOTICE_LOADING || record.getStatu() == InformationState.STATU_NOTICE_SENDING
-				        || record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+				if (record.getStatu() == InformationState.STATU_NOTICE_LOADING || record.getStatu() == InformationState.STATU_NOTICE_SENDING || record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 					return;
 				} else {
 					if (mLongPressDialog == null) {
-						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload),
-						        getString(R.string.delete) }, new OnLongPressItemClickListener() {
+						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload), getString(R.string.delete) }, new OnLongPressItemClickListener() {
 
 							@Override
 							public void onClick(int listPostion, int itemIndex) {
 								Information record = adapter.getData().get(listPostion);
 								switch (itemIndex) {
-									case 0:
-										reSendNotifyToService(record);
-										mLongPressDialog.hide();
-										break;
-									// 重新下载
-									case 1:
-										reLoadPictrue(record);
-										mLongPressDialog.hide();
-										break;
+								case 0:
+									reSendNotifyToService(record);
+									mLongPressDialog.hide();
+									break;
+								// 重新下载
+								case 1:
+									reLoadPictrue(record);
+									mLongPressDialog.hide();
+									break;
 
-									case 2:
-										PhotoTalkDao.getInstance().deleteRecordById(HomeActivity.this, record.getRecordId());
-										adapter.getData().remove(record);
-										adapter.notifyDataSetChanged();
-										notifyServiceDelete(record);
-										mLongPressDialog.hide();
-										break;
+								case 2:
+									PhotoTalkDao.getInstance().deleteRecordById(HomeActivity.this, record.getRecordId());
+									adapter.getData().remove(record);
+									adapter.notifyDataSetChanged();
+									notifyServiceDelete(record);
+									mLongPressDialog.hide();
+									break;
 								}
 							}
 						});
@@ -462,8 +470,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(),
-		                                         ImageOptionsFactory.getReceiveImageOption(), record);
+		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
 
 	private void show(final int position) {
@@ -474,8 +481,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 				// 这句还给View里面联合起作用，这边加入任务每一秒钟去setLimitTime改变值，然后RecordTimerLimitView在每秒钟显示下新的值
 				TimerLimitUtil.getInstence().addTask(infoRecord);
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId()
-				        + Button.class.getName());
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
 				limitView.setOnTimeEndListener(new OnTimeEndListener() {
@@ -576,12 +582,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	public boolean dispatchTouchEvent(MotionEvent event) {
 		int action = event.getAction();
 		switch (action) {
-			case MotionEvent.ACTION_UP:
-				if (isShow) {
-					mShowDialog.hideDialog();
-					isShow = false;
-				}
-				break;
+		case MotionEvent.ACTION_UP:
+			if (isShow) {
+				mShowDialog.hideDialog();
+				isShow = false;
+			}
+			break;
 		}
 		if (isShow) {
 			return true;
@@ -594,22 +600,22 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case MSG_WHAT_GET_SERVICE_RECORD_SUCCESS:
-					if (msg.obj != null) {
-						initOrRefreshListView((List<Information>) msg.obj);
-					}
-					mRefreshView.onHeaderRefreshComplete();
-					break;
-				case LOAD_MORE_SUCCESS:
-					mRefreshView.onFooterRefreshComplete();
-					break;
-				case LOAD_MORE_FAIL:
-					mRefreshView.onFooterRefreshComplete();
-					break;
-				case REFRESH_FAIL:
-					// Toast.makeText(HomeActivity.this, "加载失败..", 1).show();
-					mRefreshView.onHeaderRefreshComplete();
-					break;
+			case MSG_WHAT_GET_SERVICE_RECORD_SUCCESS:
+				if (msg.obj != null) {
+					initOrRefreshListView((List<Information>) msg.obj);
+				}
+				mRefreshView.onHeaderRefreshComplete();
+				break;
+			case LOAD_MORE_SUCCESS:
+				mRefreshView.onFooterRefreshComplete();
+				break;
+			case LOAD_MORE_FAIL:
+				mRefreshView.onFooterRefreshComplete();
+				break;
+			case REFRESH_FAIL:
+				// Toast.makeText(HomeActivity.this, "加载失败..", 1).show();
+				mRefreshView.onHeaderRefreshComplete();
+				break;
 			}
 		};
 	};
@@ -692,9 +698,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			jsonObject = new JSONObject(text);
 			int state = jsonObject.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
 			if (state == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-				List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(jsonObject.getJSONArray("noticeList").toString(),
-				                                                                                   new TypeToken<List<ServiceRecordInfo>>() {
-				                                                                                   }.getType());
+				List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(jsonObject.getJSONArray("noticeList").toString(), new TypeToken<List<ServiceRecordInfo>>() {
+				}.getType());
 				if (recordInfo != null && recordInfo.size() > 0) {
 					if (app.getSendRecordsList(time) != null && app.getSendRecordsList(time).size() > 0) {
 						// 删除 本地缓存的图片
@@ -723,8 +728,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				}
 				initOrRefreshListView(null);
 			}
-		}
-		catch (JSONException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 	}
@@ -822,8 +826,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		final Map<String, String> params = new HashMap<String, String>();
-		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail())
-		        + "");
+		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail()) + "");
 		notifyServiceDeleteAll(params);
 		PhotoTalkDatabaseFactory.getDatabase().clearInformation();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
@@ -866,8 +869,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	public void snapHide() {
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).resetPressedInformation();
 	}
+
 	private void checkUpdate() {
 		mCheckUpdateTask = new CheckUpdateTask(this, true);
 		mCheckUpdateTask.start();
 	}
+	
+	
 }
