@@ -17,4 +17,18 @@ public class UserSettingProxy {
 		client.putRequestParam(PhotoTalkParams.UserSetting.PARAM_KEY_TREND_SETTING, userInfo.getTrendsSet() + "");
 		client.post(context, MenueApiUrl.USER_SETTING_URL, responseHandler);
 	}
+
+	public static void checkCurrentPassword(Context context, RCPlatformResponseHandler responseHandler, String currentPassword) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.putRequestParam(PhotoTalkParams.ChangePassword.PARAM_KEY_CHECK_PASSWORD, currentPassword);
+		client.post(context, MenueApiUrl.CHECK_LOGIN_PASSWORD_URL, responseHandler);
+	}
+
+	public static void changePassword(Context context, RCPlatformResponseHandler responseHandler, String newPassword) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.putRequestParam(PhotoTalkParams.ChangePassword.PARAM_KEY_NEW_PASSWORD, newPassword);
+		client.post(context, MenueApiUrl.UPDATE_LOGIN_PASSWORD_URL, responseHandler);
+	}
 }
