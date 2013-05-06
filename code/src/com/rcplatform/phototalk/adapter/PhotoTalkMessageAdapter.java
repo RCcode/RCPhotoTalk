@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract.Action;
@@ -389,7 +390,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void openedNotice(Context context, Information record) {
-		PhotoTalkUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
+		LogicUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	class ViewHolder {

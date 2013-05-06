@@ -18,6 +18,9 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
 
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.utils.Contract.Action;
 
 public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
@@ -101,6 +104,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	protected void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		LogicUtils.uploadFriendInvite(this, Action.ACTION_UPLOAD_INTITE_CONTACT, FriendType.CONTACT);
 		friendsAdded.clear();
 		friendsAdded = null;
 	}
@@ -121,7 +125,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		// params.softInputMode =
 		// WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
 		// }
-		if(event.getKeyCode()==KeyEvent.KEYCODE_BACK&&friendsAdded.size()>0&&params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE){
+		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && friendsAdded.size() > 0 && params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
 			Intent intent = new Intent();
 			intent.putExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS, new ArrayList<Friend>(friendsAdded));
 			setResult(Activity.RESULT_OK, intent);

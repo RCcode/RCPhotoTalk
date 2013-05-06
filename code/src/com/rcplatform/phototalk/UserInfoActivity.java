@@ -19,6 +19,7 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.task.FacebookUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class UserInfoActivity extends FacebookActivity implements OnClickListener {
@@ -38,7 +39,6 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_info);
 		setAutoLogin(false);
@@ -90,7 +90,6 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.user_facebook_layout:
 			if (isFacebookAuthorize()) {
@@ -107,11 +106,10 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 			break;
 		case R.id.login_out_btn:
 			Intent intent = new Intent(this, HomeActivity.class);
+			intent.setAction(Action.ACTION_LOGOUT);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 			PrefsUtils.LoginState.clearLoginInfo(this);
 			startActivity(intent);
-			// 清楚数据操作
-			this.finish();
 			break;
 		case R.id.back:
 			startActivity(new Intent(this, SettingsActivity.class));

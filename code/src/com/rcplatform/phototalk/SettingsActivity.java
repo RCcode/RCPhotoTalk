@@ -36,6 +36,7 @@ import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract.Action;
@@ -247,7 +248,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	}
 
 	private void doCleanDistory() {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
+		LogicUtils.clearInformationHistory(this);
 	}
 
 	@Override

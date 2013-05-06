@@ -57,6 +57,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
@@ -122,6 +123,8 @@ public class HomeActivity extends BaseActivity {
 
 	private AlertDialog mUpdateDialog;
 
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -227,12 +230,22 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		String action = intent.getAction();
+		if (Action.ACTION_LOGOUT.equals(action)) {
+			logout();
+			return;
+		}
 		if (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from"))) {
 			long time = intent.getLongExtra("time", 0);
 			if (app.getSendRecordsList(time) != null) {
 				initOrRefreshListView(app.getSendRecordsList(time));
 			}
 		}
+	}
+
+	private void logout() {
+		startActivity(InitPageActivity.class);
+		finish();
 	}
 
 	private void reSendNotifyToService(Information record) {
@@ -323,7 +336,7 @@ public class HomeActivity extends BaseActivity {
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
-		title_line = (ImageView)findViewById(R.id.title_line);
+		title_line = (ImageView) findViewById(R.id.title_line);
 		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
@@ -401,15 +414,17 @@ public class HomeActivity extends BaseActivity {
 		public boolean onSingleTapUp(MotionEvent e) {
 			if (mRecordListView.getChildCount() > 0) {
 				int position = getPostionFromTouch(e, mRecordListView);
-				Information record = (Information) adapter.getItem(position);
-				if (record != null && (record.getType() != InformationType.TYPE_SYSTEM_NOTICE && record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
-					String sUid = null;
-					if (PhotoTalkUtils.isSender(HomeActivity.this, record)) {
-						sUid = record.getReceiver().getSuid();
-					} else {
-						sUid = record.getSender().getSuid();
+				if (position != -1) {
+					Information record = (Information) adapter.getItem(position);
+					if (record != null && (record.getType() != InformationType.TYPE_SYSTEM_NOTICE && record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
+						String sUid = null;
+						if (PhotoTalkUtils.isSender(HomeActivity.this, record)) {
+							sUid = record.getReceiver().getSuid();
+						} else {
+							sUid = record.getSender().getSuid();
+						}
+						searchFriendDetailById(sUid, record);
 					}
-					searchFriendDetailById(sUid, record);
 				}
 			}
 			return super.onSingleTapUp(e);
@@ -486,7 +501,7 @@ public class HomeActivity extends BaseActivity {
 
 						RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
 						if (timerLimitView != null) {
-//							timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+							// timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
 							timerLimitView.setText("");
 						}
 						TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
@@ -633,7 +648,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void notifyServiceUpdateState(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, record);
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	/**
@@ -644,7 +659,7 @@ public class HomeActivity extends BaseActivity {
 	 * @param record
 	 */
 	private void notifyServiceDelete(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
 	}
 
 	/**
@@ -830,7 +845,7 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	private void checkFialRequest() {

@@ -16,8 +16,8 @@ public class UserInfoProvider extends ContentProvider {
 	private static final int CODE_LOGIN_USER = 0;
 	private static final int CODE_USERS = 1;
 	static {
-		mUriMatcher.addURI(Contract.PROVIDER_AUTHORITY, Contract.PROVIDER_USERS_PATH, CODE_USERS);
-		mUriMatcher.addURI(Contract.PROVIDER_AUTHORITY, Contract.PROVIDER_LOGIN_USER_PATH, CODE_LOGIN_USER);
+		mUriMatcher.addURI(Contract.Provider.PROVIDER_AUTHORITY, Contract.Provider.PROVIDER_USERS_PATH, CODE_USERS);
+		mUriMatcher.addURI(Contract.Provider.PROVIDER_AUTHORITY, Contract.Provider.PROVIDER_LOGIN_USER_PATH, CODE_LOGIN_USER);
 	}
 
 	@Override

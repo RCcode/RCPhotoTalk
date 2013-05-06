@@ -21,7 +21,7 @@ public class Contract {
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		DATABASE_PATH = context.getFilesDir().getAbsolutePath();
-		FILE_PATH =context.getFilesDir()+ "/" + "rcplatform/phototalk";
+		FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 	}
 
 	public static class Action {
@@ -32,11 +32,15 @@ public class Contract {
 
 		public static final String ACTION_INFORMATION_DELETE = "com.rcplatform.phototalk.action.INFORMATION_DELETE";
 		public static final String ACTION_INFORMATION_STATE_CHANGE = "com.rcplatform.phototalk.action.INFORMATION_STATE_CHANGE";
+
+		public static final String ACTION_LOGOUT = "com.rcplatform.phototalk.action.LOGOUT";
 	}
 
-	public static final String PROVIDER_AUTHORITY = "com.rcplatform.phototalk.provider";
-	public static final String PROVIDER_USERS_PATH = "user";
-	public static final String PROVIDER_LOGIN_USER_PATH = "user/#";
+	public static class Provider {
+		public static final String PROVIDER_AUTHORITY = "com.rcplatform.phototalk.provider";
+		public static final String PROVIDER_USERS_PATH = "user";
+		public static final String PROVIDER_LOGIN_USER_PATH = "user/#";
+	}
 
 	public static final String PREFS_FILE_USER_INFO = "com.menue.login.info.prefs";
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
