@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -52,12 +54,13 @@ import com.rcplatform.phototalk.clienservice.PhotoTalkInformationStateService;
 import com.rcplatform.phototalk.db.DatabaseFactory;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
+import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -111,6 +114,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private TextView mBtFriendList;
 
 	private TextView mBtMore;
+	private ImageView title_line;
 
 	private LongPressDialog mLongPressDialog;
 
@@ -118,6 +122,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private Information mShowDetailInformation;
 
+	private CheckUpdateTask mCheckUpdateTask;
+
+	private AlertDialog mUpdateDialog;
+
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -129,6 +139,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		initViewAndListener();
 		loadDataFromDataBase();
 		loadRecords();
+		checkUpdate();
 	}
 
 	@Override
@@ -227,12 +238,22 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		String action = intent.getAction();
+		if (Action.ACTION_LOGOUT.equals(action)) {
+			logout();
+			return;
+		}
 		if (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from"))) {
 			long time = intent.getLongExtra("time", 0);
 			if (app.getSendRecordsList(time) != null) {
 				initOrRefreshListView(app.getSendRecordsList(time));
 			}
 		}
+	}
+
+	private void logout() {
+		startActivity(InitPageActivity.class);
+		finish();
 	}
 
 	private void reSendNotifyToService(Information record) {
@@ -325,10 +346,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
-
+		title_line = (ImageView) findViewById(R.id.title_line);
+		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
-		mBtFriendList.setBackgroundResource(R.drawable.friendlist_icon);
+		mBtFriendList.setBackgroundResource(R.drawable.friendlist_btn);
 		mBtFriendList.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -339,7 +361,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 		mBtMore = (TextView) findViewById(R.id.choosebutton);
 		mBtMore.setVisibility(View.VISIBLE);
-		mBtMore.setBackgroundResource(R.drawable.more_icon);
+		mBtMore.setBackgroundResource(R.drawable.more_btn);
 		mBtMore.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -387,39 +409,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		});
 	}
 
-	class HomeGestureListener extends SimpleOnGestureListener {
-
-		@Override
-		public boolean onDown(MotionEvent e) {
-			if (mRecordListView.getChildCount() > 0) {
-				int position = getPostionFromTouch(e, mRecordListView);
-				if (position != -1) {
-					show(position);
-				}
-			}
-			return super.onDown(e);
-		}
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			if (mRecordListView.getChildCount() > 0) {
-				int position = getPostionFromTouch(e, mRecordListView);
-				Information record = (Information) adapter.getItem(position);
-				if (record != null
-				        && (record.getType() != InformationType.TYPE_SYSTEM_NOTICE && record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record
-				                .getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
-					String sUid = null;
-					if (PhotoTalkUtils.isSender(HomeActivity.this, record)) {
-						sUid = record.getReceiver().getSuid();
-					} else {
-						sUid = record.getSender().getSuid();
-					}
-					searchFriendDetailById(sUid, record);
-				}
-			}
-			return super.onSingleTapUp(e);
-		}
-	}
+	
 
 	protected void showLongClickDialog(int position) {
 		if (adapter != null) {
@@ -495,7 +485,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 						RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
 						if (timerLimitView != null) {
-							timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+							// timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
 							timerLimitView.setText("");
 						}
 						TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
@@ -642,7 +632,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void notifyServiceUpdateState(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, record);
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	/**
@@ -653,7 +643,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	 * @param record
 	 */
 	private void notifyServiceDelete(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
 	}
 
 	/**
@@ -815,22 +805,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		}
 	};
 
-	private final GalHttpLoadTextCallBack notifyRecordOpenedCallBack = new GalHttpLoadTextCallBack() {
-
-		@Override
-		public void textLoaded(String text) {
-
-		}
-
-		@Override
-		public void loadFail() {
-
-		}
-	};
-
 	@Override
 	protected void onDestroy() {
 		app.removeActivity(this.getClass().getName());
+		if (mCheckUpdateTask != null)
+			mCheckUpdateTask.cancel();
 		super.onDestroy();
 	}
 
@@ -846,14 +825,14 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail())
 		        + "");
 		notifyServiceDeleteAll(params);
-		PhotoTalkDao.getInstance().deleteCurrentUserTable(this);
+		PhotoTalkDatabaseFactory.getDatabase().clearInformation();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	private void checkFialRequest() {
@@ -886,5 +865,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	@Override
 	public void snapHide() {
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).resetPressedInformation();
+	}
+	private void checkUpdate() {
+		mCheckUpdateTask = new CheckUpdateTask(this, true);
+		mCheckUpdateTask.start();
 	}
 }

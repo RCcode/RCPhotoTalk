@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingLeft="@dimen/user_detail_padding"
-    android:paddingRight="@dimen/user_detail_padding" >
+    android:background="#FFFFFF"
+   >
+  <!--    android:paddingLeft="@dimen/user_detail_padding"
+    android:paddingRight="@dimen/user_detail_padding" -->
 
-    <RelativeLayout
+<!--     <RelativeLayout
         android:id="@+id/rela_infos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/user_detail_top_margin"
-        android:background="@color/white"
-        android:padding="@dimen/user_detail_userinfo_padding" >
+        android:padding="@dimen/user_detail_userinfo_padding" > -->
 
         <TextView
             android:id="@+id/tv_rcid"
             style="@style/text_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black" />
+            android:layout_marginTop="53dp"
+            android:layout_marginLeft="16dp"
+            android:text="RC ID : 45678"
+            android:textColor="#74554a" />
 
         <RelativeLayout
-            android:layout_width="match_parent"
             android:id="@+id/infos"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" >
 
             <ImageView
                 android:id="@+id/iv_bg"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/user_detail_bg_height"
-                android:layout_below="@+id/tv_rcid"
                 android:scaleType="centerCrop"
                 android:src="@drawable/user_detail_bg" />
 
-            <LinearLayout
+           <LinearLayout
                 android:id="@+id/rela_userinfo"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/user_detail_user_infos_height"
@@ -47,6 +50,7 @@
                     android:id="@+id/iv_head"
                     android:layout_width="@dimen/user_detail_head_image_width"
                     android:layout_height="@dimen/user_detail_head_image_width"
+                    android:background="@drawable/default_head"
                     android:layout_marginRight="@dimen/user_detail_source_margin_left" />
 
                 <LinearLayout
@@ -100,13 +104,13 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <com.rcplatform.phototalk.views.HorizontalListView
+         <com.rcplatform.phototalk.views.HorizontalListView
             android:id="@+id/hlv_apps"
             android:layout_width="match_parent"
             android:layout_height="@dimen/app_list_height"
             android:layout_below="@+id/infos"
-            android:padding="10dp" />
-    </RelativeLayout>
+            android:padding="10dp" /> 
+    <!-- </RelativeLayout> -->
 
     <Button
         android:id="@+id/btn_perform"
@@ -114,4 +118,4 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/rela_infos" />
 
-</RelativeLayout>
+</LinearLayout>

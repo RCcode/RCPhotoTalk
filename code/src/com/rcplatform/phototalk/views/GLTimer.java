@@ -81,7 +81,7 @@ public class GLTimer extends TextView {
             infoRecord.setLimitTime(mSeconds);
             if (mSeconds < 0) {
                 // setVisibility(View.INVISIBLE);
-                setBackgroundResource(R.drawable.receive_arrows_opened);
+//                setBackgroundResource(R.drawable.receive_arrows_opened);
                 handler.removeCallbacks(this);
                 if (endListener != null)
                     endListener.onEnd();

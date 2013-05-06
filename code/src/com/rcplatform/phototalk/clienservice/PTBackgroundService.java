@@ -298,6 +298,7 @@ public class PTBackgroundService extends Service {
 							time);
 					break;
 				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+					LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~send sms error ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 					if (isUserNeedToBindPhone(mCurrentUser)) {
 						sendSMS(PrefsUtils.User.getLastBindNumber(
 								getApplicationContext(),

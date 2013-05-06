@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract.Action;
@@ -83,6 +84,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			convertView = LayoutInflater.from(context).inflate(R.layout.home_user_record_list_item, null);
 			holder = new ViewHolder();
 			holder.head = (ImageView) convertView.findViewById(R.id.iv_record_item_head);
+			holder.item_new = (ImageView) convertView.findViewById(R.id.item_new);
 			holder.name = (TextView) convertView.findViewById(R.id.tv_record_item_name);
 			holder.statu = (TextView) convertView.findViewById(R.id.tv_record_item_statu);
 			holder.bar = (ProgressBar) convertView.findViewById(R.id.progress_home_record);
@@ -202,28 +204,34 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
 			holder.statuButton.stopTask();
 			holder.statuButton.setText("");
-			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+			holder.statuButton.setBackgroundDrawable(null);
+			holder.item_new.setVisibility(View.VISIBLE);
+//			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
 				holder.bar.setVisibility(View.GONE);
-				holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+				holder.item_new.setVisibility(View.VISIBLE);
+//				holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 				holder.statuButton.stopTask();
 				holder.statuButton.setText(null);
+				holder.statuButton.setBackgroundDrawable(null);
 				holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
 			} else {
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.home_record_pic_loading);
 				RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
 				holder.statuButton.stopTask();
-				holder.statuButton.setText(null);
-				holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+				holder.statuButton.setText("");
+				holder.statuButton.setBackgroundDrawable(null);
+				holder.item_new.setVisibility(View.VISIBLE);
+//				holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 			}
 			// 状态为4.表示正在查看
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundDrawable(null);
+			holder.statuButton.setBackgroundResource(R.drawable.item_time_bg);
 			holder.statuButton.scheuleTask(record);
 			holder.statuButton.setOnTimeEndListener(new OnTimeEndListener() {
 
@@ -231,8 +239,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				public void onEnd(Object statuTag, Object buttonTag) {
 					RecordTimerLimitView timerLimitView = (RecordTimerLimitView) listView.findViewWithTag(buttonTag);
 					if (timerLimitView != null) {
-						timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+						holder.item_new.setVisibility(View.GONE);
+//						timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
 						timerLimitView.setText("");
+						holder.statuButton.setBackgroundDrawable(null);
 					}
 					TextView statu = ((TextView) listView.findViewWithTag(statuTag));
 					if (statu != null) {
@@ -247,7 +257,9 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			// 状态为3 表示 已经查看，
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_opened);
+			holder.item_new.setVisibility(View.GONE);
+			holder.statuButton.setBackgroundDrawable(null);
+//			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_opened);
 			holder.statuButton.setText("");
 			holder.statuButton.stopTask();
 			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
@@ -257,15 +269,19 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.home_record_pic_loading);
 			holder.statuButton.setText("");
+			holder.statuButton.setBackgroundDrawable(null);
 			holder.statuButton.stopTask();
-			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+			holder.item_new.setVisibility(View.VISIBLE);
+//			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 			// 7 下载失败
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(R.string.home_record_load_fail);
 			holder.statuButton.setText("");
+			holder.statuButton.setBackgroundDrawable(null);
 			holder.statuButton.stopTask();
-			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
+			holder.item_new.setVisibility(View.VISIBLE);
+//			holder.statuButton.setBackgroundResource(R.drawable.receive_arrows_unread);
 		}
 
 	}
@@ -374,12 +390,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void openedNotice(Context context, Information record) {
-		PhotoTalkUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
+		LogicUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	class ViewHolder {
 
 		ImageView head;
+		ImageView item_new;
 
 		TextView name;
 

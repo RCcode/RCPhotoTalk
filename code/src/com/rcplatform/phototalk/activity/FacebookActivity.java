@@ -3,8 +3,6 @@ package com.rcplatform.phototalk.activity;
 import java.util.List;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -44,8 +42,14 @@ public class FacebookActivity extends BaseActivity {
 	private String[] mInviteIds;
 	private boolean hasTryLogin = false;
 
+	private boolean mAutoLogin = false;
+
 	private enum PendingAction {
 		NONE, SEND_INVATE, GET_INFO, DE_AUTHORIZE;
+	}
+
+	protected void setAutoLogin(boolean autoLogin) {
+		this.mAutoLogin = autoLogin;
 	}
 
 	@Override
@@ -101,16 +105,27 @@ public class FacebookActivity extends BaseActivity {
 		super.onResume();
 		mHelper.onResume();
 		if (!hasTryLogin) {
-			if (FacebookUtil.isFacebookVlidate(this))
+			boolean isAuth = FacebookUtil.isFacebookVlidate(this);
+			if (isAuth)
 				mAction = PendingAction.NONE;
 			else
 				mAction = PendingAction.GET_INFO;
-			Session session = Session.getActiveSession();
-			if (session != null && (!session.isOpened() && !session.isClosed())) {
-				session.openForRead(new Session.OpenRequest(this).setPermissions(null).setCallback(mCallback));
+			if (isAuth) {
+				openSession();
 			} else {
-				Session.openActiveSession(this, true, mCallback);
+				if (mAutoLogin) {
+					openSession();
+				}
 			}
+		}
+	}
+
+	private void openSession() {
+		Session session = Session.getActiveSession();
+		if (session != null && (!session.isOpened() && !session.isClosed())) {
+			session.openForRead(new Session.OpenRequest(this).setPermissions(null).setCallback(mCallback));
+		} else {
+			Session.openActiveSession(this, true, mCallback);
 		}
 	}
 
@@ -220,16 +235,16 @@ public class FacebookActivity extends BaseActivity {
 					showErrorConfirmDialog(R.string.invite_fail);
 				} else {
 					onInviteComplete(mInviteIds);
-					mInviteIds=null;
+					mInviteIds = null;
 				}
 			}
 		}).build();
 		dialog.show();
 	}
 
-	protected void onInviteComplete(String...ids) {
+	protected void onInviteComplete(String... ids) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private Handler mHandler = new Handler() {
@@ -237,15 +252,8 @@ public class FacebookActivity extends BaseActivity {
 			dismissLoadingDialog();
 			switch (msg.what) {
 			case MSG_DEAUTHORIZE_SUCCESS:
+				FacebookUtil.clearFacebookVlidated(FacebookActivity.this);
 				Dialog dialog = DialogUtil.createMsgDialog(FacebookActivity.this, getString(R.string.deauthorize_complete), getString(R.string.confirm));
-				dialog.setOnDismissListener(new OnDismissListener() {
-
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						// TODO Auto-generated method stub
-						finish();
-					}
-				});
 				dialog.show();
 				break;
 			case MSG_DEAUTHORIZE_ERROR:
@@ -287,6 +295,13 @@ public class FacebookActivity extends BaseActivity {
 			};
 		};
 		th.start();
+	}
 
+	protected boolean isFacebookAuthorize() {
+		return FacebookUtil.isFacebookVlidate(this);
+	}
+
+	protected void authorize() {
+		openSession();
 	}
 }

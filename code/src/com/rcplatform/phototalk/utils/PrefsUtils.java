@@ -28,6 +28,8 @@ public class PrefsUtils {
 
 		public static final String APP_KEY_CONTACT_UPLOADED = "contactuploaded";
 		public static final String LAST_CONTACT_UPLOAD_TIME = "lastuploadtime";
+		public static final String NEVER_ATTENTION_VERSION = "never_attention";
+		public static final String LAST_UPDATE_TIME = "last_update_time";
 
 		public static boolean hasUploadContacts(Context context) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
@@ -48,6 +50,24 @@ public class PrefsUtils {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
 			return sh.getLong(LAST_CONTACT_UPLOAD_TIME, 0l);
 		}
+
+		public static void setNeverAttentionVersion(Context context, String version) {
+			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
+			sh.edit().putString(NEVER_ATTENTION_VERSION, version).commit();
+		}
+
+		public static String getNeverAttentionVersion(Context context) {
+			return getPreference(context, PREF_APP_INFO).getString(NEVER_ATTENTION_VERSION, null);
+		}
+
+		public static void setLastCheckUpdateTime(Context context, long time) {
+			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
+			sh.edit().putLong(LAST_UPDATE_TIME, time).commit();
+		}
+
+		public static long getLastCheckUpdateTime(Context context) {
+			return getPreference(context, PREF_APP_INFO).getLong(LAST_UPDATE_TIME, 0);
+		}
 	}
 
 	public static class LoginState {
@@ -67,6 +87,11 @@ public class PrefsUtils {
 				return User.getUserInfo(context, pref);
 			}
 			return null;
+		}
+
+		public static void clearLoginInfo(Context context) {
+			SharedPreferences sh = getPreference(context, PREF_NAME);
+			sh.edit().clear().commit();
 		}
 	}
 
@@ -100,6 +125,7 @@ public class PrefsUtils {
 			userInfo.setDeviceId(sp.getString(Contract.KEY_DEVICE_ID, null));
 			userInfo.setPhone(sp.getString(Contract.KEY_PHONE, null));
 			userInfo.setRcId(sp.getString(Contract.KEY_RCID, null));
+			userInfo.setBackground(sp.getString(Contract.KEY_BACKGROUND, null));
 			return userInfo;
 		}
 
@@ -135,7 +161,7 @@ public class PrefsUtils {
 			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_SUID, userInfo.getSuid()).putString(Contract.KEY_USERNAME, userInfo.getNick()).putString(Contract.KEY_PASSWORD, userInfo.getPassWord())
 					.putString(Contract.KEY_USER_TOKEN, userInfo.getToken()).putString(Contract.KEY_SIGNATURE, userInfo.getSignature()).putString(Contract.KEY_NICK, userInfo.getNick()).putString(Contract.KEY_HEADURL, userInfo.getHeadUrl()).putInt(Contract.KEY_SEX, userInfo.getSex())
 					.putInt(Contract.KEY_RECEIVESET, userInfo.getReceiveSet()).putInt(Contract.KEY_TRENDSET, userInfo.getTrendsSet()).putString(Contract.KEY_RCID, userInfo.getRcId()).putString(Contract.KEY_PHONE, userInfo.getPhone()).putString(Contract.KEY_AGE, userInfo.getAge())
-					.putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).commit();
+					.putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
 
 		/**
@@ -197,6 +223,16 @@ public class PrefsUtils {
 		public static int getUserMaxRecordInfoId(Context context, String pref) {
 			SharedPreferences sh = getPreference(context, pref);
 			return sh.getInt(PREF_KEY_MAX_RECORDINFO_ID, 0);
+		}
+
+		public static void setBackground(Context context, String pref, String bgUrl) {
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putString(Contract.KEY_BACKGROUND, bgUrl).commit();
+		}
+
+		public static String getBackground(Context context, String pref) {
+			SharedPreferences sh = getPreference(context, pref);
+			return sh.getString(Contract.KEY_BACKGROUND, null);
 		}
 	}
 }

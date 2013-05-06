@@ -133,9 +133,9 @@ public class DialogUtil {
 		return dialogBuilder.create();
 	}
 
-	public static Dialog createMsgDialog(Context context, String title, String positive, String negative) {
+	public static Dialog createMsgDialog(Context context, String msg, String positive, String negative) {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-		dialogBuilder.setMessage(title).setCancelable(false).setPositiveButton(positive, new DialogInterface.OnClickListener() {
+		dialogBuilder.setMessage(msg).setCancelable(false).setPositiveButton(positive, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

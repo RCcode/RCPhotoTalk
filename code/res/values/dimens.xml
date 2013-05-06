@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <!--朋友列表属性  -->
+<dimen name="friend_tiem_hight">74dp</dimen>
+<dimen name="friend_head_left">8dp</dimen>
+<dimen name="friend_head_side">66dp</dimen>
+<dimen name="friend_text_padding">8dp</dimen>
     <!-- 默认间距 -->
     <dimen name="default_gap">8.0dip</dimen>
     <dimen name="default_gap_2x">16.0dip</dimen>
@@ -41,5 +45,6 @@
     <dimen name="friend_head_width">90dp</dimen>
     <dimen name="friend_name_marginleft">10dp</dimen>
     <dimen name="user_detail_bg_height">200dp</dimen>
+    <dimen name="about_icon_width">100dp</dimen>
 
 </resources>

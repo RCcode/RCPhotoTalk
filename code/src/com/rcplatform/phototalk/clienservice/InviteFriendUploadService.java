@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -24,6 +25,7 @@ import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.api.PhotoTalkParams;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Contract;
 
 public class InviteFriendUploadService extends IntentService {
@@ -99,7 +101,8 @@ public class InviteFriendUploadService extends IntentService {
 		HttpPost post = new HttpPost(MenueApiUrl.ASYNC_INVITE_URL);
 		post.setEntity(entity);
 		try {
-			new DefaultHttpClient().execute(post);
+			HttpResponse res=new DefaultHttpClient().execute(post);
+			LogUtil.e(res.getStatusLine().getStatusCode()+"");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

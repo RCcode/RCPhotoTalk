@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk;
 
-import java.util.List;
 import java.util.Set;
 
 import org.json.JSONObject;
@@ -8,8 +7,6 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.api.JSONConver;
