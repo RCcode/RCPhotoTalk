@@ -2,120 +2,162 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="#FFFFFF"
-   >
-  <!--    android:paddingLeft="@dimen/user_detail_padding"
-    android:paddingRight="@dimen/user_detail_padding" -->
+    android:background="@drawable/user_info_detail"
+    android:orientation="vertical" >
 
-<!--     <RelativeLayout
-        android:id="@+id/rela_infos"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/tv_rcid"
+        style="@style/text_base"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/user_detail_top_margin"
-        android:padding="@dimen/user_detail_userinfo_padding" > -->
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:layout_marginTop="@dimen/friend_info_title_top"
+        android:text="RC ID : 45678"
+        android:textSize="20sp"
+        android:textColor="#74554a" />
 
-        <TextView
-            android:id="@+id/tv_rcid"
-            style="@style/text_base"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="53dp"
-            android:layout_marginLeft="16dp"
-            android:text="RC ID : 45678"
-            android:textColor="#74554a" />
+    <RelativeLayout
+        android:id="@+id/infos"
+        android:layout_marginTop="@dimen/friend_info_app_left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-        <RelativeLayout
-            android:id="@+id/infos"
+        <ImageView
+            android:id="@+id/iv_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/user_detail_bg_height"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user_detail_bg" />
+
+        <LinearLayout
+            android:id="@+id/rela_userinfo"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="@dimen/user_detail_user_infos_height"
+            android:layout_alignBottom="@+id/iv_bg"
+            android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin"
+            android:background="@color/TRANSPARENT" >
 
             <ImageView
-                android:id="@+id/iv_bg"
+                android:id="@+id/iv_head"
+                android:layout_width="@dimen/user_detail_head_image_width"
+                android:layout_height="@dimen/user_detail_head_image_width"
+                android:layout_marginLeft="@dimen/friend_info_app_left"
+                android:layout_marginRight="@dimen/user_detail_source_margin_left"
+                android:background="@drawable/default_head" />
+
+            <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/user_detail_bg_height"
-                android:scaleType="centerCrop"
-                android:src="@drawable/user_detail_bg" />
-
-           <LinearLayout
-                android:id="@+id/rela_userinfo"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/user_detail_user_infos_height"
-                android:layout_alignBottom="@+id/iv_bg"
-                android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin"
-                android:background="@color/TRANSPARENT"
-                android:padding="@dimen/user_detail_info_padding" >
-
-                <ImageView
-                    android:id="@+id/iv_head"
-                    android:layout_width="@dimen/user_detail_head_image_width"
-                    android:layout_height="@dimen/user_detail_head_image_width"
-                    android:background="@drawable/default_head"
-                    android:layout_marginRight="@dimen/user_detail_source_margin_left" />
+                android:layout_height="fill_parent"
+                android:layout_marginLeft="@dimen/friend_info_left"
+                android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:orientation="vertical" >
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/user_detail_head_width_half"
+                    android:gravity="bottom"
+                    android:orientation="vertical"
+                    android:paddingBottom="5dp" >
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/user_detail_head_width_half"
-                        android:gravity="bottom"
-                        android:orientation="vertical"
-                        android:paddingBottom="5dp" >
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
 
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/tv_name"
+                            style="@style/text_base"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal" >
+                            android:text="Name"
+                            android:textSize="20sp"
+                            android:textColor="#FFFFFF" />
 
-                            <TextView
-                                android:id="@+id/tv_name"
-                                style="@style/text_base"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" />
+                        <Button
+                            android:id="@+id/btn_edit"
+                            style="@style/text_base"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/friend_info_edit_left"
+                            android:background="@drawable/friend_info_edit_btn" />
+                    </LinearLayout>
 
-                            <Button
-                                android:id="@+id/btn_edit"
-                                style="@style/text_base"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:background="@null"
-                                android:text="@string/edit" />
-                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/friend_info_sex_layout_top"
+                        android:orientation="horizontal" >
+
+                        <ImageView
+                            android:id="@+id/tv_sex"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/boy_icon" />
 
                         <TextView
                             android:id="@+id/tv_sex_age"
                             style="@style/text_base"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp" />
+                            android:layout_marginLeft="@dimen/friend_info_age_left"
+                            android:text="24"
+                            android:textColor="#E5E5E5" />
                     </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/user_detail_head_width_half"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/directory_icon" />
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        style="@style/text_base"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/friend_info_name_left"
+                        android:text="赵楠"
+                        android:textColor="#4f3e36" />
 
                     <TextView
                         android:id="@+id/tv_source"
                         style="@style/text_base"
                         android:layout_width="wrap_content"
-                        android:layout_height="@dimen/user_detail_head_width_half"
-                        android:gravity="center_vertical" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/friend_info_phone_left"
+                        android:text="12354566543"
+                        android:textColor="#8a837b" />
                 </LinearLayout>
             </LinearLayout>
-        </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
 
-         <com.rcplatform.phototalk.views.HorizontalListView
-            android:id="@+id/hlv_apps"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/app_list_height"
-            android:layout_below="@+id/infos"
-            android:padding="10dp" /> 
+    <com.rcplatform.phototalk.views.HorizontalListView
+        android:id="@+id/hlv_apps"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/app_list_height"
+        android:layout_below="@+id/infos"
+        android:background="@drawable/app_list_bg"
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:layout_marginRight="@dimen/friend_info_app_right"
+        android:padding="10dp" />
     <!-- </RelativeLayout> -->
 
     <Button
         android:id="@+id/btn_perform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:layout_marginRight="@dimen/friend_info_app_right"
+        android:background="@drawable/friend_info_send_btn"
+        android:layout_marginTop="@dimen/friend_info_send_top"
+        android:layout_marginBottom="@dimen/friend_info_send_top"
+        android:textColor="#FFFFFF"
         android:layout_below="@+id/rela_infos" />
 
 </LinearLayout>

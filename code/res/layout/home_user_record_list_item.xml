@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="@dimen/friend_tiem_hight"
-    android:background="@drawable/friend_item_bg" >
+    >
 
     <RelativeLayout
         android:id="@+id/head_layou"
@@ -18,13 +18,11 @@
             android:layout_alignParentLeft="true"
             android:background="@drawable/default_head"
             android:scaleType="fitXY" />
-
-        <ImageView
-            android:layout_width="@dimen/friend_head_side"
-            android:layout_height="@dimen/friend_head_side"
-            android:background="@drawable/head_bg" />
     </RelativeLayout>
-    
+    <ImageView android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/friend_item_bg"
+        />
     
     <ImageView android:background="@drawable/item_new_bg"
         android:id="@+id/item_new"

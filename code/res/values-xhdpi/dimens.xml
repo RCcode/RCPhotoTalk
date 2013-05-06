@@ -2,16 +2,22 @@
 <resources>
     <!--朋友列表属性  -->
 <dimen name="friend_tiem_hight">74dp</dimen>
-<dimen name="friend_head_left">8dp</dimen>
+<dimen name="friend_head_left">10dp</dimen>
 <dimen name="friend_head_side">66dp</dimen>
 <dimen name="friend_text_padding">8dp</dimen>
+
     <!--朋友信息属性  -->
-<dimen name="friend_info_edit_left">17dp</dimen>
-<dimen name="friend_info_sex_layout_top">8dp</dimen>
+<dimen name="friend_info_edit_left">20dp</dimen>
+<dimen name="friend_info_sex_layout_top">7dp</dimen>
 <dimen name="friend_info_photo_left">9dp</dimen>
-<dimen name="friend_info_app_left">8dp</dimen>
-<dimen name="friend_info_app_right">8dp</dimen>
+<dimen name="friend_info_age_left">12dp</dimen>
+<dimen name="friend_info_left">12dp</dimen>
+<dimen name="friend_info_name_left">8dp</dimen>
+<dimen name="friend_info_phone_left">10dp</dimen>
+<dimen name="friend_info_app_left">5dp</dimen>
+<dimen name="friend_info_app_right">5dp</dimen>
 <dimen name="friend_info_send_top">13dp</dimen>
+<dimen name="friend_info_title_top">15dp</dimen>
     <!-- 默认间距 -->
     <dimen name="default_gap">8.0dip</dimen>
     <dimen name="default_gap_2x">16.0dip</dimen>
