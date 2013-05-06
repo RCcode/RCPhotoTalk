@@ -23,7 +23,7 @@ public class SnapListView extends ListView {
 
 	private final long TAP_LONG_TIME = 200l;
 
-	private final float TAP_POINT_MAX_Y_LEN = 20;
+	private final float TAP_POINT_MAX_Y_LEN = 5;
 
 	private SnapShowListener snapListener = null;
 
@@ -75,6 +75,7 @@ public class SnapListView extends ListView {
 					TimerTask sanpTask = new TimerTask() {
 
 						public void run() {
+							showSnap = true;
 							Message message = new Message();
 							message.what = SHOW_SNAP_FLAG;
 							handler.sendMessage(message);
@@ -91,8 +92,7 @@ public class SnapListView extends ListView {
 				Log.e("snap list", "move");
 				float currentY = event.getY();
 				float len = currentY - startTapPointY;
-
-				if (len > TAP_POINT_MAX_Y_LEN && !showSnap) {
+				if ((len > TAP_POINT_MAX_Y_LEN || len < -TAP_POINT_MAX_Y_LEN) && !showSnap) {
 					willShowSnap = false;
 					if (null != snapTimer) {
 						snapTimer.cancel();
