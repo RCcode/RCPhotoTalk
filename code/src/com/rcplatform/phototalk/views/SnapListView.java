@@ -60,6 +60,7 @@ public class SnapListView extends ListView {
 	}
 
 	public boolean onTouchEvent(MotionEvent event) {
+		super.onTouchEvent(event);
 		final int action = event.getAction();
 		switch (action) {
 			case MotionEvent.ACTION_DOWN:
