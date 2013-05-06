@@ -19,6 +19,7 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.task.FacebookUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class UserInfoActivity extends FacebookActivity implements OnClickListener {
 	private TextView user_Email;
@@ -107,6 +108,7 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 		case R.id.login_out_btn:
 			Intent intent = new Intent(this, HomeActivity.class);
 			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			PrefsUtils.LoginState.clearLoginInfo(this);
 			startActivity(intent);
 			// 清楚数据操作
 			this.finish();

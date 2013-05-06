@@ -31,6 +31,7 @@ import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -109,6 +110,7 @@ public class HomeActivity extends BaseActivity {
 	private TextView mBtFriendList;
 
 	private TextView mBtMore;
+	private ImageView title_line;
 
 	private LongPressDialog mLongPressDialog;
 
@@ -321,10 +323,11 @@ public class HomeActivity extends BaseActivity {
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
-
+		title_line = (ImageView)findViewById(R.id.title_line);
+		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
-		mBtFriendList.setBackgroundResource(R.drawable.friendlist_icon);
+		mBtFriendList.setBackgroundResource(R.drawable.friendlist_btn);
 		mBtFriendList.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -335,7 +338,7 @@ public class HomeActivity extends BaseActivity {
 
 		mBtMore = (TextView) findViewById(R.id.choosebutton);
 		mBtMore.setVisibility(View.VISIBLE);
-		mBtMore.setBackgroundResource(R.drawable.more_icon);
+		mBtMore.setBackgroundResource(R.drawable.more_btn);
 		mBtMore.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -483,7 +486,7 @@ public class HomeActivity extends BaseActivity {
 
 						RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
 						if (timerLimitView != null) {
-							timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
+//							timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
 							timerLimitView.setText("");
 						}
 						TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));

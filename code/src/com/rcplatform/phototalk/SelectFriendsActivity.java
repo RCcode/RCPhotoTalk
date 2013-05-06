@@ -282,7 +282,23 @@ public class SelectFriendsActivity extends BaseActivity implements
 	};
 
 	private long timeSnap;
+	public void deleteTemp() {
+		MenueApplication app = (MenueApplication) getApplication();
+		String tempFilePath = app.getSendFileCachePath();
+		File tempPic = new File(tempFilePath);
+		deleteFile(tempPic);
+	}
 
+	public void deleteFile(File file) {
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File file2 : files) {
+				deleteFile(file2);
+			}
+		}else{
+			file.delete();
+		}
+	}
 	private void sendPicture(final String desc, String imagePath,
 			final String timeLimit, final List<Friend> friends) {
 		timeSnap = System.currentTimeMillis();
@@ -296,6 +312,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 					@Override
 					public void onSuccess(int statusCode, String content) {
 						// TODO Auto-generated method stub
+						deleteTemp();
 						mHandler.obtainMessage(MSG_SEND_SUCCESS).sendToTarget();
 					}
 

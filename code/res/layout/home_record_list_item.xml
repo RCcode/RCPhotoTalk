@@ -64,7 +64,6 @@
 	    android:focusable="false"
 	    android:enabled="false"
 	    android:visibility="gone"
-	    android:background="@drawable/receive_arrows_opened"
 	    />
 	</FrameLayout>
 	</RelativeLayout>
