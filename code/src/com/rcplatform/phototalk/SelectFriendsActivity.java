@@ -342,8 +342,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 			for (Friend f : friends) {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("userId", f.getSuid());
-				jsonObject.put("headUrl", f.getHeadUrl());
-				jsonObject.put("nick", f.getNick());
+				jsonObject.put("headUrl", f.getHeadUrl()+"");
+				jsonObject.put("nick", f.getNick()+"");
 				array.put(jsonObject);
 
 				record = new Information();
