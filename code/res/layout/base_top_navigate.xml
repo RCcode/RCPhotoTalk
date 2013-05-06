@@ -6,11 +6,11 @@
     android:background="@drawable/base_top_navigate_background" >
 
     <LinearLayout
+        android:id="@+id/title_linear_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:id="@+id/title_linear_back"
         android:layout_marginLeft="@dimen/default_gap"
         android:orientation="horizontal" >
 
@@ -44,21 +44,30 @@
         android:id="@+id/choosebutton"
         style="@style/titleBtnStlye"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="7dp"
         android:gravity="center"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/title_line"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:background="@drawable/top_line"
+        android:layout_toLeftOf="@id/choosebutton"
+        android:visibility="gone" />
+
     <TextView
         android:id="@+id/choosebutton0"
         style="@style/titleBtnStlye"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="7dp"
-        android:layout_toLeftOf="@id/choosebutton"
+        android:layout_toLeftOf="@id/title_line"
         android:visibility="gone" />
 
 </RelativeLayout>
