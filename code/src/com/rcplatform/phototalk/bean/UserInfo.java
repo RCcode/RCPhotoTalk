@@ -25,12 +25,12 @@ public class UserInfo implements Serializable {
 	public static final int SEX_FAMALE = 2;
 
 	public static final int FIRST_TIME = 0;
-	
-	public static final int RECEIVE_ALL=0;
-	public static final int RECEIVE_FRIEND=1;
-	
-	public static final int TRENDS_SHOW=0;
-	public static final int TRENDS_HIDE=1;
+
+	public static final int RECEIVE_ALL = 0;
+	public static final int RECEIVE_FRIEND = 1;
+
+	public static final int TRENDS_SHOW = 0;
+	public static final int TRENDS_HIDE = 1;
 
 	private static final long serialVersionUID = 1L;
 
@@ -72,9 +72,19 @@ public class UserInfo implements Serializable {
 	private int receiveSet;
 
 	private int showRecommends;
-	
+
 	private int trendsSet;
-	
+
+	private String background;
+
+	public String getBackground() {
+		return background;
+	}
+
+	public void setBackground(String background) {
+		this.background = background;
+	}
+
 	public int getTrendsSet() {
 		return trendsSet;
 	}
@@ -254,23 +264,25 @@ public class UserInfo implements Serializable {
 	public void setRcId(String rcId) {
 		this.rcId = rcId;
 	}
+
 	@Override
 	public boolean equals(Object o) {
 		// TODO Auto-generated method stub
-		return suid.equals(((UserInfo)o).getSuid());
+		return suid.equals(((UserInfo) o).getSuid());
 	}
-	public void clone(UserInfo userInfo){
-		suid=userInfo.getSuid();
-		passWord=userInfo.getPassWord();
-		phone=userInfo.getPhone();
-		birthday=userInfo.getBirthday();
-		rcId=userInfo.getRcId();
-		token=userInfo.getToken();
-		trendsSet=userInfo.getTrendsSet();
-		sex=userInfo.getSex();
-		receiveSet=userInfo.getReceiveSet();
-		headUrl=userInfo.getHeadUrl();
-		deviceId=userInfo.getDeviceId();
-		nick=userInfo.getNick();
+
+	public void clone(UserInfo userInfo) {
+		suid = userInfo.getSuid();
+		passWord = userInfo.getPassWord();
+		phone = userInfo.getPhone();
+		birthday = userInfo.getBirthday();
+		rcId = userInfo.getRcId();
+		token = userInfo.getToken();
+		trendsSet = userInfo.getTrendsSet();
+		sex = userInfo.getSex();
+		receiveSet = userInfo.getReceiveSet();
+		headUrl = userInfo.getHeadUrl();
+		deviceId = userInfo.getDeviceId();
+		nick = userInfo.getNick();
 	}
 }

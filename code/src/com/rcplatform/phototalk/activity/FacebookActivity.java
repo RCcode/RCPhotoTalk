@@ -44,8 +44,14 @@ public class FacebookActivity extends BaseActivity {
 	private String[] mInviteIds;
 	private boolean hasTryLogin = false;
 
+	private boolean mAutoLogin = false;
+
 	private enum PendingAction {
 		NONE, SEND_INVATE, GET_INFO, DE_AUTHORIZE;
+	}
+
+	protected void setAutoLogin(boolean autoLogin) {
+		this.mAutoLogin = autoLogin;
 	}
 
 	@Override
@@ -105,12 +111,22 @@ public class FacebookActivity extends BaseActivity {
 				mAction = PendingAction.NONE;
 			else
 				mAction = PendingAction.GET_INFO;
-			Session session = Session.getActiveSession();
-			if (session != null && (!session.isOpened() && !session.isClosed())) {
-				session.openForRead(new Session.OpenRequest(this).setPermissions(null).setCallback(mCallback));
+			if (FacebookUtil.isFacebookVlidate(this)) {
+				openSession();
 			} else {
-				Session.openActiveSession(this, true, mCallback);
+				if (mAutoLogin) {
+					openSession();
+				}
 			}
+		}
+	}
+
+	private void openSession() {
+		Session session = Session.getActiveSession();
+		if (session != null && (!session.isOpened() && !session.isClosed())) {
+			session.openForRead(new Session.OpenRequest(this).setPermissions(null).setCallback(mCallback));
+		} else {
+			Session.openActiveSession(this, true, mCallback);
 		}
 	}
 
@@ -220,16 +236,16 @@ public class FacebookActivity extends BaseActivity {
 					showErrorConfirmDialog(R.string.invite_fail);
 				} else {
 					onInviteComplete(mInviteIds);
-					mInviteIds=null;
+					mInviteIds = null;
 				}
 			}
 		}).build();
 		dialog.show();
 	}
 
-	protected void onInviteComplete(String...ids) {
+	protected void onInviteComplete(String... ids) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	private Handler mHandler = new Handler() {

@@ -254,4 +254,7 @@
 	<string name="receive_friend">我的好友</string>
 	<string name="setting">设置</string>
 	<string name="input_current_password">为验证你为用户本人，请输入现密码</string>
+	<string name="two_password_not_same">两次密码输入不一致，请重新输入</string>
+	<string name="password_change_complete">修改密码成功</string>
+	<string name="change_password">修改登录密码</string>
 </resources>
