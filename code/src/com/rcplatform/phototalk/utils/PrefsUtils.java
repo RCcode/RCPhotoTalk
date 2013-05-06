@@ -204,5 +204,15 @@ public class PrefsUtils {
 			SharedPreferences sh = getPreference(context, pref);
 			return sh.getInt(PREF_KEY_MAX_RECORDINFO_ID, 0);
 		}
+		
+		public static void setBackground(Context context,String pref,String bgUrl){
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putString(Contract.KEY_BACKGROUND, bgUrl).commit();
+		}
+		
+		public static String getBackground(Context context,String pref){
+			SharedPreferences sh = getPreference(context, pref);
+			return sh.getString(Contract.KEY_BACKGROUND, null);
+		}
 	}
 }
