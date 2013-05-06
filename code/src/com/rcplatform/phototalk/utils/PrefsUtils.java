@@ -68,6 +68,11 @@ public class PrefsUtils {
 			}
 			return null;
 		}
+
+		public static void clearLoginInfo(Context context) {
+			SharedPreferences sh = getPreference(context, PREF_NAME);
+			sh.edit().clear().commit();
+		}
 	}
 
 	public static class User {
@@ -100,6 +105,7 @@ public class PrefsUtils {
 			userInfo.setDeviceId(sp.getString(Contract.KEY_DEVICE_ID, null));
 			userInfo.setPhone(sp.getString(Contract.KEY_PHONE, null));
 			userInfo.setRcId(sp.getString(Contract.KEY_RCID, null));
+			userInfo.setBackground(sp.getString(Contract.KEY_BACKGROUND, null));
 			return userInfo;
 		}
 
@@ -135,7 +141,7 @@ public class PrefsUtils {
 			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_SUID, userInfo.getSuid()).putString(Contract.KEY_USERNAME, userInfo.getNick()).putString(Contract.KEY_PASSWORD, userInfo.getPassWord())
 					.putString(Contract.KEY_USER_TOKEN, userInfo.getToken()).putString(Contract.KEY_SIGNATURE, userInfo.getSignature()).putString(Contract.KEY_NICK, userInfo.getNick()).putString(Contract.KEY_HEADURL, userInfo.getHeadUrl()).putInt(Contract.KEY_SEX, userInfo.getSex())
 					.putInt(Contract.KEY_RECEIVESET, userInfo.getReceiveSet()).putInt(Contract.KEY_TRENDSET, userInfo.getTrendsSet()).putString(Contract.KEY_RCID, userInfo.getRcId()).putString(Contract.KEY_PHONE, userInfo.getPhone()).putString(Contract.KEY_AGE, userInfo.getAge())
-					.putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).commit();
+					.putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
 
 		/**

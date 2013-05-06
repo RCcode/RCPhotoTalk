@@ -99,5 +99,7 @@ public class Contract {
 	public static final String KEY_DEVICE_ID = "deviceid";
 
 	public static final String KEY_MAX_RECORD_ID = "max_record_id";
+	
+	public static final String KEY_BACKGROUND="background";
 
 }
