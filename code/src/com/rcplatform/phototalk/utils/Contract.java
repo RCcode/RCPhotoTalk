@@ -21,7 +21,7 @@ public class Contract {
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		DATABASE_PATH = context.getFilesDir().getAbsolutePath();
-		FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + "rcplatform/phototalk";
+		FILE_PATH =context.getFilesDir()+ "/" + "rcplatform/phototalk";
 	}
 
 	public static class Action {

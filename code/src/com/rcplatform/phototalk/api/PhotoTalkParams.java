@@ -113,7 +113,10 @@ public class PhotoTalkParams {
 	public static class DelFriends {
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
 	}
-
+	public static class DelRecommend{
+		public static final String PARAM_KEY_FRIEND_ID="atUserId";
+		public static final String PARAM_KEY_RECOMMEND_TYPE="attrType";
+	}
 	public static class UpdateFriendRemark {
 		public static final String PARAM_KEY_REMARK = "mark";
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
