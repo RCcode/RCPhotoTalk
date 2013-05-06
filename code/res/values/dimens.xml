@@ -41,5 +41,6 @@
     <dimen name="friend_head_width">90dp</dimen>
     <dimen name="friend_name_marginleft">10dp</dimen>
     <dimen name="user_detail_bg_height">200dp</dimen>
+    <dimen name="about_icon_width">100dp</dimen>
 
 </resources>

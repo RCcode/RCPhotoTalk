@@ -29,9 +29,9 @@ public class Contract {
 		public static final String ACTION_FRIEND_DETAIL = "com.rcplatform.phototalk.action.FRIEND";
 		public static final String ACTION_UPLOAD_INTITE_CONTACT = "com.rcplatform.phototalk.action.INVITE_CONTACT";
 		public static final String ACTION_UPLOAD_INTITE_THIRDPART = "com.rcplatform.phototalk.action.INVITE_THIRDPART";
-		
-		public static final String ACTION_INFORMATION_DELETE="com.rcplatform.phototalk.action.INFORMATION_DELETE";
-		public static final String ACTION_INFORMATION_STATE_CHANGE="com.rcplatform.phototalk.action.INFORMATION_STATE_CHANGE";
+
+		public static final String ACTION_INFORMATION_DELETE = "com.rcplatform.phototalk.action.INFORMATION_DELETE";
+		public static final String ACTION_INFORMATION_STATE_CHANGE = "com.rcplatform.phototalk.action.INFORMATION_STATE_CHANGE";
 	}
 
 	public static final String PROVIDER_AUTHORITY = "com.rcplatform.phototalk.provider";
@@ -39,8 +39,7 @@ public class Contract {
 	public static final String PROVIDER_LOGIN_USER_PATH = "user/#";
 
 	public static final String PREFS_FILE_USER_INFO = "com.menue.login.info.prefs";
-
-	public static final String HOME_RECORD_INFO = "com.menue.home.notice";
+	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 
 	public static final String BIND_PHONE_NUMBER = "+18146193618";
 	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
@@ -67,7 +66,6 @@ public class Contract {
 	 */
 	public static final String KEY_LOGIN_PAGE = "loginpage";
 
-	/* APP_ID photochat 为1，videochat为2 */
 	public static final String APP_ID = "1";
 
 	public static final String PLATFORM = "android";
@@ -84,8 +82,8 @@ public class Contract {
 
 	public static final String KEY_RECEIVESET = "receiveSet";
 
-	public static final String KEY_TRENDSET="trendset";
-	
+	public static final String KEY_TRENDSET = "trendset";
+
 	public static final String KEY_RCID = "rcId";
 
 	public static final String KEY_PHONE = "phone";
@@ -99,7 +97,7 @@ public class Contract {
 	public static final String KEY_DEVICE_ID = "deviceid";
 
 	public static final String KEY_MAX_RECORD_ID = "max_record_id";
-	
-	public static final String KEY_BACKGROUND="background";
+
+	public static final String KEY_BACKGROUND = "background";
 
 }

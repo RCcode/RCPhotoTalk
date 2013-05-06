@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -52,12 +53,12 @@ import com.rcplatform.phototalk.clienservice.PhotoTalkInformationStateService;
 import com.rcplatform.phototalk.db.DatabaseFactory;
 import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
+import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -115,6 +116,10 @@ public class HomeActivity extends BaseActivity {
 
 	private Information mShowDetailInformation;
 
+	private CheckUpdateTask mCheckUpdateTask;
+
+	private AlertDialog mUpdateDialog;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -126,6 +131,7 @@ public class HomeActivity extends BaseActivity {
 		initViewAndListener();
 		loadDataFromDataBase();
 		loadRecords();
+		checkUpdate();
 	}
 
 	@Override
@@ -795,22 +801,11 @@ public class HomeActivity extends BaseActivity {
 		}
 	};
 
-	private final GalHttpLoadTextCallBack notifyRecordOpenedCallBack = new GalHttpLoadTextCallBack() {
-
-		@Override
-		public void textLoaded(String text) {
-
-		}
-
-		@Override
-		public void loadFail() {
-
-		}
-	};
-
 	@Override
 	protected void onDestroy() {
 		app.removeActivity(this.getClass().getName());
+		if (mCheckUpdateTask != null)
+			mCheckUpdateTask.cancel();
 		super.onDestroy();
 	}
 
@@ -825,7 +820,7 @@ public class HomeActivity extends BaseActivity {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail()) + "");
 		notifyServiceDeleteAll(params);
-		PhotoTalkDao.getInstance().deleteCurrentUserTable(this);
+		PhotoTalkDatabaseFactory.getDatabase().clearInformation();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
 		return super.onOptionsItemSelected(item);
@@ -852,5 +847,10 @@ public class HomeActivity extends BaseActivity {
 		if (adapter == null)
 			return null;
 		return adapter.getData();
+	}
+
+	private void checkUpdate() {
+		mCheckUpdateTask = new CheckUpdateTask(this, true);
+		mCheckUpdateTask.start();
 	}
 }

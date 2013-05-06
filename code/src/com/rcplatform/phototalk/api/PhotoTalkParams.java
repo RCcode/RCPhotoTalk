@@ -23,6 +23,7 @@ public class PhotoTalkParams {
 	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
 	public static String PARAM_VALUE_APP_ID = "1";
 
+	
 	public static class ChangePassword{
 		public static final String PARAM_KEY_CHECK_PASSWORD="pwd";
 		public static final String PARAM_KEY_NEW_PASSWORD="newpwd";

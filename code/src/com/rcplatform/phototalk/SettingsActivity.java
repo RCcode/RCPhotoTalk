@@ -1,41 +1,25 @@
 package com.rcplatform.phototalk;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.AccountInfoEditActivity.LoadImageTask;
-import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -71,6 +55,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private ImageView user_bg_View;
 	private PopupWindow mImageSelectPopupWindow;
 	private Uri mImageUri;
+	private View viewAbout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +78,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		user_bg_View = (ImageView) findViewById(R.id.user_bg);
 		user_bg_View.setOnClickListener(this);
 		userInfo = getPhotoTalkApplication().getCurrentUser();
+		viewAbout = findViewById(R.id.rela_about);
+		viewAbout.setOnClickListener(this);
 		setUserInfo(userInfo);
 	}
 
@@ -142,6 +129,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		case R.id.settings_user_edit_rc_id_action:
 			startActivity(SystemSettingActivity.class);
 			break;
+		case R.id.rela_about:
+			startActivity(AboutActivity.class);
+			break;
 		}
 	}
 
@@ -170,13 +160,11 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			String headPath = params[1].getPath();
 			Bitmap bitmap = null;
 			try {
-				int rotateAngel = Utils.getUriImageAngel(SettingsActivity.this,
-						imageUri);
+				int rotateAngel = Utils.getUriImageAngel(SettingsActivity.this, imageUri);
 				int nWidth = 0, nHeight = 0;
 				nHeight = user_bg_View.getHeight();
 				nWidth = user_bg_View.getWidth();
-				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
-						nHeight, rotateAngel);
+				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
 			} catch (OutOfMemoryError e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -195,8 +183,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	}
 
 	private void doCleanDistory() {
-		PhotoTalkUtils.updateInformationState(this,
-				Action.ACTION_INFORMATION_DELETE);
+		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	@Override
@@ -206,11 +193,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EDIT_INFO) {
 				setUserInfo((UserInfo) data.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
-			} 
+			}
 		}
 	}
-
-
 
 	public void postImage(String imageUrl) {
 		File file = null;
