@@ -115,7 +115,6 @@ public class Request {
     private Bundle parameters;
     private Callback callback;
     private String overriddenURL;
-
     /**
      * Constructs a request without a session, graph path, or any other parameters.
      */
@@ -929,7 +928,6 @@ public class Request {
         HttpURLConnection connection;
         try {
             connection = createConnection(url);
-
             serializeToUrlConnection(requests, connection);
         } catch (IOException e) {
             throw new FacebookException("could not construct request body", e);

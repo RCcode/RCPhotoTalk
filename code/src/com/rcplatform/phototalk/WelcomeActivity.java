@@ -1,25 +1,15 @@
 package com.rcplatform.phototalk;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.utils.Contract;
-import com.rcplatform.phototalk.utils.PakageInfoProvider;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 /**
@@ -37,6 +27,7 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 public class WelcomeActivity extends BaseActivity {
 
 	private static final int INIT_SUCCESS=100;
+	private static final long WAITING_TIME=1000;
 	
 	private Handler mHandler = new Handler() {
 
@@ -51,11 +42,12 @@ public class WelcomeActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.loading);
 		startService(new Intent(this, PTBackgroundService.class));
 		Thread th=new Thread(){
 			public void run() {
 				Contract.init(WelcomeActivity.this);
-				mHandler.sendEmptyMessage(INIT_SUCCESS);
+				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS,WAITING_TIME);
 			};
 		};
 		th.start();

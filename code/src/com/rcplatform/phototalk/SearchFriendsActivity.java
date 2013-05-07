@@ -8,8 +8,10 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -65,8 +67,17 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	}
 
 	private void initView() {
-		// TODO Auto-generated method stub
 		mEditText = (EditText) findViewById(R.id.search_et);
+		mEditText.setOnKeyListener(new OnKeyListener() {
+
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if (keyCode == KeyEvent.KEYCODE_ENTER) {
+					search();
+				}
+				return false;
+			}
+		});
 		mSearchButton = (ImageView) findViewById(R.id.search_btn);
 		mSearchButton.setOnClickListener(this);
 		mListView = (ListView) findViewById(R.id.search_result_list);
@@ -82,13 +93,17 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			finish();
 			break;
 		case R.id.search_btn:
-			String keyword = mEditText.getText().toString().toLowerCase();
-			if (TextUtils.isEmpty(keyword))
-				return;
-			searchFriends(keyword);
+			search();
 			break;
 
 		}
+	}
+
+	private void search() {
+		String keyword = mEditText.getText().toString().toLowerCase();
+		if (TextUtils.isEmpty(keyword))
+			return;
+		searchFriends(keyword);
 	}
 
 	private void searchFriends(String keyword) {
@@ -182,7 +197,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 			nickTextView.setText(friend.getNick());
 			if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
-				addFriendBtn.setClickable(true);
+				addFriendBtn.setEnabled(true);
 				addFriendBtn.setTag(friend);
 				addFriendBtn.setOnClickListener(mAddFriendButtonClickListener);
 			} else {

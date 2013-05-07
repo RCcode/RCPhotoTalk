@@ -181,6 +181,6 @@ public class Information {
             return false;
         Information info = (Information) o;
         return this.recordId.equals(info.getRecordId()) && this.type == info.getType();
-
     }
+    
 }

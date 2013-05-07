@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationType;
@@ -36,8 +35,6 @@ public class LongClickShowView extends Dialog {
 
 	private LayoutParams params;
 
-	private MenueApplication app;
-
 	private RelativeLayout contentView;
 
 	private Bitmap currentBitmap;
@@ -45,7 +42,6 @@ public class LongClickShowView extends Dialog {
 	public LongClickShowView(Context context, int theme) {
 		super(context, theme);
 		this.getWindow().setWindowAnimations(R.style.ContentOverlay);
-		app = (MenueApplication) context.getApplicationContext();
 	}
 
 	public LongClickShowView(Context context) {
@@ -147,7 +143,7 @@ public class LongClickShowView extends Dialog {
 			return file.listFiles()[0].listFiles();
 		else {
 			if (file.mkdirs()) {
-				String filePath = PhotoTalkUtils.getFilePath(app, url);
+				String filePath = PhotoTalkUtils.getFilePath(url);
 				ZipUtil.UnZipFolder(filePath, unZipPath);
 				return file.listFiles()[0].listFiles();
 			}
@@ -156,8 +152,7 @@ public class LongClickShowView extends Dialog {
 	}
 
 	private String getUnZipPath(String url) {
-		String filePath = PhotoTalkUtils.getFilePath(app, url);
-		return filePath + "_unzip";
+		return PhotoTalkUtils.getUnZipDirPath(url);
 	}
 
 	private void playAudio(File file, Information info) throws Exception {

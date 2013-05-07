@@ -24,5 +24,5 @@ public interface PhotoTalkDatabase {
 	public void clearInformation();
 	
 	public void close();
-
+	
 }

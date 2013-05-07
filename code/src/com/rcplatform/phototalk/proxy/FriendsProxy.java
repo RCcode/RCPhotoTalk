@@ -168,6 +168,5 @@ public class FriendsProxy {
 		client.putRequestParam(PhotoTalkParams.DelRecommend.PARAM_KEY_FRIEND_ID, friend.getSuid());
 		client.putRequestParam(PhotoTalkParams.DelRecommend.PARAM_KEY_RECOMMEND_TYPE, friend.getSource().getAttrType()+"");
 		client.post(context, MenueApiUrl.DELETE_RECOMMEND_URL, responseHandler);
-		
 	}
 }
