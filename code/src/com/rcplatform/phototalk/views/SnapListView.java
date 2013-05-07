@@ -17,13 +17,12 @@ public class SnapListView extends ListView {
 
 	private boolean showSnap = false;
 
-	private long willShowSnapStartTime = 0l;
 
 	private float startTapPointY = 0;
 
 	private final long TAP_LONG_TIME = 200l;
 
-	private final float TAP_POINT_MAX_Y_LEN = 5;
+	private final float TAP_POINT_MAX_Y_LEN = 15;
 
 	private SnapShowListener snapListener = null;
 
@@ -66,7 +65,6 @@ public class SnapListView extends ListView {
 			case MotionEvent.ACTION_DOWN:
 				if (!willShowSnap) {
 					willShowSnap = true;
-					willShowSnapStartTime = System.currentTimeMillis();
 					startTapPointY = event.getY();
 					if (null != snapTimer) {
 						snapTimer.cancel();
@@ -82,7 +80,7 @@ public class SnapListView extends ListView {
 						}
 					};
 
-					snapTimer.schedule(sanpTask, 200);
+					snapTimer.schedule(sanpTask, TAP_LONG_TIME);
 				}
 
 				Log.e("snap list", "down");
