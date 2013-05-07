@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.views.wheel.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.util.Log;
 import android.view.Gravity;

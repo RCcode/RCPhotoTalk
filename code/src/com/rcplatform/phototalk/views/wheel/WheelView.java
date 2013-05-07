@@ -30,6 +30,8 @@ public class WheelView extends View {
 	/** Top and bottom shadows colors */
 	private static final int[] SHADOWS_COLORS = new int[] { 0xFF111111,
 			0x00AAAAAA, 0x00AAAAAA };
+	private static final int[] CENTER_COLORS = new int[] { 0x00AAAAAA,
+		0x00AAAAAA, 0x00AAAAAA };
 
 	/** Top and bottom items offset (to hide that) */
 	private static final int ITEM_OFFSET_PERCENT = 10;
@@ -439,8 +441,12 @@ public class WheelView extends View {
 	 */
 	private void initResourcesIfNecessary() {
 		if (centerDrawable == null) {
-			centerDrawable = getContext().getResources().getDrawable(
-					R.drawable.wheel_val);
+			centerDrawable = new GradientDrawable(Orientation.TOP_BOTTOM,
+					CENTER_COLORS);
+//			centerDrawable = getContext().getResources().getDrawable(
+//					R.drawable.wheel_val);
+//			centerDrawable = getContext().getResources().getDrawable(
+//					R.drawable.com_facebook_button_grey_normal);
 		}
 
 		if (topShadow == null) {
@@ -453,8 +459,8 @@ public class WheelView extends View {
 					SHADOWS_COLORS);
 		}
 
-		// setBackgroundResource(R.drawable.wheel_bg);
-		setBackgroundColor(Color.WHITE);
+//		 setBackgroundResource(R.drawable.wheelview_bg);
+		setBackgroundColor(Color.TRANSPARENT);
 	}
 
 	/**
@@ -620,7 +626,6 @@ public class WheelView extends View {
 		int top = (currentItem - firstItem) * getItemHeight()
 				+ (getItemHeight() - getHeight()) / 2;
 		canvas.translate(PADDING, -top + scrollingOffset);
-
 		itemsLayout.draw(canvas);
 
 		canvas.restore();

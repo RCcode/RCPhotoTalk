@@ -3,15 +3,15 @@
     android:id="@+id/layout_013"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@color/title_bg_color" >
+    android:background="@drawable/title_item_bg" >
 
     <TextView android:id="@+id/content_title"
         android:layout_width="fill_parent"
         android:layout_height="41dip"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/default_gap_2x"
-        android:text="推荐好友"
-        android:textColor="@color/black"
+        android:text="邀请好友"
+        android:textColor="#EEEEEE"
         android:textSize="16sp"
        />
 

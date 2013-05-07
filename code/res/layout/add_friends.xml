@@ -11,21 +11,30 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/base_top_navigate_background" >
 
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/btn_continue"
-                android:text="@string/friends_already_use_app" />
+                android:layout_marginLeft="@dimen/friend_info_phone_left"
+                android:text="@string/friends_already_use_app"
+                android:textColor="#f1f1f1" />
 
             <Button
                 android:id="@+id/btn_continue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:text="@string/next" />
+                android:layout_centerVertical="true"
+                android:background="@drawable/ok_done_btn" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/btn_continue"
+                android:background="@drawable/top_line" />
         </RelativeLayout>
 
         <TabWidget
@@ -45,29 +54,33 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:checked="true"
-                android:text="@string/contact" />
+                android:background="@drawable/radio_contact_btn"
+                android:button="@null"
+                android:checked="true" />
 
             <RadioButton
                 android:id="@+id/tab_facebook"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/facebook" />
+                android:background="@drawable/radio_facebok_btn"
+                android:button="@null" />
 
             <RadioButton
                 android:id="@+id/tab_vkontakte"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/vkontakte" />
+                android:background="@drawable/radio_vk_btn"
+                android:button="@null" />
 
             <RadioButton
                 android:id="@+id/tab_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/firend_list_search_friend_title" >
+                android:background="@drawable/radio_seach_btn"
+                android:button="@null" >
             </RadioButton>
         </RadioGroup>
 

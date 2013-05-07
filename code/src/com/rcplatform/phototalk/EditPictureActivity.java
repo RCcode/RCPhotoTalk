@@ -16,6 +16,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.media.MediaPlayer;
@@ -90,7 +91,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private Button mButtonUndo;
 
-	private RelativeLayout make_voice;
+	private LinearLayout make_voice;
 
 	private TextView voice_size;
 	private Button play_voice;
@@ -125,8 +126,8 @@ public class EditPictureActivity extends BaseActivity {
 	private AudioRecordButton audioBtn;
 	private String voicePath;
 	private boolean isSave = false;
-
 	private Friend friend = null;
+	private RelativeLayout select_layout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -167,7 +168,7 @@ public class EditPictureActivity extends BaseActivity {
 		mEditableViewGroup.addView(mEditePicView, LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT);
 
-		make_voice = (RelativeLayout) findViewById(R.id.make_voice);
+		make_voice = (LinearLayout) findViewById(R.id.make_voice);
 		voice_size = (TextView) findViewById(R.id.voice_size);
 		play_voice = (Button) findViewById(R.id.play_voice);
 		play_voice.setTag(PLAY_VOICE);
@@ -183,8 +184,9 @@ public class EditPictureActivity extends BaseActivity {
 		mButtonSave = (Button) findViewById(R.id.btn_edit_pic_save);
 		mButtonClose = (Button) findViewById(R.id.btn_edit_pic_close);
 		mButtonUndo.setVisibility(View.GONE);
+		select_layout = (RelativeLayout) findViewById(R.id.select_layout);
 		mWheel = (WheelView) findViewById(R.id.wv_hours);
-		mWheel.setVisibility(View.GONE);
+		select_layout.setVisibility(View.GONE);
 		mWheel.addClickingListener(new OnWheelClickedListener() {
 
 			@Override
@@ -405,13 +407,14 @@ public class EditPictureActivity extends BaseActivity {
 
 	private void showTimeLimitView() {
 		// if (timeChooseDialog == null) {
-		final String timers[] = new String[] { "1s", "2s", "3s", "4s", "5s",
-				"6s", "7s", "8s", "9s", "10s" };
+		final String timers[] = new String[] { "1", "2", "3", "4", "5", "6",
+				"7", "8", "9", "10" };
 		TimeChooseAdapter adapter = new TimeChooseAdapter(this, timers);
-		adapter.setTextSize(20);
+		adapter.setTextColor(Color.WHITE);
+		adapter.setTextSize(18);
 		mWheel.setVisibleItems(3);
 		mWheel.setViewAdapter(adapter);
-		mWheel.setVisibility(View.VISIBLE);
+		select_layout.setVisibility(View.VISIBLE);
 
 	}
 
@@ -526,7 +529,7 @@ public class EditPictureActivity extends BaseActivity {
 				mButtonTimeLimit.setText(n + "");
 				mEditePicView.setTimeLimit(n);
 				audioBtn.setMaxRecoedSize(n);
-				mWheel.setVisibility(View.GONE);
+				select_layout.setVisibility(View.GONE);
 				break;
 			}
 
@@ -586,9 +589,7 @@ public class EditPictureActivity extends BaseActivity {
 					public void onFailure(int errorCode, String content) {
 						// TODO Auto-generated method stub
 					}
-				}, getPhotoTalkApplication().getCurrentUser().getHeadUrl(),
-				String.valueOf(timeSnap), getPhotoTalkApplication()
-						.getCurrentUser().getNick(), desc, timeLimit,
+				}, String.valueOf(timeSnap), desc, timeLimit,
 				buildUserArray(friend, timeSnap, timeLimit));
 
 		this.finish();
@@ -601,8 +602,6 @@ public class EditPictureActivity extends BaseActivity {
 			Information record;
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("userId", friend.getSuid());
-			jsonObject.put("headUrl", friend.getHeadUrl());
-			jsonObject.put("nick", friend.getNick());
 			array.put(jsonObject);
 
 			record = new Information();

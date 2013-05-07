@@ -322,9 +322,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 						sendStringMessage(MSG_WHAT_ERROR,
 								getString(R.string.net_error));
 					}
-				}, getPhotoTalkApplication().getCurrentUser().getHeadUrl(),
-				String.valueOf(timeSnap), getPhotoTalkApplication()
-						.getCurrentUser().getNick(), desc, timeLimit,
+				}, 
+				String.valueOf(timeSnap),  desc, timeLimit,
 				buildUserArray(friends, timeSnap));
 
 	}
@@ -342,8 +341,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 			for (Friend f : friends) {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("userId", f.getSuid());
-				jsonObject.put("headUrl", f.getHeadUrl()+"");
-				jsonObject.put("nick", f.getNick()+"");
 				array.put(jsonObject);
 
 				record = new Information();

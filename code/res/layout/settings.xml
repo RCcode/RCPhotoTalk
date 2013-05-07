@@ -24,8 +24,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/user_info_detail" 
-                android:orientation="vertical">
+                android:background="@drawable/user_info_detail"
+                android:orientation="vertical" >
 
                 <RelativeLayout
                     android:id="@+id/rela_infos"
@@ -48,6 +48,14 @@
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="15dp"
                         android:background="@drawable/user_info_edit_btn" />
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent"
+                        android:layout_alignBottom="@id/user_bg"
+                        android:layout_alignTop="@+id/rela_userinfo"
+                        android:background="#50000000"
+                        android:orientation="horizontal" />
 
                     <LinearLayout
                         android:id="@+id/rela_userinfo"
@@ -284,8 +292,7 @@
                     android:layout_marginLeft="@dimen/default_gap"
                     android:layout_marginRight="@dimen/default_gap" >
                 </Spinner>
-            </LinearLayout>
-            -->
+            </LinearLayout>            -->
 
 
             <!-- line5 -->

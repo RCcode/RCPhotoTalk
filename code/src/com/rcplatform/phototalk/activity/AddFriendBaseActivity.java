@@ -9,6 +9,7 @@ import java.util.Set;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -230,6 +231,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		if (!willInvateFriends.contains(friend)) {
 			willInvateFriends.add(friend);
 			TextView tvName = buildInvateTextView(friend);
+			tvName.setTextColor(Color.WHITE);
 			willInvateViews.put(friend.getSuid(), tvName);
 			mLinearInvate.addView(tvName);
 			refreshList();

@@ -24,6 +24,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private TabHost mHost;
 	private static final String TAB_CONTACTS = "contacts";
 	private static final String TAB_FACEBOOK = "facebook";
+	private static final String TAB_VK = "vkontakte";
 	private static final String TAB_SEARCH = "search";
 
 	private static TreeSet<Friend> friendsAdded;
@@ -70,6 +71,9 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 				case R.id.tab_facebook:
 					mHost.setCurrentTabByTag(TAB_FACEBOOK);
 					break;
+				case R.id.tab_vkontakte:
+					mHost.setCurrentTabByTag(TAB_VK);
+					break;
 				case R.id.tab_search:
 					mHost.setCurrentTabByTag(TAB_SEARCH);
 				}
@@ -83,6 +87,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 		mHost.addTab(mHost.newTabSpec(TAB_CONTACTS).setIndicator(TAB_CONTACTS).setContent(new Intent(this, ContactFriendRecommendActivity.class).setAction("action.meneu.phonebook_friend")));
 		mHost.addTab(mHost.newTabSpec(TAB_FACEBOOK).setIndicator(TAB_FACEBOOK).setContent(new Intent(this, FacebookFriendRecommendActivity.class).setAction("action.meneu.facebook_friend")));
+		mHost.addTab(mHost.newTabSpec(TAB_VK).setIndicator(TAB_VK).setContent(new Intent(this, FacebookFriendRecommendActivity.class).setAction("action.meneu.facebook_friend")));
 		mHost.addTab(mHost.newTabSpec(TAB_SEARCH).setIndicator(TAB_SEARCH).setContent(new Intent(this, SearchFriendsActivity.class)));
 	}
 

@@ -13,14 +13,14 @@
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginTop="@dimen/friend_info_title_top"
         android:text="RC ID : 45678"
-        android:textSize="20sp"
-        android:textColor="#74554a" />
+        android:textColor="#74554a"
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/infos"
-        android:layout_marginTop="@dimen/friend_info_app_left"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/friend_info_app_left" >
 
         <ImageView
             android:id="@+id/iv_bg"
@@ -30,12 +30,19 @@
             android:src="@drawable/user_detail_bg" />
 
         <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignBottom="@id/iv_bg"
+            android:layout_alignTop="@+id/rela_userinfo"
+            android:background="#50000000"
+            android:orientation="horizontal" />
+
+        <LinearLayout
             android:id="@+id/rela_userinfo"
             android:layout_width="match_parent"
             android:layout_height="@dimen/user_detail_user_infos_height"
             android:layout_alignBottom="@+id/iv_bg"
-            android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin"
-            android:background="@color/TRANSPARENT" >
+            android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin" >
 
             <ImageView
                 android:id="@+id/iv_head"
@@ -69,8 +76,8 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Name"
-                            android:textSize="20sp"
-                            android:textColor="#FFFFFF" />
+                            android:textColor="#FFFFFF"
+                            android:textSize="20sp" />
 
                         <Button
                             android:id="@+id/btn_edit"
@@ -142,9 +149,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_list_height"
         android:layout_below="@+id/infos"
-        android:background="@drawable/app_list_bg"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
+        android:background="@drawable/app_list_bg"
         android:padding="10dp" />
     <!-- </RelativeLayout> -->
 
@@ -152,12 +159,12 @@
         android:id="@+id/btn_perform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/rela_infos"
+        android:layout_marginBottom="@dimen/friend_info_send_top"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
-        android:background="@drawable/friend_info_send_btn"
         android:layout_marginTop="@dimen/friend_info_send_top"
-        android:layout_marginBottom="@dimen/friend_info_send_top"
-        android:textColor="#FFFFFF"
-        android:layout_below="@+id/rela_infos" />
+        android:background="@drawable/friend_info_send_btn"
+        android:textColor="#FFFFFF" />
 
 </LinearLayout>

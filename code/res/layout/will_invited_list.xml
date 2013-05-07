@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@drawable/add_friend_bottom_bg"
     android:layout_height="wrap_content" >
 
     <HorizontalScrollView
+        android:id="@+id/hs_wish_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/hs_wish_list"
-        android:layout_toLeftOf="@+id/btn_invate" 
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/btn_invate" >
 
         <LinearLayout
             android:id="@+id/linear_wish"
@@ -23,6 +24,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:text="@string/invate_friend" />
-
+        android:layout_centerInParent="true"
+        android:background="@drawable/seach_send_btn" />
+    <ImageView android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/btn_invate"
+        android:background="@drawable/add_friend_bottom_line"/>
 </RelativeLayout>
