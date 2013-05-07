@@ -17,19 +17,18 @@ public class SnapListView extends ListView {
 
 	private boolean showSnap = false;
 
-	private long willShowSnapStartTime = 0l;
 
 	private float startTapPointY = 0;
 
-	private final long TAP_LONG_TIME = 200l;
+	private final long TAP_LONG_TIME = 100l;
 
-	private final float TAP_POINT_MAX_Y_LEN = 5;
+	private final float TAP_POINT_MAX_Y_LEN = 10;
 
 	private SnapShowListener snapListener = null;
 
 	private final int SHOW_SNAP_FLAG = 1;
 
-	private final Handler handler = new Handler() {
+	private final Handler snapHandler = new Handler() {
 
 		@Override
 		public void handleMessage(Message msg) {
@@ -37,7 +36,7 @@ public class SnapListView extends ListView {
 			switch (msg.what) {
 				case SHOW_SNAP_FLAG:
 					if (null != snapListener) {
-						snapListener.snapShow();
+						//snapListener.snapShow();
 					}
 					break;
 			}
@@ -66,7 +65,6 @@ public class SnapListView extends ListView {
 			case MotionEvent.ACTION_DOWN:
 				if (!willShowSnap) {
 					willShowSnap = true;
-					willShowSnapStartTime = System.currentTimeMillis();
 					startTapPointY = event.getY();
 					if (null != snapTimer) {
 						snapTimer.cancel();
@@ -78,11 +76,11 @@ public class SnapListView extends ListView {
 							showSnap = true;
 							Message message = new Message();
 							message.what = SHOW_SNAP_FLAG;
-							handler.sendMessage(message);
+							snapHandler.sendMessage(message);
 						}
 					};
 
-					snapTimer.schedule(sanpTask, 200);
+					snapTimer.schedule(sanpTask, TAP_LONG_TIME);
 				}
 
 				Log.e("snap list", "down");
@@ -105,7 +103,7 @@ public class SnapListView extends ListView {
 				Log.e("snap list", "up");
 				willShowSnap = false;
 				showSnap = false;
-				this.snapListener.snapHide();
+				//this.snapListener.snapHide();
 				if (null != snapTimer) {
 					snapTimer.cancel();
 				}
