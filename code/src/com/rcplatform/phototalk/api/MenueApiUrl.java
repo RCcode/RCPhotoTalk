@@ -20,7 +20,7 @@ public class MenueApiUrl {
 	
 	private static final String APP_URL=BASE_URL_FOR_PHOTOTALK+"app/";
 
-	public static final String REMOVE_NOTICE_ITEM = NOTICE_URL + "lookedTheNotice.do";
+	public static final String NOTICE_OVER_URL = NOTICE_URL + "lookedTheNotice.do";
 
 	public static final String FRIEND_QUERY_BY_PHONENUM_URL = USER_URL + "queryUsersByPhones.do";
 

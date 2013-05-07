@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.activity;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.app.Dialog;
@@ -11,6 +12,7 @@ import android.os.Message;
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
+import com.facebook.Request.Callback;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
@@ -269,12 +271,14 @@ public class FacebookActivity extends BaseActivity {
 
 	protected void deAuthorize() {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Thread th = new Thread() {
-			public void run() {
+		Request request = new Request(Session.getActiveSession(), "me/permissions");
+		request.setHttpMethod(HttpMethod.DELETE);
+		request.setCallback(new Callback() {
+			
+			@Override
+			public void onCompleted(Response response) {
+				// TODO Auto-generated method stub
 				try {
-					Request request = new Request(Session.getActiveSession(), "me/permissions");
-					request.setHttpMethod(HttpMethod.DELETE);
-					Response response = request.executeAndWait();
 					if (response.getConnection().getResponseCode() == 200 && response.getError() == null) {
 						mHandler.sendEmptyMessage(MSG_DEAUTHORIZE_SUCCESS);
 					} else {
@@ -292,9 +296,9 @@ public class FacebookActivity extends BaseActivity {
 					e.printStackTrace();
 					mHandler.sendEmptyMessage(MSG_NET_ERROR);
 				}
-			};
-		};
-		th.start();
+			}
+		});
+		request.executeAsync();
 	}
 
 	protected boolean isFacebookAuthorize() {

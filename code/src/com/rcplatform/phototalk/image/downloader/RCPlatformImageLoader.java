@@ -44,11 +44,11 @@ public class RCPlatformImageLoader {
 
 	public static synchronized void LoadPictureForList(final Context context, final ProgressBar bar, final TextView statu, ListView listView, ImageLoader imageLoader, DisplayImageOptions options, final Information record) {
 		String url = record.getUrl();
-		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(context, url), new HomeRecordLoadPicListener(listView, bar, statu, context, record));
+		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(url), new HomeRecordLoadPicListener(listView, bar, statu, context, record));
 	}
 
 	public static boolean isFileExist(Context context, String url) {
-		File file = new File(PhotoTalkUtils.getFilePath(context, url));
+		File file = new File(PhotoTalkUtils.getFilePath(url));
 		return file.exists();
 	}
 }

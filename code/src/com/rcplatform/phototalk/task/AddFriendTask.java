@@ -24,8 +24,6 @@ public class AddFriendTask {
 		this.mContext = context;
 		this.mResponseHandler = responseHandler;
 		PhotoTalkParams.buildBasicParams(mContext, mHttpClient);
-		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_HEAD_URL, userInfo.getHeadUrl());
-		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_NICK, userInfo.getNick());
 		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_SUID, userInfo.getSuid());
 		buildFriends(friends);
 	}
@@ -35,8 +33,6 @@ public class AddFriendTask {
 		for (Friend friend : friends) {
 			try {
 				JSONObject jsonFriend = new JSONObject();
-				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_HEAD_URL, friend.getHeadUrl());
-				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_NICK, friend.getNick());
 				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SUID, friend.getSuid());
 				if (friend.getSource() != null)
 					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType());

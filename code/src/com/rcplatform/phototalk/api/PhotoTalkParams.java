@@ -101,12 +101,8 @@ public class PhotoTalkParams {
 
 	public static class AddFriends {
 		public static final String PARAM_KEY_USER_SUID = "seSuid";
-		public static final String PARAM_KEY_USER_NICK = "snick";
-		public static final String PARAM_KEY_USER_HEAD_URL = "shead";
 		public static final String PARAM_KEY_FRIENDS = "friends";
 		public static final String PARAM_KEY_FRIEND_SUID = "reSuid";
-		public static final String PARAM_KEY_FRIEND_NICK = "rnick";
-		public static final String PARAM_KEY_FRIEND_HEAD_URL = "rhead";
 		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
 	}
 

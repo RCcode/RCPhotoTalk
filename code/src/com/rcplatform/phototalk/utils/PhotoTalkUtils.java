@@ -42,10 +42,13 @@ public class PhotoTalkUtils {
 		return result;
 	}
 
-	public static String getFilePath(Context context, String url) {
+	public static String getFilePath(String url) {
 		StringBuilder sbPath = new StringBuilder();
-		sbPath.append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
+		sbPath.append(Contract.PhotoInformationCache.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
 		return sbPath.toString();
 	}
 
+	public static String getUnZipDirPath(String url) {
+		return getFilePath(url) + Contract.PhotoInformationCache.UNZIP_SUFFIX;
+	}
 }
