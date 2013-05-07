@@ -20,7 +20,7 @@ public class SnapListView extends ListView {
 
 	private float startTapPointY = 0;
 
-	private final long TAP_LONG_TIME = 100l;
+	private final long TAP_LONG_TIME = 1l;
 
 	private final float TAP_POINT_MAX_Y_LEN = 10;
 
@@ -36,7 +36,7 @@ public class SnapListView extends ListView {
 			switch (msg.what) {
 				case SHOW_SNAP_FLAG:
 					if (null != snapListener) {
-						//snapListener.snapShow();
+						snapListener.snapShow();
 					}
 					break;
 			}
@@ -103,7 +103,7 @@ public class SnapListView extends ListView {
 				Log.e("snap list", "up");
 				willShowSnap = false;
 				showSnap = false;
-				//this.snapListener.snapHide();
+				snapListener.snapHide();
 				if (null != snapTimer) {
 					snapTimer.cancel();
 				}
