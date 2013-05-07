@@ -135,7 +135,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_DETAIL) {
@@ -212,7 +211,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void startFriendDetailActivity(Friend friend) {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
@@ -436,7 +434,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 								case 2:
 									adapter.getData().remove(record);
 									adapter.notifyDataSetChanged();
-									notifyServiceDelete(record);
+									LogicUtils.updateInformationState(HomeActivity.this, Action.ACTION_INFORMATION_DELETE, record);
 									mLongPressDialog.hide();
 									break;
 								}
@@ -593,17 +591,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			sortList(getAdapterData());
 			adapter.notifyDataSetChanged();
 		}
-	}
-
-	/**
-	 * {"token":"asdasd@126.com|5289ea63123123123","appId":1,"deviceId":
-	 * "android2323"
-	 * ,"userId":"asdasd",notices":"[{'id':30,'type':2,'state':2}]"}
-	 * 
-	 * @param record
-	 */
-	private void notifyServiceDelete(Information record) {
-		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
 	}
 
 	/**
@@ -802,15 +789,18 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	public void snapShow() {
-		int pos = ((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getPressedPosition();
-		if (pos >= 0) {
-			show(pos);
+		if (mRecordListView.getAdapter() != null) {
+			int pos = ((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getPressedPosition();
+			if (pos >= 0) {
+				show(pos);
+			}
 		}
 	}
 
 	@Override
 	public void snapHide() {
-		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).resetPressedInformation();
+		if (mRecordListView.getAdapter() != null)
+			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).resetPressedInformation();
 	}
 
 	private void checkUpdate() {
@@ -821,6 +811,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	public void onInformationShowEnd(Information information) {
 		String buttonTag = information.getRecordId() + Button.class.getName();
 		String statuTag = information.getRecordId() + TextView.class.getName();
+		String newTag = information.getRecordId() + ImageView.class.getName();
 		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
 			timerLimitView.setVisibility(View.GONE);
@@ -829,5 +820,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		if (statu != null) {
 			statu.setText(R.string.statu_opened_1s_ago);
 		}
+		View newView = mRecordListView.findViewWithTag(newTag);
+		if (newView != null)
+			newView.setVisibility(View.GONE);
 	}
 }

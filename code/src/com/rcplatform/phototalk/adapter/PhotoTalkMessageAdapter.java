@@ -27,10 +27,8 @@ import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
-import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
-import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 
@@ -105,6 +103,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		String statuTag = record.getRecordId() + TextView.class.getName();
 		holder.statu.setTag(statuTag);
 		holder.bar.setTag(record.getRecordId() + ProgressBar.class.getName());
+		holder.item_new.setTag(record.getRecordId() + ImageView.class.getName());
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.STATU_NOTICE_OPENED && !PhotoTalkUtils.isSender(context, record)) {
 			holder.item_new.setVisibility(View.VISIBLE);
 		} else {
@@ -206,13 +205,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.stopTask();
 			holder.statuButton.setText("");
 			holder.statuButton.setBackgroundDrawable(null);
-			holder.item_new.setVisibility(View.VISIBLE);
-
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
 				holder.bar.setVisibility(View.GONE);
-				holder.item_new.setVisibility(View.VISIBLE);
 				holder.statuButton.stopTask();
 				holder.statuButton.setText(null);
 				holder.statuButton.setBackgroundDrawable(null);
@@ -224,7 +220,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				holder.statuButton.stopTask();
 				holder.statuButton.setText("");
 				holder.statuButton.setBackgroundDrawable(null);
-				holder.item_new.setVisibility(View.VISIBLE);
 			}
 			// 状态为4.表示正在查看
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
@@ -235,7 +230,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			// 状态为3 表示 已经查看，
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.item_new.setVisibility(View.GONE);
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statuButton.setText("");
 			holder.statuButton.stopTask();
@@ -248,7 +242,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setText("");
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statuButton.stopTask();
-			holder.item_new.setVisibility(View.VISIBLE);
 			// 7 下载失败
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
@@ -256,7 +249,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setText("");
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statuButton.stopTask();
-			holder.item_new.setVisibility(View.VISIBLE);
 		}
 
 	}
@@ -361,10 +353,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		sb.append(" ago " + postfix);
 		return sb.toString();
 
-	}
-
-	private void openedNotice(Context context, Information record) {
-		LogicUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	class ViewHolder {
