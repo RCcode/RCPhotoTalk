@@ -12,19 +12,7 @@ import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {
 
-	/**
-	 * 判断当前用户是不是发送者
-	 * 
-	 * @param context
-	 * @param record
-	 * @return true表示当前用户是发送者，false表示当前用户是接受者
-	 */
-	public static boolean isSender(Context context, Information record) {
 
-		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getSuid().equals(record.getSender().getSuid()) && !record.getReceiver().getSuid().equals(record.getSender().getSuid()))
-			return true;
-		return false;
-	}
 
 	public static String getSexString(Context context, int sex) {
 		String result = null;

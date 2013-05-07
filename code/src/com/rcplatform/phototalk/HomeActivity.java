@@ -61,7 +61,6 @@ import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
@@ -399,7 +398,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			return;
 		}
 		String friendSuid = null;
-		if (PhotoTalkUtils.isSender(HomeActivity.this, information)) {
+		if (LogicUtils.isSender(HomeActivity.this, information)) {
 			friendSuid = information.getReceiver().getSuid();
 		} else {
 			friendSuid = information.getSender().getSuid();
@@ -461,7 +460,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private void show(int position) {
 
 		Information infoRecord = ((Information) mRecordListView.getAdapter().getItem(position));
-		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !PhotoTalkUtils.isSender(this, infoRecord)) {
+		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
@@ -689,50 +688,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	 *            ： 服务器取回的数据
 	 */
 	protected void filterList(List<Information> listinfo) {
-		List<Information> newNotices = new ArrayList<Information>();
-		List<Information> updateInfos = new ArrayList<Information>();
-		Iterator<Information> iterator = listinfo.iterator();
-		List<Information> data = getAdapterData();
-		while (iterator.hasNext()) {
-			Information serviceInfo = iterator.next();
-			if (serviceInfo.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && PhotoTalkUtils.isSender(this, serviceInfo) && serviceInfo.getStatu() == InformationState.STATU_NOTICE_OPENED) {
-				LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_OVER, serviceInfo);
-			}
-			// 如果是通知
-			if (data != null && data.contains(serviceInfo)) {
-				Information localInfo = data.get(data.indexOf(serviceInfo));
-				if (serviceInfo.getStatu() == localInfo.getStatu()) {
-					// 状态没有改变
-					iterator.remove();
-				} else {
-					// 状态改变
-					if (serviceInfo.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-						// 好友请求信息
-						localInfo.setStatu(serviceInfo.getStatu());
-					} else if (serviceInfo.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
-						// 图片信息
-						if (InformationState.isServiceState(localInfo.getStatu()) && localInfo.getStatu() > serviceInfo.getStatu()) {
-							LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, localInfo);
-						} else {
-							localInfo.setStatu(serviceInfo.getStatu());
-							updateInfos.add(localInfo);
-						}
-					}
-				}
-			} else {
-				newNotices.add(serviceInfo);
-			}
-		}
-		if (updateInfos.size() > 0) {
-			Information[] infos = new Information[updateInfos.size()];
-			for (int i = 0; i < updateInfos.size(); i++) {
-				infos[i] = updateInfos.get(i);
-			}
-			updateInfos.clear();
-			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(infos);
-		}
-		if (newNotices.size() > 0)
-			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(newNotices);
+		List<Information> newNotices = LogicUtils.informationFilter(this, listinfo, getAdapterData());
 		sendDataLoadedMessage(newNotices);
 	}
 

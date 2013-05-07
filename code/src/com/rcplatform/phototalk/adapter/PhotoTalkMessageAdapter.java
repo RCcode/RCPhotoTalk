@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -104,7 +105,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		holder.statu.setTag(statuTag);
 		holder.bar.setTag(record.getRecordId() + ProgressBar.class.getName());
 		holder.item_new.setTag(record.getRecordId() + ImageView.class.getName());
-		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.STATU_NOTICE_OPENED && !PhotoTalkUtils.isSender(context, record)) {
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.STATU_NOTICE_OPENED && !LogicUtils.isSender(context, record)) {
 			holder.item_new.setVisibility(View.VISIBLE);
 		} else {
 			holder.item_new.setVisibility(View.GONE);
@@ -112,7 +113,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO || record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			// 如果当前用户是接收者
-			if (!PhotoTalkUtils.isSender(context, record)) {
+			if (!LogicUtils.isSender(context, record)) {
 				// 状态为1，表示需要去下载
 				initReceiverView(record, statuTag, buttonTag);
 			} else {
@@ -121,7 +122,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
 			holder.bar.setVisibility(View.GONE);
 			// 如果是对方添加我
-			if (!PhotoTalkUtils.isSender(context, record)) {
+			if (!LogicUtils.isSender(context, record)) {
 				// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
 					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
@@ -131,6 +132,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				}
 				// 2,如果更多里面设置了只有好友可以给我发送图片，那么item里面 状态显示： XX 将加我为好友，并显示添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
+					holder.statuButton.setEnabled(true);
 					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
@@ -138,20 +140,21 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				}
 				// 2.1 点击了确认添加对方为好友好友后， 添加 XX为好友，隐藏添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
+					holder.statuButton.setEnabled(false);
 					holder.statuButton.setBackgroundResource(R.drawable.added);
 					holder.statuButton.stopTask();
 					holder.statuButton.setText("");
 					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getSender().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}
-
 				if (record.getStatu() != InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setOnClickListener(new OnClickListener() {
-
 						@Override
 						public void onClick(View v) {
 							addAsFriend(record);
 						}
 					});
+				} else {
+					holder.statuButton.setOnClickListener(null);
 				}
 
 			} else { // 我添加别人为好友
@@ -183,13 +186,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
-		if (PhotoTalkUtils.isSender(context, record)) {
+		if (LogicUtils.isSender(context, record)) {
 			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getReceiver().getHeadUrl(), AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
 		} else {
 			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getSender().getHeadUrl(), AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
 		}
 
-		if (!PhotoTalkUtils.isSender(context, record)) {
+		if (!LogicUtils.isSender(context, record)) {
 			holder.name.setText(record.getSender().getNick());
 		} else {
 			holder.name.setText(record.getReceiver().getNick());
@@ -302,8 +305,11 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			public void onSuccess(int statusCode, String content) {
 
 				record.setStatu(InformationState.STATU_QEQUEST_ADDED);
-				if (listView.findViewWithTag(record.getRecordId() + Button.class.getName()) != null)
-					listView.findViewWithTag(record.getRecordId() + Button.class.getName()).setBackgroundResource(R.drawable.added);
+				RecordTimerLimitView button = (RecordTimerLimitView) listView.findViewWithTag(record.getRecordId() + Button.class.getName());
+				if (button != null) {
+					button.setBackgroundResource(R.drawable.added);
+					button.setEnabled(false);
+				}
 				if (listView.findViewWithTag(record.getRecordId() + TextView.class.getName()) != null) {
 					((TextView) listView.findViewWithTag(record.getRecordId() + TextView.class.getName())).setText(getStringfromResource(R.string.home_record_added) + record.getSender().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}

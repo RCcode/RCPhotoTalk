@@ -23,11 +23,8 @@ public class UpdateDialogClickListener implements OnClickListener {
 		case DialogInterface.BUTTON_NEGATIVE:
 			// TODO 现在更新
 			break;
-		case DialogInterface.BUTTON_NEUTRAL:
-			PrefsUtils.AppInfo.setLastCheckUpdateTime(mContext, System.currentTimeMillis());
-			break;
 		case DialogInterface.BUTTON_POSITIVE:
-			PrefsUtils.AppInfo.setNeverAttentionVersion(mContext.getApplicationContext(), mVersion);
+			PrefsUtils.AppInfo.setLastCheckUpdateTime(mContext, System.currentTimeMillis());
 			break;
 
 		}
