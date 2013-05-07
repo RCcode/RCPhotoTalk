@@ -1,13 +1,8 @@
 package com.rcplatform.phototalk.utils;
 
 import android.content.Context;
-import android.content.Intent;
 
-import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.bean.Information;
-import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {

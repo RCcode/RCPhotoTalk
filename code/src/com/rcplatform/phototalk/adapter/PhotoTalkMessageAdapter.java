@@ -30,7 +30,6 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 
 public class PhotoTalkMessageAdapter extends BaseAdapter {

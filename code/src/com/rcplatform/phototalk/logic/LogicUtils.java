@@ -15,7 +15,6 @@ import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Contract.Action;
 
 public class LogicUtils {
