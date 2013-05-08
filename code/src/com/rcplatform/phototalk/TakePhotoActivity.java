@@ -139,13 +139,16 @@ public class TakePhotoActivity extends Activity {
 	}
 
 	public void deleteFile(File file) {
-		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			for (File file2 : files) {
-				deleteFile(file2);
+		if (file.exists()) {
+			if (file.isDirectory()) {
+				File[] files = file.listFiles();
+				for (File file2 : files) {
+					deleteFile(file2);
+				}
+			} else {
+				file.delete();
 			}
 		}else{
-			file.delete();
 		}
 	}
 }

@@ -702,7 +702,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		public int compare(Information lhs, Information rhs) {
 			LogUtil.e(lhs.getCreatetime() + "......is lhs create time");
 			LogUtil.e(rhs.getCreatetime() + "......is rhs create time");
-
+			
 			return (int) (rhs.getCreatetime() - lhs.getCreatetime());
 		}
 	};

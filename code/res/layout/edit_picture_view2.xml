@@ -64,7 +64,7 @@
         <com.rcplatform.phototalk.views.wheel.WheelView
             android:id="@+id/wv_hours"
             android:layout_width="40dp"
-            android:layout_height="90dp"
+            android:layout_height="100dp"
             android:layout_centerInParent="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/take_photo_wheel_bottom"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/timelimit_button_selector"
             android:gravity="center"
-            android:paddingTop="5dp"
+            android:paddingTop="4dp"
             android:textColor="@color/white"
             android:textSize="12sp" />
 
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/take_photo_left"
+                android:layout_marginLeft="@dimen/edit_photo_voice_text_size"
                 android:textColor="#FFFFFF" />
 
             <Button
@@ -119,7 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="30dp"
+                android:layout_marginLeft="40dp"
                 android:background="@drawable/delete_voice" />
         </LinearLayout>
 
@@ -130,10 +130,10 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/btn_download_n"
             android:gravity="center"
-            android:paddingLeft="20dp"
+            android:paddingLeft="30dp"
             android:text="按住录音"
             android:textColor="#FFFFFF"
-            android:textSize="12sp" />
+            android:textSize="@dimen/edit_photo_voice_text_size" />
 
         <Button
             android:id="@+id/btn_edit_pic_send"

@@ -164,10 +164,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
 				File file = new File(app.getSendFileCachePath() + ".zip");
 				try {
 					if (file.exists()) {
@@ -187,8 +183,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 					sendStringMessage(MSG_WHAT_ERROR,
 							getString(R.string.receive_data_error));
 				}
-//			}
-//		}).start();
 
 	}
 
@@ -271,11 +265,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 				progressBar.setVisibility(View.GONE);
 				break;
 			case MSG_SEND_SUCCESS:
-				Intent intent = new Intent(SelectFriendsActivity.this,
-						HomeActivity.class);
-				intent.putExtra("from", this.getClass().getName());
-				intent.putExtra("time", timeSnap);
-				startActivity(intent);
+//				Intent intent = new Intent(SelectFriendsActivity.this,
+//						HomeActivity.class);
+//				intent.putExtra("from", this.getClass().getName());
+//				intent.putExtra("time", timeSnap);
+//				startActivity(intent);
 				break;
 			}
 		};
@@ -296,6 +290,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 				deleteFile(file2);
 			}
 		}else{
+			System.out.println("select----->"+file.getPath());
 			file.delete();
 		}
 	}
@@ -380,6 +375,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 				return;
 			} else {
 				sendPicture("123", tempFilePath, timeLimit, sendData);
+				Intent intent = new Intent(SelectFriendsActivity.this,
+						HomeActivity.class);
+				intent.putExtra("from", this.getClass().getName());
+				intent.putExtra("time", timeSnap);
+				startActivity(intent);
 			}
 			break;
 		case R.id.back:

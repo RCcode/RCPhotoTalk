@@ -42,17 +42,25 @@ public class MenueApplication extends Application {
 
 	public Map<Long, List<Information>> sendRecords;
 
-
 	private final Map<String, Activity> mActivityMap = new HashMap<String, Activity>();
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		PhotoInformationCountDownService.getInstance().setApplication(this);
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache()).threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory().imageDownloader(new BaseImageDownloader(this))
-				.defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions()).tasksProcessingOrder(QueueProcessingType.LIFO);
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
+				getApplicationContext())
+				.memoryCache(new WeakMemoryCache())
+				.threadPriority(THREAD_COUNT)
+				.memoryCacheSize(MEMORY_CACHE_SIZE)
+				.denyCacheImageMultipleSizesInMemory()
+				.imageDownloader(new BaseImageDownloader(this))
+				.defaultDisplayImageOptions(
+						ImageOptionsFactory.getDefaultImageOptions())
+				.tasksProcessingOrder(QueueProcessingType.LIFO);
 		if (createImageCacheDir()) {
-			builder.discCache(new UnlimitedDiscCache(cacheDir, new Md5FileNameGenerator()));
+			builder.discCache(new UnlimitedDiscCache(cacheDir,
+					new Md5FileNameGenerator()));
 		}
 		ImageLoaderConfiguration config = builder.build();
 		ImageLoader.getInstance().init(config);
@@ -61,8 +69,10 @@ public class MenueApplication extends Application {
 	}
 
 	private boolean createImageCacheDir() {
-		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			cacheDir = new File(Environment.getExternalStorageDirectory(), CACHE_FILE_PATH);
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			cacheDir = new File(Environment.getExternalStorageDirectory(),
+					CACHE_FILE_PATH);
 			if (!cacheDir.exists()) {
 				return cacheDir.mkdirs();
 			}
@@ -148,7 +158,8 @@ public class MenueApplication extends Application {
 	public String getSendFileCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -161,11 +172,11 @@ public class MenueApplication extends Application {
 		} else {
 			// Logger.d(Constant.RcAdTag, "SD卡不存在! ", null); getCacheDir()
 			File file = new File(getFilesDir(), "temp");
-			if (!file.exists())
+			if (!file.exists()) {
 				file.mkdir();
-			imagePath = file.getAbsolutePath();
+			}
+			imagePath = file.getPath();
 		}
-		// Logger.d(Constant.RcAdTag, "自主广告 图片保存路径为 ：  " + imagePath, null);
 		return imagePath;
 
 		// if (sendFileCachePath == null || sendFileCachePath.length() <= 0) {
@@ -180,7 +191,8 @@ public class MenueApplication extends Application {
 	public String getBackgroundCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
