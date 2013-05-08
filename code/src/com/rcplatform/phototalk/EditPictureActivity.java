@@ -124,7 +124,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private String tempFilePath;
 
-//	private Dialog waitDialog;
+	// private Dialog waitDialog;
 
 	private boolean enableSave = true;
 	private WheelView mWheel;
@@ -134,7 +134,7 @@ public class EditPictureActivity extends BaseActivity {
 	private Friend friend = null;
 	private RelativeLayout select_layout;
 	private MediaPlayer player;
-	private boolean isPlayer =false;
+	private boolean isPlayer = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -161,7 +161,7 @@ public class EditPictureActivity extends BaseActivity {
 						voicePath = savePath;
 						audioBtn.setVisibility(4);
 						make_voice.setVisibility(0);
-						voice_size.setText(n-1 + "s");
+						voice_size.setText(n - 1 + "s");
 
 					}
 				});
@@ -268,28 +268,29 @@ public class EditPictureActivity extends BaseActivity {
 				if (player == null) {
 					try {
 						File file = new File(voicePath);
-						System.out.println("---voicePath---->"+voicePath);
-						if(file.exists()){
-							System.out.println("asdasd录音文件存在"+file.length()/1024+"kb");
-						}else{
+						System.out.println("---voicePath---->" + voicePath);
+						if (file.exists()) {
+							System.out.println("asdasd录音文件存在" + file.length()
+									/ 1024 + "kb");
+						} else {
 							System.out.println("asdasd录音文件不存在");
-							
+
 						}
-						
-					player = new MediaPlayer();
+
+						player = new MediaPlayer();
 						player.setDataSource(voicePath);
 						player.prepare();
-					player.setOnCompletionListener(new OnCompletionListener() {
+						player.setOnCompletionListener(new OnCompletionListener() {
 
-						@Override
-						public void onCompletion(MediaPlayer mp) {
-							// TODO Auto-generated method stub
-							player.release();
-							player = null;
-							isPlayer = false;
-							playEndMusic();
-						}
-					});
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								// TODO Auto-generated method stub
+								player.release();
+								player = null;
+								isPlayer = false;
+								playEndMusic();
+							}
+						});
 					} catch (Exception e) {
 						// TODO: handle exception
 					}
@@ -355,7 +356,9 @@ public class EditPictureActivity extends BaseActivity {
 				// // mEditableViewGroup.setDrawingCacheEnabled(true);
 				// // mEditableViewGroup.buildDrawingCache();
 				// // saveEditedPictrue(mEditableViewGroup.getDrawingCache());
-				// startSelectFriendActivity();
+				if (friend == null) {
+					startSelectFriendActivity();
+				}
 				break;
 			case CLOSE_ON_CLICK:
 				mEditePicView.recyle();
@@ -368,10 +371,12 @@ public class EditPictureActivity extends BaseActivity {
 	private void playEndMusic() {
 		MediaPlayer endplayer = new MediaPlayer();
 		try {
-			AssetFileDescriptor fileDescriptor = this.getAssets()
-					.openFd("end.mp3");
-			endplayer.setDataSource(fileDescriptor.getFileDescriptor(),
-					fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+			AssetFileDescriptor fileDescriptor = this.getAssets().openFd(
+					"end.mp3");
+			endplayer
+					.setDataSource(fileDescriptor.getFileDescriptor(),
+							fileDescriptor.getStartOffset(),
+							fileDescriptor.getLength());
 			endplayer.prepare();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -520,16 +525,16 @@ public class EditPictureActivity extends BaseActivity {
 	}
 
 	public void saveEditedPictrue(final Bitmap bitmap) {
-//		showDialog();
+		// showDialog();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-//				if (!Environment.getExternalStorageState().equals(
-//						Environment.MEDIA_MOUNTED)) {
-//					handler.sendEmptyMessage(NO_SDC);
-//					return;
-//				}
+				// if (!Environment.getExternalStorageState().equals(
+				// Environment.MEDIA_MOUNTED)) {
+				// handler.sendEmptyMessage(NO_SDC);
+				// return;
+				// }
 				tempFilePath = app.getSendFileCachePath() + "/Photochat.jpg";
 				File file = new File(tempFilePath);
 				try {
@@ -553,17 +558,17 @@ public class EditPictureActivity extends BaseActivity {
 		}).start();
 	}
 
-//	public void showDialog() {
-//
-//		if (waitDialog == null) {
-//			waitDialog = new Dialog(this, R.style.waiting_dialog);
-//			waitDialog.setContentView(R.layout.reader_progress_wait_view);
-//			waitDialog.getWindow().setBackgroundDrawableResource(
-//					R.color.TRANSPARENT);
-//			waitDialog.setCancelable(false);
-//		}
-//		waitDialog.show();
-//	}
+	// public void showDialog() {
+	//
+	// if (waitDialog == null) {
+	// waitDialog = new Dialog(this, R.style.waiting_dialog);
+	// waitDialog.setContentView(R.layout.reader_progress_wait_view);
+	// waitDialog.getWindow().setBackgroundDrawableResource(
+	// R.color.TRANSPARENT);
+	// waitDialog.setCancelable(false);
+	// }
+	// waitDialog.show();
+	// }
 
 	Handler handler = new Handler() {
 
@@ -571,13 +576,11 @@ public class EditPictureActivity extends BaseActivity {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case SAVE_SUCCESS:
-//				if (waitDialog != null && waitDialog.isShowing())
-//					waitDialog.hide();
+				// if (waitDialog != null && waitDialog.isShowing())
+				// waitDialog.hide();
 				setSaveable(false);
 				if (isSave) {
-					if (friend == null) {
-						startSelectFriendActivity();
-					} else {
+					if (friend != null) {
 						send();
 					}
 				} else {
@@ -586,14 +589,14 @@ public class EditPictureActivity extends BaseActivity {
 				}
 				break;
 			case SAVE_FAIL:
-//				if (waitDialog != null && waitDialog.isShowing())
-//					waitDialog.hide();
+				// if (waitDialog != null && waitDialog.isShowing())
+				// waitDialog.hide();
 				Toast.makeText(EditPictureActivity.this, R.string.save_fail,
 						Toast.LENGTH_SHORT).show();
 				break;
 			case NO_SDC:
-//				if (waitDialog != null && waitDialog.isShowing())
-//					waitDialog.hide();
+				// if (waitDialog != null && waitDialog.isShowing())
+				// waitDialog.hide();
 				Toast.makeText(EditPictureActivity.this, R.string.no_sdc,
 						Toast.LENGTH_SHORT).show();
 				break;

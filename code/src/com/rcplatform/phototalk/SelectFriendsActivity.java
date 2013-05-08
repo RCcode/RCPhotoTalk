@@ -110,7 +110,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
 		initViewOrListener();
-		catchBitampOnSDC();
+		getFriends();
 		// 初始化view 和 listener
 
 	}
@@ -176,9 +176,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 					System.out.println("压缩失败" + e.getMessage());
 					e.printStackTrace();
 				}
-
 				if (file.exists()) {
-					getFriends();
+					sendPicture("123", tempFilePath, timeLimit, sendData);
 				} else {
 					sendStringMessage(MSG_WHAT_ERROR,
 							getString(R.string.receive_data_error));
@@ -374,7 +373,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 						R.string.please_select_contact, 1).show();
 				return;
 			} else {
-				sendPicture("123", tempFilePath, timeLimit, sendData);
+				catchBitampOnSDC();
 				Intent intent = new Intent(SelectFriendsActivity.this,
 						HomeActivity.class);
 				intent.putExtra("from", this.getClass().getName());
@@ -451,7 +450,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			//
+			if(tempFilePath!=null){
 			app.deleteSendFileCache(tempFilePath);
+			}
 		}
 		return super.onKeyDown(keyCode, event);
 	}
