@@ -72,13 +72,11 @@ public class FriendsProxy {
 	}
 //	田镇源 上传zip方法
 	public static void postZip(Context context,File file,
-			RCPlatformResponseHandler responseHandler,String head_url,String time,String nick,String desc,String timeLimit,String user_appary) {
+			RCPlatformResponseHandler responseHandler,String time,String desc,String timeLimit,String user_appary) {
 		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
 				RequestAction.FILE);
 		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(MenueApiFactory.HEAD_URL, head_url);
 		client.putRequestParam(MenueApiFactory.TIME, time);
-		client.putRequestParam(MenueApiFactory.NICK, nick);
 //		client.putRequestParam(MenueApiFactory.IMAGE_TYPE, "jpg");
 		client.putRequestParam(MenueApiFactory.DESC, desc);
 		client.putRequestParam(MenueApiFactory.TIME_LIMIT, timeLimit);

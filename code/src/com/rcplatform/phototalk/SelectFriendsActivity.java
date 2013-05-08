@@ -110,7 +110,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
 		initViewOrListener();
-		catchBitampOnSDC();
+		getFriends();
 		// 初始化view 和 listener
 
 	}
@@ -164,10 +164,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
-//		new Thread(new Runnable() {
-//
-//			@Override
-//			public void run() {
 				File file = new File(app.getSendFileCachePath() + ".zip");
 				try {
 					if (file.exists()) {
@@ -180,15 +176,12 @@ public class SelectFriendsActivity extends BaseActivity implements
 					System.out.println("压缩失败" + e.getMessage());
 					e.printStackTrace();
 				}
-
 				if (file.exists()) {
-					getFriends();
+					sendPicture("123", tempFilePath, timeLimit, sendData);
 				} else {
 					sendStringMessage(MSG_WHAT_ERROR,
 							getString(R.string.receive_data_error));
 				}
-//			}
-//		}).start();
 
 	}
 
@@ -271,11 +264,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 				progressBar.setVisibility(View.GONE);
 				break;
 			case MSG_SEND_SUCCESS:
-				Intent intent = new Intent(SelectFriendsActivity.this,
-						HomeActivity.class);
-				intent.putExtra("from", this.getClass().getName());
-				intent.putExtra("time", timeSnap);
-				startActivity(intent);
+//				Intent intent = new Intent(SelectFriendsActivity.this,
+//						HomeActivity.class);
+//				intent.putExtra("from", this.getClass().getName());
+//				intent.putExtra("time", timeSnap);
+//				startActivity(intent);
 				break;
 			}
 		};
@@ -296,6 +289,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 				deleteFile(file2);
 			}
 		}else{
+			System.out.println("select----->"+file.getPath());
 			file.delete();
 		}
 	}
@@ -322,9 +316,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 						sendStringMessage(MSG_WHAT_ERROR,
 								getString(R.string.net_error));
 					}
-				}, getPhotoTalkApplication().getCurrentUser().getHeadUrl(),
-				String.valueOf(timeSnap), getPhotoTalkApplication()
-						.getCurrentUser().getNick(), desc, timeLimit,
+				}, 
+				String.valueOf(timeSnap),  desc, timeLimit,
 				buildUserArray(friends, timeSnap));
 
 	}
@@ -342,8 +335,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 			for (Friend f : friends) {
 				JSONObject jsonObject = new JSONObject();
 				jsonObject.put("userId", f.getSuid());
-				jsonObject.put("headUrl", f.getHeadUrl());
-				jsonObject.put("nick", f.getNick());
 				array.put(jsonObject);
 
 				record = new Information();
@@ -382,7 +373,12 @@ public class SelectFriendsActivity extends BaseActivity implements
 						R.string.please_select_contact, 1).show();
 				return;
 			} else {
-				sendPicture("123", tempFilePath, timeLimit, sendData);
+				catchBitampOnSDC();
+				Intent intent = new Intent(SelectFriendsActivity.this,
+						HomeActivity.class);
+				intent.putExtra("from", this.getClass().getName());
+				intent.putExtra("time", timeSnap);
+				startActivity(intent);
 			}
 			break;
 		case R.id.back:
@@ -454,7 +450,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			//
+			if(tempFilePath!=null){
 			app.deleteSendFileCache(tempFilePath);
+			}
 		}
 		return super.onKeyDown(keyCode, event);
 	}

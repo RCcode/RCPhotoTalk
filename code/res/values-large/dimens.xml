@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--朋友列表属性  -->
+<dimen name="friend_tiem_hight">74dp</dimen>
+<dimen name="friend_head_left">10dp</dimen>
+<dimen name="friend_head_side">66dp</dimen>
+<dimen name="friend_text_padding">8dp</dimen>
+
+    <!--朋友信息属性  -->
+<dimen name="friend_info_edit_left">20dp</dimen>
+<dimen name="friend_info_sex_layout_top">7dp</dimen>
+<dimen name="friend_info_photo_left">9dp</dimen>
+<dimen name="friend_info_age_left">12dp</dimen>
+<dimen name="friend_info_left">12dp</dimen>
+<dimen name="friend_info_name_left">8dp</dimen>
+<dimen name="friend_info_phone_left">10dp</dimen>
+<dimen name="friend_info_app_left">5dp</dimen>
+<dimen name="friend_info_app_right">5dp</dimen>
+<dimen name="friend_info_send_top">13dp</dimen>
+<dimen name="friend_info_title_top">15dp</dimen>
+    <!-- 默认间距 -->
+    <dimen name="default_gap">8.0dip</dimen>
+    <dimen name="default_gap_2x">16.0dip</dimen>
+    <dimen name="default_gap_3x">24.0dip</dimen>
+    <dimen name="default_gap_half">4.0dip</dimen>
+    <dimen name="ui_element_unit">40.0dip</dimen>
+    <dimen name="login_margin_top">20.0dip</dimen>
+    <!-- 颜色选择器 -->
+    <dimen name="color_picker_width">20dp</dimen>
+    <dimen name="color_picker_height">100dp</dimen>
+    <!-- 照相界面 -->
+    <dimen name="take_photo_left">6dp</dimen>
+    <dimen name="take_photo_bottom">10dp</dimen>
+    <dimen name="take_photo_wheel_bottom">7dp</dimen>
+    <dimen name="edit_photo_voice_text_size">15sp</dimen>
+    <!-- 长按对话框 -->
+    <dimen name="long_press_dialog_width">250dp</dimen>
+    <dimen name="long_press_dialog_text_size">20sp</dimen>
+    <dimen name="long_press_dialog_text_padding">5dp</dimen>
+    <dimen name="long_press_dialog_title_padding">7dp</dimen>
+    <dimen name="long_press_dialog_title_text_size">22sp</dimen>
+    <dimen name="init_pager_height">300dp</dimen>
+    <dimen name="invate_friend_space">5dp</dimen>
+    <dimen name="registe_image_width">100dp</dimen>
+    <dimen name="head_image_width">90dp</dimen>
+    <dimen name="user_app_item_width">100dp</dimen>
+    <dimen name="user_detail_padding">5dp</dimen>
+    <dimen name="user_detail_top_margin">20dp</dimen>
+    <dimen name="user_detail_userinfo_padding">5dp</dimen>
+    <!-- 下面三个必须是一半一半的比例要不出问题 -->
+    <dimen name="user_detail_user_infos_height">100dp</dimen>
+    <dimen name="user_detail_head_image_width">100dp</dimen>
+    <dimen name="app_list_height">60dp</dimen>
+    <dimen name="user_detail_user_infos_bottom_margin">-50dp</dimen>
+    <dimen name="user_detail_head_width_half">50dp</dimen>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <dimen name="user_detail_">-50dp</dimen>
+    <dimen name="user_detail_source_height">50dp</dimen>
+    <dimen name="user_detail_info_padding">5dp</dimen>
+    <dimen name="user_detail_source_margin_left">10dp</dimen>
+    <dimen name="app_icon_width">55dp</dimen>
+    <dimen name="first_word_padding">5dp</dimen>
+    <dimen name="friend_head_width">90dp</dimen>
+    <dimen name="friend_name_marginleft">10dp</dimen>
+    <dimen name="user_detail_bg_height">200dp</dimen>
+
+</resources>

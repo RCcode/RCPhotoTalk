@@ -130,13 +130,12 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
 					holder.statuButton.setEnabled(true);
-					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
-
+					holder.statuButton.setBackgroundResource(R.drawable.add_friend_bg);
 				}
 				// 2,如果更多里面设置了只有好友可以给我发送图片，那么item里面 状态显示： XX 将加我为好友，并显示添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
+					holder.statuButton.setBackgroundResource(R.drawable.add_friend_bg);
 					holder.statuButton.setEnabled(true);
-					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
 				}
 				// 2.1 点击了确认添加对方为好友好友后， 添加 XX为好友，隐藏添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {

@@ -8,49 +8,51 @@
         android:id="@+id/alpha"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="13dip"
-        android:layout_marginLeft="18dip"
-        android:layout_marginTop="13dip"
+        android:background="@drawable/title_item_bg"
+        android:gravity="center_vertical"
+        android:paddingLeft="20dp"
         android:text="A"
-        android:textColor="#ff000000"
-        android:textSize="24sp" />
+        android:textColor="#EEEEEE"
+        android:textSize="20sp" />
 
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/list_divider" />
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/iv_sfli_head"
-            android:layout_width="56dip"
-            android:layout_height="56dip"
-            android:layout_marginBottom="14dip"
-            android:layout_marginLeft="14dip"
-            android:layout_marginRight="14dip"
-            android:layout_marginTop="14dip"
-            android:scaleType="fitXY"
-            android:src="@drawable/default_head" />
+            android:layout_width="@dimen/friend_head_side"
+            android:layout_height="@dimen/friend_head_side"
+            android:background="@drawable/default_head"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/friend_item_bg" />
 
         <TextView
             android:id="@+id/tv_sfli_name"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textColor="#6a6c6c"
+            android:layout_toRightOf="@id/iv_sfli_head"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:textColor="#1B1B1B"
             android:textSize="24sp" />
 
         <CheckBox
             android:id="@+id/cb_sfli"
             android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
+            android:layout_height="wrap_content"
             android:layout_marginRight="10dip"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:button="@drawable/btn_check"
             android:gravity="center_vertical" />
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

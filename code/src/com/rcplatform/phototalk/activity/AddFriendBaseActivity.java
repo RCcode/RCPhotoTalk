@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -35,6 +36,7 @@ import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.task.AddFriendTask;
+//github.com/RCcode/RCPhotoTalk.git
 
 public class AddFriendBaseActivity extends BaseActivity {
 	protected ExpandableListView mList;
@@ -229,6 +231,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		if (!willInvateFriends.contains(friend)) {
 			willInvateFriends.add(friend);
 			TextView tvName = buildInvateTextView(friend);
+			tvName.setTextColor(Color.WHITE);
 			willInvateViews.put(friend.getSuid(), tvName);
 			mLinearInvate.addView(tvName);
 			refreshList();
