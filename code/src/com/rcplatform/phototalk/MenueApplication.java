@@ -7,12 +7,8 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
@@ -27,22 +23,16 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
+import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.utils.Contract;
 
 public class MenueApplication extends Application {
 
 	private WindowManager.LayoutParams wmParams;
-	
 
 	private static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
 
-	private static final int READ_TIME_OUT = 20 * 1000;
-
-	private static final int CONNECT_TIME_OUT = 5 * 1000;
-
 	private static final String CACHE_FILE_PATH = "menue/cache/photochat";
-
-	private static final int CACHE_DISK_SIZE = 1024 * 1024 * 200;
 
 	private static final int THREAD_COUNT = 3;
 
@@ -50,26 +40,17 @@ public class MenueApplication extends Application {
 
 	public File cacheDir;
 
-	private int mScreenWidth;
-
-	private int mScreentHeight;
-
 	public Map<Long, List<Information>> sendRecords;
 
-	private static UserInfo userInfo;
 
 	private final Map<String, Activity> mActivityMap = new HashMap<String, Activity>();
 
-	private String sendFileCachePath;
-
 	@Override
 	public void onCreate() {
-		// TODO Auto-generated method stub
 		super.onCreate();
-		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		mScreenWidth = metrics.widthPixels;
-		mScreentHeight = metrics.heightPixels;
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache()).threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory().imageDownloader(new BaseImageDownloader(this)).defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions()).tasksProcessingOrder(QueueProcessingType.LIFO);
+		PhotoInformationCountDownService.getInstance().setApplication(this);
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache()).threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory().imageDownloader(new BaseImageDownloader(this))
+				.defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions()).tasksProcessingOrder(QueueProcessingType.LIFO);
 		if (createImageCacheDir()) {
 			builder.discCache(new UnlimitedDiscCache(cacheDir, new Md5FileNameGenerator()));
 		}
@@ -107,7 +88,6 @@ public class MenueApplication extends Application {
 
 	@Override
 	public void onLowMemory() {
-		// TODO Auto-generated method stub
 		ImageLoader.getInstance().clearMemoryCache();
 		super.onLowMemory();
 	}
@@ -121,11 +101,11 @@ public class MenueApplication extends Application {
 	}
 
 	public int getScreenWidth() {
-		return mScreenWidth;
+		return Contract.SCREEN_WIDTH;
 	}
 
 	public int getScreentHeight() {
-		return mScreentHeight;
+		return Contract.SCREEN_HEIGHT;
 	}
 
 	public WindowManager.LayoutParams getMywmParams() {
@@ -166,38 +146,37 @@ public class MenueApplication extends Application {
 	}
 
 	public String getSendFileCachePath() {
-			String imagePath = "";
-			File sdDir = null;
-			boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
-			if (sdCardExist) {
-				sdDir = Environment.getExternalStorageDirectory();
-				// 获取根目录
-				// Logger.d(Constant.RcAdTag, "SD卡存在! ", null);
-				String sdUrl = sdDir.toString()+"/temp";
-				File dir = new File(sdUrl);
-				if (!dir.exists())
-					dir.mkdir();
-				imagePath = sdUrl;
-			} else {
-				// Logger.d(Constant.RcAdTag, "SD卡不存在! ", null); getCacheDir()
-				File file = new File(getFilesDir(), "temp");
-				if (!file.exists())
-					file.mkdir();
-				imagePath = file.getAbsolutePath();
-			}
-			// Logger.d(Constant.RcAdTag, "自主广告 图片保存路径为 ：  " + imagePath, null);
-			return imagePath;
-		
-		
-		
-//		if (sendFileCachePath == null || sendFileCachePath.length() <= 0) {
-//			File file = new File(getFilesDir(), "temp");
-//			if (!file.exists())
-//				file.mkdir();
-//			sendFileCachePath = file.getAbsolutePath();
-//		}
-//		return sendFileCachePath;
+		String imagePath = "";
+		File sdDir = null;
+		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		if (sdCardExist) {
+			sdDir = Environment.getExternalStorageDirectory();
+			// 获取根目录
+			// Logger.d(Constant.RcAdTag, "SD卡存在! ", null);
+			String sdUrl = sdDir.toString() + "/temp";
+			File dir = new File(sdUrl);
+			if (!dir.exists())
+				dir.mkdir();
+			imagePath = sdUrl;
+		} else {
+			// Logger.d(Constant.RcAdTag, "SD卡不存在! ", null); getCacheDir()
+			File file = new File(getFilesDir(), "temp");
+			if (!file.exists())
+				file.mkdir();
+			imagePath = file.getAbsolutePath();
+		}
+		// Logger.d(Constant.RcAdTag, "自主广告 图片保存路径为 ：  " + imagePath, null);
+		return imagePath;
+
+		// if (sendFileCachePath == null || sendFileCachePath.length() <= 0) {
+		// File file = new File(getFilesDir(), "temp");
+		// if (!file.exists())
+		// file.mkdir();
+		// sendFileCachePath = file.getAbsolutePath();
+		// }
+		// return sendFileCachePath;
 	}
+
 	public String getBackgroundCachePath() {
 		String imagePath = "";
 		File sdDir = null;
@@ -206,7 +185,7 @@ public class MenueApplication extends Application {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
 			// Logger.d(Constant.RcAdTag, "SD卡存在! ", null);
-			String sdUrl = sdDir.toString()+"/PhotoTalk";
+			String sdUrl = sdDir.toString() + "/PhotoTalk";
 			File dir = new File(sdUrl);
 			if (!dir.exists())
 				dir.mkdir();
@@ -220,7 +199,7 @@ public class MenueApplication extends Application {
 		}
 		// Logger.d(Constant.RcAdTag, "自主广告 图片保存路径为 ：  " + imagePath, null);
 		return imagePath;
-		}
+	}
 
 	public void deleteSendFileCache(String fileName) {
 		File file = new File(getSendFileCachePath());

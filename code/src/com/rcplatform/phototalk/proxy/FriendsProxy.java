@@ -158,4 +158,13 @@ public class FriendsProxy {
 				info.getSender().getSuid());
 		client.post(context, MenueApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
 	}
+	
+	public static void deleteRecommendFriend(Context context,RCPlatformResponseHandler responseHandler,Friend friend){
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
+				RequestAction.JSON);
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.putRequestParam(PhotoTalkParams.DelRecommend.PARAM_KEY_FRIEND_ID, friend.getSuid());
+		client.putRequestParam(PhotoTalkParams.DelRecommend.PARAM_KEY_RECOMMEND_TYPE, friend.getSource().getAttrType()+"");
+		client.post(context, MenueApiUrl.DELETE_RECOMMEND_URL, responseHandler);
+	}
 }

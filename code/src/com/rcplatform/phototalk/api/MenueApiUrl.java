@@ -17,8 +17,10 @@ public class MenueApiUrl {
 	private static final String NOTICE_URL = BASE_URL_FOR_PHOTOTALK + "notice/";
 
 	private static final String SETTING_URL = BASE_URL_FOR_PHOTOTALK + "setting/";
+	
+	private static final String APP_URL=BASE_URL_FOR_PHOTOTALK+"app/";
 
-	public static final String REMOVE_NOTICE_ITEM = NOTICE_URL + "lookedTheNotice.do";
+	public static final String NOTICE_OVER_URL = NOTICE_URL + "lookedTheNotice.do";
 
 	public static final String FRIEND_QUERY_BY_PHONENUM_URL = USER_URL + "queryUsersByPhones.do";
 
@@ -64,6 +66,10 @@ public class MenueApiUrl {
 	public static final String ADD_FRIEND_FROM_INFORMATION = USER_URL + "addFriendFromMain.do";
 
 	public static final String USER_SETTING_URL = SETTING_URL + "submitConfig.do";
+	
+	public static final String CHECK_UPATE_URL=APP_URL+"getAppConfig.do";
+	
+	public static final String DELETE_RECOMMEND_URL=USER_URL+"delInviteUser.do";
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 	private static final String BASE_URL_FOR_USER = BASE_URL + "useraccess/";

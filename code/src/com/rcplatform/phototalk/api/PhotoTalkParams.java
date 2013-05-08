@@ -23,6 +23,7 @@ public class PhotoTalkParams {
 	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
 	public static String PARAM_VALUE_APP_ID = "1";
 
+	
 	public static class ChangePassword{
 		public static final String PARAM_KEY_CHECK_PASSWORD="pwd";
 		public static final String PARAM_KEY_NEW_PASSWORD="newpwd";
@@ -100,19 +101,18 @@ public class PhotoTalkParams {
 
 	public static class AddFriends {
 		public static final String PARAM_KEY_USER_SUID = "seSuid";
-		public static final String PARAM_KEY_USER_NICK = "snick";
-		public static final String PARAM_KEY_USER_HEAD_URL = "shead";
 		public static final String PARAM_KEY_FRIENDS = "friends";
 		public static final String PARAM_KEY_FRIEND_SUID = "reSuid";
-		public static final String PARAM_KEY_FRIEND_NICK = "rnick";
-		public static final String PARAM_KEY_FRIEND_HEAD_URL = "rhead";
 		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
 	}
 
 	public static class DelFriends {
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
 	}
-
+	public static class DelRecommend{
+		public static final String PARAM_KEY_FRIEND_ID="atUserId";
+		public static final String PARAM_KEY_RECOMMEND_TYPE="attrType";
+	}
 	public static class UpdateFriendRemark {
 		public static final String PARAM_KEY_REMARK = "mark";
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";

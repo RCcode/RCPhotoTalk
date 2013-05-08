@@ -1,30 +1,13 @@
 package com.rcplatform.phototalk.utils;
 
 import android.content.Context;
-import android.content.Intent;
 
-import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.bean.Information;
-import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {
 
-	/**
-	 * 判断当前用户是不是发送者
-	 * 
-	 * @param context
-	 * @param record
-	 * @return true表示当前用户是发送者，false表示当前用户是接受者
-	 */
-	public static boolean isSender(Context context, Information record) {
 
-		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getSuid().equals(record.getSender().getSuid()) && !record.getReceiver().getSuid().equals(record.getSender().getSuid()))
-			return true;
-		return false;
-	}
 
 	public static String getSexString(Context context, int sex) {
 		String result = null;
@@ -42,23 +25,13 @@ public class PhotoTalkUtils {
 		return result;
 	}
 
-	public static String getFilePath(Context context, String url) {
+	public static String getFilePath(String url) {
 		StringBuilder sbPath = new StringBuilder();
-		sbPath.append(Contract.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
+		sbPath.append(Contract.PhotoInformationCache.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
 		return sbPath.toString();
 	}
 
-	public static void updateInformationState(Context context, String action, Information... infos) {
-		Intent intent = new Intent(context, InformationStateChangeService.class);
-		if (infos.length > 0) {
-			ServiceSimpleNotice[] ssns = new ServiceSimpleNotice[infos.length];
-			for (int i = 0; i < infos.length; i++) {
-				Information info = infos[i];
-				ssns[i] = new ServiceSimpleNotice(info.getStatu() + "", info.getRecordId(), info.getType() + "");
-			}
-			intent.putExtra(InformationStateChangeService.PARAM_KEY_INFORMATION, ssns);
-		}
-		intent.setAction(action);
-		context.startService(intent);
+	public static String getUnZipDirPath(String url) {
+		return getFilePath(url) + Contract.PhotoInformationCache.UNZIP_SUFFIX;
 	}
 }

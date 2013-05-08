@@ -28,6 +28,8 @@ public class PrefsUtils {
 
 		public static final String APP_KEY_CONTACT_UPLOADED = "contactuploaded";
 		public static final String LAST_CONTACT_UPLOAD_TIME = "lastuploadtime";
+		public static final String NEVER_ATTENTION_VERSION = "never_attention";
+		public static final String LAST_UPDATE_TIME = "last_update_time";
 
 		public static boolean hasUploadContacts(Context context) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
@@ -47,6 +49,24 @@ public class PrefsUtils {
 		public static long getLastContactUploadTime(Context context) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
 			return sh.getLong(LAST_CONTACT_UPLOAD_TIME, 0l);
+		}
+
+		public static void setNeverAttentionVersion(Context context, String version) {
+			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
+			sh.edit().putString(NEVER_ATTENTION_VERSION, version).commit();
+		}
+
+		public static String getNeverAttentionVersion(Context context) {
+			return getPreference(context, PREF_APP_INFO).getString(NEVER_ATTENTION_VERSION, null);
+		}
+
+		public static void setLastCheckUpdateTime(Context context, long time) {
+			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
+			sh.edit().putLong(LAST_UPDATE_TIME, time).commit();
+		}
+
+		public static long getLastCheckUpdateTime(Context context) {
+			return getPreference(context, PREF_APP_INFO).getLong(LAST_UPDATE_TIME, 0);
 		}
 	}
 
@@ -204,13 +224,13 @@ public class PrefsUtils {
 			SharedPreferences sh = getPreference(context, pref);
 			return sh.getInt(PREF_KEY_MAX_RECORDINFO_ID, 0);
 		}
-		
-		public static void setBackground(Context context,String pref,String bgUrl){
+
+		public static void setBackground(Context context, String pref, String bgUrl) {
 			SharedPreferences sh = getPreference(context, pref);
 			sh.edit().putString(Contract.KEY_BACKGROUND, bgUrl).commit();
 		}
-		
-		public static String getBackground(Context context,String pref){
+
+		public static String getBackground(Context context, String pref) {
 			SharedPreferences sh = getPreference(context, pref);
 			return sh.getString(Contract.KEY_BACKGROUND, null);
 		}

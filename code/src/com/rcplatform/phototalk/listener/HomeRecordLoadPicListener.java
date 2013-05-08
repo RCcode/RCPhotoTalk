@@ -9,12 +9,10 @@ import android.widget.TextView;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
-import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
-import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.Contract;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class HomeRecordLoadPicListener implements OnLoadingListener {
@@ -64,7 +62,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 	}
 
 	private static void notifyServer(Context context, Information record) {
-		PhotoTalkUtils.updateInformationState(context, Contract.Action.ACTION_INFORMATION_STATE_CHANGE, record);
+		LogicUtils.updateInformationState(context, Contract.Action.ACTION_INFORMATION_STATE_CHANGE, record);
 	}
 
 	private void updateView(int visibitity, String text) {

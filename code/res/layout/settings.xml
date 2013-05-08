@@ -240,7 +240,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@id/settings_account_tacotyid_pandle"
+                android:id="@+id/rela_about"
                 android:layout_width="match_parent"
                 android:layout_height="44dp"
                 android:layout_marginLeft="@dimen/default_gap"
@@ -253,8 +253,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
-                    android:text="关于"
-                    android:textColor="#313131" >
+                    android:text="@string/about" >
                 </TextView>
 
                 <ImageView

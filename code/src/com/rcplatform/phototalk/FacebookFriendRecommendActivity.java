@@ -21,11 +21,13 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.FacebookUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
@@ -66,11 +68,7 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	}
 
 	private void asyncInviteInfo(String... ids) {
-		Intent intent = new Intent(this, InviteFriendUploadService.class);
-		intent.putExtra(InviteFriendUploadService.PARAM_FRIENDS_IDS, ids);
-		intent.putExtra(InviteFriendUploadService.PARAM_TYPE, FriendType.FACEBOOK);
-		intent.setAction(Contract.Action.ACTION_UPLOAD_INTITE_THIRDPART);
-		startService(intent);
+		LogicUtils.uploadFriendInvite(this,Action.ACTION_UPLOAD_INTITE_THIRDPART,FriendType.FACEBOOK, ids);
 	}
 
 	private void getRecommentFriends() {

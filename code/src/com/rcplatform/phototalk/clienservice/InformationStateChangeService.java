@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
@@ -41,27 +42,32 @@ public class InformationStateChangeService extends IntentService {
 	protected void onHandleIntent(Intent intent) {
 		ServiceSimpleNotice[] infos = getNotices(intent);
 		String action = intent.getAction();
-		if (action.equals(Contract.Action.ACTION_INFORMATION_STATE_CHANGE)) {
-			updateState(infos);
-		} else if (action.equals(Contract.Action.ACTION_INFORMATION_DELETE)) {
-			if (infos != null)
-				deleteInformation(infos);
-			else
-				deleteAllInformation();
+		try {
+			if (action.equals(Contract.Action.ACTION_INFORMATION_STATE_CHANGE)) {
+				sendRequest(MenueApiUrl.NOTICE_STATE_CHANGE_URL, getEntity(infos));
+			} else if (action.equals(Contract.Action.ACTION_INFORMATION_DELETE)) {
+				if (infos != null)
+					sendRequest(MenueApiUrl.NOTICE_DELETE_URL, getEntity(infos));
+				else
+					sendRequest(MenueApiUrl.NOTICE_CLEAR_URL, getClearInformationEntity());
+			} else if (action.equals(Contract.Action.ACTION_INFORMATION_OVER)) {
+				sendRequest(MenueApiUrl.NOTICE_OVER_URL, getEntity(infos));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
 	}
 
-	private void deleteAllInformation() {
+	private void sendRequest(String url, HttpEntity entity) {
 		try {
-			HttpPost post = new HttpPost(MenueApiUrl.NOTICE_CLEAR_URL);
-			post.setEntity(getClearInformationEntity());
+			HttpPost post = new HttpPost(url);
+			post.setEntity(entity);
 			HttpClient client = new DefaultHttpClient();
 			HttpResponse res = client.execute(post);
 			if (isRequestSuccess(res)) {
-				LogUtil.e("clear informations success");
+				LogUtil.e("update informations success");
 			} else {
-				LogUtil.e("clear informations fail");
+				LogUtil.e("update informations fail");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,38 +108,6 @@ public class InformationStateChangeService extends IntentService {
 			return simpleInfo;
 		}
 		return null;
-	}
-
-	private void deleteInformation(ServiceSimpleNotice... simpleInfo) {
-		try {
-			HttpPost post = new HttpPost(MenueApiUrl.NOTICE_DELETE_URL);
-			post.setEntity(getEntity(simpleInfo));
-			HttpClient client = new DefaultHttpClient();
-			HttpResponse res = client.execute(post);
-			if (isRequestSuccess(res)) {
-				LogUtil.e("DELETE state success");
-			} else {
-				LogUtil.e("delete state fail");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void updateState(ServiceSimpleNotice... simpleInfo) {
-		try {
-			HttpPost post = new HttpPost(MenueApiUrl.NOTICE_STATE_CHANGE_URL);
-			post.setEntity(getEntity(simpleInfo));
-			HttpClient client = new DefaultHttpClient();
-			HttpResponse res = client.execute(post);
-			if (isRequestSuccess(res)) {
-				LogUtil.e("update state success");
-			} else {
-				LogUtil.e("update state fail");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public StringEntity getEntity(ServiceSimpleNotice... simpleInfo) throws JSONException, UnsupportedEncodingException {

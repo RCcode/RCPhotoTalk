@@ -102,7 +102,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public void clearInformation() {
 		ObjectSet<Information> result = db.query(Information.class);
-		db.delete(result);
+		for(Information info:result){
+			db.delete(info);
+		}
 		db.commit();
 	}
 }

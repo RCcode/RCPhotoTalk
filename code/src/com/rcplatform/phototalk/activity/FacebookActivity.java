@@ -1,10 +1,9 @@
 package com.rcplatform.phototalk.activity;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +12,7 @@ import android.os.Message;
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
+import com.facebook.Request.Callback;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
@@ -107,11 +107,12 @@ public class FacebookActivity extends BaseActivity {
 		super.onResume();
 		mHelper.onResume();
 		if (!hasTryLogin) {
-			if (FacebookUtil.isFacebookVlidate(this))
+			boolean isAuth = FacebookUtil.isFacebookVlidate(this);
+			if (isAuth)
 				mAction = PendingAction.NONE;
 			else
 				mAction = PendingAction.GET_INFO;
-			if (FacebookUtil.isFacebookVlidate(this)) {
+			if (isAuth) {
 				openSession();
 			} else {
 				if (mAutoLogin) {
@@ -253,15 +254,8 @@ public class FacebookActivity extends BaseActivity {
 			dismissLoadingDialog();
 			switch (msg.what) {
 			case MSG_DEAUTHORIZE_SUCCESS:
+				FacebookUtil.clearFacebookVlidated(FacebookActivity.this);
 				Dialog dialog = DialogUtil.createMsgDialog(FacebookActivity.this, getString(R.string.deauthorize_complete), getString(R.string.confirm));
-				dialog.setOnDismissListener(new OnDismissListener() {
-
-					@Override
-					public void onDismiss(DialogInterface dialog) {
-						// TODO Auto-generated method stub
-						finish();
-					}
-				});
 				dialog.show();
 				break;
 			case MSG_DEAUTHORIZE_ERROR:
@@ -277,12 +271,14 @@ public class FacebookActivity extends BaseActivity {
 
 	protected void deAuthorize() {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Thread th = new Thread() {
-			public void run() {
+		Request request = new Request(Session.getActiveSession(), "me/permissions");
+		request.setHttpMethod(HttpMethod.DELETE);
+		request.setCallback(new Callback() {
+			
+			@Override
+			public void onCompleted(Response response) {
+				// TODO Auto-generated method stub
 				try {
-					Request request = new Request(Session.getActiveSession(), "me/permissions");
-					request.setHttpMethod(HttpMethod.DELETE);
-					Response response = request.executeAndWait();
 					if (response.getConnection().getResponseCode() == 200 && response.getError() == null) {
 						mHandler.sendEmptyMessage(MSG_DEAUTHORIZE_SUCCESS);
 					} else {
@@ -300,9 +296,16 @@ public class FacebookActivity extends BaseActivity {
 					e.printStackTrace();
 					mHandler.sendEmptyMessage(MSG_NET_ERROR);
 				}
-			};
-		};
-		th.start();
+			}
+		});
+		request.executeAsync();
+	}
 
+	protected boolean isFacebookAuthorize() {
+		return FacebookUtil.isFacebookVlidate(this);
+	}
+
+	protected void authorize() {
+		openSession();
 	}
 }

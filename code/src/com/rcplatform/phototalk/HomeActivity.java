@@ -19,15 +19,13 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.GestureDetector;
-import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -50,27 +48,28 @@ import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceRecordInfo;
 import com.rcplatform.phototalk.clienservice.PhotoTalkInformationStateService;
-import com.rcplatform.phototalk.db.DatabaseFactory;
-import com.rcplatform.phototalk.db.PhotoTalkDao;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.InformationPageController;
+import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
+import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.TimerLimitUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
 import com.rcplatform.phototalk.views.PullToRefreshView;
 import com.rcplatform.phototalk.views.PullToRefreshView.OnHeaderRefreshListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
-import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
+import com.rcplatform.phototalk.views.SnapListView;
+import com.rcplatform.phototalk.views.SnapShowListener;
 
 /**
  * 主界面. <br>
@@ -79,7 +78,8 @@ import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
  * 
  * @version 1.0.0
  */
-public class HomeActivity extends BaseActivity {
+public class HomeActivity extends BaseActivity implements SnapShowListener {
+
 	private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
 
 	private static final int REQUEST_CODE_DETAIL = 100;
@@ -92,7 +92,7 @@ public class HomeActivity extends BaseActivity {
 
 	private PullToRefreshView mRefreshView;
 
-	private ListView mRecordListView;
+	private SnapListView mRecordListView;
 
 	private Button mTakePhoto;
 
@@ -117,22 +117,23 @@ public class HomeActivity extends BaseActivity {
 
 	private Information mShowDetailInformation;
 
+	private CheckUpdateTask mCheckUpdateTask;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
+		InformationPageController.getInstance().setupController(this);
 		app = getPhotoTalkApplication();
 		app.addActivity(this.getClass().getName(), this);
-		DatabaseFactory.getInstance(this).createTables(this);
-		checkFialRequest();
 		initViewAndListener();
 		loadDataFromDataBase();
 		loadRecords();
+		checkUpdate();
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_DETAIL) {
@@ -145,6 +146,7 @@ public class HomeActivity extends BaseActivity {
 	private void loadRecords() {
 		mRefreshView.setRefreshing();
 		RecordInfoProxy.getAllRecordInfos(this, new RCPlatformResponseHandler() {
+
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				handleServiceRecordInfo(content);
@@ -160,6 +162,7 @@ public class HomeActivity extends BaseActivity {
 
 	private void handleServiceRecordInfo(final String serviceContent) {
 		Thread thread = new Thread() {
+
 			@Override
 			public void run() {
 				try {
@@ -207,7 +210,6 @@ public class HomeActivity extends BaseActivity {
 	}
 
 	private void startFriendDetailActivity(Friend friend) {
-		// TODO Auto-generated method stub
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
@@ -221,12 +223,22 @@ public class HomeActivity extends BaseActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
+		String action = intent.getAction();
+		if (Action.ACTION_LOGOUT.equals(action)) {
+			logout();
+			return;
+		}
 		if (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from"))) {
 			long time = intent.getLongExtra("time", 0);
 			if (app.getSendRecordsList(time) != null) {
 				initOrRefreshListView(app.getSendRecordsList(time));
 			}
 		}
+	}
+
+	private void logout() {
+		startActivity(InitPageActivity.class);
+		finish();
 	}
 
 	private void reSendNotifyToService(Information record) {
@@ -241,7 +253,6 @@ public class HomeActivity extends BaseActivity {
 		long time = System.currentTimeMillis();
 		record.setCreatetime(time);
 		record.setStatu(InformationState.STATU_NOTICE_SENDING);
-		PhotoTalkDao.getInstance().deleteRecordById(this, record.getRecordId());
 		List<Information> newSendlist = new ArrayList<Information>();
 		newSendlist.add(record);
 		app.addSendRecords(time, newSendlist);
@@ -310,14 +321,15 @@ public class HomeActivity extends BaseActivity {
 
 	private void initViewAndListener() {
 		mRefreshView = (PullToRefreshView) findViewById(R.id.rf_home);
-		mRecordListView = (ListView) findViewById(R.id.lv_home);
+		mRecordListView = (SnapListView) findViewById(R.id.lv_home);
+		mRecordListView.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
 		mRecord = (Button) findViewById(R.id.btn_home_record);
 
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
-		title_line = (ImageView)findViewById(R.id.title_line);
+		title_line = (ImageView) findViewById(R.id.title_line);
 		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
@@ -354,20 +366,21 @@ public class HomeActivity extends BaseActivity {
 				startActivity(new Intent(HomeActivity.this, VideoRecordActivity.class));
 			}
 		});
-		final GestureDetector gestureDetector = new GestureDetector(new HomeGestureListener());
-		mRecordListView.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				return gestureDetector.onTouchEvent(event);
-			}
-		});
 		mRecordListView.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				showLongClickDialog(arg2);
 				return false;
+			}
+		});
+		mRecordListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Information information = (Information) adapter.getItem(arg2);
+				showFriendDetail(information);
+
 			}
 		});
 		mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
@@ -379,35 +392,18 @@ public class HomeActivity extends BaseActivity {
 		});
 	}
 
-	class HomeGestureListener extends SimpleOnGestureListener {
-		@Override
-		public boolean onDown(MotionEvent e) {
-			if (mRecordListView.getChildCount() > 0) {
-				int position = getPostionFromTouch(e, mRecordListView);
-				if (position != -1) {
-					show(position);
-				}
-			}
-			return super.onDown(e);
+	private void showFriendDetail(Information information) {
+		if (information.getSender().getSuid().equals(information.getReceiver().getSuid())) {
+			startActivity(SettingsActivity.class);
+			return;
 		}
-
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			if (mRecordListView.getChildCount() > 0) {
-				int position = getPostionFromTouch(e, mRecordListView);
-				Information record = (Information) adapter.getItem(position);
-				if (record != null && (record.getType() != InformationType.TYPE_SYSTEM_NOTICE && record.getStatu() != InformationState.STATU_NOTICE_SHOWING && record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED)) {
-					String sUid = null;
-					if (PhotoTalkUtils.isSender(HomeActivity.this, record)) {
-						sUid = record.getReceiver().getSuid();
-					} else {
-						sUid = record.getSender().getSuid();
-					}
-					searchFriendDetailById(sUid, record);
-				}
-			}
-			return super.onSingleTapUp(e);
+		String friendSuid = null;
+		if (LogicUtils.isSender(HomeActivity.this, information)) {
+			friendSuid = information.getReceiver().getSuid();
+		} else {
+			friendSuid = information.getSender().getSuid();
 		}
+		searchFriendDetailById(friendSuid, information);
 	}
 
 	protected void showLongClickDialog(int position) {
@@ -435,10 +431,9 @@ public class HomeActivity extends BaseActivity {
 									break;
 
 								case 2:
-									PhotoTalkDao.getInstance().deleteRecordById(HomeActivity.this, record.getRecordId());
 									adapter.getData().remove(record);
 									adapter.notifyDataSetChanged();
-									notifyServiceDelete(record);
+									LogicUtils.updateInformationState(HomeActivity.this, Action.ACTION_INFORMATION_DELETE, record);
 									mLongPressDialog.hide();
 									break;
 								}
@@ -462,38 +457,16 @@ public class HomeActivity extends BaseActivity {
 		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
 
-	private void show(final int position) {
+	private void show(int position) {
 
-		final Information infoRecord = ((Information) mRecordListView.getAdapter().getItem(position));
-		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !PhotoTalkUtils.isSender(this, infoRecord)) {
+		Information infoRecord = ((Information) mRecordListView.getAdapter().getItem(position));
+		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-				// 这句还给View里面联合起作用，这边加入任务每一秒钟去setLimitTime改变值，然后RecordTimerLimitView在每秒钟显示下新的值
-				TimerLimitUtil.getInstence().addTask(infoRecord);
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
-				limitView.setOnTimeEndListener(new OnTimeEndListener() {
-
-					@Override
-					public void onEnd(Object statuTag, Object buttonTag) {
-
-						RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
-						if (timerLimitView != null) {
-//							timerLimitView.setBackgroundResource(R.drawable.receive_arrows_opened);
-							timerLimitView.setText("");
-						}
-						TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
-						if (statu != null) {
-							statu.setText(R.string.statu_opened_1s_ago);
-						}
-						// 通知服务器改变状态为3，表示已经查看
-						infoRecord.setStatu(InformationState.STATU_NOTICE_OPENED);
-						PhotoTalkDatabaseFactory.getDatabase().updateInformationState(infoRecord);
-						notifyServiceUpdateState(infoRecord);
-					}
-				}, infoRecord.getRecordId() + TextView.class.getName(), infoRecord.getRecordId() + Button.class.getName());
-
+				PhotoInformationCountDownService.getInstance().addInformation(infoRecord);
 				if (mShowDialog == null) {
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
@@ -508,8 +481,6 @@ public class HomeActivity extends BaseActivity {
 				}
 				mShowDialog.ShowDialog(infoRecord);
 				isShow = true;
-			} else if (infoRecord.isDestroyed()) {
-				// 个人资料界面
 			}
 		}
 
@@ -537,7 +508,6 @@ public class HomeActivity extends BaseActivity {
 		}
 		int index_in_adapter = first;
 		int count = 0;
-		int index_of_childview = 0;
 
 		/* 第一个可见项是listview header */
 		if (0 == first) {
@@ -545,7 +515,6 @@ public class HomeActivity extends BaseActivity {
 				/* 触摸不在listview header上，根据触摸的Y坐标和listitem的高度计算索引 */
 				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
 				count++;
-				index_of_childview = count;
 				index_in_adapter += count;
 			} else {
 				/* 触摸在listview header上 */
@@ -558,10 +527,8 @@ public class HomeActivity extends BaseActivity {
 				/* 用触摸点坐标和item高度相除来计算索引 */
 				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
 				count++;
-				index_of_childview = count;
 				index_in_adapter += count;
 			} else {
-				index_of_childview = 0;
 			}
 		}
 		return index_in_adapter;
@@ -602,7 +569,6 @@ public class HomeActivity extends BaseActivity {
 				mRefreshView.onFooterRefreshComplete();
 				break;
 			case REFRESH_FAIL:
-				// Toast.makeText(HomeActivity.this, "加载失败..", 1).show();
 				mRefreshView.onHeaderRefreshComplete();
 				break;
 			}
@@ -614,31 +580,16 @@ public class HomeActivity extends BaseActivity {
 			adapter.notifyDataSetChanged();
 			return;
 		}
+
 		if (adapter == null) {
 			adapter = new PhotoTalkMessageAdapter(this, data, mRecordListView);
 			sortList(getAdapterData());
 			mRecordListView.setAdapter(adapter);
-
 		} else {
 			getAdapterData().addAll(data);
 			sortList(getAdapterData());
 			adapter.notifyDataSetChanged();
 		}
-	}
-
-	private void notifyServiceUpdateState(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_STATE_CHANGE, record);
-	}
-
-	/**
-	 * {"token":"asdasd@126.com|5289ea63123123123","appId":1,"deviceId":
-	 * "android2323"
-	 * ,"userId":"asdasd",notices":"[{'id':30,'type':2,'state':2}]"}
-	 * 
-	 * @param record
-	 */
-	private void notifyServiceDelete(Information record) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE, record);
 	}
 
 	/**
@@ -677,7 +628,6 @@ public class HomeActivity extends BaseActivity {
 					info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
 				}
 				// 把当前这次发送错误的信息写入数据库保存，并删除app中的引用
-				PhotoTalkDao.getInstance().insertInfoRecord(this, app.getSendRecordsList(time));
 			}
 			initOrRefreshListView(null);
 			return;
@@ -712,7 +662,6 @@ public class HomeActivity extends BaseActivity {
 						}
 					}
 
-					PhotoTalkDao.getInstance().insertInfoRecord(this, app.getSendRecordsList(time));
 					// app.getSendRecords().remove(time);
 				}
 				initOrRefreshListView(null);
@@ -739,49 +688,7 @@ public class HomeActivity extends BaseActivity {
 	 *            ： 服务器取回的数据
 	 */
 	protected void filterList(List<Information> listinfo) {
-		List<Information> newNotices = new ArrayList<Information>();
-		List<Information> updateInfos = new ArrayList<Information>();
-		Iterator<Information> iterator = listinfo.iterator();
-		List<Information> data = getAdapterData();
-		while (iterator.hasNext()) {
-			Information serviceInfo = iterator.next();
-			// 如果是通知
-			if (data != null && data.contains(serviceInfo)) {
-				Information localInfo = data.get(data.indexOf(serviceInfo));
-				if (serviceInfo.getStatu() == localInfo.getStatu()) {
-					// 状态没有改变
-					iterator.remove();
-				} else {
-					// 状态改变
-					if (serviceInfo.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-						// 好友请求信息
-						localInfo.setStatu(serviceInfo.getStatu());
-					} else if (serviceInfo.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
-						// 图片信息
-						if (InformationState.isServiceState(localInfo.getStatu()) && localInfo.getStatu() > serviceInfo.getStatu()) {
-							notifyServiceUpdateState(localInfo);
-						} else {
-							localInfo.setStatu(serviceInfo.getStatu());
-							updateInfos.add(localInfo);
-						}
-						// 为什么没有状态为3的情况，因为状态为3，不管是发送者还是接收者，这条记录生命线已经完了，不需要做任何操作了
-					} else if (serviceInfo.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
-					}
-				}
-			} else {
-				newNotices.add(serviceInfo);
-			}
-		}
-		if (updateInfos.size() > 0) {
-			Information[] infos = new Information[updateInfos.size()];
-			for (int i = 0; i < updateInfos.size(); i++) {
-				infos[i] = updateInfos.get(i);
-			}
-			updateInfos.clear();
-			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(infos);
-		}
-		if (newNotices.size() > 0)
-			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(newNotices);
+		List<Information> newNotices = LogicUtils.informationFilter(this, listinfo, getAdapterData());
 		sendDataLoadedMessage(newNotices);
 	}
 
@@ -793,27 +700,19 @@ public class HomeActivity extends BaseActivity {
 
 		@Override
 		public int compare(Information lhs, Information rhs) {
+			LogUtil.e(lhs.getCreatetime() + "......is lhs create time");
+			LogUtil.e(rhs.getCreatetime() + "......is rhs create time");
 
 			return (int) (rhs.getCreatetime() - lhs.getCreatetime());
-		}
-	};
-
-	private final GalHttpLoadTextCallBack notifyRecordOpenedCallBack = new GalHttpLoadTextCallBack() {
-
-		@Override
-		public void textLoaded(String text) {
-
-		}
-
-		@Override
-		public void loadFail() {
-
 		}
 	};
 
 	@Override
 	protected void onDestroy() {
 		app.removeActivity(this.getClass().getName());
+		InformationPageController.getInstance().destroy();
+		if (mCheckUpdateTask != null)
+			mCheckUpdateTask.cancel();
 		super.onDestroy();
 	}
 
@@ -828,32 +727,57 @@ public class HomeActivity extends BaseActivity {
 		final Map<String, String> params = new HashMap<String, String>();
 		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail()) + "");
 		notifyServiceDeleteAll(params);
-		PhotoTalkDao.getInstance().deleteCurrentUserTable(this);
+		PhotoTalkDatabaseFactory.getDatabase().clearInformation();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
 		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
 		return super.onOptionsItemSelected(item);
 	}
 
 	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		PhotoTalkUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
-	}
-
-	private void checkFialRequest() {
-		List<Map<String, String>> requests = PhotoTalkDao.getInstance().findAllFailRequestInfo(this);
-		if (requests != null && requests.size() > 0) {
-			Map<String, String> params;
-			for (Map<String, String> info : requests) {
-				params = new Gson().fromJson(info.get("params"), new TypeToken<Map<String, String>>() {
-				}.getType());
-				params.put("id", info.get("id"));
-				notifyServiceDeleteAll(params);
-			}
-		}
+		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	private List<Information> getAdapterData() {
 		if (adapter == null)
 			return null;
 		return adapter.getData();
+	}
+
+	@Override
+	public void snapShow() {
+		if (mRecordListView.getAdapter() != null) {
+			int pos = ((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getPressedPosition();
+			if (pos >= 0) {
+				show(pos);
+			}
+		}
+	}
+
+	@Override
+	public void snapHide() {
+		if (mRecordListView.getAdapter() != null)
+			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).resetPressedInformation();
+	}
+
+	private void checkUpdate() {
+		mCheckUpdateTask = new CheckUpdateTask(this, true);
+		mCheckUpdateTask.start();
+	}
+
+	public void onInformationShowEnd(Information information) {
+		String buttonTag = information.getRecordId() + Button.class.getName();
+		String statuTag = information.getRecordId() + TextView.class.getName();
+		String newTag = information.getRecordId() + ImageView.class.getName();
+		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
+		if (timerLimitView != null) {
+			timerLimitView.setVisibility(View.GONE);
+		}
+		TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
+		if (statu != null) {
+			statu.setText(R.string.statu_opened_1s_ago);
+		}
+		View newView = mRecordListView.findViewWithTag(newTag);
+		if (newView != null)
+			newView.setVisibility(View.GONE);
 	}
 }

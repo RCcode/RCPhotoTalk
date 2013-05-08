@@ -1,19 +1,13 @@
 package com.rcplatform.phototalk;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -31,7 +25,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -41,19 +34,17 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.AccountInfoEditActivity.LoadImageTask;
-import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HorizontalListView;
@@ -81,6 +72,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	private ImageView user_bg_View;
 	private PopupWindow mImageSelectPopupWindow;
 	private Uri mImageUri;
+	private View viewAbout;
 	private MenueApplication app;
 	private String saveBgUrl=null;
 	private int CAMERA_CODE = 0;
@@ -108,6 +100,8 @@ public class SettingsActivity extends ImagePickActivity implements
 		user_bg_View = (ImageView) findViewById(R.id.user_bg);
 		user_bg_View.setOnClickListener(this);
 		userInfo = getPhotoTalkApplication().getCurrentUser();
+		viewAbout = findViewById(R.id.rela_about);
+		viewAbout.setOnClickListener(this);
 		setUserInfo(userInfo);
 	}
 
@@ -167,7 +161,6 @@ public class SettingsActivity extends ImagePickActivity implements
 			break;
 		case R.id.use_account_message:
 			startActivity(new Intent(this, UserInfoActivity.class));
-			this.finish();
 			break;
 		case R.id.choosebutton:
 			startActivity(new Intent(this, AddFriendActivity.class));
@@ -187,6 +180,8 @@ public class SettingsActivity extends ImagePickActivity implements
 			//更改个人头像设置
 			CAMERA_CODE = 2;
 			showImagePickMenu(mHeadView);
+		case R.id.rela_about:
+			startActivity(AboutActivity.class);
 			break;
 		}
 	}
@@ -225,13 +220,11 @@ public class SettingsActivity extends ImagePickActivity implements
 			String headPath = params[1].getPath();
 			Bitmap bitmap = null;
 			try {
-				int rotateAngel = Utils.getUriImageAngel(SettingsActivity.this,
-						imageUri);
+				int rotateAngel = Utils.getUriImageAngel(SettingsActivity.this, imageUri);
 				int nWidth = 0, nHeight = 0;
 				nHeight = user_bg_View.getHeight();
 				nWidth = user_bg_View.getWidth();
-				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
-						nHeight, rotateAngel);
+				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
 			} catch (OutOfMemoryError e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -283,8 +276,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	}
 
 	private void doCleanDistory() {
-		PhotoTalkUtils.updateInformationState(this,
-				Action.ACTION_INFORMATION_DELETE);
+		LogicUtils.clearInformationHistory(this);
 	}
 
 	@Override
@@ -293,6 +285,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EDIT_INFO) {
+				setUserInfo((UserInfo) data.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
 				setUserInfo((UserInfo) data
 						.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
 			}

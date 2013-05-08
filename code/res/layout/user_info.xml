@@ -11,8 +11,8 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/top_layout"
-        android:layout_above="@+id/login_out_btn" >
+        android:layout_above="@+id/login_out_btn"
+        android:layout_below="@+id/top_layout" >
 
         <LinearLayout
             android:layout_width="fill_parent"
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"/>
+                    android:layout_marginRight="5dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -94,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"/>
+                    android:layout_marginRight="5dp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -111,11 +111,20 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
+                    android:layout_toLeftOf="@+id/tv_facebook_authstate"
                     android:gravity="center_vertical"
-                    android:text="Facebook" >
+                    android:text="@string/facebook" >
                 </TextView>
 
+                <TextView
+                    android:id="@+id/tv_facebook_authstate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/iv_to_right" />
+
                 <ImageView
+                    android:id="@+id/iv_to_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -158,11 +167,10 @@
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
-                android:paddingLeft="7dp"
-                android:text="修改登陆密码"
+                android:background="@drawable/init_page_login_button_selector"
                 android:gravity="left|center_vertical"
-                android:background="@drawable/init_page_login_button_selector" >
-
+                android:paddingLeft="7dp"
+                android:text="修改登陆密码" >
             </Button>
         </LinearLayout>
     </ScrollView>
@@ -171,10 +179,10 @@
         android:id="@+id/login_out_btn"
         style="@style/LandingPageButton"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="@dimen/default_gap"
         android:layout_marginRight="@dimen/default_gap"
         android:layout_marginTop="@dimen/default_gap_2x"
-        android:layout_marginBottom="20dp"
         android:background="@drawable/button_selector_red"
         android:text="注销"
         android:textColor="@android:color/white" />
