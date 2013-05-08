@@ -7,14 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -36,6 +33,7 @@ import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnCheckBoxChange
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.task.AddFriendTask;
 
 public class AddFriendBaseActivity extends BaseActivity {
@@ -133,7 +131,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		if (listView.getExpandableListAdapter() != null) {
 			adapter = (PhotoTalkFriendsAdapter) listView.getExpandableListAdapter();
 			adapter.setListData(baseFriendsList);
-//			listView.setSelection(0);
+			// listView.setSelection(0);
 
 		} else {
 			adapter = new PhotoTalkFriendsAdapter(AddFriendBaseActivity.this, baseFriendsList, willInvateFriends, ImageLoader.getInstance());
@@ -150,7 +148,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 		@Override
 		public void addFriend(Friend friend, Handler h) {
-			doFriendAdd(friend, h);
+			doFriendAdd(friend);
 		}
 	};
 	private OnCheckBoxChangedListener mInvateCheckBoxChangeListener = new OnCheckBoxChangedListener() {
@@ -164,7 +162,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		}
 	};
 
-	private void doFriendAdd(final Friend friend, final Handler handler) {
+	private void doFriendAdd(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new RCPlatformResponseHandler() {
 
@@ -175,6 +173,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 				refreshList();
 				AddFriendsActivity.addFriend(friend);
+				LogicUtils.friendAdded(friend);
 			}
 
 			@Override

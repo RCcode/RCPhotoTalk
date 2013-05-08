@@ -30,6 +30,7 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 
 public class PhotoTalkMessageAdapter extends BaseAdapter {
@@ -120,30 +121,27 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			}
 		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
 			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.stopTask();
+			holder.statuButton.setText(null);
+			holder.statu.setText(RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
 			// 如果是对方添加我
 			if (!LogicUtils.isSender(context, record)) {
+				holder.name.setText(context.getString(R.string.added_by_friend, record.getSender().getNick()));
 				// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
+					holder.statuButton.setEnabled(true);
 					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statu.setText(getStringfromResource(R.string.home_record_added_you_as_friend));
+
 				}
 				// 2,如果更多里面设置了只有好友可以给我发送图片，那么item里面 状态显示： XX 将加我为好友，并显示添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
 					holder.statuButton.setEnabled(true);
 					holder.statuButton.setBackgroundResource(R.drawable.addfriend);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statu.setText(getStringfromResource(R.string.home_record_will_add_you_as_friend));
 				}
 				// 2.1 点击了确认添加对方为好友好友后， 添加 XX为好友，隐藏添加按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setEnabled(false);
 					holder.statuButton.setBackgroundResource(R.drawable.added);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getSender().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}
 				if (record.getStatu() != InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setOnClickListener(new OnClickListener() {
@@ -158,26 +156,17 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 			} else { // 我添加别人为好友
 				// 1 如果对方设置了所有人都可以发送图片，那么item里面显示 状态显示：添加 XX为好友，隐藏按钮， 对应上面 1
+				holder.name.setText(context.getString(R.string.added_friend, record.getReceiver().getNick()));
 				if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NO_CONFIRM) {
-					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getReceiver().getNick() + getStringfromResource(R.string.home_record_as_friend));
 					holder.statuButton.setBackgroundResource(R.drawable.added);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-
 				}
 				// 2 如果对方更多里面内设置了只有好友可以发送图片，那么item 里面状态显示，等待 XX 确认好友请求 ，隐藏按钮
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADD_NEED_CONFIRM) {
 					holder.statuButton.setBackgroundDrawable(null);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statu.setText(getStringfromResource(R.string.home_record_waitting_and_confirm));
 				}
 				// 2.1 如果对方确认了请求，那么那么item 里面状态显示，添加 xx 为好友，按钮显示为已添加
 				else if (record.getStatu() == InformationState.STATU_QEQUEST_ADDED) {
 					holder.statuButton.setBackgroundResource(R.drawable.added);
-					holder.statuButton.stopTask();
-					holder.statuButton.setText("");
-					holder.statu.setText(getStringfromResource(R.string.home_record_added) + record.getReceiver().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}
 			}
 		} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
@@ -185,71 +174,65 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
+
 		if (LogicUtils.isSender(context, record)) {
 			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getReceiver().getHeadUrl(), AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
 		} else {
 			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getSender().getHeadUrl(), AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
 		}
-
-		if (!LogicUtils.isSender(context, record)) {
-			holder.name.setText(record.getSender().getNick());
-		} else {
-			holder.name.setText(record.getReceiver().getNick());
+		if (record.getType() != InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
+			if (!LogicUtils.isSender(context, record)) {
+				holder.name.setText(record.getSender().getNick());
+			} else {
+				holder.name.setText(record.getReceiver().getNick());
+			}
 		}
 		return convertView;
 	}
 
 	private void initReceiverView(final Information record, String statuTag, String buttonTag) {
+		holder.statuButton.setBackgroundDrawable(null);
+		holder.statuButton.setText(null);
 		if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
-			holder.statu.setText(R.string.home_record_pic_loading);
+			holder.statu.setText(R.string.receive_downloading);
 			RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
 			holder.statuButton.stopTask();
-			holder.statuButton.setText("");
-			holder.statuButton.setBackgroundDrawable(null);
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
+				// 如果缓存文件存在
 				holder.bar.setVisibility(View.GONE);
 				holder.statuButton.stopTask();
-				holder.statuButton.setText(null);
-				holder.statuButton.setBackgroundDrawable(null);
-				holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
+				holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
 			} else {
+				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
-				holder.statu.setText(R.string.home_record_pic_loading);
+				holder.statu.setText(R.string.receive_downloading);
 				RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
 				holder.statuButton.stopTask();
-				holder.statuButton.setText("");
-				holder.statuButton.setBackgroundDrawable(null);
 			}
 			// 状态为4.表示正在查看
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statuButton.setBackgroundResource(R.drawable.item_time_bg);
 			holder.statuButton.scheuleTask(record);
-			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_received), getStringfromResource(R.string.statu_press_to_show), record.getLastUpdateTime()));
+			holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
 			// 状态为3 表示 已经查看，
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundDrawable(null);
-			holder.statuButton.setText("");
 			holder.statuButton.stopTask();
-			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
+			holder.statu.setText(getTimeText(R.string.receive_looked, record.getReceiveTime()));
 
 			// 状态为5 表示正在下载
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_LOADING) {
 			holder.bar.setVisibility(View.VISIBLE);
-			holder.statu.setText(R.string.home_record_pic_loading);
-			holder.statuButton.setText("");
-			holder.statuButton.setBackgroundDrawable(null);
+			holder.statu.setText(R.string.receive_downloading);
 			holder.statuButton.stopTask();
 			// 7 下载失败
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statu.setText(R.string.home_record_load_fail);
-			holder.statuButton.setText("");
-			holder.statuButton.setBackgroundDrawable(null);
+			holder.statu.setText(R.string.receive_fail);
 			holder.statuButton.stopTask();
 		}
 
@@ -257,43 +240,34 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private void initSenderView(Information record) {
 		// 如果当前用户是发送者
+		holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+		holder.statuButton.setText(null);
+		holder.statuButton.stopTask();
 		// 状态为1 表示已经发送到服务器
 		if (record.getStatu() == InformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-			holder.statuButton.setText("");
-			holder.statuButton.stopTask();
-			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_send), "", record.getLastUpdateTime()));
+			holder.statu.setText(getTimeText(R.string.send_sended, record.getReceiveTime()));
 			// 状态为2表示对方已经下载
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-			holder.statuButton.setText("");
-			holder.statuButton.stopTask();
-			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_delivered), "", record.getLastUpdateTime()));
+			holder.statu.setText(getTimeText(R.string.send_received, record.getReceiveTime()));
 			// 状态为3 表示已经查看
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-			holder.statuButton.setText("");
-			holder.statuButton.stopTask();
-			holder.statu.setText(getStatuTime(getStringfromResource(R.string.statu_opened), "", record.getLastUpdateTime()));
+			holder.statu.setText(getTimeText(R.string.send_looked, record.getReceiveTime()));
 			// 0 表示正在发送
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_SENDING) {
 			holder.bar.setVisibility(View.VISIBLE);
-			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-			holder.statuButton.setText("");
-			holder.statuButton.stopTask();
-			holder.statu.setText(R.string.home_record_pic_sending);
+			holder.statu.setText(R.string.send_sending);
 			// 6 表示发送失败
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
-			holder.statuButton.setText("");
-			holder.statuButton.stopTask();
-			holder.statu.setText(R.string.home_record_pic_send_fail);
+			holder.statu.setText(R.string.send_fail);
 		}
+	}
 
+	private String getTimeText(int baseResId, long time) {
+		return context.getString(baseResId, RCPlatformTextUtil.getTextFromTimeToNow(context, time));
 	}
 
 	private void addAsFriend(final Information record) {
@@ -302,7 +276,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-
 				record.setStatu(InformationState.STATU_QEQUEST_ADDED);
 				RecordTimerLimitView button = (RecordTimerLimitView) listView.findViewWithTag(record.getRecordId() + Button.class.getName());
 				if (button != null) {
@@ -312,6 +285,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				if (listView.findViewWithTag(record.getRecordId() + TextView.class.getName()) != null) {
 					((TextView) listView.findViewWithTag(record.getRecordId() + TextView.class.getName())).setText(getStringfromResource(R.string.home_record_added) + record.getSender().getNick() + getStringfromResource(R.string.home_record_as_friend));
 				}
+				LogicUtils.informationFriendAdded(record);
 				((BaseActivity) context).dismissLoadingDialog();
 			}
 

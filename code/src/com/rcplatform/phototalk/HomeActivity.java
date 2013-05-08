@@ -13,7 +13,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -47,21 +46,19 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceRecordInfo;
-import com.rcplatform.phototalk.clienservice.PhotoTalkInformationStateService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
-import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.InformationPageController;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
@@ -81,8 +78,6 @@ import com.rcplatform.phototalk.views.SnapShowListener;
 public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
-
-	private static final int REQUEST_CODE_DETAIL = 100;
 
 	private static final int LOAD_MORE_FAIL = 4;
 
@@ -115,8 +110,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private PhotoTalkMessageAdapter adapter;
 
-	private Information mShowDetailInformation;
-
 	private CheckUpdateTask mCheckUpdateTask;
 
 	@Override
@@ -130,17 +123,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		loadDataFromDataBase();
 		loadRecords();
 		checkUpdate();
-	}
-
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK) {
-			if (requestCode == REQUEST_CODE_DETAIL) {
-				mShowDetailInformation.setStatu(InformationState.STATU_QEQUEST_ADDED);
-				adapter.notifyDataSetChanged();
-			}
-		}
 	}
 
 	private void loadRecords() {
@@ -193,7 +175,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				try {
 					JSONObject jObj = new JSONObject(content);
 					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject("friendInfo").toString());
-					mShowDetailInformation = record;
 					startFriendDetailActivity(friend);
 				} catch (JSONException e) {
 					showErrorConfirmDialog(R.string.net_error);
@@ -217,7 +198,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		} else {
 			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
 		}
-		startActivityForResult(intent, REQUEST_CODE_DETAIL);
+		startActivity(intent);
 	}
 
 	@Override
@@ -226,6 +207,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		String action = intent.getAction();
 		if (Action.ACTION_LOGOUT.equals(action)) {
 			logout();
+			return;
+		} else if (Action.ACTION_RELOGIN.equals(action)) {
+			relogin();
 			return;
 		}
 		if (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from"))) {
@@ -241,46 +225,59 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		finish();
 	}
 
-	private void reSendNotifyToService(Information record) {
-		//
-		List<Information> sendList = app.getSendRecordsList(record.getCreatetime());
-		if (sendList != null) {
-			sendList.remove(record);
-			if (sendList.size() == 0)
-				app.getSendRecords().remove(record.getCreatetime());
-		}
-
-		long time = System.currentTimeMillis();
-		record.setCreatetime(time);
-		record.setStatu(InformationState.STATU_NOTICE_SENDING);
-		List<Information> newSendlist = new ArrayList<Information>();
-		newSendlist.add(record);
-		app.addSendRecords(time, newSendlist);
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(MenueApiFactory.COUNTRY, Locale.getDefault().getCountry());
-		params.put(MenueApiFactory.HEAD_URL, getPhotoTalkApplication().getCurrentUser().getHeadUrl());
-		params.put(MenueApiFactory.TIME, String.valueOf(record.getCreatetime()));
-		params.put(MenueApiFactory.NICK, getPhotoTalkApplication().getCurrentUser().getNick());
-		params.put(MenueApiFactory.IMAGE_TYPE, "jpg");
-		params.put(MenueApiFactory.DESC, "");
-		params.put(MenueApiFactory.TIME_LIMIT, String.valueOf(record.getLimitTime()));
-		params.put(MenueApiFactory.USER_ARRAY, buildUserArray(record.getReceiver()));
-		params.put(MenueApiFactory.FILE, record.getUrl());
-
-		PhotoTalkInformationStateService.getInstence().postRequestByTimestamp(this, new PhotoChatHttpLoadTextCallBack() {
-
-			@Override
-			public void textLoaded(String text, long time) {
-				callBackForSend(time, text);
-			}
-
-			@Override
-			public void loadFail(long time) {
-				callBackForSend(time, "");
-			}
-		}, params, MenueApiUrl.SEND_PICTURE_URL, record.getCreatetime(), null);
-
+	private void relogin() {
+		Intent loginIntent = new Intent(this, LoginActivity.class);
+		loginIntent.putExtra(Contract.KEY_LOGIN_PAGE, true);
+		startActivity(loginIntent);
+		finish();
 	}
+
+	// private void reSendNotifyToService(Information record) {
+	// //
+	// List<Information> sendList =
+	// app.getSendRecordsList(record.getCreatetime());
+	// if (sendList != null) {
+	// sendList.remove(record);
+	// if (sendList.size() == 0)
+	// app.getSendRecords().remove(record.getCreatetime());
+	// }
+	//
+	// long time = System.currentTimeMillis();
+	// record.setCreatetime(time);
+	// record.setStatu(InformationState.STATU_NOTICE_SENDING);
+	// List<Information> newSendlist = new ArrayList<Information>();
+	// newSendlist.add(record);
+	// app.addSendRecords(time, newSendlist);
+	// Map<String, String> params = new HashMap<String, String>();
+	// params.put(MenueApiFactory.COUNTRY, Locale.getDefault().getCountry());
+	// params.put(MenueApiFactory.HEAD_URL,
+	// getPhotoTalkApplication().getCurrentUser().getHeadUrl());
+	// params.put(MenueApiFactory.TIME, String.valueOf(record.getCreatetime()));
+	// params.put(MenueApiFactory.NICK,
+	// getPhotoTalkApplication().getCurrentUser().getNick());
+	// params.put(MenueApiFactory.IMAGE_TYPE, "jpg");
+	// params.put(MenueApiFactory.DESC, "");
+	// params.put(MenueApiFactory.TIME_LIMIT,
+	// String.valueOf(record.getLimitTime()));
+	// params.put(MenueApiFactory.USER_ARRAY,
+	// buildUserArray(record.getReceiver()));
+	// params.put(MenueApiFactory.FILE, record.getUrl());
+	//
+	// PhotoTalkInformationStateService.getInstence().postRequestByTimestamp(this,
+	// new PhotoChatHttpLoadTextCallBack() {
+	//
+	// @Override
+	// public void textLoaded(String text, long time) {
+	// callBackForSend(time, text);
+	// }
+	//
+	// @Override
+	// public void loadFail(long time) {
+	// callBackForSend(time, "");
+	// }
+	// }, params, MenueApiUrl.SEND_PICTURE_URL, record.getCreatetime(), null);
+	//
+	// }
 
 	private String buildUserArray(RecordUser receiver) {
 		try {
@@ -421,7 +418,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 								Information record = adapter.getData().get(listPostion);
 								switch (itemIndex) {
 								case 0:
-									reSendNotifyToService(record);
+									// reSendNotifyToService(record);
 									mLongPressDialog.hide();
 									break;
 								// 重新下载
@@ -431,9 +428,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 									break;
 
 								case 2:
-									adapter.getData().remove(record);
-									adapter.notifyDataSetChanged();
-									LogicUtils.updateInformationState(HomeActivity.this, Action.ACTION_INFORMATION_DELETE, record);
+									deleteInformation(record);
 									mLongPressDialog.hide();
 									break;
 								}
@@ -453,6 +448,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		}
 	}
 
+	private void deleteInformation(Information information) {
+		adapter.getData().remove(information);
+		adapter.notifyDataSetChanged();
+		LogicUtils.deleteInformation(this, information);
+	}
+
 	protected void reLoadPictrue(Information record) {
 		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
@@ -466,7 +467,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
-				PhotoInformationCountDownService.getInstance().addInformation(infoRecord);
+				LogicUtils.startShowPhotoInformation(infoRecord);
 				if (mShowDialog == null) {
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
@@ -580,7 +581,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			adapter.notifyDataSetChanged();
 			return;
 		}
-
 		if (adapter == null) {
 			adapter = new PhotoTalkMessageAdapter(this, data, mRecordListView);
 			sortList(getAdapterData());
@@ -614,6 +614,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			infoRecord.setType(info.getType());
 			infoRecord.setUrl(info.getPicUrl());
 			infoRecord.setLastUpdateTime(info.getUpdTime());
+			infoRecord.setReceiveTime(System.currentTimeMillis());
 			data.add(infoRecord);
 		}
 		list.clear();
@@ -661,8 +662,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 							info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
 						}
 					}
-
-					// app.getSendRecords().remove(time);
 				}
 				initOrRefreshListView(null);
 			}
@@ -700,10 +699,13 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 		@Override
 		public int compare(Information lhs, Information rhs) {
-			LogUtil.e(lhs.getCreatetime() + "......is lhs create time");
-			LogUtil.e(rhs.getCreatetime() + "......is rhs create time");
-
-			return (int) (rhs.getCreatetime() - lhs.getCreatetime());
+			// LogUtil.e(lhs.getCreatetime() + "......is lhs create time");
+			// LogUtil.e(rhs.getCreatetime() + "......is rhs create time");
+			if (rhs.getReceiveTime() > lhs.getReceiveTime())
+				return 1;
+			else if (rhs.getReceiveTime() < lhs.getReceiveTime())
+				return -1;
+			return 0;
 		}
 	};
 
@@ -724,17 +726,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		final Map<String, String> params = new HashMap<String, String>();
-		params.put(MenueApiFactory.NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(this, getPhotoTalkApplication().getCurrentUser().getEmail()) + "");
-		notifyServiceDeleteAll(params);
-		PhotoTalkDatabaseFactory.getDatabase().clearInformation();
-		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
-		((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
+		LogicUtils.showInformationClearDialog(this);
 		return super.onOptionsItemSelected(item);
-	}
-
-	private void notifyServiceDeleteAll(final Map<String, String> params) {
-		LogicUtils.updateInformationState(this, Action.ACTION_INFORMATION_DELETE);
 	}
 
 	private List<Information> getAdapterData() {
@@ -774,10 +767,29 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		}
 		TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
 		if (statu != null) {
-			statu.setText(R.string.statu_opened_1s_ago);
+			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getReceiveTime())));
 		}
 		View newView = mRecordListView.findViewWithTag(newTag);
 		if (newView != null)
 			newView.setVisibility(View.GONE);
+	}
+
+	public void onFriendAdded(Friend friend) {
+		List<Information> infos = getAdapterData();
+		if (infos != null && infos.size() > 0) {
+			for (Information information : infos) {
+				if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE && information.getSender().getSuid().equals(friend.getSuid())) {
+					information.setStatu(InformationState.STATU_QEQUEST_ADDED);
+				}
+			}
+			adapter.notifyDataSetChanged();
+		}
+	}
+
+	public void clearInformation() {
+		if (mRecordListView.getAdapter() != null) {
+			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
+			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
+		}
 	}
 }

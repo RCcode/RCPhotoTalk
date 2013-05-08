@@ -1,6 +1,15 @@
 package com.rcplatform.phototalk.utils;
 
+import com.rcplatform.phototalk.R;
+
+import android.content.Context;
+
 public class RCPlatformTextUtil {
+	private static final long A_SECOND = 1000;
+	private static final long A_MINUTE = 60 * A_SECOND;
+	private static final long A_HOUR = 60 * A_MINUTE;
+	private static final long A_DAY = 24 * A_HOUR;
+
 	private static final String EMAIL_REGEX = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
 	private static final String NICK_REGEX = "[a-zA-Z0-9]{1,20}";
 	private static final String RCID_REGEX = "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
@@ -41,5 +50,24 @@ public class RCPlatformTextUtil {
 		StringBuilder sb = new StringBuilder();
 		sb.append(suid).append(",").append(appId);
 		return sb.toString();
+	}
+
+	public static String getTextFromTimeToNow(Context context, long time) {
+		long timeToNow = System.currentTimeMillis() - time;
+		String result = null;
+		if (timeToNow < A_MINUTE) {
+			int timeNumber = (int) (timeToNow / A_SECOND);
+			result = context.getString(R.string.ago, context.getString(R.string.second, timeNumber));
+		} else if (timeToNow < A_HOUR) {
+			int timeNumber = (int) (timeToNow / A_MINUTE);
+			result = context.getString(R.string.ago, context.getString(R.string.minute, timeNumber));
+		} else if (timeToNow < A_DAY) {
+			int timeNumber = (int) (timeToNow / A_HOUR);
+			result = context.getString(R.string.ago, context.getString(R.string.hour, timeNumber));
+		} else {
+			int timeNumber = (int) (timeToNow / A_DAY);
+			result = context.getString(R.string.ago, context.getString(R.string.day, timeNumber));
+		}
+		return result;
 	}
 }

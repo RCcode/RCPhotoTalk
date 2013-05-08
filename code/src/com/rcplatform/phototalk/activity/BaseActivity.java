@@ -1,36 +1,75 @@
 package com.rcplatform.phototalk.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient;
+import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class BaseActivity extends Activity {
-	public static  final int LOADING_NO_MSG = -1;
+	public static final int LOADING_NO_MSG = -1;
 	ProgressDialog mProgressDialog;
-	protected RCPlatformAsyncHttpClient httpClient;
-	protected InputMethodManager mInputMethodManager;
+	private AlertDialog logoutDialog;
+	private BroadcastReceiver mOtherDeviceLoginReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			dismissLoadingDialog();
+			showReLoginDialog();
+		}
+	};
+
+	private void showReLoginDialog() {
+		if (logoutDialog == null) {
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						LogicUtils.relogin(BaseActivity.this);
+						break;
+					}
+				}
+			};
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			logoutDialog = builder.setMessage(R.string.other_device_login).setPositiveButton(R.string.cancel, listener).setNegativeButton(R.string.relogin, listener).setCancelable(false).create();
+		}
+		logoutDialog.show();
+	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		registeOtherDeviceLoginReceiver();
+	}
+
+	private void registeOtherDeviceLoginReceiver() {
+		IntentFilter filter = new IntentFilter(Action.ACTION_OTHER_DEVICE_LOGIN);
+		registerReceiver(mOtherDeviceLoginReceiver, filter);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
+		unregisterReceiver(mOtherDeviceLoginReceiver);
 	}
-
 
 	protected void hideSoftKeyboard(View view) {
 		Utils.hideSoftInputKeyboard(this, view);
@@ -73,14 +112,6 @@ public class BaseActivity extends Activity {
 		return (MenueApplication) getApplication();
 	}
 
-	@Override
-	protected void onDestroy() {
-		dismissLoadingDialog();
-		if (httpClient != null)
-			httpClient.cancel(this);
-		super.onDestroy();
-	}
-
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
 		findViewById(R.id.title_linear_back).setOnClickListener(onClickListener);
 		TextView tv = (TextView) findViewById(R.id.titleContent);
@@ -88,16 +119,17 @@ public class BaseActivity extends Activity {
 		tv.setText(textResId);
 		findViewById(R.id.back).setVisibility(View.VISIBLE);
 	}
-	
+
 	public void showErrorConfirmDialog(String msg) {
 		DialogUtil.createErrorInfoDialog(this, msg).show();
 	}
+
 	public void showErrorConfirmDialog(int msgResId) {
 		DialogUtil.createErrorInfoDialog(this, msgResId).show();
 	}
-	
-	protected void initForwordButton(int resId,OnClickListener onClickListener) {
-		TextView tvForward=(TextView) findViewById(R.id.choosebutton);
+
+	protected void initForwordButton(int resId, OnClickListener onClickListener) {
+		TextView tvForward = (TextView) findViewById(R.id.choosebutton);
 		tvForward.setText(resId);
 		tvForward.setOnClickListener(onClickListener);
 		tvForward.setVisibility(View.VISIBLE);

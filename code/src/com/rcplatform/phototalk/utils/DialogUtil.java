@@ -97,16 +97,17 @@ public class DialogUtil {
 
 		return dialogBuilder.create();
 	}
+
 	public static Dialog createMsgDialog(Context context, int message, int positive) {
-		
+
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 		dialogBuilder.setMessage(message).setCancelable(false).setPositiveButton(positive, new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
 		});
-		
+
 		return dialogBuilder.create();
 	}
 
@@ -121,11 +122,12 @@ public class DialogUtil {
 		});
 		return dialogBuilder.create();
 	}
+
 	public static Dialog createErrorInfoDialog(Context context, String msg) {
-		
+
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
 		dialogBuilder.setMessage(msg).setCancelable(false).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-			
+
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 			}
@@ -158,27 +160,7 @@ public class DialogUtil {
 		return builder;
 	}
 
-	// public static AlertDialog getConfirmDialog(Context context, int msgResId,
-	// OnClickListener onClickListener) {
-	// View view = LayoutInflater.from(context).inflate(
-	// R.layout.confirm_dialog, null);
-	// TextView tv = (TextView) view.findViewById(R.id.tv_dialo_message);
-	// tv.setText(msgResId);
-	// Button btnConfirm = (Button) view.findViewById(R.id.btn_confirm);
-	// Button btnCancel = (Button) view.findViewById(R.id.btn_cancel);
-	// btnCancel.setOnClickListener(onClickListener);
-	// btnConfirm.setOnClickListener(onClickListener);
-	// AlertDialog.Builder builder = new AlertDialog.Builder(context);
-	// AlertDialog dialog = builder.create();
-	// dialog.show();
-	// WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
-	// lp.width = context.getResources().getDimensionPixelSize(
-	// R.dimen.delete_tag_width);// 定义宽度
-	// lp.height = context.getResources().getDimensionPixelSize(
-	// R.dimen.delete_tag_height);// 定义高度
-	// dialog.getWindow().setAttributes(lp);
-	//
-	// dialog.setContentView(view);
-	// return dialog;
-	// }
+	public static void showInformationClearConfirmDialog(Context context, int msgId, int posResId, int negResId, DialogInterface.OnClickListener listener) {
+		new AlertDialog.Builder(context).setMessage(msgId).setPositiveButton(posResId, listener).setNegativeButton(negResId, listener).create().show();
+	}
 }

@@ -17,10 +17,9 @@ import com.rcplatform.phototalk.activity.FacebookActivity;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.task.FacebookUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
-import com.rcplatform.phototalk.utils.Contract.Action;
-import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class UserInfoActivity extends FacebookActivity implements OnClickListener {
 	private TextView user_Email;
@@ -105,11 +104,7 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 			startActivity(ChangePasswordActivity.class);
 			break;
 		case R.id.login_out_btn:
-			Intent intent = new Intent(this, HomeActivity.class);
-			intent.setAction(Action.ACTION_LOGOUT);
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			PrefsUtils.LoginState.clearLoginInfo(this);
-			startActivity(intent);
+			LogicUtils.logout(this);
 			break;
 		case R.id.back:
 			startActivity(new Intent(this, SettingsActivity.class));

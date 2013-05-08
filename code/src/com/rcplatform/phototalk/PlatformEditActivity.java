@@ -185,7 +185,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 	private void updateUserInfo() {
 		String nick = etNick.getText().toString().trim();
 		if (checkInfo(nick)) {
-			httpClient = new RCPlatformAsyncHttpClient(RequestAction.FILE);
+			RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient(RequestAction.FILE);
 			PhotoTalkParams.buildBasicParams(this, httpClient);
 			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getSuid());
 			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_TOKEN, mUserInfo.getToken());

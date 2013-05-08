@@ -13,6 +13,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class HomeRecordLoadPicListener implements OnLoadingListener {
@@ -39,18 +40,19 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 	@Override
 	public void onStartLoad() {
 		record.setStatu(InformationState.STATU_NOTICE_LOADING);
-		updateView(View.VISIBLE, context.getResources().getString(R.string.home_record_pic_loading));
+		updateView(View.VISIBLE, context.getString(R.string.receive_downloading));
 	}
 
 	@Override
 	public void onDownloadSuccess() {
+		record.setLastUpdateTime(System.currentTimeMillis());
 		if (record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			record.setStatu(InformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 			notifyServer(context, record);
 		}
 		record.setLastUpdateTime(System.currentTimeMillis());
-		String text = Utils.getStatuTime(context.getResources().getString(R.string.statu_received), context.getResources().getString(R.string.statu_press_to_show), record.getLastUpdateTime());
+		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
 		updateView(View.GONE, text);
 	}
 
@@ -58,7 +60,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 	public void onDownloadFail() {
 		record.setStatu(InformationState.STATU_NOTICE_LOAD_FAIL);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
-		updateView(View.GONE, context.getResources().getString(R.string.home_record_load_fail));
+		updateView(View.GONE, context.getResources().getString(R.string.receive_fail));
 	}
 
 	private static void notifyServer(Context context, Information record) {

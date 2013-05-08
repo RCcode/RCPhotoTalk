@@ -23,6 +23,8 @@ public interface PhotoTalkDatabase {
 	
 	public void clearInformation();
 	
+	public void updateFriendRequestInformationByFriend(Friend friend);
+	
 	public void close();
 	
 }

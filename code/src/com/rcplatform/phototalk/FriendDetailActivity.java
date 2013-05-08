@@ -23,6 +23,7 @@ import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Contract;
@@ -77,6 +78,7 @@ public class FriendDetailActivity extends BaseActivity {
 					public void onSuccess(int statusCode, String content) {
 						mFriend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 						coverToFriendView();
+						LogicUtils.friendAdded(mFriend);
 						dismissLoadingDialog();
 					}
 

@@ -2,39 +2,34 @@ package com.rcplatform.phototalk.bean;
 
 public class Information {
 
-    protected String recordId;
+	protected String recordId;
 
-    protected long createtime;
+	protected long createtime;
 
-    protected long lastUpdateTime;
+	protected long lastUpdateTime;
 
-    protected int type; // 发送图片，接收图片，通知
+	private long receiveTime;
 
-    protected int statu;
+	protected int type; // 发送图片，接收图片，通知
 
-    protected int limitTime;
+	protected int statu;
 
-    protected String url;
+	protected int limitTime;
 
-    protected int notifyStatu;
+	protected String url;
 
-    protected RecordUser sender;
+	protected int notifyStatu;
 
-    protected RecordUser receiver;
+	protected RecordUser sender;
 
-    protected boolean opened = false;
+	protected RecordUser receiver;
 
-    protected boolean showing = false;
+	private int totleLength;
 
-    protected boolean destroyed = false;
+	public Information() {
+	}
 
-    protected boolean isLoaded = false;
-
-    protected boolean loading = false;
-    
-    private int totleLength;
-
-    public int getTotleLength() {
+	public int getTotleLength() {
 		return totleLength;
 	}
 
@@ -42,145 +37,106 @@ public class Information {
 		this.totleLength = totleLength;
 	}
 
-	public Information() {
-        // TODO Auto-generated constructor stub
-    }
+	public long getReceiveTime() {
+		return receiveTime;
+	}
 
-    public Information(String id, int statu, long lastUpdateTime) {
-        this.recordId = id;
-        this.statu = statu;
-        this.lastUpdateTime = lastUpdateTime;
-    }
-    public int getLimitTime() {
-        return limitTime;
-    }
+	public void setReceiveTime(long receiveTime) {
+		this.receiveTime = receiveTime;
+	}
 
-    public void setLimitTime(int limitTime) {
-        this.limitTime = limitTime;
-    }
+	public Information(String id, int statu, long lastUpdateTime) {
+		this.recordId = id;
+		this.statu = statu;
+		this.lastUpdateTime = lastUpdateTime;
+	}
 
-    public String getRecordId() {
-        return recordId;
-    }
+	public int getLimitTime() {
+		return limitTime;
+	}
 
-    public void setRecordId(String recordId) {
-        this.recordId = recordId;
-    }
+	public void setLimitTime(int limitTime) {
+		this.limitTime = limitTime;
+	}
 
-    public long getCreatetime() {
-        return createtime;
-    }
+	public String getRecordId() {
+		return recordId;
+	}
 
-    public void setCreatetime(long createtime) {
-        this.createtime = createtime;
-    }
+	public void setRecordId(String recordId) {
+		this.recordId = recordId;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public long getCreatetime() {
+		return createtime;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setCreatetime(long createtime) {
+		this.createtime = createtime;
+	}
 
-    public int getStatu() {
-        return statu;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public void setStatu(int statu) {
-        this.statu = statu;
-    }
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public String getUrl() {
-        return url;
-    }
+	public int getStatu() {
+		return statu;
+	}
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+	public void setStatu(int statu) {
+		this.statu = statu;
+	}
 
-    public int getNotifyStatu() {
-        return notifyStatu;
-    }
+	public String getUrl() {
+		return url;
+	}
 
-    public void setNotifyStatu(int notifyStatu) {
-        this.notifyStatu = notifyStatu;
-    }
+	public void setUrl(String url) {
+		this.url = url;
+	}
 
-    public RecordUser getSender() {
-        return sender;
-    }
+	public int getNotifyStatu() {
+		return notifyStatu;
+	}
 
-    public void setSender(RecordUser own) {
-        this.sender = own;
-    }
+	public void setNotifyStatu(int notifyStatu) {
+		this.notifyStatu = notifyStatu;
+	}
 
-    public RecordUser getReceiver() {
-        return receiver;
-    }
+	public RecordUser getSender() {
+		return sender;
+	}
 
-    public void setReceiver(RecordUser receiver) {
-        this.receiver = receiver;
-    }
+	public void setSender(RecordUser own) {
+		this.sender = own;
+	}
 
-    public boolean isShowing() {
-        return showing;
-    }
+	public RecordUser getReceiver() {
+		return receiver;
+	}
 
-    public void setShowing(boolean showing) {
-        this.showing = showing;
-    }
+	public void setReceiver(RecordUser receiver) {
+		this.receiver = receiver;
+	}
 
-    public boolean isDestroyed() {
-        return destroyed;
-    }
+	public long getLastUpdateTime() {
+		return lastUpdateTime;
+	}
 
-    public void setDestroyed(boolean destroyed) {
-        this.destroyed = destroyed;
-        if (destroyed)
-            showing = false;
-    }
+	public void setLastUpdateTime(long lastUpdateTime) {
+		this.lastUpdateTime = lastUpdateTime;
+	}
 
-    public boolean isOpened() {
-        return opened;
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof Information))
+			return false;
+		Information info = (Information) o;
+		return this.recordId.equals(info.getRecordId()) && this.type == info.getType();
+	}
 
-    public void setOpened(boolean opened) {
-        this.opened = opened;
-        if (opened)
-            setShowing(true);
-    }
-
-    public long getLastUpdateTime() {
-        return lastUpdateTime;
-    }
-
-    public void setLastUpdateTime(long lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
-    }
-
-    public boolean isLoaded() {
-        return isLoaded;
-    }
-
-    public void setLoaded(boolean isLoaded) {
-        this.isLoaded = isLoaded;
-    }
-
-    public boolean isLoading() {
-        return loading;
-    }
-
-    public void setLoading(boolean loading) {
-        this.loading = loading;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Information))
-            return false;
-        Information info = (Information) o;
-        return this.recordId.equals(info.getRecordId()) && this.type == info.getType();
-    }
-    
 }
