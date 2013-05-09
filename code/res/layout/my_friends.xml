@@ -21,6 +21,7 @@
             style="@style/expand_listview_base"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="@null"
             android:groupIndicator="@null" >
         </ExpandableListView>
 
@@ -30,6 +31,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="gone"
+            android:divider="@null"
             android:groupIndicator="@null" >
         </ExpandableListView>
     </FrameLayout>

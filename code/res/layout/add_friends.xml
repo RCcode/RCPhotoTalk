@@ -22,7 +22,7 @@
                 android:text="@string/friends_already_use_app"
                 android:textColor="#f1f1f1" />
 
-            <Button
+           <!--  <Button
                 android:id="@+id/btn_continue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/btn_continue"
-                android:background="@drawable/top_line" />
+                android:background="@drawable/top_line" /> -->
         </RelativeLayout>
 
         <TabWidget

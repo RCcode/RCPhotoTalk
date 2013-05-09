@@ -5,6 +5,8 @@ import android.text.TextUtils;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
+import com.nostra13.universalimageloader.core.display.BitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rcplatform.phototalk.R;
 
 public class ImageOptionsFactory {
@@ -27,6 +29,7 @@ public class ImageOptionsFactory {
 			.cacheOnDisc().bitmapConfig(Config.RGB_565)
 			.showStubImage(SMALL_PICTURE_DEFAULT_DRAWABLE)
 			.showImageOnFail(SMALL_PICTURE_DEFAULT_DRAWABLE)
+			.displayer(new RoundedBitmapDisplayer(90))
 			.showImageForEmptyUri(SMALL_PICTURE_DEFAULT_DRAWABLE)
 			.imageScaleType(ImageScaleType.EXACTLY).build();
 
@@ -44,11 +47,14 @@ public class ImageOptionsFactory {
 
 	private static DisplayImageOptions mReceiveImageOption;
 
-	public static DisplayImageOptions getHeadImageOptions(){
-    	if(mHeadImageOptions==null)
-    		mHeadImageOptions=new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.default_head).showStubImage(R.drawable.default_head).build();
-    	return mHeadImageOptions;
-    }
+	public static DisplayImageOptions getHeadImageOptions() {
+		if (mHeadImageOptions == null)
+			mHeadImageOptions = new DisplayImageOptions.Builder()
+					.showImageForEmptyUri(R.drawable.default_head)
+					.displayer(new RoundedBitmapDisplayer(90))
+					.showStubImage(R.drawable.default_head).build();
+		return mHeadImageOptions;
+	}
 
 	public static DisplayImageOptions getDefaultImageOptions() {
 		return defaultImageOption;
@@ -90,7 +96,7 @@ public class ImageOptionsFactory {
 			mPublishImageOptions = new DisplayImageOptions.Builder()
 					.cloneFrom(defaultImageOption)
 					.showImageForEmptyUri(FOLLOW_PUBLISH_PHOTO_DRAWABLE)
-					.cacheInMemory()
+					.cacheInMemory().displayer(new RoundedBitmapDisplayer(90))
 					.showStubImage(FOLLOW_PUBLISH_PHOTO_DRAWABLE).cacheOnDisc()
 					.imageScaleType(ImageScaleType.NONE).build();
 		return mPublishImageOptions;

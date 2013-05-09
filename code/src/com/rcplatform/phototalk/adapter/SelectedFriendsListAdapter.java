@@ -15,7 +15,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Friend;
@@ -113,6 +115,10 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
         // }
         // });
         holder.checkBox.setChecked(statu.get(position));
+//        
+//        DisplayImageOptions options = ImageOptionsFactory.getPublishImageOptions();
+//        options.
+//        options.displayer(new RoundedBitmapDisplayer(90));
         RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
                                    AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, holder.head, R.drawable.default_head);
         holder.name.setText(friend.getNick());

@@ -56,11 +56,11 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private void initView() {
 		// TODO Auto-generated method stub
 
-		Button btnContinue = (Button) findViewById(R.id.btn_continue);
-		btnContinue.setOnClickListener(this);
-		if (getIntent().getData() != null) {
-			btnContinue.setVisibility(View.GONE);
-		}
+//		Button btnContinue = (Button) findViewById(R.id.btn_continue);
+//		btnContinue.setOnClickListener(this);
+//		if (getIntent().getData() != null) {
+//			btnContinue.setVisibility(View.GONE);
+//		}
 		RadioGroup rgTabs = (RadioGroup) findViewById(R.id.rg_add_friends);
 		rgTabs.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -97,12 +97,12 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
-		switch (v.getId()) {
-		case R.id.btn_continue:
-			startActivity(new Intent(this, HomeActivity.class));
-			finish();
-			break;
-		}
+//		switch (v.getId()) {
+//		case R.id.btn_continue:
+//			startActivity(new Intent(this, HomeActivity.class));
+//			finish();
+//			break;
+//		}
 	}
 
 	@Override
