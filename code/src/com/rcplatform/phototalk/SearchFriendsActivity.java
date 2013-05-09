@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
@@ -144,6 +145,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 				mAdapter.notifyDataSetChanged();
 				AddFriendsActivity.addFriend(friend);
+				LogicUtils.friendAdded(friend);
 			}
 
 			@Override

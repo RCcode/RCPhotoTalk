@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.logic;
 
 import com.rcplatform.phototalk.HomeActivity;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 
 public class InformationPageController {
@@ -20,6 +21,15 @@ public class InformationPageController {
 			mActivity.onInformationShowEnd(information);
 	}
 
+	public void clearInformations(){
+		if (mActivity != null)
+			mActivity.clearInformation();
+	}
+	
+	public void friendAdded(Friend friend){
+		if (mActivity != null)
+			mActivity.onFriendAdded(friend);
+	}
 	public void destroy() {
 		mActivity = null;
 	}

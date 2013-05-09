@@ -10,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.content.Intent;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -17,6 +18,7 @@ import com.loopj.android.http.RequestParams;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
+import com.rcplatform.phototalk.utils.Contract.Action;
 
 public class RCPlatformAsyncHttpClient {
 	private static final String CONTENT_TYPE_JSON = "application/json";
@@ -65,6 +67,8 @@ public class RCPlatformAsyncHttpClient {
 							int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
 							if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
 								responseHandler.onSuccess(state, content);
+							} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {
+								context.sendBroadcast(new Intent(Action.ACTION_OTHER_DEVICE_LOGIN));
 							} else {
 								responseHandler.onFailure(state, null);
 							}

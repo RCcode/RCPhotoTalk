@@ -23,7 +23,7 @@ import com.rcplatform.phototalk.views.PageIndicator;
 public class InitPageActivity extends BaseActivity {
 
 	private PageIndicator mPageIndicator;
-	private final int REQUEST_CODE_LOGIN = 100;
+	public static final int REQUEST_CODE_LOGIN = 100;
 	private final int GUIDE_PAGE_COUNT = 10;
 
 	@Override

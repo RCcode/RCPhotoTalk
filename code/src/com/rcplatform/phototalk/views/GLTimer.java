@@ -59,7 +59,6 @@ public class GLTimer extends TextView {
         mSeconds = info.getLimitTime();
         setText("" + mSeconds);
         setVisibility(View.VISIBLE);
-        info.setOpened(true);
         handler.postDelayed(timerTask, 1000);
     }
 
@@ -85,7 +84,6 @@ public class GLTimer extends TextView {
                 handler.removeCallbacks(this);
                 if (endListener != null)
                     endListener.onEnd();
-                infoRecord.setDestroyed(true);
                 return;
             } else {
                 setText(mSeconds + "");

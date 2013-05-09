@@ -50,8 +50,7 @@ import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.HorizontalListView;
 
-public class SettingsActivity extends ImagePickActivity implements
-		View.OnClickListener {
+public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
 	private static final String TAG = "MyFriendsActivity";
 
@@ -107,12 +106,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	}
 
 	private void setUserInfo(UserInfo userInfo) {
-		RCPlatformImageLoader.loadImage(SettingsActivity.this,
-				ImageLoader.getInstance(),
-				ImageOptionsFactory.getHeadImageOptions(),
-				userInfo.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView,
-				R.drawable.default_head);
+		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getHeadImageOptions(), userInfo.getHeadUrl(), AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView, R.drawable.default_head);
 		mNickView.setText("" + userInfo.getNick());
 		userRcId.setText("" + userInfo.getRcId());
 		if (userInfo.getBackground() != null) {
@@ -139,15 +133,12 @@ public class SettingsActivity extends ImagePickActivity implements
 		mBack.setOnClickListener(this);
 		//
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
-		mTitleTextView.setText(getResources().getString(
-				R.string.my_firend_setting_more_title));
+		mTitleTextView.setText(getResources().getString(R.string.my_firend_setting_more_title));
 		mTitleTextView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this,
-				getResources().getString(R.string.login_error),
-				getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
 	}
 
 	@Override
@@ -157,8 +148,7 @@ public class SettingsActivity extends ImagePickActivity implements
 			finish();
 			break;
 		case R.id.settings_user_info_edit_action:
-			startActivityForResult(new Intent(this,
-					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
+			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
 		case R.id.use_account_message:
 			startActivity(new Intent(this, UserInfoActivity.class));
@@ -265,8 +255,7 @@ public class SettingsActivity extends ImagePickActivity implements
 			}
 			if (!file.exists())
 				file.createNewFile();
-			BufferedOutputStream os = new BufferedOutputStream(
-					new FileOutputStream(file)); //
+			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file)); //
 			// b.compress(Bitmap.CompressFormat.JPEG, 100, os);
 			bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
 			os.flush();
@@ -278,7 +267,7 @@ public class SettingsActivity extends ImagePickActivity implements
 	}
 
 	private void doCleanDistory() {
-		LogicUtils.clearInformationHistory(this);
+		LogicUtils.showInformationClearDialog(this);
 	}
 
 	@Override
@@ -288,8 +277,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EDIT_INFO) {
 				setUserInfo((UserInfo) data.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
-				setUserInfo((UserInfo) data
-						.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
+				setUserInfo((UserInfo) data.getSerializableExtra(AccountInfoEditActivity.RESULT_PARAM_USER));
 			}
 		}
 	}
@@ -299,9 +287,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		try {
 			file = new File(imageUrl);
 			if (file != null) {
-				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file,
-						new RCPlatformResponseHandler() {
-
+				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
 							@Override
 							public void onSuccess(int statusCode, String content) {
 								// TODO Auto-generated method stub

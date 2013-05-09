@@ -8,6 +8,9 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
+import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
@@ -96,15 +99,30 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			db.delete(info);
 			db.commit();
 		}
-
 	}
 
 	@Override
 	public void clearInformation() {
 		ObjectSet<Information> result = db.query(Information.class);
-		for(Information info:result){
+		for (Information info : result) {
 			db.delete(info);
 		}
 		db.commit();
+	}
+
+	@Override
+	public void updateFriendRequestInformationByFriend(Friend friend) {
+		Information infoExample = new Information();
+		infoExample.setSender(new RecordUser(friend.getSuid(), null, null));
+		infoExample.setType(InformationType.TYPE_FRIEND_REQUEST_NOTICE);
+		ObjectSet<Information> infos = db.queryByExample(infoExample);
+		if (infos.size() > 0) {
+			List<Information> infoCaches=new ArrayList<Information>();
+			for (Information infoCache : infos) {
+				infoCache.setStatu(InformationState.STATU_QEQUEST_ADDED);
+				infoCaches.add(infoCache);
+			}
+			db.store(infoCaches);
+		}
 	}
 }

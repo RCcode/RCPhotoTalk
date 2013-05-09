@@ -37,6 +37,7 @@ import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListe
 import com.rcplatform.phototalk.api.JSONConver;
 import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Contract;
@@ -290,6 +291,7 @@ protected void initForwordButton(int resId, OnClickListener onClickListener) {
 				// TODO Auto-generated method stub
 				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 				refreshList();
+				LogicUtils.friendAdded(friend);
 				dismissLoadingDialog();
 			}
 
@@ -377,7 +379,6 @@ protected void initForwordButton(int resId, OnClickListener onClickListener) {
 		};
 		thread.start();
 	}
-
 
 	private void deleteFriend(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);

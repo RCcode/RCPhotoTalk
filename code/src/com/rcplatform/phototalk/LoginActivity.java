@@ -186,6 +186,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		}
 
 	};
+	private RCPlatformAsyncHttpClient httpClient;
 
 	private void userLoginSuccess(final UserInfo userInfo) {
 		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME && !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {

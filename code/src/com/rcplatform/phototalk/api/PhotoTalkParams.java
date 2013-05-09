@@ -41,6 +41,7 @@ public class PhotoTalkParams {
 	}
 	public static class InformationStateChange {
 		public static final String PARAM_KEY_INFOS = "notices";
+		public static final String PARAM_KEY_TIME="time";
 	}
 
 	public static class UploadContacts {

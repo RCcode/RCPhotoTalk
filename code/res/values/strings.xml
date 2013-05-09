@@ -135,12 +135,6 @@
     <!-- home view -->
     <string name="sightseer">游客</string>
     <string name="statu_send">Send</string>
-    <string name="statu_delivered">Delivered</string>
-    <string name="statu_received">Received</string>
-    <string name="statu_opened">Opened</string>
-    <string name="statu_opened_1s_ago">Opened 1s ago</string>
-    <string name="statu_received_press_to_show">Opened 1s ago</string>
-    <string name="statu_press_to_show">-press to show</string>
     <string name="statu_added_you">Added you as Friend</string>
     <string name="home_record_add">add</string>
     <string name="home_record_added">added</string>
@@ -149,10 +143,6 @@
     <string name="home_record_added_you_as_friend">added you as friend</string>
     <string name="home_record_waitting">waitting</string>
     <string name="home_record_waitting_and_confirm">waitting for confirm add as friend</string>
-    <string name="home_record_pic_loading">loading</string>
-    <string name="home_record_pic_sending">sending</string>
-    <string name="home_record_pic_send_fail">send fail</string>
-    <string name="home_record_load_fail">"Load Fail"</string>
     <string name="home_clear_all_record">清空所有记录</string>
     <!-- pull to refresh -->
 
@@ -266,5 +256,30 @@
     <string name="check_update">检查更新</string>
     <string name="compact">隐私协议</string>
     <string name="no_new_version">Phototalk已是最新版本</string>
+    <string name="clear_infos_message">确定删除所有消息？</string>
+    <string name="other_device_login">您的账号已在其他设备登陆,请重新登陆</string>
+    <string name="relogin">重新登陆</string>
 
+    <string name="send_sending">正在发送……</string>
+    <string name="send_sended">%1$s-已发送 </string>
+    <string name="send_received"> %1$s-已接收</string>
+    <string name="send_looked">%1$s-已查看 </string>
+    <string name="send_fail">发送失败，点击重新发送</string>
+    
+    <string name="receive_downloading">正在下载……</string>
+    <string name="receive_loaded">%1$s-按住查看</string>
+    <string name="receive_looked">%1$s-已查看</string>
+    <string name="receive_fail">下载失败，点击重新下载</string>
+    
+    <string name="receive_looked_one_second_ago">1秒以前-已查看</string>
+    
+    <string name="minute">%1$d分钟</string>
+    <string name="second">%1$d秒</string>
+    <string name="hour">%1$d小时</string>
+    <string name="day">%1$d天</string>
+    
+    <string name="ago">%1$s以前</string>
+    
+    <string name="added_by_friend">%1$s将我加为好友</string>
+    <string name="added_friend">我将%1$s加为好友</string>
 </resources>

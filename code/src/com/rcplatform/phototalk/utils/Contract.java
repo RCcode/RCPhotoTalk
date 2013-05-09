@@ -17,16 +17,16 @@ public class Contract {
 	public static void init(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
-	
+
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		DATABASE_PATH = context.getFilesDir().getAbsolutePath();
-		PhotoInformationCache.FILE_PATH = Environment.getExternalStorageDirectory().getPath() + "/" + "rcplatform/phototalk";
+		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 	}
 
 	public static class Action {
-		
+
 		/**
 		 * 显示推荐好友详情
 		 */
@@ -54,11 +54,16 @@ public class Contract {
 		/**
 		 * 信息状态更改：信息流传完成
 		 */
-		public static final String ACTION_INFORMATION_OVER="com.rcplatform.phototalk.action.INFORMATION_OVER";
+		public static final String ACTION_INFORMATION_OVER = "com.rcplatform.phototalk.action.INFORMATION_OVER";
 		/**
 		 * 登出
 		 */
 		public static final String ACTION_LOGOUT = "com.rcplatform.phototalk.action.LOGOUT";
+		/**
+		 * 重新登陆
+		 */
+		public static final String ACTION_RELOGIN="com.rcplatform.phototalk.action.RELOGIN";
+		public static final String ACTION_OTHER_DEVICE_LOGIN = "com.rcplatform.phototalk.action.OTHER_DEVICE_LOGIN";
 	}
 
 	public static class Provider {
