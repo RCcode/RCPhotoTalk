@@ -24,7 +24,7 @@
 
             <!-- line1 -->
 
-            <ImageView
+            <com.rcplatform.phototalk.views.HeadImageView
                 android:id="@id/settings_account_head_portrait"
                 android:layout_width="100dp"
                 android:layout_height="100dp"

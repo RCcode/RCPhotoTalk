@@ -4,20 +4,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/linear_letter"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:background="@drawable/friend_title_tiem_bg" >
 
         <TextView
             android:id="@+id/tv_letter"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/first_word_padding" />
-
-        <include layout="@layout/line" />
-    </LinearLayout>
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:text="A"
+            android:textColor="#4F3E36" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -32,6 +33,11 @@
                 android:id="@+id/iv_head"
                 android:layout_width="@dimen/friend_head_width"
                 android:layout_height="@dimen/friend_head_width" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/friend_item_bg" />
 
             <ImageView
                 android:id="@+id/iv_new"

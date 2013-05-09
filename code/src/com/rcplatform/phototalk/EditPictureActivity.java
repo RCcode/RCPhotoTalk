@@ -267,15 +267,15 @@ public class EditPictureActivity extends BaseActivity {
 
 				if (player == null) {
 					try {
-						File file = new File(voicePath);
-						System.out.println("---voicePath---->" + voicePath);
-						if (file.exists()) {
-							System.out.println("asdasd录音文件存在" + file.length()
-									/ 1024 + "kb");
-						} else {
-							System.out.println("asdasd录音文件不存在");
-
-						}
+//						File file = new File(voicePath);
+//						System.out.println("---voicePath---->" + voicePath);
+//						if (file.exists()) {
+//							System.out.println("asdasd录音文件存在" + file.length()
+//									/ 1024 + "kb");
+//						} else {
+//							System.out.println("asdasd录音文件不存在");
+//
+//						}
 
 						player = new MediaPlayer();
 						player.setDataSource(voicePath);
@@ -358,6 +358,10 @@ public class EditPictureActivity extends BaseActivity {
 				// // saveEditedPictrue(mEditableViewGroup.getDrawingCache());
 				if (friend == null) {
 					startSelectFriendActivity();
+				}else{
+					Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
 				}
 				break;
 			case CLOSE_ON_CLICK:
@@ -576,8 +580,6 @@ public class EditPictureActivity extends BaseActivity {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case SAVE_SUCCESS:
-				// if (waitDialog != null && waitDialog.isShowing())
-				// waitDialog.hide();
 				setSaveable(false);
 				if (isSave) {
 					if (friend != null) {
@@ -667,10 +669,6 @@ public class EditPictureActivity extends BaseActivity {
 					}
 				}, String.valueOf(timeSnap), desc, timeLimit,
 				buildUserArray(friend, timeSnap, timeLimit));
-		Intent intent = new Intent(this, HomeActivity.class);
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
-		this.finish();
 	}
 
 	private String buildUserArray(Friend friend, long time, String timeLimit) {

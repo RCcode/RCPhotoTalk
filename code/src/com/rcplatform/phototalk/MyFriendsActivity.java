@@ -26,6 +26,7 @@ import android.view.View.OnCreateContextMenuListener;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
@@ -99,7 +100,16 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private static final int ITEM_ID = 101;
-
+@Override
+protected void initForwordButton(int resId, OnClickListener onClickListener) {
+	// TODO Auto-generated method stub
+//	super.initForwordButton(resId, onClickListener);
+	TextView tvForward=(TextView) findViewById(R.id.choosebutton);
+//	tvForward.setText(resId);
+	tvForward.setBackgroundResource(R.drawable.title_add_friend_btn);
+	tvForward.setOnClickListener(onClickListener);
+	tvForward.setVisibility(View.VISIBLE);
+}
 	private void initView() {
 		initBackButton(R.string.my_firend_title, this);
 		initForwordButton(R.string.add_friend_title, this);

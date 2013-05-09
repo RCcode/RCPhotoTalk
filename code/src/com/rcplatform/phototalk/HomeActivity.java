@@ -341,7 +341,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				showLongClickDialog(arg2 - 1);
+				showLongClickDialog(arg2);
 				return false;
 			}
 		});
@@ -349,7 +349,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Information information = (Information) adapter.getItem(arg2 - 1);
+				Information information = (Information) adapter.getItem(arg2);
 				showFriendDetail(information);
 
 			}
@@ -600,6 +600,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
+		if(mShowDialog!=null&&mShowDialog.isShowing())
+			mShowDialog.dismiss();
 		ImageLoader.getInstance().clearMemoryCache();
 		super.onDestroy();
 	}

@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/friend_info_app_left" >
 
-        <ImageView
+        <com.rcplatform.phototalk.views.HeadImageView
             android:id="@+id/iv_bg"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/user_detail_bg_height"
@@ -41,11 +41,12 @@
             android:layout_alignBottom="@+id/iv_bg"
             android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin" >
 
-            <ImageView
+            <com.rcplatform.phototalk.views.HeadImageView
                 android:id="@+id/iv_head"
                 android:layout_width="@dimen/user_detail_head_image_width"
                 android:layout_height="@dimen/user_detail_head_image_width"
                 android:layout_marginLeft="@dimen/friend_info_app_left"
+                android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/user_detail_source_margin_left"
                 android:background="@drawable/default_head" />
 
