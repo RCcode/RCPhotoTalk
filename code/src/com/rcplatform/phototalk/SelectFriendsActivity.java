@@ -39,19 +39,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PinyinComparator;
@@ -177,7 +179,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 					e.printStackTrace();
 				}
 				if (file.exists()) {
-					sendPicture("123", tempFilePath, timeLimit, sendData);
+					sendPicture(tempFilePath, timeLimit, sendData);
 				} else {
 					sendStringMessage(MSG_WHAT_ERROR,
 							getString(R.string.receive_data_error));
@@ -293,32 +295,32 @@ public class SelectFriendsActivity extends BaseActivity implements
 			file.delete();
 		}
 	}
-	private void sendPicture(final String desc, String imagePath,
+	private void sendPicture( String imagePath,
 			final String timeLimit, final List<Friend> friends) {
 		timeSnap = System.currentTimeMillis();
-
 		final File file = new File(imagePath);
-		FriendsProxy.postZip(
-				SelectFriendsActivity.this,
-				file,
-				new RCPlatformResponseHandler() {
-
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						// TODO Auto-generated method stub
-						deleteTemp();
-						mHandler.obtainMessage(MSG_SEND_SUCCESS).sendToTarget();
-					}
-
-					@Override
-					public void onFailure(int errorCode, String content) {
-						// TODO Auto-generated method stub
-						sendStringMessage(MSG_WHAT_ERROR,
-								getString(R.string.net_error));
-					}
-				}, 
-				String.valueOf(timeSnap),  desc, timeLimit,
-				buildUserArray(friends, timeSnap));
+		LogicUtils.sendPhoto(this, timeLimit, friends, file);
+//		FriendsProxy.postZip(
+//				SelectFriendsActivity.this,
+//				file,
+//				new RCPlatformResponseHandler() {
+//
+//					@Override
+//					public void onSuccess(int statusCode, String content) {
+//						// TODO Auto-generated method stub
+//						deleteTemp();
+//						mHandler.obtainMessage(MSG_SEND_SUCCESS).sendToTarget();
+//					}
+//
+//					@Override
+//					public void onFailure(int errorCode, String content) {
+//						// TODO Auto-generated method stub
+//						sendStringMessage(MSG_WHAT_ERROR,
+//								getString(R.string.net_error));
+//					}
+//				}, 
+//				String.valueOf(timeSnap),  desc, timeLimit,
+//				buildUserArray(friends, timeSnap));
 
 	}
 
@@ -483,5 +485,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 					}
 				});
 
+	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 }

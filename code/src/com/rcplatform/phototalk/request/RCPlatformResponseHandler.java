@@ -1,4 +1,4 @@
-package com.rcplatform.phototalk.api;
+package com.rcplatform.phototalk.request;
 
 
 public interface RCPlatformResponseHandler {

@@ -3,11 +3,11 @@ package com.rcplatform.phototalk.proxy;
 import android.content.Context;
 
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.PhotoTalkParams;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
+import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 
 public class UserSettingProxy {
 	public static void updateUserSetting(Context context, RCPlatformResponseHandler responseHandler, UserInfo userInfo) {

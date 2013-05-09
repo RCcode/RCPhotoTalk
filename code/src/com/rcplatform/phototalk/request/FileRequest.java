@@ -1,17 +1,21 @@
 package com.rcplatform.phototalk.request;
 
-import com.loopj.android.http.RequestParams;
+import java.io.File;
 
 
-public class FileRequest {
-	private RequestParams params;
-
-	public RequestParams getParams() {
-		return params;
+public class FileRequest extends Request{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private File file;
+	
+	public File getFile() {
+		return file;
 	}
 
-	public void setParams(RequestParams params) {
-		this.params = params;
+	public void setFile(File file) {
+		this.file = file;
 	}
 	
 }

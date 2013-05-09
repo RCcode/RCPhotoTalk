@@ -13,6 +13,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.logic.LogicUtils;
@@ -133,5 +135,10 @@ public class BaseActivity extends Activity {
 		tvForward.setText(resId);
 		tvForward.setOnClickListener(onClickListener);
 		tvForward.setVisibility(View.VISIBLE);
+	}
+	@Override
+	protected void onDestroy() {
+		ImageLoader.getInstance().stop();
+		super.onDestroy();
 	}
 }

@@ -10,9 +10,9 @@ import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class ChangePasswordActivity extends BaseActivity implements OnClickListener {

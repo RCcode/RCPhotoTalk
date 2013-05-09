@@ -7,13 +7,14 @@ import android.content.Context;
 
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.PhotoTalkParams;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient.RequestAction;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.request.FileRequest;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
+import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 
 public class FriendsProxy {
 
@@ -73,6 +74,9 @@ public class FriendsProxy {
 //	田镇源 上传zip方法
 	public static void postZip(Context context,File file,
 			RCPlatformResponseHandler responseHandler,String time,String desc,String timeLimit,String user_appary) {
+	
+		
+		
 		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
 				RequestAction.FILE);
 		PhotoTalkParams.buildBasicParams(context, client);

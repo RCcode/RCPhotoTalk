@@ -32,9 +32,9 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 //github.com/RCcode/RCPhotoTalk.git
 

@@ -85,5 +85,4 @@
         android:paddingTop="6dp"
         android:textColor="#ff0000"
         android:textSize="18sp" />
-
 </RelativeLayout>

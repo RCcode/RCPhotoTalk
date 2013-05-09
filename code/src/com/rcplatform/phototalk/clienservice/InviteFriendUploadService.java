@@ -22,10 +22,10 @@ import android.net.Uri;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.PhotoTalkParams;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.utils.Contract;
 
 public class InviteFriendUploadService extends IntentService {

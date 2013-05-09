@@ -9,9 +9,9 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class SystemSettingActivity extends BaseActivity implements OnClickListener {

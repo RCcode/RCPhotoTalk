@@ -14,6 +14,8 @@ public class Contract {
 	public static final String IMAGE_FORMAT = ".jpg";
 	public static final String AUDIO_FORMAT = ".amr";
 
+	public static final String TEMP_INFORMATION_ID = "temp_information";
+	
 	public static void init(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -138,5 +140,6 @@ public class Contract {
 	public static final String KEY_MAX_RECORD_ID = "max_record_id";
 
 	public static final String KEY_BACKGROUND = "background";
+
 
 }

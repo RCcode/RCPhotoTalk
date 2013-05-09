@@ -1,15 +1,10 @@
 package com.rcplatform.phototalk;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -31,29 +26,22 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
-import com.rcplatform.phototalk.api.JSONConver;
-import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.RecordUser;
-import com.rcplatform.phototalk.bean.ServiceRecordInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.PhotoChatHttpLoadTextCallBack;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.InformationPageController;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.RecordInfoProxy;
+import com.rcplatform.phototalk.request.JSONConver;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
@@ -85,9 +73,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private static final int REFRESH_FAIL = 6;
 
-	private PullToRefreshView mRefreshView;
+	private PullToRefreshView mPtrView;
 
-	private SnapListView mRecordListView;
+	private SnapListView mInformationList;
 
 	private Button mTakePhoto;
 
@@ -96,8 +84,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	protected LongClickShowView mShowDialog;
 
 	private boolean isShow;
-
-	private MenueApplication app;
 
 	private TextView mTvContentTitle;
 
@@ -117,8 +103,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
 		InformationPageController.getInstance().setupController(this);
-		app = getPhotoTalkApplication();
-		app.addActivity(this.getClass().getName(), this);
 		initViewAndListener();
 		loadDataFromDataBase();
 		loadRecords();
@@ -126,7 +110,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void loadRecords() {
-		mRefreshView.setRefreshing();
+		// mRefreshView.setRefreshing();
 		RecordInfoProxy.getAllRecordInfos(this, new RCPlatformResponseHandler() {
 
 			@Override
@@ -137,7 +121,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			@Override
 			public void onFailure(int errorCode, String content) {
 				showErrorConfirmDialog(content);
-				mRefreshView.onHeaderRefreshComplete();
+				// mRefreshView.onHeaderRefreshComplete();
 			}
 		});
 	}
@@ -151,11 +135,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 					JSONObject obj = new JSONObject(serviceContent);
 					int noticeId = obj.getInt("noticeId");
 					PrefsUtils.User.setUserMaxRecordInfoId(HomeActivity.this, getPhotoTalkApplication().getCurrentUser().getEmail(), noticeId);
-					@SuppressWarnings("unchecked")
-					List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(obj.getJSONArray("mainUserNotice").toString(), new TypeToken<List<ServiceRecordInfo>>() {
-					}.getType());
-
-					List<Information> listinfo = convertData(recordInfo);
+					List<Information> listinfo = JSONConver.jsonToInformations(obj.getJSONArray("mainUserNotice").toString());
 					filterList(listinfo);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -212,12 +192,14 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			relogin();
 			return;
 		}
-		if (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from"))) {
-			long time = intent.getLongExtra("time", 0);
-			if (app.getSendRecordsList(time) != null) {
-				initOrRefreshListView(app.getSendRecordsList(time));
-			}
-		}
+		// if
+		// (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from")))
+		// {
+		// long time = intent.getLongExtra("time", 0);
+		// if (app.getSendRecordsList(time) != null) {
+		// initOrRefreshListView(app.getSendRecordsList(time));
+		// }
+		// }
 	}
 
 	private void logout() {
@@ -279,21 +261,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	//
 	// }
 
-	private String buildUserArray(RecordUser receiver) {
-		try {
-			JSONArray array = new JSONArray();
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("userId", receiver.getSuid());
-			jsonObject.put("headUrl", receiver.getHeadUrl());
-			jsonObject.put("nick", receiver.getNick());
-			array.put(jsonObject);
-			return array.toString();
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-		return "";
-	}
-
 	private void loadDataFromDataBase() {
 		new Thread(new Runnable() {
 
@@ -317,9 +284,16 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void initViewAndListener() {
-		mRefreshView = (PullToRefreshView) findViewById(R.id.rf_home);
-		mRecordListView = (SnapListView) findViewById(R.id.lv_home);
-		mRecordListView.setSnapListener(this);
+		mPtrView = (PullToRefreshView) findViewById(R.id.ptr_home);
+		mPtrView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
+
+			@Override
+			public void onHeaderRefresh(PullToRefreshView view) {
+				loadRecords();
+			}
+		});
+		mInformationList = (SnapListView) findViewById(R.id.lv_home);
+		mInformationList.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
 		mRecord = (Button) findViewById(R.id.btn_home_record);
 
@@ -363,30 +337,31 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				startActivity(new Intent(HomeActivity.this, VideoRecordActivity.class));
 			}
 		});
-		mRecordListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				showLongClickDialog(arg2);
+				showLongClickDialog(arg2 - 1);
 				return false;
 			}
 		});
-		mRecordListView.setOnItemClickListener(new OnItemClickListener() {
+		mInformationList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Information information = (Information) adapter.getItem(arg2);
+				Information information = (Information) adapter.getItem(arg2 - 1);
 				showFriendDetail(information);
 
 			}
 		});
-		mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
-
-			@Override
-			public void onHeaderRefresh(PullToRefreshView view) {
-				loadRecords();
-			}
-		});
+		// mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener()
+		// {
+		//
+		// @Override
+		// public void onHeaderRefresh(PullToRefreshView view) {
+		// loadRecords();
+		// }
+		// });
 	}
 
 	private void showFriendDetail(Information information) {
@@ -455,16 +430,16 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, null, null, mRecordListView, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
+		RCPlatformImageLoader.LoadPictureForList(this, null, null, mInformationList, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
 
 	private void show(int position) {
 
-		Information infoRecord = ((Information) mRecordListView.getAdapter().getItem(position));
+		Information infoRecord = (Information) adapter.getItem(position);
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
 				LogicUtils.startShowPhotoInformation(infoRecord);
@@ -561,16 +536,16 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				if (msg.obj != null) {
 					initOrRefreshListView((List<Information>) msg.obj);
 				}
-				mRefreshView.onHeaderRefreshComplete();
+				mPtrView.onHeaderRefreshComplete();
 				break;
 			case LOAD_MORE_SUCCESS:
-				mRefreshView.onFooterRefreshComplete();
+				mPtrView.onHeaderRefreshComplete();
 				break;
 			case LOAD_MORE_FAIL:
-				mRefreshView.onFooterRefreshComplete();
+				mPtrView.onHeaderRefreshComplete();
 				break;
 			case REFRESH_FAIL:
-				mRefreshView.onHeaderRefreshComplete();
+				mPtrView.onHeaderRefreshComplete();
 				break;
 			}
 		};
@@ -582,101 +557,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			return;
 		}
 		if (adapter == null) {
-			adapter = new PhotoTalkMessageAdapter(this, data, mRecordListView);
-			sortList(getAdapterData());
-			mRecordListView.setAdapter(adapter);
+			sortList(data);
+			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList);
+			mInformationList.setAdapter(adapter);
 		} else {
-			getAdapterData().addAll(data);
-			sortList(getAdapterData());
+			adapter.addData(data);
 			adapter.notifyDataSetChanged();
-		}
-	}
-
-	/**
-	 * 把服务器返回的数据list 转换为本地需要的list
-	 * 
-	 * @param list
-	 *            服务器的list
-	 * @return 本地需要的list
-	 */
-	private List<Information> convertData(List<ServiceRecordInfo> list) {
-		List<Information> data = new ArrayList<Information>();
-		Information infoRecord;
-		for (ServiceRecordInfo info : list) {
-			infoRecord = new Information();
-			infoRecord.setRecordId(info.getId().trim());
-			infoRecord.setCreatetime(info.getCrtTime());
-			infoRecord.setTotleLength(info.getTime());
-			infoRecord.setLimitTime(info.getTime());
-			infoRecord.setSender(new RecordUser(info.getSeSuid(), info.getSnick(), info.getShead()));
-			infoRecord.setReceiver(new RecordUser(info.getReSuid(), info.getRnick(), info.getRhead()));
-			infoRecord.setStatu(info.getState());
-			infoRecord.setType(info.getType());
-			infoRecord.setUrl(info.getPicUrl());
-			infoRecord.setLastUpdateTime(info.getUpdTime());
-			infoRecord.setReceiveTime(System.currentTimeMillis());
-			data.add(infoRecord);
-		}
-		list.clear();
-		list = null;
-		return data;
-	}
-
-	public void callBackForSend(long time, String text) {
-		if (text == null || text.length() <= 0) {
-			if (app.getSendRecordsList(time) != null) {
-				for (Information info : app.getSendRecordsList(time)) {
-					info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
-				}
-				// 把当前这次发送错误的信息写入数据库保存，并删除app中的引用
-			}
-			initOrRefreshListView(null);
-			return;
-		}
-		try {
-			JSONObject jsonObject = null;
-			jsonObject = new JSONObject(text);
-			int state = jsonObject.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-			if (state == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-				List<ServiceRecordInfo> recordInfo = (List<ServiceRecordInfo>) new Gson().fromJson(jsonObject.getJSONArray("noticeList").toString(), new TypeToken<List<ServiceRecordInfo>>() {
-				}.getType());
-				if (recordInfo != null && recordInfo.size() > 0) {
-					if (app.getSendRecordsList(time) != null && app.getSendRecordsList(time).size() > 0) {
-						// 删除 本地缓存的图片
-						String fileName = app.getSendRecordsList(time).get(0).getUrl();
-						app.deleteSendFileCache(fileName);
-						// 删除app 中的记录
-						app.getSendRecords().remove(time);
-						// 删除 list列表里面的
-						clearListDataByTime(getAdapterData(), time);
-
-						List<Information> listinfo = convertData(recordInfo);
-
-						filterList(listinfo);
-					}
-				}
-			} else {
-				if (app.getSendRecordsList(time) != null) {
-					for (Information info : app.getSendRecordsList(time)) {
-						if (info.getCreatetime() == time) {
-							info.setStatu(InformationState.STATU_NOTICE_SEND_FAIL);
-						}
-					}
-				}
-				initOrRefreshListView(null);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void clearListDataByTime(List<Information> data2, long time) {
-		Iterator<Information> iterator = data2.iterator();
-		while (iterator.hasNext()) {
-			Information infoRecord = iterator.next();
-			if (infoRecord.getCreatetime() == time && (infoRecord.getRecordId().equals(MenueApiFactory.ERROR_NOTICE))) {
-				iterator.remove();
-			}
 		}
 	}
 
@@ -711,10 +597,10 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	protected void onDestroy() {
-		app.removeActivity(this.getClass().getName());
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
+		ImageLoader.getInstance().clearMemoryCache();
 		super.onDestroy();
 	}
 
@@ -738,8 +624,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	public void snapShow() {
-		if (mRecordListView.getAdapter() != null) {
-			int pos = ((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getPressedPosition();
+		if (adapter != null) {
+			int pos = adapter.getPressedPosition();
 			if (pos >= 0) {
 				show(pos);
 			}
@@ -748,8 +634,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	public void snapHide() {
-		if (mRecordListView.getAdapter() != null)
-			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).resetPressedInformation();
+		if (adapter != null)
+			adapter.resetPressedInformation();
 	}
 
 	private void checkUpdate() {
@@ -761,15 +647,15 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		String buttonTag = information.getRecordId() + Button.class.getName();
 		String statuTag = information.getRecordId() + TextView.class.getName();
 		String newTag = information.getRecordId() + ImageView.class.getName();
-		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mRecordListView.findViewWithTag(buttonTag);
+		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
 			timerLimitView.setVisibility(View.GONE);
 		}
-		TextView statu = ((TextView) mRecordListView.findViewWithTag(statuTag));
+		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {
 			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getReceiveTime())));
 		}
-		View newView = mRecordListView.findViewWithTag(newTag);
+		View newView = mInformationList.findViewWithTag(newTag);
 		if (newView != null)
 			newView.setVisibility(View.GONE);
 	}
@@ -784,12 +670,32 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			}
 			adapter.notifyDataSetChanged();
 		}
+
 	}
 
 	public void clearInformation() {
-		if (mRecordListView.getAdapter() != null) {
-			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).getData().clear();
-			((PhotoTalkMessageAdapter) mRecordListView.getAdapter()).notifyDataSetChanged();
+		if (adapter != null) {
+			adapter.getData().clear();
+			adapter.notifyDataSetChanged();
+		}
+	}
+
+	public void onPhotoSending(List<Information> informations) {
+		sendDataLoadedMessage(informations);
+	}
+
+	public void onPhotoSendSuccess(Map<String, Information> informations, long flag) {
+		List<Information> localInfos = getAdapterData();
+		if (localInfos != null) {
+			for (Information info : localInfos) {
+				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.STATU_NOTICE_SENDING && info.getCreatetime() == flag && info.getRecordId().startsWith(Contract.TEMP_INFORMATION_ID)) {
+					Information serviceInformation = informations.get(info.getReceiver().getSuid());
+					info.setCreatetime(serviceInformation.getCreatetime());
+					info.setStatu(serviceInformation.getStatu());
+					info.setRecordId(serviceInformation.getRecordId());
+				}
+			}
+			adapter.notifyDataSetChanged();
 		}
 	}
 }

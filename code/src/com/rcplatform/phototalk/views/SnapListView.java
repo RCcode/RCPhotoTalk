@@ -57,7 +57,6 @@ public class SnapListView extends ListView {
 	public void setSnapListener(SnapShowListener listener) {
 		this.snapListener = listener;
 	}
-
 	public boolean onTouchEvent(MotionEvent event) {
 		super.onTouchEvent(event);
 		final int action = event.getAction();

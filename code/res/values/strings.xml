@@ -146,9 +146,6 @@
     <string name="home_clear_all_record">清空所有记录</string>
     <!-- pull to refresh -->
 
-    <string name="pull_to_refresh_pull_label">pull to refresh</string>
-    <string name="pull_to_refresh_release_label">let it go to refresh</string>
-    <string name="pull_to_refresh_refreshing_label">refreshing\u2026</string>
     <string name="pull_to_refresh_footer_release_label">let it go to load</string>
     <string name="pull_to_refresh_footer_pull_label">pull up to load more</string>
     <string name="pull_to_refresh_footer_refreshing_label">loading\u2026</string>

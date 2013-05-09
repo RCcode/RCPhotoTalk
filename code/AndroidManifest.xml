@@ -4,8 +4,8 @@
     android:versionName="@string/version" >
 
     <uses-sdk
-        android:minSdkVersion="10"
-        android:targetSdkVersion="10" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="17" />
 
     <supports-screens
         android:anyDensity="true"
@@ -234,6 +234,7 @@
         <service android:name="com.rcplatform.phototalk.clienservice.PTBackgroundService" />
         <service android:name="com.rcplatform.phototalk.clienservice.InviteFriendUploadService" />
         <service android:name="com.rcplatform.phototalk.clienservice.InformationStateChangeService" />
+        <service android:name="com.rcplatform.phototalk.clienservice.PhotoTalkWebService" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

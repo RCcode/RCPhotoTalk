@@ -40,6 +40,8 @@ public class PhotoInformationCountDownService {
 	}
 
 	public void addInformation(Information info) {
+		info.setStatu(InformationState.STATU_NOTICE_SHOWING);
+		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
 		mShowingInformations.put(info.getRecordId(), info);
 		sendDelayMessage(info);
 		startCountDown(info);

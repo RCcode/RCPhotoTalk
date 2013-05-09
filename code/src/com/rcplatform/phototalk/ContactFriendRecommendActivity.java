@@ -9,10 +9,10 @@ import android.os.Bundle;
 
 import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
-import com.rcplatform.phototalk.api.JSONConver;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.request.JSONConver;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.ContactQuery.OnContactsQueryCompleteListener;
 import com.rcplatform.phototalk.utils.ContactUtil;
 

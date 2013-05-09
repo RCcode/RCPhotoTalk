@@ -1,4 +1,4 @@
-package com.rcplatform.phototalk.api;
+package com.rcplatform.phototalk.request;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,6 +47,8 @@ public class RCPlatformAsyncHttpClient {
 	public void clearParams() {
 		if (mAction == RequestAction.JSON)
 			mParams.clear();
+		else if (mAction == RequestAction.FILE)
+			mRequestParams = new RequestParams();
 	}
 
 	public void cancel() {

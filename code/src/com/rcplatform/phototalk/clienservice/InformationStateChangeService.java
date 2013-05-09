@@ -21,11 +21,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.PhotoTalkParams;
-import com.rcplatform.phototalk.api.RCPlatformResponse;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
+import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 

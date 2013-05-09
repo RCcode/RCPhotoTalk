@@ -19,10 +19,10 @@ import android.content.Context;
 import android.os.Handler;
 
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.PhotoTalkParams;
-import com.rcplatform.phototalk.api.RCPlatformResponse;
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
+import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 

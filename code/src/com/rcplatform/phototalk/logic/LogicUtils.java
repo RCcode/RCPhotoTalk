@@ -1,8 +1,15 @@
 package com.rcplatform.phototalk.logic;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,14 +18,22 @@ import android.content.Intent;
 import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.request.FileRequest;
+import com.rcplatform.phototalk.request.JSONConver;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -154,13 +169,11 @@ public class LogicUtils {
 		DialogUtil.showInformationClearConfirmDialog(context, R.string.clear_infos_message, R.string.cancel, R.string.confirm, listener);
 	}
 
-	
-	public static void deleteInformation(Context context,Information information){
+	public static void deleteInformation(Context context, Information information) {
 		PhotoTalkDatabaseFactory.getDatabase().deleteInformation(information);
 		updateInformationState(context, Action.ACTION_INFORMATION_DELETE, information);
 	}
-	
-	
+
 	public static void logout(Context context) {
 		doLogoutOperation(context);
 		Intent intent = new Intent(context, HomeActivity.class);
@@ -179,5 +192,92 @@ public class LogicUtils {
 		intent.setAction(Action.ACTION_RELOGIN);
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		context.startActivity(intent);
+	}
+
+	public static void sendPhoto(Context context, String timeLimit, List<Friend> friends, File file) {
+		try {
+			long flag = System.currentTimeMillis();
+			UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+			String userArray = buildSendPhotoTempInformations(currentUser, friends, flag);
+			FileRequest request = new FileRequest();
+			request.setFile(file);
+			PhotoTalkParams.buildBasicParams(context, request);
+			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
+			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
+			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, userArray);
+			request.setResponseHandler(new RCPlatformResponseHandler() {
+
+				@Override
+				public void onSuccess(int statusCode, String content) {
+					try {
+						JSONObject jsonObject = new JSONObject(content);
+						List<Information> infos = JSONConver.jsonToInformations(jsonObject.getJSONArray("noticeList").toString());
+						Map<String, Information> serviceInformations = new HashMap<String, Information>();
+						long flag = jsonObject.getLong("time");
+						Information infoSelf = null;
+						for (Information info : infos) {
+							if (info.getReceiver().getSuid().equals(info.getSender().getSuid())) {
+								infoSelf = info;
+								continue;
+							}
+							info.setReceiveTime(flag);
+							serviceInformations.put(info.getReceiver().getSuid(), info);
+						}
+						if (infoSelf != null)
+							infos.remove(infoSelf);
+						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(infos, flag);
+						InformationPageController.getInstance().photosSendSuccess(serviceInformations, flag);
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+
+				@Override
+				public void onFailure(int errorCode, String content) {
+
+				}
+			});
+			request.setUrl(MenueApiUrl.SEND_PICTURE_URL);
+			((MenueApplication) context.getApplicationContext()).getWebService().postRequest(request);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static String buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag) throws JSONException {
+		JSONArray array = new JSONArray();
+		List<Information> infoRecords = new ArrayList<Information>();
+		for (Friend f : friends) {
+
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put(PhotoTalkParams.SendPhoto.PARAM_KEY_RECEIVER_ID, f.getSuid());
+			array.put(jsonObject);
+			if (f.getSuid().equals(currentUser.getSuid()))
+				continue;
+			Information record = new Information();
+			record.setRecordId(Contract.TEMP_INFORMATION_ID + record.hashCode());
+			record.setCreatetime(flag);
+			record.setReceiveTime(flag);
+			// 发送者信息
+			RecordUser user = new RecordUser();
+			user.setHeadUrl(currentUser.getHeadUrl());
+			user.setNick(currentUser.getNick());
+			user.setSuid(currentUser.getSuid());
+			record.setSender(user);
+			// 接受者信息
+			user = new RecordUser();
+			user.setNick(f.getNick());
+			user.setHeadUrl(f.getHeadUrl());
+			user.setSuid(f.getSuid());
+			record.setReceiver(user);
+			// 信息类型为发图，状态正在发送
+			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
+			record.setStatu(InformationState.STATU_NOTICE_SENDING);
+			infoRecords.add(record);
+		}
+		PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infoRecords);
+		InformationPageController.getInstance().sendPhotos(infoRecords);
+		return array.toString();
 	}
 }

@@ -14,10 +14,10 @@ import android.widget.TextView;
 
 import com.facebook.model.GraphUser;
 import com.rcplatform.phototalk.activity.FacebookActivity;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.FacebookUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 

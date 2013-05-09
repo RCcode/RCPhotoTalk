@@ -14,7 +14,9 @@ public interface PhotoTalkDatabase {
 	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends);
 
 	public void saveRecordInfos(List<Information> recordInfos);
-
+	
+	public void updateTempInformations(List<Information> informations,long flag);
+	
 	public List<Information> getRecordInfos();
 
 	public void updateInformationState(Information...informations);

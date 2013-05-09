@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.api.PhotoTalkParams;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.api.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
+import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 import android.content.Context;

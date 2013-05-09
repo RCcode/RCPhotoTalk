@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.adapter;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
@@ -29,13 +29,14 @@ import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 
 public class PhotoTalkMessageAdapter extends BaseAdapter {
 
-	private final List<Information> data;
+	private final LinkedList<Information> data = new LinkedList<Information>();
 
 	private final Context context;
 
@@ -49,7 +50,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	private int mPressedPosition = -1;
 
 	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView ls) {
-		this.data = data;
+		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = ImageLoader.getInstance();
 		this.listView = ls;
@@ -69,7 +70,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return 0;
 	}
-
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		//
@@ -92,9 +92,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					LogUtil.e("item down");
 					mPressedInformation = record;
 					mPressedPosition = position;
+				}else if(event.getAction()==MotionEvent.ACTION_MOVE){
+					LogUtil.e("move");
 				}
 				return false;
 			}
@@ -188,7 +189,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		}
 		return convertView;
 	}
-
 	private void initReceiverView(final Information record, String statuTag, String buttonTag) {
 		holder.statuButton.setBackgroundDrawable(null);
 		holder.statuButton.setText(null);
@@ -239,6 +239,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private void initSenderView(Information record) {
 		// 如果当前用户是发送者
+
 		holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 		holder.statuButton.setText(null);
 		holder.statuButton.stopTask();
@@ -334,7 +335,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	class ViewHolder {
-
+		View touchView;
 		ImageView head;
 		ImageView item_new;
 
@@ -352,7 +353,12 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	public List<Information> getData() {
 		return data;
 	}
-
+	public void addData(List<Information> data){
+		for(Information info:data){
+			this.data.addFirst(info);
+		}
+		notifyDataSetChanged();
+	}
 	public static interface OnInformationPressListener {
 		public void onPress(Information information);
 	}

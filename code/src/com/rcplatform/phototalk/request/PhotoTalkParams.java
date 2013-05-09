@@ -1,4 +1,4 @@
-package com.rcplatform.phototalk.api;
+package com.rcplatform.phototalk.request;
 
 import java.util.Locale;
 
@@ -23,25 +23,32 @@ public class PhotoTalkParams {
 	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
 	public static String PARAM_VALUE_APP_ID = "1";
 
-	
-	public static class ChangePassword{
-		public static final String PARAM_KEY_CHECK_PASSWORD="pwd";
-		public static final String PARAM_KEY_NEW_PASSWORD="newpwd";
+	public static class ChangePassword {
+		public static final String PARAM_KEY_CHECK_PASSWORD = "pwd";
+		public static final String PARAM_KEY_NEW_PASSWORD = "newpwd";
 	}
-	public static class UserSetting{
-		public static final String PARAM_KEY_TREND_SETTING="tset";
-		public static final String PARAM_KEY_RECEIVE_SETTING="rset";
+	public static class SendPhoto{
+		public static final String PARAM_KEY_FLAG="time";
+		public static final String PARAM_KEY_TIME_LIMIT="timeLimit";
+		public static final String PARAM_KEY_USERS="userArray";
+		public static final String PARAM_KEY_RECEIVER_ID = "userId";
 	}
-	
+	public static class UserSetting {
+		public static final String PARAM_KEY_TREND_SETTING = "tset";
+		public static final String PARAM_KEY_RECEIVE_SETTING = "rset";
+	}
+
 	public static class SearchFriends {
 		public static final String PARAM_KEY_KEYWORDS = "keyword";
 	}
-	public static class ClearInformation{
-		public static final String PARAM_KEY_NOTICE_ID="noticeId";
+
+	public static class ClearInformation {
+		public static final String PARAM_KEY_NOTICE_ID = "noticeId";
 	}
+
 	public static class InformationStateChange {
 		public static final String PARAM_KEY_INFOS = "notices";
-		public static final String PARAM_KEY_TIME="time";
+		public static final String PARAM_KEY_TIME = "time";
 	}
 
 	public static class UploadContacts {
@@ -86,6 +93,20 @@ public class PhotoTalkParams {
 		client.putRequestParam(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
 	}
 
+	public static void buildBasicParams(Context context, Request request) {
+		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		if (userInfo != null) {
+			request.putParam(PARAM_KEY_USER_ID, userInfo.getSuid());
+			request.putParam(PARAM_KEY_TOKEN, userInfo.getToken());
+		} else {
+			request.putParam(PARAM_KEY_USER_ID, UserInfo.DEFAULT_USER_ID);
+			request.putParam(PARAM_KEY_TOKEN, UserInfo.DEFAULT_TOKEN);
+		}
+		request.putParam(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
+		request.putParam(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
+		request.putParam(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
+	}
+
 	public static class UpdateBindState {
 		public static final String PARAM_KEY_BIND_TIME = "time";
 		public static final String PARAM_KEY_BIND_NUMBER = "phone";
@@ -110,10 +131,12 @@ public class PhotoTalkParams {
 	public static class DelFriends {
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
 	}
-	public static class DelRecommend{
-		public static final String PARAM_KEY_FRIEND_ID="atUserId";
-		public static final String PARAM_KEY_RECOMMEND_TYPE="attrType";
+
+	public static class DelRecommend {
+		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+		public static final String PARAM_KEY_RECOMMEND_TYPE = "attrType";
 	}
+
 	public static class UpdateFriendRemark {
 		public static final String PARAM_KEY_REMARK = "mark";
 		public static final String PARAM_KEY_FRIEND_ID = "atUserId";

@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
+import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
@@ -83,13 +84,20 @@ public class MenueApplication extends Application {
 	}
 
 	private PTBackgroundService mService;
-
+	private PhotoTalkWebService mWebService;
 	public void setService(PTBackgroundService service) {
 		this.mService = service;
 	}
-
 	public PTBackgroundService getService() {
 		return mService;
+	}
+	
+	public PhotoTalkWebService getWebService() {
+		return mWebService;
+	}
+
+	public void setWebService(PhotoTalkWebService webService) {
+		this.mWebService = webService;
 	}
 
 	public String getCacheFilePath() {
@@ -231,4 +239,5 @@ public class MenueApplication extends Application {
 		mService.setCurrentUser(userInfo);
 		PhotoTalkDatabaseFactory.open(userInfo);
 	}
+	
 }
