@@ -66,10 +66,11 @@
                         android:background="@color/TRANSPARENT"
                         android:padding="@dimen/user_detail_info_padding" >
 
-                        <ImageView
+                        <com.rcplatform.phototalk.views.HeadImageView
                             android:id="@+id/settings_account_head_portrait"
                             android:layout_width="@dimen/user_detail_head_image_width"
                             android:layout_height="@dimen/user_detail_head_image_width"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginRight="@dimen/user_detail_source_margin_left" />
 
                         <LinearLayout
@@ -253,6 +254,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
+                    android:textColor="#313131" 
                     android:text="@string/about" >
                 </TextView>
 
@@ -264,37 +266,6 @@
                     android:layout_marginRight="5dp"
                     android:src="@drawable/right_arrow" />
             </RelativeLayout>
-            <!-- line4 -->
-
-
-            <!--
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/default_gap"
-                    android:layout_marginRight="@dimen/default_gap"
-                    android:layout_marginTop="@dimen/default_gap_2x"
-                    android:gravity="center_vertical"
-                    android:text="谁可以给我发送图片"
-                    android:textColor="@color/black" >
-                </TextView>
-
-                <Spinner
-                    android:id="@id/settings_private_send_photo_spinner"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/default_gap"
-                    android:layout_marginRight="@dimen/default_gap" >
-                </Spinner>
-            </LinearLayout>            -->
-
-
-            <!-- line5 -->
 
             <Button
                 android:id="@id/settings_clean_history_record_btn"

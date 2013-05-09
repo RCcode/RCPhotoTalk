@@ -311,6 +311,8 @@ public class Utils {
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
+		// options.outHeight=200;
+		// options.outWidth=200;
 		BitmapFactory.decodeFile(filename, options);
 		// Calculate inSampleSize
 		int inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight,
@@ -557,29 +559,28 @@ public class Utils {
 		return result;
 	}
 
-	// 生成圆角图片
+	// 生成圆形图片
 
-	public static Bitmap GetRoundedCornerBitmap(Bitmap bitmap) {
+	public static Bitmap getRoundedCornerBitmap(Bitmap bitmap) {
 
 		try {
 
 			Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
 
 			bitmap.getHeight(), Config.ARGB_8888);
-
 			Canvas canvas = new Canvas(output);
 
-			 Paint paint = new Paint();
+			Paint paint = new Paint();
 
-			 Rect rect = new Rect(0, 0, bitmap.getWidth(),
+			Rect rect = new Rect(0, 0, bitmap.getWidth(),
 
 			bitmap.getHeight());
 
-			 RectF rectF = new RectF(new Rect(0, 0, bitmap.getWidth(),
+			RectF rectF = new RectF(new Rect(0, 0, bitmap.getWidth(),
 
 			bitmap.getHeight()));
 
-			final float roundPx = 14;
+			final float roundPx = bitmap.getWidth() / 2;
 
 			paint.setAntiAlias(true);
 
@@ -596,7 +597,10 @@ public class Utils {
 			bitmap.getHeight());
 
 			canvas.drawBitmap(bitmap, src, rect, paint);
-
+			if (bitmap != null && !bitmap.isRecycled()) {
+				bitmap.recycle();
+				bitmap = null;
+			}
 			return output;
 
 		} catch (Exception e) {
@@ -606,17 +610,24 @@ public class Utils {
 		}
 
 	}
-	//将其转换为圆形 bitmap
-	public static Bitmap GetOvalBitmap(Bitmap bitmap) {
-		int w = bitmap.getWidth();
-        int h = bitmap.getHeight();
-        Bitmap ovalBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(bitmap);
-        Paint paint = new Paint(1);
-        paint.setColor(0xff000000);
-        RectF rectf = new RectF(0F, 0F, w, h);
-        canvas.drawOval(rectf, paint);
-        return ovalBitmap; 			
+
+	// 头像图片保存为正方形
+	public static Bitmap getRectBitmap(Bitmap bitmap) {
+		Bitmap output = null;
+		if (bitmap.getWidth() > bitmap.getHeight()) {
+			output = Bitmap.createBitmap(bitmap,
+					bitmap.getWidth() / 2 - bitmap.getHeight() / 2, 0,
+					bitmap.getHeight(), bitmap.getHeight());
+		} else {
+			output = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight() / 2
+					- bitmap.getWidth() / 2, bitmap.getWidth(),
+					bitmap.getWidth());
+		}
+		if (bitmap != null && !bitmap.isRecycled()) {
+			bitmap.recycle();
+			bitmap = null;
+		}
+		return output;
 	}
 
 }

@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.HorizontalListView;
 
 public class FriendDetailActivity extends BaseActivity {
@@ -36,7 +37,7 @@ public class FriendDetailActivity extends BaseActivity {
 	public static final String RESULT_PARAM_FRIEND = "friend";
 
 	private String mAction;
-	private ImageView ivHead;
+	private HeadImageView ivHead;
 	private ImageView ivBackground;
 	private Button btnEdit;
 	private TextView tvSexAge;
@@ -109,7 +110,7 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void initView() {
-		ivHead = (ImageView) findViewById(R.id.iv_head);
+		ivHead = (HeadImageView) findViewById(R.id.iv_head);
 		ivBackground = (ImageView) findViewById(R.id.iv_bg);
 		btnEdit = (Button) findViewById(R.id.btn_edit);
 		tvSexAge = (TextView) findViewById(R.id.tv_sex_age);

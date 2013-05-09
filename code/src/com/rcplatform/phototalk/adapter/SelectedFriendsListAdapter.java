@@ -21,143 +21,136 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 
 public class SelectedFriendsListAdapter extends BaseAdapter {
 
-    private final List<Friend> data;
+	private final List<SelectFriend> data;
 
-    private final Context context;
+	private final Context context;
 
-    private final String[] mLetters;
+	private final String[] mLetters;
 
-    private ViewHolder holder;
+	private ViewHolder holder;
 
-    private final ImageLoader mImageLoader;
+	private final ImageLoader mImageLoader;
 
-    private final Map<Integer, Boolean> statu = new HashMap<Integer, Boolean>();
+	// private final static Map<Integer, Boolean> statu = new HashMap<Integer,
+	// Boolean>();
 
-    private OnCheckBoxChangedListener mCheckBoxChangedListener;
+	private OnCheckBoxChangedListener mCheckBoxChangedListener;
 
-    public interface OnCheckBoxChangedListener {
+	public interface OnCheckBoxChangedListener {
 
-        void onChange(Friend friend, boolean isChecked);
-    }
+		void onChange(SelectFriend friend, boolean isChecked, int position);
+	}
 
-    public SelectedFriendsListAdapter(Context context, List<Friend> data) {
-        this.data = data;
-        this.context = context;
-        mLetters = new String[data.size()];
-        for (int i = 0; i < mLetters.length; i++) {
-            mLetters[i] = data.get(i).getLetter();
-        }
-        this.mImageLoader = ImageLoader.getInstance();
-        for (int i = 0; i < data.size(); i++) {
-            statu.put(i, false);
-        }
-    }
+	public SelectedFriendsListAdapter(Context context, List<SelectFriend> data) {
+		this.data = data;
+		this.context = context;
+		mLetters = new String[data.size()];
+		for (int i = 0; i < mLetters.length; i++) {
+			mLetters[i] = data.get(i).getLetter();
+		}
+		this.mImageLoader = ImageLoader.getInstance();
+	}
 
-    @Override
-    public int getCount() {
-        return data != null ? data.size() : 0;
-    }
+	@Override
+	public int getCount() {
+		return data != null ? data.size() : 0;
+	}
 
-    @Override
-    public Object getItem(int position) {
-        return (data != null && data.size() > 0) ? data.get(position) : null;
-    }
+	@Override
+	public Object getItem(int position) {
+		return (data != null && data.size() > 0) ? data.get(position) : null;
+	}
 
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
+	@Override
+	public long getItemId(int position) {
+		return 0;
+	}
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Friend friend = data.get(position);
-//        friend.setPostion(position);
-        final int index = position;
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.selected_friends_list_item, null);
-            holder = new ViewHolder();
-            holder.head = (ImageView) convertView.findViewById(R.id.iv_sfli_head);
-            holder.name = (TextView) convertView.findViewById(R.id.tv_sfli_name);
-            holder.checkBox = (CheckBox) convertView.findViewById(R.id.cb_sfli);
-            holder.tvLetter = (TextView) convertView.findViewById(R.id.alpha);
-            convertView.setTag(holder);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		SelectFriend friend = data.get(position);
+		// friend.setPostion(position);
+		final int index = position;
+		if (convertView == null) {
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.selected_friends_list_item, null);
+			holder = new ViewHolder();
+			holder.head = (ImageView) convertView
+					.findViewById(R.id.iv_sfli_head);
+			holder.name = (TextView) convertView
+					.findViewById(R.id.tv_sfli_name);
+			holder.checkBox = (CheckBox) convertView.findViewById(R.id.cb_sfli);
+			holder.tvLetter = (TextView) convertView.findViewById(R.id.alpha);
+			convertView.setTag(holder);
 
-        } else {
-            holder = (ViewHolder) convertView.getTag();
-        }
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
 
-        holder.checkBox.setOnClickListener(new OnClickListener() {
+		data.get(index).setPosition(index);
+		holder.checkBox.setOnClickListener(new OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                if (((CheckBox) v).isChecked()) {
+			@Override
+			public void onClick(View v) {
+				if (((CheckBox) v).isChecked()) {
+					data.get(index).setIsChosed(true);
+					mCheckBoxChangedListener.onChange(data.get(index), true,
+							index);
+				} else {
+					data.get(index).setIsChosed(false);
+					mCheckBoxChangedListener.onChange(data.get(index), false,
+							index);
+				}
+			}
+		});
+		holder.checkBox.setChecked(data.get(index).getIsChosed());
+		RCPlatformImageLoader.loadImage(context, mImageLoader,
+				ImageOptionsFactory.getPublishImageOptions(),
+				friend.getHeadUrl(),
+				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, holder.head,
+				R.drawable.default_head);
+		holder.name.setText(friend.getNick());
+		String letter = friend.getLetter();
+		if (!isNeedToShowLetter(position)) {
+			holder.tvLetter.setVisibility(View.GONE);
+		} else {
+			holder.tvLetter.setVisibility(View.VISIBLE);
+			holder.tvLetter.setText(letter);
+		}
 
-                    statu.put(index, true);
-                    mCheckBoxChangedListener.onChange(data.get(index), true);
-                } else {
-                    statu.put(index, false);
-                    mCheckBoxChangedListener.onChange(data.get(index), false);
-                }
-            }
-        });
-        // holder.checkBox.setOnCheckedChangeListener(new
-        // OnCheckedChangeListener() {
-        //
-        // @Override
-        // public void onCheckedChanged(CompoundButton buttonView, boolean
-        // isChecked) {
-        // }
-        // });
-        holder.checkBox.setChecked(statu.get(position));
-//        
-//        DisplayImageOptions options = ImageOptionsFactory.getPublishImageOptions();
-//        options.
-//        options.displayer(new RoundedBitmapDisplayer(90));
-        RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
-                                   AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, holder.head, R.drawable.default_head);
-        holder.name.setText(friend.getNick());
-        String letter = friend.getLetter();
-        if (!isNeedToShowLetter(position)) {
-            holder.tvLetter.setVisibility(View.GONE);
-        } else {
-            holder.tvLetter.setVisibility(View.VISIBLE);
-            holder.tvLetter.setText(letter);
-        }
+		return convertView;
 
-        return convertView;
+	}
 
-    }
+	private boolean isNeedToShowLetter(int position) {
+		return position > 0 ? (!mLetters[position]
+				.equals(mLetters[position - 1])) : true;
+	}
 
-    private boolean isNeedToShowLetter(int position) {
-        return position > 0 ? (!mLetters[position].equals(mLetters[position - 1])) : true;
-    }
+	class ViewHolder {
 
-    class ViewHolder {
+		ImageView head;
 
-        ImageView head;
+		TextView name;
 
-        TextView name;
+		CheckBox checkBox;
 
-        CheckBox checkBox;
+		public TextView tvLetter;
+	}
 
-        public TextView tvLetter;
-    }
+	public void setOnCheckBoxChangedListener(
+			OnCheckBoxChangedListener mCheckBoxChangedListener) {
+		this.mCheckBoxChangedListener = mCheckBoxChangedListener;
+	}
 
-    public void setOnCheckBoxChangedListener(OnCheckBoxChangedListener mCheckBoxChangedListener) {
-        this.mCheckBoxChangedListener = mCheckBoxChangedListener;
-    }
-
-    public Map<Integer, Boolean> getStatu() {
-        return statu;
-    }
-
-    public List<Friend> getData() {
-        return data;
-    }
+	public List<SelectFriend> getData() {
+		return data;
+	}
 }

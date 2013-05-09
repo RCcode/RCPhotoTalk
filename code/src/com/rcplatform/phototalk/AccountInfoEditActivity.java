@@ -17,6 +17,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +50,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.utils.Utils;
+import com.rcplatform.phototalk.views.HeadImageView;
 
 public class AccountInfoEditActivity extends ImagePickActivity implements
 		View.OnClickListener {
@@ -68,7 +70,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	private View mBackView;
 	private DatePicker mBirthDayPicker;
 	private TextView mTitleView;
-	private ImageView mMyHeadView;
+	private HeadImageView mMyHeadView;
 	private AlertDialog mBirthChooseDialog;
 	private Bitmap bitmap = null;
 	private Calendar mBirthDayCalender;
@@ -144,7 +146,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 	private void initView() {
 		initTitle();
-		mMyHeadView = (ImageView) findViewById(R.id.settings_account_head_portrait);
+		mMyHeadView = (HeadImageView) findViewById(R.id.settings_account_head_portrait);
 		mNameView = (TextView) findViewById(R.id.settings_modify_name);
 		mSexView = (TextView) findViewById(R.id.settings_modify_sex);
 		mBirthday = (TextView) findViewById(R.id.settings_modify_age);
@@ -173,12 +175,13 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 	private void loadHeadPicture() {
 		String headUrl = userDetailInfo.getHeadUrl();
-		if (headUrl.startsWith("file")) {
+		File file = new File(headUrl);
+		if(file.exists()){
+			Bitmap bitmap =BitmapFactory.decodeFile(headUrl);
+			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
+		}else{
 			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(),
 					mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-		} else {
-			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(),
-					mMyHeadView);
 		}
 
 	}
@@ -379,15 +382,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
-	// private boolean isSigntureChanged(UserInfo oldUserInfo,
-	// UserInfo currentUserInfo) {
-	// if (oldUserInfo.getSignature() == null)
-	// return currentUserInfo.getSignature() != null;
-	// else
-	// return !oldUserInfo.getSignature().equals(
-	// currentUserInfo.getSignature());
-	// }
-
 	private void updateUserInfo() {
 		// 资料发生改变 上传服务器
 		if (isChance) {
@@ -428,30 +422,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 					}, userDetailInfo.getNick(), userDetailInfo.getBirthday(),
 					userDetailInfo.getSex() + "");
 		}
-		//
-		// if (isSigntureChanged(userInfo, userDetailInfo)) {
-		// request.setPostValueForKey(MenueApiFactory.SIGNATURE,
-		// userDetailInfo.getSignature());
-		// }
-		// if (request.getPostData().size() > PhotoTalkParams.BASIC_PARAM_COUNT)
-		// {
-		// PrefsUtils.User.saveUserInfo(this, userDetailInfo.getEmail(),
-		// userDetailInfo);
-		// setResultParam();
-		// request.startAsynUploadImage(new RcplatformhkTextCallBack() {
-		//
-		// @Override
-		// public void onLoadSuccess(String content) {
-		// Gson gson = new Gson();
-		// try {
-		// JSONObject obj = new JSONObject(content);
-		// UserInfo userInfo =
-		// gson.fromJson(obj.getJSONObject("userInfo").toString(),
-		// UserInfo.class);
-		// PrefsUtils.User.saveUserInfo(getApplicationContext(),
-		// userDetailInfo.getEmail(), userInfo);
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
 		// e.printStackTrace();
 		// }
 		// }
@@ -470,50 +440,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 		setResult(Activity.RESULT_OK, intent);
 	}
 
-	// public void syncUserInfo() {
-	// UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
-	// GalHttpRequest request = GalHttpRequest.requestWithURL(this,
-	// MenueApiUrl.USER_INFO_URL);
-	// request.setPostValueForKey(MenueApiFactory.USERID, userInfo.getSuid());
-	// request.setPostValueForKey(MenueApiFactory.TOKEN, userInfo.getToken());
-	// request.setPostValueForKey(MenueApiFactory.LANGUAGE,
-	// Locale.getDefault().getLanguage());
-	// request.setPostValueForKey(MenueApiFactory.DEVICE_ID,
-	// android.os.Build.DEVICE);
-	// request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
-	//
-	// request.startAsynRequestString(new GalHttpLoadTextCallBack() {
-	//
-	// @Override
-	// public void textLoaded(String text) {
-	//
-	// try {
-	// System.out.println(text);
-	// JSONObject obj = new JSONObject(text);
-	// final int status = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-	// if (status == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-	//
-	// Gson gson = new Gson();
-	// JSONObject uiObj = obj.getJSONObject("userInfo");
-	// userDetailInfo = gson.fromJson(uiObj.toString(), UserInfo.class);
-	// mHandler2.sendMessage(mHandler2.obtainMessage());
-	//
-	// } else {
-	// failure(obj);
-	// }
-	// } catch (JSONException e) {
-	// e.printStackTrace();
-	// }
-	// }
-	//
-	// @Override
-	// public void loadFail() {
-	// ShowToast.showToast(AccountInfoEditActivity.this,
-	// getResources().getString(R.string.net_error), Toast.LENGTH_LONG);
-	// }
-	// });
-	//
-	// }
 
 	class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
 
@@ -538,6 +464,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 				nWidth = mMyHeadView.getWidth();
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
 						nHeight, rotateAngel);
+				
+				bitmap = Utils.getRectBitmap(bitmap);
 				if (bitmap != null) {
 					cacheHeadImage(bitmap);
 				}

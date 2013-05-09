@@ -47,6 +47,7 @@ import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
+import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.HorizontalListView;
 
 public class SettingsActivity extends ImagePickActivity implements
@@ -66,13 +67,13 @@ public class SettingsActivity extends ImagePickActivity implements
 	private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
-	private ImageView mHeadView;
+	private HeadImageView mHeadView;
 	private TextView mNickView;
 	private TextView userRcId;
 	private ImageView user_bg_View;
 	private PopupWindow mImageSelectPopupWindow;
 	private Uri mImageUri;
-	private View viewAbout;
+	private RelativeLayout viewAbout;
 	private MenueApplication app;
 	private String saveBgUrl=null;
 	private int CAMERA_CODE = 0;
@@ -84,7 +85,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		app = (MenueApplication) getApplication();
 		mContext = this;
 		initTitle();
-		mHeadView = (ImageView) findViewById(R.id.settings_account_head_portrait);
+		mHeadView = (HeadImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
 		mNickView = (TextView) findViewById(R.id.settings_user_nick);
 		userRcId = (TextView) findViewById(R.id.user_rc_id);
@@ -100,7 +101,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		user_bg_View = (ImageView) findViewById(R.id.user_bg);
 		user_bg_View.setOnClickListener(this);
 		userInfo = getPhotoTalkApplication().getCurrentUser();
-		viewAbout = findViewById(R.id.rela_about);
+		viewAbout = (RelativeLayout)findViewById(R.id.rela_about);
 		viewAbout.setOnClickListener(this);
 		setUserInfo(userInfo);
 	}
@@ -180,6 +181,7 @@ public class SettingsActivity extends ImagePickActivity implements
 			//更改个人头像设置
 			CAMERA_CODE = 2;
 			showImagePickMenu(mHeadView);
+			break;
 		case R.id.rela_about:
 			startActivity(AboutActivity.class);
 			break;
@@ -399,6 +401,7 @@ public class SettingsActivity extends ImagePickActivity implements
 				nWidth = mHeadView.getWidth();
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
 						nHeight, rotateAngel);
+				bitmap = Utils.getRectBitmap(bitmap);
 				if (bitmap != null) {
 					updateUserInfo(cacheHeadImage(bitmap));
 				}

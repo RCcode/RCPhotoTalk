@@ -29,7 +29,6 @@ public class ImageOptionsFactory {
 			.cacheOnDisc().bitmapConfig(Config.RGB_565)
 			.showStubImage(SMALL_PICTURE_DEFAULT_DRAWABLE)
 			.showImageOnFail(SMALL_PICTURE_DEFAULT_DRAWABLE)
-			.displayer(new RoundedBitmapDisplayer(90))
 			.showImageForEmptyUri(SMALL_PICTURE_DEFAULT_DRAWABLE)
 			.imageScaleType(ImageScaleType.EXACTLY).build();
 
@@ -51,7 +50,6 @@ public class ImageOptionsFactory {
 		if (mHeadImageOptions == null)
 			mHeadImageOptions = new DisplayImageOptions.Builder()
 					.showImageForEmptyUri(R.drawable.default_head)
-					.displayer(new RoundedBitmapDisplayer(90))
 					.showStubImage(R.drawable.default_head).build();
 		return mHeadImageOptions;
 	}
@@ -96,7 +94,6 @@ public class ImageOptionsFactory {
 			mPublishImageOptions = new DisplayImageOptions.Builder()
 					.cloneFrom(defaultImageOption)
 					.showImageForEmptyUri(FOLLOW_PUBLISH_PHOTO_DRAWABLE)
-					.cacheInMemory().displayer(new RoundedBitmapDisplayer(90))
 					.showStubImage(FOLLOW_PUBLISH_PHOTO_DRAWABLE).cacheOnDisc()
 					.imageScaleType(ImageScaleType.NONE).build();
 		return mPublishImageOptions;
