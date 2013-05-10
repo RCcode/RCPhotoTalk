@@ -441,6 +441,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
+				limitView.setVisibility(View.VISIBLE);
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
 				LogicUtils.startShowPhotoInformation(infoRecord);

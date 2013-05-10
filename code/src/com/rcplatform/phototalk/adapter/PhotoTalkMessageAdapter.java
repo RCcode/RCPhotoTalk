@@ -214,6 +214,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			// 状态为4.表示正在查看
 		} else if (record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
 			holder.bar.setVisibility(View.GONE);
+			holder.statuButton.setVisibility(View.VISIBLE);
 			holder.statuButton.setBackgroundResource(R.drawable.item_time_bg);
 			holder.statuButton.scheuleTask(record);
 			holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
