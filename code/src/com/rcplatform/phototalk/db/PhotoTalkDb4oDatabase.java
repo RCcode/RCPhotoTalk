@@ -17,7 +17,7 @@ import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 
 public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
-	private ObjectContainer db;
+	private static ObjectContainer db;
 
 	public PhotoTalkDb4oDatabase(UserInfo userInfo) {
 		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DatabaseUtils.getDatabasePath(userInfo));

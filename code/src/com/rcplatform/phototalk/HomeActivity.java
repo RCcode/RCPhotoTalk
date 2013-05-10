@@ -73,6 +73,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private static final int REFRESH_FAIL = 6;
 
+	protected static final int MSG_WHAT_LOCAL_LOADED = 10;
+
 	private PullToRefreshView mPtrView;
 
 	private SnapListView mInformationList;
@@ -105,7 +107,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		InformationPageController.getInstance().setupController(this);
 		initViewAndListener();
 		loadDataFromDataBase();
-		loadRecords();
 		checkUpdate();
 	}
 
@@ -139,7 +140,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 					filterList(listinfo);
 				} catch (Exception e) {
 					e.printStackTrace();
-					sendDataLoadedMessage(null);
+					sendDataLoadedMessage(null,MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
 				}
 			}
 		};
@@ -267,19 +268,19 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			@Override
 			public void run() {
 				List<Information> data = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
-				sendDataLoadedMessage(data);
+				sendDataLoadedMessage(data,MSG_WHAT_LOCAL_LOADED);
 			}
 		}).start();
 	}
 
-	private void sendDataLoadedMessage(List<Information> infos) {
+	private void sendDataLoadedMessage(List<Information> infos,int what) {
 		if (infos != null && infos.size() > 0) {
 			Message msg = myHandler.obtainMessage();
-			msg.what = MSG_WHAT_GET_SERVICE_RECORD_SUCCESS;
+			msg.what = what;
 			msg.obj = infos;
 			myHandler.sendMessage(msg);
 		} else {
-			myHandler.sendEmptyMessage(MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
+			myHandler.sendEmptyMessage(what);
 		}
 	}
 
@@ -547,6 +548,13 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			case REFRESH_FAIL:
 				mPtrView.onHeaderRefreshComplete();
 				break;
+			case MSG_WHAT_LOCAL_LOADED:
+				if (msg.obj != null) {
+					initOrRefreshListView((List<Information>) msg.obj);
+				}
+				mPtrView.onHeaderRefreshComplete();
+				loadRecords();
+				break;
 			}
 		};
 	};
@@ -564,6 +572,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			adapter.addData(data);
 			adapter.notifyDataSetChanged();
 		}
+		
 	}
 
 	/**
@@ -574,7 +583,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	 */
 	protected void filterList(List<Information> listinfo) {
 		List<Information> newNotices = LogicUtils.informationFilter(this, listinfo, getAdapterData());
-		sendDataLoadedMessage(newNotices);
+		sendDataLoadedMessage(newNotices,MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
 	}
 
 	private void sortList(List<Information> list) {
@@ -683,7 +692,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	public void onPhotoSending(List<Information> informations) {
-		sendDataLoadedMessage(informations);
+		sendDataLoadedMessage(informations,MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
 	}
 
 	public void onPhotoSendSuccess(Map<String, Information> informations, long flag) {
