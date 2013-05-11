@@ -56,6 +56,22 @@ public class XmppTool {
 		chatManager = null;
 	}
 
+	public static boolean register(String user, String password) {
+		boolean flag = false;
+
+		try {
+			con.getAccountManager().createAccount(user, password);
+			flag = true;
+		}
+		catch (XMPPException e) {
+			// TODO Auto-generated catch block
+			flag = false;
+			e.printStackTrace();
+		}
+
+		return flag;
+	}
+
 	// 登录tigase
 	public static boolean login(String user, String password) {
 		boolean flag = false;
