@@ -281,4 +281,5 @@
     <string name="added_friend_back">我已反加%1$s为好友</string>
     <string name="added_friend">我将%1$s加为好友</string>
     <string name="added_friend_confirm">%1$s已反加我为好友</string>
+    <string name="registe_fail">注册失败</string>
 </resources>

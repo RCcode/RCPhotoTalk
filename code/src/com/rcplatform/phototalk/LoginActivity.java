@@ -9,15 +9,18 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -37,12 +40,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
@@ -59,6 +65,7 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.utils.Utils;
+import com.rcplatform.tigase.TigaseRegisterSerivce;
 
 public class LoginActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -187,6 +194,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	};
 	private RCPlatformAsyncHttpClient httpClient;
+	private UserInfo mUser;
 
 	private void userLoginSuccess(final UserInfo userInfo) {
 		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME && !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
@@ -355,21 +363,21 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			final String psw = mPswEditText.getText().toString();
 			if (invalidate(this, email, nick, psw)) {
 				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
-				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false).setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
+						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-					}
-				}).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						}).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.cancel();
-						showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-						register(LoginActivity.this, email, psw, nick);
-
-					}
-				});
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+//								tigaseRegiste(LoginActivity.this, email, psw, nick);
+								register(LoginActivity.this, email, psw, nick);
+							}
+						});
 				dialogBuilder.create().show();
 			}
 			break;
@@ -384,6 +392,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				// --------------------------------------------------
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 				login(this, mHandler, email2, psw2, loginType);
+//				tigaseLogin(this, email2, psw2);
 			}
 			break;
 		case R.id.login_page_forget_password_button:
@@ -684,5 +693,86 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		Message msg = handler.obtainMessage(statusCode);
 		msg.obj = userInfo;
 		handler.sendMessage(msg);
+	}
+
+	private void tigaseRegiste(Context context, final String email, String password, final String nick) {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		client.putRequestParam("email", email);
+		client.putRequestParam("pwd", MD5.encodeMD5String(password));
+		client.putRequestParam("appId", PhotoTalkParams.PARAM_VALUE_APP_ID);
+		client.putRequestParam("nickName", nick);
+		client.putRequestParam("country", PhotoTalkParams.PARAM_VALUE_LANGUAGE);
+		client.post(context, MenueApiUrl.TIGASE_REGISTE_URL, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				LogUtil.e(content);
+				try {
+					mUser = new UserInfo();
+					mUser.setEmail(email);
+					mUser.setNick(nick);
+					JSONObject jsonObject = new JSONObject(content);
+					mUser.setToken(jsonObject.getString("token"));
+					mUser.setTigaseId(jsonObject.getString("tgId"));
+					mUser.setTigasePassword(jsonObject.getString("tgpwd"));
+					mUser.setShowRecommends(UserInfo.FIRST_TIME);
+					registeTigase(mUser.getTigaseId(), mUser.getTigasePassword());
+					// sendLoginMessage(mHandler2, statusCode, userInfo);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		});
+	}
+
+	private void registeTigase(String tigaseId, String tigasePassword) {
+		IntentFilter filter = new IntentFilter(TigaseRegisterSerivce.TIGASE_REGISTER_BROADCAST);
+		registerReceiver(mTigaseRegisteReciver, filter);
+		Intent intent = new Intent(LoginActivity.this, TigaseRegisterSerivce.class);
+		intent.putExtra(UserMessageService.TIGASE_USER_NAME_KEY, tigaseId);
+		intent.putExtra(UserMessageService.TIGASE_USER_PASSWORD_KEY, tigasePassword);
+		startService(intent);
+	}
+
+	private BroadcastReceiver mTigaseRegisteReciver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			boolean isRegisteSuccess = intent.getBooleanExtra(TigaseRegisterSerivce.TIGASE_REGISTER_RESULT_KEY, false);
+			if (isRegisteSuccess)
+				sendLoginMessage(mHandler2, RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS, mUser);
+			else
+				showErrorConfirmDialog(R.string.registe_fail);
+			dismissLoadingDialog();
+			unregisterReceiver(this);
+		}
+	};
+	
+	private void tigaseLogin(Context context,String account,String password){
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		client.putRequestParam("user", account);
+		client.putRequestParam("pwd", MD5.encodeMD5String(password));
+		client.putRequestParam("appId", PhotoTalkParams.PARAM_VALUE_APP_ID);
+		client.post(context, MenueApiUrl.TIGASE_LOGIN_URL, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				LogUtil.e(content);
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		});
 	}
 }

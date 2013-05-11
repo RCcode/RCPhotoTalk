@@ -129,7 +129,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.bar.setVisibility(View.GONE);
 			holder.statuButton.stopTask();
 			holder.statuButton.setText(null);
-			holder.statu.setText(RCPlatformTextUtil.getTextFromTimeToNow(context, record.getCreatetime()));
+			holder.statu.setText(RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
 
 			// 如果是对方添加我
 			if (!LogicUtils.isSender(context, record)) {
@@ -216,7 +216,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				// 如果缓存文件存在
 				holder.bar.setVisibility(View.GONE);
 				holder.statuButton.stopTask();
-				holder.statu.setText(getTimeText(R.string.receive_loaded, record.getCreatetime()));
+				holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
 			} else {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
@@ -231,12 +231,12 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setVisibility(View.VISIBLE);
 			holder.statuButton.setBackgroundResource(R.drawable.item_time_bg);
 			holder.statuButton.scheuleTask(record);
-			holder.statu.setText(getTimeText(R.string.receive_loaded, record.getCreatetime()));
+			holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
 			// 状态为3 表示 已经查看，
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statuButton.stopTask();
-			holder.statu.setText(getTimeText(R.string.receive_looked, record.getCreatetime()));
+			holder.statu.setText(getTimeText(R.string.receive_looked, record.getReceiveTime()));
 
 			// 状态为5 表示正在下载
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOADING) {
@@ -254,22 +254,22 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private void initPhotoInformationSenderView(Information record) {
 		// 如果当前用户是发送者
-
+		holder.statuButton.setVisibility(View.VISIBLE);
 		holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 		holder.statuButton.setText(null);
 		holder.statuButton.stopTask();
 		// 状态为1 表示已经发送到服务器
 		if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statu.setText(getTimeText(R.string.send_sended, record.getCreatetime()));
+			holder.statu.setText(getTimeText(R.string.send_sended, record.getReceiveTime()));
 			// 状态为2表示对方已经下载
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statu.setText(getTimeText(R.string.send_received, record.getCreatetime()));
+			holder.statu.setText(getTimeText(R.string.send_received, record.getReceiveTime()));
 			// 状态为3 表示已经查看
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statu.setText(getTimeText(R.string.send_looked, record.getCreatetime()));
+			holder.statu.setText(getTimeText(R.string.send_looked, record.getReceiveTime()));
 			// 0 表示正在发送
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING) {
 			holder.bar.setVisibility(View.VISIBLE);

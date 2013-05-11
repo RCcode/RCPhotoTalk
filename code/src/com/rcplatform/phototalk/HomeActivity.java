@@ -36,6 +36,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
@@ -609,10 +610,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void startTigaseService() {
+		UserInfo currentUser=getPhotoTalkApplication().getCurrentUser();
 		Intent intent = new Intent(this, UserMessageService.class);
 		Bundle bundle = new Bundle();
-		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, "user0");
-		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, "111111");
+		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, "1000034_1");
+		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, "9cafeef08db2dd477098a0293e71f90a");
 		intent.putExtras(bundle);
 		startService(intent);
 	}

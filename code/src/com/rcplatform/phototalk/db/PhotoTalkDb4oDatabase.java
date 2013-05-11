@@ -62,9 +62,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public int compare(Information lhs, Information rhs) {
-				if (rhs.getCreatetime() > lhs.getCreatetime())
+				if (rhs.getReceiveTime() > lhs.getReceiveTime())
 					return 1;
-				else if (rhs.getCreatetime() < lhs.getCreatetime())
+				else if (rhs.getReceiveTime() < lhs.getReceiveTime())
 					return -1;
 				return 0;
 			}

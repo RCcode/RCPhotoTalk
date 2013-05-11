@@ -7,14 +7,14 @@ import android.content.Intent;
 import android.os.Bundle;
 
 public class TigaseRegisterSerivce extends IntentService {
+	private static final String SERVICE_NAME="TigaseRegisteService";
 
 	public static final String TIGASE_REGISTER_BROADCAST = "com.rcplatform.tigase.register";
 
 	public static final String TIGASE_REGISTER_RESULT_KEY = "tigase_register";
 
-	public TigaseRegisterSerivce(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
+	public TigaseRegisterSerivce() {
+		super(SERVICE_NAME);
 	}
 
 	@Override

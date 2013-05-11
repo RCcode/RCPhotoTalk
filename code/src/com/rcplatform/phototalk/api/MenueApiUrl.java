@@ -2,6 +2,13 @@ package com.rcplatform.phototalk.api;
 
 public class MenueApiUrl {
 
+	
+	public static final String TIGASE_REGISTE_URL="http://192.168.0.90:8890/rcboss/user/regist.do";
+	
+	public static final String TIGASE_LOGIN_URL="http://192.168.0.90:8890/rcboss/user/userLogin.do";
+	
+	
+	
 	private static final String BASE_URL = "http://192.168.0.86:8083/";
 	// private static final String BASE_URL = "http://103.247.169.150:8083/";
 //	 private static final String BASE_URL = "http://192.168.0.118/";

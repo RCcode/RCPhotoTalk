@@ -2,12 +2,13 @@ package com.rcplatform.phototalk.bean;
 
 public class Information {
 
-//	protected String recordId;
+	// protected String recordId;
 
 	protected long createtime;
 
 	protected long lastUpdateTime;
 
+	private long receiveTime;
 
 	protected int type; // 发送图片，接收图片，通知
 
@@ -120,6 +121,14 @@ public class Information {
 		Information info = (Information) o;
 		return this.getSender().getSuid().equals(info.getSender().getSuid()) && this.getReceiver().getSuid().equals(info.getReceiver().getSuid())
 				&& this.createtime == info.getCreatetime() && this.type == info.getType();
+	}
+
+	public long getReceiveTime() {
+		return receiveTime;
+	}
+
+	public void setReceiveTime(long receiveTime) {
+		this.receiveTime = receiveTime;
 	}
 
 }

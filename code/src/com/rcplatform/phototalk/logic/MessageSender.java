@@ -15,7 +15,7 @@ public class MessageSender {
 		String message = JSONConver.informationToJSON(informations);
 		Intent intent = new Intent();
 		intent.setAction(UserMessageService.MESSAGE_SEND_BROADCAST);
-		intent.putExtra(UserMessageService.MESSAGE_TO_USER, "user1");
+		intent.putExtra(UserMessageService.MESSAGE_TO_USER, "1000032_1");
 		intent.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, message);
 		context.sendBroadcast(intent);
 	}

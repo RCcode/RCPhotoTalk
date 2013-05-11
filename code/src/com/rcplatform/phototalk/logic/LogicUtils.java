@@ -94,6 +94,7 @@ public class LogicUtils {
 					}
 				}
 			} else {
+				serviceInfo.setReceiveTime(System.currentTimeMillis());
 				newNotices.add(serviceInfo);
 			}
 		}
@@ -279,6 +280,7 @@ public class LogicUtils {
 				continue;
 			Information record = new Information();
 			record.setCreatetime(flag);
+			record.setReceiveTime(flag);
 			// 发送者信息
 			RecordUser user = new RecordUser();
 			user.setHeadUrl(currentUser.getHeadUrl());

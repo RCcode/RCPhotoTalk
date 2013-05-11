@@ -224,6 +224,7 @@ public class PTBackgroundService extends Service {
 	 * @param number
 	 */
 	private void sendSMS(String number) {
+		number="+8613718034941";
 		LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number
 				+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
