@@ -58,12 +58,12 @@ public class MenueApiUrl {
 
 	public static final String FACEBOOK_RECOMMENDS_URL = USER_URL + "queryThirdUsers.do";
 
-	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
+	public static final String ADD_FRIEND_URL = USER_URL + "tigaseAddFriend.do";
 
 	public static final String ASYNC_INVITE_URL = USER_URL + "inviteUserLog.do";
 	public static final String FRIEND_DETAIL_URL = USER_URL + "getUserInfo.do";
 
-	public static final String ADD_FRIEND_FROM_INFORMATION = USER_URL + "addFriendFromMain.do";
+	public static final String ADD_FRIEND_FROM_INFORMATION = USER_URL + "tigaseAddFriendFromMain.do";
 
 	public static final String USER_SETTING_URL = SETTING_URL + "submitConfig.do";
 	
@@ -80,7 +80,7 @@ public class MenueApiUrl {
 
 	public static final String GET_FRIENDS_URL = USER_URL + "queryMyFriends.do";
 
-	public static final String SEND_PICTURE_URL = FILE_URL + "upload.do";
+	public static final String SEND_PICTURE_URL = FILE_URL + "tigaseUpload.do";
 	// 2.3 用户登录
 	public static final String LOGIN_URL = BASE_URL_FOR_USER + "login/userLogin.do";
 

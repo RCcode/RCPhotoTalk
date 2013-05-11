@@ -29,19 +29,19 @@ public class InformationPageController {
 			mActivity.clearInformation();
 	}
 
-	public void friendAdded(Friend friend) {
+	public void friendAdded(Information info, int addType) {
 		if (mActivity != null)
-			mActivity.onFriendAdded(friend);
+			mActivity.onFriendAdded(info, addType);
 	}
 
 	public void sendPhotos(List<Information> informations) {
-		if (mActivity != null&&informations.size()>0)
+		if (mActivity != null && informations.size() > 0)
 			mActivity.onPhotoSending(informations);
 	}
 
-	public void photosSendSuccess(Map<String,Information> informations, long flag) {
-		if (mActivity != null&&informations.size()>0)
-			mActivity.onPhotoSendSuccess(informations, flag);
+	public void photosSendSuccess(long flag) {
+		if (mActivity != null)
+			mActivity.onPhotoSendSuccess(flag);
 	}
 
 	public void destroy() {

@@ -73,18 +73,17 @@ public class FriendDetailActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-				new AddFriendTask(FriendDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new RCPlatformResponseHandler() {
+				new AddFriendTask(FriendDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 					@Override
-					public void onSuccess(int statusCode, String content) {
+					public void onFriendAddSuccess(int addType) {
 						mFriend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 						coverToFriendView();
-						LogicUtils.friendAdded(mFriend);
 						dismissLoadingDialog();
 					}
 
 					@Override
-					public void onFailure(int errorCode, String content) {
+					public void onFriendAddFail(int statusCode, String content) {
 						showErrorConfirmDialog(content);
 						dismissLoadingDialog();
 					}

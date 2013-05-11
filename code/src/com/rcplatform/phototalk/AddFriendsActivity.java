@@ -33,7 +33,6 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private static TreeSet<Friend> friendsAdded;
 
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub

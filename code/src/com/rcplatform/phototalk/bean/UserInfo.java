@@ -76,6 +76,27 @@ public class UserInfo implements Serializable {
 	private int trendsSet;
 
 	private String background;
+	
+	private String tigaseId;
+	
+	private String tigasePassword;
+	
+
+	public String getTigaseId() {
+		return tigaseId;
+	}
+
+	public void setTigaseId(String tigaseId) {
+		this.tigaseId = tigaseId;
+	}
+
+	public String getTigasePassword() {
+		return tigasePassword;
+	}
+
+	public void setTigasePassword(String tigasePassword) {
+		this.tigasePassword = tigasePassword;
+	}
 
 	public String getBackground() {
 		return background;

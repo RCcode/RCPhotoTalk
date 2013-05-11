@@ -7,12 +7,15 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -39,56 +42,57 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	@Override
 	public void onStartLoad() {
-		record.setStatu(InformationState.STATU_NOTICE_LOADING);
+		record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_LOADING);
 		updateView(View.VISIBLE, context.getString(R.string.receive_downloading));
 	}
 
 	@Override
 	public void onDownloadSuccess() {
 		record.setLastUpdateTime(System.currentTimeMillis());
-		if (record.getStatu() != InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-			record.setStatu(InformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
+		if (record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 			notifyServer(context, record);
 		}
 		record.setLastUpdateTime(System.currentTimeMillis());
-		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
+		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getCreatetime()));
 		updateView(View.GONE, text);
 	}
 
 	@Override
 	public void onDownloadFail() {
-		record.setStatu(InformationState.STATU_NOTICE_LOAD_FAIL);
+		record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 		updateView(View.GONE, context.getResources().getString(R.string.receive_fail));
 	}
 
 	private static void notifyServer(Context context, Information record) {
-		LogicUtils.updateInformationState(context, Contract.Action.ACTION_INFORMATION_STATE_CHANGE, record);
+		MessageSender.sendInformation(context, record.getSender().getTigaseId(), record);
 	}
 
 	private void updateView(int visibitity, String text) {
+		String baseTag = PhotoTalkUtils.getInformationTagBase(record);
 		if (bar == null) {
 			if (listView != null) {
-				bar = (ProgressBar) listView.findViewWithTag(record.getRecordId() + ProgressBar.class.getName());
+				bar = (ProgressBar) listView.findViewWithTag(baseTag + ProgressBar.class.getName());
 			}
 		}
 		if (bar != null) {
 			String barTag = (String) bar.getTag();
-			if (barTag.equals(record.getRecordId() + ProgressBar.class.getName())) {
+			if (barTag.equals(baseTag + ProgressBar.class.getName())) {
 				bar.setVisibility(visibitity);
 			}
 		}
 
 		if (statu == null) {
 			if (listView != null) {
-				statu = (TextView) listView.findViewWithTag(record.getRecordId() + TextView.class.getName());
+				statu = (TextView) listView.findViewWithTag(baseTag + TextView.class.getName());
 			}
 		}
 
 		if (statu != null) {
 			String statuTag = (String) statu.getTag();
-			if (statuTag.equals(record.getRecordId() + TextView.class.getName())) {
+			if (statuTag.equals(baseTag + TextView.class.getName())) {
 				statu.setText(text);
 			}
 		}

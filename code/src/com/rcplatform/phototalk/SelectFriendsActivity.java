@@ -1,20 +1,15 @@
 package com.rcplatform.phototalk;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,17 +34,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.Information;
-import com.rcplatform.phototalk.bean.InformationState;
-import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
@@ -337,42 +327,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		return jsonObject.getInt(MenueApiFactory.RESPONSE_KEY_STATUS) == MenueApiFactory.RESPONSE_STATE_SUCCESS;
 	}
 
-	private String buildUserArray(List<SelectFriend> friends, long time) {
-		try {
-			JSONArray array = new JSONArray();
-			List<Information> infoRecords = new ArrayList<Information>();
-			Information record;
-			for (Friend f : friends) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("userId", f.getSuid());
-				array.put(jsonObject);
-
-				record = new Information();
-				record.setRecordId(record.hashCode() + "");
-				record.setCreatetime(time);
-				RecordUser user = new RecordUser();
-				record.setSender(user);
-				user = new RecordUser();
-				user.setNick(f.getNick());
-				user.setHeadUrl(f.getHeadUrl());
-				record.setReceiver(user);
-				record.setUrl(tempFilePath);
-				record.setLimitTime(Integer.parseInt(this.timeLimit));
-				record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
-				record.setStatu(InformationState.STATU_NOTICE_SENDING);
-				infoRecords.add(record);
-
-			}
-			app.addSendRecords(time, infoRecords);
-			// Log.i("MENUE", "add send records" + time + " //" + timeSnap);
-			return array.toString();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
+	
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub

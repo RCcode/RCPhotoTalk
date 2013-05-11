@@ -6,26 +6,30 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 
 public class AddFriendTask {
 	private RCPlatformAsyncHttpClient mHttpClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
 	private Context mContext;
-	private RCPlatformResponseHandler mResponseHandler;
+	private AddFriendListener mListener;
+	private Friend mFriend;
 
-	public AddFriendTask(Context context, UserInfo userInfo, RCPlatformResponseHandler responseHandler, Friend... friends) {
-		// TODO Auto-generated constructor stub
+	public AddFriendTask(Context context, UserInfo userInfo, AddFriendListener listener, Friend... friends) {
 		this.mContext = context;
-		this.mResponseHandler = responseHandler;
+		this.mListener = listener;
 		PhotoTalkParams.buildBasicParams(mContext, mHttpClient);
 		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_SUID, userInfo.getSuid());
 		buildFriends(friends);
+		mFriend = friends[0];
 	}
 
 	private void buildFriends(Friend... friends) {
@@ -38,7 +42,6 @@ public class AddFriendTask {
 					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType());
 				array.put(jsonFriend);
 			} catch (JSONException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -46,6 +49,33 @@ public class AddFriendTask {
 	}
 
 	public void execute() {
-		mHttpClient.post(mContext, MenueApiUrl.ADD_FRIEND_URL, mResponseHandler);
+		mHttpClient.post(mContext, MenueApiUrl.ADD_FRIEND_URL, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				if (mListener != null) {
+					try {
+						JSONObject jsonObject = new JSONObject(content);
+						int addType = jsonObject.getInt("isFriend");
+						mListener.onFriendAddSuccess(addType);
+						LogicUtils.friendAdded(mContext, mFriend, addType);
+					} catch (JSONException e) {
+						e.printStackTrace();
+						onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, mContext.getString(R.string.net_error));
+					}
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+				if (mListener != null)
+					mListener.onFriendAddFail(errorCode, content);
+			}
+		});
+	}
+
+	public static interface AddFriendListener {
+		public void onFriendAddSuccess(int addType);
+		public void onFriendAddFail(int statusCode, String content);
 	}
 }

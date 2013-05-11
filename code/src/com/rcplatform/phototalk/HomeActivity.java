@@ -1,14 +1,15 @@
 package com.rcplatform.phototalk;
 
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,8 +26,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.Friend;
@@ -34,24 +37,23 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.InformationPageController;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.proxy.RecordInfoProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
-import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
-import com.rcplatform.phototalk.views.PullToRefreshView;
-import com.rcplatform.phototalk.views.PullToRefreshView.OnHeaderRefreshListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
@@ -65,17 +67,19 @@ import com.rcplatform.phototalk.views.SnapShowListener;
  */
 public class HomeActivity extends BaseActivity implements SnapShowListener {
 
-	private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
+	// private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
 
-	private static final int LOAD_MORE_FAIL = 4;
+	// private static final int LOAD_MORE_FAIL = 4;
 
-	private static final int LOAD_MORE_SUCCESS = 5;
+	// private static final int LOAD_MORE_SUCCESS = 5;
 
-	private static final int REFRESH_FAIL = 6;
+	// private static final int REFRESH_FAIL = 6;
 
-	protected static final int MSG_WHAT_LOCAL_LOADED = 10;
+	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
-	private PullToRefreshView mPtrView;
+	private static final int MSG_WHAT_REGISTE_INFORMATION_RECEIVER = 2;
+
+	// private PullToRefreshView mPtrView;
 
 	private SnapListView mInformationList;
 
@@ -100,6 +104,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private CheckUpdateTask mCheckUpdateTask;
 
+	private boolean isInformationReceiverRegiste = false;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -108,43 +114,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		initViewAndListener();
 		loadDataFromDataBase();
 		checkUpdate();
-	}
-
-	private void loadRecords() {
-		// mRefreshView.setRefreshing();
-		RecordInfoProxy.getAllRecordInfos(this, new RCPlatformResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				handleServiceRecordInfo(content);
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-				showErrorConfirmDialog(content);
-				// mRefreshView.onHeaderRefreshComplete();
-			}
-		});
-	}
-
-	private void handleServiceRecordInfo(final String serviceContent) {
-		Thread thread = new Thread() {
-
-			@Override
-			public void run() {
-				try {
-					JSONObject obj = new JSONObject(serviceContent);
-					int noticeId = obj.getInt("noticeId");
-					PrefsUtils.User.setUserMaxRecordInfoId(HomeActivity.this, getPhotoTalkApplication().getCurrentUser().getEmail(), noticeId);
-					List<Information> listinfo = JSONConver.jsonToInformations(obj.getJSONArray("mainUserNotice").toString());
-					filterList(listinfo);
-				} catch (Exception e) {
-					e.printStackTrace();
-					sendDataLoadedMessage(null,MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
-				}
-			}
-		};
-		thread.start();
 	}
 
 	private void searchFriendDetailById(String atUserId, final Information record) {
@@ -193,14 +162,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			relogin();
 			return;
 		}
-		// if
-		// (SelectFriendsActivity.class.getName().equals(intent.getStringExtra("from")))
-		// {
-		// long time = intent.getLongExtra("time", 0);
-		// if (app.getSendRecordsList(time) != null) {
-		// initOrRefreshListView(app.getSendRecordsList(time));
-		// }
-		// }
 	}
 
 	private void logout() {
@@ -215,84 +176,26 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		finish();
 	}
 
-	// private void reSendNotifyToService(Information record) {
-	// //
-	// List<Information> sendList =
-	// app.getSendRecordsList(record.getCreatetime());
-	// if (sendList != null) {
-	// sendList.remove(record);
-	// if (sendList.size() == 0)
-	// app.getSendRecords().remove(record.getCreatetime());
-	// }
-	//
-	// long time = System.currentTimeMillis();
-	// record.setCreatetime(time);
-	// record.setStatu(InformationState.STATU_NOTICE_SENDING);
-	// List<Information> newSendlist = new ArrayList<Information>();
-	// newSendlist.add(record);
-	// app.addSendRecords(time, newSendlist);
-	// Map<String, String> params = new HashMap<String, String>();
-	// params.put(MenueApiFactory.COUNTRY, Locale.getDefault().getCountry());
-	// params.put(MenueApiFactory.HEAD_URL,
-	// getPhotoTalkApplication().getCurrentUser().getHeadUrl());
-	// params.put(MenueApiFactory.TIME, String.valueOf(record.getCreatetime()));
-	// params.put(MenueApiFactory.NICK,
-	// getPhotoTalkApplication().getCurrentUser().getNick());
-	// params.put(MenueApiFactory.IMAGE_TYPE, "jpg");
-	// params.put(MenueApiFactory.DESC, "");
-	// params.put(MenueApiFactory.TIME_LIMIT,
-	// String.valueOf(record.getLimitTime()));
-	// params.put(MenueApiFactory.USER_ARRAY,
-	// buildUserArray(record.getReceiver()));
-	// params.put(MenueApiFactory.FILE, record.getUrl());
-	//
-	// PhotoTalkInformationStateService.getInstence().postRequestByTimestamp(this,
-	// new PhotoChatHttpLoadTextCallBack() {
-	//
-	// @Override
-	// public void textLoaded(String text, long time) {
-	// callBackForSend(time, text);
-	// }
-	//
-	// @Override
-	// public void loadFail(long time) {
-	// callBackForSend(time, "");
-	// }
-	// }, params, MenueApiUrl.SEND_PICTURE_URL, record.getCreatetime(), null);
-	//
-	// }
-
 	private void loadDataFromDataBase() {
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
 				List<Information> data = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
-				sendDataLoadedMessage(data,MSG_WHAT_LOCAL_LOADED);
+				sendDataLoadedMessage(data, MSG_WHAT_INFORMATION_LOADED);
+				myHandler.sendEmptyMessage(MSG_WHAT_REGISTE_INFORMATION_RECEIVER);
 			}
 		}).start();
 	}
 
-	private void sendDataLoadedMessage(List<Information> infos,int what) {
-		if (infos != null && infos.size() > 0) {
-			Message msg = myHandler.obtainMessage();
-			msg.what = what;
-			msg.obj = infos;
-			myHandler.sendMessage(msg);
-		} else {
-			myHandler.sendEmptyMessage(what);
-		}
+	private void sendDataLoadedMessage(List<Information> infos, int what) {
+		Message msg = myHandler.obtainMessage();
+		msg.what = what;
+		msg.obj = infos;
+		myHandler.sendMessage(msg);
 	}
 
 	private void initViewAndListener() {
-		mPtrView = (PullToRefreshView) findViewById(R.id.ptr_home);
-		mPtrView.setOnHeaderRefreshListener(new OnHeaderRefreshListener() {
-
-			@Override
-			public void onHeaderRefresh(PullToRefreshView view) {
-				loadRecords();
-			}
-		});
 		mInformationList = (SnapListView) findViewById(R.id.lv_home);
 		mInformationList.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
@@ -355,14 +258,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 			}
 		});
-		// mRefreshView.setOnHeaderRefreshListener(new OnHeaderRefreshListener()
-		// {
-		//
-		// @Override
-		// public void onHeaderRefresh(PullToRefreshView view) {
-		// loadRecords();
-		// }
-		// });
 	}
 
 	private void showFriendDetail(Information information) {
@@ -383,11 +278,14 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		if (adapter != null) {
 			Information record = adapter.getData().get(position);
 			if (record != null) {
-				if (record.getStatu() == InformationState.STATU_NOTICE_LOADING || record.getStatu() == InformationState.STATU_NOTICE_SENDING || record.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+				if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOADING
+						|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
+						|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 					return;
 				} else {
 					if (mLongPressDialog == null) {
-						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload), getString(R.string.delete) }, new OnLongPressItemClickListener() {
+						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload),
+								getString(R.string.delete) }, new OnLongPressItemClickListener() {
 
 							@Override
 							public void onClick(int listPostion, int itemIndex) {
@@ -412,9 +310,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 						});
 					}
 
-					if (record.getStatu() == InformationState.STATU_NOTICE_LOAD_FAIL) {
+					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL) {
 						mLongPressDialog.show(position, 0);
-					} else if (record.getStatu() == InformationState.STATU_NOTICE_SEND_FAIL) {
+					} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
 						mLongPressDialog.show(position, 1);
 					} else {
 						mLongPressDialog.show(position, 0, 1);
@@ -431,7 +329,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, null, null, mInformationList, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
+		RCPlatformImageLoader.LoadPictureForList(this, null, null, mInformationList, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(),
+				record);
 	}
 
 	private void show(int position) {
@@ -439,20 +338,21 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		Information infoRecord = (Information) adapter.getItem(position);
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
-			if (infoRecord.getStatu() == InformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getRecordId() + Button.class.getName());
+			if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(PhotoTalkUtils.getInformationTagBase(infoRecord)
+						+ Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
 				limitView.setBackgroundDrawable(null);
 				(limitView).scheuleTask(infoRecord);
-				LogicUtils.startShowPhotoInformation(infoRecord);
 				if (mShowDialog == null) {
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
 				mShowDialog.ShowDialog(infoRecord);
 				isShow = true;
+				LogicUtils.startShowPhotoInformation(infoRecord);
 				// 把数据里面的状态更改为3，已查看
-			} else if (infoRecord.getStatu() == InformationState.STATU_NOTICE_SHOWING) {
+			} else if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
@@ -534,46 +434,25 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case MSG_WHAT_GET_SERVICE_RECORD_SUCCESS:
-				if (msg.obj != null) {
-					initOrRefreshListView((List<Information>) msg.obj);
-				}
-				mPtrView.onHeaderRefreshComplete();
+			case MSG_WHAT_REGISTE_INFORMATION_RECEIVER:
+				registeInformationReceiver();
 				break;
-			case LOAD_MORE_SUCCESS:
-				mPtrView.onHeaderRefreshComplete();
-				break;
-			case LOAD_MORE_FAIL:
-				mPtrView.onHeaderRefreshComplete();
-				break;
-			case REFRESH_FAIL:
-				mPtrView.onHeaderRefreshComplete();
-				break;
-			case MSG_WHAT_LOCAL_LOADED:
-				if (msg.obj != null) {
-					initOrRefreshListView((List<Information>) msg.obj);
-				}
-				mPtrView.onHeaderRefreshComplete();
-				loadRecords();
+			case MSG_WHAT_INFORMATION_LOADED:
+				initOrRefreshListView((List<Information>) msg.obj);
 				break;
 			}
 		};
 	};
 
 	private void initOrRefreshListView(List<Information> data) {
-		if (data == null || data.isEmpty()) {
-			adapter.notifyDataSetChanged();
-			return;
-		}
 		if (adapter == null) {
-			sortList(data);
-			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList);
+			adapter = new PhotoTalkMessageAdapter(this, data);
 			mInformationList.setAdapter(adapter);
 		} else {
 			adapter.addData(data);
 			adapter.notifyDataSetChanged();
 		}
-		
+
 	}
 
 	/**
@@ -584,35 +463,18 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	 */
 	protected void filterList(List<Information> listinfo) {
 		List<Information> newNotices = LogicUtils.informationFilter(this, listinfo, getAdapterData());
-		sendDataLoadedMessage(newNotices,MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
+		sendDataLoadedMessage(newNotices, MSG_WHAT_INFORMATION_LOADED);
 	}
-
-	private void sortList(List<Information> list) {
-		Collections.sort(list, comparator);
-	}
-
-	Comparator<Information> comparator = new Comparator<Information>() {
-
-		@Override
-		public int compare(Information lhs, Information rhs) {
-			// LogUtil.e(lhs.getCreatetime() + "......is lhs create time");
-			// LogUtil.e(rhs.getCreatetime() + "......is rhs create time");
-			if (rhs.getReceiveTime() > lhs.getReceiveTime())
-				return 1;
-			else if (rhs.getReceiveTime() < lhs.getReceiveTime())
-				return -1;
-			return 0;
-		}
-	};
 
 	@Override
 	protected void onDestroy() {
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
-		if(mShowDialog!=null&&mShowDialog.isShowing())
+		if (mShowDialog != null && mShowDialog.isShowing())
 			mShowDialog.dismiss();
 		ImageLoader.getInstance().clearMemoryCache();
+		unregisteInformationReceiver();
 		super.onDestroy();
 	}
 
@@ -656,33 +518,40 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	public void onInformationShowEnd(Information information) {
-		String buttonTag = information.getRecordId() + Button.class.getName();
-		String statuTag = information.getRecordId() + TextView.class.getName();
-		String newTag = information.getRecordId() + ImageView.class.getName();
+		String tagBase = PhotoTalkUtils.getInformationTagBase(information);
+		String buttonTag = tagBase + Button.class.getName();
+		String statuTag = tagBase + TextView.class.getName();
+		String newTag = tagBase + ImageView.class.getName();
 		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
 			timerLimitView.setVisibility(View.GONE);
 		}
 		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {
-			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getReceiveTime())));
+			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getCreatetime())));
 		}
 		View newView = mInformationList.findViewWithTag(newTag);
 		if (newView != null)
 			newView.setVisibility(View.GONE);
 	}
 
-	public void onFriendAdded(Friend friend) {
-		List<Information> infos = getAdapterData();
-		if (infos != null && infos.size() > 0) {
-			for (Information information : infos) {
-				if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE && information.getSender().getSuid().equals(friend.getSuid())) {
-					information.setStatu(InformationState.STATU_QEQUEST_ADDED);
+	public void onFriendAdded(Information friend, int addType) {
+		if (addType == Contract.FriendAddType.ADD_FRIEND_PASSIVE) {
+			List<Information> infos = getAdapterData();
+			if (infos != null && infos.size() > 0) {
+				for (Information information : infos) {
+					if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE
+							&& information.getSender().getSuid().equals(friend.getSender().getSuid())) {
+						information.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+					}
 				}
+				adapter.notifyDataSetChanged();
 			}
-			adapter.notifyDataSetChanged();
+		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
+			List<Information> infos = new ArrayList<Information>();
+			infos.add(friend);
+			sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
 		}
-
 	}
 
 	public void clearInformation() {
@@ -693,21 +562,70 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	public void onPhotoSending(List<Information> informations) {
-		sendDataLoadedMessage(informations,MSG_WHAT_GET_SERVICE_RECORD_SUCCESS);
+		sendDataLoadedMessage(informations, MSG_WHAT_INFORMATION_LOADED);
 	}
 
-	public void onPhotoSendSuccess(Map<String, Information> informations, long flag) {
+	public void onPhotoSendSuccess(long flag) {
 		List<Information> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (Information info : localInfos) {
-				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.STATU_NOTICE_SENDING && info.getCreatetime() == flag && info.getRecordId().startsWith(Contract.TEMP_INFORMATION_ID)) {
-					Information serviceInformation = informations.get(info.getReceiver().getSuid());
-					info.setCreatetime(serviceInformation.getCreatetime());
-					info.setStatu(serviceInformation.getStatu());
-					info.setRecordId(serviceInformation.getRecordId());
+				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
+						&& info.getCreatetime() == flag) {
+					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 				}
 			}
 			adapter.notifyDataSetChanged();
 		}
+	}
+
+	private BroadcastReceiver mInformationReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Bundle extras = intent.getExtras();
+			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
+			LogUtil.e(msg);
+			DialogUtil.showToast(getApplicationContext(), msg, Toast.LENGTH_LONG);
+			List<Information> informations = JSONConver.jsonToInformations(msg);
+			filteInformations(informations);
+		}
+	};
+
+	private void filteInformations(final List<Information> infos) {
+		Thread th = new Thread() {
+			public void run() {
+				List<Information> newInfos = LogicUtils.informationFilter(HomeActivity.this, infos, getAdapterData());
+				sendDataLoadedMessage(newInfos, MSG_WHAT_INFORMATION_LOADED);
+			};
+		};
+		th.start();
+	}
+
+	private void registeInformationReceiver() {
+		IntentFilter filter = new IntentFilter(UserMessageService.MESSAGE_RECIVE_BROADCAST);
+		registerReceiver(mInformationReceiver, filter);
+		isInformationReceiverRegiste = true;
+		startTigaseService();
+	}
+
+	private void startTigaseService() {
+		Intent intent = new Intent(this, UserMessageService.class);
+		Bundle bundle = new Bundle();
+		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, "user0");
+		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, "111111");
+		intent.putExtras(bundle);
+		startService(intent);
+	}
+
+	private void unregisteInformationReceiver() {
+		if (isInformationReceiverRegiste)
+			unregisterReceiver(mInformationReceiver);
+		isInformationReceiverRegiste = false;
+		stopTigaseService();
+	}
+
+	private void stopTigaseService() {
+		Intent intent = new Intent(this, UserMessageService.class);
+		stopService(intent);
 	}
 }

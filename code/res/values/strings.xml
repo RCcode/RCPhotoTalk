@@ -278,5 +278,7 @@
     <string name="ago">%1$s以前</string>
     
     <string name="added_by_friend">%1$s将我加为好友</string>
+    <string name="added_friend_back">我已反加%1$s为好友</string>
     <string name="added_friend">我将%1$s加为好友</string>
+    <string name="added_friend_confirm">%1$s已反加我为好友</string>
 </resources>

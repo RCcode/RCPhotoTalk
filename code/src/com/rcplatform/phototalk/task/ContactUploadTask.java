@@ -63,7 +63,6 @@ public class ContactUploadTask {
 	private static ContactUploadTask mTask;
 
 	private ContactUploadTask(Context context) {
-		// TODO Auto-generated constructor stub
 		this.mContext = context.getApplicationContext();
 		mUploadTask = new UploadThread();
 	};
@@ -83,7 +82,6 @@ public class ContactUploadTask {
 	private class UploadThread extends Thread {
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			LogUtil.e("start ----------- upload --------------- contacts");
 			List<Contacts> allContacts = ContactUtil.getContacts(mContext);
 
@@ -92,7 +90,6 @@ public class ContactUploadTask {
 
 					@Override
 					public int compare(Contacts lhs, Contacts rhs) {
-						// TODO Auto-generated method stub
 						if (lhs.getMobilePhoneNumber().equals(rhs.getMobilePhoneNumber()))
 							return 0;
 						return 1;
@@ -117,7 +114,6 @@ public class ContactUploadTask {
 							}
 						}
 					} catch (Exception e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -136,6 +132,7 @@ public class ContactUploadTask {
 			entity.put(PhotoTalkParams.PARAM_KEY_TOKEN, PhotoTalkParams.PARAM_VALUE_TOKEN_DEFAULT);
 			entity.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
 			entity.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
+			entity.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
 			JSONArray arrayContacts = new JSONArray();
 			for (Contacts contact : contacts) {
 				JSONObject jsonContact = new JSONObject();
@@ -146,7 +143,6 @@ public class ContactUploadTask {
 			entity.put(PhotoTalkParams.UploadContacts.PARAM_KEY_CONTACT_LIST, arrayContacts);
 			return entity.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -175,13 +171,11 @@ public class ContactUploadTask {
 			}
 			return sb.toString();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

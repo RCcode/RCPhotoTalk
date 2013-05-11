@@ -79,6 +79,10 @@ public class Contract {
 		public static final String UNZIP_SUFFIX = "_unzip";
 	}
 
+	public static class FriendAddType{
+		public static final int ADD_FRIEND_ACTIVE=0;
+		public static final int ADD_FRIEND_PASSIVE=1;
+	}
 	public static final String PREFS_FILE_USER_INFO = "com.menue.login.info.prefs";
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 

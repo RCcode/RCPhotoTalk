@@ -63,7 +63,16 @@ public class Friend implements Serializable {
 	
 	private int isFriend;
 	
+	private String tigaseId;
 	
+	public String getTigaseId() {
+		return tigaseId;
+	}
+
+	public void setTigaseId(String tigaseId) {
+		this.tigaseId = tigaseId;
+	}
+
 	public int getIsFriend() {
 		return isFriend;
 	}

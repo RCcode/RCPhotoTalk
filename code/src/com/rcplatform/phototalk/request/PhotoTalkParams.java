@@ -151,9 +151,6 @@ public class PhotoTalkParams {
 	}
 
 	public static class AddFriendFromInformation {
-		public static final String PARAM_KEY_INFORMATION_ID = "noticeId";
-		public static final String PARAM_KEY_INFORMATION_TYPE = "noType";
-		public static final String PARAM_KEY_INFORMATION_STATE = "state";
-		public static final String PARAM_KEY_FRIEND_SUID = "friendId";
+		public static final String PARAM_KEY_FRIEND_IDS = "friendIds";
 	}
 }

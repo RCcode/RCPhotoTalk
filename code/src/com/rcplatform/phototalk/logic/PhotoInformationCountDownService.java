@@ -40,9 +40,9 @@ public class PhotoInformationCountDownService {
 	}
 
 	public void addInformation(Information info) {
-		info.setStatu(InformationState.STATU_NOTICE_SHOWING);
+		info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
-		mShowingInformations.put(info.getRecordId(), info);
+		mShowingInformations.put(PhotoTalkUtils.getInformationTagBase(info), info);
 		sendDelayMessage(info);
 		startCountDown(info);
 	}
@@ -53,7 +53,7 @@ public class PhotoInformationCountDownService {
 
 	private void sendDelayMessage(Information info) {
 		Message msg = mCountDownHandler.obtainMessage();
-		msg.obj = info.getRecordId();
+		msg.obj = PhotoTalkUtils.getInformationTagBase(info);
 		mCountDownMsgs.add(msg);
 		mCountDownHandler.sendMessageDelayed(msg, info.getTotleLength() * 1000);
 	}
@@ -61,10 +61,10 @@ public class PhotoInformationCountDownService {
 	private Handler mCountDownHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			mCountDownMsgs.remove(msg);
-			String recordId = (String) msg.obj;
-			Information info = mShowingInformations.get(recordId);
-			info.setLastUpdateTime(System.currentTimeMillis());
-			info.setStatu(InformationState.STATU_NOTICE_OPENED);
+			String key = (String) msg.obj;
+			Information info = mShowingInformations.get(key);
+			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
+			MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info);
 			InformationPageController.getInstance().photoInformationShowEnd(info);
 			mPool.execute(new ClearPhotoInformationCacheTask(info));
 		};
@@ -83,7 +83,6 @@ public class PhotoInformationCountDownService {
 
 		@Override
 		public void run() {
-			LogicUtils.updateInformationState(mApplication, Action.ACTION_INFORMATION_STATE_CHANGE, mInfo);
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(mInfo);
 			deleteCacheFiles(mInfo);
 		}
@@ -121,7 +120,7 @@ public class PhotoInformationCountDownService {
 
 		@Override
 		public void run() {
-			mInfo.setStatu(InformationState.STATU_NOTICE_SHOWING);
+			mInfo.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
 			mInfo.setLimitTime(mInfo.getLimitTime() - 1);
 			if (mInfo.getLimitTime() <= 0) {
 				cancel();

@@ -8,14 +8,23 @@ public class RecordUser {
 
     private String headUrl;
 
+    private String tigaseId;
     public RecordUser() {
-        // TODO Auto-generated constructor stub
     }
 
-    public RecordUser(String suid,String nick, String headUrl) {
+    public String getTigaseId() {
+		return tigaseId;
+	}
+
+	public void setTigaseId(String tigaseId) {
+		this.tigaseId = tigaseId;
+	}
+
+	public RecordUser(String suid,String nick, String headUrl,String tigaseId) {
         this.suid = suid;
         this.nick = nick;
         this.headUrl = headUrl;
+        this.tigaseId=tigaseId;
     }
 
 

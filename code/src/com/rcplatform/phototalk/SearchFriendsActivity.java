@@ -136,20 +136,18 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 	private void doFriendAdd(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new RCPlatformResponseHandler() {
+		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 			@Override
-			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
+			public void onFriendAddSuccess(int addType) {
 				dismissLoadingDialog();
 				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 				mAdapter.notifyDataSetChanged();
 				AddFriendsActivity.addFriend(friend);
-				LogicUtils.friendAdded(friend);
 			}
 
 			@Override
-			public void onFailure(int errorCode, String content) {
+			public void onFriendAddFail(int statusCode, String content) {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
@@ -188,7 +186,8 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				tvName.setText(source.getName());
 			}
 
-			RCPlatformImageLoader.loadImage(SearchFriendsActivity.this, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(), AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, portraitImage, R.drawable.default_head);
+			RCPlatformImageLoader.loadImage(SearchFriendsActivity.this, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
+					AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, portraitImage, R.drawable.default_head);
 			// view friend detail.
 			portraitImage.setOnClickListener(new View.OnClickListener() {
 

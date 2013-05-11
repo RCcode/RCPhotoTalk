@@ -3,6 +3,7 @@ package com.rcplatform.phototalk.utils;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {
@@ -33,5 +34,9 @@ public class PhotoTalkUtils {
 
 	public static String getUnZipDirPath(String url) {
 		return getFilePath(url) + Contract.PhotoInformationCache.UNZIP_SUFFIX;
+	}
+	
+	public static String getInformationTagBase(Information information){
+			return information.getReceiver().getSuid()+"|"+information.getSender().getSuid()+"|"+information.getCreatetime();
 	}
 }

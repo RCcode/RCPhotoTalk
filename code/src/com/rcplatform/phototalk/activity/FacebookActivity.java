@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk.activity;
 
-import java.io.IOException;
 import java.util.List;
 
 import android.app.Dialog;
