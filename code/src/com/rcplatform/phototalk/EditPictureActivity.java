@@ -51,8 +51,6 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
@@ -68,8 +66,11 @@ import com.rcplatform.phototalk.views.wheel.adapter.AbstractWheelTextAdapter;
 public class EditPictureActivity extends BaseActivity {
 
 	private static final int UNDO_ON_CLICK = 0;
+
 	private static final int PLAY_VOICE = 1;
+
 	private static final int DELETE_VOICE = 2;
+
 	private static final int TUYA_ON_CLICK = 3;
 
 	private static final int TIMELIMIT_ON_CLICK = 4;
@@ -85,6 +86,7 @@ public class EditPictureActivity extends BaseActivity {
 	private static final int SAVE_FAIL = 200;
 
 	private static final int NO_SDC = 300;
+
 	private static final int SET_LIMIT = 400;
 
 	private EditPictureView mEditePicView;
@@ -94,7 +96,9 @@ public class EditPictureActivity extends BaseActivity {
 	private LinearLayout make_voice;
 
 	private TextView voice_size;
+
 	private Button play_voice;
+
 	private Button delete_voice;
 
 	private ImageView mButtonTuya;
@@ -122,14 +126,66 @@ public class EditPictureActivity extends BaseActivity {
 	// private Dialog waitDialog;
 
 	private boolean enableSave = true;
+
 	private WheelView mWheel;
+
 	private AudioRecordButton audioBtn;
+
 	private String voicePath;
+
 	private boolean isSave = false;
+
 	private Friend friend = null;
+
 	private RelativeLayout select_layout;
+
 	private MediaPlayer player;
+
 	private boolean isPlayer = false;
+
+	private RelativeLayout tooShortLayout;
+
+	private RelativeLayout recordDisplayLayout;
+	
+	private TextView tvVoiceRecordSecond;
+	
+
+	
+	private Handler voiceRecordHandler = new Handler(){
+		private boolean isRecording = false;
+		private Integer recordLast;
+		@Override
+		public void handleMessage(android.os.Message msg) {
+			switch(msg.what){
+				case AudioRecordButton.AUDIO_RECORD_TOO_SHORT:
+					tooShortLayout.setVisibility(View.VISIBLE);
+					voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END, 1000);
+					break;
+				case AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END:
+					tooShortLayout.setVisibility(View.GONE);
+					break;
+				case AudioRecordButton.AUDIO_RECORD_START:
+					recordDisplayLayout.setVisibility(View.VISIBLE);
+					isRecording = true;
+					recordLast = (Integer)msg.obj;
+					voiceRecordHandler.sendEmptyMessage(AudioRecordButton.AUDIO_RECORDING);
+					break;
+					
+				case AudioRecordButton.AUDIO_RECORDING:
+					if(isRecording){
+						tvVoiceRecordSecond.setText(recordLast.toString() + "s");
+						voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORDING, 1000);
+					}
+					recordLast -=1;
+					break;
+				
+				case AudioRecordButton.AUDIO_RECORD_END:
+					recordDisplayLayout.setVisibility(View.GONE);
+					isRecording = false;
+					break;
+			}
+		}
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -137,10 +193,13 @@ public class EditPictureActivity extends BaseActivity {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.edit_picture_view2);
+		tooShortLayout = (RelativeLayout) findViewById(R.id.layout_voice_record_too_short);
+		recordDisplayLayout = (RelativeLayout) findViewById(R.id.layout_voice_record);
+		tvVoiceRecordSecond = (TextView) findViewById(R.id.tv_record_second);
 		friend = (Friend) getIntent().getSerializableExtra("friend");
 		audioBtn = (AudioRecordButton) findViewById(R.id.audioBtn);
-		AudioShowView view = new AudioShowView(this);
-		audioBtn.setAttentionView(getWindowManager(), view, new OnRecordingListener() {
+		audioBtn.setVoiceHandler(voiceRecordHandler);
+		audioBtn.setOnRecordingListener( new OnRecordingListener() {
 
 			@Override
 			public void onRecording(int recordedSecord, int amplitude) {
@@ -154,7 +213,7 @@ public class EditPictureActivity extends BaseActivity {
 				voicePath = savePath;
 				audioBtn.setVisibility(4);
 				make_voice.setVisibility(0);
-				voice_size.setText(n - 1 + "s");
+				voice_size.setText(n + "s");
 
 			}
 		});
@@ -213,37 +272,31 @@ public class EditPictureActivity extends BaseActivity {
 		mButtonClose.setOnClickListener(clickListener);
 		mEditableViewGroup.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
+			@Override
+			public void onGlobalLayout() {
+				// TODO Auto-generated method stub
+				Rect r = new Rect();
+				mEditableViewGroup.getWindowVisibleDisplayFrame(r);
 
-					@Override
-					public void onGlobalLayout() {
-						// TODO Auto-generated method stub
-						Rect r = new Rect();
-						mEditableViewGroup.getWindowVisibleDisplayFrame(r);
+				int screenHeight = mEditableViewGroup.getRootView().getHeight();
+				softInputHight = screenHeight - (r.bottom - r.top);
+				if (softInputHight != 0) {
 
-						int screenHeight = mEditableViewGroup.getRootView()
-								.getHeight();
-						softInputHight = screenHeight - (r.bottom - r.top);
-						if (softInputHight != 0) {
-
-							mEditableViewGroup.setPopupSoftInput(true);
-							mEditableViewGroup
-									.updateTextViewLoation(screenHeight
-											- softInputHight);
-						} else {
-							mEditableViewGroup.setPopupSoftInput(false);
-							if (mEditText != null
-									&& (mEditText.getVisibility() == View.VISIBLE)) {
-								//
-								// if (((EditText) mEditText.getChildAt(0))
-								// .getText().equals("")
-								// || ((EditText) mEditText.getChildAt(0))
-								// .getText() == null) {
-								// mEditText.setVisibility(View.GONE);
-								// }else
-								mEditText.getChildAt(0)
-										.setFocusableInTouchMode(false);
-								mEditText.getChildAt(0).setFocusable(false);
-								mEditText.getChildAt(0).clearFocus();
+					mEditableViewGroup.setPopupSoftInput(true);
+					mEditableViewGroup.updateTextViewLoation(screenHeight - softInputHight);
+				} else {
+					mEditableViewGroup.setPopupSoftInput(false);
+					if (mEditText != null && (mEditText.getVisibility() == View.VISIBLE)) {
+						//
+						// if (((EditText) mEditText.getChildAt(0))
+						// .getText().equals("")
+						// || ((EditText) mEditText.getChildAt(0))
+						// .getText() == null) {
+						// mEditText.setVisibility(View.GONE);
+						// }else
+						mEditText.getChildAt(0).setFocusableInTouchMode(false);
+						mEditText.getChildAt(0).setFocusable(false);
+						mEditText.getChildAt(0).clearFocus();
 
 					}
 				}
@@ -257,103 +310,103 @@ public class EditPictureActivity extends BaseActivity {
 		public void onClick(View v) {
 			int tag = (Integer) v.getTag();
 			switch (tag) {
-			case UNDO_ON_CLICK:
-				setSaveable(true);
-				mEditePicView.undo();
-				break;
-
-			case PLAY_VOICE:
-
-				if (player == null) {
-					try {
-
-						player = new MediaPlayer();
-						player.setDataSource(voicePath);
-						player.setAudioStreamType(AudioManager.STREAM_RING);
-						player.prepare();
-						player.setOnCompletionListener(new OnCompletionListener() {
-
-							@Override
-							public void onCompletion(MediaPlayer mp) {
-								// TODO Auto-generated method stub
-								player.release();
-								player = null;
-								isPlayer = false;
-								playEndMusic();
-							}
-						});
-					} catch (Exception e) {
-						// TODO: handle exception
-					}
-				}
-
-				if (!isPlayer) {
-					player.start();
-					play_voice.setBackgroundResource(R.drawable.voice_pause);
-					isPlayer = true;
-				} else {
-					player.pause();
-					play_voice.setBackgroundResource(R.drawable.play_voice);
-					isPlayer = false;
-				}
-
-				break;
-			case DELETE_VOICE:
-				File file = new File(voicePath);
-				if (file.exists()) {
-					file.delete();
-				}
-				audioBtn.setVisibility(0);
-				make_voice.setVisibility(4);
-				break;
-			case TUYA_ON_CLICK:
-
-				if (mEditePicView.openOrCloseTuya()) {
-					mButtonTuya.setBackgroundResource(R.drawable.scrawl_press);
-					showColorPickerDialog();
-					mEditableViewGroup.setTuyaMode(true);
-					mButtonUndo.setVisibility(View.VISIBLE);
+				case UNDO_ON_CLICK:
 					setSaveable(true);
-				} else {
-					mButtonTuya.setBackgroundResource(R.drawable.scrawl_normal);
-					mButtonUndo.setVisibility(View.GONE);
-					mEditableViewGroup.setTuyaMode(false);
-					if (colorPickerDialog.isShowing())
-						colorPickerDialog.dismiss();
-				}
+					mEditePicView.undo();
+					break;
 
-				break;
-			case TIMELIMIT_ON_CLICK:
-				showTimeLimitView();
-				break;
+				case PLAY_VOICE:
 
-			case SAVE_PICTURE_ON_CLICK:
-				if (enableSave) {
+					if (player == null) {
+						try {
+
+							player = new MediaPlayer();
+							player.setDataSource(voicePath);
+							player.setAudioStreamType(AudioManager.STREAM_RING);
+							player.prepare();
+							player.setOnCompletionListener(new OnCompletionListener() {
+
+								@Override
+								public void onCompletion(MediaPlayer mp) {
+									// TODO Auto-generated method stub
+									player.release();
+									player = null;
+									isPlayer = false;
+									playEndMusic();
+								}
+							});
+						}
+						catch (Exception e) {
+							// TODO: handle exception
+						}
+					}
+
+					if (!isPlayer) {
+						player.start();
+						play_voice.setBackgroundResource(R.drawable.voice_pause);
+						isPlayer = true;
+					} else {
+						player.pause();
+						play_voice.setBackgroundResource(R.drawable.play_voice);
+						isPlayer = false;
+					}
+
+					break;
+				case DELETE_VOICE:
+					File file = new File(voicePath);
+					if (file.exists()) {
+						file.delete();
+					}
+					audioBtn.setVisibility(0);
+					make_voice.setVisibility(4);
+					break;
+				case TUYA_ON_CLICK:
+
+					if (mEditePicView.openOrCloseTuya()) {
+						mButtonTuya.setBackgroundResource(R.drawable.scrawl_press);
+						showColorPickerDialog();
+						mEditableViewGroup.setTuyaMode(true);
+						mButtonUndo.setVisibility(View.VISIBLE);
+						setSaveable(true);
+					} else {
+						mButtonTuya.setBackgroundResource(R.drawable.scrawl_normal);
+						mButtonUndo.setVisibility(View.GONE);
+						mEditableViewGroup.setTuyaMode(false);
+						if (colorPickerDialog.isShowing())
+							colorPickerDialog.dismiss();
+					}
+
+					break;
+				case TIMELIMIT_ON_CLICK:
+					showTimeLimitView();
+					break;
+
+				case SAVE_PICTURE_ON_CLICK:
+					if (enableSave) {
+						mEditableViewGroup.setDrawingCacheEnabled(true);
+						mEditableViewGroup.buildDrawingCache();
+						saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+
+					}
+					break;
+				case SEND_ON_CLICK:
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
+					isSave = true;
 					saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+					if (friend == null) {
+						startSelectFriendActivity();
+					} else {
 
-				}
-				break;
-			case SEND_ON_CLICK:
-				mEditableViewGroup.setDrawingCacheEnabled(true);
-				mEditableViewGroup.buildDrawingCache();
-				isSave = true;
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
-				if (friend == null) {
-					startSelectFriendActivity();
-				} else {
-
-					Intent intent = new Intent(EditPictureActivity.this,
-							HomeActivity.class);
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					startActivity(intent);
-				}
-				break;
-			case CLOSE_ON_CLICK:
-				mEditePicView.recyle();
-				finish();
-				break;
+						Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
+						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+						startActivity(intent);
+					}
+					break;
+				case CLOSE_ON_CLICK:
+					mEditePicView.recyle();
+					finish();
+					break;
 			}
 		}
 	};
@@ -362,21 +415,20 @@ public class EditPictureActivity extends BaseActivity {
 		MediaPlayer endplayer = new MediaPlayer();
 		try {
 
-			AssetFileDescriptor fileDescriptor = this.getAssets().openFd(
-					"end.mp3");
+			AssetFileDescriptor fileDescriptor = this.getAssets().openFd("end.mp3");
 			endplayer.setAudioStreamType(AudioManager.STREAM_RING);
-			endplayer
-					.setDataSource(fileDescriptor.getFileDescriptor(),
-							fileDescriptor.getStartOffset(),
-							fileDescriptor.getLength());
+			endplayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
 			endplayer.prepare();
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -388,7 +440,8 @@ public class EditPictureActivity extends BaseActivity {
 				try {
 					mp.release();
 					play_voice.setBackgroundResource(R.drawable.play_voice);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					// TODO: handle exception
 				}
 			}
@@ -407,38 +460,38 @@ public class EditPictureActivity extends BaseActivity {
 
 		int action = event.getAction();
 		switch (action) {
-		case MotionEvent.ACTION_DOWN:
-			if (mEditText == null) {
-				mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
-				EditText editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
-				final Paint paint = editText.getPaint();
-				editText.addTextChangedListener(new TextWatcher() {
+			case MotionEvent.ACTION_DOWN:
+				if (mEditText == null) {
+					mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
+					EditText editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
+					final Paint paint = editText.getPaint();
+					editText.addTextChangedListener(new TextWatcher() {
 
-					@Override
-					public void onTextChanged(CharSequence s, int start, int before, int count) {
-						setSaveable(true);
-					}
-
-					@Override
-					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-					}
-
-					@Override
-					public void afterTextChanged(Editable s) {
-						float length = paint.measureText(s.toString());
-						if (length > app.getScreenWidth()) {
-							s.delete(s.length() - 1, s.length());
+						@Override
+						public void onTextChanged(CharSequence s, int start, int before, int count) {
+							setSaveable(true);
 						}
-					}
-				});
-				mEditableViewGroup.addEditeTextView(mEditText);
-				setSaveable(true);
-			}
-			break;
 
-		default:
-			break;
+						@Override
+						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+						}
+
+						@Override
+						public void afterTextChanged(Editable s) {
+							float length = paint.measureText(s.toString());
+							if (length > app.getScreenWidth()) {
+								s.delete(s.length() - 1, s.length());
+							}
+						}
+					});
+					mEditableViewGroup.addEditeTextView(mEditText);
+					setSaveable(true);
+				}
+				break;
+
+			default:
+				break;
 		}
 
 		return super.onTouchEvent(event);
@@ -534,7 +587,8 @@ public class EditPictureActivity extends BaseActivity {
 					os.flush();
 					os.close();
 					handler.sendEmptyMessage(SAVE_SUCCESS);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					handler.sendEmptyMessage(NO_SDC);
 					e.printStackTrace();
 				}
@@ -547,33 +601,33 @@ public class EditPictureActivity extends BaseActivity {
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case SAVE_SUCCESS:
-				// setSaveable(false);
-				if (isSave) {
-					if (friend != null) {
-						send();
+				case SAVE_SUCCESS:
+					// setSaveable(false);
+					if (isSave) {
+						if (friend != null) {
+							send();
+						}
+					} else {
+						Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
 					}
-				} else {
-					Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
-				}
-				break;
-			case SAVE_FAIL:
-				// if (waitDialog != null && waitDialog.isShowing())
-				// waitDialog.hide();
-				Toast.makeText(EditPictureActivity.this, R.string.save_fail, Toast.LENGTH_SHORT).show();
-				break;
-			case NO_SDC:
-				// if (waitDialog != null && waitDialog.isShowing())
-				// waitDialog.hide();
-				Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
-				break;
-			case SET_LIMIT:
-				int n = (Integer) msg.obj;
-				mButtonTimeLimit.setText(n + "");
-				mEditePicView.setTimeLimit(n);
-				audioBtn.setMaxRecoedSize(n);
-				select_layout.setVisibility(View.GONE);
-				break;
+					break;
+				case SAVE_FAIL:
+					// if (waitDialog != null && waitDialog.isShowing())
+					// waitDialog.hide();
+					Toast.makeText(EditPictureActivity.this, R.string.save_fail, Toast.LENGTH_SHORT).show();
+					break;
+				case NO_SDC:
+					// if (waitDialog != null && waitDialog.isShowing())
+					// waitDialog.hide();
+					Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
+					break;
+				case SET_LIMIT:
+					int n = (Integer) msg.obj;
+					mButtonTimeLimit.setText(n + "");
+					mEditePicView.setTimeLimit(n);
+					audioBtn.setMaxRecoedSize(n);
+					select_layout.setVisibility(View.GONE);
+					break;
 			}
 
 		};
@@ -607,7 +661,8 @@ public class EditPictureActivity extends BaseActivity {
 			}
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), app.getSendFileCachePath() + ".zip");
 			tempPath = app.getSendFileCachePath() + ".zip";
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 		String timelimit = (String) mButtonTimeLimit.getText();
@@ -645,7 +700,8 @@ public class EditPictureActivity extends BaseActivity {
 			infoRecords.add(record);
 			app.addSendRecords(time, infoRecords);
 			return array.toString();
-		} catch (JSONException e) {
+		}
+		catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

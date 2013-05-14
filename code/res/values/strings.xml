@@ -110,6 +110,7 @@
 
 
     <!-- added futao start -->
+    <string name="voice_too_short">录音时间太短</string>
     <string name="voice_record">按住录音</string>
     <string name="camera">相机</string>
     <string name="photo">相册</string>

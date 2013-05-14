@@ -14,6 +14,7 @@ import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
 import android.media.MediaRecorder.OutputFormat;
 import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -25,22 +26,39 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 public class AudioRecordButton extends Button {
+
 	private int maxRecoedSize = 10;
+
 	private final int STATE_RECORDING = 1;
+
 	// ¼������
 	private final int STATE_RECORD_STOP = 2;
+
+	static public final int AUDIO_RECORD_TOO_SHORT = 3;
+
+	static public final int AUDIO_RECORD_TOO_SHORT_SHOW_END = 4;
+
+	static public final int AUDIO_RECORD_START = 5;
+
+	static public final int AUDIO_RECORD_END = 6;
+
+	static public final int AUDIO_RECORDING = 7;
 
 	private long mStartTime = 0l;
 
 	private int mRecordedSeconds = 0;
 
 	private MediaRecorder mRecorder;
+
 	private String mFilePath = "/record.amr";
+
 	private Handler mHandler = new Handler();
-	private AudioShowView mAttentionView;
-	private WindowManager mWindowManager;
+
 	private int state = 0;
+
 	private OnRecordingListener mOnRecordingListener;
+
+	private Handler mRecordHandler;
 
 	public void setMaxRecoedSize(int maxRecoedSize) {
 		this.maxRecoedSize = maxRecoedSize;
@@ -51,18 +69,19 @@ public class AudioRecordButton extends Button {
 		mFilePath = path + mFilePath;
 	}
 
+	public void setVoiceHandler(Handler handler) {
+		this.mRecordHandler = handler;
+	}
+
 	private Runnable mRecordingListenerTask = new Runnable() {
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			if (state == STATE_RECORDING) {
-				mAttentionView.setChanceText(maxRecoedSize - mRecordedSeconds
-						+ "");
-				mOnRecordingListener.onRecording(mRecordedSeconds++,
-						mRecorder.getMaxAmplitude());
+				mOnRecordingListener.onRecording(mRecordedSeconds++, mRecorder.getMaxAmplitude());
 				mHandler.postDelayed(mRecordingListenerTask, 1000);
-				
+
 				if (mRecordedSeconds > maxRecoedSize) {
 					stopRecord();
 				}
@@ -89,21 +108,22 @@ public class AudioRecordButton extends Button {
 	public boolean onTouchEvent(MotionEvent event) {
 		// TODO Auto-generated method stub
 		switch (event.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			this.setBackgroundResource(R.drawable.btn_download_p);
-			state = 0;
-			// 开始录音
-			play(mFilePath);
-			break;
-		case MotionEvent.ACTION_UP:
-			this.setBackgroundResource(R.drawable.btn_download_n);
-			if (state == STATE_RECORDING) {
-				stopRecord();
-			}else{
-				Toast.makeText(getContext(), "录音时间太短", Toast.LENGTH_SHORT).show();
-			}
-			state = STATE_RECORD_STOP;
-			break;
+			case MotionEvent.ACTION_DOWN:
+				this.setBackgroundResource(R.drawable.btn_download_p);
+				state = 0;
+				// 开始录音
+				play(mFilePath);
+				break;
+			case MotionEvent.ACTION_UP:
+				this.setBackgroundResource(R.drawable.btn_download_n);
+				if (state == STATE_RECORDING) {
+					stopRecord();
+				} else {
+					mRecordHandler.sendEmptyMessage(AUDIO_RECORD_TOO_SHORT);
+
+				}
+				state = STATE_RECORD_STOP;
+				break;
 		}
 		return true;
 	}
@@ -112,18 +132,19 @@ public class AudioRecordButton extends Button {
 		MediaPlayer player = new MediaPlayer();
 		player.setAudioStreamType(AudioManager.STREAM_RING);
 		try {
-			AssetFileDescriptor fileDescriptor = this.getContext().getAssets()
-					.openFd("start.mp3");
-			player.setDataSource(fileDescriptor.getFileDescriptor(),
-					fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+			AssetFileDescriptor fileDescriptor = this.getContext().getAssets().openFd("start.mp3");
+			player.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
 			player.prepare();
-		} catch (IllegalArgumentException e) {
+		}
+		catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -139,7 +160,8 @@ public class AudioRecordButton extends Button {
 					if (state != STATE_RECORD_STOP) {
 						startRecord(voicePath);
 					}
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					// TODO: handle exception
 				}
 			}
@@ -157,7 +179,7 @@ public class AudioRecordButton extends Button {
 			System.out.println("file.exists()");
 			file.delete();
 		}
-		showAttention();
+		// showAttention();
 		mStartTime = System.currentTimeMillis();
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
@@ -169,13 +191,20 @@ public class AudioRecordButton extends Button {
 			mRecorder.start();
 			state = STATE_RECORDING;
 			// mHandler.postDelayed(mStopRecordTask, MAX_RECORD_TIME * 1000);
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Message msg = new Message();
+		msg.what = AUDIO_RECORD_START;
+		msg.obj = this.maxRecoedSize;
+		mRecordHandler.sendMessage(msg);
+		mHandler.post(mRecordingListenerTask);
 	}
 
 	private void stopMediaRecorder() {
@@ -183,49 +212,36 @@ public class AudioRecordButton extends Button {
 			mRecorder.stop();
 			mRecorder.release();
 			state = STATE_RECORD_STOP;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// TODO: handle exception
 		}
 
 	}
 
-	private void showAttention() {
-		if (mAttentionView != null) {
-			LayoutParams params = new WindowManager.LayoutParams();
-			params.width = WindowManager.LayoutParams.WRAP_CONTENT;
-			params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-			params.gravity = Gravity.CENTER;
-			mWindowManager.addView(mAttentionView, params);
-			mHandler.post(mRecordingListenerTask);
-		}
-	}
-
-	private void removeAttention() {
-		if (mAttentionView != null) {
-			mWindowManager.removeViewImmediate(mAttentionView);
-		}
-	}
-
 	private void stopRecord() {
 
-		removeAttention();
 		stopMediaRecorder();
 		if ((System.currentTimeMillis() - mStartTime) < 1 * 1000) {
-			Toast.makeText(getContext(), "录音时间太短", Toast.LENGTH_SHORT).show();
+			// Toast.makeText(getContext(), "录音时间太短",
+			// Toast.LENGTH_SHORT).show();
+			mRecordHandler.sendEmptyMessage(AUDIO_RECORD_TOO_SHORT);
 		} else {
+			mRecordedSeconds = (int) (System.currentTimeMillis() - mStartTime) / 1000;
 			mOnRecordingListener.endRecord(mFilePath, mRecordedSeconds);
 		}
 		mRecordedSeconds = 0;
+
+		mRecordHandler.sendEmptyMessage(AUDIO_RECORD_END);
 	}
 
-	public void setAttentionView(WindowManager manager, AudioShowView view,
-			OnRecordingListener listener) {
-		this.mAttentionView = view;
-		this.mWindowManager = manager;
+	public void setOnRecordingListener(OnRecordingListener listener) {
+
 		this.mOnRecordingListener = listener;
 	}
 
 	public static interface OnRecordingListener {
+
 		public void onRecording(int recordedSecord, int amplitude);
 
 		public void endRecord(String savePath, int size);
