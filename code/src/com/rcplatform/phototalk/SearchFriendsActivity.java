@@ -33,17 +33,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 
-/**
- * 好友搜索页面
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-11 上午10:18:23
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author jelly.xiong@menue.com.cn
- * @version 1.0.0
- */
 public class SearchFriendsActivity extends BaseActivity implements View.OnClickListener {
 
 	private EditText mEditText;
