@@ -19,29 +19,29 @@
 
         <Button
             android:id="@+id/btn_edit_pic_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/close_edit_button_selector" />
 
         <Button
             android:id="@+id/btn_edit_pic_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/save_button_selector" />
 
         <Button
             android:id="@+id/btn_edit_pic_undo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginRight="@dimen/take_photo_left"
             android:layout_toLeftOf="@id/btn_edit_pic_tuya"
             android:background="@drawable/undo_button_selector" />
 
         <ImageView
             android:id="@+id/btn_edit_pic_tuya"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:src="@drawable/scrawl_button_selector" />
     </RelativeLayout>
@@ -82,8 +82,8 @@
 
         <Button
             android:id="@+id/btn_edit_pic_timelimit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/timelimit_button_selector"
             android:gravity="center"
             android:paddingTop="4dp"
@@ -92,8 +92,8 @@
 
         <LinearLayout
             android:id="@+id/make_voice"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="48dp"
             android:layout_centerHorizontal="true"
             android:background="@drawable/voice_bg"
             android:visibility="invisible" >
@@ -108,16 +108,16 @@
 
             <Button
                 android:id="@+id/play_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="10dp"
                 android:background="@drawable/play_voice" />
 
             <Button
                 android:id="@+id/delete_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="21dp"
+                android:layout_height="21dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="40dp"
                 android:background="@drawable/delete_voice" />
@@ -131,14 +131,14 @@
             android:background="@drawable/btn_download_n"
             android:gravity="center"
             android:paddingLeft="30dp"
-            android:text="按住录音"
+            android:text="@string/voice_record"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/edit_photo_voice_text_size" />
 
         <Button
             android:id="@+id/btn_edit_pic_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:background="@drawable/send_edit_button_selector" />
     </RelativeLayout>

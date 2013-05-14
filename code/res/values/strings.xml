@@ -110,6 +110,7 @@
 
 
     <!-- added futao start -->
+    <string name="voice_record">按住录音</string>
     <string name="camera">相机</string>
     <string name="photo">相册</string>
     <string name="close">关闭</string>
