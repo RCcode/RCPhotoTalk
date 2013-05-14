@@ -16,7 +16,7 @@ public class ImageOptionsFactory {
 	public static final int IMAGE_TYPE_THUMBNAIL = 2;
 
 	// futao------------
-	private static final int SMALL_PICTURE_DEFAULT_DRAWABLE = R.drawable.ic_launcher;
+	private static final int SMALL_PICTURE_DEFAULT_DRAWABLE = R.drawable.user_detail_bg;
 
 	private static final int THEME_PICTURE_DEFAULT_DRAWABLE = R.drawable.ic_launcher;
 

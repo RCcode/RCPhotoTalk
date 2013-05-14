@@ -74,7 +74,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private Uri mImageUri;
 	private RelativeLayout viewAbout;
 	private MenueApplication app;
-	private String saveBgUrl=null;
 	private int CAMERA_CODE = 0;
 
 	@Override
@@ -109,22 +108,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getHeadImageOptions(), userInfo.getHeadUrl(), AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView, R.drawable.default_head);
 		mNickView.setText("" + userInfo.getNick());
 		userRcId.setText("" + userInfo.getRcId());
-		if (userInfo.getBackground() != null) {
-			String url = app.getBackgroundCachePath()+"/"+getFileName(userInfo.getBackground());
-			File file = new File(url);
-			if(file.exists()){
-			user_bg_View.setBackgroundDrawable(new BitmapDrawable(
-					getBitmap(userInfo.getBackground())));
-			}else{
-				//图片有更新 下载新的图片
-				RCPlatformImageLoader.loadImage(SettingsActivity.this,
+		RCPlatformImageLoader.loadImage(SettingsActivity.this,
 						ImageLoader.getInstance(),
-						ImageOptionsFactory.getHeadImageOptions(),
+						ImageOptionsFactory.getDefaultImageOptions(),
 						userInfo.getBackground(),
-						AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, user_bg_View,
-						R.drawable.default_head);
-			}
-		}
+						AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, user_bg_View,
+						R.drawable.user_detail_bg);
 	}
 
 	private void initTitle() {
@@ -185,7 +174,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		// 加是判断是背景还是头像设置 两个上传和保存顺序不同 后期需要优化
 		switch (CAMERA_CODE) {
 		case 1:
-			postImage(imagePath,imageBaseUri);
+			// 背景上传 
+			new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
 			break;
 
 		case 2:
@@ -230,8 +220,16 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			dismissLoadingDialog();
-			saveEditedPictrue(result);
-			user_bg_View.setBackgroundDrawable(new BitmapDrawable(result));
+			String url= null;
+			try {
+				url = cacheHeadImage(result);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			user_bg_View.setImageBitmap(result);
+			//上传
+			postImage(url);
 		}
 	}
 
@@ -243,27 +241,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			e.printStackTrace();
 		}
 		return bitmap;
-	}
-
-	public void saveEditedPictrue(final Bitmap bitmap) {
-		File file = new File(saveBgUrl);
-		userInfo.setBackground(saveBgUrl);
-		PrefsUtils.User.saveUserInfo(this, userInfo.getEmail(), userInfo);
-		try {
-			if (file.exists()) {
-				file.delete();
-			}
-			if (!file.exists())
-				file.createNewFile();
-			BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file)); //
-			// b.compress(Bitmap.CompressFormat.JPEG, 100, os);
-			bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-			os.flush();
-			os.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 
 	private void doCleanDistory() {
@@ -282,7 +259,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		}
 	}
 
-	public void postImage(final String imageUrl,final Uri imageBaseUri) {
+	public void postImage(final String imageUrl) {
 		File file = null;
 		try {
 			file = new File(imageUrl);
@@ -292,13 +269,15 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 							public void onSuccess(int statusCode, String content) {
 								// TODO Auto-generated method stub
 								// 上传成功
-								saveBgUrl = decodeUtil(content);
-								new LoadImageTask().execute(imageBaseUri, Uri.parse(imageUrl));
+								System.out.println("---content------>"+content);
+								userInfo.setBackground(decodeUtil(content,"background"));
+								PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getEmail(), userInfo);
 							}
 
 							@Override
 							public void onFailure(int errorCode, String content) {
 								// TODO Auto-generated method stub
+								System.out.println("fail--content-->"+content);
 								// 上传失败
 							}
 						});
@@ -314,7 +293,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
-	public String decodeUtil(String content){
+	public String decodeUtil(String content,String name){
 		String headUrl = null;
 		JSONObject contentJson = null;
 		try {
@@ -322,8 +301,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			if(contentJson.has("userInfo")){
 				JSONObject json = new JSONObject(contentJson.getString("userInfo"));
 			if(json.has("headUrl")){
-				headUrl = json.getString("headUrl");
-				headUrl = app.getBackgroundCachePath()+"/"+getFileName(headUrl);
+				headUrl = json.getString(name);
 			}
 			}
 		} catch (JSONException e) {
@@ -333,19 +311,11 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		return headUrl;
 	}
 	
-	public static String getFileName(String imageUrl) {
-		String fileName = "";
-		if (imageUrl != null && imageUrl.length() != 0) {
-			fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
-		}
-		return fileName;
-	}
 	
-	
-	private void updateUserInfo(String url) {
+	private void upUserInfoHeadImage(String url) {
 		// 资料发生改变 上传服务器
 			File file = file = new File(url);
-			FriendsProxy.upUserInfo(
+			FriendsProxy.upUserInfoHeadImage(
 					this,
 					file,
 					new RCPlatformResponseHandler() {
@@ -353,6 +323,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 						@Override
 						public void onSuccess(int statusCode, String content) {
 							// TODO Auto-generated method stub
+							userInfo.setHeadUrl(decodeUtil(content,"headUrl"));
+							PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getEmail(), userInfo);
 						}
 
 						@Override
@@ -360,8 +332,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 							// TODO Auto-generated method stub
 
 						}
-					}, userInfo.getNick(), userInfo.getBirthday(),
-					userInfo.getSex() + "");
+					});
 		}
 	
 	class LoadHeadImageTask extends AsyncTask<Uri, Void, Bitmap> {
@@ -388,9 +359,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
 						nHeight, rotateAngel);
 				bitmap = Utils.getRectBitmap(bitmap);
-				if (bitmap != null) {
-					updateUserInfo(cacheHeadImage(bitmap));
-				}
 			} catch (OutOfMemoryError e) {
 				e.printStackTrace();
 			} catch (Exception e) {
@@ -409,6 +377,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 						R.string.image_unsupport, Toast.LENGTH_SHORT);
 				finish();
 			} else {
+				try {
+					upUserInfoHeadImage(cacheHeadImage(result));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				mHeadView.setImageBitmap(result);
 			}
 		}
@@ -416,10 +390,10 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 	private String cacheHeadImage(Bitmap bitmap) throws Exception {
 		String cachePath =null;
-		File file = new File(getCacheDir(), Contract.HEAD_CACHE_PATH);
+		File file = new File(app.getBackgroundCachePath(), Contract.HEAD_CACHE_PATH);
 		FileOutputStream fos = new FileOutputStream(file);
 		bitmap.compress(CompressFormat.PNG, 100, fos);
-		cachePath = "file://" + file.getPath();
+		cachePath = file.getPath();
 		userInfo.setHeadUrl(cachePath);
 		fos.flush();
 		fos.close();

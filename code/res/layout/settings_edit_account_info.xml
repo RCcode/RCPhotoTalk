@@ -39,7 +39,7 @@
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/init_page_login_button_selector" >
+                android:background="@drawable/popup_btn" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -68,7 +68,7 @@
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/init_page_login_button_selector" >
+                android:background="@drawable/popup_btn" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -97,7 +97,7 @@
                 android:layout_marginLeft="7dp"
                 android:layout_marginRight="7dp"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/init_page_login_button_selector" >
+                android:background="@drawable/popup_btn" >
 
                 <TextView
                     android:layout_width="match_parent"
@@ -119,34 +119,7 @@
                     android:gravity="center_vertical" />
             </RelativeLayout>
 
-          <!--   <RelativeLayout
-                android:id="@+id/rela_edit_signture"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="7dp"
-                android:layout_marginRight="7dp"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/init_page_login_button_selector" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/signture" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/settings_modify_signature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/default_gap"
-                    android:drawableRight="@drawable/right_arrow"
-                    android:gravity="center_vertical" />
-            </RelativeLayout> -->
+       
         </LinearLayout>
     </ScrollView>
 

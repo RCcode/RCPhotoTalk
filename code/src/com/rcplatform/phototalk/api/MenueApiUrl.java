@@ -62,6 +62,9 @@ public class MenueApiUrl {
 	public static final String USER_INFO_URL = USER_URL + "getPUser.do";
 
 	public static final String USER_INFO_UPDATE_URL = FILE_URL + "userUpload.do";
+	public static final String USER_INFO_BACKGROUND_URL = FILE_URL + "uploadBackground.do";
+	
+	public static final String USER_INFO_HEAD_IMAGE_URL = FILE_URL + "uploadHead.do";
 
 	public static final String FACEBOOK_RECOMMENDS_URL = USER_URL + "queryThirdUsers.do";
 

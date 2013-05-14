@@ -8,6 +8,7 @@ import com.rcplatform.phototalk.R;
 
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaRecorder;
@@ -109,6 +110,7 @@ public class AudioRecordButton extends Button {
 
 	public void play(final String voicePath) {
 		MediaPlayer player = new MediaPlayer();
+		player.setAudioStreamType(AudioManager.STREAM_RING);
 		try {
 			AssetFileDescriptor fileDescriptor = this.getContext().getAssets()
 					.openFd("start.mp3");

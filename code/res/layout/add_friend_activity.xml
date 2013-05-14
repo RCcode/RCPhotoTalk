@@ -22,7 +22,7 @@
             android:layout_marginLeft="@dimen/default_gap"
             android:layout_marginRight="@dimen/default_gap"
             android:layout_marginTop="@dimen/default_gap"
-            android:background="@drawable/init_page_login_button_selector" >
+            android:background="@drawable/popup_btn" >
 
             <ImageView
                 android:id="@+id/imageView1"
@@ -53,7 +53,7 @@
             android:layout_marginLeft="@dimen/default_gap"
             android:layout_marginRight="@dimen/default_gap"
             android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/init_page_login_button_selector" >
+            android:background="@drawable/popup_btn" >
 
             <TextView
                 android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
              android:layout_marginLeft="@dimen/default_gap"
             android:layout_marginRight="@dimen/default_gap"
             android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/init_page_login_button_selector" >
+            android:background="@drawable/popup_btn" >
 
             <TextView
                 android:layout_width="wrap_content"

@@ -108,7 +108,7 @@ public class ImagePickActivity extends BaseActivity {
 			mImageSelectPopupWindow.setFocusable(true);
 			mImageSelectPopupWindow.setOutsideTouchable(true);
 			mImageSelectPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-			ImageButton cameraBtn = (ImageButton) detailsView.findViewById(R.id.picker_head_source_camera);
+			Button cameraBtn = (Button) detailsView.findViewById(R.id.picker_head_source_camera);
 			cameraBtn.setOnClickListener(new View.OnClickListener() {
 
 				@Override
@@ -121,7 +121,7 @@ public class ImagePickActivity extends BaseActivity {
 					startCamera();
 				}
 			});
-			ImageButton gallaryBtn = (ImageButton) detailsView.findViewById(R.id.picker_head_source_gallary);
+			Button gallaryBtn = (Button) detailsView.findViewById(R.id.picker_head_source_gallary);
 			gallaryBtn.setOnClickListener(new View.OnClickListener() {
 
 				@Override

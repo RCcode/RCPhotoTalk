@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
@@ -12,7 +13,7 @@ import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
 
 public class AboutActivity extends BaseActivity implements OnClickListener, DialogInterface.OnClickListener {
-	private TextView tvCheckUpdate;
+	private Button tvCheckUpdate;
 	private String updateUrl;
 	private AlertDialog mUpdateDialog;
 
@@ -25,7 +26,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 
 	private void initView() {
 		initBackButton(R.string.about, this);
-		tvCheckUpdate = (TextView) findViewById(R.id.tv_check_update);
+		tvCheckUpdate = (Button) findViewById(R.id.tv_check_update);
 		tvCheckUpdate.setOnClickListener(this);
 	}
 

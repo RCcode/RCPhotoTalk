@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
@@ -56,9 +57,13 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		// TODO Auto-generated method stub
 
 		Button btnContinue = (Button) findViewById(R.id.btn_continue);
+
+		ImageView btn_continue_line = (ImageView)findViewById(R.id.btn_continue_line);
 		btnContinue.setOnClickListener(this);
 		if (getIntent().getData() != null) {
 			btnContinue.setVisibility(View.GONE);
+			btn_continue_line.setVisibility(View.GONE);
+
 		}
 		RadioGroup rgTabs = (RadioGroup) findViewById(R.id.rg_add_friends);
 		rgTabs.setOnCheckedChangeListener(new OnCheckedChangeListener() {

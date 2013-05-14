@@ -149,6 +149,13 @@ public class FriendsProxy {
 		request.setFile(file);
 		request.excuteAsync();
 	}
+	//上传头像
+	public static void upUserInfoHeadImage(Context context,File file,
+			RCPlatformResponseHandler responseHandler) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
+		PhotoTalkParams.buildBasicParams(context, client);
+		client.postFile(context, MenueApiUrl.USER_INFO_HEAD_IMAGE_URL, file, responseHandler);
+	}
 
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
 		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);

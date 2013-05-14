@@ -350,6 +350,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 					mShowDialog = builder.create();
 				}
 				mShowDialog.ShowDialog(infoRecord);
+				LogicUtils.startShowPhotoInformation(infoRecord);
 				isShow = true;
 				LogicUtils.startShowPhotoInformation(infoRecord);
 				// 把数据里面的状态更改为3，已查看

@@ -81,12 +81,17 @@ public class LongClickShowView extends Dialog {
 		 */
 		public LongClickShowView create() {
 			if (dialog == null)
-				dialog = new LongClickShowView(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+				dialog = new LongClickShowView(context,
+						android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 			if (dialog.contentView == null) {
-				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);
-				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
-				mPlayVidoeView = (PlayVidoeView) dialog.contentView.findViewById(R.id.pv_rts_video);
+				LayoutInflater inflater = (LayoutInflater) context
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				dialog.contentView = (RelativeLayout) inflater.inflate(
+						layoutResId, null);
+				mImageView = (ImageView) dialog.contentView
+						.findViewById(R.id.iv_rts_pic);
+				mPlayVidoeView = (PlayVidoeView) dialog.contentView
+						.findViewById(R.id.pv_rts_video);
 				dialog.setContentView(dialog.contentView);
 			} else {
 				dialog.setContentView(dialog.contentView);
@@ -123,7 +128,8 @@ public class LongClickShowView extends Dialog {
 		show();
 	}
 
-	private void showZipContent(File[] fileList, Information info) throws Exception {
+	private void showZipContent(File[] fileList, Information info)
+			throws Exception {
 		for (File file : fileList) {
 			if (isImage(file.getName())) {
 				showImage(file);
@@ -160,7 +166,9 @@ public class LongClickShowView extends Dialog {
 		Builder.mAudioPlayer.setDataSource(file.getPath());
 		Builder.mAudioPlayer.prepare();
 		Builder.mAudioPlayer.start();
-		Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
+		if (info.getTotleLength() != info.getLimitTime())
+			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000
+					- info.getLimitTime() * 1000);
 	}
 
 	private void showImage(File file) {
@@ -188,7 +196,8 @@ public class LongClickShowView extends Dialog {
 	public void initTimer() {
 
 		glTimer = new RecordTimerLimitView(getContext());
-		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT,
+				LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		params.setMargins(0, 10, 40, 0);
 		glTimer.setTextSize(56);
@@ -199,12 +208,13 @@ public class LongClickShowView extends Dialog {
 				hideDialog();
 			}
 		}, null, null);
-		Builder.mPlayVidoeView.setOnStartPlayListener(new OnStartPlayListener() {
-			@Override
-			public void onStart() {
-				glTimer.setVisibility(View.VISIBLE);
-			}
-		});
+		Builder.mPlayVidoeView
+				.setOnStartPlayListener(new OnStartPlayListener() {
+					@Override
+					public void onStart() {
+						glTimer.setVisibility(View.VISIBLE);
+					}
+				});
 		contentView.addView(glTimer, params);
 	}
 }

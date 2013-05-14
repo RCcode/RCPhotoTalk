@@ -565,49 +565,32 @@ public class Utils {
 		try {
 
 			Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-
 			bitmap.getHeight(), Config.ARGB_8888);
 			Canvas canvas = new Canvas(output);
-
 			Paint paint = new Paint();
-
 			Rect rect = new Rect(0, 0, bitmap.getWidth(),
-
 			bitmap.getHeight());
-
 			RectF rectF = new RectF(new Rect(0, 0, bitmap.getWidth(),
-
 			bitmap.getHeight()));
-
 			final float roundPx = bitmap.getWidth() / 2;
-
 			paint.setAntiAlias(true);
-
 			canvas.drawARGB(0, 0, 0, 0);
-
 			paint.setColor(Color.BLACK);
-
 			canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
-
 			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-
 			final Rect src = new Rect(0, 0, bitmap.getWidth(),
-
 			bitmap.getHeight());
-
 			canvas.drawBitmap(bitmap, src, rect, paint);
 			if (bitmap != null && !bitmap.isRecycled()) {
 				bitmap.recycle();
 				bitmap = null;
+				System.gc();
 			}
 			return output;
 
 		} catch (Exception e) {
-
 			return bitmap;
-
 		}
-
 	}
 
 	// 头像图片保存为正方形
@@ -625,6 +608,7 @@ public class Utils {
 		if (bitmap != null && !bitmap.isRecycled()) {
 			bitmap.recycle();
 			bitmap = null;
+			System.gc();
 		}
 		return output;
 	}

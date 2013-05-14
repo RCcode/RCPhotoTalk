@@ -15,45 +15,42 @@
         android:layout_above="@+id/btns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:dotSpacing="3dp"
+        app:dotSpacing="5dp"
         android:layout_centerHorizontal="true" 
-        android:layout_marginBottom="10dp"/>
-    <RelativeLayout
+        android:layout_marginBottom="@dimen/init_indicator_bottom"/>
+    <LinearLayout
         android:id="@+id/btns"
-        style="@style/StandardButtonsAndBoxesLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10.0dip" >
+        android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/init_btn_bottom" >
 
-        <ImageView
+      <!--   <ImageView
             android:id="@id/init_page_ghost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_launcher"
-            android:visibility="gone" />
+            android:visibility="gone" /> -->
 
         <Button
             android:id="@id/init_page_login_button"
-            style="@style/LandingPageButton"
-            android:layout_width="275.0dip"
-            android:layout_below="@id/init_page_ghost"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/default_gap_2x"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/init_page_login_button_selector"
             android:text="@string/init_page_login"
-            android:textColor="@drawable/btn_color" />
+            android:textColor="#2a2928" />
 
         <Button
             android:id="@id/init_page_signup_button"
-            style="@style/LandingPageButton"
-            android:layout_width="275.0dip"
-            android:layout_below="@id/init_page_login_button"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/init_page_signup_button_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/init_btn_padding"
+            android:background="@drawable/init_page_login_button_selector"
             android:text="@string/init_page_signup"
-            android:textColor="@drawable/btn_color" />
-    </RelativeLayout>
+            android:textColor="#E2582a" />
+    </LinearLayout>
 
 </RelativeLayout>

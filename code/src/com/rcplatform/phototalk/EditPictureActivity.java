@@ -18,6 +18,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
@@ -212,24 +213,38 @@ public class EditPictureActivity extends BaseActivity {
 		mButtonClose.setOnClickListener(clickListener);
 		mEditableViewGroup.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
-			@Override
-			public void onGlobalLayout() {
-				// TODO Auto-generated method stub
-				Rect r = new Rect();
-				mEditableViewGroup.getWindowVisibleDisplayFrame(r);
 
-				int screenHeight = mEditableViewGroup.getRootView().getHeight();
-				softInputHight = screenHeight - (r.bottom - r.top);
-				if (softInputHight != 0) {
+					@Override
+					public void onGlobalLayout() {
+						// TODO Auto-generated method stub
+						Rect r = new Rect();
+						mEditableViewGroup.getWindowVisibleDisplayFrame(r);
 
-					mEditableViewGroup.setPopupSoftInput(true);
-					mEditableViewGroup.updateTextViewLoation(screenHeight - softInputHight);
-				} else {
-					mEditableViewGroup.setPopupSoftInput(false);
-					if (mEditText != null && (mEditText.getVisibility() == View.VISIBLE)) {
-						mEditText.getChildAt(0).setFocusableInTouchMode(false);
-						mEditText.getChildAt(0).setFocusable(false);
-						mEditText.getChildAt(0).clearFocus();
+						int screenHeight = mEditableViewGroup.getRootView()
+								.getHeight();
+						softInputHight = screenHeight - (r.bottom - r.top);
+						if (softInputHight != 0) {
+
+							mEditableViewGroup.setPopupSoftInput(true);
+							mEditableViewGroup
+									.updateTextViewLoation(screenHeight
+											- softInputHight);
+						} else {
+							mEditableViewGroup.setPopupSoftInput(false);
+							if (mEditText != null
+									&& (mEditText.getVisibility() == View.VISIBLE)) {
+								//
+								// if (((EditText) mEditText.getChildAt(0))
+								// .getText().equals("")
+								// || ((EditText) mEditText.getChildAt(0))
+								// .getText() == null) {
+								// mEditText.setVisibility(View.GONE);
+								// }else
+								mEditText.getChildAt(0)
+										.setFocusableInTouchMode(false);
+								mEditText.getChildAt(0).setFocusable(false);
+								mEditText.getChildAt(0).clearFocus();
+
 					}
 				}
 			}
@@ -251,18 +266,10 @@ public class EditPictureActivity extends BaseActivity {
 
 				if (player == null) {
 					try {
-						// File file = new File(voicePath);
-						// System.out.println("---voicePath---->" + voicePath);
-						// if (file.exists()) {
-						// System.out.println("asdasd录音文件存在" + file.length()
-						// / 1024 + "kb");
-						// } else {
-						// System.out.println("asdasd录音文件不存在");
-						//
-						// }
 
 						player = new MediaPlayer();
 						player.setDataSource(voicePath);
+						player.setAudioStreamType(AudioManager.STREAM_RING);
 						player.prepare();
 						player.setOnCompletionListener(new OnCompletionListener() {
 
@@ -333,17 +340,12 @@ public class EditPictureActivity extends BaseActivity {
 				mEditableViewGroup.buildDrawingCache();
 				isSave = true;
 				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
-				// mEditableViewGroup.setDrawingCacheEnabled(true);
-				// mEditableViewGroup.buildDrawingCache();
-				// app.setEditeBitmap(mEditableViewGroup.getDrawingCache());
-				// // 点击发送后实时保存
-				// // mEditableViewGroup.setDrawingCacheEnabled(true);
-				// // mEditableViewGroup.buildDrawingCache();
-				// // saveEditedPictrue(mEditableViewGroup.getDrawingCache());
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
-					Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
+
+					Intent intent = new Intent(EditPictureActivity.this,
+							HomeActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
 				}
@@ -359,8 +361,14 @@ public class EditPictureActivity extends BaseActivity {
 	private void playEndMusic() {
 		MediaPlayer endplayer = new MediaPlayer();
 		try {
-			AssetFileDescriptor fileDescriptor = this.getAssets().openFd("end.mp3");
-			endplayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
+
+			AssetFileDescriptor fileDescriptor = this.getAssets().openFd(
+					"end.mp3");
+			endplayer.setAudioStreamType(AudioManager.STREAM_RING);
+			endplayer
+					.setDataSource(fileDescriptor.getFileDescriptor(),
+							fileDescriptor.getStartOffset(),
+							fileDescriptor.getLength());
 			endplayer.prepare();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -534,25 +542,13 @@ public class EditPictureActivity extends BaseActivity {
 		}).start();
 	}
 
-	// public void showDialog() {
-	//
-	// if (waitDialog == null) {
-	// waitDialog = new Dialog(this, R.style.waiting_dialog);
-	// waitDialog.setContentView(R.layout.reader_progress_wait_view);
-	// waitDialog.getWindow().setBackgroundDrawableResource(
-	// R.color.TRANSPARENT);
-	// waitDialog.setCancelable(false);
-	// }
-	// waitDialog.show();
-	// }
-
 	Handler handler = new Handler() {
 
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case SAVE_SUCCESS:
-				setSaveable(false);
+				// setSaveable(false);
 				if (isSave) {
 					if (friend != null) {
 						send();
