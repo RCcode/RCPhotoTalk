@@ -112,7 +112,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 			startActivityForResult(new Intent(this, UnbindFacebookActivity.class), REQUEST_CODE_UNBIND_FACEBOOK);
 			break;
 		case R.id.rela_change_password:
-			startActivity(new Intent(this, UpdateLoginPasswordActivity.class));
+			startActivity(new Intent(this, ChangePasswordActivity.class));
 			break;
 
 		}

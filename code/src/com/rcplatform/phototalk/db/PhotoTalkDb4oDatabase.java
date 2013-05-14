@@ -9,6 +9,7 @@ import java.util.Map;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
@@ -77,7 +78,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public synchronized boolean hasFriend(String suid) {
 		Friend example = new Friend();
-		example.setSuid(suid);
+		example.setRcId(suid);
 		ObjectSet<Friend> result = db.queryByExample(example);
 		if (result.size() > 0) {
 			return true;
@@ -107,8 +108,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	private Information getInformationExample(Information information) {
 		Information infoExample = new Information();
 		infoExample.setCreatetime(information.getCreatetime());
-		infoExample.setSender(new RecordUser(information.getSender().getSuid(), null, null,null));
-		infoExample.setReceiver(new RecordUser(information.getReceiver().getSuid(), null, null,null));
+		infoExample.setSender(new RecordUser(information.getSender().getSuid(), null, null, null));
+		infoExample.setReceiver(new RecordUser(information.getReceiver().getSuid(), null, null, null));
 		infoExample.setType(information.getType());
 		return infoExample;
 	}
@@ -140,7 +141,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public synchronized void updateFriendRequestInformationByFriend(Friend friend) {
 		Information infoExample = new Information();
-		infoExample.setSender(new RecordUser(friend.getSuid(), null, null,null));
+		infoExample.setSender(new RecordUser(friend.getRcId(), null, null, null));
 		infoExample.setType(InformationType.TYPE_FRIEND_REQUEST_NOTICE);
 		ObjectSet<Information> infos = db.queryByExample(infoExample);
 		if (infos.size() > 0) {
@@ -156,7 +157,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, Map<String, String> userIds) {
 		Information infoExample = new Information();
-		infoExample.setSender(new RecordUser(senderInfo.getSuid(), null, null,null));
+		infoExample.setSender(new RecordUser(senderInfo.getRcId(), null, null, null));
 		infoExample.setCreatetime(createTime);
 		ObjectSet<Information> infoLocals = db.queryByExample(infoExample);
 		List<Information> informations = new ArrayList<Information>();
@@ -169,8 +170,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				result.put(info.getReceiver().getSuid(), info);
 			}
 		}
-		if (userIds.containsKey(senderInfo.getSuid())) {
-			RecordUser user = new RecordUser(senderInfo.getSuid(), senderInfo.getNick(), senderInfo.getHeadUrl(),senderInfo.getTigaseId());
+		if (userIds.containsKey(senderInfo.getRcId())) {
+			RecordUser user = new RecordUser(senderInfo.getRcId(), senderInfo.getNick(), senderInfo.getHeadUrl(), senderInfo.getTigaseId());
 			Information information = MessageSender.createInformation(InformationType.TYPE_PICTURE_OR_VIDEO,
 					InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD, user, user, createTime);
 			result.put(user.getSuid(), information);
@@ -180,5 +181,78 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		informations.clear();
 		informations = null;
 		return result;
+	}
+
+	@Override
+	public void saveFriends(List<Friend> friends) {
+		Friend friendExample = new Friend();
+		friendExample.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
+		for (Friend friend : localCache)
+			db.delete(friend);
+		db.store(friends);
+		db.commit();
+	}
+
+	@Override
+	public List<Friend> getFriends() {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return arg0.getStatus() == Friend.USER_STATUS_FRIEND_ADDED;
+			}
+		}, new Comparator<Friend>() {
+
+			@Override
+			public int compare(Friend lhs, Friend rhs) {
+				return lhs.getLetter().compareTo(rhs.getLetter());
+			}
+		});
+		List<Friend> friends = new ArrayList<Friend>();
+		friends.addAll(result);
+		return friends;
+	}
+
+	@Override
+	public List<Friend> getRecommends(final int type) {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return arg0.getStatus() == Friend.USER_STATUS_NOT_FRIEND && arg0.getSource().getAttrType() == type;
+			}
+		});
+		List<Friend> friends = new ArrayList<Friend>();
+		friends.addAll(result);
+		return friends;
+	}
+
+	@Override
+	public List<Friend> getRecommends() {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return arg0.getStatus() == Friend.USER_STATUS_NOT_FRIEND;
+			}
+		});
+		List<Friend> friends = new ArrayList<Friend>();
+		friends.addAll(result);
+		return friends;
+	}
+
+	@Override
+	public void saveRecommends(List<Friend> recommends) {
+		Friend friendExample = new Friend();
+		friendExample.setStatus(Friend.USER_STATUS_NOT_FRIEND);
+		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
+		for (Friend friend : localCache)
+			db.delete(friend);
+		db.store(recommends);
+		db.commit();
 	}
 }

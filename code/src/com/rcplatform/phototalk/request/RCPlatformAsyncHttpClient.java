@@ -2,10 +2,11 @@ package com.rcplatform.phototalk.request;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.entity.StringEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -24,31 +25,21 @@ public class RCPlatformAsyncHttpClient {
 	private static final String CONTENT_TYPE_JSON = "application/json";
 	private static final int TIME_OUT = 30 * 1000;
 	private AsyncHttpClient mClient;
-	private Map<String, String> mParams;
 	private RequestParams mRequestParams;
-	private RequestAction mAction;
 	private boolean isCancel = false;
 
 	public static enum RequestAction {
 		FILE, JSON
 	}
 
-	public RCPlatformAsyncHttpClient(RequestAction action) {
-		mAction = action;
+	public RCPlatformAsyncHttpClient() {
 		mClient = new AsyncHttpClient();
 		mClient.setTimeout(TIME_OUT);
-		if (action == RequestAction.JSON) {
-			mParams = new HashMap<String, String>();
-		} else if (action == RequestAction.FILE) {
-			mRequestParams = new RequestParams();
-		}
+		mRequestParams = new RequestParams();
 	}
 
 	public void clearParams() {
-		if (mAction == RequestAction.JSON)
-			mParams.clear();
-		else if (mAction == RequestAction.FILE)
-			mRequestParams = new RequestParams();
+		mRequestParams = new RequestParams();
 	}
 
 	public void cancel() {
@@ -60,7 +51,6 @@ public class RCPlatformAsyncHttpClient {
 			mClient.post(context, url, getEntityFromParams(), CONTENT_TYPE_JSON, new AsyncHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, String content) {
-					// TODO Auto-generated method stub
 					super.onSuccess(statusCode, content);
 					LogUtil.e("response is " + content);
 					if (responseHandler != null && !isCancel) {
@@ -72,10 +62,9 @@ public class RCPlatformAsyncHttpClient {
 							} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {
 								context.sendBroadcast(new Intent(Action.ACTION_OTHER_DEVICE_LOGIN));
 							} else {
-								responseHandler.onFailure(state, null);
+								responseHandler.onFailure(state, jsonObject.getString(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_MESSAGE));
 							}
 						} catch (JSONException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 							onIOException(context, responseHandler);
 						}
@@ -84,7 +73,6 @@ public class RCPlatformAsyncHttpClient {
 
 				@Override
 				public void onFailure(Throwable error, String content) {
-					// TODO Auto-generated method stub
 					super.onFailure(error, content);
 					LogUtil.e("response is " + content);
 					if (responseHandler != null) {
@@ -93,7 +81,6 @@ public class RCPlatformAsyncHttpClient {
 				}
 			});
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			if (responseHandler != null)
 				responseHandler.onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
@@ -111,14 +98,12 @@ public class RCPlatformAsyncHttpClient {
 				mRequestParams.put("file", file);
 				mRequestParams.put("imgType", "jpg");
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		mClient.post(context, url, mRequestParams, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
 				super.onSuccess(statusCode, content);
 				LogUtil.e(content);
 				if (responseHandler != null && !isCancel) {
@@ -131,7 +116,6 @@ public class RCPlatformAsyncHttpClient {
 							responseHandler.onFailure(state, null);
 						}
 					} catch (JSONException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 						onIOException(context, responseHandler);
 					}
@@ -140,7 +124,6 @@ public class RCPlatformAsyncHttpClient {
 
 			@Override
 			public void onFailure(Throwable error, String content) {
-				// TODO Auto-generated method stub
 				super.onFailure(error, content);
 				LogUtil.e(content);
 				if (responseHandler != null) {
@@ -152,19 +135,13 @@ public class RCPlatformAsyncHttpClient {
 	}
 
 	public void putRequestParam(String key, String value) {
-		if (mAction == RequestAction.FILE)
-			mRequestParams.put(key, value);
-		else if (mAction == RequestAction.JSON)
-			mParams.put(key, value);
+		mRequestParams.put(key, value);
 	}
 
 	public void putAllRequestParams(Map<String, String> params) {
-		if (mAction == RequestAction.FILE) {
-			for (String key : params.keySet()) {
-				mRequestParams.put(key, params.get(key));
-			}
-		} else if (mAction == RequestAction.JSON)
-			mParams.putAll(params);
+		for (String key : params.keySet()) {
+			mRequestParams.put(key, params.get(key));
+		}
 	}
 
 	public void cancel(Context context) {
@@ -173,8 +150,9 @@ public class RCPlatformAsyncHttpClient {
 
 	private StringEntity getEntityFromParams() throws Exception {
 		JSONObject jsonObject = new JSONObject();
-		for (String key : mParams.keySet()) {
-			jsonObject.put(key, mParams.get(key));
+		List<BasicNameValuePair> params = mRequestParams.getParamsList();
+		for (BasicNameValuePair pair : params) {
+			jsonObject.put(pair.getName(), pair.getValue());
 		}
 		LogUtil.e("request params is :" + jsonObject.toString());
 		return new StringEntity(jsonObject.toString(), "UTF-8");

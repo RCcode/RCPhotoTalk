@@ -116,7 +116,7 @@ public class UnbindFacebookActivity extends Activity implements View.OnClickList
 
 	private void createTacotyId(String tacotyid) {
 		GalHttpRequest request = GalHttpRequest.requestWithURL(this, MenueApiUrl.CREATE_TACOTY_ID_URL);
-		request.setPostValueForKey(MenueApiFactory.USERID, PrefsUtils.LoginState.getLoginUser(this).getSuid());
+		request.setPostValueForKey(MenueApiFactory.USERID, PrefsUtils.LoginState.getLoginUser(this).getRcId());
 		request.setPostValueForKey(MenueApiFactory.TOKEN, MenueApiFactory.TOKEN_DEFAULT);
 		request.setPostValueForKey(MenueApiFactory.TACOTYID, tacotyid);
 		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());

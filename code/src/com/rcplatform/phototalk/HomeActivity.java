@@ -610,11 +610,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void startTigaseService() {
-		UserInfo currentUser=getPhotoTalkApplication().getCurrentUser();
+		UserInfo currentUser = getCurrentUser();
 		Intent intent = new Intent(this, UserMessageService.class);
 		Bundle bundle = new Bundle();
-		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, "1000034_1");
-		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, "9cafeef08db2dd477098a0293e71f90a");
+		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, currentUser.getTigaseId());
+		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePassword());
 		intent.putExtras(bundle);
 		startService(intent);
 	}

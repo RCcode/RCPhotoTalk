@@ -13,7 +13,6 @@ import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUserInfo;
 
@@ -36,7 +35,7 @@ public class FacebookUploadTask {
 	public FacebookUploadTask(Context context, List<ThirdPartFriend> friends, GraphUser user) {
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
-		mClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		mClient = new RCPlatformAsyncHttpClient();
 		buildPostParam(context, friends, user);
 
 	}
@@ -48,7 +47,7 @@ public class FacebookUploadTask {
 	public FacebookUploadTask(Context context, List<ThirdPartFriend> friends, ThirdPartUserInfo user) {
 		// TODO Auto-generated constructor stub
 		this.mContext = context;
-		mClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		mClient = new RCPlatformAsyncHttpClient();
 		buildPostParam(context, friends, user);
 	}
 

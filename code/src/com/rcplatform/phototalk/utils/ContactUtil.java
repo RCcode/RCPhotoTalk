@@ -43,7 +43,7 @@ public class ContactUtil {
 		List<Friend> friends = new ArrayList<Friend>();
 		for (Contacts contact : contacts) {
 			Friend friend = paserContact(contact);
-			friend.setSuid(contact.getMobilePhoneNumber());
+			friend.setRcId(contact.getMobilePhoneNumber());
 			friends.add(friend);
 		}
 		return friends;

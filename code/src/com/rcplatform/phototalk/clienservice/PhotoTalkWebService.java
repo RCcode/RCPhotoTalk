@@ -5,20 +5,16 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.rcplatform.phototalk.MenueApplication;
-import com.rcplatform.phototalk.request.FileRequest;
-import com.rcplatform.phototalk.request.JSONRequest;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
+import com.rcplatform.phototalk.request.Request;
 
 public class PhotoTalkWebService extends Service {
-	private RCPlatformAsyncHttpClient mClientJson;
-	private RCPlatformAsyncHttpClient mClientFile;
+	private RCPlatformAsyncHttpClient mClient;
 
 	public void onCreate() {
 		super.onCreate();
 		((MenueApplication) getApplication()).setWebService(this);
-		mClientJson = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		mClientFile = new RCPlatformAsyncHttpClient(RequestAction.FILE);
+		mClient = new RCPlatformAsyncHttpClient();
 	};
 
 	@Override
@@ -26,15 +22,12 @@ public class PhotoTalkWebService extends Service {
 		return null;
 	}
 
-	public void postRequest(JSONRequest request) {
-		mClientJson.clearParams();
-		mClientJson.putAllRequestParams(request.getParams());
-		mClientJson.post(getBaseContext(), request.getUrl(), request.getResponseHandler());
-	}
-
-	public void postRequest(FileRequest request) {
-		mClientFile.clearParams();
-		mClientFile.putAllRequestParams(request.getParams());
-		mClientFile.postFile(getBaseContext(), request.getUrl(), request.getFile(), request.getResponseHandler());
+	public void post(Request request) {
+		mClient.clearParams();
+		mClient.putAllRequestParams(request.getParams());
+		if (request.getFile() == null)
+			mClient.post(getBaseContext(), request.getUrl(), request.getResponseHandler());
+		else
+			mClient.postFile(getBaseContext(), request.getUrl(), request.getFile(), request.getResponseHandler());
 	}
 }

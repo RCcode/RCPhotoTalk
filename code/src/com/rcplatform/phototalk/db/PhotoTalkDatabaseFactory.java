@@ -14,6 +14,11 @@ public class PhotoTalkDatabaseFactory {
 	public static PhotoTalkDatabase getDatabase() {
 		return mDatabase;
 	}
+
+	public static RequestDatabase getRequestDatabase() {
+		return RequestDb4oDatabase.getInstance();
+	}
+
 	public static void close() {
 
 	}

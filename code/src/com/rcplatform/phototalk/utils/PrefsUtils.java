@@ -73,6 +73,7 @@ public class PrefsUtils {
 	public static class LoginState {
 		private static final String PREF_NAME = "loginstate";
 		private static final String PREF_KEY_LOGIN_USER = "loginuser";
+		private static final String PREF_KEY_HAS_USED = "hasused";
 
 		public static void setLoginUser(Context context, UserInfo userInfo) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
@@ -93,6 +94,16 @@ public class PrefsUtils {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
 			sh.edit().clear().commit();
 		}
+
+		public static void setAppUsed(Context context) {
+			SharedPreferences sh = getPreference(context, PREF_NAME);
+			sh.edit().putBoolean(PREF_KEY_HAS_USED, true).commit();
+		}
+
+		public static boolean hasAppUsed(Context context) {
+			SharedPreferences sh = getPreference(context, PREF_NAME);
+			return sh.getBoolean(PREF_KEY_HAS_USED, false);
+		}
 	}
 
 	public static class User {
@@ -106,11 +117,11 @@ public class PrefsUtils {
 		public static UserInfo getUserInfo(Context context, String pref) {
 
 			SharedPreferences sp = getPreference(context, pref);
-			String suid = sp.getString(Contract.KEY_SUID, null);
-			if (suid == null)
+			String rcId = sp.getString(Contract.KEY_RCID, null);
+			if (rcId == null)
 				return null;
 			UserInfo userInfo = new UserInfo();
-			userInfo.setSuid(suid);
+			userInfo.setRcId(rcId);
 			userInfo.setEmail(sp.getString(Contract.KEY_EMAIL, null));
 			userInfo.setPassWord(sp.getString(Contract.KEY_PASSWORD, null));
 			userInfo.setToken(sp.getString(Contract.KEY_USER_TOKEN, null));
@@ -124,8 +135,9 @@ public class PrefsUtils {
 			userInfo.setBirthday(sp.getString(Contract.KEY_BIRTHDAY, null));
 			userInfo.setDeviceId(sp.getString(Contract.KEY_DEVICE_ID, null));
 			userInfo.setPhone(sp.getString(Contract.KEY_PHONE, null));
-			userInfo.setRcId(sp.getString(Contract.KEY_RCID, null));
 			userInfo.setBackground(sp.getString(Contract.KEY_BACKGROUND, null));
+			userInfo.setTigaseId(sp.getString(Contract.KEY_TIGASE_ID, null));
+			userInfo.setTigasePassword((sp.getString(Contract.KEY_TIGASE_PASSWORD, null)));
 			return userInfo;
 		}
 
@@ -158,10 +170,15 @@ public class PrefsUtils {
 		 */
 		public static void saveUserInfo(Context context, String pref, UserInfo userInfo) {
 			SharedPreferences sharedPreferences = getPreference(context, pref);
-			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_SUID, userInfo.getSuid()).putString(Contract.KEY_USERNAME, userInfo.getNick()).putString(Contract.KEY_PASSWORD, userInfo.getPassWord())
-					.putString(Contract.KEY_USER_TOKEN, userInfo.getToken()).putString(Contract.KEY_SIGNATURE, userInfo.getSignature()).putString(Contract.KEY_NICK, userInfo.getNick()).putString(Contract.KEY_HEADURL, userInfo.getHeadUrl()).putInt(Contract.KEY_SEX, userInfo.getSex())
-					.putInt(Contract.KEY_RECEIVESET, userInfo.getReceiveSet()).putInt(Contract.KEY_TRENDSET, userInfo.getTrendsSet()).putString(Contract.KEY_RCID, userInfo.getRcId()).putString(Contract.KEY_PHONE, userInfo.getPhone()).putString(Contract.KEY_AGE, userInfo.getAge())
-					.putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
+			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_USERNAME, userInfo.getNick())
+					.putString(Contract.KEY_PASSWORD, userInfo.getPassWord()).putString(Contract.KEY_USER_TOKEN, userInfo.getToken())
+					.putString(Contract.KEY_SIGNATURE, userInfo.getSignature()).putString(Contract.KEY_NICK, userInfo.getNick())
+					.putString(Contract.KEY_HEADURL, userInfo.getHeadUrl()).putInt(Contract.KEY_SEX, userInfo.getSex())
+					.putInt(Contract.KEY_RECEIVESET, userInfo.getReceiveSet()).putInt(Contract.KEY_TRENDSET, userInfo.getTrendsSet())
+					.putString(Contract.KEY_RCID, userInfo.getRcId()).putString(Contract.KEY_PHONE, userInfo.getPhone())
+					.putString(Contract.KEY_TIGASE_ID, userInfo.getTigaseId()).putString(Contract.KEY_TIGASE_PASSWORD, userInfo.getTigasePassword())
+					.putString(Contract.KEY_AGE, userInfo.getAge()).putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday())
+					.putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
 
 		/**

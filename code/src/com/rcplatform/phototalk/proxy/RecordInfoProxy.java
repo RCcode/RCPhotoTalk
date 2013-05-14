@@ -16,8 +16,7 @@ import android.content.Context;
 public class RecordInfoProxy {
 	public static List<Information> getAllRecordInfos(Context context,
 			RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(
-				RequestAction.JSON);
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.putRequestParam(PhotoTalkParams.RecordInfo.PARAM_MAX_RECORD_ID,
 				getMaxRecordInfoId(context) + "");

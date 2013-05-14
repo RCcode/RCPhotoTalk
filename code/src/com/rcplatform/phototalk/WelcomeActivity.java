@@ -1,5 +1,7 @@
 package com.rcplatform.phototalk;
 
+import java.io.File;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,6 +12,9 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -64,7 +69,7 @@ public class WelcomeActivity extends BaseActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
+//		testRequestDatabase();
 	}
 
 	private void executeAutoLogin() {
@@ -87,5 +92,19 @@ public class WelcomeActivity extends BaseActivity {
 		intent.setAction(Contract.Action.ACTION_UPLOAD_INTITE_CONTACT);
 		startService(intent);
 	}
-
+	private void testRequestDatabase(){
+		Request request=new Request(this, "http://www.baidu.com", new RCPlatformResponseHandler() {
+			
+			@Override
+			public void onSuccess(int statusCode, String content) {
+			}
+			
+			@Override
+			public void onFailure(int errorCode, String content) {
+			}
+		});
+		request.putParam("nihao", "buhao");
+		request.setFile(new File("/storage/dicm"));
+		PhotoTalkDatabaseFactory.getRequestDatabase().saveRequest(request);
+	}
 }

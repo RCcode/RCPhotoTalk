@@ -45,8 +45,6 @@ public class Friend implements Serializable {
 
 	private int receiveSet;
 
-	private String suid;
-
 	private int userFrom;
 
 	private List<AppInfo> appList;
@@ -211,13 +209,6 @@ public class Friend implements Serializable {
 		this.userFrom = userFrom;
 	}
 
-	public String getSuid() {
-		return suid;
-	}
-
-	public void setSuid(String suid) {
-		this.suid = suid;
-	}
 
 	/* 获取朋友状态。1表示已添加，0表示未添加。 */
 	public int getStatus() {
@@ -267,7 +258,6 @@ public class Friend implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
-		// TODO Auto-generated method stub
-		return suid.equals(((Friend) o).getSuid());
+		return rcId.equals(((Friend) o).getRcId());
 	}
 }

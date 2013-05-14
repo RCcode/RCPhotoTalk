@@ -18,7 +18,7 @@ import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 
 public class AddFriendTask {
-	private RCPlatformAsyncHttpClient mHttpClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+	private RCPlatformAsyncHttpClient mHttpClient = new RCPlatformAsyncHttpClient();
 	private Context mContext;
 	private AddFriendListener mListener;
 	private Friend mFriend;
@@ -27,7 +27,7 @@ public class AddFriendTask {
 		this.mContext = context;
 		this.mListener = listener;
 		PhotoTalkParams.buildBasicParams(mContext, mHttpClient);
-		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_SUID, userInfo.getSuid());
+		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_SUID, userInfo.getRcId());
 		buildFriends(friends);
 		mFriend = friends[0];
 	}
@@ -37,7 +37,7 @@ public class AddFriendTask {
 		for (Friend friend : friends) {
 			try {
 				JSONObject jsonFriend = new JSONObject();
-				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SUID, friend.getSuid());
+				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SUID, friend.getRcId());
 				if (friend.getSource() != null)
 					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType());
 				array.put(jsonFriend);

@@ -28,7 +28,7 @@ public class GetBindPhoneTask {
 	}
 
 	public void start() {
-		client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		client = new RCPlatformAsyncHttpClient();
 		PhotoTalkParams.buildBasicParams(mContext, client);
 		client.post(mContext.getApplicationContext(), MenueApiUrl.CHECK_USER_PHONEBIND_URL, new RCPlatformResponseHandler() {
 

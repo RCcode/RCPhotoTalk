@@ -148,7 +148,7 @@ public class MyFriendExpandableListAdapter extends BaseExpandableListAdapter {
 		}
 		// data
 		final FriendChat mContent = childData.get(groupPosition).get(childPosition);
-		viewHolder.id = mContent.getSuid();
+		viewHolder.id = mContent.getRcId();
 		// 推荐好友
 		if (getGroup(groupPosition).toString().equals("好友推荐")) {
 			viewHolder.line1.setVisibility(View.VISIBLE);

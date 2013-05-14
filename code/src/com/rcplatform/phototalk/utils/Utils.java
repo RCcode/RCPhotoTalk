@@ -41,7 +41,6 @@ import android.view.inputmethod.InputMethodManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendChat;
 import com.rcplatform.phototalk.bean.UserInfo;
 
 public class Utils {
@@ -101,8 +100,8 @@ public class Utils {
 					.getColumnIndex(Contract.KEY_RECEIVESET)));
 			userInfo.setSignature(cursor.getString(cursor
 					.getColumnIndex(Contract.KEY_SIGNATURE)));
-			userInfo.setSuid(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_SUID)));
+			userInfo.setRcId(cursor.getString(cursor
+					.getColumnIndex(Contract.KEY_RCID)));
 			userInfo.setToken(cursor.getString(cursor
 					.getColumnIndex(Contract.KEY_USER_TOKEN)));
 		}

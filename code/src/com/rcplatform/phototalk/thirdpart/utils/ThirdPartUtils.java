@@ -17,7 +17,7 @@ public class ThirdPartUtils {
 
 	public static Friend parserToFriend(ThirdPartFriend friend, int type) {
 		Friend result = new Friend();
-		result.setSuid(friend.getId());
+		result.setRcId(friend.getId());
 		result.setHeadUrl(friend.getHeadUrl());
 		result.setNick(friend.getNick());
 		return result;
@@ -28,7 +28,7 @@ public class ThirdPartUtils {
 		for (Friend friend : recommendFriends) {
 			String facebookId = friend.getSource().getValue();
 			for (Friend facebookFriend : facebookFriends) {
-				if (facebookFriend.getSuid().equals(facebookId)) {
+				if (facebookFriend.getRcId().equals(facebookId)) {
 					friendsRepeat.add(facebookFriend);
 					break;
 				}

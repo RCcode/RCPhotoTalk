@@ -12,7 +12,6 @@ import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
@@ -84,7 +83,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 	private void doGetPassword(String email) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		mEmail = email;
-		RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient();
 		PhotoTalkParams.buildBasicParams(this, httpClient);
 		httpClient.putRequestParam("email", email);
 		httpClient.post(this, MenueApiUrl.FORGET_PASSWORD_URL, new RCPlatformResponseHandler() {

@@ -65,7 +65,7 @@ public class MenueApiUrl {
 
 	public static final String FACEBOOK_RECOMMENDS_URL = USER_URL + "queryThirdUsers.do";
 
-	public static final String ADD_FRIEND_URL = USER_URL + "tigaseAddFriend.do";
+	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
 
 	public static final String ASYNC_INVITE_URL = USER_URL + "inviteUserLog.do";
 	public static final String FRIEND_DETAIL_URL = USER_URL + "getUserInfo.do";
@@ -79,7 +79,7 @@ public class MenueApiUrl {
 	public static final String DELETE_RECOMMEND_URL=USER_URL+"delInviteUser.do";
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
-	private static final String BASE_URL_FOR_USER = BASE_URL + "useraccess/";
+	private static final String BASE_URL_FOR_USER = BASE_URL + "rcboss/";
 
 	public static final String RCPLATFORM_ACCOUNT_LOGIN_URL = BASE_URL_FOR_USER + "login/createUserInfo.do";
 	private static final String COMM_URL = BASE_URL_FOR_USER + "comm/";

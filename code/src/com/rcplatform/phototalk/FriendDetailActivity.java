@@ -226,6 +226,6 @@ public class FriendDetailActivity extends BaseActivity {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
-		}, mFriend.getSuid(), remark);
+		}, mFriend.getRcId(), remark);
 	}
 }

@@ -1,134 +1,193 @@
 package com.rcplatform.phototalk.proxy;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
+import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class FriendsProxy {
 
 	public static List<Friend> getFacebookRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam("attrType", FriendType.FACEBOOK + "");
-		client.post(context, MenueApiUrl.FACEBOOK_RECOMMENDS_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.FACEBOOK_RECOMMENDS_URL, responseHandler);
+		request.putParam("attrType", FriendType.FACEBOOK + "");
+		request.excuteAsync();
 		return null;
 	}
 
 	public static List<Friend> getContactRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
 		PhotoTalkParams.buildBasicParams(context, client);
 		client.post(context, MenueApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
 		return null;
 	}
 
 	public static void searchFriendsAsync(Context context, RCPlatformResponseHandler responseHandler, String keyWords) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.SearchFriends.PARAM_KEY_KEYWORDS, keyWords);
-		client.post(context, MenueApiUrl.SEARCH_FRIENDS_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.SEARCH_FRIENDS_URL, responseHandler);
+		request.putParam(PhotoTalkParams.SearchFriends.PARAM_KEY_KEYWORDS, keyWords);
+		request.excuteAsync();
 	}
 
-	public static List<Friend>[] getMyFriend(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+	public static void getMyFriend(final Activity context, final OnFriendsLoadedListener listener) {
+		Thread thread = new Thread() {
+			@Override
+			public void run() {
+				final List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+				final List<Friend> recommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
+				if (!context.isFinishing()) {
+					context.runOnUiThread(new Runnable() {
+						@Override
+						public void run() {
+							listener.onLocalFriendsLoaded(friends, recommends);
+							loadFriendsFromService(context, listener);
+						}
+					});
+				}
+			}
+		};
+		thread.start();
+	}
+
+	private static void loadFriendsFromService(final Activity context, final OnFriendsLoadedListener listener) {
+		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
 		PhotoTalkParams.buildBasicParams(context, client);
-		client.post(context, MenueApiUrl.GET_MY_FRIENDS_URL, responseHandler);
-		return null;
+		client.post(context, MenueApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, final String content) {
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						try {
+							JSONObject jObj = new JSONObject(content);
+							final List<Friend> mFriends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
+							final List<Friend> mRecommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
+							for (Friend friend : mFriends) {
+								friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNick()));
+							}
+							PhotoTalkDatabaseFactory.getDatabase().saveFriends(mFriends);
+							PhotoTalkDatabaseFactory.getDatabase().saveRecommends(mRecommends);
+							Collections.sort(mFriends, new Comparator<Friend>() {
+
+								@Override
+								public int compare(Friend lhs, Friend rhs) {
+									return lhs.getLetter().compareTo(rhs.getLetter());
+								}
+							});
+							runOnUiThread(context, new Runnable() {
+
+								@Override
+								public void run() {
+									listener.onServiceFriendsLoaded(mFriends, mRecommends);
+								}
+							});
+
+						} catch (Exception e) {
+							e.printStackTrace();
+							runOnUiThread(context, new Runnable() {
+
+								@Override
+								public void run() {
+									listener.onError(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+								}
+							});
+						}
+					}
+				};
+				thread.start();
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+				listener.onError(errorCode, content);
+			}
+		});
+	}
+
+	private static void runOnUiThread(Activity context, Runnable task) {
+		context.runOnUiThread(task);
 	}
 
 	public static void getUserInfo(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.post(context, MenueApiUrl.GET_USER_INFO, responseHandler);
+		Request request = new Request(context, MenueApiUrl.GET_USER_INFO, responseHandler);
+		request.excuteAsync();
 	}
 
 	// 田镇源 发送图片时 请求好友列表
 	public static void getMyFriendlist(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.post(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
-	}
-
-	// 田镇源 上传zip方法
-	public static void postZip(Context context, File file, RCPlatformResponseHandler responseHandler, String time, String desc, String timeLimit,
-			String user_appary) {
-
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.FILE);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(MenueApiFactory.TIME, time);
-		// client.putRequestParam(MenueApiFactory.IMAGE_TYPE, "jpg");
-		client.putRequestParam(MenueApiFactory.DESC, desc);
-		client.putRequestParam(MenueApiFactory.TIME_LIMIT, timeLimit);
-		client.putRequestParam(MenueApiFactory.USER_ARRAY, user_appary);
-		// client.putRequestParam(key, value)
-		client.postFile(context, MenueApiUrl.SEND_PICTURE_URL, file, responseHandler);
+		Request request = new Request(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
+		request.excuteAsync();
 	}
 
 	// 田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.FILE);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(MenueApiFactory.NICK, nick);
-		client.putRequestParam(MenueApiFactory.BIRTHDAY, birthday);
-		client.putRequestParam(MenueApiFactory.SEX, sex);
-		client.postFile(context, MenueApiUrl.USER_INFO_UPDATE_URL, file, responseHandler);
+		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);
+		request.putParam(MenueApiFactory.NICK, nick);
+		request.putParam(MenueApiFactory.BIRTHDAY, birthday);
+		request.putParam(MenueApiFactory.SEX, sex);
+		request.setFile(file);
+		request.excuteAsync();
 	}
 
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.FILE);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.postFile(context, MenueApiUrl.USER_INFO_UPDATE_URL, file, responseHandler);
+		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);
+		request.setFile(file);
+		request.excuteAsync();
 	}
 
 	public static void deleteFriend(Context context, RCPlatformResponseHandler responseHandler, String friendSuid) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.DelFriends.PARAM_KEY_FRIEND_ID, friendSuid);
-		client.post(context, MenueApiUrl.DELETE_FRIEND_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.DELETE_FRIEND_URL, responseHandler);
+		request.putParam(PhotoTalkParams.DelFriends.PARAM_KEY_FRIEND_ID, friendSuid);
+		request.excuteAsync();
 	}
 
 	public static void updateFriendRemark(Context context, RCPlatformResponseHandler responseHandler, String friendSuid, String remark) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_REMARK, remark);
-		client.putRequestParam(PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_FRIEND_ID, friendSuid);
-		client.post(context, MenueApiUrl.UPDATE_FRIEND_REMARK_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.UPDATE_FRIEND_REMARK_URL, responseHandler);
+		request.putParam(PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_REMARK, remark);
+		request.putParam(PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_FRIEND_ID, friendSuid);
+		request.excuteAsync();
 	}
 
 	public static Friend getFriendDetail(Context context, RCPlatformResponseHandler responseHandler, String friendSuid) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendSuid);
-		client.post(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
+		request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendSuid);
+		request.excuteAsync();
 		return null;
 	}
 
 	public static void addFriendFromInformation(Context context, RCPlatformResponseHandler responseHandler, Information info) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
+		Request request = new Request(context, MenueApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
 		JSONArray array = new JSONArray();
 		array.put(info.getSender().getSuid());
-		client.putRequestParam(PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_FRIEND_IDS, array.toString());
-		client.post(context, MenueApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
+		request.putParam(PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_FRIEND_IDS, array.toString());
+		request.excuteAsync();
 	}
 
 	public static void deleteRecommendFriend(Context context, RCPlatformResponseHandler responseHandler, Friend friend) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.DelRecommend.PARAM_KEY_FRIEND_ID, friend.getSuid());
-		client.putRequestParam(PhotoTalkParams.DelRecommend.PARAM_KEY_RECOMMEND_TYPE, friend.getSource().getAttrType() + "");
-		client.post(context, MenueApiUrl.DELETE_RECOMMEND_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.DELETE_RECOMMEND_URL, responseHandler);
+		request.putParam(PhotoTalkParams.DelRecommend.PARAM_KEY_FRIEND_ID, friend.getRcId());
+		request.putParam(PhotoTalkParams.DelRecommend.PARAM_KEY_RECOMMEND_TYPE, friend.getSource().getAttrType() + "");
+		request.excuteAsync();
 	}
 }

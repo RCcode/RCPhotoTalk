@@ -33,7 +33,7 @@ public class UserInfoProvider extends ContentProvider {
 			final UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getContext());
 			if (userInfo != null) {
 				Cursor cursor = new AbstractCursor() {
-					private String[] columnNames = new String[] { Contract.KEY_SUID, Contract.KEY_EMAIL, Contract.KEY_PASSWORD, Contract.KEY_USER_TOKEN, Contract.KEY_NICK, Contract.KEY_HEADURL, Contract.KEY_SIGNATURE, Contract.KEY_SEX, Contract.KEY_RECEIVESET, Contract.KEY_BIRTHDAY, Contract.KEY_DEVICE_ID, Contract.KEY_PHONE };
+					private String[] columnNames = new String[] { Contract.KEY_RCID, Contract.KEY_EMAIL, Contract.KEY_PASSWORD, Contract.KEY_USER_TOKEN, Contract.KEY_NICK, Contract.KEY_HEADURL, Contract.KEY_SIGNATURE, Contract.KEY_SEX, Contract.KEY_RECEIVESET, Contract.KEY_BIRTHDAY, Contract.KEY_DEVICE_ID, Contract.KEY_PHONE };
 
 					@Override
 					public boolean isNull(int column) {
@@ -131,7 +131,7 @@ public class UserInfoProvider extends ContentProvider {
 		String result = null;
 		switch (column) {
 		case 0:
-			result = userInfo.getSuid();
+			result = userInfo.getRcId();
 			break;
 		case 1:
 			result = userInfo.getEmail();

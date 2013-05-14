@@ -7,8 +7,9 @@ public class RCPlatformResponse {
 
 	public static class ResponseStatus {
 		public static final String RESPONSE_KEY_STATUS = "status";
+		public static final String RESPONSE_KEY_MESSAGE = "message";
 		public static final int RESPONSE_VALUE_SUCCESS = 0;
-		public static final int RESPONSE_NEED_LOGIN = -2;
+		public static final int RESPONSE_NEED_LOGIN = -100;
 
 		public static boolean isRequestSuccess(String json) throws JSONException {
 			JSONObject jsonObject = new JSONObject(json);

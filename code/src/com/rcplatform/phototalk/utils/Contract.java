@@ -1,32 +1,45 @@
 package com.rcplatform.phototalk.utils;
 
+import java.util.Map;
+
 import android.app.Activity;
-import android.os.Environment;
 import android.util.DisplayMetrics;
+
+import com.rcplatform.phototalk.LoginActivity;
+import com.rcplatform.phototalk.bean.AppInfo;
+import com.rcplatform.phototalk.bean.UserInfo;
 
 public class Contract {
 
 	public static int SCREEN_WIDTH;
 	public static int SCREEN_HEIGHT;
 	public static int HEAD_IMAGE_WIDTH;
-	public static String DATABASE_PATH;
+	
 
 	public static final String IMAGE_FORMAT = ".jpg";
 	public static final String AUDIO_FORMAT = ".amr";
 
 	public static final String TEMP_INFORMATION_ID = "temp_information";
-	
+
+	public static Map<AppInfo, UserInfo> userApps;
+
 	public static void init(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
-
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
-		DATABASE_PATH = context.getFilesDir().getAbsolutePath();
+		Database.DATABASE_PATH = context.getFilesDir().getAbsolutePath();
+		Database.REQUEST_DATABASE_PATH=context.getFilesDir().getAbsolutePath();
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
+		userApps = Utils.getRCPlatformAppUsers(context);
 	}
 
+	public static class Database{
+		public static String DATABASE_PATH;
+		public static String REQUEST_DATABASE_PATH;
+	}
+	
 	public static class Action {
 
 		/**
@@ -64,7 +77,7 @@ public class Contract {
 		/**
 		 * 重新登陆
 		 */
-		public static final String ACTION_RELOGIN="com.rcplatform.phototalk.action.RELOGIN";
+		public static final String ACTION_RELOGIN = "com.rcplatform.phototalk.action.RELOGIN";
 		public static final String ACTION_OTHER_DEVICE_LOGIN = "com.rcplatform.phototalk.action.OTHER_DEVICE_LOGIN";
 	}
 
@@ -79,10 +92,11 @@ public class Contract {
 		public static final String UNZIP_SUFFIX = "_unzip";
 	}
 
-	public static class FriendAddType{
-		public static final int ADD_FRIEND_ACTIVE=0;
-		public static final int ADD_FRIEND_PASSIVE=1;
+	public static class FriendAddType {
+		public static final int ADD_FRIEND_ACTIVE = 0;
+		public static final int ADD_FRIEND_PASSIVE = 1;
 	}
+
 	public static final String PREFS_FILE_USER_INFO = "com.menue.login.info.prefs";
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 
@@ -97,8 +111,6 @@ public class Contract {
 	 */
 
 	public static final String KEY_USER_TOKEN = "userToken";
-
-	public static final String KEY_SUID = "suid";
 
 	public static final String KEY_EMAIL = "email";
 
@@ -144,6 +156,8 @@ public class Contract {
 	public static final String KEY_MAX_RECORD_ID = "max_record_id";
 
 	public static final String KEY_BACKGROUND = "background";
-
-
+	
+	public static final String KEY_TIGASE_ID="tigaseid";
+	
+	public static final String KEY_TIGASE_PASSWORD="tigasepassword";
 }

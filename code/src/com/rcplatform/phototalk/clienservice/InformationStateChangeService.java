@@ -117,7 +117,7 @@ public class InformationStateChangeService extends IntentService {
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getSuid());
+		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
 		Gson gson = new Gson();
 		JSONArray arrayInfos = new JSONArray(gson.toJson(simpleInfo, new TypeToken<ServiceSimpleNotice[]>() {
 		}.getType()));
@@ -132,7 +132,7 @@ public class InformationStateChangeService extends IntentService {
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getSuid());
+		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
 		jsonParams.put(PhotoTalkParams.ClearInformation.PARAM_KEY_NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(getApplicationContext(), userInfo.getEmail()));
 		return new StringEntity(jsonParams.toString(), "UTF-8");
 	}

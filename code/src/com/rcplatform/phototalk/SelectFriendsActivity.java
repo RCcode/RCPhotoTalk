@@ -45,6 +45,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PinyinComparator;
@@ -219,7 +220,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 			// .add(;)friends
 			SelectFriend user = new SelectFriend();
 			user.setNick(app.getCurrentUser().getNick());
-			user.setSuid(app.getCurrentUser().getSuid());
+			user.setRcId(app.getCurrentUser().getRcId());
 			user.setHeadUrl(app.getCurrentUser().getHeadUrl());
 			friends.add(user);
 
@@ -447,6 +448,23 @@ public class SelectFriendsActivity extends BaseActivity implements
 								getString(R.string.net_error));
 					}
 				});
+		FriendsProxy.getMyFriend(this, new OnFriendsLoadedListener() {
+			
+			@Override
+			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				
+			}
+			
+			@Override
+			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				
+			}
+			
+			@Override
+			public void onError(int errorCode, String content) {
+				
+			}
+		});
 
 	}
 	@Override

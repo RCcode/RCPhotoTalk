@@ -49,19 +49,12 @@ public class MenueApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		PhotoInformationCountDownService.getInstance().setApplication(this);
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
-				getApplicationContext())
-				.memoryCache(new WeakMemoryCache())
-				.threadPriority(THREAD_COUNT)
-				.memoryCacheSize(MEMORY_CACHE_SIZE)
-				.denyCacheImageMultipleSizesInMemory()
-				.imageDownloader(new BaseImageDownloader(this))
-				.defaultDisplayImageOptions(
-						ImageOptionsFactory.getDefaultImageOptions())
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache())
+				.threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory()
+				.imageDownloader(new BaseImageDownloader(this)).defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions())
 				.tasksProcessingOrder(QueueProcessingType.LIFO);
 		if (createImageCacheDir()) {
-			builder.discCache(new UnlimitedDiscCache(cacheDir,
-					new Md5FileNameGenerator()));
+			builder.discCache(new UnlimitedDiscCache(cacheDir, new Md5FileNameGenerator()));
 		}
 		ImageLoaderConfiguration config = builder.build();
 		ImageLoader.getInstance().init(config);
@@ -70,10 +63,8 @@ public class MenueApplication extends Application {
 	}
 
 	private boolean createImageCacheDir() {
-		if (Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED)) {
-			cacheDir = new File(Environment.getExternalStorageDirectory(),
-					CACHE_FILE_PATH);
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			cacheDir = new File(Environment.getExternalStorageDirectory(), CACHE_FILE_PATH);
 			if (!cacheDir.exists()) {
 				return cacheDir.mkdirs();
 			}
@@ -85,13 +76,15 @@ public class MenueApplication extends Application {
 
 	private PTBackgroundService mService;
 	private PhotoTalkWebService mWebService;
+
 	public void setService(PTBackgroundService service) {
 		this.mService = service;
 	}
+
 	public PTBackgroundService getService() {
 		return mService;
 	}
-	
+
 	public PhotoTalkWebService getWebService() {
 		return mWebService;
 	}
@@ -166,8 +159,7 @@ public class MenueApplication extends Application {
 	public String getSendFileCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -199,8 +191,7 @@ public class MenueApplication extends Application {
 	public String getBackgroundCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(
-				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -232,12 +223,14 @@ public class MenueApplication extends Application {
 	}
 
 	public UserInfo getCurrentUser() {
-		return mService.getCurrentUser();
+		if (mService != null)
+			return mService.getCurrentUser();
+		return null;
 	}
 
 	public void setCurrentUser(UserInfo userInfo) {
 		mService.setCurrentUser(userInfo);
 		PhotoTalkDatabaseFactory.open(userInfo);
 	}
-	
+
 }

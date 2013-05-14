@@ -52,7 +52,7 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 			int i = 0;
 			while (itFriends.hasNext()) {
 				Friend friend = itFriends.next();
-				ids[i] = friend.getSuid();
+				ids[i] = friend.getRcId();
 				i++;
 			}
 			sendInviteMessage(ids);

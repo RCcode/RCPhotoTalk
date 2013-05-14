@@ -36,7 +36,6 @@ import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -185,9 +184,9 @@ public class PlatformEditActivity extends ImagePickActivity {
 	private void updateUserInfo() {
 		String nick = etNick.getText().toString().trim();
 		if (checkInfo(nick)) {
-			RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient(RequestAction.FILE);
+			RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient();
 			PhotoTalkParams.buildBasicParams(this, httpClient);
-			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getSuid());
+			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());
 			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_TOKEN, mUserInfo.getToken());
 			httpClient.putRequestParam(PhotoTalkParams.PLATFORM_ACCOUNT_LOGIN.PARAM_KEY_NICK, nick);
 			if ((mHeadImagePath != null && mHeadImagePath.startsWith("http://"))) {

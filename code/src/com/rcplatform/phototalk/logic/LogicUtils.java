@@ -29,9 +29,9 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.request.FileRequest;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -120,7 +120,7 @@ public class LogicUtils {
 	 */
 	public static boolean isSender(Context context, Information record) {
 
-		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getSuid().equals(record.getSender().getSuid())
+		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getSuid())
 				&& !record.getReceiver().getSuid().equals(record.getSender().getSuid()))
 			return true;
 		return false;
@@ -138,14 +138,14 @@ public class LogicUtils {
 		long createTime = System.currentTimeMillis();
 		Information information = null;
 		if (addType == Contract.FriendAddType.ADD_FRIEND_PASSIVE) {
-			RecordUser sender = new RecordUser(friend.getSuid(), friend.getNick(), friend.getHeadUrl(),friend.getTigaseId());
-			RecordUser receiver = new RecordUser(currentUser.getSuid(), currentUser.getNick(), currentUser.getHeadUrl(),currentUser.getTigaseId());
+			RecordUser sender = new RecordUser(friend.getRcId(), friend.getNick(), friend.getHeadUrl(), friend.getTigaseId());
+			RecordUser receiver = new RecordUser(currentUser.getRcId(), currentUser.getNick(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
 					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM, sender, receiver, createTime);
 			PhotoTalkDatabaseFactory.getDatabase().updateFriendRequestInformationByFriend(friend);
 		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
-			RecordUser receiver = new RecordUser(friend.getSuid(), friend.getNick(), friend.getHeadUrl(),friend.getTigaseId());
-			RecordUser sender = new RecordUser(currentUser.getSuid(), currentUser.getNick(), currentUser.getHeadUrl(),currentUser.getTigaseId());
+			RecordUser receiver = new RecordUser(friend.getRcId(), friend.getNick(), friend.getHeadUrl(), friend.getTigaseId());
+			RecordUser sender = new RecordUser(currentUser.getRcId(), currentUser.getNick(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
 					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST, sender, receiver, createTime);
 			List<Information> infos = new ArrayList<Information>();
@@ -159,7 +159,6 @@ public class LogicUtils {
 	}
 
 	public static void clearInformations(Context context) {
-		// updateInformationState(context, Action.ACTION_INFORMATION_DELETE);
 		PhotoTalkDatabaseFactory.getDatabase().clearInformation();
 		InformationPageController.getInstance().clearInformations();
 	}
@@ -214,20 +213,12 @@ public class LogicUtils {
 		try {
 			long flag = System.currentTimeMillis();
 			UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
-			String userArray = buildSendPhotoTempInformations(currentUser, friends, flag,Integer.parseInt(timeLimit));
-			FileRequest request = new FileRequest();
-			request.setFile(file);
-			PhotoTalkParams.buildBasicParams(context, request);
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, userArray);
-			request.setResponseHandler(new RCPlatformResponseHandler() {
+			String userArray = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit));
+			RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
 
 				@Override
 				public void onSuccess(int statusCode, String content) {
 					try {
-
-						// {"message":"成功","users":["fNqBZj3+nhk=","uGEqzN+o2Ec="],"picUrl":"http://192.168.0.84:81/20130511/13/1368250339859_59421.jpg","status":0}
 						JSONObject jsonObject = new JSONObject(content);
 						String informationUrl = jsonObject.getString("picUrl");
 						Map<String, String> userIds = buildUserIds(jsonObject.getJSONArray("users"));
@@ -246,10 +237,14 @@ public class LogicUtils {
 				public void onFailure(int errorCode, String content) {
 
 				}
-			});
-			request.setUrl(MenueApiUrl.SEND_PICTURE_URL);
-			((MenueApplication) context.getApplicationContext()).getWebService().postRequest(request);
-
+			};
+			Request request = new Request(context, MenueApiUrl.SEND_PICTURE_URL, responseHandler);
+			PhotoTalkParams.buildBasicParams(context, request);
+			request.setFile(file);
+			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
+			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
+			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, userArray);
+			request.excuteAsync();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -268,15 +263,15 @@ public class LogicUtils {
 		return ids;
 	}
 
-	private static String buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag,int timeLimit) throws JSONException {
+	private static String buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit) throws JSONException {
 		JSONArray array = new JSONArray();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
 
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(PhotoTalkParams.SendPhoto.PARAM_KEY_RECEIVER_ID, f.getSuid());
+			jsonObject.put(PhotoTalkParams.SendPhoto.PARAM_KEY_RECEIVER_ID, f.getRcId());
 			array.put(jsonObject);
-			if (f.getSuid().equals(currentUser.getSuid()))
+			if (f.getRcId().equals(currentUser.getRcId()))
 				continue;
 			Information record = new Information();
 			record.setCreatetime(flag);
@@ -285,13 +280,13 @@ public class LogicUtils {
 			RecordUser user = new RecordUser();
 			user.setHeadUrl(currentUser.getHeadUrl());
 			user.setNick(currentUser.getNick());
-			user.setSuid(currentUser.getSuid());
+			user.setSuid(currentUser.getRcId());
 			record.setSender(user);
 			// 接受者信息
 			user = new RecordUser();
 			user.setNick(f.getNick());
 			user.setHeadUrl(f.getHeadUrl());
-			user.setSuid(f.getSuid());
+			user.setSuid(f.getRcId());
 			record.setReceiver(user);
 			// 信息类型为发图，状态正在发送
 			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);

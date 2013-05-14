@@ -49,6 +49,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -617,22 +618,11 @@ public class EditPictureActivity extends BaseActivity {
 		sendPicture("", tempPath, timelimit, friend);
 	}
 
-	private void sendPicture(final String desc, String imagePath, final String timeLimit, final Friend friend) {
-		Long timeSnap = System.currentTimeMillis();
-
-		final File file = new File(imagePath);
-		FriendsProxy.postZip(EditPictureActivity.this, file, new RCPlatformResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-				// TODO Auto-generated method stub
-			}
-		}, String.valueOf(timeSnap), desc, timeLimit, buildUserArray(friend, timeSnap, timeLimit));
+	private void sendPicture(final String desc, String imagePath, final String timeLimit, Friend friend) {
+		File file = new File(imagePath);
+		List<Friend> friends = new ArrayList<Friend>();
+		friends.add(friend);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file);
 	}
 
 	private String buildUserArray(Friend friend, long time, String timeLimit) {
@@ -641,7 +631,7 @@ public class EditPictureActivity extends BaseActivity {
 			List<Information> infoRecords = new ArrayList<Information>();
 			Information record;
 			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("userId", friend.getSuid());
+			jsonObject.put("userId", friend.getRcId());
 			array.put(jsonObject);
 
 			record = new Information();

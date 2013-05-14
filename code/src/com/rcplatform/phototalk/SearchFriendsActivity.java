@@ -27,7 +27,6 @@ import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
-import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -53,8 +52,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 	private ListView mListView;
 
-	private View mShowView;
-
 	private ImageLoader mImageLoader;
 
 	private SearchFriendsAdapter mAdapter;
@@ -70,11 +67,15 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	private void initView() {
 		mEditText = (EditText) findViewById(R.id.search_et);
 		mEditText.setOnKeyListener(new OnKeyListener() {
+			private long lastPressTime = 0l;
 
 			@Override
 			public boolean onKey(View v, int keyCode, KeyEvent event) {
 				if (keyCode == KeyEvent.KEYCODE_ENTER) {
-					search();
+					if (System.currentTimeMillis() - lastPressTime > 1000) {
+						lastPressTime = System.currentTimeMillis();
+						search();
+					}
 				}
 				return false;
 			}
@@ -96,7 +97,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		case R.id.search_btn:
 			search();
 			break;
-
 		}
 	}
 
@@ -113,13 +113,11 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
 				try {
 					JSONObject jsonObject = new JSONObject(content);
 					List<Friend> resultFriends = JSONConver.jsonToFriends(jsonObject.getJSONArray("userList").toString());
 					mAdapter.setData(resultFriends);
 				} catch (JSONException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				dismissLoadingDialog();
@@ -127,7 +125,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 			@Override
 			public void onFailure(int errorCode, String content) {
-				// TODO Auto-generated method stub
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
@@ -159,7 +156,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			if (convertView == null) {
 				convertView = getLayoutInflater().inflate(R.layout.add_friend_list_item, null);
 			}
@@ -209,19 +205,16 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return mFriends.size();
 		}
 
@@ -236,7 +229,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 		@Override
 		public void onClick(View v) {
-			// TODO Auto-generated method stub
 			Friend friend = (Friend) v.getTag();
 			doFriendAdd(friend);
 		}

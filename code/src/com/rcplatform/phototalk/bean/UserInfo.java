@@ -25,6 +25,7 @@ public class UserInfo implements Serializable {
 	public static final int SEX_FAMALE = 2;
 
 	public static final int FIRST_TIME = 0;
+	public static final int NOT_FIRST_TIME = 1;
 
 	public static final int RECEIVE_ALL = 0;
 	public static final int RECEIVE_FRIEND = 1;
@@ -49,7 +50,7 @@ public class UserInfo implements Serializable {
 
 	private long lastTime;
 
-	private String suid;
+//	private String suid;
 
 	private String deviceId;
 
@@ -122,7 +123,7 @@ public class UserInfo implements Serializable {
 		this.passWord = passWord;
 		this.email = email;
 		this.token = token;
-		this.suid = suId;
+//		this.suid = suId;
 		this.nick = nick;
 	}
 
@@ -262,13 +263,13 @@ public class UserInfo implements Serializable {
 		this.token = token;
 	}
 
-	public String getSuid() {
-		return suid;
-	}
-
-	public void setSuid(String suid) {
-		this.suid = suid;
-	}
+//	public String getSuid() {
+//		return suid;
+//	}
+//
+//	public void setSuid(String suid) {
+//		this.suid = suid;
+//	}
 
 	public int getShowRecommends() {
 		return showRecommends;
@@ -288,12 +289,11 @@ public class UserInfo implements Serializable {
 
 	@Override
 	public boolean equals(Object o) {
-		// TODO Auto-generated method stub
-		return suid.equals(((UserInfo) o).getSuid());
+		return rcId.equals(((UserInfo) o).getRcId());
 	}
 
 	public void clone(UserInfo userInfo) {
-		suid = userInfo.getSuid();
+//		suid = userInfo.getSuid();
 		passWord = userInfo.getPassWord();
 		phone = userInfo.getPhone();
 		birthday = userInfo.getBirthday();

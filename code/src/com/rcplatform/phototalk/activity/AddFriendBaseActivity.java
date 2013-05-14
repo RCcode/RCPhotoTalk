@@ -243,7 +243,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 			willInvateFriends.add(friend);
 			TextView tvName = buildInvateTextView(friend);
 			tvName.setTextColor(Color.WHITE);
-			willInvateViews.put(friend.getSuid(), tvName);
+			willInvateViews.put(friend.getRcId(), tvName);
 			mLinearInvate.addView(tvName);
 			refreshList();
 		}
@@ -256,7 +256,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 	 */
 	private void removeInvateFriend(Friend friend) {
 		willInvateFriends.remove(friend);
-		TextView tvName = willInvateViews.get(friend.getSuid());
+		TextView tvName = willInvateViews.get(friend.getRcId());
 		if (tvName != null) {
 			willInvateViews.remove(friend.getNick());
 			mLinearInvate.removeView(tvName);

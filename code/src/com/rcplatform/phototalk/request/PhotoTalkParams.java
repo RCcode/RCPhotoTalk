@@ -60,7 +60,7 @@ public class PhotoTalkParams {
 	public static class Registe {
 		public static final String PARAM_KEY_EMAIL = "email";
 		public static final String PARAM_KEY_PASSWORD = "pwd";
-		public static final String PARAM_KEY_NICK = "nick";
+		public static final String PARAM_KEY_NICK = "nickName";
 		public static final String PARAM_KEY_COUNTRY = "country";
 	}
 
@@ -72,7 +72,7 @@ public class PhotoTalkParams {
 
 	public static void buildBasicParams(Context context, GalHttpRequest request) {
 		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
-		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getSuid());
+		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getRcId());
 		request.setPostValueForKey(PARAM_KEY_TOKEN, userInfo.getToken());
 		request.setPostValueForKey(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
 		request.setPostValueForKey(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
@@ -82,7 +82,7 @@ public class PhotoTalkParams {
 	public static void buildBasicParams(Context context, RCPlatformAsyncHttpClient client) {
 		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		if (userInfo != null) {
-			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getSuid());
+			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getRcId());
 			client.putRequestParam(PARAM_KEY_TOKEN, userInfo.getToken());
 		} else {
 			client.putRequestParam(PARAM_KEY_USER_ID, UserInfo.DEFAULT_USER_ID);
@@ -96,7 +96,7 @@ public class PhotoTalkParams {
 	public static void buildBasicParams(Context context, Request request) {
 		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		if (userInfo != null) {
-			request.putParam(PARAM_KEY_USER_ID, userInfo.getSuid());
+			request.putParam(PARAM_KEY_USER_ID, userInfo.getRcId());
 			request.putParam(PARAM_KEY_TOKEN, userInfo.getToken());
 		} else {
 			request.putParam(PARAM_KEY_USER_ID, UserInfo.DEFAULT_USER_ID);
@@ -113,7 +113,7 @@ public class PhotoTalkParams {
 	}
 
 	public static class Login {
-		public static String PARAM_KEY_ACCOUNT = "account";
+		public static String PARAM_KEY_ACCOUNT = "user";
 		public static String PARAM_KEY_PASSWORD = "pwd";
 		public static String PARAM_KEY_SYSTEM = "system";
 		public static String PARAM_KEY_TYPE = "type";

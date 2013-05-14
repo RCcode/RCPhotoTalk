@@ -240,7 +240,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		ProfilePictureView head = (ProfilePictureView) convertView
 				.findViewById(R.id.facebook_ppv);
-		head.setProfileId(friend.getSuid());
+		head.setProfileId(friend.getRcId());
 		TextView tvName = (TextView) convertView.findViewById(R.id.tv_nick);
 		tvName.setText(friend.getNick());
 		CheckBox cbInvite = (CheckBox) convertView.findViewById(R.id.cb_invite);

@@ -87,7 +87,7 @@ public class InviteFriendUploadService extends IntentService {
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-		jsonObject.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getSuid());
+		jsonObject.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
 		jsonObject.put("attrType", type + "");
 		JSONArray array = new JSONArray();
 		for (String id : ids) {

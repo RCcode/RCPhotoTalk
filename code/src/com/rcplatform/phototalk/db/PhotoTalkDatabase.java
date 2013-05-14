@@ -29,6 +29,16 @@ public interface PhotoTalkDatabase {
 
 	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, Map<String, String> userIds);
 
+	public void saveFriends(List<Friend> friends);
+	
+	public void saveRecommends(List<Friend> recommends);
+
+	public List<Friend> getFriends();
+
+	public List<Friend> getRecommends(int type);
+
+	public List<Friend> getRecommends();
+
 	public void close();
 
 }

@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.accounts.Account;
@@ -24,7 +23,6 @@ import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.View;
@@ -37,7 +35,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.rcplatform.message.UserMessageService;
@@ -54,7 +51,8 @@ import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
+import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.task.ContactUploadTask;
 import com.rcplatform.phototalk.task.ContactUploadTask.OnUploadOverListener;
 import com.rcplatform.phototalk.task.ContactUploadTask.Status;
@@ -63,14 +61,11 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.ListViewUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
-import com.rcplatform.phototalk.utils.ShowToast;
-import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.tigase.TigaseRegisterSerivce;
 
 public class LoginActivity extends ImagePickActivity implements View.OnClickListener {
 
 	public static final String RESULT_KEY_USERINFO = "userinfo";
-	private static final int MSG_LOAD_RCPLATFORM_USERS_OVER = 100;
 	private String mGoogleAccount;
 	private boolean mIsLoginPage;
 
@@ -103,119 +98,14 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	// 密码正则表达式
 	private final Pattern passwordPattern = Pattern.compile("[a-zA-Z0-9]{6,16}");
 
-	// 用户登录。
-	private Handler mHandler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-
-			case MenueApiFactory.RESPONSE_STATE_SUCCESS:
-				// b)登录成功,保持用户信息，请求进入好友采集页面。
-				UserInfo userInfo = (UserInfo) msg.obj;
-				userLoginSuccess(userInfo);
-				break;
-			// 密码错误
-			case MenueApiFactory.LOGIN_PASSWORD_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_pwd_no_email_yes), Toast.LENGTH_LONG);
-				break;
-			// 邮箱没有注册
-			case MenueApiFactory.LOGIN_EMAIL_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_email_no), Toast.LENGTH_LONG);
-				break;
-			// 服务器异常
-			case MenueApiFactory.LOGIN_SERVER_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_server_no), Toast.LENGTH_LONG);
-				break;
-			// 管理员不允许客户端登录
-			case MenueApiFactory.LOGIN_ADMIN_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
-				break;
-			default:
-				break;
-
-			}
-		}
-
-	};
-
 	private void startPlatformUserEditActivity(Map<AppInfo, UserInfo> userApps) {
 		Intent intent = new Intent(this, PlatformEditActivity.class);
 		intent.putExtra(PlatformEditActivity.PARAM_USER_APPS, (HashMap<AppInfo, UserInfo>) userApps);
 		startActivity(intent);
 	}
 
-	// 注册handler
-	private Handler mHandler2 = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MSG_LOAD_RCPLATFORM_USERS_OVER:
-				dismissLoadingDialog();
-				final BaseAdapter adapter = new OtherAppsAdapter((Map<AppInfo, UserInfo>) msg.obj);
-				mLvAcccounts.setAdapter(adapter);
-				mLvAcccounts.setOnItemClickListener(new OnItemClickListener() {
-
-					@Override
-					public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-						// TODO Auto-generated method stub
-						Map<AppInfo, UserInfo> userApps = (Map<AppInfo, UserInfo>) adapter.getItem(position);
-						checkPlatformUser(userApps);
-						// startPlatformUserEditActivity(userApps);
-					}
-				});
-				ListViewUtils.setListViewHeightBasedOnChildren(mLvAcccounts);
-				break;
-			case MenueApiFactory.RESPONSE_STATE_SUCCESS:
-				// a)注册成功后,发短信短信到+8618146193618，然后登录
-				UserInfo userInfo = (UserInfo) msg.obj;
-				userLoginSuccess(userInfo);
-				// bindSuidByPhone(Contract.BIND_PHONE_NUMBER, userInfo);
-				break;
-			// 后台异常错误
-			case MenueApiFactory.REGISTER_SERVER_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_server_error));
-				break;
-			// 邮箱已被注册
-			case MenueApiFactory.REGISTER_EMAIL_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_email_is_register));
-				break;
-			// 昵称已被注册
-			case MenueApiFactory.REGISTER_NICK_ERROR:
-				ShowToast.showToast(LoginActivity.this, getResources().getString(R.string.reg_nick_is_register));
-				break;
-			default:
-				break;
-
-			}
-
-		}
-
-	};
 	private RCPlatformAsyncHttpClient httpClient;
 	private UserInfo mUser;
-
-	private void userLoginSuccess(final UserInfo userInfo) {
-		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME && !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
-			ContactUploadTask task = ContactUploadTask.getInstance(LoginActivity.this);
-			if (task.getStatus() == Status.STATUS_RUNNING) {
-				showLoadingDialog(LOADING_NO_MSG, R.string.uploading_contacts, false);
-				task.setOnUploadOverListener(new OnUploadOverListener() {
-
-					@Override
-					public void onUploadOver(boolean isSuccess) {
-						dismissLoadingDialog();
-						saveUserInfo(userInfo);
-						closePage(userInfo);
-					}
-				});
-				return;
-			}
-		}
-		saveUserInfo(userInfo);
-		closePage(userInfo);
-	}
 
 	private void saveUserInfo(UserInfo userInfo) {
 		String psw = mPswEditText.getText().toString();
@@ -236,14 +126,12 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		setContentView(R.layout.login);
 		Intent intent = getIntent();
 		mIsLoginPage = (Boolean) intent.getExtras().get(Contract.KEY_LOGIN_PAGE);
-		httpClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		httpClient = new RCPlatformAsyncHttpClient();
 		setupData();
 		setupView();
-		loadRcplatfromUsers();
 	}
 
 	private void setupData() {
-		// TODO Auto-generated method stub
 		AccountManager manager = AccountManager.get(this);
 		Account[] accounts = manager.getAccounts();
 		if (accounts != null && accounts.length > 0) {
@@ -254,23 +142,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				}
 			}
 		}
-	}
-
-	private void loadRcplatfromUsers() {
-		// TODO Auto-generated method stub
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Thread th = new Thread() {
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				Map<AppInfo, UserInfo> appUsers = Utils.getRCPlatformAppUsers(LoginActivity.this);
-				Message msg = mHandler2.obtainMessage();
-				msg.what = MSG_LOAD_RCPLATFORM_USERS_OVER;
-				msg.obj = appUsers;
-				mHandler2.sendMessage(msg);
-			}
-		};
-		th.start();
 	}
 
 	private void setupView() {
@@ -298,6 +169,16 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mSignupButton = (Button) findViewById(R.id.login_page_signup_button);
 		mSignupButton.setOnClickListener(this);
 		mLinearAccounts = findViewById(R.id.linear_platform_accounts);
+		BaseAdapter adapter = new OtherAppsAdapter(Contract.userApps);
+		mLvAcccounts.setAdapter(adapter);
+		mLvAcccounts.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				Map<AppInfo, UserInfo> userApps = (Map<AppInfo, UserInfo>) parent.getAdapter().getItem(position);
+				checkPlatformUser(userApps);
+			}
+		});
 		ListViewUtils.setListViewHeightBasedOnChildren(mLvAcccounts);
 		if (mIsLoginPage) {
 			showLoginView();
@@ -328,7 +209,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		clearInputInfo();
 		mDescTextView.setText(R.string.user_other_account);
 		btnChange.setText(R.string.landing_page_signup);
-		mLinearAccounts.setVisibility(View.VISIBLE);
+		if (Contract.userApps.size() > 0) {
+			mLinearAccounts.setVisibility(View.VISIBLE);
+		} else {
+			mLinearAccounts.setVisibility(View.GONE);
+		}
 		mTitleTextView.setText(R.string.login_title_login_bubble_text);
 		mLine2View.setVisibility(View.GONE);
 		mForgetPswButton.setVisibility(View.VISIBLE);
@@ -374,8 +259,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 							@Override
 							public void onClick(DialogInterface dialog, int which) {
 								dialog.cancel();
-//								tigaseRegiste(LoginActivity.this, email, psw, nick);
-								register(LoginActivity.this, email, psw, nick);
+								tigaseRegiste(LoginActivity.this, email, psw, nick);
+								// register(LoginActivity.this, email, psw,
+								// nick);
 							}
 						});
 				dialogBuilder.create().show();
@@ -391,8 +277,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					email2 = "+86" + email2;
 				// --------------------------------------------------
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-				login(this, mHandler, email2, psw2, loginType);
-//				tigaseLogin(this, email2, psw2);
+				// login(this, mHandler, email2, psw2, loginType);
+				tigaseLogin(this, email2, psw2);
 			}
 			break;
 		case R.id.login_page_forget_password_button:
@@ -502,7 +388,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					final UserInfo userInfo = new Gson().fromJson(obj.getJSONObject("userInfoAll").toString(), UserInfo.class);
 					int showRecommends = obj.getInt("showRecommends");
 					userInfo.setShowRecommends(showRecommends);
-					sendLoginMessage(mHandler2, statusCode, userInfo);
+					loginSuccess(userInfo);
 					return;
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -526,7 +412,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	 * @param email
 	 * @param psw
 	 */
-	public void login(final Context context, final Handler handler, String email, String psw, int loginType) {
+	private void login(final Context context, final Handler handler, String email, String psw, int loginType) {
 		httpClient.clearParams();
 		PhotoTalkParams.buildBasicParams(context, httpClient);
 		httpClient.putRequestParam(PhotoTalkParams.Login.PARAM_KEY_ACCOUNT, email);
@@ -565,7 +451,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 						String lastBindNumber = obj.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
 						PrefsUtils.User.setLastBindNumber(getApplicationContext(), userInfo.getEmail(), lastBindNumber);
 						PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getEmail());
-						sendLoginMessage(handler, statusCode, userInfo);
+						loginSuccess(userInfo);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -594,7 +480,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		private Map<AppInfo, UserInfo> installedApps;
 
 		public OtherAppsAdapter(Map<AppInfo, UserInfo> platformUsers) {
-			// TODO Auto-generated constructor stub
 			users = new ArrayList<UserInfo>();
 			for (UserInfo user : platformUsers.values()) {
 				if (!users.contains(user)) {
@@ -606,7 +491,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			if (convertView == null)
 				convertView = getLayoutInflater().inflate(R.layout.other_app_item, null);
 			TextView tv = (TextView) convertView.findViewById(R.id.tv_account);
@@ -619,18 +503,16 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			UserInfo userInfo = users.get(position);
 			Map<AppInfo, UserInfo> userApps = new HashMap<AppInfo, UserInfo>();
 			for (AppInfo info : installedApps.keySet()) {
 				UserInfo user = installedApps.get(info);
-				if (userInfo.getSuid().equals(user.getSuid())) {
+				if (userInfo.getRcId().equals(user.getRcId())) {
 					userApps.put(info, user);
 				}
 			}
@@ -639,7 +521,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return users.size();
 		}
 
@@ -649,15 +530,10 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Iterator<UserInfo> itUsers = userApps.values().iterator();
 		UserInfo userInfo = itUsers.next();
-		httpClient.clearParams();
-		PhotoTalkParams.buildBasicParams(this, httpClient);
-		httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
-		httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getSuid());
-		httpClient.post(this, MenueApiUrl.CHECK_USER_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(this, MenueApiUrl.CHECK_USER_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
 				dismissLoadingDialog();
 				try {
 					JSONObject obj = new JSONObject(content);
@@ -671,10 +547,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 						String lastBindNumber = obj.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
 						PrefsUtils.User.setLastBindNumber(getApplicationContext(), userInfo.getEmail(), lastBindNumber);
 						PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getEmail());
-						sendLoginMessage(mHandler, statusCode, userInfo);
+						loginSuccess(userInfo);
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					showErrorConfirmDialog(R.string.net_error);
 				}
@@ -682,44 +557,51 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void onFailure(int errorCode, String content) {
-				// TODO Auto-generated method stub
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
 		});
+		PhotoTalkParams.buildBasicParams(this, request);
+		request.putParam(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
+		request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
+		request.excuteAsync();
 	}
 
-	private void sendLoginMessage(Handler handler, int statusCode, UserInfo userInfo) {
-		Message msg = handler.obtainMessage(statusCode);
-		msg.obj = userInfo;
-		handler.sendMessage(msg);
+	private void loginSuccess(final UserInfo userInfo) {
+		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME && !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
+			ContactUploadTask task = ContactUploadTask.getInstance(LoginActivity.this);
+			if (task.getStatus() == Status.STATUS_RUNNING) {
+				showLoadingDialog(LOADING_NO_MSG, R.string.uploading_contacts, false);
+				task.setOnUploadOverListener(new OnUploadOverListener() {
+
+					@Override
+					public void onUploadOver(boolean isSuccess) {
+						dismissLoadingDialog();
+						saveUserInfo(userInfo);
+						closePage(userInfo);
+					}
+				});
+				return;
+			}
+		}
+		saveUserInfo(userInfo);
+		closePage(userInfo);
 	}
 
 	private void tigaseRegiste(Context context, final String email, String password, final String nick) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		client.putRequestParam("email", email);
-		client.putRequestParam("pwd", MD5.encodeMD5String(password));
-		client.putRequestParam("appId", PhotoTalkParams.PARAM_VALUE_APP_ID);
-		client.putRequestParam("nickName", nick);
-		client.putRequestParam("country", PhotoTalkParams.PARAM_VALUE_LANGUAGE);
-		client.post(context, MenueApiUrl.TIGASE_REGISTE_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(context, MenueApiUrl.TIGASE_REGISTE_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				LogUtil.e(content);
 				try {
-					mUser = new UserInfo();
+					mUser = buildUserInfo(content);
 					mUser.setEmail(email);
 					mUser.setNick(nick);
-					JSONObject jsonObject = new JSONObject(content);
-					mUser.setToken(jsonObject.getString("token"));
-					mUser.setTigaseId(jsonObject.getString("tgId"));
-					mUser.setTigasePassword(jsonObject.getString("tgpwd"));
 					mUser.setShowRecommends(UserInfo.FIRST_TIME);
 					registeTigase(mUser.getTigaseId(), mUser.getTigasePassword());
-					// sendLoginMessage(mHandler2, statusCode, userInfo);
-				} catch (JSONException e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 				}
@@ -731,6 +613,12 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				showErrorConfirmDialog(content);
 			}
 		});
+		PhotoTalkParams.buildBasicParams(context, request);
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_EMAIL, email);
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_PASSWORD, MD5.encodeMD5String(password));
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_NICK, nick);
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Locale.getDefault().getCountry());
+		request.excuteAsync();
 	}
 
 	private void registeTigase(String tigaseId, String tigasePassword) {
@@ -748,31 +636,42 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		public void onReceive(Context context, Intent intent) {
 			boolean isRegisteSuccess = intent.getBooleanExtra(TigaseRegisterSerivce.TIGASE_REGISTER_RESULT_KEY, false);
 			if (isRegisteSuccess)
-				sendLoginMessage(mHandler2, RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS, mUser);
+				loginSuccess(mUser);
 			else
 				showErrorConfirmDialog(R.string.registe_fail);
 			dismissLoadingDialog();
 			unregisterReceiver(this);
 		}
 	};
-	
-	private void tigaseLogin(Context context,String account,String password){
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient(RequestAction.JSON);
-		client.putRequestParam("user", account);
-		client.putRequestParam("pwd", MD5.encodeMD5String(password));
-		client.putRequestParam("appId", PhotoTalkParams.PARAM_VALUE_APP_ID);
-		client.post(context, MenueApiUrl.TIGASE_LOGIN_URL, new RCPlatformResponseHandler() {
+
+	private void tigaseLogin(Context context, final String account, String password) {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		Request.login(context, new OnUserInfoLoadedListener() {
 
 			@Override
-			public void onSuccess(int statusCode, String content) {
-				LogUtil.e(content);
+			public void onSuccess(UserInfo userInfo) {
+				dismissLoadingDialog();
+				loginSuccess(userInfo);
 			}
 
 			@Override
-			public void onFailure(int errorCode, String content) {
+			public void onError(int errorCode, String content) {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
-		});
+		}, account, password).excuteAsync();
 	}
+
+	private UserInfo buildUserInfo(String content) throws Exception {
+		UserInfo userInfo = new UserInfo();
+		JSONObject jsonObject = new JSONObject(content);
+		userInfo.setToken(jsonObject.getString("token"));
+		userInfo.setTigaseId(jsonObject.getString("tgId"));
+		userInfo.setTigasePassword(jsonObject.getString("tgpwd"));
+		userInfo.setRcId(jsonObject.getString("rcId"));
+		userInfo.setEmail(jsonObject.optString("email", null));
+		userInfo.setNick(jsonObject.optString("nick", null));
+		return userInfo;
+	}
+
 }

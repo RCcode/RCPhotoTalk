@@ -22,7 +22,7 @@ public class CheckUpdateTask {
 	private OnUpdateCheckListener mOnUpdateCheckListener;
 
 	public CheckUpdateTask(Context context, boolean isAuto) {
-		mClient = new RCPlatformAsyncHttpClient(RequestAction.JSON);
+		mClient = new RCPlatformAsyncHttpClient();
 		this.mContext = context;
 		PhotoTalkParams.buildBasicParams(mContext, mClient);
 		this.isAutoRequest = isAuto;

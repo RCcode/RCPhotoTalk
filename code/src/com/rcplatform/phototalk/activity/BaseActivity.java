@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -50,7 +51,8 @@ public class BaseActivity extends Activity {
 				}
 			};
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			logoutDialog = builder.setMessage(R.string.other_device_login).setPositiveButton(R.string.cancel, listener).setNegativeButton(R.string.relogin, listener).setCancelable(false).create();
+			logoutDialog = builder.setMessage(R.string.other_device_login).setPositiveButton(R.string.cancel, listener)
+					.setNegativeButton(R.string.relogin, listener).setCancelable(false).create();
 		}
 		logoutDialog.show();
 	}
@@ -113,6 +115,10 @@ public class BaseActivity extends Activity {
 		return (MenueApplication) getApplication();
 	}
 
+	public UserInfo getCurrentUser() {
+		return getPhotoTalkApplication().getCurrentUser();
+	}
+
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
 		findViewById(R.id.title_linear_back).setOnClickListener(onClickListener);
 		TextView tv = (TextView) findViewById(R.id.titleContent);
@@ -135,6 +141,7 @@ public class BaseActivity extends Activity {
 		tvForward.setOnClickListener(onClickListener);
 		tvForward.setVisibility(View.VISIBLE);
 	}
+
 	@Override
 	protected void onDestroy() {
 		ImageLoader.getInstance().stop();

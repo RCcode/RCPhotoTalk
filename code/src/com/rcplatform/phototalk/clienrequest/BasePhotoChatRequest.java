@@ -32,7 +32,7 @@ public class BasePhotoChatRequest implements BasePhotoChatRequestInterface {
 	@Override
 	public void createBody() {
 		request.setPostValueForKey(MenueApiFactory.TOKEN, currentUser.getToken());
-		request.setPostValueForKey(MenueApiFactory.USERID, currentUser.getSuid());
+		request.setPostValueForKey(MenueApiFactory.USERID, currentUser.getRcId());
 		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
 		request.setPostValueForKey(MenueApiFactory.DEVICE_ID, android.os.Build.DEVICE);
 		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
