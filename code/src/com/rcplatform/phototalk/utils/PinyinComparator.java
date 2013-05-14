@@ -31,8 +31,8 @@ public class PinyinComparator implements Comparator {
 	public int compare(Object o1, Object o2) {
 		Friend friend1 = (Friend) o1;
 		Friend friend2 = (Friend) o2;
-		String str1 = getPingYin(friend1.getNick());
-		String str2 = getPingYin(friend2.getNick());
+		String str1 = getPingYin(friend1.getNickName());
+		String str2 = getPingYin(friend2.getNickName());
 		friend1.setLetter(str1.substring(0, 1));
 		friend2.setLetter(str2.substring(0, 1));
 		if (str1.equals(str2))

@@ -219,7 +219,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 					}.getType());
 			// .add(;)friends
 			SelectFriend user = new SelectFriend();
-			user.setNick(app.getCurrentUser().getNick());
+			user.setNickName(app.getCurrentUser().getNickName());
 			user.setRcId(app.getCurrentUser().getRcId());
 			user.setHeadUrl(app.getCurrentUser().getHeadUrl());
 			friends.add(user);

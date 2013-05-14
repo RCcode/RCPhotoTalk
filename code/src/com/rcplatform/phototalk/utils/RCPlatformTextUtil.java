@@ -1,5 +1,8 @@
 package com.rcplatform.phototalk.utils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
@@ -13,6 +16,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 public class RCPlatformTextUtil {
+
+	private static SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	private static final long A_SECOND = 1000;
 	private static final long A_MINUTE = 60 * A_SECOND;
 	private static final long A_HOUR = 60 * A_MINUTE;
@@ -117,5 +123,15 @@ public class RCPlatformTextUtil {
 				return letter + "";
 		}
 		return "#";
+	}
+
+	public static int getAgeByBirthday(String birthday) {
+		try {
+			long birthTime = mDateFormat.parse(birthday).getTime();
+			return (int) ((System.currentTimeMillis() - birthTime) / (1000 * 60 * 60 * 24 * 365));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

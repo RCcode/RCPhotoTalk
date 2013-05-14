@@ -5,14 +5,11 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
+import com.rcplatform.phototalk.request.Request;
 
 public class GetBindPhoneTask {
-	RCPlatformAsyncHttpClient client;
 	public static interface OnBindSuccessListener {
 		public void onBindSuccess(String phoneNumber);
 
@@ -28,9 +25,7 @@ public class GetBindPhoneTask {
 	}
 
 	public void start() {
-		client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(mContext, client);
-		client.post(mContext.getApplicationContext(), MenueApiUrl.CHECK_USER_PHONEBIND_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(mContext, MenueApiUrl.CHECK_USER_PHONEBIND_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -52,14 +47,13 @@ public class GetBindPhoneTask {
 					mListener.onBindFail();
 			}
 		});
-
+		request.excuteAsync();
 	}
 
 	private boolean isCancel = false;
 
 	public void cancel() {
 		isCancel = true;
-		client.cancel();
 	}
 
 }

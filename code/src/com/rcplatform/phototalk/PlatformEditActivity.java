@@ -33,9 +33,9 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -53,7 +53,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.platform_user_edit);
 		mImageLoader = ImageLoader.getInstance();
@@ -69,7 +68,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 	}
 
 	private void initView() {
-		// TODO Auto-generated method stub
 		initTitle();
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		ivHead.setOnClickListener(mOnClickListener);
@@ -82,7 +80,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// TODO Auto-generated method stub
 				UserInfo userInfo = (UserInfo) adapter.getItem(position);
 				mUserInfo = userInfo;
 				setUserInfo();
@@ -92,7 +89,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 	}
 
 	private void setUserInfo() {
-		etNick.setText(mUserInfo.getNick());
+		etNick.setText(mUserInfo.getNickName());
 		mHeadImagePath = mUserInfo.getHeadUrl();
 		RCPlatformImageLoader.displayImage(this, ivHead, mUserInfo.getHeadUrl(), mImageLoader);
 	}
@@ -102,32 +99,27 @@ public class PlatformEditActivity extends ImagePickActivity {
 		private List<AppInfo> mAppInfos;
 
 		public AccountAdapter(Map<AppInfo, UserInfo> userApps) {
-			// TODO Auto-generated constructor stub
 			this.mUserApps = userApps;
 			this.mAppInfos = new ArrayList<AppInfo>(mUserApps.keySet());
 		}
 
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
 			return mAppInfos.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
 			return mUserApps.get(mAppInfos.get(position));
 		}
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return 0;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			if (convertView == null) {
 				convertView = getLayoutInflater().inflate(R.layout.user_app_info_item, null);
 				convertView.setLayoutParams(new AbsListView.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
@@ -140,7 +132,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 			ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 			TextView tvAppName = (TextView) convertView.findViewById(R.id.tv_app_name);
 			RCPlatformImageLoader.displayImage(PlatformEditActivity.this, ivHead, userInfo.getHeadUrl(), mImageLoader);
-			tvNick.setText(userInfo.getNick());
+			tvNick.setText(userInfo.getNickName());
 			tvAppName.setText(appInfo.getAppName());
 			return convertView;
 		}
@@ -149,7 +141,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		mImageLoader.stop();
 	}
@@ -158,7 +149,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 		@Override
 		public void onViewClick(View v) {
-			// TODO Auto-generated method stub
 			switch (v.getId()) {
 			case R.id.title_linear_back:
 				finish();
@@ -184,21 +174,17 @@ public class PlatformEditActivity extends ImagePickActivity {
 	private void updateUserInfo() {
 		String nick = etNick.getText().toString().trim();
 		if (checkInfo(nick)) {
-			RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient();
-			PhotoTalkParams.buildBasicParams(this, httpClient);
-			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());
-			httpClient.putRequestParam(PhotoTalkParams.PARAM_KEY_TOKEN, mUserInfo.getToken());
-			httpClient.putRequestParam(PhotoTalkParams.PLATFORM_ACCOUNT_LOGIN.PARAM_KEY_NICK, nick);
+			Request request = new Request(this, MenueApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, mResponseHandler);
+			request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());
+			request.putParam(PhotoTalkParams.PARAM_KEY_TOKEN, mUserInfo.getToken());
+			request.putParam(PhotoTalkParams.PLATFORM_ACCOUNT_LOGIN.PARAM_KEY_NICK, nick);
 			if ((mHeadImagePath != null && mHeadImagePath.startsWith("http://"))) {
-				httpClient.putRequestParam(PhotoTalkParams.PLATFORM_ACCOUNT_LOGIN.PARAM_KEY_HEAD_URL, mHeadImagePath);
-				httpClient.postFile(this, MenueApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, null, mResponseHandler);
+				request.putParam(PhotoTalkParams.PLATFORM_ACCOUNT_LOGIN.PARAM_KEY_HEAD_URL, mHeadImagePath);
 			} else if (mHeadImagePath != null) {
-				httpClient.postFile(this, MenueApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, new File(mHeadImagePath), mResponseHandler);
-			} else {
-				httpClient.postFile(this, MenueApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, null, mResponseHandler);
+				request.setFile(new File(mHeadImagePath));
 			}
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-
+			request.excutePostNameValuePairAsync();
 		}
 	}
 
@@ -206,7 +192,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 		@Override
 		public void onSuccess(int statusCode, String content) {
-			// TODO Auto-generated method stub
 			dismissLoadingDialog();
 			try {
 				JSONObject jsonObject = new JSONObject(content);
@@ -214,11 +199,10 @@ public class PlatformEditActivity extends ImagePickActivity {
 				PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
 				long lastBindTime = jsonObject.optLong(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_TIME);
 				String lastBindNumber = jsonObject.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
-				PrefsUtils.User.setLastBindNumber(getApplicationContext(), userInfo.getEmail(), lastBindNumber);
-				PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getEmail());
+				PrefsUtils.User.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
+				PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
 				loginSuccess(userInfo);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				showErrorConfirmDialog(R.string.net_error);
 			}
@@ -226,7 +210,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 		@Override
 		public void onFailure(int errorCode, String content) {
-			// TODO Auto-generated method stub
 			dismissLoadingDialog();
 			showErrorConfirmDialog(content);
 		}
@@ -241,14 +224,12 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	@Override
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
-		// TODO Auto-generated method stub
 		super.onImageReceive(imageBaseUri, imagePath);
 		cutImage(imageBaseUri);
 	}
 
 	@Override
 	protected void onImageCutSuccess(String tmpPath) {
-		// TODO Auto-generated method stub
 		super.onImageCutSuccess(tmpPath);
 		Uri uri = Uri.parse(tmpPath);
 		mHeadImagePath = tmpPath;
@@ -257,7 +238,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	@Override
 	protected void onImagePickFail() {
-		// TODO Auto-generated method stub
 		super.onImagePickFail();
 		DialogUtil.showToast(getApplicationContext(), R.string.image_pick_fail, Toast.LENGTH_SHORT);
 	}

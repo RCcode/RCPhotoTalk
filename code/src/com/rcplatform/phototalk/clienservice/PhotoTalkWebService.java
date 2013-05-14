@@ -23,11 +23,11 @@ public class PhotoTalkWebService extends Service {
 	}
 
 	public void post(Request request) {
-		mClient.clearParams();
-		mClient.putAllRequestParams(request.getParams());
-		if (request.getFile() == null)
-			mClient.post(getBaseContext(), request.getUrl(), request.getResponseHandler());
-		else
-			mClient.postFile(getBaseContext(), request.getUrl(), request.getFile(), request.getResponseHandler());
+		mClient.post(request);
+
+	}
+
+	public void postNameValue(Request request) {
+
 	}
 }

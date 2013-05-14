@@ -3,35 +3,29 @@ package com.rcplatform.phototalk.bean;
 import java.io.Serializable;
 import java.util.List;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-4 下午03:17:42
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author jelly.xiong@menue.com.cn
- * @version 1.0.0
- */
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+
 public class Friend implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int USER_STATUS_NOT_FRIEND = 0;
-	public static final int USER_STATUS_FRIEND_ADDED = 1;
+	public static final int FRIEND_ADDED = 0;
+	public static final int FRIEND_NOT_ADDED = 1;
+
+	public Friend(String nick, String cellPhone, String headUrl) {
+		this.nickName = nick;
+		this.cellPhone = cellPhone;
+		this.headUrl = headUrl;
+	}
 
 	private FriendSourse source;
 
-	private String nameChat;
-
-	private String signature;
-
 	private int appId;
 
-	private String nick;
+	private int added;
+
+	private String nickName;
 
 	private String headUrl;
 
@@ -39,44 +33,39 @@ public class Friend implements Serializable {
 
 	private String rcId;
 
-	private String phone;
-
-	private int trendsSet;
-
-	private int receiveSet;
-
-	private int userFrom;
+	private String cellPhone;
 
 	private List<AppInfo> appList;
 
-	private String mark;
+	private String localName;
 
-	private int sex;
-
-	private int age;
+	private int gender;
 
 	private String letter;
 
-	private boolean isNew=false;
-	
-	private int isFriend;
-	
+	private boolean isNew = false;
+
 	private String tigaseId;
-	
+
+	private String birthday;
+
+	private String country;
+
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
 	public String getTigaseId() {
 		return tigaseId;
 	}
 
 	public void setTigaseId(String tigaseId) {
 		this.tigaseId = tigaseId;
-	}
-
-	public int getIsFriend() {
-		return isFriend;
-	}
-
-	public void setIsFriend(int isFriend) {
-		this.isFriend = isFriend;
 	}
 
 	public boolean isNew() {
@@ -95,32 +84,21 @@ public class Friend implements Serializable {
 		this.letter = letter;
 	}
 
-	public int getSex() {
-		return sex;
+	public int getGender() {
+		return gender;
 	}
 
-	public void setSex(int sex) {
-		this.sex = sex;
+	public void setGender(int gender) {
+		this.gender = gender;
 	}
 
-	public int getAge() {
-		return age;
+	public String getLocalName() {
+		return localName;
 	}
 
-	public void setAge(int age) {
-		this.age = age;
+	public void setLocalName(String localName) {
+		this.localName = localName;
 	}
-
-	public String getMark() {
-		return mark;
-	}
-
-	public void setMark(String mark) {
-		this.mark = mark;
-	}
-
-	/* 朋友状态 */
-	private int status;
 
 	public Friend() {
 		super();
@@ -134,31 +112,12 @@ public class Friend implements Serializable {
 		this.background = background;
 	}
 
-	public Friend(String nick, String p, String headUrl) {
-		this.nick = nick;
-		this.phone = p;
-		this.headUrl = headUrl;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public Friend(int type, String nameChat, String name, String number, String headUri) {
-		this(name, number, headUri);
-		this.nameChat = nameChat;
-	}
-
-	public String getNameChat() {
-		return nameChat;
-	}
-
-	public void setNameChat(String nameChat) {
-		this.nameChat = nameChat;
-	}
-
-	public String getSignature() {
-		return signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public int getAppId() {
@@ -167,14 +126,6 @@ public class Friend implements Serializable {
 
 	public void setAppId(int appId) {
 		this.appId = appId;
-	}
-
-	public String getNick() {
-		return nick;
-	}
-
-	public void setNick(String nick) {
-		this.nick = nick;
 	}
 
 	public String getHeadUrl() {
@@ -193,35 +144,23 @@ public class Friend implements Serializable {
 		this.rcId = rcId;
 	}
 
-	public String getPhone() {
-		return phone;
+	public String getCellPhone() {
+		return cellPhone;
 	}
 
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
 	}
 
-	public int getUserFrom() {
-		return userFrom;
+	public boolean isFriend() {
+		return added == FRIEND_ADDED;
 	}
 
-	public void setUserFrom(int userFrom) {
-		this.userFrom = userFrom;
-	}
-
-
-	/* 获取朋友状态。1表示已添加，0表示未添加。 */
-	public int getStatus() {
-		return isFriend;
-	}
-
-	/*
-	 * 设置朋友状态。1表示已添加，0表示未添加。
-	 * 
-	 * @param status
-	 */
-	public void setStatus(int status) {
-		isFriend=status;
+	public void setFriend(boolean isFriend) {
+		if (isFriend)
+			added = FRIEND_ADDED;
+		else
+			added = FRIEND_NOT_ADDED;
 	}
 
 	public FriendSourse getSource() {
@@ -240,24 +179,30 @@ public class Friend implements Serializable {
 		this.appList = appList;
 	}
 
-	public int getTrendsSet() {
-		return trendsSet;
-	}
-
-	public void setTrendsSet(int trendsSet) {
-		this.trendsSet = trendsSet;
-	}
-
-	public int getReceiveSet() {
-		return receiveSet;
-	}
-
-	public void setReceiveSet(int receiveSet) {
-		this.receiveSet = receiveSet;
-	}
-
 	@Override
 	public boolean equals(Object o) {
 		return rcId.equals(((Friend) o).getRcId());
+	}
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public int getAdded() {
+		return added;
+	}
+
+	public void setAdded(int added) {
+		this.added = added;
+	}
+
+	public int getAge() {
+		if (birthday == null)
+			return 0;
+		return RCPlatformTextUtil.getAgeByBirthday(birthday);
 	}
 }

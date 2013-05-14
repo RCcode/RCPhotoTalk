@@ -27,7 +27,7 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 		if (willInvateFriends != null && willInvateFriends.size() > 0) {
 			StringBuilder mobiles = new StringBuilder();
 			for (Friend f : willInvateFriends) {
-				mobiles.append(f.getPhone()).append(";");
+				mobiles.append(f.getCellPhone()).append(";");
 			}
 			System.out.println(mobiles.toString());
 			String msg = String.format(getResources().getString(R.string.my_firend_invite_send_short_msg), "mark.", android.os.Build.VERSION.RELEASE, "http://www.menue.com/photochat/", "123458755");

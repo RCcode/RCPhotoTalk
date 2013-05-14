@@ -48,13 +48,13 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 		trendSets[1] = getString(R.string.trends_hide);
 		receiveSets[0] = getString(R.string.receive_all);
 		receiveSets[1] = getString(R.string.receive_friend);
-		lastReceiveSet = mCurrentUser.getReceiveSet();
-		lastTrendSet = mCurrentUser.getTrendsSet();
+		lastReceiveSet = mCurrentUser.getAllowsend();
+		lastTrendSet = mCurrentUser.getShareNews();
 	}
 
 	private void setSetText() {
-		tvReceiveSet.setText(receiveSets[mCurrentUser.getReceiveSet()]);
-		tvTrendSet.setText(trendSets[mCurrentUser.getTrendsSet()]);
+		tvReceiveSet.setText(receiveSets[mCurrentUser.getAllowsend()]);
+		tvTrendSet.setText(trendSets[mCurrentUser.getShareNews()]);
 	}
 
 	private void initView() {
@@ -104,8 +104,8 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				PrefsUtils.User.setUserReceiveSet(getApplicationContext(), mCurrentUser.getEmail(), mCurrentUser.getReceiveSet());
-				PrefsUtils.User.setUserTrendSet(getApplicationContext(), mCurrentUser.getEmail(), mCurrentUser.getTrendsSet());
+				PrefsUtils.User.setUserReceiveSet(getApplicationContext(), mCurrentUser.getRcId(), mCurrentUser.getAllowsend());
+				PrefsUtils.User.setUserTrendSet(getApplicationContext(), mCurrentUser.getRcId(), mCurrentUser.getShareNews());
 				dismissLoadingDialog();
 				finish();
 			}
@@ -119,16 +119,16 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 	}
 
 	private boolean hasChange() {
-		return !(mCurrentUser.getTrendsSet() == lastTrendSet && mCurrentUser.getReceiveSet() == lastReceiveSet);
+		return !(mCurrentUser.getShareNews() == lastTrendSet && mCurrentUser.getAllowsend() == lastReceiveSet);
 	}
 
 	private void showTrendSetDialog() {
 		if (mTrendSetDialog == null) {
-			mTrendSetDialog = new AlertDialog.Builder(this).setSingleChoiceItems(trendSets, mCurrentUser.getTrendsSet(), new DialogInterface.OnClickListener() {
+			mTrendSetDialog = new AlertDialog.Builder(this).setSingleChoiceItems(trendSets, mCurrentUser.getShareNews(), new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					mCurrentUser.setTrendsSet(which);
+					mCurrentUser.setShareNews(which);
 					setSetText();
 					dialog.dismiss();
 				}
@@ -139,11 +139,11 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 	private void showReceiveSetDialog() {
 		if (mReceiveSetDialog == null) {
-			mReceiveSetDialog = new AlertDialog.Builder(this).setSingleChoiceItems(receiveSets, mCurrentUser.getReceiveSet(), new DialogInterface.OnClickListener() {
+			mReceiveSetDialog = new AlertDialog.Builder(this).setSingleChoiceItems(receiveSets, mCurrentUser.getAllowsend(), new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					mCurrentUser.setReceiveSet(which);
+					mCurrentUser.setAllowsend(which);
 					setSetText();
 					dialog.dismiss();
 				}

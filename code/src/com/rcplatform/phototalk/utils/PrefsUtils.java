@@ -77,8 +77,8 @@ public class PrefsUtils {
 
 		public static void setLoginUser(Context context, UserInfo userInfo) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
-			sh.edit().putString(PREF_KEY_LOGIN_USER, userInfo.getEmail()).commit();
-			User.saveUserInfo(context, userInfo.getEmail(), userInfo);
+			sh.edit().putString(PREF_KEY_LOGIN_USER, userInfo.getRcId()).commit();
+			User.saveUserInfo(context, userInfo.getRcId(), userInfo);
 		}
 
 		public static UserInfo getLoginUser(Context context) {
@@ -125,19 +125,17 @@ public class PrefsUtils {
 			userInfo.setEmail(sp.getString(Contract.KEY_EMAIL, null));
 			userInfo.setPassWord(sp.getString(Contract.KEY_PASSWORD, null));
 			userInfo.setToken(sp.getString(Contract.KEY_USER_TOKEN, null));
-			userInfo.setNick(sp.getString(Contract.KEY_NICK, null));
+			userInfo.setNickName(sp.getString(Contract.KEY_NICK, null));
 			userInfo.setHeadUrl(sp.getString(Contract.KEY_HEADURL, null));
-			userInfo.setSignature(sp.getString(Contract.KEY_SIGNATURE, null));
-			userInfo.setSex(sp.getInt(Contract.KEY_SEX, 0));
-			userInfo.setReceiveSet(sp.getInt(Contract.KEY_RECEIVESET, UserInfo.RECEIVE_ALL));
-			userInfo.setTrendsSet(sp.getInt(Contract.KEY_TRENDSET, UserInfo.TRENDS_SHOW));
-			userInfo.setAge(sp.getString(Contract.KEY_AGE, null));
+			userInfo.setGender(sp.getInt(Contract.KEY_SEX, 0));
+			userInfo.setAllowsend(sp.getInt(Contract.KEY_RECEIVESET, UserInfo.RECEIVE_ALL));
+			userInfo.setShareNews(sp.getInt(Contract.KEY_TRENDSET, UserInfo.TRENDS_SHOW));
 			userInfo.setBirthday(sp.getString(Contract.KEY_BIRTHDAY, null));
 			userInfo.setDeviceId(sp.getString(Contract.KEY_DEVICE_ID, null));
-			userInfo.setPhone(sp.getString(Contract.KEY_PHONE, null));
+			userInfo.setCellPhone(sp.getString(Contract.KEY_PHONE, null));
 			userInfo.setBackground(sp.getString(Contract.KEY_BACKGROUND, null));
 			userInfo.setTigaseId(sp.getString(Contract.KEY_TIGASE_ID, null));
-			userInfo.setTigasePassword((sp.getString(Contract.KEY_TIGASE_PASSWORD, null)));
+			userInfo.setTigasePwd((sp.getString(Contract.KEY_TIGASE_PASSWORD, null)));
 			return userInfo;
 		}
 
@@ -170,15 +168,14 @@ public class PrefsUtils {
 		 */
 		public static void saveUserInfo(Context context, String pref, UserInfo userInfo) {
 			SharedPreferences sharedPreferences = getPreference(context, pref);
-			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_USERNAME, userInfo.getNick())
-					.putString(Contract.KEY_PASSWORD, userInfo.getPassWord()).putString(Contract.KEY_USER_TOKEN, userInfo.getToken())
-					.putString(Contract.KEY_SIGNATURE, userInfo.getSignature()).putString(Contract.KEY_NICK, userInfo.getNick())
-					.putString(Contract.KEY_HEADURL, userInfo.getHeadUrl()).putInt(Contract.KEY_SEX, userInfo.getSex())
-					.putInt(Contract.KEY_RECEIVESET, userInfo.getReceiveSet()).putInt(Contract.KEY_TRENDSET, userInfo.getTrendsSet())
-					.putString(Contract.KEY_RCID, userInfo.getRcId()).putString(Contract.KEY_PHONE, userInfo.getPhone())
-					.putString(Contract.KEY_TIGASE_ID, userInfo.getTigaseId()).putString(Contract.KEY_TIGASE_PASSWORD, userInfo.getTigasePassword())
-					.putString(Contract.KEY_AGE, userInfo.getAge()).putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday())
-					.putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
+			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_PASSWORD, userInfo.getPassWord())
+					.putString(Contract.KEY_USER_TOKEN, userInfo.getToken()).putString(Contract.KEY_NICK, userInfo.getNickName())
+					.putString(Contract.KEY_HEADURL, userInfo.getHeadUrl()).putInt(Contract.KEY_SEX, userInfo.getGender())
+					.putInt(Contract.KEY_RECEIVESET, userInfo.getAllowsend()).putInt(Contract.KEY_TRENDSET, userInfo.getShareNews())
+					.putString(Contract.KEY_RCID, userInfo.getRcId()).putString(Contract.KEY_PHONE, userInfo.getCellPhone())
+					.putString(Contract.KEY_TIGASE_ID, userInfo.getTigaseId()).putString(Contract.KEY_TIGASE_PASSWORD, userInfo.getTigasePwd())
+					.putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId())
+					.putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
 
 		/**

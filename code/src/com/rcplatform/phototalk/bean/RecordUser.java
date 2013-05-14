@@ -2,17 +2,18 @@ package com.rcplatform.phototalk.bean;
 
 public class RecordUser {
 
-    private String suid;
+	private String rcId;
 
-    private String nick;
+	private String nick;
 
-    private String headUrl;
+	private String headUrl;
 
-    private String tigaseId;
-    public RecordUser() {
-    }
+	private String tigaseId;
 
-    public String getTigaseId() {
+	public RecordUser() {
+	}
+
+	public String getTigaseId() {
 		return tigaseId;
 	}
 
@@ -20,36 +21,35 @@ public class RecordUser {
 		this.tigaseId = tigaseId;
 	}
 
-	public RecordUser(String suid,String nick, String headUrl,String tigaseId) {
-        this.suid = suid;
-        this.nick = nick;
-        this.headUrl = headUrl;
-        this.tigaseId=tigaseId;
-    }
-
-
-    public String getSuid() {
-		return suid;
+	public RecordUser(String rcId, String nick, String headUrl, String tigaseId) {
+		this.rcId = rcId;
+		this.nick = nick;
+		this.headUrl = headUrl;
+		this.tigaseId = tigaseId;
 	}
 
-	public void setSuid(String suid) {
-		this.suid = suid;
+	public String getRcId() {
+		return rcId;
 	}
 
-    public String getNick() {
-        return nick;
-    }
+	public void setRcId(String rcId) {
+		this.rcId = rcId;
+	}
 
-    public void setNick(String nick) {
-        this.nick = nick;
-    }
+	public String getNick() {
+		return nick;
+	}
 
-    public String getHeadUrl() {
-        return headUrl;
-    }
+	public void setNick(String nick) {
+		this.nick = nick;
+	}
 
-    public void setHeadUrl(String headUrl) {
-        this.headUrl = headUrl;
-    }
+	public String getHeadUrl() {
+		return headUrl;
+	}
+
+	public void setHeadUrl(String headUrl) {
+		this.headUrl = headUrl;
+	}
 
 }

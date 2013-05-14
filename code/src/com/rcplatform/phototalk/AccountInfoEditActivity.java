@@ -44,8 +44,7 @@ import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HeadImageView;
 
-public class AccountInfoEditActivity extends ImagePickActivity implements
-		View.OnClickListener {
+public class AccountInfoEditActivity extends ImagePickActivity implements View.OnClickListener {
 
 	private static final int REQUESTCODE_NAME = 1010;
 	private static final int REQUESTCODE_SIGNATURE = 1011;
@@ -73,14 +72,14 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	private boolean isHeadChange = false;
 	private boolean isChance = false;
 	private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_edit_account_info);
 		app = (MenueApplication) getApplication();
 		userDetailInfo = app.getCurrentUser();
-		sex = new String[] { getString(R.string.male),
-				getString(R.string.famale) };
+		sex = new String[] { getString(R.string.male), getString(R.string.famale) };
 		// sex = new String[] { getString(R.string.sex_secret),
 		// getString(R.string.male), getString(R.string.famale) };
 		initView();
@@ -96,9 +95,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 				mMyHeadView.setImageBitmap(bitmap);// 把拍摄的照片转成圆角显示在预览控件
 				// mSexView.setText(sex);
 				if (userDetailInfo != null) {
-					mNameView.setText("" + userDetailInfo.getNick());
+					mNameView.setText("" + userDetailInfo.getNickName());
 
-					selectedSex = Integer.valueOf(userDetailInfo.getSex()) - 1;
+					selectedSex = Integer.valueOf(userDetailInfo.getGender()) - 1;
 					if (selectedSex == -1) {
 						mSexView.setText(R.string.settings_select_sex_private);
 					} else {
@@ -110,25 +109,16 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 				}
 				break;
 			case MenueApiFactory.LOGIN_PASSWORD_ERROR:
-				ShowToast
-						.showToast(AccountInfoEditActivity.this, getResources()
-								.getString(R.string.reg_pwd_no_email_yes),
-								Toast.LENGTH_LONG);
+				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_pwd_no_email_yes), Toast.LENGTH_LONG);
 				break;
 			case MenueApiFactory.LOGIN_EMAIL_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this,
-						getResources().getString(R.string.reg_email_no),
-						Toast.LENGTH_LONG);
+				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_email_no), Toast.LENGTH_LONG);
 				break;
 			case MenueApiFactory.LOGIN_SERVER_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this,
-						getResources().getString(R.string.reg_server_no),
-						Toast.LENGTH_LONG);
+				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_server_no), Toast.LENGTH_LONG);
 				break;
 			case MenueApiFactory.LOGIN_ADMIN_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this,
-						getResources().getString(R.string.reg_admin_no),
-						Toast.LENGTH_LONG);
+				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
 				break;
 			}
 
@@ -168,18 +158,17 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	private void loadHeadPicture() {
 		String headUrl = userDetailInfo.getHeadUrl();
 		File file = new File(headUrl);
-		if(file.exists()){
-			Bitmap bitmap =BitmapFactory.decodeFile(headUrl);
+		if (file.exists()) {
+			Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
 			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
-		}else{
-			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(),
-					mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
+		} else {
+			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
 		}
 
 	}
 
 	private void setNick() {
-		mNameView.setText(userDetailInfo.getNick());
+		mNameView.setText(userDetailInfo.getNickName());
 	}
 
 	private void setSex() {
@@ -191,16 +180,12 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 		mBackView.setVisibility(View.VISIBLE);
 		mBackView.setOnClickListener(this);
 		mTitleView = (TextView) findViewById(R.id.titleContent);
-		mTitleView.setText(""
-				+ getResources().getString(
-						R.string.settings_update_person_info_title));
+		mTitleView.setText("" + getResources().getString(R.string.settings_update_person_info_title));
 		mTitleView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this,
-				getResources().getString(R.string.login_error),
-				getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
 		finish();
 	}
 
@@ -224,8 +209,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 		case R.id.rela_edit_nick:
 			Intent intentName = new Intent(this, UpdateNameActivity.class);
 			intentName.setAction("setting_update_name");
-			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT,
-					userDetailInfo.getNick());
+			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getNickName());
 			startActivityForResult(intentName, REQUESTCODE_NAME);
 			break;
 		case R.id.rela_edit_sex:
@@ -238,40 +222,31 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	}
 
 	private void showSexChooseDialog() {
-		int selectedSex = userDetailInfo.getSex();
-		new AlertDialog.Builder(this)
-				.setTitle(
-						getResources().getString(R.string.settings_select_sex))
-				.setSingleChoiceItems(sex, selectedSex,
-						new DialogInterface.OnClickListener() {
+		int selectedSex = userDetailInfo.getGender();
+		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.settings_select_sex))
+				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
 
-							public void onClick(DialogInterface dialog,
-									int which) {
-								userDetailInfo.setSex(which);
-								setSex();
-								dialog.dismiss();
-							}
-						}).show();
+					public void onClick(DialogInterface dialog, int which) {
+						userDetailInfo.setGender(which);
+						setSex();
+						dialog.dismiss();
+					}
+				}).show();
 	}
 
 	private void saveBirthDay(int year, int monthOfYear, int dayOfMonth) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, monthOfYear, dayOfMonth);
-		userDetailInfo.setBirthday(mDateFormat.format(new Date(calendar
-				.getTimeInMillis())));
+		userDetailInfo.setBirthday(mDateFormat.format(new Date(calendar.getTimeInMillis())));
 		setBirthday();
 	}
 
 	private OnDateChangedListener mOnBirthdayChangeListener = new OnDateChangedListener() {
 
 		@Override
-		public void onDateChanged(DatePicker view, int year, int monthOfYear,
-				int dayOfMonth) {
-			// TODO Auto-generated method stub
+		public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			if (isSelectedTimeAfterToday(year, monthOfYear, dayOfMonth)) {
-				view.init(mBirthDayCalender.get(Calendar.YEAR),
-						mBirthDayCalender.get(Calendar.MONTH),
-						mBirthDayCalender.get(Calendar.DAY_OF_MONTH), this);
+				view.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH), this);
 			}
 		}
 	};
@@ -287,43 +262,32 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					// TODO Auto-generated method stub
 					dialog.dismiss();
 					if (which == DialogInterface.BUTTON_NEGATIVE)
-						saveBirthDay(mBirthDayPicker.getYear(),
-								mBirthDayPicker.getMonth(),
-								mBirthDayPicker.getDayOfMonth());
+						saveBirthDay(mBirthDayPicker.getYear(), mBirthDayPicker.getMonth(), mBirthDayPicker.getDayOfMonth());
 				}
 			};
-			mBirthChooseDialog = new AlertDialog.Builder(this)
-					.setTitle(R.string.select_birthday).setView(view)
-					.setNegativeButton(R.string.confirm, birthListener)
-					.setPositiveButton(R.string.cancel, birthListener).create();
+			mBirthChooseDialog = new AlertDialog.Builder(this).setTitle(R.string.select_birthday).setView(view)
+					.setNegativeButton(R.string.confirm, birthListener).setPositiveButton(R.string.cancel, birthListener).create();
 		}
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			try {
-				mBirthDayCalender.setTime(mDateFormat.parse(userDetailInfo
-						.getBirthday()));
+				mBirthDayCalender.setTime(mDateFormat.parse(userDetailInfo.getBirthday()));
 			} catch (ParseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
 		}
-		mBirthDayPicker.init(mBirthDayCalender.get(Calendar.YEAR),
-				mBirthDayCalender.get(Calendar.MONTH),
-				mBirthDayCalender.get(Calendar.DAY_OF_MONTH),
+		mBirthDayPicker.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH),
 				mOnBirthdayChangeListener);
 		mBirthChooseDialog.show();
 	}
 
-	private boolean isSelectedTimeAfterToday(int year, int monthOfYear,
-			int dayOfMonth) {
+	private boolean isSelectedTimeAfterToday(int year, int monthOfYear, int dayOfMonth) {
 		Calendar calenderSelected = Calendar.getInstance();
 		calenderSelected.set(year, monthOfYear, dayOfMonth);
 		Calendar calendarCurrent = Calendar.getInstance();
-		return calenderSelected.getTimeInMillis() > calendarCurrent
-				.getTimeInMillis();
+		return calenderSelected.getTimeInMillis() > calendarCurrent.getTimeInMillis();
 	}
 
 	@Override
@@ -332,9 +296,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 		if (resultCode == Activity.RESULT_OK) {
 			if (REQUESTCODE_NAME == requestCode) {
 				String nick = data.getStringExtra("result");
-				if (!userDetailInfo.getNick().equals(nick)) {
+				if (!userDetailInfo.getNickName().equals(nick)) {
 					isChance = true;
-					userDetailInfo.setNick(nick);
+					userDetailInfo.setNickName(nick);
 					setNick();
 				}
 			}
@@ -343,7 +307,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 	@Override
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
-		// TODO Auto-generated method stub
 		super.onImageReceive(imageBaseUri, imagePath);
 		isChance = true;
 		new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
@@ -351,22 +314,18 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 	@Override
 	protected void onImagePickFail() {
-		// TODO Auto-generated method stub
 		super.onImagePickFail();
-		DialogUtil.showToast(getApplicationContext(), R.string.get_image_fail,
-				Toast.LENGTH_SHORT);
+		DialogUtil.showToast(getApplicationContext(), R.string.get_image_fail, Toast.LENGTH_SHORT);
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 
 		super.onDestroy();
 	}
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			updateUserInfo();
 			return true;
@@ -383,36 +342,25 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 			if (isHeadChange && !TextUtils.isEmpty(headPath)) {
 				file = new File(headPath);
 			}
-			FriendsProxy.upUserInfo(
-					this,
-					file,
-					new RCPlatformResponseHandler() {
+			FriendsProxy.upUserInfo(this, file, new RCPlatformResponseHandler() {
 
-						@Override
-						public void onSuccess(int statusCode, String content) {
-							// TODO Auto-generated method stub
-							Gson gson = new Gson();
-							try {
-								JSONObject obj = new JSONObject(content);
-								UserInfo userInfo = gson.fromJson(obj
-										.getJSONObject("userInfo").toString(),
-										UserInfo.class);
-								PrefsUtils.User.saveUserInfo(
-										getApplicationContext(),
-										userDetailInfo.getEmail(), userInfo);
-							} catch (Exception e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
+				@Override
+				public void onSuccess(int statusCode, String content) {
+					Gson gson = new Gson();
+					try {
+						JSONObject obj = new JSONObject(content);
+						UserInfo userInfo = gson.fromJson(obj.getJSONObject("userInfo").toString(), UserInfo.class);
+						PrefsUtils.User.saveUserInfo(getApplicationContext(), userDetailInfo.getRcId(), userInfo);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
 
-						@Override
-						public void onFailure(int errorCode, String content) {
-							// TODO Auto-generated method stub
+				@Override
+				public void onFailure(int errorCode, String content) {
 
-						}
-					}, userDetailInfo.getNick(), userDetailInfo.getBirthday(),
-					userDetailInfo.getSex() + "");
+				}
+			}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
 		}
 		// e.printStackTrace();
 		// }
@@ -432,31 +380,26 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 		setResult(Activity.RESULT_OK, intent);
 	}
 
-
 	class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		}
 
 		@Override
 		protected Bitmap doInBackground(Uri... params) {
-			// TODO Auto-generated method stub
 			Uri imageUri = params[0];
 			headPath = params[1].getPath();
 			Bitmap bitmap = null;
 			try {
-				int rotateAngel = Utils.getUriImageAngel(
-						AccountInfoEditActivity.this, imageUri);
+				int rotateAngel = Utils.getUriImageAngel(AccountInfoEditActivity.this, imageUri);
 				int nWidth = 0, nHeight = 0;
 				nHeight = mMyHeadView.getHeight();
 				nWidth = mMyHeadView.getWidth();
-				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth,
-						nHeight, rotateAngel);
-				
+				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
+
 				bitmap = Utils.getRectBitmap(bitmap);
 				if (bitmap != null) {
 					cacheHeadImage(bitmap);
@@ -471,12 +414,10 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			dismissLoadingDialog();
 			if (result == null) {
-				DialogUtil.showToast(getApplicationContext(),
-						R.string.image_unsupport, Toast.LENGTH_SHORT);
+				DialogUtil.showToast(getApplicationContext(), R.string.image_unsupport, Toast.LENGTH_SHORT);
 				finish();
 			} else {
 				isHeadChange = true;

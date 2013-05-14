@@ -22,7 +22,6 @@ import com.rcplatform.phototalk.adapter.AppAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
@@ -59,7 +58,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
-		mLastRemark = mFriend.getMark();
+		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		mAction = getIntent().getAction();
 	}
@@ -77,7 +76,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 					@Override
 					public void onFriendAddSuccess(int addType) {
-						mFriend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+						mFriend.setFriend(true);
 						coverToFriendView();
 						dismissLoadingDialog();
 					}
@@ -121,7 +120,7 @@ public class FriendDetailActivity extends BaseActivity {
 		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead);
 		mImageLoader.displayImage(mFriend.getBackground(), ivBackground);
 		btnEdit.setOnClickListener(mOnClickListener);
-		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getSex()), mFriend.getAge()));
+		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getGender()), mFriend.getAge()));
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
@@ -144,7 +143,7 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendName() {
-		tvName.setText(!TextUtils.isEmpty(mFriend.getMark()) ? mFriend.getMark() : mFriend.getNick());
+		tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName());
 	}
 
 	private OnClickListener mOnClickListener = new OnClickListener() {
@@ -174,12 +173,12 @@ public class FriendDetailActivity extends BaseActivity {
 	};
 
 	private boolean hasChangeUserInfo() {
-		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL) && mFriend.getStatus() == Friend.USER_STATUS_FRIEND_ADDED) {
+		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL) && !mFriend.isFriend()) {
 			return true;
 		}
-		if (mLastRemark != null && !mLastRemark.equals(mFriend.getMark())) {
+		if (mLastRemark != null && !mLastRemark.equals(mFriend.getLocalName())) {
 			return true;
-		} else if (mLastRemark != mFriend.getMark()) {
+		} else if (mLastRemark == null && null != mFriend.getLocalName()) {
 			return true;
 		}
 		return false;
@@ -190,7 +189,7 @@ public class FriendDetailActivity extends BaseActivity {
 			View editView = getLayoutInflater().inflate(R.layout.my_friend_details_layout_edit, null, false);
 			Button btnConfirm = (Button) editView.findViewById(R.id.btn_remark_confirm);
 			final EditText etRemark = (EditText) editView.findViewById(R.id.et_remark);
-			etRemark.setText(mFriend.getMark());
+			etRemark.setText(mFriend.getLocalName());
 			btnConfirm.setOnClickListener(new OnClickListener() {
 
 				@Override
@@ -215,7 +214,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				mFriend.setMark(remark);
+				mFriend.setLocalName(remark);
 				setFriendName();
 				mRemarkEditWindow.dismiss();
 				dismissLoadingDialog();

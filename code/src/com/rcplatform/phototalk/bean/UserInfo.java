@@ -5,6 +5,7 @@ import java.io.Serializable;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 /**
  * 标题、简要说明. <br>
@@ -48,40 +49,31 @@ public class UserInfo implements Serializable {
 
 	private String birthday;
 
-	private long lastTime;
-
-//	private String suid;
-
 	private String deviceId;
 
-	private String registAppId;
+	private String appId;
 
 	private String rcId;
 
-	private String phone;
+	private String cellPhone;
 
-	private int sex;
+	private int gender;
 
-	private String age;
-
-	private String signature;
-
-	private String nick;
+	private String nickName;
 
 	private String headUrl;
 
-	private int receiveSet;
+	private int allowsend;
 
 	private int showRecommends;
 
-	private int trendsSet;
+	private int shareNews;
 
 	private String background;
-	
+
 	private String tigaseId;
-	
-	private String tigasePassword;
-	
+
+	private String tigasePwd;
 
 	public String getTigaseId() {
 		return tigaseId;
@@ -89,14 +81,6 @@ public class UserInfo implements Serializable {
 
 	public void setTigaseId(String tigaseId) {
 		this.tigaseId = tigaseId;
-	}
-
-	public String getTigasePassword() {
-		return tigasePassword;
-	}
-
-	public void setTigasePassword(String tigasePassword) {
-		this.tigasePassword = tigasePassword;
 	}
 
 	public String getBackground() {
@@ -107,14 +91,6 @@ public class UserInfo implements Serializable {
 		this.background = background;
 	}
 
-	public int getTrendsSet() {
-		return trendsSet;
-	}
-
-	public void setTrendsSet(int trendsSet) {
-		this.trendsSet = trendsSet;
-	}
-
 	public UserInfo() {
 		super();
 	}
@@ -123,8 +99,7 @@ public class UserInfo implements Serializable {
 		this.passWord = passWord;
 		this.email = email;
 		this.token = token;
-//		this.suid = suId;
-		this.nick = nick;
+		this.nickName = nick;
 	}
 
 	public String getCountry() {
@@ -151,14 +126,6 @@ public class UserInfo implements Serializable {
 		this.email = email;
 	}
 
-	public long getLastTime() {
-		return lastTime;
-	}
-
-	public void setLastTime(long lastTime) {
-		this.lastTime = lastTime;
-	}
-
 	public String getBirthday() {
 		return birthday;
 	}
@@ -175,25 +142,9 @@ public class UserInfo implements Serializable {
 		this.deviceId = deviceId;
 	}
 
-	public String getRegistAppId() {
-		return registAppId;
-	}
-
-	public void setRegistAppId(String registAppId) {
-		this.registAppId = registAppId;
-	}
-
-	public String getPhone() {
-		return phone;
-	}
-
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
-
 	public String getSexString(Context context) {
 		String sexString = null;
-		switch (sex) {
+		switch (gender) {
 		case SEX_SECRET:
 			sexString = context.getString(R.string.sex_secret);
 			break;
@@ -207,52 +158,12 @@ public class UserInfo implements Serializable {
 		return sexString;
 	}
 
-	public int getSex() {
-		return sex;
-	}
-
-	public void setSex(int sex) {
-		this.sex = sex;
-	}
-
-	public String getAge() {
-		return age;
-	}
-
-	public void setAge(String age) {
-		this.age = age;
-	}
-
-	public String getSignature() {
-		return signature == null ? "" : signature;
-	}
-
-	public void setSignature(String signature) {
-		this.signature = signature;
-	}
-
-	public String getNick() {
-		return nick == null ? "" : nick;
-	}
-
-	public void setNick(String nick) {
-		this.nick = nick;
-	}
-
 	public String getHeadUrl() {
 		return headUrl == null ? "" : headUrl;
 	}
 
 	public void setHeadUrl(String headUrl) {
 		this.headUrl = headUrl;
-	}
-
-	public int getReceiveSet() {
-		return receiveSet;
-	}
-
-	public void setReceiveSet(int receiveSet) {
-		this.receiveSet = receiveSet;
 	}
 
 	public String getToken() {
@@ -262,14 +173,6 @@ public class UserInfo implements Serializable {
 	public void setToken(String token) {
 		this.token = token;
 	}
-
-//	public String getSuid() {
-//		return suid;
-//	}
-//
-//	public void setSuid(String suid) {
-//		this.suid = suid;
-//	}
 
 	public int getShowRecommends() {
 		return showRecommends;
@@ -292,18 +195,80 @@ public class UserInfo implements Serializable {
 		return rcId.equals(((UserInfo) o).getRcId());
 	}
 
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getCellPhone() {
+		return cellPhone;
+	}
+
+	public void setCellPhone(String cellPhone) {
+		this.cellPhone = cellPhone;
+	}
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public int getAllowsend() {
+		return allowsend;
+	}
+
+	public void setAllowsend(int allowsend) {
+		this.allowsend = allowsend;
+	}
+
+	public int getShareNews() {
+		return shareNews;
+	}
+
+	public void setShareNews(int shareNews) {
+		this.shareNews = shareNews;
+	}
+
+	public String getTigasePwd() {
+		return tigasePwd;
+	}
+
+	public void setTigasePwd(String tigasePwd) {
+		this.tigasePwd = tigasePwd;
+	}
+
 	public void clone(UserInfo userInfo) {
-//		suid = userInfo.getSuid();
 		passWord = userInfo.getPassWord();
-		phone = userInfo.getPhone();
+		cellPhone = userInfo.getCellPhone();
 		birthday = userInfo.getBirthday();
 		rcId = userInfo.getRcId();
 		token = userInfo.getToken();
-		trendsSet = userInfo.getTrendsSet();
-		sex = userInfo.getSex();
-		receiveSet = userInfo.getReceiveSet();
+		shareNews = userInfo.getShareNews();
+		gender = userInfo.getGender();
+		allowsend = userInfo.getAllowsend();
 		headUrl = userInfo.getHeadUrl();
 		deviceId = userInfo.getDeviceId();
-		nick = userInfo.getNick();
+		nickName = userInfo.getNickName();
+	}
+
+	public int getAge() {
+		if (birthday != null) {
+			return RCPlatformTextUtil.getAgeByBirthday(birthday);
+		}
+		return 0;
 	}
 }

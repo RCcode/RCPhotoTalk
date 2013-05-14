@@ -5,30 +5,26 @@ import android.content.Context;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
+import com.rcplatform.phototalk.request.Request;
 
 public class UserSettingProxy {
 	public static void updateUserSetting(Context context, RCPlatformResponseHandler responseHandler, UserInfo userInfo) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.UserSetting.PARAM_KEY_RECEIVE_SETTING, userInfo.getReceiveSet() + "");
-		client.putRequestParam(PhotoTalkParams.UserSetting.PARAM_KEY_TREND_SETTING, userInfo.getTrendsSet() + "");
-		client.post(context, MenueApiUrl.USER_SETTING_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.USER_SETTING_URL, responseHandler);
+		request.putParam(PhotoTalkParams.UserSetting.PARAM_KEY_RECEIVE_SETTING, userInfo.getAllowsend() + "");
+		request.putParam(PhotoTalkParams.UserSetting.PARAM_KEY_TREND_SETTING, userInfo.getShareNews() + "");
+		request.excuteAsync();
 	}
 
 	public static void checkCurrentPassword(Context context, RCPlatformResponseHandler responseHandler, String currentPassword) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.ChangePassword.PARAM_KEY_CHECK_PASSWORD, currentPassword);
-		client.post(context, MenueApiUrl.CHECK_LOGIN_PASSWORD_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.CHECK_LOGIN_PASSWORD_URL, responseHandler);
+		request.putParam(PhotoTalkParams.ChangePassword.PARAM_KEY_CHECK_PASSWORD, currentPassword);
+		request.excuteAsync();
 	}
 
 	public static void changePassword(Context context, RCPlatformResponseHandler responseHandler, String newPassword) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.putRequestParam(PhotoTalkParams.ChangePassword.PARAM_KEY_NEW_PASSWORD, newPassword);
-		client.post(context, MenueApiUrl.UPDATE_LOGIN_PASSWORD_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.UPDATE_LOGIN_PASSWORD_URL, responseHandler);
+		request.putParam(PhotoTalkParams.ChangePassword.PARAM_KEY_NEW_PASSWORD, newPassword);
+		request.excuteAsync();
 	}
 }

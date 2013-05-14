@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
@@ -11,18 +10,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Bitmap.CompressFormat;
-import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
-import android.provider.MediaStore;
-import android.text.TextUtils;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -31,8 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -42,7 +32,6 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
-import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -52,13 +41,11 @@ import com.rcplatform.phototalk.views.HorizontalListView;
 
 public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
-	private static final String TAG = "MyFriendsActivity";
 
 	private static final int REQUEST_CODE_EDIT_INFO = 100;
 	protected static final int REQUEST_CODE_GALLARY = 1012;
 	protected static final int REQUEST_CODE_CAMERA = 1013;
 
-	private Context mContext;
 	private Button mCleanBtn;
 	private Button editBtn;
 	private UserInfo userInfo;
@@ -81,7 +68,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
 		app = (MenueApplication) getApplication();
-		mContext = this;
 		initTitle();
 		mHeadView = (HeadImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
@@ -106,7 +92,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 	private void setUserInfo(UserInfo userInfo) {
 		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getHeadImageOptions(), userInfo.getHeadUrl(), AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView, R.drawable.default_head);
-		mNickView.setText("" + userInfo.getNick());
+		mNickView.setText("" + userInfo.getNickName());
 		userRcId.setText("" + userInfo.getRcId());
 		RCPlatformImageLoader.loadImage(SettingsActivity.this,
 						ImageLoader.getInstance(),
@@ -169,7 +155,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 	@Override
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
-		// TODO Auto-generated method stub
 		super.onImageReceive(imageBaseUri, imagePath);
 		// 加是判断是背景还是头像设置 两个上传和保存顺序不同 后期需要优化
 		switch (CAMERA_CODE) {
@@ -190,14 +175,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		}
 
 		@Override
 		protected Bitmap doInBackground(Uri... params) {
-			// TODO Auto-generated method stub
 			Uri imageUri = params[0];
 			String headPath = params[1].getPath();
 			Bitmap bitmap = null;
@@ -217,14 +200,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			dismissLoadingDialog();
 			String url= null;
 			try {
 				url = cacheHeadImage(result);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			user_bg_View.setImageBitmap(result);
@@ -249,7 +230,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_EDIT_INFO) {
@@ -267,16 +247,14 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
 							@Override
 							public void onSuccess(int statusCode, String content) {
-								// TODO Auto-generated method stub
 								// 上传成功
 								System.out.println("---content------>"+content);
 								userInfo.setBackground(decodeUtil(content,"background"));
-								PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getEmail(), userInfo);
+								PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getRcId(), userInfo);
 							}
 
 							@Override
 							public void onFailure(int errorCode, String content) {
-								// TODO Auto-generated method stub
 								System.out.println("fail--content-->"+content);
 								// 上传失败
 							}
@@ -284,13 +262,11 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 	}
 	public String decodeUtil(String content,String name){
@@ -305,7 +281,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return headUrl;
@@ -322,14 +297,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 						@Override
 						public void onSuccess(int statusCode, String content) {
-							// TODO Auto-generated method stub
 							userInfo.setHeadUrl(decodeUtil(content,"headUrl"));
-							PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getEmail(), userInfo);
+							PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getRcId(), userInfo);
 						}
 
 						@Override
 						public void onFailure(int errorCode, String content) {
-							// TODO Auto-generated method stub
 
 						}
 					});
@@ -339,14 +312,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 		@Override
 		protected void onPreExecute() {
-			// TODO Auto-generated method stub
 			super.onPreExecute();
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		}
 
 		@Override
 		protected Bitmap doInBackground(Uri... params) {
-			// TODO Auto-generated method stub
 			Uri imageUri = params[0];
 			String headPath = params[1].getPath();
 			Bitmap bitmap = null;
@@ -369,7 +340,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 		@Override
 		protected void onPostExecute(Bitmap result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			dismissLoadingDialog();
 			if (result == null) {
@@ -380,7 +350,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 				try {
 					upUserInfoHeadImage(cacheHeadImage(result));
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				mHeadView.setImageBitmap(result);

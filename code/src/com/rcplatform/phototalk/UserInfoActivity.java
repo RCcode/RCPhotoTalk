@@ -83,7 +83,7 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 	public void setTextView() {
 		UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
 		user_Email.setText(userInfo.getEmail());
-		user_Phone.setText(userInfo.getPhone());
+		user_Phone.setText(userInfo.getCellPhone());
 		user_rcId.setText(userInfo.getRcId());
 	}
 

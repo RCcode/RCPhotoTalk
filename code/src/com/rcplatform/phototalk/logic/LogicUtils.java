@@ -68,10 +68,6 @@ public class LogicUtils {
 		Iterator<Information> iterator = informations.iterator();
 		while (iterator.hasNext()) {
 			Information serviceInfo = iterator.next();
-			// if (isNeedToNotifyServiceOverInformation(context, serviceInfo)) {
-			// updateInformationState(context, Action.ACTION_INFORMATION_OVER,
-			// serviceInfo);
-			// }
 			// 如果是通知
 			if (localData != null && localData.contains(serviceInfo)) {
 				Information localInfo = localData.get(localData.indexOf(serviceInfo));
@@ -120,8 +116,8 @@ public class LogicUtils {
 	 */
 	public static boolean isSender(Context context, Information record) {
 
-		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getSuid())
-				&& !record.getReceiver().getSuid().equals(record.getSender().getSuid()))
+		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId())
+				&& !record.getReceiver().getRcId().equals(record.getSender().getRcId()))
 			return true;
 		return false;
 	}
@@ -138,14 +134,14 @@ public class LogicUtils {
 		long createTime = System.currentTimeMillis();
 		Information information = null;
 		if (addType == Contract.FriendAddType.ADD_FRIEND_PASSIVE) {
-			RecordUser sender = new RecordUser(friend.getRcId(), friend.getNick(), friend.getHeadUrl(), friend.getTigaseId());
-			RecordUser receiver = new RecordUser(currentUser.getRcId(), currentUser.getNick(), currentUser.getHeadUrl(), currentUser.getTigaseId());
+			RecordUser sender = new RecordUser(friend.getRcId(), friend.getNickName(), friend.getHeadUrl(), friend.getTigaseId());
+			RecordUser receiver = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
 					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM, sender, receiver, createTime);
 			PhotoTalkDatabaseFactory.getDatabase().updateFriendRequestInformationByFriend(friend);
 		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
-			RecordUser receiver = new RecordUser(friend.getRcId(), friend.getNick(), friend.getHeadUrl(), friend.getTigaseId());
-			RecordUser sender = new RecordUser(currentUser.getRcId(), currentUser.getNick(), currentUser.getHeadUrl(), currentUser.getTigaseId());
+			RecordUser receiver = new RecordUser(friend.getRcId(), friend.getNickName(), friend.getHeadUrl(), friend.getTigaseId());
+			RecordUser sender = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
 					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST, sender, receiver, createTime);
 			List<Information> infos = new ArrayList<Information>();
@@ -244,6 +240,7 @@ public class LogicUtils {
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, userArray);
+			request.setCache(true);
 			request.excuteAsync();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -279,14 +276,14 @@ public class LogicUtils {
 			// 发送者信息
 			RecordUser user = new RecordUser();
 			user.setHeadUrl(currentUser.getHeadUrl());
-			user.setNick(currentUser.getNick());
-			user.setSuid(currentUser.getRcId());
+			user.setNick(currentUser.getNickName());
+			user.setRcId(currentUser.getRcId());
 			record.setSender(user);
 			// 接受者信息
 			user = new RecordUser();
-			user.setNick(f.getNick());
+			user.setNick(f.getNickName());
 			user.setHeadUrl(f.getHeadUrl());
-			user.setSuid(f.getRcId());
+			user.setRcId(f.getRcId());
 			record.setReceiver(user);
 			// 信息类型为发图，状态正在发送
 			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);

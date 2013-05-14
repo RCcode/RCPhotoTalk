@@ -14,42 +14,20 @@ import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
 
 public class AddFriendTask {
 	private RCPlatformAsyncHttpClient mHttpClient = new RCPlatformAsyncHttpClient();
 	private Context mContext;
 	private AddFriendListener mListener;
 	private Friend mFriend;
+	private Request mRequest;
 
 	public AddFriendTask(Context context, UserInfo userInfo, AddFriendListener listener, Friend... friends) {
 		this.mContext = context;
 		this.mListener = listener;
-		PhotoTalkParams.buildBasicParams(mContext, mHttpClient);
-		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_SUID, userInfo.getRcId());
-		buildFriends(friends);
-		mFriend = friends[0];
-	}
-
-	private void buildFriends(Friend... friends) {
-		JSONArray array = new JSONArray();
-		for (Friend friend : friends) {
-			try {
-				JSONObject jsonFriend = new JSONObject();
-				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SUID, friend.getRcId());
-				if (friend.getSource() != null)
-					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType());
-				array.put(jsonFriend);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-		}
-		mHttpClient.putRequestParam(PhotoTalkParams.AddFriends.PARAM_KEY_FRIENDS, array.toString());
-	}
-
-	public void execute() {
-		mHttpClient.post(mContext, MenueApiUrl.ADD_FRIEND_URL, new RCPlatformResponseHandler() {
+		mRequest = new Request(context, MenueApiUrl.ADD_FRIEND_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -72,10 +50,34 @@ public class AddFriendTask {
 					mListener.onFriendAddFail(errorCode, content);
 			}
 		});
+		mRequest.putParam(PhotoTalkParams.AddFriends.PARAM_KEY_USER_SUID, userInfo.getRcId());
+		buildFriends(friends);
+		mFriend = friends[0];
+	}
+
+	private void buildFriends(Friend... friends) {
+		JSONArray array = new JSONArray();
+		for (Friend friend : friends) {
+			try {
+				JSONObject jsonFriend = new JSONObject();
+				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SUID, friend.getRcId());
+				if (friend.getSource() != null)
+					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType());
+				array.put(jsonFriend);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+		}
+		mRequest.putParam(PhotoTalkParams.AddFriends.PARAM_KEY_FRIENDS, array.toString());
+	}
+
+	public void execute() {
+		mHttpClient.post(mRequest);
 	}
 
 	public static interface AddFriendListener {
 		public void onFriendAddSuccess(int addType);
+
 		public void onFriendAddFail(int statusCode, String content);
 	}
 }

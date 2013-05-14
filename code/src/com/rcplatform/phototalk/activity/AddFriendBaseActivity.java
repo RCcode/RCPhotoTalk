@@ -58,14 +58,12 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_friend_source_activity);
 		initView();
 	}
 
 	private void initView() {
-		// TODO Auto-generated method stub
 		mEtSearch = (EditText) findViewById(R.id.et_search);
 		mEtSearch.addTextChangedListener(mSearchTextChangeListener);
 		initInvateView();
@@ -78,21 +76,18 @@ public class AddFriendBaseActivity extends BaseActivity {
 	private OnGroupClickListener mOnGroupClickListener = new OnGroupClickListener() {
 
 		@Override
-		public boolean onGroupClick(ExpandableListView parent, View v,
-				int groupPosition, long id) {
+		public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 			return true;
 		}
 	};
 	private TextWatcher mSearchTextChangeListener = new TextWatcher() {
 
 		@Override
-		public void onTextChanged(CharSequence s, int start, int before,
-				int count) {
+		public void onTextChanged(CharSequence s, int start, int before, int count) {
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count,
-				int after) {
+		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 		}
 
 		@Override
@@ -118,34 +113,29 @@ public class AddFriendBaseActivity extends BaseActivity {
 		}
 		List<Friend> resultInvite = new ArrayList<Friend>();
 		for (Friend friend : inviteFriends) {
-			if (friend.getNick().toLowerCase().contains(keyWord)) {
+			if (friend.getNickName().toLowerCase().contains(keyWord)) {
 				resultInvite.add(friend);
 			}
 		}
 		setListData(resultFriends, resultInvite, mSearchList);
 	}
 
-	protected void setListData(List<Friend> friends,
-			List<Friend> invateFriends, ExpandableListView listView) {
+	protected void setListData(List<Friend> friends, List<Friend> invateFriends, ExpandableListView listView) {
 		Map<Integer, List<Friend>> baseFriendsList = new HashMap<Integer, List<Friend>>();
 		if (friends != null && friends.size() > 0) {
-			baseFriendsList.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS,
-					friends);
+			baseFriendsList.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS, friends);
 		}
 		if (invateFriends != null && invateFriends.size() > 0) {
 			baseFriendsList.put(mItemType, invateFriends);
 		}
 		PhotoTalkFriendsAdapter adapter = null;
 		if (listView.getExpandableListAdapter() != null) {
-			adapter = (PhotoTalkFriendsAdapter) listView
-					.getExpandableListAdapter();
+			adapter = (PhotoTalkFriendsAdapter) listView.getExpandableListAdapter();
 			adapter.setListData(baseFriendsList);
 			// listView.setSelection(0);
 
 		} else {
-			adapter = new PhotoTalkFriendsAdapter(AddFriendBaseActivity.this,
-					baseFriendsList, willInvateFriends,
-					ImageLoader.getInstance());
+			adapter = new PhotoTalkFriendsAdapter(AddFriendBaseActivity.this, baseFriendsList, willInvateFriends, ImageLoader.getInstance());
 			adapter.setOnCheckBoxChangedListener(mInvateCheckBoxChangeListener);
 			adapter.setOnFriendAddListener(mFriendAddListener);
 			listView.setAdapter(adapter);
@@ -175,55 +165,49 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	private void doFriendAdd(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(),
-				new AddFriendListener() {
-					@Override
-					public void onFriendAddSuccess(int addType) {
-						dismissLoadingDialog();
-						friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
-						refreshList();
-						AddFriendsActivity.addFriend(friend);
-						LogicUtils.friendAdded(AddFriendBaseActivity.this,friend, addType);
-					}
+		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendListener() {
+			@Override
+			public void onFriendAddSuccess(int addType) {
+				dismissLoadingDialog();
+				friend.setFriend(true);
+				refreshList();
+				AddFriendsActivity.addFriend(friend);
+				LogicUtils.friendAdded(AddFriendBaseActivity.this, friend, addType);
+			}
 
-					@Override
-					public void onFriendAddFail(int statusCode, String content) {
-						dismissLoadingDialog();
-						showErrorConfirmDialog(content);
-					}
-				}, friend).execute();
+			@Override
+			public void onFriendAddFail(int statusCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		}, friend).execute();
 	}
 
 	protected void refreshList() {
 		if (mList.getExpandableListAdapter() != null) {
-			((BaseExpandableListAdapter) mList.getExpandableListAdapter())
-					.notifyDataSetChanged();
+			((BaseExpandableListAdapter) mList.getExpandableListAdapter()).notifyDataSetChanged();
 		}
 		if (mSearchList.getExpandableListAdapter() != null) {
-			((BaseExpandableListAdapter) mSearchList.getExpandableListAdapter())
-					.notifyDataSetChanged();
+			((BaseExpandableListAdapter) mSearchList.getExpandableListAdapter()).notifyDataSetChanged();
 		}
 	}
 
 	private void initInvateView() {
 		View view = findViewById(R.id.wish_to_invate);
-		final HorizontalScrollView hsv = (HorizontalScrollView) view
-				.findViewById(R.id.hs_wish_list);
+		final HorizontalScrollView hsv = (HorizontalScrollView) view.findViewById(R.id.hs_wish_list);
 		mLinearInvate = (LinearLayout) view.findViewById(R.id.linear_wish);
-		mLinearInvate.getViewTreeObserver().addOnGlobalLayoutListener(
-				new OnGlobalLayoutListener() {
+		mLinearInvate.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
-					@Override
-					public void onGlobalLayout() {
-						hsv.smoothScrollTo(mLinearInvate.getWidth(), 0);
-					}
-				});
+			@Override
+			public void onGlobalLayout() {
+				hsv.smoothScrollTo(mLinearInvate.getWidth(), 0);
+			}
+		});
 		Button btnInvate = (Button) findViewById(R.id.btn_invate);
 		btnInvate.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				onInviteButtonClick(willInvateFriends);
 			}
 		});
@@ -258,7 +242,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		willInvateFriends.remove(friend);
 		TextView tvName = willInvateViews.get(friend.getRcId());
 		if (tvName != null) {
-			willInvateViews.remove(friend.getNick());
+			willInvateViews.remove(friend.getNickName());
 			mLinearInvate.removeView(tvName);
 		}
 		refreshList();
@@ -266,18 +250,15 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	private TextView buildInvateTextView(final Friend friend) {
 		TextView tvName = new TextView(this);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		int marginLeft = getResources().getDimensionPixelSize(
-				R.dimen.invate_friend_space);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		int marginLeft = getResources().getDimensionPixelSize(R.dimen.invate_friend_space);
 		params.setMargins(marginLeft, 0, 0, 0);
 		tvName.setLayoutParams(params);
-		tvName.setText(friend.getNick());
+		tvName.setText(friend.getNickName());
 		tvName.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub]
 				removeInvateFriend(friend);
 			}
 		});

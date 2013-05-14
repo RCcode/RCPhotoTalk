@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk.request;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +16,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.utils.Contract.Action;
@@ -46,62 +46,80 @@ public class RCPlatformAsyncHttpClient {
 		isCancel = true;
 	}
 
-	public void post(final Context context, String url, final RCPlatformResponseHandler responseHandler) {
+	public void post(Request request) {
+		mRequestParams = new RequestParams();
 		try {
-			mClient.post(context, url, getEntityFromParams(), CONTENT_TYPE_JSON, new AsyncHttpResponseHandler() {
-				@Override
-				public void onSuccess(int statusCode, String content) {
-					super.onSuccess(statusCode, content);
-					LogUtil.e("response is " + content);
-					if (responseHandler != null && !isCancel) {
-						try {
-							JSONObject jsonObject = new JSONObject(content);
-							int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
-							if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
-								responseHandler.onSuccess(state, content);
-							} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {
-								context.sendBroadcast(new Intent(Action.ACTION_OTHER_DEVICE_LOGIN));
-							} else {
-								responseHandler.onFailure(state, jsonObject.getString(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_MESSAGE));
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-							onIOException(context, responseHandler);
-						}
-					}
-				}
-
-				@Override
-				public void onFailure(Throwable error, String content) {
-					super.onFailure(error, content);
-					LogUtil.e("response is " + content);
-					if (responseHandler != null) {
-						onIOException(context, responseHandler);
-					}
-				}
-			});
+			if (request.getFile() != null) {
+				postFile(request);
+			} else {
+				postRequest(request);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			if (responseHandler != null)
-				responseHandler.onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+			onRequestFailure(request.getContext(), e, e.getMessage(), request);
 		}
-		clearParams();
 	}
 
-	private void onIOException(Context context, RCPlatformResponseHandler responseHandler) {
-		responseHandler.onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-	}
+	private void postRequest(final Request request) throws Exception {
+		putAllRequestParams(request.getParams());
+		final Context context = request.getContext();
+		final RCPlatformResponseHandler responseHandler = request.getResponseHandler();
 
-	public void postFile(final Context context, String url, File file, final RCPlatformResponseHandler responseHandler) {
-		if (file != null && file.exists()) {
-			try {
-				mRequestParams.put("file", file);
-				mRequestParams.put("imgType", "jpg");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+		mClient.post(context, request.getUrl(), getEntityFromParams(), CONTENT_TYPE_JSON, new AsyncHttpResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				super.onSuccess(statusCode, content);
+				LogUtil.e("response is " + content);
+				if (responseHandler != null && !isCancel) {
+					try {
+						JSONObject jsonObject = new JSONObject(content);
+						int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
+						if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
+							responseHandler.onSuccess(state, content);
+						} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {
+							context.sendBroadcast(new Intent(Action.ACTION_OTHER_DEVICE_LOGIN));
+						} else {
+							responseHandler.onFailure(state, jsonObject.getString(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_MESSAGE));
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+						onFailure(e, content);
+					}
+				}
 			}
+
+			@Override
+			public void onFailure(Throwable error, String content) {
+				super.onFailure(error, content);
+				LogUtil.e("response is " + content);
+				onRequestFailure(context, error, content, request);
+			}
+		});
+	}
+
+	private void postFile(final Request request) throws FileNotFoundException {
+		putAllRequestParams(request.getParams());
+		mRequestParams.put("file", request.getFile());
+		postNameValuePair(request);
+	}
+
+	public void postNameValue(Request request) {
+		try {
+			mRequestParams = new RequestParams();
+			putAllRequestParams(request.getParams());
+			if (request.getFile() != null)
+				mRequestParams.put("file", request.getFile());
+			postNameValuePair(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			onRequestFailure(request.getContext(), e, e.getMessage(), request);
 		}
-		mClient.post(context, url, mRequestParams, new AsyncHttpResponseHandler() {
+	}
+
+	private void postNameValuePair(final Request request) {
+		final RCPlatformResponseHandler responseHandler = request.getResponseHandler();
+		final Context context = request.getContext();
+		mClient.post(request.getUrl(), mRequestParams, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				super.onSuccess(statusCode, content);
@@ -113,11 +131,11 @@ public class RCPlatformAsyncHttpClient {
 						if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
 							responseHandler.onSuccess(state, content);
 						} else {
-							responseHandler.onFailure(state, null);
+							responseHandler.onFailure(state, jsonObject.getString(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_MESSAGE));
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
-						onIOException(context, responseHandler);
+						onFailure(e, content);
 					}
 				}
 			}
@@ -125,13 +143,17 @@ public class RCPlatformAsyncHttpClient {
 			@Override
 			public void onFailure(Throwable error, String content) {
 				super.onFailure(error, content);
-				LogUtil.e(content);
-				if (responseHandler != null) {
-					onIOException(context, responseHandler);
-				}
+				onRequestFailure(context, error, content, request);
 			}
 		});
+	}
 
+	private void onRequestFailure(Context context, Throwable error, String content, Request request) {
+		if (request.getResponseHandler() != null) {
+			request.getResponseHandler().onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+		}
+		if (request.isCache())
+			PhotoTalkDatabaseFactory.getRequestDatabase().saveRequest(request);
 	}
 
 	public void putRequestParam(String key, String value) {

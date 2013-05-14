@@ -144,7 +144,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private void startFriendDetailActivity(Friend friend) {
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
-		if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
+		if (!friend.isFriend()) {
 			intent.setAction(Contract.Action.ACTION_RECOMMEND_DETAIL);
 		} else {
 			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
@@ -262,15 +262,15 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void showFriendDetail(Information information) {
-		if (information.getSender().getSuid().equals(information.getReceiver().getSuid())) {
+		if (information.getSender().getRcId().equals(information.getReceiver().getRcId())) {
 			startActivity(SettingsActivity.class);
 			return;
 		}
 		String friendSuid = null;
 		if (LogicUtils.isSender(HomeActivity.this, information)) {
-			friendSuid = information.getReceiver().getSuid();
+			friendSuid = information.getReceiver().getRcId();
 		} else {
-			friendSuid = information.getSender().getSuid();
+			friendSuid = information.getSender().getRcId();
 		}
 		searchFriendDetailById(friendSuid, information);
 	}
@@ -543,7 +543,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			if (infos != null && infos.size() > 0) {
 				for (Information information : infos) {
 					if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE
-							&& information.getSender().getSuid().equals(friend.getSender().getSuid())) {
+							&& information.getSender().getRcId().equals(friend.getSender().getRcId())) {
 						information.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
 					}
 				}
@@ -615,7 +615,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		Intent intent = new Intent(this, UserMessageService.class);
 		Bundle bundle = new Bundle();
 		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, currentUser.getTigaseId());
-		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePassword());
+		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePwd());
 		intent.putExtras(bundle);
 		startService(intent);
 	}

@@ -9,9 +9,8 @@ import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.MenueApiUrl;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
@@ -83,14 +82,10 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 	private void doGetPassword(String email) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		mEmail = email;
-		RCPlatformAsyncHttpClient httpClient = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(this, httpClient);
-		httpClient.putRequestParam("email", email);
-		httpClient.post(this, MenueApiUrl.FORGET_PASSWORD_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(this, MenueApiUrl.FORGET_PASSWORD_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
 				dismissLoadingDialog();
 				String resetMsg = String.format(getResources().getString(R.string.forget_password_reset_text), mEmail);
 				DialogUtil.createMsgDialog(ForgetPasswordActivity.this, resetMsg, getString(R.string.confirm));
@@ -102,5 +97,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 				showErrorConfirmDialog(content);
 			}
 		});
+		request.putParam("email", email);
+		request.excuteAsync();
 	}
 }
