@@ -119,7 +119,7 @@ public class Information {
 		if (!(o instanceof Information))
 			return false;
 		Information info = (Information) o;
-		return this.getSender().getSuid().equals(info.getSender().getSuid()) && this.getReceiver().getSuid().equals(info.getReceiver().getSuid())
+		return this.getSender().getRcId().equals(info.getSender().getRcId()) && this.getReceiver().getRcId().equals(info.getReceiver().getRcId())
 				&& this.createtime == info.getCreatetime() && this.type == info.getType();
 	}
 

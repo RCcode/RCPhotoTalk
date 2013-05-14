@@ -116,7 +116,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 				friend.getHeadUrl(),
 				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, holder.head,
 				R.drawable.default_head);
-		holder.name.setText(friend.getNick());
+		holder.name.setText(friend.getNickName());
 		String letter = friend.getLetter();
 		if (!isNeedToShowLetter(position)) {
 			holder.tvLetter.setVisibility(View.GONE);

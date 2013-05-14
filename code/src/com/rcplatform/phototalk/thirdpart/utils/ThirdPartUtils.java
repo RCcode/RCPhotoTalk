@@ -19,7 +19,7 @@ public class ThirdPartUtils {
 		Friend result = new Friend();
 		result.setRcId(friend.getId());
 		result.setHeadUrl(friend.getHeadUrl());
-		result.setNick(friend.getNick());
+		result.setNickName(friend.getNick());
 		return result;
 	}
 

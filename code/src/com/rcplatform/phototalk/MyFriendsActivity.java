@@ -168,13 +168,13 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private void search(String keyWords) {
 		List<Friend> resultRecommends = new ArrayList<Friend>();
 		for (Friend friend : mRecommends) {
-			if (friend.getNick().contains(keyWords)) {
+			if (friend.getNickName().contains(keyWords)) {
 				resultRecommends.add(friend);
 			}
 		}
 		List<Friend> resultFriends = new ArrayList<Friend>();
 		for (Friend friend : mFriends) {
-			if (friend.getNick().contains(keyWords)) {
+			if (friend.getNickName().contains(keyWords)) {
 				resultFriends.add(friend);
 			}
 		}
@@ -206,7 +206,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		mFriendShowDetail = friend;
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
-		if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
+		if (!friend.isFriend()) {
 			intent.setAction(Contract.Action.ACTION_RECOMMEND_DETAIL);
 		} else {
 			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
@@ -233,7 +233,6 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		if (mFriends != null && mFriends.size() > 0) {
 			List<Friend> newFriends = new ArrayList<Friend>();
 			for (Friend friend : mFriends) {
-				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
 				if (friend.isNew()) {
 					newFriends.add(friend);
 				}
@@ -242,7 +241,6 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				listData.put(PhotoTalkFriendsAdapter.TYPE_FRIEND_NEW, newFriends);
 			}
 			listData.put(PhotoTalkFriendsAdapter.TYPE_FRIEND_ADDED, mFriends);
-
 		}
 		if (mRecommends != null && mRecommends.size() > 0) {
 			listData.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS, mRecommends);
@@ -275,7 +273,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onFriendAddSuccess(int addType) {
-				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+				friend.setFriend(true);
 				refreshList();
 				dismissLoadingDialog();
 			}
@@ -317,8 +315,8 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_KEY_DETAIL) {
 				Friend result = (Friend) data.getSerializableExtra(FriendDetailActivity.RESULT_PARAM_FRIEND);
-				mFriendShowDetail.setStatus(result.getStatus());
-				mFriendShowDetail.setMark(result.getMark());
+				mFriendShowDetail.setFriend(true);
+				mFriendShowDetail.setLocalName(result.getLocalName());
 				refreshList();
 			} else if (requestCode == REQUEST_KEY_ADD_FRIEND) {
 				List<Friend> newFriends = (List<Friend>) data.getSerializableExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
@@ -379,9 +377,9 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				showErrorConfirmDialog(content);
 			}
 		};
-		if (friend.getStatus() == Friend.USER_STATUS_FRIEND_ADDED) {
+		if (friend.isFriend()) {
 			FriendsProxy.deleteFriend(this, handler, friend.getRcId());
-		} else if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
+		} else {
 			FriendsProxy.deleteRecommendFriend(this, handler, friend);
 		}
 

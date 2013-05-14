@@ -37,6 +37,6 @@ public class PhotoTalkUtils {
 	}
 	
 	public static String getInformationTagBase(Information information){
-			return information.getReceiver().getSuid()+"|"+information.getSender().getSuid()+"|"+information.getCreatetime();
+			return information.getReceiver().getRcId()+"|"+information.getSender().getRcId()+"|"+information.getCreatetime();
 	}
 }

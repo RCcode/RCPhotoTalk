@@ -48,16 +48,14 @@ public class Utils {
 	public static Map<AppInfo, UserInfo> getRCPlatformAppUsers(Context context) {
 		PackageManager manager = context.getPackageManager();
 		Map<AppInfo, UserInfo> appUsers = new HashMap<AppInfo, UserInfo>();
-		List<PackageInfo> packages = manager
-				.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
+		List<PackageInfo> packages = manager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
 		for (PackageInfo info : packages) {
 			if (info.packageName.startsWith("com.rcplatform")) {
 				UserInfo userInfo = getAppLoginUser(context, info.packageName);
 				if (userInfo != null) {
 					AppInfo appInfo = new AppInfo();
 					appInfo.setPackageName(info.packageName);
-					appInfo.setAppName(info.applicationInfo.loadLabel(manager)
-							.toString());
+					appInfo.setAppName(info.applicationInfo.loadLabel(manager).toString());
 					appUsers.put(appInfo, userInfo);
 				}
 			}
@@ -67,10 +65,8 @@ public class Utils {
 
 	private static UserInfo getAppLoginUser(Context context, String packageName) {
 		StringBuilder sbUri = new StringBuilder();
-		sbUri.append("content://").append(packageName).append(".provider")
-				.append("/user/0");
-		Cursor cursor = context.getContentResolver().query(
-				Uri.parse(sbUri.toString()), null, null, null, null);
+		sbUri.append("content://").append(packageName).append(".provider").append("/user/0");
+		Cursor cursor = context.getContentResolver().query(Uri.parse(sbUri.toString()), null, null, null, null);
 		if (cursor != null)
 			return cursorToUserInfo(cursor);
 		return null;
@@ -80,30 +76,17 @@ public class Utils {
 		UserInfo userInfo = null;
 		if (cursor.moveToFirst()) {
 			userInfo = new UserInfo();
-			userInfo.setBirthday(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_BIRTHDAY)));
-			userInfo.setEmail(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_EMAIL)));
-			userInfo.setDeviceId(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_DEVICE_ID)));
-			userInfo.setHeadUrl(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_HEADURL)));
-			userInfo.setPassWord(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_PASSWORD)));
-			userInfo.setNick(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_NICK)));
-			userInfo.setPhone(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_PHONE)));
-			userInfo.setSex(cursor.getInt(cursor
-					.getColumnIndex(Contract.KEY_SEX)));
-			userInfo.setReceiveSet(cursor.getInt(cursor
-					.getColumnIndex(Contract.KEY_RECEIVESET)));
-			userInfo.setSignature(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_SIGNATURE)));
-			userInfo.setRcId(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_RCID)));
-			userInfo.setToken(cursor.getString(cursor
-					.getColumnIndex(Contract.KEY_USER_TOKEN)));
+			userInfo.setBirthday(cursor.getString(cursor.getColumnIndex(Contract.KEY_BIRTHDAY)));
+			userInfo.setEmail(cursor.getString(cursor.getColumnIndex(Contract.KEY_EMAIL)));
+			userInfo.setDeviceId(cursor.getString(cursor.getColumnIndex(Contract.KEY_DEVICE_ID)));
+			userInfo.setHeadUrl(cursor.getString(cursor.getColumnIndex(Contract.KEY_HEADURL)));
+			userInfo.setPassWord(cursor.getString(cursor.getColumnIndex(Contract.KEY_PASSWORD)));
+			userInfo.setNickName(cursor.getString(cursor.getColumnIndex(Contract.KEY_NICK)));
+			userInfo.setCellPhone(cursor.getString(cursor.getColumnIndex(Contract.KEY_PHONE)));
+			userInfo.setGender(cursor.getInt(cursor.getColumnIndex(Contract.KEY_SEX)));
+			userInfo.setAllowsend(cursor.getInt(cursor.getColumnIndex(Contract.KEY_RECEIVESET)));
+			userInfo.setRcId(cursor.getString(cursor.getColumnIndex(Contract.KEY_RCID)));
+			userInfo.setToken(cursor.getString(cursor.getColumnIndex(Contract.KEY_USER_TOKEN)));
 		}
 		cursor.close();
 		return userInfo;
@@ -115,13 +98,11 @@ public class Utils {
 	 * @return
 	 */
 	public static boolean isExternalStorageUsable() {
-		return Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED);
+		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
 	}
 
 	public static boolean isNetworkEnable(Context context) {
-		ConnectivityManager manager = (ConnectivityManager) context
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo info = manager.getActiveNetworkInfo();
 		if (info != null)
 			return info.isAvailable();
@@ -168,8 +149,7 @@ public class Utils {
 	 */
 	public static File createTmpPic() {
 
-		File tmpFile = new File(Environment.getExternalStorageDirectory(),
-				"rcplatform/phototalk");
+		File tmpFile = new File(Environment.getExternalStorageDirectory(), "rcplatform/phototalk");
 
 		if (!tmpFile.exists()) {
 			if (!tmpFile.mkdirs()) {
@@ -190,8 +170,7 @@ public class Utils {
 	public static int getVerCode(Context context) {
 		int verCode = -1;
 		try {
-			verCode = context.getPackageManager().getPackageInfo(
-					"com.menue.photosticker", 0).versionCode;
+			verCode = context.getPackageManager().getPackageInfo("com.menue.photosticker", 0).versionCode;
 		} catch (NameNotFoundException e) {
 			Log.e("msg", e.getMessage());
 		}
@@ -207,8 +186,7 @@ public class Utils {
 	public static String getVerName(Context context) {
 		String verName = "";
 		try {
-			verName = context.getPackageManager().getPackageInfo(
-					"com.menue.photosticker", 0).versionName;
+			verName = context.getPackageManager().getPackageInfo("com.menue.photosticker", 0).versionName;
 		} catch (NameNotFoundException e) {
 			Log.e("msg", e.getMessage());
 		}
@@ -233,8 +211,7 @@ public class Utils {
 	 */
 	public static Bitmap rollingOver(Bitmap originalBitmap) {
 		try {
-			Bitmap bitmap = Bitmap.createBitmap(originalBitmap.getWidth(),
-					originalBitmap.getHeight(), Config.ARGB_8888);
+			Bitmap bitmap = Bitmap.createBitmap(originalBitmap.getWidth(), originalBitmap.getHeight(), Config.ARGB_8888);
 			Canvas canvas = new Canvas(bitmap);
 			Matrix matrix = new Matrix();
 
@@ -245,10 +222,8 @@ public class Utils {
 			mCamera.restore();
 
 			// 以图片的中心点为旋转中心,如果不加这两句，就是以（0,0）点为旋转中心
-			matrix.preTranslate(-originalBitmap.getWidth() / 2,
-					-originalBitmap.getHeight() / 2);
-			matrix.postTranslate(originalBitmap.getWidth() / 2,
-					originalBitmap.getHeight() / 2);
+			matrix.preTranslate(-originalBitmap.getWidth() / 2, -originalBitmap.getHeight() / 2);
+			matrix.postTranslate(originalBitmap.getWidth() / 2, originalBitmap.getHeight() / 2);
 
 			canvas.drawBitmap(originalBitmap, matrix, null);
 			if (originalBitmap != null && !originalBitmap.isRecycled()) {
@@ -304,8 +279,7 @@ public class Utils {
 	 * @param reqHeight
 	 * @return
 	 */
-	public static Bitmap decodeSampledBitmapFromFile(String filename,
-			int reqWidth, int reqHeight, int rotateAngel) {
+	public static Bitmap decodeSampledBitmapFromFile(String filename, int reqWidth, int reqHeight, int rotateAngel) {
 
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -314,8 +288,7 @@ public class Utils {
 		// options.outWidth=200;
 		BitmapFactory.decodeFile(filename, options);
 		// Calculate inSampleSize
-		int inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight,
-				rotateAngel);
+		int inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight, rotateAngel);
 		options.inSampleSize = inSampleSize;
 
 		// Decode bitmap with inSampleSize set
@@ -330,11 +303,8 @@ public class Utils {
 			in.close();
 			if (rotateAngel != 0) {
 				Matrix matrix = new Matrix();
-				matrix.setRotate(rotateAngel, tempBitmap.getWidth() / 2,
-						tempBitmap.getHeight() / 2);
-				Bitmap result = Bitmap.createBitmap(tempBitmap, 0, 0,
-						tempBitmap.getWidth(), tempBitmap.getHeight(), matrix,
-						true);
+				matrix.setRotate(rotateAngel, tempBitmap.getWidth() / 2, tempBitmap.getHeight() / 2);
+				Bitmap result = Bitmap.createBitmap(tempBitmap, 0, 0, tempBitmap.getWidth(), tempBitmap.getHeight(), matrix, true);
 				tempBitmap.recycle();
 				tempBitmap = result;
 			}
@@ -359,8 +329,7 @@ public class Utils {
 	 * @param reqHeight
 	 * @return
 	 */
-	public static Bitmap decodeSampledBitmapFromFile(InputStream is,
-			int reqWidth, int reqHeight) {
+	public static Bitmap decodeSampledBitmapFromFile(InputStream is, int reqWidth, int reqHeight) {
 
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
@@ -389,8 +358,7 @@ public class Utils {
 	 * @param reqHeight
 	 * @return
 	 */
-	public static int calculateInSampleSize(BitmapFactory.Options options,
-			int reqWidth, int reqHeight, int rotateAngel) {
+	public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight, int rotateAngel) {
 		// Raw height and width of image
 		final int height;
 		final int width;
@@ -446,13 +414,10 @@ public class Utils {
 			if (uri.getScheme().toString().compareTo("content") == 0) // content://开头的uri
 			{
 				String[] proj = { MediaStore.Images.Media.DATA };
-				Cursor actualimagecursor = context.getContentResolver().query(
-						uri, proj, null, null, null);
-				int actual_image_column_index = actualimagecursor
-						.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+				Cursor actualimagecursor = context.getContentResolver().query(uri, proj, null, null, null);
+				int actual_image_column_index = actualimagecursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
 				actualimagecursor.moveToFirst();
-				fileName = actualimagecursor
-						.getString(actual_image_column_index);
+				fileName = actualimagecursor.getString(actual_image_column_index);
 			} else if (uri.getScheme().compareTo("file") == 0) // file:///开头的uri
 			{
 				fileName = filePathUri.toString();
@@ -473,8 +438,7 @@ public class Utils {
 		int angle = 0;
 
 		try {
-			String[] filePathColumn = { MediaStore.Images.Media.DATA,
-					MediaStore.Images.Media.ORIENTATION };
+			String[] filePathColumn = { MediaStore.Images.Media.DATA, MediaStore.Images.Media.ORIENTATION };
 			ContentResolver cr = context.getContentResolver();
 			cursor = cr.query(imageUri, filePathColumn, null, null, null);
 			if (cursor != null) {
@@ -519,9 +483,7 @@ public class Utils {
 		int degree = 0;
 		try {
 			ExifInterface exifInterface = new ExifInterface(path);
-			int orientation = exifInterface.getAttributeInt(
-					ExifInterface.TAG_ORIENTATION,
-					ExifInterface.ORIENTATION_NORMAL);
+			int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 			switch (orientation) {
 			case ExifInterface.ORIENTATION_ROTATE_90:
 				degree = 90;
@@ -542,11 +504,9 @@ public class Utils {
 	}
 
 	public static void hideSoftInputKeyboard(Context context, View view) {
-		InputMethodManager mInputMethodManager = (InputMethodManager) context
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager mInputMethodManager = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		if (view != null)
-			mInputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),
-					0);
+			mInputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
 	}
 
 	public static List<Friend> getFriendOrderByLetter(List<Friend> friends) {
@@ -564,22 +524,18 @@ public class Utils {
 
 		try {
 
-			Bitmap output = Bitmap.createBitmap(bitmap.getWidth(),
-			bitmap.getHeight(), Config.ARGB_8888);
+			Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Config.ARGB_8888);
 			Canvas canvas = new Canvas(output);
 			Paint paint = new Paint();
-			Rect rect = new Rect(0, 0, bitmap.getWidth(),
-			bitmap.getHeight());
-			RectF rectF = new RectF(new Rect(0, 0, bitmap.getWidth(),
-			bitmap.getHeight()));
+			Rect rect = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
+			RectF rectF = new RectF(new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()));
 			final float roundPx = bitmap.getWidth() / 2;
 			paint.setAntiAlias(true);
 			canvas.drawARGB(0, 0, 0, 0);
 			paint.setColor(Color.BLACK);
 			canvas.drawRoundRect(rectF, roundPx, roundPx, paint);
 			paint.setXfermode(new PorterDuffXfermode(Mode.SRC_IN));
-			final Rect src = new Rect(0, 0, bitmap.getWidth(),
-			bitmap.getHeight());
+			final Rect src = new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight());
 			canvas.drawBitmap(bitmap, src, rect, paint);
 			if (bitmap != null && !bitmap.isRecycled()) {
 				bitmap.recycle();
@@ -597,13 +553,9 @@ public class Utils {
 	public static Bitmap getRectBitmap(Bitmap bitmap) {
 		Bitmap output = null;
 		if (bitmap.getWidth() > bitmap.getHeight()) {
-			output = Bitmap.createBitmap(bitmap,
-					bitmap.getWidth() / 2 - bitmap.getHeight() / 2, 0,
-					bitmap.getHeight(), bitmap.getHeight());
+			output = Bitmap.createBitmap(bitmap, bitmap.getWidth() / 2 - bitmap.getHeight() / 2, 0, bitmap.getHeight(), bitmap.getHeight());
 		} else {
-			output = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight() / 2
-					- bitmap.getWidth() / 2, bitmap.getWidth(),
-					bitmap.getWidth());
+			output = Bitmap.createBitmap(bitmap, 0, bitmap.getHeight() / 2 - bitmap.getWidth() / 2, bitmap.getWidth(), bitmap.getWidth());
 		}
 		if (bitmap != null && !bitmap.isRecycled()) {
 			bitmap.recycle();

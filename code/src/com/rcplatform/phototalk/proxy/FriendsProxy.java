@@ -21,7 +21,6 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
@@ -37,9 +36,8 @@ public class FriendsProxy {
 	}
 
 	public static List<Friend> getContactRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.post(context, MenueApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
+		Request request = new Request(context, MenueApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
+		request.excuteAsync();
 		return null;
 	}
 
@@ -70,9 +68,7 @@ public class FriendsProxy {
 	}
 
 	private static void loadFriendsFromService(final Activity context, final OnFriendsLoadedListener listener) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.post(context, MenueApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(context, MenueApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, final String content) {
@@ -82,9 +78,11 @@ public class FriendsProxy {
 						try {
 							JSONObject jObj = new JSONObject(content);
 							final List<Friend> mFriends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
+							for (Friend f : mFriends)
+								f.setFriend(true);
 							final List<Friend> mRecommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
 							for (Friend friend : mFriends) {
-								friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNick()));
+								friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
 							}
 							PhotoTalkDatabaseFactory.getDatabase().saveFriends(mFriends);
 							PhotoTalkDatabaseFactory.getDatabase().saveRecommends(mRecommends);
@@ -123,6 +121,7 @@ public class FriendsProxy {
 				listener.onError(errorCode, content);
 			}
 		});
+		request.excuteAsync();
 	}
 
 	private static void runOnUiThread(Activity context, Runnable task) {
@@ -149,12 +148,12 @@ public class FriendsProxy {
 		request.setFile(file);
 		request.excuteAsync();
 	}
-	//上传头像
-	public static void upUserInfoHeadImage(Context context,File file,
-			RCPlatformResponseHandler responseHandler) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(context, client);
-		client.postFile(context, MenueApiUrl.USER_INFO_HEAD_IMAGE_URL, file, responseHandler);
+
+	// 上传头像
+	public static void upUserInfoHeadImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
+		Request request = new Request(context, MenueApiUrl.USER_INFO_HEAD_IMAGE_URL, responseHandler);
+		request.setFile(file);
+		request.excuteAsync();
 	}
 
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
@@ -186,7 +185,7 @@ public class FriendsProxy {
 	public static void addFriendFromInformation(Context context, RCPlatformResponseHandler responseHandler, Information info) {
 		Request request = new Request(context, MenueApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
 		JSONArray array = new JSONArray();
-		array.put(info.getSender().getSuid());
+		array.put(info.getSender().getRcId());
 		request.putParam(PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_FRIEND_IDS, array.toString());
 		request.excuteAsync();
 	}

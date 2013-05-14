@@ -9,7 +9,7 @@ public class DatabaseUtils {
 	public static final String DATABASE_REQUEST = "request";
 
 	public static String getDatabasePath(UserInfo userInfo) {
-		return Contract.Database.DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getEmail();
+		return Contract.Database.DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getRcId();
 	}
 
 	public static String getRequestDatabasePath() {

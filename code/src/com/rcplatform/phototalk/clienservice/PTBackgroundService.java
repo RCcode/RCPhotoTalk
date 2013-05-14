@@ -75,7 +75,6 @@ public class PTBackgroundService extends Service {
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
 			startThirdpartAsync();
-
 		}
 	}
 
@@ -96,7 +95,7 @@ public class PTBackgroundService extends Service {
 	private void startFacebookAsync() {
 		if (FacebookUtil.isFacebookVlidate(getApplicationContext())) {
 			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~facebook has authorized~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			long lastRefreshTime = PrefsUtils.User.getFacebookLastAsyncTime(getApplicationContext(), mCurrentUser.getEmail());
+			long lastRefreshTime = PrefsUtils.User.getFacebookLastAsyncTime(getApplicationContext(), mCurrentUser.getRcId());
 			if (mFacebookAsyncPI == null) {
 				Intent intent = new Intent(ACTION_ASYNC_THIRDPART);
 				intent.putExtra(INTENT_PARAM_KEY_THIRD_PART, FriendType.FACEBOOK);
@@ -118,15 +117,15 @@ public class PTBackgroundService extends Service {
 		super.onCreate();
 		((MenueApplication) getApplication()).setService(this);
 		registeNetConnectionReceiver();
-		//Intent.ACTION_TIME_TICK;
+		// Intent.ACTION_TIME_TICK;
 	}
 
 	private void checkPhoneBindState() {
 
 		if (isUserNeedToBindPhone(mCurrentUser)) {
 			// 如果号码没有绑定，而且绑定短信发送成功过
-			boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), mCurrentUser.getEmail());
-			long lastBindTime = PrefsUtils.User.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getEmail());
+			boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), mCurrentUser.getRcId());
+			long lastBindTime = PrefsUtils.User.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getRcId());
 			if (lastBindTime == 0) {
 				// 一次都没有发送成功过
 				bindSuidByPhone(Contract.BIND_PHONE_NUMBER, mCurrentUser);
@@ -143,7 +142,7 @@ public class PTBackgroundService extends Service {
 	}
 
 	private boolean isUserNeedToBindPhone(UserInfo userInfo) {
-		return userInfo != null && userInfo.getPhone() == null && android.os.Build.SERIAL.equals(userInfo.getDeviceId());
+		return userInfo != null && userInfo.getCellPhone() == null && android.os.Build.SERIAL.equals(userInfo.getDeviceId());
 	}
 
 	@Override
@@ -168,8 +167,8 @@ public class PTBackgroundService extends Service {
 			} else if (task.getStatus() == Status.STATUS_PENDING) {
 				task.startUpload();
 			}
-		}else{
-			//TODO 定时上传
+		} else {
+			// TODO 定时上传
 		}
 	}
 
@@ -216,7 +215,7 @@ public class PTBackgroundService extends Service {
 		PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
 		SmsManager smsManager = SmsManager.getDefault();
 		smsManager.sendTextMessage(number, null, RCPlatformTextUtil.getSMSMessage(mCurrentUser.getRcId(), Contract.APP_ID), sendPI, null);
-		PrefsUtils.User.setLastBindNumber(getApplicationContext(), mCurrentUser.getEmail(), number);
+		PrefsUtils.User.setLastBindNumber(getApplicationContext(), mCurrentUser.getRcId(), number);
 	}
 
 	/**
@@ -266,15 +265,15 @@ public class PTBackgroundService extends Service {
 				case Activity.RESULT_OK:
 					LogUtil.i("sms send success");
 					long time = System.currentTimeMillis();
-					PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), time, mCurrentUser.getEmail());
+					PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), time, mCurrentUser.getRcId());
 					getBindPhoneNumberFromService(BIND_STATE_CHECK_DELAY_TIME, mCurrentUser);
 					unregisterReceiver(this);
-					sendSMSStateToService(PrefsUtils.User.getLastBindNumber(getApplicationContext(), mCurrentUser.getEmail()), time);
+					sendSMSStateToService(PrefsUtils.User.getLastBindNumber(getApplicationContext(), mCurrentUser.getRcId()), time);
 					break;
 				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
 					LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~send sms error ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 					if (isUserNeedToBindPhone(mCurrentUser)) {
-						sendSMS(PrefsUtils.User.getLastBindNumber(getApplicationContext(), mCurrentUser.getEmail()));
+						sendSMS(PrefsUtils.User.getLastBindNumber(getApplicationContext(), mCurrentUser.getRcId()));
 					}
 					break;
 				case SmsManager.RESULT_ERROR_NO_SERVICE:
@@ -304,7 +303,7 @@ public class PTBackgroundService extends Service {
 		Intent intent = new Intent(ACTION_CHECK_BIND_PHONE);
 		mCheckBindStatePI = PendingIntent.getBroadcast(getApplicationContext(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), userInfo.getEmail());
+		boolean willTryToBind = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), userInfo.getRcId());
 		if (willTryToBind) {
 			LogUtil.e("~~~~~~~~~~~~~~now try to bind first sms number start get state from service~~~~~~~~~~~~~~");
 			alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + delay, BIND_STATE_CHECK_SPACING_TIME, mCheckBindStatePI);
@@ -326,7 +325,7 @@ public class PTBackgroundService extends Service {
 					LogUtil.e("~~~~~~~~~~~~~~already bind phone number~~~~~~~~~~~~~~");
 
 					if (isUserNeedToBindPhone(mCurrentUser)) {
-						PrefsUtils.User.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mCurrentUser.getEmail());
+						PrefsUtils.User.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mCurrentUser.getRcId());
 					}
 					cancelCurrentBindCheckTask();
 				}
@@ -334,7 +333,7 @@ public class PTBackgroundService extends Service {
 				@Override
 				public void onBindFail() {
 					LogUtil.e("~~~~~~~~~~~~~~haven't binded phone number~~~~~~~~~~~~~~");
-					boolean willTry = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), mCurrentUser.getEmail());
+					boolean willTry = PrefsUtils.User.willTryToBindPhone(getApplicationContext(), mCurrentUser.getRcId());
 					if (isUserNeedToBindPhone(mCurrentUser) && isOverBindWaitingTime() && willTry) {
 						// 判断，如果距离上次发短信时间已经大于一天，而且仍要进行绑定，同时当前有登陆的用户，同时该用户需要绑定手机号，则使用备用短信平台发送短信
 						LogUtil.e("~~~~~~~~~~~~~~over max wait time try second sms number~~~~~~~~~~~~~~");
@@ -350,7 +349,7 @@ public class PTBackgroundService extends Service {
 	};
 
 	private boolean isOverBindWaitingTime() {
-		long lastSendTime = PrefsUtils.User.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getEmail());
+		long lastSendTime = PrefsUtils.User.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getRcId());
 		return (System.currentTimeMillis() - lastSendTime) > MAX_BIND_WAITING_TIME;
 	}
 
@@ -369,22 +368,22 @@ public class PTBackgroundService extends Service {
 	}
 
 	private void sendSMSStateToService(String number, long time) {
-		RCPlatformAsyncHttpClient client = new RCPlatformAsyncHttpClient();
-		PhotoTalkParams.buildBasicParams(getApplicationContext(), client);
-		client.putRequestParam(PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_TIME, time + "");
-		client.putRequestParam(PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_NUMBER, number);
-		client.post(getApplicationContext(), MenueApiUrl.UPDATE_PHONE_BIND_STATE_URL, new RCPlatformResponseHandler() {
+		com.rcplatform.phototalk.request.Request request = new com.rcplatform.phototalk.request.Request(getBaseContext(),
+				MenueApiUrl.UPDATE_PHONE_BIND_STATE_URL, new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~response is " + content + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~response is " + content + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				LogUtil.e(content + "");
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						LogUtil.e(content + "");
+					}
+				});
+		request.putParam(PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_TIME, time + "");
+		request.putParam(PhotoTalkParams.UpdateBindState.PARAM_KEY_BIND_NUMBER, number);
+		request.excuteAsync();
 	}
 
 	private List<ThirdPartFriend> mFriends;
@@ -437,7 +436,7 @@ public class PTBackgroundService extends Service {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				PrefsUtils.User.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getEmail(), System.currentTimeMillis());
+				PrefsUtils.User.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getRcId(), System.currentTimeMillis());
 				LogUtil.e("upload facebook success");
 			}
 

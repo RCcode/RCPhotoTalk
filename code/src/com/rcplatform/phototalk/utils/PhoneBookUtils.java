@@ -88,8 +88,8 @@ public class PhoneBookUtils {
 		LinkedHashMap<String, String> allContactsMap = getAllContactPhoneNumbers(context);
 		if (friends != null) {
 			for (Friend friend : friends) {
-				if (allContactsMap.containsKey(friend.getPhone())) {
-					allContactsMap.remove(friend.getPhone());
+				if (allContactsMap.containsKey(friend.getCellPhone())) {
+					allContactsMap.remove(friend.getCellPhone());
 				}
 			}
 		}

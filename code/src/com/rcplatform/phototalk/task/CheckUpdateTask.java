@@ -8,10 +8,9 @@ import android.content.Context;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.listener.UpdateDialogClickListener;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient.RequestAction;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -20,28 +19,11 @@ public class CheckUpdateTask {
 	private Context mContext;
 	private boolean isAutoRequest = true;
 	private OnUpdateCheckListener mOnUpdateCheckListener;
+	private Request mRequest;
 
 	public CheckUpdateTask(Context context, boolean isAuto) {
 		mClient = new RCPlatformAsyncHttpClient();
-		this.mContext = context;
-		PhotoTalkParams.buildBasicParams(mContext, mClient);
-		this.isAutoRequest = isAuto;
-	}
-
-	/**
-	 * {"message":"成功","status":0,"appConfig":{"language":"zh","appId":1,
-	 * "createTime"
-	 * :1363064832000,"updateTime":1363064865000,"appName":"photochat"
-	 * ,"versionId":3,"clientFs":50,"serverFs":50,"isUpdate":3,"notice":
-	 * "the king of young men","clientVs":1,"serverVs":1,"updateUrl":"asdasd"}}
-	 */
-	public void start() {
-		if (isAutoRequest) {
-			long lastCheckTime = PrefsUtils.AppInfo.getLastCheckUpdateTime(mContext);
-			if ((System.currentTimeMillis() - lastCheckTime) < Contract.UPDATE_CHECK_WAITING_TIME)
-				return;
-		}
-		mClient.post(mContext, MenueApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
+		mRequest = new Request(context, MenueApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -60,8 +42,9 @@ public class CheckUpdateTask {
 							return;
 						}
 						UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
-						AlertDialog.Builder builder = new AlertDialog.Builder(mContext).setMessage(updateContent).setTitle(mContext.getString(R.string.update_dialog_title, mContext.getString(R.string.app_name), newVersion)).setNegativeButton(R.string.update_now, mUpdateListener)
-								.setPositiveButton(R.string.attention_later, mUpdateListener);
+						AlertDialog.Builder builder = new AlertDialog.Builder(mContext).setMessage(updateContent)
+								.setTitle(mContext.getString(R.string.update_dialog_title, mContext.getString(R.string.app_name), newVersion))
+								.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
 						AlertDialog mUpdateDialog = builder.create();
 						mUpdateDialog.setCancelable(false);
 						mUpdateDialog.show();
@@ -86,6 +69,17 @@ public class CheckUpdateTask {
 				}
 			}
 		});
+		this.mContext = context;
+		this.isAutoRequest = isAuto;
+	}
+
+	public void start() {
+		if (isAutoRequest) {
+			long lastCheckTime = PrefsUtils.AppInfo.getLastCheckUpdateTime(mContext);
+			if ((System.currentTimeMillis() - lastCheckTime) < Contract.UPDATE_CHECK_WAITING_TIME)
+				return;
+		}
+		mClient.post(mRequest);
 	}
 
 	public static interface OnUpdateCheckListener {

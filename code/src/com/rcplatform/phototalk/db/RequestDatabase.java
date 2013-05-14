@@ -8,4 +8,6 @@ public interface RequestDatabase {
 	public void saveRequest(Request request);
 
 	public List<Request> getRequests();
+
+	public void deleteRequest(Request request);
 }

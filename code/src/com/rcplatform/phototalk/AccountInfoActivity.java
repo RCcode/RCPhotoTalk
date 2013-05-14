@@ -134,17 +134,17 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 	}
 
 	public void checkBindPhone() {
-		if (!TextUtils.isEmpty(mUserInfo.getPhone())) {
-			setPhoneNumer(mUserInfo.getPhone());
+		if (!TextUtils.isEmpty(mUserInfo.getCellPhone())) {
+			setPhoneNumer(mUserInfo.getCellPhone());
 			return;
 		}
 		mTask = new GetBindPhoneTask(this, new OnBindSuccessListener() {
 
 			@Override
 			public void onBindSuccess(String phoneNumber) {
-				mUserInfo.setPhone(phoneNumber);
+				mUserInfo.setCellPhone(phoneNumber);
 				setPhoneNumer(phoneNumber);
-				PrefsUtils.User.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mUserInfo.getEmail());
+				PrefsUtils.User.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mUserInfo.getRcId());
 			}
 
 			@Override

@@ -15,7 +15,7 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_TOKEN = "token";
 	public static String PARAM_KEY_LANGUAGE = "language";
 	public static String PARAM_KEY_DEVICE_ID = "deviceId";
-	public static String PARAM_KEY_USER_ID = "userId";
+	public static String PARAM_KEY_USER_ID = "rcId";
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = "000000";
@@ -31,11 +31,11 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_FLAG="time";
 		public static final String PARAM_KEY_TIME_LIMIT="timeLimit";
 		public static final String PARAM_KEY_USERS="userArray";
-		public static final String PARAM_KEY_RECEIVER_ID = "userId";
+		public static final String PARAM_KEY_RECEIVER_ID = "rcId";
 	}
 	public static class UserSetting {
-		public static final String PARAM_KEY_TREND_SETTING = "tset";
-		public static final String PARAM_KEY_RECEIVE_SETTING = "rset";
+		public static final String PARAM_KEY_TREND_SETTING = "shareNews";
+		public static final String PARAM_KEY_RECEIVE_SETTING = "allowSend";
 	}
 
 	public static class SearchFriends {
@@ -122,24 +122,24 @@ public class PhotoTalkParams {
 	}
 
 	public static class AddFriends {
-		public static final String PARAM_KEY_USER_SUID = "seSuid";
+		public static final String PARAM_KEY_USER_SUID = "rcId";
 		public static final String PARAM_KEY_FRIENDS = "friends";
-		public static final String PARAM_KEY_FRIEND_SUID = "reSuid";
+		public static final String PARAM_KEY_FRIEND_SUID = "rcId";
 		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
 	}
 
 	public static class DelFriends {
-		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+		public static final String PARAM_KEY_FRIEND_ID = "atRcId";
 	}
 
 	public static class DelRecommend {
-		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+		public static final String PARAM_KEY_FRIEND_ID = "atRcId";
 		public static final String PARAM_KEY_RECOMMEND_TYPE = "attrType";
 	}
 
 	public static class UpdateFriendRemark {
-		public static final String PARAM_KEY_REMARK = "mark";
-		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+		public static final String PARAM_KEY_REMARK = "localName";
+		public static final String PARAM_KEY_FRIEND_ID = "atRcId";
 	}
 
 	public static class RecordInfo {
@@ -147,7 +147,7 @@ public class PhotoTalkParams {
 	}
 
 	public static class FriendDetail {
-		public static final String PARAM_KEY_FRIEND_ID = "atUserId";
+		public static final String PARAM_KEY_FRIEND_ID = "atRcId";
 	}
 
 	public static class AddFriendFromInformation {

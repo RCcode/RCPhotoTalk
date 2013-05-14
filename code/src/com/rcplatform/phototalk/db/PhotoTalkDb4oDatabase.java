@@ -108,8 +108,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	private Information getInformationExample(Information information) {
 		Information infoExample = new Information();
 		infoExample.setCreatetime(information.getCreatetime());
-		infoExample.setSender(new RecordUser(information.getSender().getSuid(), null, null, null));
-		infoExample.setReceiver(new RecordUser(information.getReceiver().getSuid(), null, null, null));
+		infoExample.setSender(new RecordUser(information.getSender().getRcId(), null, null, null));
+		infoExample.setReceiver(new RecordUser(information.getReceiver().getRcId(), null, null, null));
 		infoExample.setType(information.getType());
 		return infoExample;
 	}
@@ -166,15 +166,15 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			info.setUrl(picUrl);
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 			informations.add(info);
-			if (userIds.containsKey(info.getReceiver().getSuid())) {
-				result.put(info.getReceiver().getSuid(), info);
+			if (userIds.containsKey(info.getReceiver().getRcId())) {
+				result.put(info.getReceiver().getRcId(), info);
 			}
 		}
 		if (userIds.containsKey(senderInfo.getRcId())) {
-			RecordUser user = new RecordUser(senderInfo.getRcId(), senderInfo.getNick(), senderInfo.getHeadUrl(), senderInfo.getTigaseId());
+			RecordUser user = new RecordUser(senderInfo.getRcId(), senderInfo.getNickName(), senderInfo.getHeadUrl(), senderInfo.getTigaseId());
 			Information information = MessageSender.createInformation(InformationType.TYPE_PICTURE_OR_VIDEO,
 					InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD, user, user, createTime);
-			result.put(user.getSuid(), information);
+			result.put(user.getRcId(), information);
 		}
 		db.store(informations);
 		db.commit();
@@ -186,7 +186,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public void saveFriends(List<Friend> friends) {
 		Friend friendExample = new Friend();
-		friendExample.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+		friendExample.setFriend(true);
 		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
 		for (Friend friend : localCache)
 			db.delete(friend);
@@ -201,7 +201,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return arg0.getStatus() == Friend.USER_STATUS_FRIEND_ADDED;
+				return arg0.isFriend();
 			}
 		}, new Comparator<Friend>() {
 
@@ -222,7 +222,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return arg0.getStatus() == Friend.USER_STATUS_NOT_FRIEND && arg0.getSource().getAttrType() == type;
+				return !arg0.isFriend() && arg0.getSource().getAttrType() == type;
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
@@ -237,7 +237,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return arg0.getStatus() == Friend.USER_STATUS_NOT_FRIEND;
+				return !arg0.isFriend();
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
@@ -248,7 +248,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public void saveRecommends(List<Friend> recommends) {
 		Friend friendExample = new Friend();
-		friendExample.setStatus(Friend.USER_STATUS_NOT_FRIEND);
+		friendExample.setFriend(false);
 		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
 		for (Friend friend : localCache)
 			db.delete(friend);

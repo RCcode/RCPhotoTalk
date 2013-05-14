@@ -127,7 +127,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			@Override
 			public void onFriendAddSuccess(int addType) {
 				dismissLoadingDialog();
-				friend.setStatus(Friend.USER_STATUS_FRIEND_ADDED);
+				friend.setFriend(true);
 				mAdapter.notifyDataSetChanged();
 				AddFriendsActivity.addFriend(friend);
 			}
@@ -181,8 +181,8 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				}
 			});
 
-			nickTextView.setText(friend.getNick());
-			if (friend.getStatus() == Friend.USER_STATUS_NOT_FRIEND) {
+			nickTextView.setText(friend.getNickName());
+			if (!friend.isFriend()) {
 				addFriendBtn.setEnabled(true);
 				addFriendBtn.setTag(friend);
 				addFriendBtn.setOnClickListener(mAddFriendButtonClickListener);

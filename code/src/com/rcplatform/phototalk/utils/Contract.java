@@ -116,8 +116,6 @@ public class Contract {
 
 	public static final String KEY_PASSWORD = "password";
 
-	public static final String KEY_USERNAME = "userName";
-
 	/*
 	 * 登录和注册页面。
 	 */
@@ -128,8 +126,6 @@ public class Contract {
 	public static final String PLATFORM = "android";
 
 	public static final String META_DATA = "jpg";
-
-	public static final String KEY_SIGNATURE = "signature";
 
 	public static final String KEY_NICK = "nick";
 
@@ -144,8 +140,6 @@ public class Contract {
 	public static final String KEY_RCID = "rcId";
 
 	public static final String KEY_PHONE = "phone";
-
-	public static final String KEY_AGE = "age";
 
 	public static final String KEY_CREATETIME = "createTime";
 

@@ -635,7 +635,7 @@ public class EditPictureActivity extends BaseActivity {
 			RecordUser user = new RecordUser();
 			record.setSender(user);
 			user = new RecordUser();
-			user.setNick(friend.getNick());
+			user.setNick(friend.getNickName());
 			user.setHeadUrl(friend.getHeadUrl());
 			record.setReceiver(user);
 			record.setUrl(tempFilePath);
