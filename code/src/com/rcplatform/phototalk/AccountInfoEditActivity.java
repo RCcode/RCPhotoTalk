@@ -227,7 +227,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
-						
 						userDetailInfo.setGender(which+1);
 						setSex();
 						dialog.dismiss();

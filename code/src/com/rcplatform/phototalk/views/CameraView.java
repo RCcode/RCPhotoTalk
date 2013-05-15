@@ -200,34 +200,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         public void onPictureTaken(byte[] data, Camera camera) {
             // TODO Auto-generated method stub
             if (camera != null) {
-                // String tempFile = "";
-                // if
-                // (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-                // {
-                // tempFile = app.getCacheFilePath() + "/" +
-                // System.currentTimeMillis() + ".jpg";
-                // FileOutputStream outputStream = null;
-                // try {
-                // outputStream = new FileOutputStream(tempFile);
-                // outputStream.write(data);
-                // outputStream.flush();
-                // outputStream.close();
-                // }
-                // catch (Exception e) {
-                // e.printStackTrace();
-                // }
-                // finally {
-                // if (outputStream != null) {
-                // try {
-                // outputStream.close();
-                // }
-                // catch (IOException e) {
-                // // TODO Auto-generated catch block
-                // e.printStackTrace();
-                // }
-                // }
-                // }
-                // } else {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 options.inSampleSize = 2;
                 Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -235,7 +207,11 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
                 if (mBitmap.getWidth() > mBitmap.getHeight()) {
                     Matrix matrix = new Matrix();
                     matrix.reset();
-                    matrix.setRotate(90);
+                    if (mCurrentCameraNum == mFrontCameraNum) {
+                    	matrix.setRotate(270);
+                    } else {
+                        matrix.setRotate(90);
+                    }
                     tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
                     mBitmap.recycle();
                 } else {
@@ -395,7 +371,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
                     w = app.getScreentHeight();
                     h = app.getScreenWidth();
                 }
-
                 if (mCurrentCameraNum == mFrontCameraNum) {
                     parameters.setRotation(270);
                 } else {
