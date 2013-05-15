@@ -105,6 +105,10 @@
     <string name="setting_update_tacotyid_edit_limit_hint">4-16个字母数字</string>
     <string name="setting_update_not_available_tacotyid">%s不可用，请重新输入</string>
     <string name="setting_update_name_invalid">请输入1-20字符</string>
+    
+    <string name="take">将</string>
+    <string name="add_friend">加为好友</string>
+    <string name= "friend_dynamic">好友动态</string>
 
     <!-- added jelly.xiong end -->
 
