@@ -5,9 +5,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.TreeSet;
 
 import android.content.ContentResolver;
@@ -15,6 +17,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
@@ -563,6 +566,17 @@ public class Utils {
 			System.gc();
 		}
 		return output;
+	}
+
+	public static int getTimeZoneId(Context ctx) {
+		Configuration configuration = ctx.getResources().getConfiguration();
+		Calendar calendar = Calendar.getInstance(configuration.locale);
+		TimeZone timeZone = calendar.getTimeZone();
+		if (timeZone == null) {
+			timeZone = TimeZone.getDefault();
+		}
+		return timeZone.getRawOffset() / (60 * 60 * 1000);
+
 	}
 
 }

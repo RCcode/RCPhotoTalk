@@ -117,7 +117,6 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		mList.setOnChildClickListener(mChildClickListener);
 		mSearchList.setOnChildClickListener(mChildClickListener);
 		mList.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-
 			@Override
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 				ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;

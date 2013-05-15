@@ -14,11 +14,11 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.provider.ContactsContract.CommonDataKinds.Photo;
 
 import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
@@ -30,8 +30,8 @@ import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -130,6 +130,7 @@ public class LogicUtils {
 	}
 
 	public static void friendAdded(Context context, Friend friend, int addType) {
+		PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
 		UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		long createTime = System.currentTimeMillis();
 		Information information = null;
@@ -206,44 +207,27 @@ public class LogicUtils {
 	}
 
 	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file) {
+		long flag = System.currentTimeMillis();
 		try {
-			long flag = System.currentTimeMillis();
 			UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
-			String userArray = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit));
-			RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
+			String userArray = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file);
+			Request request = Request.sendPhoto(context, flag, file, timeLimit, userArray, new PhotoSendListener() {
 
 				@Override
-				public void onSuccess(int statusCode, String content) {
-					try {
-						JSONObject jsonObject = new JSONObject(content);
-						String informationUrl = jsonObject.getString("picUrl");
-						Map<String, String> userIds = buildUserIds(jsonObject.getJSONArray("users"));
-						long flag = jsonObject.getLong("time");
-						UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
-						Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
-								flag, userIds);
-						InformationPageController.getInstance().photosSendSuccess(flag);
-						MessageSender.sendInformation(context, informations, userIds);
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
+				public void onSendSuccess(long flag) {
+					InformationPageController.getInstance().onPhotoSendSuccess(flag);
 				}
 
 				@Override
-				public void onFailure(int errorCode, String content) {
-
+				public void onFail(long flag, int errorCode, String content) {
+					InformationPageController.getInstance().onPhotoSendFail(flag);
 				}
-			};
-			Request request = new Request(context, MenueApiUrl.SEND_PICTURE_URL, responseHandler);
-			PhotoTalkParams.buildBasicParams(context, request);
-			request.setFile(file);
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, userArray);
-			request.setCache(true);
+
+			});
 			request.excuteAsync();
 		} catch (Exception e) {
 			e.printStackTrace();
+			InformationPageController.getInstance().onPhotoSendFail(flag);
 		}
 	}
 
@@ -260,7 +244,7 @@ public class LogicUtils {
 		return ids;
 	}
 
-	private static String buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit) throws JSONException {
+	private static String buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file) throws JSONException {
 		JSONArray array = new JSONArray();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
@@ -290,6 +274,7 @@ public class LogicUtils {
 			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
 			record.setTotleLength(timeLimit);
 			record.setLimitTime(timeLimit);
+			record.setUrl(file.getPath());
 			infoRecords.add(record);
 		}
 		PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infoRecords);
