@@ -46,7 +46,7 @@ public class FacebookActivity extends BaseActivity {
 	private boolean mAutoLogin = false;
 
 	private enum PendingAction {
-		NONE, SEND_INVATE, GET_INFO, DE_AUTHORIZE;
+		NONE, SEND_INVATE, GET_INFO, SEND_JOIN_MESSAGE, DE_AUTHORIZE;
 	}
 
 	protected void setAutoLogin(boolean autoLogin) {
@@ -55,7 +55,6 @@ public class FacebookActivity extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mHelper = new UiLifecycleHelper(this, mCallback);
 		mHelper.onCreate(savedInstanceState);
@@ -71,6 +70,9 @@ public class FacebookActivity extends BaseActivity {
 		case GET_INFO:
 			getFacebookInfos();
 			break;
+		case SEND_JOIN_MESSAGE:
+			sendJoinMessageOnFacebook();
+			break;
 		default:
 			break;
 		}
@@ -78,7 +80,6 @@ public class FacebookActivity extends BaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		hasTryLogin = true;
 		mHelper.onActivityResult(requestCode, resultCode, data);
@@ -87,7 +88,6 @@ public class FacebookActivity extends BaseActivity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		mHelper.onPause();
 		hasTryLogin = false;
@@ -95,14 +95,12 @@ public class FacebookActivity extends BaseActivity {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		mHelper.onResume();
 		if (!hasTryLogin) {
@@ -132,7 +130,6 @@ public class FacebookActivity extends BaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		mHelper.onDestroy();
 		Session.getActiveSession().removeCallback(mCallback);
@@ -147,7 +144,12 @@ public class FacebookActivity extends BaseActivity {
 		}
 		if (session.isOpened()) {
 			if (mAction != PendingAction.NONE) {
-				performAction();
+				if (mAction == PendingAction.GET_INFO) {
+					sendJoinMessage();
+					mAction = PendingAction.GET_INFO;
+					performAction();
+				} else
+					performAction();
 			}
 		}
 	}
@@ -156,7 +158,6 @@ public class FacebookActivity extends BaseActivity {
 
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
-			// TODO Auto-generated method stub
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -166,7 +167,6 @@ public class FacebookActivity extends BaseActivity {
 	}
 
 	protected void onGetFacebookInfoError() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -184,7 +184,6 @@ public class FacebookActivity extends BaseActivity {
 
 			@Override
 			public void onCompleted(GraphUser user, Response response) {
-				// TODO Auto-generated method stub\
 				if (user == null) {
 					facebookRequestError();
 					return;
@@ -200,7 +199,6 @@ public class FacebookActivity extends BaseActivity {
 
 			@Override
 			public void onCompleted(List<GraphUser> users, Response response) {
-				// TODO Auto-generated method
 				if (users == null) {
 					facebookRequestError();
 					return;
@@ -221,30 +219,40 @@ public class FacebookActivity extends BaseActivity {
 		performAction();
 	}
 
+	private void sendJoinMessageOnFacebook() {
+		Request.executeStatusUpdateRequestAsync(Session.getActiveSession(), getString(R.string.join_message), new Callback() {
+
+			@Override
+			public void onCompleted(Response response) {
+
+			}
+		});
+	}
+
 	private void sendInviteToFriend() {
 		StringBuilder sbIds = new StringBuilder();
 		for (String id : mInviteIds) {
 			sbIds.append(id).append(",");
 		}
-		WebDialog dialog = new WebDialog.RequestsDialogBuilder(this, Session.getActiveSession()).setMessage(getString(R.string.my_firend_invite_send_short_msg)).setTo(sbIds.substring(0, sbIds.length() - 1)).setOnCompleteListener(new OnCompleteListener() {
-			@Override
-			public void onComplete(Bundle values, FacebookException error) {
-				// TODO Auto-generated method stub
-				if (error != null) {
-					showErrorConfirmDialog(error.getMessage());
-				} else if (values != null && values.size() == 0) {
-					showErrorConfirmDialog(R.string.invite_fail);
-				} else {
-					onInviteComplete(mInviteIds);
-					mInviteIds = null;
-				}
-			}
-		}).build();
+		WebDialog dialog = new WebDialog.RequestsDialogBuilder(this, Session.getActiveSession())
+				.setMessage(getString(R.string.my_firend_invite_send_short_msg)).setTo(sbIds.substring(0, sbIds.length() - 1))
+				.setOnCompleteListener(new OnCompleteListener() {
+					@Override
+					public void onComplete(Bundle values, FacebookException error) {
+						if (error != null) {
+							showErrorConfirmDialog(error.getMessage());
+						} else if (values != null && values.size() == 0) {
+							showErrorConfirmDialog(R.string.invite_fail);
+						} else {
+							onInviteComplete(mInviteIds);
+							mInviteIds = null;
+						}
+					}
+				}).build();
 		dialog.show();
 	}
 
 	protected void onInviteComplete(String... ids) {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -273,10 +281,9 @@ public class FacebookActivity extends BaseActivity {
 		Request request = new Request(Session.getActiveSession(), "me/permissions");
 		request.setHttpMethod(HttpMethod.DELETE);
 		request.setCallback(new Callback() {
-			
+
 			@Override
 			public void onCompleted(Response response) {
-				// TODO Auto-generated method stub
 				try {
 					if (response.getConnection().getResponseCode() == 200 && response.getError() == null) {
 						mHandler.sendEmptyMessage(MSG_DEAUTHORIZE_SUCCESS);
@@ -291,7 +298,6 @@ public class FacebookActivity extends BaseActivity {
 						}
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					mHandler.sendEmptyMessage(MSG_NET_ERROR);
 				}
@@ -306,5 +312,10 @@ public class FacebookActivity extends BaseActivity {
 
 	protected void authorize() {
 		openSession();
+	}
+
+	private void sendJoinMessage() {
+		mAction = PendingAction.SEND_JOIN_MESSAGE;
+		performAction();
 	}
 }

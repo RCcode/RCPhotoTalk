@@ -154,6 +154,7 @@ public class Friend implements Serializable {
 
 	public boolean isFriend() {
 		return added == FRIEND_ADDED;
+//		return false;
 	}
 
 	public void setFriend(boolean isFriend) {

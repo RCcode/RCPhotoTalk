@@ -1,33 +1,42 @@
 package com.rcplatform.phototalk.logic;
 
+import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
 import android.content.Intent;
 
 import com.rcplatform.message.UserMessageService;
+import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.request.JSONConver;
 
 public class MessageSender {
-	public static void sendInformation(Context context,String tigaseId, Information... informations) {
+	public static void sendInformation(Context context, String tigaseId, Information... informations) {
 		String message = JSONConver.informationToJSON(informations);
 		Intent intent = new Intent();
 		intent.setAction(UserMessageService.MESSAGE_SEND_BROADCAST);
-		intent.putExtra(UserMessageService.MESSAGE_TO_USER, "1000032_1");
+		intent.putExtra(UserMessageService.MESSAGE_TO_USER, tigaseId);
 		intent.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, message);
 		context.sendBroadcast(intent);
 	}
 
-	public static void sendInformation(Context context, Map<String, Information> informations, Map<String, String> userIds) {
-
+	public static void sendInformation(Context context, Map<String, Information> informations, List<String> userIds) {
+		String currentRcid = ((MenueApplication) context.getApplicationContext()).getCurrentUser().getRcId();
 		if (userIds != null && userIds.size() > 0) {
-			for (String suid : userIds.keySet()) {
-				Information info = informations.get(suid);
-				sendInformation(context,userIds.get(suid), info);
+			for (String rcid : userIds) {
+				Information info = informations.get(rcid);
+				String tigaseId = null;
+				if (info.getReceiver().getRcId().equals(info.getSender().getRcId())) {
+					tigaseId = info.getReceiver().getTigaseId();
+				} else if (info.getReceiver().getRcId().equals(currentRcid)) {
+					tigaseId = info.getSender().getTigaseId();
+				} else {
+					tigaseId = info.getReceiver().getTigaseId();
+				}
+				sendInformation(context, tigaseId, info);
 			}
-
 		}
 	}
 

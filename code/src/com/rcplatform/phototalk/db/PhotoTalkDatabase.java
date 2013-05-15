@@ -27,10 +27,12 @@ public interface PhotoTalkDatabase {
 
 	public void updateFriendRequestInformationByFriend(Friend friend);
 
-	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, Map<String, String> userIds);
+	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, List<String> userIds);
 
 	public void saveFriends(List<Friend> friends);
-	
+
+	public void addFriend(Friend friend);
+
 	public void saveRecommends(List<Friend> recommends);
 
 	public List<Friend> getFriends();

@@ -62,6 +62,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_PASSWORD = "pwd";
 		public static final String PARAM_KEY_NICK = "nickName";
 		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_TIMEZONE= "timeZone";
 	}
 
 	public static class PLATFORM_ACCOUNT_LOGIN {

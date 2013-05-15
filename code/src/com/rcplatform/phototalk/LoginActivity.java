@@ -54,6 +54,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.ListViewUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class LoginActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -87,6 +88,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	// 正则，必须由数字字母组成
 	private final String RCID_REGEX = "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
 	private final String EMAIL_REGEX = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
+
 	// 密码正则表达式
 
 	private void startPlatformUserEditActivity(Map<AppInfo, UserInfo> userApps) {
@@ -361,8 +363,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		return true;
 	}
 
-
-
 	@Override
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
 		super.onImageReceive(imageBaseUri, imagePath);
@@ -484,7 +484,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private void tigaseRegiste(Context context, final String email, String password, final String nick) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request request = new Request(context, MenueApiUrl.TIGASE_REGISTE_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(context, MenueApiUrl.SIGNUP_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -512,6 +512,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_PASSWORD, MD5.encodeMD5String(password));
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_NICK, nick);
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Locale.getDefault().getCountry());
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context)+"");
 		request.excuteAsync();
 	}
 

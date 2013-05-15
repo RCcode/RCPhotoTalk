@@ -280,5 +280,7 @@
     <string name="added_friend">我将%1$s加为好友</string>
     <string name="added_friend_confirm">%1$s已反加我为好友</string>
     <string name="registe_fail">注册失败</string>
+    <string name="join_message">我已加入PhotoTalk：</string>
+    <string name="no_net">没有可用网络</string>
 
 </resources>
