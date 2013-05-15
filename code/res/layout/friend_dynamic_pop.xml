@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:padding="20dp"
+        android:background="@drawable/popup_bg"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <com.rcplatform.phototalk.views.HeadImageView
+                android:id="@+id/friend_head"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/send_friend_head_bg" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical" >
+                <TextView android:id="@+id/friend_nick"
+                    android:text="Nick"
+                    android:layout_width="wrap_content"
+                    android:textColor="#1B1B1B"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_height="wrap_content"/>
+                <TextView android:id="@+id/friend_rc_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RC ID: 123456"
+                    android:textColor="#B1B1B1"
+                    android:textSize="16sp"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+        
+        <Button 
+            android:id="@+id/friend_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/popup_btn"
+            android:textColor="#1B1B1B"
+            android:layout_marginTop="10dp"
+            android:text="李四：1234565432"/>
+        
+        <Button 
+            android:id="@+id/add_or_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/popup_btn"
+            android:textColor="#1B1B1B"
+            android:layout_marginTop="10dp"
+            android:text="加为好友"/>
+        
+    </LinearLayout>
+
+</RelativeLayout>
