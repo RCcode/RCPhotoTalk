@@ -207,7 +207,7 @@ public class Request implements Serializable {
 		userInfo.setTigasePwd(jsonObject.getString("tgpwd"));
 		userInfo.setRcId(jsonObject.getString("rcId"));
 		userInfo.setEmail(jsonObject.optString("email", null));
-		userInfo.setNickName(jsonObject.optString("nick", null));
+		userInfo.setNickName(jsonObject.optString("nickName", null));
 		return userInfo;
 	}
 

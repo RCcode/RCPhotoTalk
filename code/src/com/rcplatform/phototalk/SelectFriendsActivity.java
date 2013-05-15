@@ -49,6 +49,7 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PinyinComparator;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
 
 public class SelectFriendsActivity extends BaseActivity implements OnClickListener {
@@ -103,7 +104,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		// 缓存要发送的图片
 		initViewOrListener();
 		getLocalFriends();
-		
+
 	}
 
 	private void getLocalFriends() {
@@ -223,10 +224,11 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			}.getType());
 			List<Friend> friendsCache = new ArrayList<Friend>();
 			for (Friend friend : friends) {
+				friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+				friend.setFriend(true);
 				friendsCache.add(friend);
 			}
 			PhotoTalkDatabaseFactory.getDatabase().saveFriends(friendsCache);
-			// .add(;)friends
 			SelectFriend user = new SelectFriend();
 			user.setNickName(app.getCurrentUser().getNickName());
 			user.setRcId(app.getCurrentUser().getRcId());

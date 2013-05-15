@@ -1,9 +1,9 @@
 package com.rcplatform.phototalk.adapter;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -34,8 +34,9 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
-import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.task.AddFriendTask;
+import com.rcplatform.phototalk.task.AddFriendTask.AddFriendListener;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -162,6 +163,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void initFriendInformationSenderView(Information record) {
+		holder.statuButton.setVisibility(View.VISIBLE);
 		holder.statuButton.setEnabled(false);
 		if (record.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
 			holder.name.setText(context.getString(R.string.added_friend, record.getReceiver().getNick()));
@@ -175,7 +177,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	}
 
 	private void initFriendInformationReceiverView(final Information record) {
-
+		holder.statuButton.setVisibility(View.VISIBLE);
 		// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 		if (record.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
 			holder.name.setText(context.getString(R.string.added_by_friend, record.getSender().getNick()));
@@ -285,33 +287,49 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		return context.getString(baseResId, RCPlatformTextUtil.getTextFromTimeToNow(context, time));
 	}
 
-	// LogicUtils.informationFriendAdded(context, record);
 	private void addAsFriend(final Information record) {
 		final BaseActivity activity = (BaseActivity) context;
 		activity.showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
-		FriendsProxy.addFriendFromInformation(context, new RCPlatformResponseHandler() {
+		Friend friend = new Friend();
+		friend.setRcId(record.getSender().getRcId());
+		new AddFriendTask(activity, activity.getCurrentUser(), new AddFriendListener() {
 
 			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					JSONObject jsonObject=new JSONObject(content);
-					Friend friend=JSONConver.jsonToObject(jsonObject.getJSONObject("userInfo").toString(), Friend.class);
-					record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
-					notifyDataSetChanged();
-					activity.dismissLoadingDialog();
-					LogicUtils.informationFriendAdded(context, record, friend);
-				} catch (Exception e) {
-					e.printStackTrace();
-					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-				}
+			public void onFriendAddSuccess(Friend friend,int addType) {
+//				record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+//				notifyDataSetChanged();
+				activity.dismissLoadingDialog();
 			}
 
 			@Override
-			public void onFailure(int errorCode, String content) {
+			public void onFriendAddFail(int statusCode, String content) {
 				activity.dismissLoadingDialog();
 				activity.showErrorConfirmDialog(content);
 			}
-		}, record);
+		}, friend).execute();
+//		FriendsProxy.addFriendFromInformation(context, new RCPlatformResponseHandler() {
+//
+//			@Override
+//			public void onSuccess(int statusCode, String content) {
+//				try {
+//					JSONObject jsonObject = new JSONObject(content);
+//					Friend friend = JSONConver.jsonToObject(jsonObject.getJSONObject("userInfo").toString(), Friend.class);
+//					record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+//					notifyDataSetChanged();
+//					activity.dismissLoadingDialog();
+//					LogicUtils.informationFriendAdded(context, record, friend);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+//				}
+//			}
+//
+//			@Override
+//			public void onFailure(int errorCode, String content) {
+//				activity.dismissLoadingDialog();
+//				activity.showErrorConfirmDialog(content);
+//			}
+//		}, record);
 	}
 
 	public String getStatuTime(String prefix, String postfix, long time) {

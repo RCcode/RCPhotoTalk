@@ -33,6 +33,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
@@ -271,7 +272,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 			@Override
-			public void onFriendAddSuccess(int addType) {
+			public void onFriendAddSuccess(Friend f, int addType) {
 				friend.setFriend(true);
 				refreshList();
 				dismissLoadingDialog();
@@ -354,6 +355,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 			public void run() {
 				mFriends.remove(friend);
 				mRecommends.remove(friend);
+				PhotoTalkDatabaseFactory.getDatabase().deleteFriend(friend);
 				mFriends = Utils.getFriendOrderByLetter(mFriends);
 				mHandler.sendEmptyMessage(MSG_WHAT_FRIEND_LOADED);
 			}

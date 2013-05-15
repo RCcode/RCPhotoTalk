@@ -71,6 +71,8 @@ public class RCPlatformTextUtil {
 		String result = null;
 		if (timeToNow < A_MINUTE) {
 			int timeNumber = (int) (timeToNow / A_SECOND);
+			if (timeNumber < 0)
+				timeNumber = 0;
 			result = context.getString(R.string.ago, context.getString(R.string.second, timeNumber));
 		} else if (timeToNow < A_HOUR) {
 			int timeNumber = (int) (timeToNow / A_MINUTE);

@@ -75,7 +75,7 @@ public class FriendDetailActivity extends BaseActivity {
 				new AddFriendTask(FriendDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 					@Override
-					public void onFriendAddSuccess(int addType) {
+					public void onFriendAddSuccess(Friend friend,int addType) {
 						mFriend.setFriend(true);
 						coverToFriendView();
 						dismissLoadingDialog();
