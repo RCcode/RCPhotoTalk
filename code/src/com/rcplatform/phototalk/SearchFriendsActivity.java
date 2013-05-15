@@ -125,7 +125,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 			@Override
-			public void onFriendAddSuccess(int addType) {
+			public void onFriendAddSuccess(Friend f,int addType) {
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				mAdapter.notifyDataSetChanged();

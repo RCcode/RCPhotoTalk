@@ -145,6 +145,7 @@ public class LogicUtils {
 			RecordUser sender = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
 					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST, sender, receiver, createTime);
+			information.setReceiveTime(createTime);
 			List<Information> infos = new ArrayList<Information>();
 			infos.add(information);
 			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infos);
@@ -262,12 +263,14 @@ public class LogicUtils {
 			user.setHeadUrl(currentUser.getHeadUrl());
 			user.setNick(currentUser.getNickName());
 			user.setRcId(currentUser.getRcId());
+			user.setTigaseId(currentUser.getTigaseId());
 			record.setSender(user);
 			// 接受者信息
 			user = new RecordUser();
 			user.setNick(f.getNickName());
 			user.setHeadUrl(f.getHeadUrl());
 			user.setRcId(f.getRcId());
+			user.setTigaseId(f.getTigaseId());
 			record.setReceiver(user);
 			// 信息类型为发图，状态正在发送
 			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);

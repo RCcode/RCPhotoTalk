@@ -345,7 +345,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				mShowDialog.ShowDialog(infoRecord);
 				LogicUtils.startShowPhotoInformation(infoRecord);
 				isShow = true;
-				LogicUtils.startShowPhotoInformation(infoRecord);
 				// 把数据里面的状态更改为3，已查看
 			} else if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
@@ -543,6 +542,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				adapter.notifyDataSetChanged();
 			}
 		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
+			friend.setReceiveTime(System.currentTimeMillis());
 			List<Information> infos = new ArrayList<Information>();
 			infos.add(friend);
 			sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
@@ -576,16 +576,16 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	public void onPhotoSendFail(long flag) {
 		List<Information> localInfos = getAdapterData();
 		if (localInfos != null) {
-			boolean hasInfo=false;
+			boolean hasInfo = false;
 			for (Information info : localInfos) {
 				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
 						&& info.getCreatetime() == flag) {
 					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
-					hasInfo=true;
+					hasInfo = true;
 				}
 			}
-			if(!hasInfo){
-				
+			if (!hasInfo) {
+
 			}
 			adapter.notifyDataSetChanged();
 		}
@@ -613,7 +613,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		};
 		th.start();
 	}
-
 
 	private void registeInformationReceiver() {
 		IntentFilter filter = new IntentFilter(UserMessageService.MESSAGE_RECIVE_BROADCAST);

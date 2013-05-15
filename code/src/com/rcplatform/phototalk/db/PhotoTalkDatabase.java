@@ -32,6 +32,8 @@ public interface PhotoTalkDatabase {
 	public void saveFriends(List<Friend> friends);
 
 	public void addFriend(Friend friend);
+	
+	public void deleteFriend(Friend friend);
 
 	public void saveRecommends(List<Friend> recommends);
 

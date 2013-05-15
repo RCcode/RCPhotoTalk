@@ -17,6 +17,7 @@ import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class AddFriendTask {
 	private RCPlatformAsyncHttpClient mHttpClient = new RCPlatformAsyncHttpClient();
@@ -36,7 +37,8 @@ public class AddFriendTask {
 						JSONObject jsonObject = new JSONObject(content);
 						int addType = jsonObject.getInt("isFriend");
 						Friend friend = JSONConver.jsonToObject(jsonObject.getJSONArray("userInfo").getJSONObject(0).toString(), Friend.class);
-						mListener.onFriendAddSuccess(addType);
+						friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+						mListener.onFriendAddSuccess(friend,addType);
 						LogicUtils.friendAdded(mContext, friend, addType);
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -76,7 +78,7 @@ public class AddFriendTask {
 	}
 
 	public static interface AddFriendListener {
-		public void onFriendAddSuccess(int addType);
+		public void onFriendAddSuccess(Friend friend,int addType);
 
 		public void onFriendAddFail(int statusCode, String content);
 	}
