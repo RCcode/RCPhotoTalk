@@ -76,10 +76,10 @@ public class UserMessageService extends Service {
 					String str = message.getBody();
 					int typeEnd = str.indexOf(MESSAGE_SPLIT);
 					String msgType = str.substring(0, typeEnd);
-					str = str.substring(typeEnd);
+					str = str.substring(typeEnd+1);
 					int actionEnd = str.indexOf(MESSAGE_SPLIT);
 					String action = str.substring(0,actionEnd);
-					String msgContent = str.substring(actionEnd);
+					String msgContent = str.substring(actionEnd+1);
 
 					if (msgType.equals(MESSAGE_TYPE_MESSAGE)) {
 						Intent intent = new Intent();
@@ -119,8 +119,10 @@ public class UserMessageService extends Service {
 			Bundle extras = intent.getExtras();
 			String toUser = extras.getString(MESSAGE_TO_USER);
 			String msg = extras.getString(MESSAGE_CONTENT_KEY);
+			
+			String action = extras.getString(MESSAGE_ACTION_KEY);
 
-			XmppTool.sendMessage(toUser, MESSAGE_TYPE_MESSAGE + msg);
+			XmppTool.sendMessage(toUser, MESSAGE_TYPE_MESSAGE +MESSAGE_SPLIT+ action+ MESSAGE_SPLIT+msg);
 
 		}
 	};
