@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.message.UserMessageService;
@@ -46,10 +46,11 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
-import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
@@ -302,9 +303,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 					}
 
 					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL) {
-						mLongPressDialog.show(position, 0);
-					} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
 						mLongPressDialog.show(position, 1);
+					} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
+						mLongPressDialog.show(position, 0);
 					} else {
 						mLongPressDialog.show(position, 0, 1);
 					}
@@ -313,7 +314,21 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		}
 	}
 
-	private void reSendPhoto(Information information) {
+	private void reSendPhoto(final Information information) {
+		List<String> friendIds = new ArrayList<String>();
+		friendIds.add(information.getReceiver().getRcId());
+		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
+
+			@Override
+			public void onSendSuccess(long flag) {
+				InformationPageController.getInstance().onPhotoResendSuccess(information);
+			}
+
+			@Override
+			public void onFail(long flag, int errorCode, String content) {
+				InformationPageController.getInstance().onPhotoResendFail(information);
+			}
+		}, friendIds);
 	}
 
 	private void deleteInformation(Information information) {
@@ -467,6 +482,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			mCheckUpdateTask.cancel();
 		if (mShowDialog != null && mShowDialog.isShowing())
 			mShowDialog.dismiss();
+		if (mLongPressDialog != null && mLongPressDialog.isShowing())
+			mLongPressDialog.dismiss();
 		ImageLoader.getInstance().clearMemoryCache();
 		unregisteInformationReceiver();
 		super.onDestroy();
@@ -522,7 +539,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		}
 		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {
-			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getCreatetime())));
+			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getReceiveTime())));
 		}
 		View newView = mInformationList.findViewWithTag(newTag);
 		if (newView != null)
@@ -573,21 +590,38 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		}
 	}
 
+	public void onPhotoResendSuccess(Information information) {
+		List<Information> localInfos = getAdapterData();
+		if (localInfos != null) {
+			int index = localInfos.indexOf(information);
+			if (index != -1) {
+				localInfos.get(index).setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				adapter.notifyDataSetChanged();
+			}
+		}
+	}
+
 	public void onPhotoSendFail(long flag) {
 		List<Information> localInfos = getAdapterData();
 		if (localInfos != null) {
-			boolean hasInfo = false;
 			for (Information info : localInfos) {
 				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
 						&& info.getCreatetime() == flag) {
 					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
-					hasInfo = true;
 				}
 			}
-			if (!hasInfo) {
-
-			}
 			adapter.notifyDataSetChanged();
+		}
+	}
+
+	public void onPhotoResendFail(Information information) {
+		List<Information> localInfos = getAdapterData();
+		if (localInfos != null) {
+			int index = localInfos.indexOf(information);
+			if (index != -1) {
+				localInfos.get(index).setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+				adapter.notifyDataSetChanged();
+			}
 		}
 	}
 
@@ -598,7 +632,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			Bundle extras = intent.getExtras();
 			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
 			LogUtil.e(msg);
-			DialogUtil.showToast(getApplicationContext(), msg, Toast.LENGTH_LONG);
+			// DialogUtil.showToast(getApplicationContext(), msg,
+			// Toast.LENGTH_LONG);
 			List<Information> informations = JSONConver.jsonToInformations(msg);
 			filteInformations(informations);
 		}

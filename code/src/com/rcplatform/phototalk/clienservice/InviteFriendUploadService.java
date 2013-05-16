@@ -50,13 +50,6 @@ public class InviteFriendUploadService extends IntentService {
 			asyncInviteInfoThirdPart(ids);
 		}
 	}
-
-	/**
-	 * {"token":"asdasd@126.com|5289ea63123123123","appId":1,"deviceId":
-	 * "android2323"
-	 * ,"userId":8,"contactList":[{"friendPhone":"0","friendName":"0"
-	 * },{"friendPhone":"1","friendName":"1"}]}
-	 */
 	private void asyncInviteInfoContact() {
 		List<String> numbers = new ArrayList<String>();
 		Uri uri = Uri.parse("content://sms/sent");
@@ -88,12 +81,12 @@ public class InviteFriendUploadService extends IntentService {
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
-		jsonObject.put("attrType", type + "");
+		jsonObject.put(PhotoTalkParams.SyncInviteInfo.PARAM_KEY_TYPE, type + "");
 		JSONArray array = new JSONArray();
 		for (String id : ids) {
 			array.put(id);
 		}
-		jsonObject.put("accounts", array);
+		jsonObject.put(PhotoTalkParams.SyncInviteInfo.PARAM_KEY_INVITED_IDS, array);
 		return new StringEntity(jsonObject.toString(), "UTF-8");
 	}
 
@@ -101,8 +94,8 @@ public class InviteFriendUploadService extends IntentService {
 		HttpPost post = new HttpPost(MenueApiUrl.ASYNC_INVITE_URL);
 		post.setEntity(entity);
 		try {
-			HttpResponse res=new DefaultHttpClient().execute(post);
-			LogUtil.e(res.getStatusLine().getStatusCode()+"");
+			HttpResponse res = new DefaultHttpClient().execute(post);
+			LogUtil.e(res.getStatusLine().getStatusCode() + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

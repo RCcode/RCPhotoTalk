@@ -144,6 +144,7 @@ public class BaseActivity extends Activity {
 
 	@Override
 	protected void onDestroy() {
+		dismissLoadingDialog();
 		ImageLoader.getInstance().stop();
 		super.onDestroy();
 	}

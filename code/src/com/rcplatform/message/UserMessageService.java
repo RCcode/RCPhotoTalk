@@ -17,6 +17,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 
 public class UserMessageService extends Service {
 
@@ -40,6 +41,8 @@ public class UserMessageService extends Service {
 
 	private Context ctx;
 
+	private boolean hasRegisteSendReceiver = false;
+
 	ChatManagerListener chatListener = new ChatManagerListener() {
 
 		@Override
@@ -55,6 +58,8 @@ public class UserMessageService extends Service {
 					intent.putExtra(MESSAGE_CONTENT_KEY, message.getBody());
 					// 发送 一个无序广播
 					ctx.sendBroadcast(intent);
+					Vibrator vib = (Vibrator) ctx.getSystemService(Service.VIBRATOR_SERVICE);
+					vib.vibrate(500);
 				}
 			});
 		}
@@ -110,6 +115,7 @@ public class UserMessageService extends Service {
 				IntentFilter intentFilter = new IntentFilter();
 				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
 				registerReceiver(sendBroadcastReceiver, intentFilter);
+				hasRegisteSendReceiver = true;
 				break;
 			}
 		};
@@ -125,6 +131,7 @@ public class UserMessageService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		XmppTool.closeConnection();
-		this.unregisterReceiver(sendBroadcastReceiver);
+		if (hasRegisteSendReceiver)
+			this.unregisterReceiver(sendBroadcastReceiver);
 	}
 }

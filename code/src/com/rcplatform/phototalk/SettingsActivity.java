@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -367,6 +366,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		fos.flush();
 		fos.close();
 		return cachePath;
+	}
+	
+	private void getUserInfo(){
 		
 	}
 }

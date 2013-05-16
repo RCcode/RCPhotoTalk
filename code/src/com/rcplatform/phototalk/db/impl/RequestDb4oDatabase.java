@@ -1,4 +1,4 @@
-package com.rcplatform.phototalk.db;
+package com.rcplatform.phototalk.db.impl;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -13,7 +13,11 @@ import org.json.JSONObject;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.config.AndroidSupport;
+import com.db4o.config.EmbeddedConfiguration;
 import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.RequestCache;
@@ -24,7 +28,9 @@ public class RequestDb4oDatabase extends PhotoTalkRequestDatabase {
 	private static ObjectContainer db;
 
 	private RequestDb4oDatabase() {
-		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DatabaseUtils.getRequestDatabasePath());
+		EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
+		config.common().add(new AndroidSupport());
+		db = Db4oEmbedded.openFile(config, DatabaseUtils.getRequestDatabasePath());
 	}
 
 	public synchronized static RequestDb4oDatabase getInstance() {
@@ -116,4 +122,5 @@ public class RequestDb4oDatabase extends PhotoTalkRequestDatabase {
 		request.setUrl(cache.getRequestUrl());
 		return request;
 	}
+
 }

@@ -1,4 +1,4 @@
-package com.rcplatform.phototalk.db;
+package com.rcplatform.phototalk.db.impl;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,6 +9,8 @@ import java.util.Map;
 import com.db4o.Db4oEmbedded;
 import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
+import com.db4o.config.AndroidSupport;
+import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 import com.rcplatform.phototalk.bean.Friend;
@@ -17,6 +19,8 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.DatabaseUtils;
+import com.rcplatform.phototalk.db.PhotoTalkDatabase;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
@@ -26,7 +30,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	private static ObjectContainer db;
 
 	public PhotoTalkDb4oDatabase(UserInfo userInfo) {
-		db = Db4oEmbedded.openFile(Db4oEmbedded.newConfiguration(), DatabaseUtils.getDatabasePath(userInfo));
+		EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
+		config.common().add(new AndroidSupport());
+		db = Db4oEmbedded.openFile(config, DatabaseUtils.getDatabasePath(userInfo));
 	}
 
 	@Override
@@ -155,22 +161,31 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, List<String> userIds) {
-		Information infoExample = new Information();
-		infoExample.setSender(new RecordUser(senderInfo.getRcId(), null, null, null));
-		infoExample.setCreatetime(createTime);
-		ObjectSet<Information> infoLocals = db.queryByExample(infoExample);
+	public synchronized Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime,
+			List<String> receivableUserIds, final List<String> allReceiverIds, int state) {
+		ObjectSet<Information> infoLocals = db.query(new Predicate<Information>() {
+
+			@Override
+			public boolean match(Information arg0) {
+				return allReceiverIds.contains(arg0.getReceiver().getRcId()) && arg0.getCreatetime() == createTime
+						&& arg0.getSender().getRcId().equals(senderInfo.getRcId());
+			}
+		});
+
 		List<Information> informations = new ArrayList<Information>();
 		Map<String, Information> result = new HashMap<String, Information>();
 		for (Information info : infoLocals) {
-			info.setUrl(picUrl);
-			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
-			informations.add(info);
-			if (userIds.contains(info.getReceiver().getRcId())) {
-				result.put(info.getReceiver().getRcId(), info);
+			if (state == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
+				info.setUrl(picUrl);
+				if (receivableUserIds.contains(info.getReceiver().getRcId())) {
+					result.put(info.getReceiver().getRcId(), info);
+				}
 			}
+			info.setStatu(state);
+			informations.add(info);
+
 		}
-		if (userIds.contains(senderInfo.getRcId())) {
+		if (receivableUserIds != null && receivableUserIds.contains(senderInfo.getRcId())) {
 			RecordUser user = new RecordUser(senderInfo.getRcId(), senderInfo.getNickName(), senderInfo.getHeadUrl(), senderInfo.getTigaseId());
 			Information information = MessageSender.createInformation(InformationType.TYPE_PICTURE_OR_VIDEO,
 					InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD, user, user, createTime);
@@ -178,13 +193,11 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		}
 		db.store(informations);
 		db.commit();
-		informations.clear();
-		informations = null;
 		return result;
 	}
 
 	@Override
-	public void saveFriends(List<Friend> friends) {
+	public synchronized void saveFriends(List<Friend> friends) {
 		Friend friendExample = new Friend();
 		friendExample.setFriend(true);
 		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
@@ -195,7 +208,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public List<Friend> getFriends() {
+	public synchronized List<Friend> getFriends() {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
 			private static final long serialVersionUID = 1L;
 
@@ -216,7 +229,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public List<Friend> getRecommends(final int type) {
+	public synchronized List<Friend> getRecommends(final int type) {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
 			private static final long serialVersionUID = 1L;
 
@@ -231,7 +244,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public List<Friend> getRecommends() {
+	public synchronized List<Friend> getRecommends() {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
 			private static final long serialVersionUID = 1L;
 
@@ -246,7 +259,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void saveRecommends(List<Friend> recommends) {
+	public synchronized void saveRecommends(List<Friend> recommends) {
 		Friend friendExample = new Friend();
 		friendExample.setFriend(false);
 		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
@@ -257,13 +270,13 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void addFriend(Friend friend) {
+	public synchronized void addFriend(Friend friend) {
 		db.store(friend);
 		db.commit();
 	}
 
 	@Override
-	public void deleteFriend(Friend friend) {
+	public synchronized void deleteFriend(Friend friend) {
 		Friend friendExample = new Friend();
 		friendExample.setRcId(friend.getRcId());
 		ObjectSet<Friend> result = db.queryByExample(friendExample);
@@ -273,5 +286,24 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			db.commit();
 		}
 
+	}
+
+	@Override
+	public synchronized void updateTempInformationFail() {
+		Information infoExample = new Information();
+		infoExample.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
+		infoExample.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+		ObjectSet<Information> result = db.queryByExample(infoExample);
+		List<Information> tempInformations = new ArrayList<Information>();
+		while (result.hasNext()) {
+			Information info = result.next();
+			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+			tempInformations.add(info);
+		}
+		if (tempInformations.size() > 0)
+			db.store(tempInformations);
+		db.commit();
+		tempInformations.clear();
+		tempInformations = null;
 	}
 }

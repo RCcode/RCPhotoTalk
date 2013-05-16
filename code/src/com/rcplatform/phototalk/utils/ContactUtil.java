@@ -33,7 +33,8 @@ public class ContactUtil {
 			Contacts c = new Contacts();
 			c.setMobilePhoneNumber(cursor.getString(cursor.getColumnIndex(Phone.NUMBER)));
 			c.setName(cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME)));
-			contacts.add(c);
+			if (!contacts.contains(c))
+				contacts.add(c);
 		}
 		cursor.close();
 		return contacts;

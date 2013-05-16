@@ -8,7 +8,7 @@ public class AppInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String packageName;
+	private String rcPackage;
 	private String appName;
 	private int appId;
 	private String picUrl;
@@ -45,12 +45,12 @@ public class AppInfo implements Serializable {
 		this.appName = appName;
 	}
 
-	public String getPackageName() {
-		return packageName;
+	public String getRcPackage() {
+		return rcPackage;
 	}
 
-	public void setPackageName(String packageName) {
-		this.packageName = packageName;
+	public void setRcPackage(String rcPackage) {
+		this.rcPackage = rcPackage;
 	}
 
 }
