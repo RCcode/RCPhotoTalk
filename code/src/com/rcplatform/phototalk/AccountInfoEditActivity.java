@@ -79,7 +79,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		setContentView(R.layout.settings_edit_account_info);
 		app = (MenueApplication) getApplication();
 		userDetailInfo = app.getCurrentUser();
-		sex = new String[] { getString(R.string.male), getString(R.string.famale) };
+		sex = new String[] {getString(R.string.male), getString(R.string.famale) };
 		// sex = new String[] { getString(R.string.sex_secret),
 		// getString(R.string.male), getString(R.string.famale) };
 		initView();
@@ -204,7 +204,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			startActivity(new Intent(this, AddFriendActivity.class));
 			break;
 		case R.id.settings_account_head_portrait:
-			showImagePickMenu(v);
+			showImagePickMenu(v,CROP_HEAD_IMAGE);
 			break;
 		case R.id.rela_edit_nick:
 			Intent intentName = new Intent(this, UpdateNameActivity.class);
@@ -227,7 +227,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
-						userDetailInfo.setGender(which);
+						userDetailInfo.setGender(which+1);
 						setSex();
 						dialog.dismiss();
 					}
