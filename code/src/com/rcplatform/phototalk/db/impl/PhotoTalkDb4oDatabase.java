@@ -171,8 +171,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 						&& arg0.getSender().getRcId().equals(senderInfo.getRcId());
 			}
 		});
-
-		List<Information> informations = new ArrayList<Information>();
 		Map<String, Information> result = new HashMap<String, Information>();
 		for (Information info : infoLocals) {
 			if (state == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
@@ -182,8 +180,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				}
 			}
 			info.setStatu(state);
-			informations.add(info);
-
+			db.store(info);
 		}
 		if (receivableUserIds != null && receivableUserIds.contains(senderInfo.getRcId())) {
 			RecordUser user = new RecordUser(senderInfo.getRcId(), senderInfo.getNickName(), senderInfo.getHeadUrl(), senderInfo.getTigaseId());
@@ -191,7 +188,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 					InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD, user, user, createTime);
 			result.put(user.getRcId(), information);
 		}
-		db.store(informations);
 		db.commit();
 		return result;
 	}
@@ -294,16 +290,11 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		infoExample.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
 		infoExample.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
 		ObjectSet<Information> result = db.queryByExample(infoExample);
-		List<Information> tempInformations = new ArrayList<Information>();
 		while (result.hasNext()) {
 			Information info = result.next();
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
-			tempInformations.add(info);
+			db.store(info);
 		}
-		if (tempInformations.size() > 0)
-			db.store(tempInformations);
 		db.commit();
-		tempInformations.clear();
-		tempInformations = null;
 	}
 }

@@ -9,6 +9,7 @@ import android.content.Intent;
 import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.request.JSONConver;
 
@@ -19,6 +20,10 @@ public class MessageSender {
 		intent.setAction(UserMessageService.MESSAGE_SEND_BROADCAST);
 		intent.putExtra(UserMessageService.MESSAGE_TO_USER, tigaseId);
 		intent.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, message);
+		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE)
+			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_FRIEND);
+		else
+			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_MSG);
 		context.sendBroadcast(intent);
 	}
 
