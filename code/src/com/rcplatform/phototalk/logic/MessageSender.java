@@ -22,7 +22,7 @@ public class MessageSender {
 		intent.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, message);
 		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE)
 			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_FRIEND);
-		else
+		else if(informations[0].getType() == InformationType.TYPE_PICTURE_OR_VIDEO)
 			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_MSG);
 		context.sendBroadcast(intent);
 	}
