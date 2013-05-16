@@ -154,7 +154,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 				finish();
 				break;
 			case R.id.iv_head:
-				showImagePickMenu(v);
+				showImagePickMenu(v,CROP_HEAD_IMAGE);
 				break;
 			case R.id.choosebutton:
 				updateUserInfo();
@@ -225,7 +225,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 	@Override
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
 		super.onImageReceive(imageBaseUri, imagePath);
-		cutImage(imageBaseUri);
 	}
 
 	@Override

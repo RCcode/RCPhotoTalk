@@ -229,7 +229,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			finish();
 			break;
 		case R.id.iv_registe_head:
-			showImagePickMenu(v);
+			showImagePickMenu(v,CROP_HEAD_IMAGE);
 			break;
 		case R.id.login_page_signup_button:
 			final String email = mLoginIdEditText.getText().toString();

@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
@@ -26,15 +28,24 @@ public class ImageCutActivity extends BaseActivity {
 	public static final String REQUEST_PARAM_IMAGE = "file";
 
 	private Button btnNext;
+
 	private HighLightView mHighLight;
+
 	private int rotateAngel;
+
+	private int width;
+
+	private int height;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.cut_image);
+		width = getIntent().getExtras().getInt(ImagePickActivity.WIDTH_KEY);
+		height = getIntent().getExtras().getInt(ImagePickActivity.HEIGHT_KEY);
 		btnNext = (Button) findViewById(R.id.btn_next);
 		mHighLight = (HighLightView) findViewById(R.id.hlv);
+		mHighLight.setCropRect(width, height);
 		btnNext.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -73,7 +84,8 @@ public class ImageCutActivity extends BaseActivity {
 				File result = shot();
 				if (!isCancelled())
 					return result;
-			} catch (Throwable e) {
+			}
+			catch (Throwable e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -96,7 +108,6 @@ public class ImageCutActivity extends BaseActivity {
 		}
 
 	}
-
 
 	@Override
 	protected void onResume() {
@@ -126,7 +137,7 @@ public class ImageCutActivity extends BaseActivity {
 		protected void onPreExecute() {
 			// TODO Auto-generated method stub
 			super.onPreExecute();
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG,false);
+			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		}
 
 		@Override
@@ -137,10 +148,14 @@ public class ImageCutActivity extends BaseActivity {
 			try {
 				rotateAngel = Utils.getUriImageAngel(ImageCutActivity.this, imageUri);
 				int nWidth = 0, nHeight = 0;
-				nHeight = Contract.HEAD_IMAGE_WIDTH;
-				nWidth = Contract.HEAD_IMAGE_WIDTH;
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inJustDecodeBounds = true;
+				BitmapFactory.decodeFile(Utils.getRealPath(ImageCutActivity.this, imageUri), options);
+				nWidth = options.outWidth;
+				nHeight = options.outHeight;
 				bitmap = Utils.decodeSampledBitmapFromFile(Utils.getRealPath(ImageCutActivity.this, imageUri), nWidth, nHeight, rotateAngel);
-			} catch (OutOfMemoryError e) {
+			}
+			catch (OutOfMemoryError e) {
 				e.printStackTrace();
 			}
 			return bitmap;
