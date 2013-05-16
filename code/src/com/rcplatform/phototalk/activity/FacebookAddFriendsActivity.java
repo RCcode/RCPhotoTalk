@@ -13,6 +13,7 @@ import android.os.Message;
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
+import com.facebook.Request.Callback;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
@@ -45,12 +46,11 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	private boolean hasTryLogin = false;
 
 	private enum PendingAction {
-		NONE, SEND_INVATE, GET_INFO, DE_AUTHORIZE;
+		NONE, SEND_INVATE, GET_INFO, SEND_JOIN_MESSAGE, DE_AUTHORIZE;
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		mHelper = new UiLifecycleHelper(this, mCallback);
 		mHelper.onCreate(savedInstanceState);
@@ -66,6 +66,9 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 		case GET_INFO:
 			getFacebookInfos();
 			break;
+		case SEND_JOIN_MESSAGE:
+			sendJoinMessageOnFacebook();
+			break;
 		default:
 			break;
 		}
@@ -73,7 +76,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
 		super.onActivityResult(requestCode, resultCode, data);
 		hasTryLogin = true;
 		mHelper.onActivityResult(requestCode, resultCode, data);
@@ -82,7 +84,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
 		super.onPause();
 		mHelper.onPause();
 		hasTryLogin = false;
@@ -90,14 +91,12 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
 		super.onStop();
 
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		mHelper.onResume();
 		if (!hasTryLogin) {
@@ -116,7 +115,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		mHelper.onDestroy();
 		Session.getActiveSession().removeCallback(mCallback);
@@ -131,7 +129,12 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 		}
 		if (session.isOpened()) {
 			if (mAction != PendingAction.NONE) {
-				performAction();
+				if (mAction == PendingAction.GET_INFO) {
+					sendJoinMessage();
+					mAction = PendingAction.GET_INFO;
+					performAction();
+				} else
+					performAction();
 			}
 		}
 	}
@@ -140,7 +143,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 		@Override
 		public void call(Session session, SessionState state, Exception exception) {
-			// TODO Auto-generated method stub
 			onSessionStateChange(session, state, exception);
 		}
 	};
@@ -150,7 +152,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	}
 
 	protected void onGetFacebookInfoError() {
-		// TODO Auto-generated method stub
 
 	}
 
@@ -168,7 +169,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 			@Override
 			public void onCompleted(GraphUser user, Response response) {
-				// TODO Auto-generated method stub\
 				if (user == null) {
 					facebookRequestError();
 					return;
@@ -184,7 +184,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 			@Override
 			public void onCompleted(List<GraphUser> users, Response response) {
-				// TODO Auto-generated method
 				if (users == null) {
 					facebookRequestError();
 					return;
@@ -210,26 +209,26 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 		for (String id : mInviteIds) {
 			sbIds.append(id).append(",");
 		}
-		WebDialog dialog = new WebDialog.RequestsDialogBuilder(this, Session.getActiveSession()).setMessage(getString(R.string.my_firend_invite_send_short_msg)).setTo(sbIds.substring(0, sbIds.length() - 1)).setOnCompleteListener(new OnCompleteListener() {
-			@Override
-			public void onComplete(Bundle values, FacebookException error) {
-				// TODO Auto-generated method stub
-				if (error != null) {
-					showErrorConfirmDialog(error.getMessage());
-				} else if (values != null && values.size() == 0) {
-					showErrorConfirmDialog(R.string.invite_fail);
-				} else {
-					onInviteComplete(mInviteIds);
-					mInviteIds=null;
-				}
-			}
-		}).build();
+		WebDialog dialog = new WebDialog.RequestsDialogBuilder(this, Session.getActiveSession())
+				.setMessage(getString(R.string.my_firend_invite_send_short_msg)).setTo(sbIds.substring(0, sbIds.length() - 1))
+				.setOnCompleteListener(new OnCompleteListener() {
+					@Override
+					public void onComplete(Bundle values, FacebookException error) {
+						if (error != null) {
+							showErrorConfirmDialog(error.getMessage());
+						} else if (values != null && values.size() == 0) {
+							showErrorConfirmDialog(R.string.invite_fail);
+						} else {
+							onInviteComplete(mInviteIds);
+							mInviteIds = null;
+						}
+					}
+				}).build();
 		dialog.show();
 	}
 
-	protected void onInviteComplete(String...ids) {
-		// TODO Auto-generated method stub
-		
+	protected void onInviteComplete(String... ids) {
+
 	}
 
 	private Handler mHandler = new Handler() {
@@ -237,12 +236,12 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 			dismissLoadingDialog();
 			switch (msg.what) {
 			case MSG_DEAUTHORIZE_SUCCESS:
-				Dialog dialog = DialogUtil.createMsgDialog(FacebookAddFriendsActivity.this, getString(R.string.deauthorize_complete), getString(R.string.confirm));
+				Dialog dialog = DialogUtil.createMsgDialog(FacebookAddFriendsActivity.this, getString(R.string.deauthorize_complete),
+						getString(R.string.confirm));
 				dialog.setOnDismissListener(new OnDismissListener() {
 
 					@Override
 					public void onDismiss(DialogInterface dialog) {
-						// TODO Auto-generated method stub
 						finish();
 					}
 				});
@@ -280,13 +279,25 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 						}
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 					mHandler.sendEmptyMessage(MSG_NET_ERROR);
 				}
 			};
 		};
 		th.start();
+	}
 
+	private void sendJoinMessageOnFacebook() {
+		Request.executeStatusUpdateRequestAsync(Session.getActiveSession(), getString(R.string.join_message), new Callback() {
+
+			@Override
+			public void onCompleted(Response response) {
+			}
+		});
+	}
+
+	private void sendJoinMessage() {
+		mAction = PendingAction.SEND_JOIN_MESSAGE;
+		performAction();
 	}
 }

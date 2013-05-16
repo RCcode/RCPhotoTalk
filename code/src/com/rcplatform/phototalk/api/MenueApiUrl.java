@@ -2,16 +2,9 @@ package com.rcplatform.phototalk.api;
 
 public class MenueApiUrl {
 
-	
-	public static final String TIGASE_REGISTE_URL="http://192.168.0.90:8890/rcboss/user/regist.do";
-	
-	public static final String TIGASE_LOGIN_URL="http://192.168.0.90:8890/rcboss/user/userLogin.do";
-	
-	
-	
-	private static final String BASE_URL = "http://192.168.0.86:8088/";
+	private static final String BASE_URL = "http://192.168.0.86:8083/";
 	// private static final String BASE_URL = "http://103.247.169.150:8083/";
-//	 private static final String BASE_URL = "http://192.168.0.118/";
+	// private static final String BASE_URL = "http://192.168.0.118/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "photochat/";
 
@@ -24,8 +17,8 @@ public class MenueApiUrl {
 	private static final String NOTICE_URL = BASE_URL_FOR_PHOTOTALK + "notice/";
 
 	private static final String SETTING_URL = BASE_URL_FOR_PHOTOTALK + "setting/";
-	
-	private static final String APP_URL=BASE_URL_FOR_PHOTOTALK+"app/";
+
+	private static final String APP_URL = BASE_URL_FOR_PHOTOTALK + "app/";
 
 	public static final String NOTICE_OVER_URL = NOTICE_URL + "lookedTheNotice.do";
 
@@ -46,7 +39,9 @@ public class MenueApiUrl {
 	public static final String NOTICE_STATE_CHANGE_URL = NOTICE_URL + "downLoadOrLookNotice.do";
 
 	public static final String HOME_USER_NOTICE_ADD_FRIEND = USER_URL + "addFriendFromMain.do";
+
 	public static final String CONTACT_RECOMMEND_URL = USER_URL + "queryUsersByPhones.do";
+
 	public static final String NOTICE_DELETE_URL = NOTICE_URL + "deleteTheNotice.do";
 
 	public static final String NOTICE_CLEAR_URL = NOTICE_URL + "clearAllNotice.do";
@@ -63,7 +58,7 @@ public class MenueApiUrl {
 
 	public static final String USER_INFO_UPDATE_URL = FILE_URL + "userUpload.do";
 	public static final String USER_INFO_BACKGROUND_URL = FILE_URL + "uploadBackground.do";
-	
+
 	public static final String USER_INFO_HEAD_IMAGE_URL = FILE_URL + "uploadHead.do";
 
 	public static final String FACEBOOK_RECOMMENDS_URL = USER_URL + "queryThirdUsers.do";
@@ -76,50 +71,43 @@ public class MenueApiUrl {
 	public static final String ADD_FRIEND_FROM_INFORMATION = USER_URL + "tigaseAddFriendFromMain.do";
 
 	public static final String USER_SETTING_URL = SETTING_URL + "submitConfig.do";
-	
-	public static final String CHECK_UPATE_URL=APP_URL+"getAppConfig.do";
-	
-	public static final String DELETE_RECOMMEND_URL=USER_URL+"delInviteUser.do";
 
-	// -----------------------------------------------------------------------------------------------------------------------------------
-	private static final String BASE_URL_FOR_USER = BASE_URL + "rcboss/";
+	public static final String CHECK_UPATE_URL = APP_URL + "getAppConfig.do";
 
-	public static final String RCPLATFORM_ACCOUNT_LOGIN_URL = BASE_URL_FOR_USER + "login/createUserInfo.do";
-	private static final String COMM_URL = BASE_URL_FOR_USER + "comm/";
-	public static final String SYNC_CONTACT_URL = COMM_URL + "synchroContacts.do";
-
+	public static final String DELETE_RECOMMEND_URL = USER_URL + "delInviteUser.do";
 	public static final String GET_FRIENDS_URL = USER_URL + "queryMyFriends.do";
 
-	public static final String SEND_PICTURE_URL = FILE_URL + "tigaseUpload.do";
-	// 2.3 用户登录
-	public static final String LOGIN_URL = BASE_URL_FOR_USER + "login/userLogin.do";
+	public static final String SEND_PICTURE_URL = FILE_URL + "upload.do";
 
-	// 2.1 用户注册
-	public static final String SIGNUP_URL = BASE_URL_FOR_USER + "login/regist.do";
-	public static final String CHECK_USER_URL = BASE_URL_FOR_USER + "login/hasUserInfo.do";
-	// 2.25 清空所有记录
-
-	// 2.22 删除好友（单方向删除）
-
-	// 2.4 忘记密码
-	public static final String FORGET_PASSWORD_URL = BASE_URL_FOR_USER + "user/getUserPass.do";
-
-	// 2.13 好友列表--上半部推荐好友（点击主界面的好友进入）
-	// 2.14 好友列表--下半部自己在此应用下的好友（点击主界面的好友进入）
-
-	// 2.16 通讯录好友查找（同2.6添加好友的列表）
-
-	// 2.26 验证登录密码
-	public static final String CHECK_LOGIN_PASSWORD_URL = BASE_URL_FOR_USER + "login/checkPwdForUpdate.do";
-
-	// 2.27 修改登录密码
-	public static final String UPDATE_LOGIN_PASSWORD_URL = BASE_URL_FOR_USER + "login/updUserPass.do";
-
-	// 2.28 存储tacotyId
-
-	public static final String CHECK_USER_PHONEBIND_URL = BASE_URL_FOR_USER + "user/checkPhone.do";
-	public static final String UPDATE_PHONE_BIND_STATE_URL = COMM_URL + "phoneLog.do";
 	public static final String SYNCHRO_THIRD_URL = THIRD_URL + "thirdBind.do";
+
 	public static final String GET_USER_INFO = USER_URL + "getUserSelfInfo.do";
+
+	// -----------------------------------------------------------------------------------------------------------------------------------
+
+	private static final String RCBOSS_BASE_URL = "http://192.168.0.90:8890";
+
+	private static final String BASE_URL_FOR_RCBOSS = BASE_URL + "rcboss/";
+
+	private static final String RCBOSS_USER_URL = BASE_URL_FOR_RCBOSS + "user/";
+
+	private static final String RCBOSS_COMM_URL = BASE_URL_FOR_RCBOSS + "comm/";
+
+	private static final String RCBOSS_LONIN_URL = BASE_URL_FOR_RCBOSS + "login/";
+
+	public static final String SYNC_CONTACT_URL = RCBOSS_COMM_URL + "synchroContacts.do";
+
+	public static final String RCPLATFORM_ACCOUNT_LOGIN_URL = RCBOSS_LONIN_URL + "createUserInfo.do";
+	public static final String UPDATE_PHONE_BIND_STATE_URL = RCBOSS_COMM_URL + "phoneLog.do";
+	public static final String LOGIN_URL = RCBOSS_USER_URL + "userLogin.do";
+	public static final String SIGNUP_URL = RCBOSS_USER_URL + "regist.do";
+	public static final String CHECK_USER_URL = RCBOSS_LONIN_URL + "hasUserInfo.do";
+	public static final String FORGET_PASSWORD_URL = RCBOSS_USER_URL + "getUserPass.do";
+
+	public static final String CHECK_LOGIN_PASSWORD_URL = RCBOSS_LONIN_URL + "checkPwdForUpdate.do";
+
+	public static final String UPDATE_LOGIN_PASSWORD_URL = RCBOSS_LONIN_URL + "updUserPass.do";
+
+	public static final String CHECK_USER_PHONEBIND_URL = RCBOSS_USER_URL + "checkPhone.do";
 
 }

@@ -167,12 +167,11 @@ public class AddFriendBaseActivity extends BaseActivity {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendListener() {
 			@Override
-			public void onFriendAddSuccess(int addType) {
+			public void onFriendAddSuccess(Friend friend,int addType) {
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();
 				AddFriendsActivity.addFriend(friend);
-				LogicUtils.friendAdded(AddFriendBaseActivity.this, friend, addType);
 			}
 
 			@Override

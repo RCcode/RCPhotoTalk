@@ -155,7 +155,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, Map<String, String> userIds) {
+	public Map<String, Information> updateTempInformations(UserInfo senderInfo, String picUrl, long createTime, List<String> userIds) {
 		Information infoExample = new Information();
 		infoExample.setSender(new RecordUser(senderInfo.getRcId(), null, null, null));
 		infoExample.setCreatetime(createTime);
@@ -166,11 +166,11 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			info.setUrl(picUrl);
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 			informations.add(info);
-			if (userIds.containsKey(info.getReceiver().getRcId())) {
+			if (userIds.contains(info.getReceiver().getRcId())) {
 				result.put(info.getReceiver().getRcId(), info);
 			}
 		}
-		if (userIds.containsKey(senderInfo.getRcId())) {
+		if (userIds.contains(senderInfo.getRcId())) {
 			RecordUser user = new RecordUser(senderInfo.getRcId(), senderInfo.getNickName(), senderInfo.getHeadUrl(), senderInfo.getTigaseId());
 			Information information = MessageSender.createInformation(InformationType.TYPE_PICTURE_OR_VIDEO,
 					InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD, user, user, createTime);
@@ -254,5 +254,24 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			db.delete(friend);
 		db.store(recommends);
 		db.commit();
+	}
+
+	@Override
+	public void addFriend(Friend friend) {
+		db.store(friend);
+		db.commit();
+	}
+
+	@Override
+	public void deleteFriend(Friend friend) {
+		Friend friendExample = new Friend();
+		friendExample.setRcId(friend.getRcId());
+		ObjectSet<Friend> result = db.queryByExample(friendExample);
+		if (result.size() > 0) {
+			for (Friend f : result)
+				db.delete(f);
+			db.commit();
+		}
+
 	}
 }

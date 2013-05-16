@@ -74,8 +74,10 @@ public class RCPlatformAsyncHttpClient {
 					try {
 						JSONObject jsonObject = new JSONObject(content);
 						int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
+						if (state == 10000)
+							state = 0;
 						if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
-							responseHandler.onSuccess(state, content);
+							onRequestSuccess(context, state, content, request);
 						} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {
 							context.sendBroadcast(new Intent(Action.ACTION_OTHER_DEVICE_LOGIN));
 						} else {
@@ -129,7 +131,7 @@ public class RCPlatformAsyncHttpClient {
 						JSONObject jsonObject = new JSONObject(content);
 						int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
 						if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
-							responseHandler.onSuccess(state, content);
+							onRequestSuccess(context, state, content, request);
 						} else {
 							responseHandler.onFailure(state, jsonObject.getString(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_MESSAGE));
 						}
@@ -152,8 +154,13 @@ public class RCPlatformAsyncHttpClient {
 		if (request.getResponseHandler() != null) {
 			request.getResponseHandler().onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 		}
+	}
+
+	private void onRequestSuccess(Context context, int state, String content, Request request) {
 		if (request.isCache())
-			PhotoTalkDatabaseFactory.getRequestDatabase().saveRequest(request);
+			PhotoTalkDatabaseFactory.getRequestDatabase().deleteRequest(request);
+		if (request.getResponseHandler() != null)
+			request.getResponseHandler().onSuccess(state, content);
 	}
 
 	public void putRequestParam(String key, String value) {

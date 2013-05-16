@@ -39,10 +39,16 @@ public class InformationPageController {
 			mActivity.onPhotoSending(informations);
 	}
 
-	public void photosSendSuccess(long flag) {
+	public void onPhotoSendSuccess(long flag) {
 		if (mActivity != null)
 			mActivity.onPhotoSendSuccess(flag);
 	}
+
+	public void onPhotoSendFail(long flag) {
+		if (mActivity != null)
+			mActivity.onPhotoSendFail(flag);
+	}
+
 
 	public void destroy() {
 		mActivity = null;

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -11,7 +12,9 @@ import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
 /**
  * 标题、简要说明. <br>
@@ -46,6 +49,7 @@ public class WelcomeActivity extends BaseActivity {
 		setContentView(R.layout.loading);
 		startService(new Intent(this, PTBackgroundService.class));
 		startService(new Intent(this, PhotoTalkWebService.class));
+		checkNetwork();
 		Thread th = new Thread() {
 			public void run() {
 				Contract.init(WelcomeActivity.this);
@@ -55,6 +59,12 @@ public class WelcomeActivity extends BaseActivity {
 		th.start();
 		// 判断版本更新
 		executeUpdate();
+	}
+
+	private void checkNetwork() {
+		if(!Utils.isNetworkEnable(this)){
+			DialogUtil.showToast(this, R.string.no_net, Toast.LENGTH_SHORT);
+		}
 	}
 
 	private void executeUpdate() {

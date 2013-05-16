@@ -68,19 +68,9 @@ import com.rcplatform.phototalk.views.SnapShowListener;
  */
 public class HomeActivity extends BaseActivity implements SnapShowListener {
 
-	// private static final int MSG_WHAT_GET_SERVICE_RECORD_SUCCESS = 1;
-
-	// private static final int LOAD_MORE_FAIL = 4;
-
-	// private static final int LOAD_MORE_SUCCESS = 5;
-
-	// private static final int REFRESH_FAIL = 6;
-
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
 	private static final int MSG_WHAT_REGISTE_INFORMATION_RECEIVER = 2;
-
-	// private PullToRefreshView mPtrView;
 
 	private SnapListView mInformationList;
 
@@ -293,7 +283,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 								Information record = adapter.getData().get(listPostion);
 								switch (itemIndex) {
 								case 0:
-									// reSendNotifyToService(record);
+									reSendPhoto(record);
 									mLongPressDialog.hide();
 									break;
 								// 重新下载
@@ -321,6 +311,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				}
 			}
 		}
+	}
+
+	private void reSendPhoto(Information information) {
 	}
 
 	private void deleteInformation(Information information) {
@@ -352,7 +345,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				mShowDialog.ShowDialog(infoRecord);
 				LogicUtils.startShowPhotoInformation(infoRecord);
 				isShow = true;
-				LogicUtils.startShowPhotoInformation(infoRecord);
 				// 把数据里面的状态更改为3，已查看
 			} else if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
@@ -550,6 +542,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				adapter.notifyDataSetChanged();
 			}
 		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
+			friend.setReceiveTime(System.currentTimeMillis());
 			List<Information> infos = new ArrayList<Information>();
 			infos.add(friend);
 			sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
@@ -575,6 +568,24 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 						&& info.getCreatetime() == flag) {
 					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 				}
+			}
+			adapter.notifyDataSetChanged();
+		}
+	}
+
+	public void onPhotoSendFail(long flag) {
+		List<Information> localInfos = getAdapterData();
+		if (localInfos != null) {
+			boolean hasInfo = false;
+			for (Information info : localInfos) {
+				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
+						&& info.getCreatetime() == flag) {
+					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+					hasInfo = true;
+				}
+			}
+			if (!hasInfo) {
+
 			}
 			adapter.notifyDataSetChanged();
 		}

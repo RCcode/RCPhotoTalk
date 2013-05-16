@@ -138,7 +138,7 @@ public class FriendsProxy {
 		Request request = new Request(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
 		request.excuteAsync();
 	}
-
+	
 	// 田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
 		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);

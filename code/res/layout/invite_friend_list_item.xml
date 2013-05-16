@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:paddingBottom="@dimen/default_gap_2x"
         android:paddingLeft="@dimen/default_gap_2x"
-        android:background="@drawable/friend_item_bg"
         android:paddingTop="@dimen/default_gap_2x" >
 
         <LinearLayout
