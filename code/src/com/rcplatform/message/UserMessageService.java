@@ -1,8 +1,13 @@
 package com.rcplatform.message;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Timer;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.MessageListener;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
 import com.rcplatform.tigase.TigaseNode;
@@ -38,7 +43,23 @@ public class UserMessageService extends Service {
 
 	public static final String MESSAGE_SEND_BROADCAST = "com.rcplatform.message.send";
 
+	private static final String MESSAGE_TYPE_MESSAGE = "m";
+
+	private static final String MESSAGE_TYPE_RECEIPT = "r";
+
+	private static final String MESSAGE_SPLIT = ":";
+	
+	public static final String MESSAGE_ACTION_KEY = "action";
+	
+	public static final String MESSAGE_ACTION_MSG = "1";
+	
+	public static final String MESSAGE_ACTION_FRIEND = "2";
+	
+	
+
 	private Context ctx;
+	
+	private HashMap<String,Timer> gcmTimers;
 
 	ChatManagerListener chatListener = new ChatManagerListener() {
 
@@ -48,13 +69,41 @@ public class UserMessageService extends Service {
 
 				@Override
 				public void processMessage(Chat chat, Message message) {
-					Intent intent = new Intent();
-					intent.setAction(MESSAGE_RECIVE_BROADCAST);
-					// 要发送的内容
-					intent.putExtra(MESSAGE_FROM_USER, message.getFrom());
-					intent.putExtra(MESSAGE_CONTENT_KEY, message.getBody());
-					// 发送 一个无序广播
-					ctx.sendBroadcast(intent);
+
+					String str = message.getBody();
+					int typeEnd = str.indexOf(MESSAGE_SPLIT);
+					String msgType = str.substring(0, typeEnd);
+					str = str.substring(typeEnd);
+					int actionEnd = str.indexOf(MESSAGE_SPLIT);
+					String action = str.substring(0,actionEnd);
+					String msgContent = str.substring(actionEnd);
+
+					if (msgType.equals(MESSAGE_TYPE_MESSAGE)) {
+						Intent intent = new Intent();
+						intent.setAction(MESSAGE_RECIVE_BROADCAST);
+						// 要发送的内容
+						intent.putExtra(MESSAGE_FROM_USER, message.getFrom());
+						intent.putExtra(MESSAGE_CONTENT_KEY, msgContent);
+						// 发送 一个无序广播
+						ctx.sendBroadcast(intent);
+
+						try {
+							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action);
+						}
+						catch (XMPPException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					} else if (msgType.equals(MESSAGE_SPLIT)) {
+						// TODO 取消gcm 发送
+						String cancelKey = message.getFrom()+action;
+						Timer cancelTimer = gcmTimers.get(cancelKey);
+						if(null != cancelTimer){
+							cancelTimer.cancel();
+							gcmTimers.remove(cancelKey);
+						}
+					}
+
 				}
 			});
 		}
@@ -69,7 +118,7 @@ public class UserMessageService extends Service {
 			String toUser = extras.getString(MESSAGE_TO_USER);
 			String msg = extras.getString(MESSAGE_CONTENT_KEY);
 
-			XmppTool.sendMessage(toUser, msg);
+			XmppTool.sendMessage(toUser, MESSAGE_TYPE_MESSAGE + msg);
 
 		}
 	};
@@ -84,10 +133,12 @@ public class UserMessageService extends Service {
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
 		createXmppConnection(intent);
+		gcmTimers = new HashMap<String , Timer>() ;
 	}
 
 	private void createXmppConnection(final Intent intent) {
 		Thread thread = new Thread() {
+
 			public void run() {
 				TigaseNode node = TigaseNodeUtil.getTigaseNode();
 				XmppTool.createConnection(node);
@@ -104,13 +155,14 @@ public class UserMessageService extends Service {
 	}
 
 	private Handler xmppHandler = new Handler() {
+
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case MSG_WHAT_XMPP_CONNECT_SUCCESS:
-				IntentFilter intentFilter = new IntentFilter();
-				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
-				registerReceiver(sendBroadcastReceiver, intentFilter);
-				break;
+				case MSG_WHAT_XMPP_CONNECT_SUCCESS:
+					IntentFilter intentFilter = new IntentFilter();
+					intentFilter.addAction(MESSAGE_SEND_BROADCAST);
+					registerReceiver(sendBroadcastReceiver, intentFilter);
+					break;
 			}
 		};
 	};

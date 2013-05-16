@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -164,7 +165,10 @@ public class LongClickShowView extends Dialog {
 	private void playAudio(File file, Information info) throws Exception {
 		Builder.mAudioPlayer.reset();
 		Builder.mAudioPlayer.setDataSource(file.getPath());
+		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
 		Builder.mAudioPlayer.prepare();
+//		Builder.mAudioPlayer.prepareAsync();
+
 		Builder.mAudioPlayer.start();
 		if (info.getTotleLength() != info.getLimitTime())
 			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000

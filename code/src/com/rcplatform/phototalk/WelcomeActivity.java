@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
 
+import com.google.android.gcm.ServerUtilities;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
@@ -31,6 +32,7 @@ import com.rcplatform.phototalk.utils.Utils;
 public class WelcomeActivity extends BaseActivity {
 
 	private static final int INIT_SUCCESS = 100;
+
 	private static final long WAITING_TIME = 1000;
 
 	private Handler mHandler = new Handler() {
@@ -51,6 +53,7 @@ public class WelcomeActivity extends BaseActivity {
 		startService(new Intent(this, PhotoTalkWebService.class));
 		checkNetwork();
 		Thread th = new Thread() {
+
 			public void run() {
 				Contract.init(WelcomeActivity.this);
 				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS, WAITING_TIME);
@@ -62,7 +65,7 @@ public class WelcomeActivity extends BaseActivity {
 	}
 
 	private void checkNetwork() {
-		if(!Utils.isNetworkEnable(this)){
+		if (!Utils.isNetworkEnable(this)) {
 			DialogUtil.showToast(this, R.string.no_net, Toast.LENGTH_SHORT);
 		}
 	}
@@ -76,10 +79,28 @@ public class WelcomeActivity extends BaseActivity {
 		super.onResume();
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		try {
+			ServerUtilities.onDestroy(this);
+		}
+		catch (Exception e) {
+
+		}
+	}
+
 	private void executeAutoLogin() {
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getApplicationContext());
 		// 用户已登录过，自动登录主页。
 		if (userInfo != null) {
+			try {
+				ServerUtilities.register(this, userInfo.getRcId(),userInfo.getToken());
+			}
+			catch (Exception e) {
+
+			}
+
 			getPhotoTalkApplication().setCurrentUser(userInfo);
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
 			startActivity(intent);
