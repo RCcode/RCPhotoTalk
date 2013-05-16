@@ -56,7 +56,7 @@ public class UserMessageService extends Service {
 	
 	public static final String MESSAGE_ACTION_FRIEND = "2";
 	
-	
+	public static final String MESSAGE_RCID_KEY="rcid";
 
 	private Context ctx;
 	
