@@ -22,6 +22,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 
 public class UserMessageService extends Service {
 
@@ -60,6 +61,8 @@ public class UserMessageService extends Service {
 	private Context ctx;
 	
 	private HashMap<String,Timer> gcmTimers;
+
+	private boolean hasRegisteSendReceiver = false;
 
 	ChatManagerListener chatListener = new ChatManagerListener() {
 
@@ -103,7 +106,6 @@ public class UserMessageService extends Service {
 							gcmTimers.remove(cancelKey);
 						}
 					}
-
 				}
 			});
 		}
@@ -158,11 +160,13 @@ public class UserMessageService extends Service {
 
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case MSG_WHAT_XMPP_CONNECT_SUCCESS:
-					IntentFilter intentFilter = new IntentFilter();
-					intentFilter.addAction(MESSAGE_SEND_BROADCAST);
-					registerReceiver(sendBroadcastReceiver, intentFilter);
-					break;
+
+			case MSG_WHAT_XMPP_CONNECT_SUCCESS:
+				IntentFilter intentFilter = new IntentFilter();
+				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
+				registerReceiver(sendBroadcastReceiver, intentFilter);
+				hasRegisteSendReceiver = true;
+				break;
 			}
 		};
 	};
@@ -177,6 +181,7 @@ public class UserMessageService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		XmppTool.closeConnection();
-		this.unregisterReceiver(sendBroadcastReceiver);
+		if (hasRegisteSendReceiver)
+			this.unregisterReceiver(sendBroadcastReceiver);
 	}
 }

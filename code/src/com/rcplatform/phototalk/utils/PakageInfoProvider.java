@@ -31,7 +31,7 @@ public class PakageInfoProvider {
 		appInfos = new ArrayList<AppInfo>();
 		for (PackageInfo packageInfo : pakageinfos) {
 			appInfo = new AppInfo();
-			appInfo.setPackageName(packageInfo.packageName);
+			appInfo.setRcPackage(packageInfo.packageName);
 			appInfos.add(appInfo);
 			appInfo = null;
 		}

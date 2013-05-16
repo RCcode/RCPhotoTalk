@@ -12,6 +12,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -102,6 +103,10 @@ public class WelcomeActivity extends BaseActivity {
 			}
 
 			getPhotoTalkApplication().setCurrentUser(userInfo);
+			if (!Contract.START_COMPLETE) {
+				PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
+				Contract.START_COMPLETE = true;
+			}
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
 			startActivity(intent);
 			finish();
@@ -112,9 +117,4 @@ public class WelcomeActivity extends BaseActivity {
 		finish();
 	}
 
-	private void startUpload() {
-		Intent intent = new Intent(this, InviteFriendUploadService.class);
-		intent.setAction(Contract.Action.ACTION_UPLOAD_INTITE_CONTACT);
-		startService(intent);
-	}
 }

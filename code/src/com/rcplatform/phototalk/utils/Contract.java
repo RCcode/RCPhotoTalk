@@ -3,9 +3,9 @@ package com.rcplatform.phototalk.utils;
 import java.util.Map;
 
 import android.app.Activity;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 
-import com.rcplatform.phototalk.LoginActivity;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 
@@ -14,7 +14,6 @@ public class Contract {
 	public static int SCREEN_WIDTH;
 	public static int SCREEN_HEIGHT;
 	public static int HEAD_IMAGE_WIDTH;
-	
 
 	public static final String IMAGE_FORMAT = ".jpg";
 	public static final String AUDIO_FORMAT = ".amr";
@@ -22,6 +21,8 @@ public class Contract {
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
 	public static Map<AppInfo, UserInfo> userApps;
+	
+	public static boolean START_COMPLETE=false;
 
 	public static void init(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -29,17 +30,26 @@ public class Contract {
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
-		Database.DATABASE_PATH = context.getFilesDir().getAbsolutePath();
-		Database.REQUEST_DATABASE_PATH=context.getFilesDir().getAbsolutePath();
+		initDatabase();
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
 	}
 
-	public static class Database{
-		public static String DATABASE_PATH;
-		public static String REQUEST_DATABASE_PATH;
+	private static void initDatabase() {
+		Database.BASE_DATABASE_PATH = Environment.getExternalStorageDirectory().getPath() + "/db";
+		Database.USERS_DATABASE_PATH = Database.BASE_DATABASE_PATH + "/users";
+		Utils.createNewDir(Database.USERS_DATABASE_PATH);
+		Database.REQUEST_DATABASE_PATH = Database.BASE_DATABASE_PATH;
+		Database.CONTACT_DATABASE_PATH = Database.BASE_DATABASE_PATH;
 	}
-	
+
+	public static class Database {
+		public static String BASE_DATABASE_PATH;
+		public static String USERS_DATABASE_PATH;
+		public static String REQUEST_DATABASE_PATH;
+		public static String CONTACT_DATABASE_PATH;
+	}
+
 	public static class Action {
 
 		/**
@@ -101,7 +111,8 @@ public class Contract {
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 
 	public static final String BIND_PHONE_NUMBER = "+18146193618";
-	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
+//	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
+	public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
 	// 头像图片本地缓存地址
 
 	public static final String HEAD_CACHE_PATH = "head";
@@ -113,8 +124,6 @@ public class Contract {
 	public static final String KEY_USER_TOKEN = "userToken";
 
 	public static final String KEY_EMAIL = "email";
-
-	public static final String KEY_PASSWORD = "password";
 
 	/*
 	 * 登录和注册页面。
@@ -150,8 +159,8 @@ public class Contract {
 	public static final String KEY_MAX_RECORD_ID = "max_record_id";
 
 	public static final String KEY_BACKGROUND = "background";
-	
-	public static final String KEY_TIGASE_ID="tigaseid";
-	
-	public static final String KEY_TIGASE_PASSWORD="tigasepassword";
+
+	public static final String KEY_TIGASE_ID = "tigaseid";
+
+	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
 }

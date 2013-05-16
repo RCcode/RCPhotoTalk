@@ -41,8 +41,6 @@ public class UserInfo implements Serializable {
 
 	private String country;
 
-	private String passWord;
-
 	private String email;
 
 	private String token;
@@ -95,8 +93,7 @@ public class UserInfo implements Serializable {
 		super();
 	}
 
-	public UserInfo(String nick, String passWord, String email, String token, String suId) {
-		this.passWord = passWord;
+	public UserInfo(String nick, String email, String token, String suId) {
 		this.email = email;
 		this.token = token;
 		this.nickName = nick;
@@ -110,13 +107,6 @@ public class UserInfo implements Serializable {
 		this.country = country;
 	}
 
-	public String getPassWord() {
-		return passWord;
-	}
-
-	public void setPassWord(String passWord) {
-		this.passWord = passWord;
-	}
 
 	public String getEmail() {
 		return email;
@@ -252,7 +242,6 @@ public class UserInfo implements Serializable {
 	}
 
 	public void clone(UserInfo userInfo) {
-		passWord = userInfo.getPassWord();
 		cellPhone = userInfo.getCellPhone();
 		birthday = userInfo.getBirthday();
 		rcId = userInfo.getRcId();

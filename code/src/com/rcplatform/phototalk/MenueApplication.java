@@ -48,6 +48,7 @@ public class MenueApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Contract.START_COMPLETE=false;
 		PhotoInformationCountDownService.getInstance().setApplication(this);
 		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache())
 				.threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory()

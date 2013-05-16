@@ -89,8 +89,6 @@ public class InitPageActivity extends BaseActivity {
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		UserInfo userInfo = (UserInfo) intent.getSerializableExtra(PlatformEditActivity.PARAM_USER);
-		getPhotoTalkApplication().setCurrentUser(userInfo);
 		startActivity(AddFriendsActivity.class);
 		finish();
 	}
@@ -100,7 +98,6 @@ public class InitPageActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			UserInfo userInfo = (UserInfo) data.getSerializableExtra(LoginActivity.RESULT_KEY_USERINFO);
-			getPhotoTalkApplication().setCurrentUser(userInfo);
 			if (userInfo.getShowRecommends() == 1) {
 				startActivity(HomeActivity.class);
 			} else {

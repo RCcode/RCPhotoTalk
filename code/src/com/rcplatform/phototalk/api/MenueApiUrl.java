@@ -65,7 +65,6 @@ public class MenueApiUrl {
 
 	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
 
-	public static final String ASYNC_INVITE_URL = USER_URL + "inviteUserLog.do";
 	public static final String FRIEND_DETAIL_URL = USER_URL + "getUserInfo.do";
 
 	public static final String ADD_FRIEND_FROM_INFORMATION = USER_URL + "tigaseAddFriendFromMain.do";
@@ -109,5 +108,6 @@ public class MenueApiUrl {
 	public static final String UPDATE_LOGIN_PASSWORD_URL = RCBOSS_LONIN_URL + "updUserPass.do";
 
 	public static final String CHECK_USER_PHONEBIND_URL = RCBOSS_USER_URL + "checkPhone.do";
+	public static final String ASYNC_INVITE_URL = RCBOSS_COMM_URL + "inviteUserLog.do";
 
 }
