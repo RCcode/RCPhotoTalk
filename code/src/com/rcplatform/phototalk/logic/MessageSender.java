@@ -15,13 +15,13 @@ import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class MessageSender {
-	public static void sendInformation(Context context, String tigaseId, Information... informations) {
+	public static void sendInformation(Context context, String tigaseId, String rcId, Information... informations) {
 		String message = JSONConver.informationToJSON(informations);
 		Intent intent = new Intent();
 		intent.setAction(UserMessageService.MESSAGE_SEND_BROADCAST);
 		intent.putExtra(UserMessageService.MESSAGE_TO_USER, tigaseId);
 		intent.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, message);
-		intent.putExtra(UserMessageService.MESSAGE_RCID_KEY, PrefsUtils.LoginState.getLoginUser(context).getRcId());
+		intent.putExtra(UserMessageService.MESSAGE_RCID_KEY, rcId);
 		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE)
 			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_FRIEND);
 		else if (informations[0].getType() == InformationType.TYPE_PICTURE_OR_VIDEO)
@@ -35,14 +35,18 @@ public class MessageSender {
 			for (String rcid : userIds) {
 				Information info = informations.get(rcid);
 				String tigaseId = null;
+				String rcId = null;
 				if (info.getReceiver().getRcId().equals(info.getSender().getRcId())) {
+					rcId = info.getReceiver().getRcId();
 					tigaseId = info.getReceiver().getTigaseId();
 				} else if (info.getReceiver().getRcId().equals(currentRcid)) {
+					rcId = info.getSender().getRcId();
 					tigaseId = info.getSender().getTigaseId();
 				} else {
+					rcId = info.getReceiver().getRcId();
 					tigaseId = info.getReceiver().getTigaseId();
 				}
-				sendInformation(context, tigaseId, info);
+				sendInformation(context, tigaseId, rcId, info);
 			}
 		}
 	}

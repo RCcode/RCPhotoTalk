@@ -64,7 +64,7 @@ public class PhotoInformationCountDownService {
 			String key = (String) msg.obj;
 			Information info = mShowingInformations.get(key);
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
-			MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info);
+			MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
 			LogicUtils.updateInformationState(mApplication, Action.ACTION_INFORMATION_STATE_CHANGE, info);
 			InformationPageController.getInstance().photoInformationShowEnd(info);
 			mPool.execute(new ClearPhotoInformationCacheTask(info));
