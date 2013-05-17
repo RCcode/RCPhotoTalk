@@ -76,18 +76,21 @@ public class AddFriendBaseActivity extends BaseActivity {
 	private OnGroupClickListener mOnGroupClickListener = new OnGroupClickListener() {
 
 		@Override
-		public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
+		public boolean onGroupClick(ExpandableListView parent, View v,
+				int groupPosition, long id) {
 			return true;
 		}
 	};
 	private TextWatcher mSearchTextChangeListener = new TextWatcher() {
 
 		@Override
-		public void onTextChanged(CharSequence s, int start, int before, int count) {
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
 		}
 
 		@Override
-		public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
 		}
 
 		@Override
@@ -120,22 +123,27 @@ public class AddFriendBaseActivity extends BaseActivity {
 		setListData(resultFriends, resultInvite, mSearchList);
 	}
 
-	protected void setListData(List<Friend> friends, List<Friend> invateFriends, ExpandableListView listView) {
+	protected void setListData(List<Friend> friends,
+			List<Friend> invateFriends, ExpandableListView listView) {
 		Map<Integer, List<Friend>> baseFriendsList = new HashMap<Integer, List<Friend>>();
 		if (friends != null && friends.size() > 0) {
-			baseFriendsList.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS, friends);
+			baseFriendsList.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS,
+					friends);
 		}
 		if (invateFriends != null && invateFriends.size() > 0) {
 			baseFriendsList.put(mItemType, invateFriends);
 		}
 		PhotoTalkFriendsAdapter adapter = null;
 		if (listView.getExpandableListAdapter() != null) {
-			adapter = (PhotoTalkFriendsAdapter) listView.getExpandableListAdapter();
+			adapter = (PhotoTalkFriendsAdapter) listView
+					.getExpandableListAdapter();
 			adapter.setListData(baseFriendsList);
 			// listView.setSelection(0);
 
 		} else {
-			adapter = new PhotoTalkFriendsAdapter(AddFriendBaseActivity.this, baseFriendsList, willInvateFriends, ImageLoader.getInstance());
+			adapter = new PhotoTalkFriendsAdapter(AddFriendBaseActivity.this,
+					baseFriendsList, willInvateFriends,
+					ImageLoader.getInstance());
 			adapter.setOnCheckBoxChangedListener(mInvateCheckBoxChangeListener);
 			adapter.setOnFriendAddListener(mFriendAddListener);
 			listView.setAdapter(adapter);
@@ -165,43 +173,56 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	private void doFriendAdd(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendListener() {
-			@Override
-			public void onFriendAddSuccess(Friend friend,int addType) {
-				dismissLoadingDialog();
-				friend.setFriend(true);
-				refreshList();
-				AddFriendsActivity.addFriend(friend);
-			}
+		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(),
+				new AddFriendListener() {
+					@Override
+					public void onFriendAddSuccess(Friend friend, int addType) {
+						dismissLoadingDialog();
+						friend.setFriend(true);
+						refreshList();
+						AddFriendsActivity.addFriend(friend);
+					}
 
-			@Override
-			public void onFriendAddFail(int statusCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		}, friend).execute();
+					@Override
+					public void onFriendAddFail(int statusCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				}, friend).execute();
 	}
 
 	protected void refreshList() {
 		if (mList.getExpandableListAdapter() != null) {
-			((BaseExpandableListAdapter) mList.getExpandableListAdapter()).notifyDataSetChanged();
+			((BaseExpandableListAdapter) mList.getExpandableListAdapter())
+					.notifyDataSetChanged();
 		}
 		if (mSearchList.getExpandableListAdapter() != null) {
-			((BaseExpandableListAdapter) mSearchList.getExpandableListAdapter()).notifyDataSetChanged();
+			((BaseExpandableListAdapter) mSearchList.getExpandableListAdapter())
+					.notifyDataSetChanged();
 		}
 	}
 
 	private void initInvateView() {
-		View view = findViewById(R.id.wish_to_invate);
-		final HorizontalScrollView hsv = (HorizontalScrollView) view.findViewById(R.id.hs_wish_list);
+		final View view = findViewById(R.id.wish_to_invate);
+		final HorizontalScrollView hsv = (HorizontalScrollView) view
+				.findViewById(R.id.hs_wish_list);
 		mLinearInvate = (LinearLayout) view.findViewById(R.id.linear_wish);
-		mLinearInvate.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+		if (mLinearInvate.getChildCount() == 0) {
+			view.setVisibility(View.INVISIBLE);
+		}
+		mLinearInvate.getViewTreeObserver().addOnGlobalLayoutListener(
+				new OnGlobalLayoutListener() {
 
-			@Override
-			public void onGlobalLayout() {
-				hsv.smoothScrollTo(mLinearInvate.getWidth(), 0);
-			}
-		});
+					@Override
+					public void onGlobalLayout() {
+						hsv.smoothScrollTo(mLinearInvate.getWidth(), 0);
+						if (mLinearInvate.getChildCount() == 0) {
+							view.setVisibility(View.INVISIBLE);
+						}else{
+							view.setVisibility(View.VISIBLE);
+						}
+					}
+				});
 		Button btnInvate = (Button) findViewById(R.id.btn_invate);
 		btnInvate.setOnClickListener(new OnClickListener() {
 
@@ -249,8 +270,10 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	private TextView buildInvateTextView(final Friend friend) {
 		TextView tvName = new TextView(this);
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		int marginLeft = getResources().getDimensionPixelSize(R.dimen.invate_friend_space);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		int marginLeft = getResources().getDimensionPixelSize(
+				R.dimen.invate_friend_space);
 		params.setMargins(marginLeft, 0, 0, 0);
 		tvName.setLayoutParams(params);
 		tvName.setText(friend.getNickName());
