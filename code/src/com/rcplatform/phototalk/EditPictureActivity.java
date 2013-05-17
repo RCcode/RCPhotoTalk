@@ -699,12 +699,10 @@ public class EditPictureActivity extends BaseActivity {
 		String tempPath = null;
 
 		try {
-			ZipUtil.ZipFolder(
-					app.getSendFileCachePath(),
-					app.getSendZipFileCachePath() + "/"
-							+ System.currentTimeMillis() + ".zip");
 			tempPath = app.getSendZipFileCachePath() + "/"
 					+ System.currentTimeMillis() + ".zip";
+			ZipUtil.ZipFolder(
+					app.getSendFileCachePath(),tempPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -171,8 +171,8 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			ZipUtil.ZipFolder(app.getSendFileCachePath(), app.getSendZipFileCachePath()+"/"+System.currentTimeMillis()+ ".zip");
 			tempFilePath = app.getSendZipFileCachePath() +"/"+System.currentTimeMillis()+ ".zip";
+			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -424,7 +424,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
-					sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
+//					sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
 				}
 			}
 
