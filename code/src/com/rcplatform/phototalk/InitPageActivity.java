@@ -199,7 +199,6 @@ public class InitPageActivity extends BaseActivity implements
 		return false;
 	}
 	public void onCheckMain(int n) {
-		System.out.println("n--->"+n);
 		pager.setDisplayedChild(n);
 		mPageIndicator.setActiveDot(n);
 	}
