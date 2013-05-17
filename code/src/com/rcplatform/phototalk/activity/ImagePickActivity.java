@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,16 +20,41 @@ import android.widget.Toast;
 
 import com.rcplatform.phototalk.ImageCutActivity;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.SettingsActivity;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class ImagePickActivity extends BaseActivity {
+
 	protected static final int REQUEST_CODE_GALLARY = 1012;
+
 	protected static final int REQUEST_CODE_CAMERA = 1013;
-	protected static final int REQUEST_CODE_CUT_IMAGE = 1014;
+
+	protected static final int CROP_PICTURE = 1015;
+
+	public static final int CROP_NONE = 0;
+
+	public static final int CROP_BACKGROUND_IMAGE = 1;
+
+	public static final int CROP_HEAD_IMAGE = 2;
 
 	private Uri mImageUri;
+
 	private PopupWindow mImageSelectPopupWindow;
+
+	private int cropMode;
+
+	static public final String WIDTH_KEY = "width";
+
+	static public final String HEIGHT_KEY = "height";
+
+	private final int HEAD_HEIGHT = 160;
+
+	private final int HEAD_WIDTH = 160;
+
+	private final int BACKGROUND_HEIGHT = 350;
+
+	private final int BACKGROUND_WIDTH = 710;
 
 	protected void startCamera() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -50,37 +76,25 @@ public class ImagePickActivity extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			if (REQUEST_CODE_CAMERA == requestCode) {
-				Uri tmpUri = mImageUri;
-				if (data != null && data.getData() != null) {
-					tmpUri = data.getData();
+
+			if (REQUEST_CODE_CAMERA == requestCode || REQUEST_CODE_GALLARY == requestCode) {
+				switch (cropMode) {
+					case CROP_BACKGROUND_IMAGE:
+						cutImage(mImageUri, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+						break;
+					case CROP_HEAD_IMAGE:
+						cutImage(mImageUri, HEAD_WIDTH, HEAD_HEIGHT);
+						break;
 				}
-				String realPath = Utils.getRealPath(this, tmpUri);
+			} else if (CROP_PICTURE == requestCode) {
+				if (data != null && data.getData() != null) {
+					mImageUri = data.getData();
+				}
+				String realPath = Utils.getRealPath(this, mImageUri);
 				if (realPath != null) {
-					onImageReceive(tmpUri, realPath);
+					onImageReceive(mImageUri, realPath);
 				} else {
 					onImagePickFail();
-				}
-
-			} else if (REQUEST_CODE_GALLARY == requestCode) {
-				try {
-					Uri tmpUri = null;
-					if (data != null && data.getData() != null) {
-						tmpUri = data.getData();
-					}
-					String realPath = Utils.getRealPath(this, tmpUri);
-					if (realPath != null) {
-						onImageReceive(tmpUri, realPath);
-					} else {
-						onImagePickFail();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			} else if (REQUEST_CODE_CUT_IMAGE == requestCode) {
-				if (data != null) {
-					String imagePath = data.getData().getPath();
-					onImageCutSuccess(imagePath);
 				}
 			}
 		}
@@ -99,11 +113,13 @@ public class ImagePickActivity extends BaseActivity {
 
 	}
 
-	protected void showImagePickMenu(View view) {
+	protected void showImagePickMenu(View view, int mode) {
+		cropMode = mode;
 		if (mImageSelectPopupWindow == null) {
 			View detailsView = LayoutInflater.from(this).inflate(R.layout.picker_head_source_layout, null, false);
 
-			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow().getWindowManager().getDefaultDisplay().getWidth(), ((Activity) this).getWindow().getWindowManager().getDefaultDisplay().getHeight());
+			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow().getWindowManager().getDefaultDisplay().getWidth(), ((Activity) this)
+			        .getWindow().getWindowManager().getDefaultDisplay().getHeight());
 
 			mImageSelectPopupWindow.setFocusable(true);
 			mImageSelectPopupWindow.setOutsideTouchable(true);
@@ -158,6 +174,7 @@ public class ImagePickActivity extends BaseActivity {
 	}
 
 	public class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
+
 		private ImageView mImageView;
 
 		public LoadImageTask(ImageView imageView) {
@@ -181,9 +198,11 @@ public class ImagePickActivity extends BaseActivity {
 				nHeight = mImageView.getHeight();
 				nWidth = mImageView.getWidth();
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
-			} catch (OutOfMemoryError e) {
+			}
+			catch (OutOfMemoryError e) {
 				e.printStackTrace();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 			return bitmap;
@@ -201,9 +220,13 @@ public class ImagePickActivity extends BaseActivity {
 		}
 	}
 
-	protected void cutImage(Uri uri) {
+	protected void cutImage(Uri uri, int width, int height) {
 		Intent intent = new Intent(this, ImageCutActivity.class);
+		Bundle bundle = new Bundle();
+		bundle.putInt(WIDTH_KEY, width);
+		bundle.putInt(HEIGHT_KEY, height);
+		intent.putExtras(bundle);
 		intent.setData(uri);
-		startActivityForResult(intent, REQUEST_CODE_CUT_IMAGE);
+		startActivityForResult(intent, CROP_PICTURE);
 	}
 }

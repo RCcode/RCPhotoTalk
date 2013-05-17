@@ -31,7 +31,7 @@ public class UserInfoProvider extends ContentProvider {
 			final UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getContext());
 			if (userInfo != null) {
 				Cursor cursor = new AbstractCursor() {
-					private String[] columnNames = new String[] { Contract.KEY_RCID, Contract.KEY_EMAIL, Contract.KEY_PASSWORD, Contract.KEY_USER_TOKEN,
+					private String[] columnNames = new String[] { Contract.KEY_RCID, Contract.KEY_EMAIL, Contract.KEY_USER_TOKEN,
 							Contract.KEY_NICK, Contract.KEY_HEADURL, Contract.KEY_SEX, Contract.KEY_RECEIVESET, Contract.KEY_BIRTHDAY, Contract.KEY_DEVICE_ID,
 							Contract.KEY_PHONE };
 
@@ -59,9 +59,9 @@ public class UserInfoProvider extends ContentProvider {
 
 					@Override
 					public int getInt(int column) {
-						if (column == 6) {
+						if (column == 5) {
 							return userInfo.getGender();
-						} else if (column == 7) {
+						} else if (column == 6) {
 							return userInfo.getAllowsend();
 						}
 						return -1;
@@ -124,24 +124,21 @@ public class UserInfoProvider extends ContentProvider {
 			result = userInfo.getEmail();
 			break;
 		case 2:
-			result = userInfo.getPassWord();
-			break;
-		case 3:
 			result = userInfo.getToken();
 			break;
-		case 4:
+		case 3:
 			result = userInfo.getNickName();
 			break;
-		case 5:
+		case 4:
 			result = userInfo.getHeadUrl();
 			break;
-		case 8:
+		case 7:
 			result = userInfo.getBirthday();
 			break;
-		case 9:
+		case 8:
 			result = userInfo.getDeviceId();
 			break;
-		case 10:
+		case 9:
 			result = userInfo.getCellPhone();
 			break;
 		}

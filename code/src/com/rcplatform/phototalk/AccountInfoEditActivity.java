@@ -204,7 +204,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			startActivity(new Intent(this, AddFriendActivity.class));
 			break;
 		case R.id.settings_account_head_portrait:
-			showImagePickMenu(v);
+			showImagePickMenu(v,CROP_HEAD_IMAGE);
 			break;
 		case R.id.rela_edit_nick:
 			Intent intentName = new Intent(this, UpdateNameActivity.class);

@@ -1,10 +1,7 @@
 package com.rcplatform.phototalk.adapter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -28,13 +25,9 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.request.JSONConver;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.task.AddFriendTask.AddFriendListener;
 import com.rcplatform.phototalk.utils.AppSelfInfo;

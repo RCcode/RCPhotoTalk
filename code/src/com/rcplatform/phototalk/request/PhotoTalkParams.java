@@ -154,4 +154,9 @@ public class PhotoTalkParams {
 	public static class AddFriendFromInformation {
 		public static final String PARAM_KEY_FRIEND_IDS = "friendIds";
 	}
+	
+	public static class SyncInviteInfo{
+		public static final String PARAM_KEY_TYPE="attrType";
+		public static final String PARAM_KEY_INVITED_IDS="accounts";
+	}
 }

@@ -184,8 +184,10 @@ public class AudioRecordButton extends Button {
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mRecorder.setOutputFile(filePath);
-		mRecorder.setOutputFormat(OutputFormat.RAW_AMR);
-		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+//		mRecorder.setOutputFormat(OutputFormat.RAW_AMR);
+//		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+		mRecorder.setOutputFormat(OutputFormat.DEFAULT);
+		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
 		try {
 			mRecorder.prepare();
 			mRecorder.start();

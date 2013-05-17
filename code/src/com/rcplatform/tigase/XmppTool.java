@@ -49,6 +49,10 @@ public class XmppTool {
 		}
 	}
 
+	public static String getFullUser(String userName) {
+		return userName + "@" + node.getDomain();
+	}
+
 	// 关闭tigase
 	public static void closeConnection() {
 		con.disconnect();

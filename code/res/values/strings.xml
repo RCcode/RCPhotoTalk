@@ -287,4 +287,7 @@
     <string name="join_message">我已加入PhotoTalk：</string>
     <string name="no_net">没有可用网络</string>
 
+    <!-- gcm -->
+    <string name="gcm_message">你有信息了</string>
+    <string name="gcm_friend">有人加你为好友</string>
 </resources>

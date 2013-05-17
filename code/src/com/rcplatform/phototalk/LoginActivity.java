@@ -8,6 +8,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.accounts.Account;
@@ -36,7 +37,9 @@ import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
@@ -100,9 +103,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private UserInfo mUser;
 
 	private void saveUserInfo(UserInfo userInfo) {
-		String psw = mPswEditText.getText().toString();
-		userInfo.setPassWord(MD5.md5Hash(psw));
 		PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
+		getPhotoTalkApplication().setCurrentUser(userInfo);
 	}
 
 	private void closePage(UserInfo userInfo) {
@@ -231,7 +233,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			finish();
 			break;
 		case R.id.iv_registe_head:
-			showImagePickMenu(v);
+			showImagePickMenu(v,CROP_HEAD_IMAGE);
 			break;
 		case R.id.login_page_signup_button:
 			final String email = mLoginIdEditText.getText().toString();
@@ -478,7 +480,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				return;
 			}
 		}
-		saveUserInfo(userInfo);
 		closePage(userInfo);
 	}
 
@@ -490,10 +491,21 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			public void onSuccess(int statusCode, String content) {
 				LogUtil.e(content);
 				try {
-					mUser = buildUserInfo(content);
+					JSONObject jsonObject = new JSONObject(content);
+					mUser = new UserInfo();
 					mUser.setEmail(email);
 					mUser.setNickName(nick);
 					mUser.setShowRecommends(UserInfo.FIRST_TIME);
+					mUser.setToken(jsonObject.getString("token"));
+					mUser.setTigaseId(jsonObject.getString("tgId"));
+					mUser.setTigasePwd(jsonObject.getString("tgpwd"));
+					mUser.setRcId(jsonObject.getString("rcId"));
+					mUser.setDeviceId(PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
+					mUser.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
+					saveUserInfo(mUser);
+					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
+					List<Friend> recommends = JSONConver.jsonToList(arrayRecommends.toString(), Friend.class);
+					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
 					loginSuccess(mUser);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -512,46 +524,18 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_PASSWORD, MD5.encodeMD5String(password));
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_NICK, nick);
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Locale.getDefault().getCountry());
-		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context)+"");
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
 		request.excuteAsync();
 	}
 
-	// private void registeTigase(String tigaseId, String tigasePassword) {
-	// IntentFilter filter = new
-	// IntentFilter(TigaseRegisterSerivce.TIGASE_REGISTER_BROADCAST);
-	// registerReceiver(mTigaseRegisteReciver, filter);
-	// Intent intent = new Intent(LoginActivity.this,
-	// TigaseRegisterSerivce.class);
-	// intent.putExtra(UserMessageService.TIGASE_USER_NAME_KEY, tigaseId);
-	// intent.putExtra(UserMessageService.TIGASE_USER_PASSWORD_KEY,
-	// tigasePassword);
-	// startService(intent);
-	// }
-	//
-	// private BroadcastReceiver mTigaseRegisteReciver = new BroadcastReceiver()
-	// {
-	//
-	// @Override
-	// public void onReceive(Context context, Intent intent) {
-	// boolean isRegisteSuccess =
-	// intent.getBooleanExtra(TigaseRegisterSerivce.TIGASE_REGISTER_RESULT_KEY,
-	// false);
-	// if (isRegisteSuccess)
-	// loginSuccess(mUser);
-	// else
-	// showErrorConfirmDialog(R.string.registe_fail);
-	// dismissLoadingDialog();
-	// unregisterReceiver(this);
-	// }
-	// };
-
 	private void tigaseLogin(Context context, final String account, String password) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request.login(context, new OnUserInfoLoadedListener() {
+		Request.executeLogin(context, new OnUserInfoLoadedListener() {
 
 			@Override
 			public void onSuccess(UserInfo userInfo) {
 				dismissLoadingDialog();
+				saveUserInfo(userInfo);
 				loginSuccess(userInfo);
 			}
 
@@ -560,19 +544,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
-		}, account, password).excuteAsync();
-	}
-
-	private UserInfo buildUserInfo(String content) throws Exception {
-		UserInfo userInfo = new UserInfo();
-		JSONObject jsonObject = new JSONObject(content);
-		userInfo.setToken(jsonObject.getString("token"));
-		userInfo.setTigaseId(jsonObject.getString("tgId"));
-		userInfo.setTigasePwd(jsonObject.getString("tgpwd"));
-		userInfo.setRcId(jsonObject.getString("rcId"));
-		userInfo.setEmail(jsonObject.optString("email", null));
-		userInfo.setNickName(jsonObject.optString("nick", null));
-		return userInfo;
+		}, account, password);
 	}
 
 }

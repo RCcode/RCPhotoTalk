@@ -1,10 +1,8 @@
 package com.rcplatform.phototalk.logic;
 
 import java.util.List;
-import java.util.Map;
 
 import com.rcplatform.phototalk.HomeActivity;
-import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 
 public class InformationPageController {
@@ -49,6 +47,15 @@ public class InformationPageController {
 			mActivity.onPhotoSendFail(flag);
 	}
 
+	public void onPhotoResendSuccess(Information information) {
+		if (mActivity != null)
+			mActivity.onPhotoResendSuccess(information);
+	}
+
+	public void onPhotoResendFail(Information information) {
+		if (mActivity != null)
+			mActivity.onPhotoResendFail(information);
+	}
 
 	public void destroy() {
 		mActivity = null;

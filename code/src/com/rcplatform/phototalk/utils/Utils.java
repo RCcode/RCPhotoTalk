@@ -57,7 +57,7 @@ public class Utils {
 				UserInfo userInfo = getAppLoginUser(context, info.packageName);
 				if (userInfo != null) {
 					AppInfo appInfo = new AppInfo();
-					appInfo.setPackageName(info.packageName);
+					appInfo.setRcPackage(info.packageName);
 					appInfo.setAppName(info.applicationInfo.loadLabel(manager).toString());
 					appUsers.put(appInfo, userInfo);
 				}
@@ -83,7 +83,6 @@ public class Utils {
 			userInfo.setEmail(cursor.getString(cursor.getColumnIndex(Contract.KEY_EMAIL)));
 			userInfo.setDeviceId(cursor.getString(cursor.getColumnIndex(Contract.KEY_DEVICE_ID)));
 			userInfo.setHeadUrl(cursor.getString(cursor.getColumnIndex(Contract.KEY_HEADURL)));
-			userInfo.setPassWord(cursor.getString(cursor.getColumnIndex(Contract.KEY_PASSWORD)));
 			userInfo.setNickName(cursor.getString(cursor.getColumnIndex(Contract.KEY_NICK)));
 			userInfo.setCellPhone(cursor.getString(cursor.getColumnIndex(Contract.KEY_PHONE)));
 			userInfo.setGender(cursor.getInt(cursor.getColumnIndex(Contract.KEY_SEX)));
@@ -579,4 +578,24 @@ public class Utils {
 
 	}
 
+	public static void createNewFile(String path) {
+		File file = new File(path);
+		if (!file.exists()) {
+			if (!file.getParentFile().exists())
+				file.getParentFile().mkdirs();
+			else {
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	public static void createNewDir(String path) {
+		File file = new File(path);
+		if (!file.exists())
+			file.mkdirs();
+	}
 }

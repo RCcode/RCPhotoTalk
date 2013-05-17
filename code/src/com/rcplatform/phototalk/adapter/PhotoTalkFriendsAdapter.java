@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.adapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -43,8 +44,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public static final int TYPE_CHILD_FACEBOOK = 2;
 	public static final int TYPE_CHILD_FRIEND_ADDED = 3;
 
-	private Map<Integer, List<Friend>> mFriends;
-	private List<Integer> mTitles;
+	private Map<Integer, List<Friend>> mFriends = new HashMap<Integer, List<Friend>>();
+	private List<Integer> mTitles = new ArrayList<Integer>();
 	private LayoutInflater mInflater;
 
 	private ImageLoader mImageLoader;
@@ -66,7 +67,6 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 
 			@Override
 			public void onViewClick(View v) {
-				// TODO Auto-generated method stub
 				Friend friend = (Friend) v.getTag();
 				if (mOnFriendAddListener != null) {
 					mOnFriendAddListener.addFriend(friend, null);
@@ -77,8 +77,14 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	}
 
 	private void initData(Map<Integer, List<Friend>> friends) {
-		this.mFriends = friends;
-		mTitles = new ArrayList<Integer>(mFriends.keySet());
+		this.mFriends.clear();
+		this.mTitles.clear();
+		for (Integer cate : friends.keySet()) {
+			mTitles.add(cate);
+			List<Friend> list = new ArrayList<Friend>();
+			list.addAll(friends.get(cate));
+			mFriends.put(cate, list);
+		}
 		if (mTitles.contains(Integer.valueOf(TYPE_FRIEND_ADDED))) {
 			List<Friend> addedFriends = mFriends.get(Integer.valueOf(TYPE_FRIEND_ADDED));
 			mLetters = new String[addedFriends.size()];

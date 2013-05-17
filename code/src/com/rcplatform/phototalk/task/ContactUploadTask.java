@@ -2,10 +2,8 @@ package com.rcplatform.phototalk.task;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Comparator;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -20,6 +18,7 @@ import android.os.Handler;
 
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Contacts;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
@@ -67,14 +66,14 @@ public class ContactUploadTask {
 		mUploadTask = new UploadThread();
 	};
 
-	public static ContactUploadTask getInstance(Context context) {
+	public synchronized static ContactUploadTask getInstance(Context context) {
 		if (mTask == null) {
 			mTask = new ContactUploadTask(context);
 		}
 		return mTask;
 	}
 
-	public static ContactUploadTask createNewTask(Context context) {
+	public synchronized static ContactUploadTask createNewTask(Context context) {
 		mTask = new ContactUploadTask(context);
 		return mTask;
 	}
@@ -82,51 +81,56 @@ public class ContactUploadTask {
 	private class UploadThread extends Thread {
 		@Override
 		public void run() {
-			LogUtil.e("start ----------- upload --------------- contacts");
-			List<Contacts> allContacts = ContactUtil.getContacts(mContext);
-
-			if (allContacts.size() > 0) {
-				Set<Contacts> contacts = new TreeSet<Contacts>(new Comparator<Contacts>() {
-
-					@Override
-					public int compare(Contacts lhs, Contacts rhs) {
-						if (lhs.getMobilePhoneNumber().equals(rhs.getMobilePhoneNumber()))
-							return 0;
-						return 1;
-					}
-				});
-				contacts.addAll(allContacts);
-				String entity = getEntity(contacts);
-				while (mCurrentTime <= MAX_RETRY_TIME) {
-					mCurrentTime++;
-					try {
-						HttpClient client = new DefaultHttpClient();
-						HttpPost post = new HttpPost(MenueApiUrl.SYNC_CONTACT_URL);
-						post.setEntity(new StringEntity(entity, "UTF-8"));
-						HttpResponse response = client.execute(post);
-						if (response.getStatusLine().getStatusCode() == 200) {
-							String result = readStream(response.getEntity().getContent());
-							if (result != null) {
-								if (RCPlatformResponse.ResponseStatus.isRequestSuccess(result)) {
-									mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_SUCCESS);
-									return;
-								}
-							}
-						}
-					} catch (Exception e) {
-						e.printStackTrace();
+			boolean hasUpdate = false;
+			List<Contacts> contacts = ContactUtil.getContacts(mContext);
+			if (!PrefsUtils.LoginState.hasAppUsed(mContext)) {
+				PrefsUtils.LoginState.setAppUsed(mContext);
+				hasUpdate = true;
+			} else {
+				List<Contacts> contactsLocal = PhotoTalkDatabaseFactory.getContactDatabase().getContacts();
+				for (Contacts contact : contacts) {
+					if (!contactsLocal.contains(contact)) {
+						hasUpdate = true;
+						break;
 					}
 				}
-				mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_FAIL);
+			}
+
+			if (hasUpdate) {
+				PhotoTalkDatabaseFactory.getContactDatabase().saveContacts(contacts);
+				if (contacts.size() > 0) {
+					String entity = getEntity(contacts);
+					while (mCurrentTime <= MAX_RETRY_TIME) {
+						mCurrentTime++;
+						try {
+							HttpClient client = new DefaultHttpClient();
+							HttpPost post = new HttpPost(MenueApiUrl.SYNC_CONTACT_URL);
+							post.setEntity(new StringEntity(entity, "UTF-8"));
+							HttpResponse response = client.execute(post);
+							if (response.getStatusLine().getStatusCode() == 200) {
+								String result = readStream(response.getEntity().getContent());
+								if (result != null) {
+									if (RCPlatformResponse.ResponseStatus.isRequestSuccess(result)) {
+										mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_SUCCESS);
+										return;
+									}
+								}
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_FAIL);
+				} else {
+					mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_SUCCESS);
+				}
 			} else {
 				mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_SUCCESS);
 			}
-
 		}
 	}
 
-	private String getEntity(Set<Contacts> contacts) {
-		// {"token":"000000","contactList":[{"friendPhone":"0","friendName":"0"},{"friendPhone":"1","friendName":"1"}],"language":"zh_CN","deviceId":"123456"}
+	private String getEntity(Collection<Contacts> contacts) {
 		try {
 			JSONObject entity = new JSONObject();
 			entity.put(PhotoTalkParams.PARAM_KEY_TOKEN, PhotoTalkParams.PARAM_VALUE_TOKEN_DEFAULT);

@@ -27,7 +27,6 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.ContactUploadTask;
 import com.rcplatform.phototalk.task.ContactUploadTask.Status;
@@ -41,6 +40,8 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class PTBackgroundService extends Service {
+
+
 	private static final long BIND_STATE_CHECK_DELAY_TIME = 30 * 1000;
 	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 30;
 	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 2;
@@ -117,7 +118,6 @@ public class PTBackgroundService extends Service {
 		super.onCreate();
 		((MenueApplication) getApplication()).setService(this);
 		registeNetConnectionReceiver();
-		// Intent.ACTION_TIME_TICK;
 	}
 
 	private void checkPhoneBindState() {
@@ -146,9 +146,9 @@ public class PTBackgroundService extends Service {
 	}
 
 	@Override
-	public void onStart(Intent intent, int startId) {
-		super.onStart(intent, startId);
-		startUploadContact();
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		uploadContact();
+		return super.onStartCommand(intent, flags, startId);
 	}
 
 	private void registeNetConnectionReceiver() {
@@ -157,18 +157,13 @@ public class PTBackgroundService extends Service {
 		registerReceiver(mConnectivityReceiver, filter);
 	}
 
-	private void startUploadContact() {
-		if (!PrefsUtils.LoginState.hasAppUsed(getApplicationContext())) {
-			PrefsUtils.LoginState.setAppUsed(getApplicationContext());
-			ContactUploadTask task = ContactUploadTask.getInstance(getApplicationContext());
-			if (task.getStatus() == Status.STATUS_FINISH) {
-				task = ContactUploadTask.createNewTask(getApplicationContext());
-				task.startUpload();
-			} else if (task.getStatus() == Status.STATUS_PENDING) {
-				task.startUpload();
-			}
-		} else {
-			// TODO 定时上传
+	private void uploadContact() {
+		ContactUploadTask task = ContactUploadTask.getInstance(getApplicationContext());
+		if (task.getStatus() == Status.STATUS_FINISH) {
+			task = ContactUploadTask.createNewTask(getApplicationContext());
+			task.startUpload();
+		} else if (task.getStatus() == Status.STATUS_PENDING) {
+			task.startUpload();
 		}
 	}
 

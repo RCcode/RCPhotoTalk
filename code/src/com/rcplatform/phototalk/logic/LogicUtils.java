@@ -2,19 +2,14 @@ package com.rcplatform.phototalk.logic;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.provider.ContactsContract.CommonDataKinds.Photo;
 
 import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.MenueApplication;
@@ -29,7 +24,6 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Contract;
@@ -71,7 +65,7 @@ public class LogicUtils {
 			// 如果是通知
 			if (localData != null && localData.contains(serviceInfo)) {
 				Information localInfo = localData.get(localData.indexOf(serviceInfo));
-				if (serviceInfo.getStatu() == localInfo.getStatu()) {
+				if (serviceInfo.getType() == localInfo.getType() && serviceInfo.getStatu() == localInfo.getStatu()) {
 					// 状态没有改变
 					iterator.remove();
 				} else {
@@ -125,7 +119,7 @@ public class LogicUtils {
 	public static void informationFriendAdded(Context context, Information information, Friend friend) {
 		if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
-			MessageSender.sendInformation(context, friend.getTigaseId(), information);
+			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
 		}
 	}
 
@@ -151,7 +145,7 @@ public class LogicUtils {
 			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infos);
 		}
 		if (information != null) {
-			MessageSender.sendInformation(context, friend.getTigaseId(), information);
+			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
 			InformationPageController.getInstance().friendAdded(information, addType);
 		}
 	}
@@ -211,8 +205,8 @@ public class LogicUtils {
 		long flag = System.currentTimeMillis();
 		try {
 			UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
-			String userArray = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file);
-			Request request = Request.sendPhoto(context, flag, file, timeLimit, userArray, new PhotoSendListener() {
+			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file);
+			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
 				public void onSendSuccess(long flag) {
@@ -224,35 +218,19 @@ public class LogicUtils {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
 				}
 
-			});
-			request.excuteAsync();
+			}, friendIds);
 		} catch (Exception e) {
 			e.printStackTrace();
 			InformationPageController.getInstance().onPhotoSendFail(flag);
 		}
 	}
 
-	private static Map<String, String> buildUserIds(JSONArray array) throws JSONException {
-		Map<String, String> ids = new HashMap<String, String>();
-		if (array.length() > 0) {
-			for (int i = 0; i < array.length(); i++) {
-				JSONObject jsonObject = array.getJSONObject(i);
-				String suid = jsonObject.getString("suid");
-				String tigaseId = jsonObject.getString("tigaseId");
-				ids.put(suid, tigaseId);
-			}
-		}
-		return ids;
-	}
-
-	private static String buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file) throws JSONException {
-		JSONArray array = new JSONArray();
+	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file)
+			throws JSONException {
+		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
-
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put(PhotoTalkParams.SendPhoto.PARAM_KEY_RECEIVER_ID, f.getRcId());
-			array.put(jsonObject);
+			friendIds.add(f.getRcId());
 			if (f.getRcId().equals(currentUser.getRcId()))
 				continue;
 			Information record = new Information();
@@ -282,7 +260,7 @@ public class LogicUtils {
 		}
 		PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infoRecords);
 		InformationPageController.getInstance().sendPhotos(infoRecords);
-		return array.toString();
+		return friendIds;
 	}
 
 }

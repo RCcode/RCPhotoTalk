@@ -7,7 +7,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
@@ -136,16 +135,16 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			break;
 		case R.id.user_bg:
 			// 点击更改背景图片
-			CAMERA_CODE = 1;
-			showImagePickMenu(user_bg_View);
+			CAMERA_CODE = CROP_BACKGROUND_IMAGE;
+			showImagePickMenu(user_bg_View,CROP_BACKGROUND_IMAGE);
 			break;
 		case R.id.settings_user_edit_rc_id_action:
 			startActivity(SystemSettingActivity.class);
 			break;
 		case R.id.settings_account_head_portrait:
 			//更改个人头像设置
-			CAMERA_CODE = 2;
-			showImagePickMenu(mHeadView);
+			CAMERA_CODE = CROP_HEAD_IMAGE;
+			showImagePickMenu(mHeadView,CROP_HEAD_IMAGE);
 			break;
 		case R.id.rela_about:
 			startActivity(AboutActivity.class);
@@ -160,16 +159,18 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		switch (CAMERA_CODE) {
 		case 1:
 			// 背景上传 
-			new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
+			//new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
 			break;
 
 		case 2:
-			new LoadHeadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
+			//new LoadHeadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
 			break;
 		}
 		
 
 	}
+	
+	/*
 
 	class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
 
@@ -213,7 +214,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			postImage(url);
 		}
 	}
-
+*/
 	private Bitmap getBitmap(String url) {
 		Bitmap bitmap = null;
 		try {
@@ -308,6 +309,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 					});
 		}
 	
+	/*
 	class LoadHeadImageTask extends AsyncTask<Uri, Void, Bitmap> {
 
 		@Override
@@ -356,7 +358,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			}
 		}
 	}
-
+*/
 	private String cacheHeadImage(Bitmap bitmap) throws Exception {
 		String cachePath =null;
 		File file = new File(app.getBackgroundCachePath(), Contract.HEAD_CACHE_PATH);
@@ -367,6 +369,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		fos.flush();
 		fos.close();
 		return cachePath;
+	}
+	
+	private void getUserInfo(){
 		
 	}
 }
