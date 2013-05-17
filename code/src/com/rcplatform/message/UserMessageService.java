@@ -8,7 +8,6 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,6 +22,7 @@ import org.json.JSONObject;
 
 import com.google.android.gcm.MetaHelper;
 import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.tigase.TigaseNode;
 import com.rcplatform.tigase.TigaseNodeUtil;
 import com.rcplatform.tigase.XmppTool;
@@ -71,6 +71,8 @@ public class UserMessageService extends Service {
 	public static final String MESSAGE_ACTION_FRIEND = "2";
 
 	public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
+	
+
 
 	public static final String MESSAGE_RCID_KEY = "rcid";
 
@@ -109,7 +111,8 @@ public class UserMessageService extends Service {
 
 						try {
 							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
-						} catch (XMPPException e) {
+						}
+						catch (XMPPException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -145,12 +148,22 @@ public class UserMessageService extends Service {
 
 			XmppTool.sendMessage(toUser, MESSAGE_TYPE_MESSAGE + MESSAGE_SPLIT + action + MESSAGE_SPLIT + msg);
 
-			String timerKey = XmppTool.getFullUser(toUser) + action;
-
-			Timer timer = new Timer();
-			GcmTask gcmTask = new GcmTask(context, action, toRcId);
-			timer.schedule(gcmTask, 30000);
-			gcmTimers.put(timerKey, timer);
+			//需要 gcm 推送的消息
+			if (action.equals(MESSAGE_ACTION_FRIEND) || action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
+				String timerKey = XmppTool.getFullUser(toUser) + action;
+				Timer timer = new Timer();
+				String type = "";
+				
+				if(action.equals(MESSAGE_ACTION_SEND_MESSAGE)){
+					type = Contract.GCM_TYPE_MSG;
+				}else if(action.equals(MESSAGE_ACTION_FRIEND)){
+					type = Contract.GCM_TYPE_FRIEND;
+				}
+				
+				GcmTask gcmTask = new GcmTask(context, type, toRcId);
+				timer.schedule(gcmTask, 10000);
+				gcmTimers.put(timerKey, timer);
+			}
 
 		}
 	};
@@ -191,12 +204,12 @@ public class UserMessageService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 
-			case MSG_WHAT_XMPP_CONNECT_SUCCESS:
-				IntentFilter intentFilter = new IntentFilter();
-				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
-				registerReceiver(sendBroadcastReceiver, intentFilter);
-				hasRegisteSendReceiver = true;
-				break;
+				case MSG_WHAT_XMPP_CONNECT_SUCCESS:
+					IntentFilter intentFilter = new IntentFilter();
+					intentFilter.addAction(MESSAGE_SEND_BROADCAST);
+					registerReceiver(sendBroadcastReceiver, intentFilter);
+					hasRegisteSendReceiver = true;
+					break;
 			}
 		};
 	};
@@ -219,13 +232,13 @@ public class UserMessageService extends Service {
 
 		private Context ctx;
 
-		private String action;
+		private String type;
 
 		private String toRcId;
 
-		GcmTask(Context ctx, String action, String toRcId) {
+		GcmTask(Context ctx, String type, String toRcId) {
 			this.ctx = ctx;
-			this.action = action;
+			this.type = type;
 			this.toRcId = toRcId;
 		}
 
@@ -236,8 +249,9 @@ public class UserMessageService extends Service {
 
 			JSONObject json = new JSONObject();
 			try {
-				json.put("appId", "1");
-				json.put("type", action);
+				// TODO
+				json.put("appId", Contract.APP_ID);
+				json.put("type", type);
 				// TODO 设置真是token
 				MenueApplication app = (MenueApplication) ctx.getApplicationContext();
 
@@ -256,7 +270,8 @@ public class UserMessageService extends Service {
 				 * json.put("timeZone", MetaHelper.getTimeZone(context));
 				 * json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
 				 */
-			} catch (JSONException e1) {
+			}
+			catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -287,20 +302,25 @@ public class UserMessageService extends Service {
 				}
 				reader.close();
 				content = builder.toString();
-			} catch (ConnectException e) {
+			}
+			catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			} finally {
+			}
+			finally {
 				try {
 					output.close();
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 				}
 				try {
 					is.close();
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 				}
 				if (conn != null)
 					conn.disconnect();
