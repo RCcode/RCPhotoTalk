@@ -9,6 +9,7 @@ import android.content.Intent;
 import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.request.JSONConver;
@@ -22,10 +23,14 @@ public class MessageSender {
 		intent.putExtra(UserMessageService.MESSAGE_TO_USER, tigaseId);
 		intent.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, message);
 		intent.putExtra(UserMessageService.MESSAGE_RCID_KEY, rcId);
-		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE)
+		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_FRIEND);
-		else if (informations[0].getType() == InformationType.TYPE_PICTURE_OR_VIDEO)
-			intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_MSG);
+		} else if (informations[0].getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
+			if (informations[0].getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD)
+				intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_SEND_MESSAGE);
+			else
+				intent.putExtra(UserMessageService.MESSAGE_ACTION_KEY, UserMessageService.MESSAGE_ACTION_MSG);
+		}
 		context.sendBroadcast(intent);
 	}
 

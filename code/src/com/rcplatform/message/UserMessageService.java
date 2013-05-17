@@ -70,8 +70,10 @@ public class UserMessageService extends Service {
 
 	public static final String MESSAGE_ACTION_FRIEND = "2";
 
+	public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
+
 	public static final String MESSAGE_RCID_KEY = "rcid";
-	
+
 	private static final String GCM_URL = "http://192.168.0.56:8080/phototalk/user/pushOfflineMsg.do";
 
 	private Context ctx;
@@ -106,19 +108,18 @@ public class UserMessageService extends Service {
 						ctx.sendBroadcast(intent);
 
 						try {
-							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action+MESSAGE_SPLIT);
-						}
-						catch (XMPPException e) {
+							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
+						} catch (XMPPException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					} else if (msgType.equals(MESSAGE_TYPE_RECEIPT)) {
 						// TODO 取消gcm 发送
-						
-						String formUser= message.getFrom();
+
+						String formUser = message.getFrom();
 						int end = formUser.indexOf("/");
 						formUser = formUser.substring(0, end);
-						String cancelKey =  formUser + action;
+						String cancelKey = formUser + action;
 						Timer cancelTimer = gcmTimers.get(cancelKey);
 						if (null != cancelTimer) {
 							cancelTimer.cancel();
@@ -143,11 +144,11 @@ public class UserMessageService extends Service {
 			String toRcId = extras.getString(MESSAGE_RCID_KEY);
 
 			XmppTool.sendMessage(toUser, MESSAGE_TYPE_MESSAGE + MESSAGE_SPLIT + action + MESSAGE_SPLIT + msg);
-			
-			String timerKey = XmppTool.getFullUser(toUser)+action;
-			
+
+			String timerKey = XmppTool.getFullUser(toUser) + action;
+
 			Timer timer = new Timer();
-			GcmTask gcmTask = new GcmTask(context,action,toRcId);
+			GcmTask gcmTask = new GcmTask(context, action, toRcId);
 			timer.schedule(gcmTask, 30000);
 			gcmTimers.put(timerKey, timer);
 
@@ -190,12 +191,12 @@ public class UserMessageService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 
-				case MSG_WHAT_XMPP_CONNECT_SUCCESS:
-					IntentFilter intentFilter = new IntentFilter();
-					intentFilter.addAction(MESSAGE_SEND_BROADCAST);
-					registerReceiver(sendBroadcastReceiver, intentFilter);
-					hasRegisteSendReceiver = true;
-					break;
+			case MSG_WHAT_XMPP_CONNECT_SUCCESS:
+				IntentFilter intentFilter = new IntentFilter();
+				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
+				registerReceiver(sendBroadcastReceiver, intentFilter);
+				hasRegisteSendReceiver = true;
+				break;
 			}
 		};
 	};
@@ -225,38 +226,37 @@ public class UserMessageService extends Service {
 		GcmTask(Context ctx, String action, String toRcId) {
 			this.ctx = ctx;
 			this.action = action;
-			this.toRcId =toRcId;
+			this.toRcId = toRcId;
 		}
 
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
 			Log.d("GcmTask", "push to service");
-			
+
 			JSONObject json = new JSONObject();
 			try {
 				json.put("appId", "1");
 				json.put("type", action);
-				//TODO 设置真是token
-				MenueApplication app = (MenueApplication)ctx.getApplicationContext();
-				
+				// TODO 设置真是token
+				MenueApplication app = (MenueApplication) ctx.getApplicationContext();
+
 				json.put("token", app.getCurrentUser().getToken());
 				json.put("fRcId", toRcId);
 				json.put("deviceId", MetaHelper.getMACAddress(ctx));
 				json.put("rcId", app.getCurrentUser().getRcId());
 				json.put("language", "");
 				/*
-				json.put("packageName", MetaHelper.getAppName(context));
-				json.put("status", STATUS_CREATE_USERINFO);
-				json.put("deviceID", MetaHelper.getImsi(context));
-				json.put("clientMac", MetaHelper.getMACAddress(context));
-				json.put("osVersion", MetaHelper.getOsVersion(context));
-				json.put("language", MetaHelper.getLanguage(context));
-				json.put("timeZone", MetaHelper.getTimeZone(context));
-				json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
-				*/
-			}
-			catch (JSONException e1) {
+				 * json.put("packageName", MetaHelper.getAppName(context));
+				 * json.put("status", STATUS_CREATE_USERINFO);
+				 * json.put("deviceID", MetaHelper.getImsi(context));
+				 * json.put("clientMac", MetaHelper.getMACAddress(context));
+				 * json.put("osVersion", MetaHelper.getOsVersion(context));
+				 * json.put("language", MetaHelper.getLanguage(context));
+				 * json.put("timeZone", MetaHelper.getTimeZone(context));
+				 * json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
+				 */
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -287,31 +287,25 @@ public class UserMessageService extends Service {
 				}
 				reader.close();
 				content = builder.toString();
-			}
-			catch (ConnectException e) {
+			} catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
 					output.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				try {
 					is.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				if (conn != null)
 					conn.disconnect();
 
 			}
-
 
 		}
 	}
