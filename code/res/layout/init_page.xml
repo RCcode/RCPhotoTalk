@@ -1,39 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.rcplatform.phototalk"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" xmlns:app="http://schemas.android.com/apk/res/com.rcplatform.phototalk">
+    android:layout_height="fill_parent" >
 
     <!-- android:background="@drawable/login_background_login" -->
 
-    <android.support.v4.view.ViewPager
+    <ViewFlipper
         android:id="@+id/intro_pager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/loading720_1280" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/login_background" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/base_top_navigate_background" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/login_background" />
+    </ViewFlipper>
+
     <com.rcplatform.phototalk.views.PageIndicator
         android:id="@+id/page_indicator_other"
         style="@style/pageIndicator"
-        android:layout_above="@+id/btns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:dotSpacing="5dp"
-        android:layout_centerHorizontal="true" 
-        android:layout_marginBottom="@dimen/init_indicator_bottom"/>
+        android:layout_above="@+id/btns"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/init_indicator_bottom"
+        app:dotSpacing="5dp" />
+
     <LinearLayout
         android:id="@+id/btns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/init_btn_bottom" >
+        android:layout_marginBottom="@dimen/init_btn_bottom"
+        android:orientation="horizontal" >
 
-      <!--   <ImageView
+        <!--
+             <ImageView
             android:id="@id/init_page_ghost"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_launcher"
-            android:visibility="gone" /> -->
+            android:visibility="gone" />
+        -->
 
         <Button
             android:id="@id/init_page_login_button"

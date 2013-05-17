@@ -12,8 +12,8 @@
     <string name="front_camera">前置摄像头</string>
     <string name="background_camera">后置摄像头</string>
     <!-- added jelly.xiong -->
-    <string name="init_page_login">使用RC账户登录</string>
-    <string name="init_page_signup">注册新账户</string>
+    <string name="init_page_login">RC账户登录</string>
+    <string name="init_page_signup">注册RC账户</string>
     <string name="landing_page_login">登录</string>
     <string name="landing_page_signup">注册</string>
     <string name="registe_email_hint">邮箱地址</string>
