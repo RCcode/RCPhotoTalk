@@ -654,19 +654,19 @@ public class EditPictureActivity extends BaseActivity {
 
 	public void send() {
 		String tempPath = null;
-		File file = new File(app.getSendFileCachePath() + ".zip");
+		
 		try {
-			if (file.exists()) {
-				file.delete();
-			}
-			ZipUtil.ZipFolder(app.getSendFileCachePath(), app.getSendFileCachePath() + ".zip");
-			tempPath = app.getSendFileCachePath() + ".zip";
+			ZipUtil.ZipFolder(app.getSendFileCachePath(), app.getSendZipFileCachePath() +"/"+System.currentTimeMillis()+ ".zip");
+			tempPath = app.getSendZipFileCachePath() +"/"+System.currentTimeMillis()+ ".zip";
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 		String timelimit = (String) mButtonTimeLimit.getText();
-		sendPicture("", tempPath, timelimit, friend);
+		File file = new File(tempFilePath);
+		if (file.exists()) {
+			sendPicture("", tempPath, timelimit, friend);
+		}
 	}
 
 	private void sendPicture(final String desc, String imagePath, final String timeLimit, Friend friend) {

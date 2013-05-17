@@ -11,6 +11,7 @@
 package com.google.android.gcm;
 
 import com.google.android.gcm.GCMRegistrar;
+import com.rcplatform.phototalk.utils.Contract;
 
 import android.content.Context;
 import android.content.Intent;
@@ -48,9 +49,7 @@ public final class ServerUtilities {
 	public final static String STATUS_RECIVIE_MSG_INSTALLED = "1001";
 
 	public final static String STATUS_RECIVIE_MSG_NEW_APP = "1002";
-
-	private final static String APP_ID = "1";
-
+	
 	private static AsyncTask<Void, Void, Void> mRegisterTask;
 
 	private static AsyncTask<Void, Void, Void> mreceivePushStatusTask;
@@ -135,7 +134,7 @@ public final class ServerUtilities {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("pushID", pushId);
-			json.put("appID", APP_ID);
+			json.put("appID", Contract.APP_ID);
 			json.put("packageName", MetaHelper.getAppName(context));
 			json.put("status", pushFlag);
 			json.put("deviceID", MetaHelper.getImsi(context));
@@ -208,7 +207,7 @@ public final class ServerUtilities {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("userKey", regId);
-			json.put("appId", APP_ID);
+			json.put("appId",Contract.APP_ID);
 			json.put("rcId", rcId);
 			//TODO 设置真是token
 			json.put("token", USER_TOKEN);
