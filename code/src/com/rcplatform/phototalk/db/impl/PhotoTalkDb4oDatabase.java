@@ -289,7 +289,14 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		Information infoExample = new Information();
 		infoExample.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
 		infoExample.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
-		ObjectSet<Information> result = db.queryByExample(infoExample);
+		ObjectSet<Information> result = db.query(new Predicate<Information>() {
+
+			@Override
+			public boolean match(Information arg0) {
+				return arg0.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& InformationState.PhotoInformationState.STATU_NOTICE_SENDING == arg0.getStatu();
+			}
+		});
 		while (result.hasNext()) {
 			Information info = result.next();
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
