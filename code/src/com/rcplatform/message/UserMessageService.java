@@ -71,8 +71,6 @@ public class UserMessageService extends Service {
 	public static final String MESSAGE_ACTION_FRIEND = "2";
 
 	public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
-	
-
 
 	public static final String MESSAGE_RCID_KEY = "rcid";
 
@@ -116,6 +114,11 @@ public class UserMessageService extends Service {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						if (action.equals(MESSAGE_ACTION_FRIEND) || action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
+							Vibrator vib = (Vibrator) ctx.getSystemService(Service.VIBRATOR_SERVICE);
+							vib.vibrate(200);
+						}
+
 					} else if (msgType.equals(MESSAGE_TYPE_RECEIPT)) {
 						// TODO 取消gcm 发送
 
@@ -148,18 +151,18 @@ public class UserMessageService extends Service {
 
 			XmppTool.sendMessage(toUser, MESSAGE_TYPE_MESSAGE + MESSAGE_SPLIT + action + MESSAGE_SPLIT + msg);
 
-			//需要 gcm 推送的消息
+			// 需要 gcm 推送的消息
 			if (action.equals(MESSAGE_ACTION_FRIEND) || action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
 				String timerKey = XmppTool.getFullUser(toUser) + action;
 				Timer timer = new Timer();
 				String type = "";
-				
-				if(action.equals(MESSAGE_ACTION_SEND_MESSAGE)){
+
+				if (action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
 					type = Contract.GCM_TYPE_MSG;
-				}else if(action.equals(MESSAGE_ACTION_FRIEND)){
+				} else if (action.equals(MESSAGE_ACTION_FRIEND)) {
 					type = Contract.GCM_TYPE_FRIEND;
 				}
-				
+
 				GcmTask gcmTask = new GcmTask(context, type, toRcId);
 				timer.schedule(gcmTask, 10000);
 				gcmTimers.put(timerKey, timer);

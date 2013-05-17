@@ -30,7 +30,7 @@ public class XmppTool {
 			con.connect();
 
 		}
-		catch (XMPPException xe) {
+		catch (Exception xe) {
 			xe.printStackTrace();
 			con = null;
 		}
@@ -67,7 +67,7 @@ public class XmppTool {
 			con.getAccountManager().createAccount(user, password);
 			flag = true;
 		}
-		catch (XMPPException e) {
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
@@ -83,7 +83,7 @@ public class XmppTool {
 			con.login(user, password, XMPP_RESOURCES);
 			flag = true;
 		}
-		catch (XMPPException e) {
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
@@ -124,7 +124,7 @@ public class XmppTool {
 			newchat.sendMessage(msg);
 			msgFlag = MessageStatus.SEND_OK;
 		}
-		catch (XMPPException e) {
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			msgFlag = MessageStatus.SEND_ERROR;
