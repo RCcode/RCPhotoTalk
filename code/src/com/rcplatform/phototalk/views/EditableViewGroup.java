@@ -82,7 +82,7 @@ public class EditableViewGroup extends ViewGroup {
 		editTextView.layout(0, specSize_Heigth / 2,
 				editTextView.getMeasuredWidth(), specSize_Heigth / 2
 						+ editTextView.getMeasuredHeight());
-		editTextView.setFocusable(true);
+//		editTextView.setFocusable(true);
 		showInputMethod(((Activity) getContext()));
 	}
 
