@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.activity;
 
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Dialog;
@@ -13,9 +14,9 @@ import android.os.Message;
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
-import com.facebook.Request.Callback;
 import com.facebook.Request.GraphUserCallback;
 import com.facebook.Request.GraphUserListCallback;
+import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -30,6 +31,8 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
 public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
+	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
+
 	private static final int MSG_DEAUTHORIZE_SUCCESS = 100;
 	private static final int MSG_DEAUTHORIZE_ERROR = 101;
 	private static final int MSG_NET_ERROR = 102;
@@ -65,6 +68,7 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 			break;
 		case GET_INFO:
 			getFacebookInfos();
+			sendJoinMessage();
 			break;
 		case SEND_JOIN_MESSAGE:
 			sendJoinMessageOnFacebook();
@@ -106,7 +110,7 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 				mAction = PendingAction.GET_INFO;
 			Session session = Session.getActiveSession();
 			if (session != null && (!session.isOpened() && !session.isClosed())) {
-				session.openForRead(new Session.OpenRequest(this).setPermissions(null).setCallback(mCallback));
+				session.openForRead(new Session.OpenRequest(this).setPermissions(PERMISSIONS).setCallback(mCallback));
 			} else {
 				Session.openActiveSession(this, true, mCallback);
 			}
@@ -129,12 +133,7 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 		}
 		if (session.isOpened()) {
 			if (mAction != PendingAction.NONE) {
-				if (mAction == PendingAction.GET_INFO) {
-					sendJoinMessage();
-					mAction = PendingAction.GET_INFO;
-					performAction();
-				} else
-					performAction();
+				performAction();
 			}
 		}
 	}
@@ -288,12 +287,28 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	}
 
 	private void sendJoinMessageOnFacebook() {
-		Request.executeStatusUpdateRequestAsync(Session.getActiveSession(), getString(R.string.join_message), new Callback() {
+		Session session = Session.getActiveSession();
+		List<String> permissions = session.getPermissions();
+		if (!permissions.containsAll(PERMISSIONS)) {
+			mAction = PendingAction.SEND_JOIN_MESSAGE;
+			Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, PERMISSIONS);
+			session.requestNewPublishPermissions(newPermissionsRequest);
+			return;
+		}
 
-			@Override
+		Bundle postParams = new Bundle();
+		postParams.putString("name", "Facebook SDK for Android");
+		postParams.putString("caption", "Build great social apps and get more installs.");
+		postParams.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
+		postParams.putString("link", "https://developers.facebook.com/android");
+		postParams.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+		Request.Callback callback = new Request.Callback() {
 			public void onCompleted(Response response) {
 			}
-		});
+		};
+		Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
+		RequestAsyncTask task = new RequestAsyncTask(request);
+		task.execute();
 	}
 
 	private void sendJoinMessage() {

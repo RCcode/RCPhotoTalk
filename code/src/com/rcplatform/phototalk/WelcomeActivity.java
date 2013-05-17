@@ -101,12 +101,7 @@ public class WelcomeActivity extends BaseActivity {
 			catch (Exception e) {
 
 			}
-
 			getPhotoTalkApplication().setCurrentUser(userInfo);
-			if (!Contract.START_COMPLETE) {
-				PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
-				Contract.START_COMPLETE = true;
-			}
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
 			startActivity(intent);
 			finish();

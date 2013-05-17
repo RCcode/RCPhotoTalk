@@ -40,14 +40,14 @@ public class Contract {
 		Database.USERS_DATABASE_PATH = Database.BASE_DATABASE_PATH + "/users";
 		Utils.createNewDir(Database.USERS_DATABASE_PATH);
 		Database.REQUEST_DATABASE_PATH = Database.BASE_DATABASE_PATH;
-		Database.CONTACT_DATABASE_PATH = Database.BASE_DATABASE_PATH;
+		Database.GLOBAL_DATABASE_PATH = Database.BASE_DATABASE_PATH;
 	}
 
 	public static class Database {
 		public static String BASE_DATABASE_PATH;
 		public static String USERS_DATABASE_PATH;
 		public static String REQUEST_DATABASE_PATH;
-		public static String CONTACT_DATABASE_PATH;
+		public static String GLOBAL_DATABASE_PATH;
 	}
 
 	public static class Action {

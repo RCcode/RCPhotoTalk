@@ -1,7 +1,7 @@
 package com.rcplatform.phototalk.db;
 
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.db.impl.PhotoTalkDb4oContactDatabase;
+import com.rcplatform.phototalk.db.impl.PhotoTalkDb4oGlobalDatabase;
 import com.rcplatform.phototalk.db.impl.PhotoTalkDb4oDatabase;
 import com.rcplatform.phototalk.db.impl.RequestDb4oDatabase;
 
@@ -22,8 +22,8 @@ public class PhotoTalkDatabaseFactory {
 		return RequestDb4oDatabase.getInstance();
 	}
 
-	public static ContactDatabase getContactDatabase() {
-		return PhotoTalkDb4oContactDatabase.getInstance();
+	public static GlobalDatabase getGlobalDatabase() {
+		return PhotoTalkDb4oGlobalDatabase.getInstance();
 	}
 
 	public static void close() {

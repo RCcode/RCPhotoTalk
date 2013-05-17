@@ -7,26 +7,23 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.model.GraphUser;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.rcplatform.phototalk.activity.FacebookAddFriendsActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.FacebookUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
-import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
@@ -68,37 +65,35 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	}
 
 	private void asyncInviteInfo(String... ids) {
-		LogicUtils.uploadFriendInvite(this,Action.ACTION_UPLOAD_INTITE_THIRDPART,FriendType.FACEBOOK, ids);
+		LogicUtils.uploadFriendInvite(this, Action.ACTION_UPLOAD_INTITE_THIRDPART, FriendType.FACEBOOK, ids);
 	}
 
 	private void getRecommentFriends() {
-
-		recommendFriends = FriendsProxy.getFacebookRecommendFriendsAsync(this, new RCPlatformResponseHandler() {
+		Request.executeGetRecommends(this, FriendType.FACEBOOK, new OnFriendsLoadedListener() {
 
 			@Override
-			public void onSuccess(int statusCode, String content) {
+			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				dismissLoadingDialog();
-				try {
-					JSONObject jsonObject = new JSONObject(content);
-					recommendFriends = JSONConver.jsonToFriends(jsonObject.getJSONArray("thirdUsers").toString());
-					List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getThirdPartFriends(FriendType.FACEBOOK);
-					inviteFriends = ThirdPartUtils.getFriendsNotRepeat(friends, recommendFriends);
-					setListData(recommendFriends, inviteFriends, mList);
-				} catch (Exception e) {
-					e.printStackTrace();
-					showErrorConfirmDialog(R.string.net_error);
-				}
+				recommendsLoaded(friends, recommends);
 			}
 
 			@Override
-			public void onFailure(int errorCode, String content) {
+			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				recommendsLoaded(friends, recommends);
+			}
+
+			@Override
+			public void onError(int errorCode, String content) {
+				dismissLoadingDialog();
 			}
 		});
-		if (recommendFriends == null || recommendFriends.size() == 0) {
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		}
+	}
+
+	private void recommendsLoaded(List<Friend> inviteFriends, List<Friend> recommends) {
+		recommendFriends = recommends;
+		this.inviteFriends = inviteFriends;
+		setListData(recommendFriends, inviteFriends, mList);
 	}
 
 	@Override

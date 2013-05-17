@@ -230,8 +230,8 @@ public class MenueApplication extends Application {
 	}
 
 	public void setCurrentUser(UserInfo userInfo) {
-		mService.setCurrentUser(userInfo);
 		PhotoTalkDatabaseFactory.open(userInfo);
+		mService.setCurrentUser(userInfo);
 	}
 
 }

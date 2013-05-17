@@ -25,6 +25,7 @@ import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -40,7 +41,6 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class PTBackgroundService extends Service {
-
 
 	private static final long BIND_STATE_CHECK_DELAY_TIME = 30 * 1000;
 	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 30;
@@ -76,6 +76,7 @@ public class PTBackgroundService extends Service {
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
 			startThirdpartAsync();
+			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
 		}
 	}
 

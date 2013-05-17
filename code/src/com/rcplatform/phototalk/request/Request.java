@@ -17,6 +17,7 @@ import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
@@ -280,6 +281,9 @@ public class Request implements Serializable {
 					JSONObject jObj = jsonObject.getJSONObject("userInfo");
 					JSONObject jsonUser = jObj.getJSONObject("userInfo");
 					UserInfo userInfo = JSONConver.jsonToObject(jsonUser.toString(), UserInfo.class);
+					JSONArray arrayApps = jObj.getJSONArray("allApp");
+					List<AppInfo> apps = JSONConver.jsonToList(arrayApps.toString(), AppInfo.class);
+					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
 					listener.onSuccess(userInfo);
 				} catch (JSONException e) {
 					e.printStackTrace();

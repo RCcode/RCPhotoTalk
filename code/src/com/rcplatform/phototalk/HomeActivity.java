@@ -317,6 +317,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private void reSendPhoto(final Information information) {
 		List<String> friendIds = new ArrayList<String>();
 		friendIds.add(information.getReceiver().getRcId());
+		information.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
+		adapter.notifyDataSetChanged();
 		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
 
 			@Override

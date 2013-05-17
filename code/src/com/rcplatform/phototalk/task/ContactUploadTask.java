@@ -19,7 +19,6 @@ import android.os.Handler;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.utils.ContactUtil;
@@ -87,7 +86,7 @@ public class ContactUploadTask {
 				PrefsUtils.LoginState.setAppUsed(mContext);
 				hasUpdate = true;
 			} else {
-				List<Contacts> contactsLocal = PhotoTalkDatabaseFactory.getContactDatabase().getContacts();
+				List<Contacts> contactsLocal = PhotoTalkDatabaseFactory.getGlobalDatabase().getContacts();
 				for (Contacts contact : contacts) {
 					if (!contactsLocal.contains(contact)) {
 						hasUpdate = true;
@@ -97,7 +96,7 @@ public class ContactUploadTask {
 			}
 
 			if (hasUpdate) {
-				PhotoTalkDatabaseFactory.getContactDatabase().saveContacts(contacts);
+				PhotoTalkDatabaseFactory.getGlobalDatabase().saveContacts(contacts);
 				if (contacts.size() > 0) {
 					String entity = getEntity(contacts);
 					while (mCurrentTime <= MAX_RETRY_TIME) {

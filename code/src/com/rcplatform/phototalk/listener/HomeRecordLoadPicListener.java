@@ -53,7 +53,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 			notifyServer(context, record);
 		}
 		record.setLastUpdateTime(System.currentTimeMillis());
-		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getCreatetime()));
+		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
 		updateView(View.GONE, text);
 	}
 

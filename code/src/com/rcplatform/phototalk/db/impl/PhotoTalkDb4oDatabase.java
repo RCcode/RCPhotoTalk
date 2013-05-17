@@ -165,6 +165,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			List<String> receivableUserIds, final List<String> allReceiverIds, int state) {
 		ObjectSet<Information> infoLocals = db.query(new Predicate<Information>() {
 
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public boolean match(Information arg0) {
 				return allReceiverIds.contains(arg0.getReceiver().getRcId()) && arg0.getCreatetime() == createTime
@@ -290,6 +292,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		infoExample.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
 		infoExample.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
 		ObjectSet<Information> result = db.query(new Predicate<Information>() {
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean match(Information arg0) {

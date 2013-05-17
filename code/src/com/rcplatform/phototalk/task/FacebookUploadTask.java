@@ -10,6 +10,7 @@ import android.content.Context;
 
 import com.facebook.model.GraphUser;
 import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
@@ -41,9 +42,9 @@ public class FacebookUploadTask {
 		if (user != null) {
 			try {
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("account", user.getId());
-				jsonObject.put("headUrl", "123");
-				jsonObject.put("nick", user.getUserName());
+				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_ACCOUNT, user.getId());
+				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_HEAD_URL, "123");
+				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_NICK, user.getUserName());
 				mRequest.putParam("thirdInfo", jsonObject.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -55,9 +56,9 @@ public class FacebookUploadTask {
 		if (user != null) {
 			try {
 				JSONObject jsonObject = new JSONObject();
-				jsonObject.put("account", user.getId());
-				jsonObject.put("headUrl", "123");
-				jsonObject.put("nick", user.getName());
+				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_ACCOUNT, user.getId());
+				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_HEAD_URL, "123");
+				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_NICK, user.getName());
 				mRequest.putParam("thirdInfo", jsonObject.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -72,7 +73,7 @@ public class FacebookUploadTask {
 	}
 
 	private void buildOtherParams() {
-		mRequest.putParam("attrType", "1");
+		mRequest.putParam(PhotoTalkParams.ThirdPartBind.PARAM_KEY_THIRD_TYPE, "1");
 	}
 
 	private void buildFriendParams(List<ThirdPartFriend> friends) {
@@ -81,9 +82,9 @@ public class FacebookUploadTask {
 				JSONArray array = new JSONArray();
 				for (ThirdPartFriend friend : friends) {
 					JSONObject jsonObject = new JSONObject();
-					jsonObject.put("friendAccount", friend.getId());
-					jsonObject.put("headUrl", friend.getHeadUrl());
-					jsonObject.put("friendName", friend.getNick());
+					jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_FRIEND_ID, friend.getId());
+					jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_FRIEND_URL, friend.getHeadUrl());
+					jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_FRIEND_NICK, friend.getNick());
 					array.put(jsonObject);
 				}
 				mRequest.putParam("friendList", array.toString());

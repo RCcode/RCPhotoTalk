@@ -57,7 +57,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/friend_text_padding"
-            android:text="@string/sightseer"
             android:singleLine="true"
             android:textColor="#a19a94"
             android:ellipsize="end"

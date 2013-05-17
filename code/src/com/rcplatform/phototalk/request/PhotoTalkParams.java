@@ -159,4 +159,14 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_TYPE="attrType";
 		public static final String PARAM_KEY_INVITED_IDS="accounts";
 	}
+	
+	public static class ThirdPartBind{
+		public static final String PARAM_KEY_ACCOUNT="loginName";
+		public static final String PARAM_KEY_NICK="loginNick";
+		public static final String PARAM_KEY_HEAD_URL="headUrl";
+		public static final String PARAM_KEY_THIRD_TYPE="attrType";
+		public static final String PARAM_KEY_FRIEND_ID="fTName";
+		public static final String PARAM_KEY_FRIEND_URL = "headUrl";
+		public static final String PARAM_KEY_FRIEND_NICK = "friendName";
+	}
 }
