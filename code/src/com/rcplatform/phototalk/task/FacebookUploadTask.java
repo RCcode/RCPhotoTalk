@@ -45,7 +45,7 @@ public class FacebookUploadTask {
 				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_ACCOUNT, user.getId());
 				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_HEAD_URL, "123");
 				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_NICK, user.getUserName());
-				mRequest.putParam("thirdInfo", jsonObject.toString());
+				mRequest.putParam(PhotoTalkParams.ThirdPartBind.PARAM_KEY_MINE_INFO, jsonObject.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -59,7 +59,7 @@ public class FacebookUploadTask {
 				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_ACCOUNT, user.getId());
 				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_HEAD_URL, "123");
 				jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_NICK, user.getName());
-				mRequest.putParam("thirdInfo", jsonObject.toString());
+				mRequest.putParam(PhotoTalkParams.ThirdPartBind.PARAM_KEY_MINE_INFO, jsonObject.toString());
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -87,7 +87,7 @@ public class FacebookUploadTask {
 					jsonObject.put(PhotoTalkParams.ThirdPartBind.PARAM_KEY_FRIEND_NICK, friend.getNick());
 					array.put(jsonObject);
 				}
-				mRequest.putParam("friendList", array.toString());
+				mRequest.putParam(PhotoTalkParams.ThirdPartBind.PARAM_KEY_FRIEND_LIST, array.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -100,5 +100,6 @@ public class FacebookUploadTask {
 
 	public void setResponseListener(RCPlatformResponseHandler listener) {
 		this.mResponseHandler = listener;
+		mRequest.setResponseHandler(listener);
 	}
 }

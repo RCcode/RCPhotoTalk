@@ -38,20 +38,16 @@ public class TigaseNodeUtil {
 			}
 			reader.close();
 			content = builder.toString();
-		}
-		catch (ConnectException e) {
+		} catch (ConnectException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		finally {
+		} finally {
 			try {
 				is.close();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 			if (conn != null)
 				conn.disconnect();
@@ -97,30 +93,27 @@ public class TigaseNodeUtil {
 					if (jsonObject.has(TigaseConfig.TIGASE_NODE_REMARK)) {
 						node.setRemark(jsonObject.getString(TigaseConfig.TIGASE_NODE_REMARK));
 					}
-					
+
 					list.add(node);
 					allWeight += node.getWeight();
 				}
 			}
-		}
-		catch (JSONException e) {
-			// TODO Auto-generated catch block
+			// 根据权重获取连接节点
+			TigaseNode selectTigaseNode = list.get(0);
+
+			int random = (int) (Math.random() * ((float) allWeight));
+			int testWeight = 0;
+			for (int i = 0; i < list.size(); i++) {
+				if (testWeight > random) {
+					break;
+				}
+				selectTigaseNode = list.get(i);
+				testWeight += list.get(i).getWeight();
+			}
+			return selectTigaseNode;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// 根据权重获取连接节点
-		TigaseNode selectTigaseNode = list.get(0);
-
-		int random = (int) (Math.random() * ((float) allWeight));
-		int testWeight = 0;
-		for (int i = 0; i < list.size(); i++) {
-			if (testWeight > random) {
-				break;
-			}
-			selectTigaseNode = list.get(i);
-			testWeight += list.get(i).getWeight();
-		}
-
-		return selectTigaseNode;
+		return null;
 	}
 }

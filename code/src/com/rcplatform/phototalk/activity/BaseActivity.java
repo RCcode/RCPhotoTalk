@@ -102,7 +102,7 @@ public class BaseActivity extends Activity {
 			mProgressDialog.setMessage(getString(msgResId));
 		else
 			mProgressDialog.setMessage(null);
-		if (!mProgressDialog.isShowing())
+		if (!mProgressDialog.isShowing() && !isFinishing())
 			mProgressDialog.show();
 	}
 
@@ -128,7 +128,8 @@ public class BaseActivity extends Activity {
 	}
 
 	public void showErrorConfirmDialog(String msg) {
-		DialogUtil.createErrorInfoDialog(this, msg).show();
+		if (!isFinishing())
+			DialogUtil.createErrorInfoDialog(this, msg).show();
 	}
 
 	public void showErrorConfirmDialog(int msgResId) {

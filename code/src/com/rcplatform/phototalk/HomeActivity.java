@@ -108,8 +108,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		checkUpdate();
 	}
 
-	private void searchFriendDetailById(String atUserId, final Information record) {
+	private void searchFriendDetailById(String atUserId) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		Request.executeGetFriendDetailAsync(this, atUserId, null);
 		FriendsProxy.getFriendDetail(this, new RCPlatformResponseHandler() {
 
 			@Override
@@ -263,7 +264,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		} else {
 			friendSuid = information.getSender().getRcId();
 		}
-		searchFriendDetailById(friendSuid, information);
+		searchFriendDetailById(friendSuid);
 	}
 
 	protected void showLongClickDialog(int position) {

@@ -29,14 +29,14 @@ public class CheckUpdateTask {
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content).getJSONObject("appConfig");
-					String version = jsonObject.getString("clientVs");
+					String version = jsonObject.getString("clientVersion");
 					if (!mContext.getString(R.string.version).equals(version)) {
-						String newVersion = jsonObject.getString("clientVs");
+						String newVersion = jsonObject.getString("clientVersion");
 						if (isAutoRequest && newVersion.equals(PrefsUtils.AppInfo.getNeverAttentionVersion(mContext))) {
 							return;
 						}
 						String updateContent = jsonObject.getString("notice");
-						String updateUrl = jsonObject.getString("updateUrl");
+						String updateUrl = jsonObject.getString("appUrl");
 						if (mOnUpdateCheckListener != null) {
 							mOnUpdateCheckListener.onHasUpdate(newVersion, updateContent, updateUrl);
 							return;

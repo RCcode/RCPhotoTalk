@@ -14,7 +14,6 @@ import android.os.Message;
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
-import com.facebook.Request.GraphUserCallback;
 import com.facebook.Request.GraphUserListCallback;
 import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
@@ -22,6 +21,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.UiLifecycleHelper;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton.UserInfoChangedCallback;
 import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.rcplatform.phototalk.R;
@@ -30,27 +30,15 @@ import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
-public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
+public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements UserInfoChangedCallback {
 	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
 	private static final int MSG_DEAUTHORIZE_SUCCESS = 100;
 	private static final int MSG_DEAUTHORIZE_ERROR = 101;
 	private static final int MSG_NET_ERROR = 102;
 
-	private boolean hasUserInfoLoaed = false;
-	private boolean hasFriendsLoaded = false;
-	private boolean hasErrored = false;
-
 	private UiLifecycleHelper mHelper;
-	private GraphUser mUser;
-	private List<ThirdPartFriend> mFriends;
-	private PendingAction mAction = PendingAction.NONE;
 	private String[] mInviteIds;
-	private boolean hasTryLogin = false;
-
-	private enum PendingAction {
-		NONE, SEND_INVATE, GET_INFO, SEND_JOIN_MESSAGE, DE_AUTHORIZE;
-	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,29 +47,9 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 		mHelper.onCreate(savedInstanceState);
 	}
 
-	private void performAction() {
-		PendingAction lastAction = mAction;
-		mAction = PendingAction.NONE;
-		switch (lastAction) {
-		case SEND_INVATE:
-			sendInviteToFriend();
-			break;
-		case GET_INFO:
-			getFacebookInfos();
-			sendJoinMessage();
-			break;
-		case SEND_JOIN_MESSAGE:
-			sendJoinMessageOnFacebook();
-			break;
-		default:
-			break;
-		}
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		hasTryLogin = true;
 		mHelper.onActivityResult(requestCode, resultCode, data);
 
 	}
@@ -90,7 +58,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	protected void onPause() {
 		super.onPause();
 		mHelper.onPause();
-		hasTryLogin = false;
 	}
 
 	@Override
@@ -103,18 +70,6 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	protected void onResume() {
 		super.onResume();
 		mHelper.onResume();
-		if (!hasTryLogin) {
-			if (FacebookUtil.isFacebookVlidate(this))
-				mAction = PendingAction.NONE;
-			else
-				mAction = PendingAction.GET_INFO;
-			Session session = Session.getActiveSession();
-			if (session != null && (!session.isOpened() && !session.isClosed())) {
-				session.openForRead(new Session.OpenRequest(this).setPermissions(PERMISSIONS).setCallback(mCallback));
-			} else {
-				Session.openActiveSession(this, true, mCallback);
-			}
-		}
 	}
 
 	@Override
@@ -126,15 +81,9 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 
 	protected void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		LogUtil.e("go into facebook status call back");
-		if (exception != null && mAction != PendingAction.NONE) {
+		if (exception != null) {
 			DialogUtil.createMsgDialog(this, exception.getMessage(), getString(R.string.confirm)).show();
-			mAction = PendingAction.NONE;
 			return;
-		}
-		if (session.isOpened()) {
-			if (mAction != PendingAction.NONE) {
-				performAction();
-			}
 		}
 	}
 
@@ -155,52 +104,12 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	}
 
 	private void facebookRequestError() {
-		if (!hasErrored)
-			hasErrored = true;
-		else
-			return;
 		onGetFacebookInfoError();
 	}
 
-	private void getFacebookInfos() {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request.executeMeRequestAsync(Session.getActiveSession(), new GraphUserCallback() {
-
-			@Override
-			public void onCompleted(GraphUser user, Response response) {
-				if (user == null) {
-					facebookRequestError();
-					return;
-				}
-				hasUserInfoLoaed = true;
-				mUser = user;
-				if (hasFriendsLoaded) {
-					onFacebookInfoLoaded(mUser, mFriends);
-				}
-			}
-		});
-		Request request = Request.newMyFriendsRequest(Session.getActiveSession(), new GraphUserListCallback() {
-
-			@Override
-			public void onCompleted(List<GraphUser> users, Response response) {
-				if (users == null) {
-					facebookRequestError();
-					return;
-				}
-				mFriends = FacebookUtil.buildFriends(users);
-				hasFriendsLoaded = true;
-				if (hasUserInfoLoaed) {
-					onFacebookInfoLoaded(mUser, mFriends);
-				}
-			}
-		});
-		request.executeAsync();
-	}
-
 	protected void sendInviteMessage(String... ids) {
-		mAction = PendingAction.SEND_INVATE;
 		this.mInviteIds = ids;
-		performAction();
+		sendInviteToFriend();
 	}
 
 	private void sendInviteToFriend() {
@@ -287,32 +196,42 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity {
 	}
 
 	private void sendJoinMessageOnFacebook() {
-		Session session = Session.getActiveSession();
-		List<String> permissions = session.getPermissions();
-		if (!permissions.containsAll(PERMISSIONS)) {
-			mAction = PendingAction.SEND_JOIN_MESSAGE;
-			Session.NewPermissionsRequest newPermissionsRequest = new Session.NewPermissionsRequest(this, PERMISSIONS);
-			session.requestNewPublishPermissions(newPermissionsRequest);
-			return;
-		}
-
 		Bundle postParams = new Bundle();
-		postParams.putString("name", "Facebook SDK for Android");
-		postParams.putString("caption", "Build great social apps and get more installs.");
-		postParams.putString("description", "The Facebook SDK for Android makes it easier and faster to develop Facebook integrated Android apps.");
-		postParams.putString("link", "https://developers.facebook.com/android");
-		postParams.putString("picture", "https://raw.github.com/fbsamples/ios-3.x-howtos/master/Images/iossdk_logo.png");
+		postParams.putString("name", "这是朕的一个测试");
+		postParams.putString("caption", "我就要发个story");
+		postParams.putString("description", "这尼玛=。=为啥服务器都减负了就我加负呢！");
+		postParams.putString("link", "http://www.google.co.jp");
+		postParams.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
 		Request.Callback callback = new Request.Callback() {
 			public void onCompleted(Response response) {
 			}
 		};
-		Request request = new Request(session, "me/feed", postParams, HttpMethod.POST, callback);
+		Request request = new Request(Session.getActiveSession(), "me/feed", postParams, HttpMethod.POST, callback);
 		RequestAsyncTask task = new RequestAsyncTask(request);
 		task.execute();
 	}
 
-	private void sendJoinMessage() {
-		mAction = PendingAction.SEND_JOIN_MESSAGE;
-		performAction();
+	@Override
+	public void onUserInfoFetched(final GraphUser user) {
+		if (user != null) {
+			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+			sendJoinMessageOnFacebook();
+			getFacebookFriends(user);
+		}
+	}
+
+	private void getFacebookFriends(final GraphUser user) {
+		Request request = Request.newMyFriendsRequest(Session.getActiveSession(), new GraphUserListCallback() {
+
+			@Override
+			public void onCompleted(List<GraphUser> users, Response response) {
+				if (users == null) {
+					facebookRequestError();
+					return;
+				}
+				onFacebookInfoLoaded(user, FacebookUtil.buildFriends(users));
+			}
+		});
+		request.executeAsync();
 	}
 }

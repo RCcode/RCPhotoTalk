@@ -39,6 +39,8 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.my_friend_source_activity);
+		initAddFriendsView();
 		setItemType(PhotoTalkFriendsAdapter.TYPE_CONTACTS);
 		getContactRecommends();
 	}

@@ -13,7 +13,7 @@ public interface PhotoTalkDatabase {
 
 	public List<Friend> getThirdPartFriends(int type);
 
-	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends);
+	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends,int type);
 
 	public void saveRecordInfos(List<Information> recordInfos);
 

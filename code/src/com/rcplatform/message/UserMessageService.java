@@ -109,8 +109,7 @@ public class UserMessageService extends Service {
 
 						try {
 							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
-						}
-						catch (XMPPException e) {
+						} catch (XMPPException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -188,15 +187,19 @@ public class UserMessageService extends Service {
 		Thread thread = new Thread() {
 
 			public void run() {
-				TigaseNode node = TigaseNodeUtil.getTigaseNode();
-				XmppTool.createConnection(node);
+				try {
+					TigaseNode node = TigaseNodeUtil.getTigaseNode();
+					XmppTool.createConnection(node);
 
-				Bundle bunde = intent.getExtras();
-				String name = bunde.getString(TIGASE_USER_NAME_KEY);
-				String password = bunde.getString(TIGASE_USER_PASSWORD_KEY);
-				XmppTool.login(name + "@" + node.getDomain(), password);
-				XmppTool.setChatManagerListener(chatListener);
-				xmppHandler.sendEmptyMessage(MSG_WHAT_XMPP_CONNECT_SUCCESS);
+					Bundle bunde = intent.getExtras();
+					String name = bunde.getString(TIGASE_USER_NAME_KEY);
+					String password = bunde.getString(TIGASE_USER_PASSWORD_KEY);
+					XmppTool.login(name + "@" + node.getDomain(), password);
+					XmppTool.setChatManagerListener(chatListener);
+					xmppHandler.sendEmptyMessage(MSG_WHAT_XMPP_CONNECT_SUCCESS);
+				} catch (Exception e) {
+
+				}
 			};
 		};
 		thread.start();
@@ -207,12 +210,12 @@ public class UserMessageService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 
-				case MSG_WHAT_XMPP_CONNECT_SUCCESS:
-					IntentFilter intentFilter = new IntentFilter();
-					intentFilter.addAction(MESSAGE_SEND_BROADCAST);
-					registerReceiver(sendBroadcastReceiver, intentFilter);
-					hasRegisteSendReceiver = true;
-					break;
+			case MSG_WHAT_XMPP_CONNECT_SUCCESS:
+				IntentFilter intentFilter = new IntentFilter();
+				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
+				registerReceiver(sendBroadcastReceiver, intentFilter);
+				hasRegisteSendReceiver = true;
+				break;
 			}
 		};
 	};
@@ -273,8 +276,7 @@ public class UserMessageService extends Service {
 				 * json.put("timeZone", MetaHelper.getTimeZone(context));
 				 * json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
 				 */
-			}
-			catch (JSONException e1) {
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -305,25 +307,20 @@ public class UserMessageService extends Service {
 				}
 				reader.close();
 				content = builder.toString();
-			}
-			catch (ConnectException e) {
+			} catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
 					output.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				try {
 					is.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				if (conn != null)
 					conn.disconnect();

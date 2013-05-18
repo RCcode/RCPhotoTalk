@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -29,17 +30,21 @@ public class JSONConver {
 		}.getType());
 	}
 
-
 	public static String informationToJSON(Information... informations) {
 		return new Gson().toJson(informations);
 	}
 
-
-	public static <T> List<T> jsonToList(String json,Class<T> clazz) {
-		return new Gson().fromJson(json, new TypeToken<List<T>>() {
+	public static List<AppInfo> jsonToAppInfos(String json) {
+		return new Gson().fromJson(json, new TypeToken<List<AppInfo>>() {
 		}.getType());
 	}
-	public static <T> T jsonToObject(String json,Class<T> clazz){
+
+	public static <T> List<T> jsonToList(String json, Class<T> clazz) {
+		return new Gson().fromJson(json, new TypeToken<List<Information>>() {
+		}.getType());
+	}
+
+	public static <T> T jsonToObject(String json, Class<T> clazz) {
 		return new Gson().fromJson(json, clazz);
 	}
 }

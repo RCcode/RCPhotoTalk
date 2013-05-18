@@ -2,8 +2,8 @@ package com.rcplatform.phototalk.api;
 
 public class MenueApiUrl {
 
-//	private static final String BASE_URL = "http://192.168.0.86:8083/";
-	 private static final String BASE_URL = "http://103.247.169.150:8083/";
+	// private static final String BASE_URL = "http://192.168.0.86:8083/";
+	private static final String BASE_URL = "http://103.247.169.150:8083/";
 	// private static final String BASE_URL = "http://192.168.0.118/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "photochat/";
@@ -65,7 +65,7 @@ public class MenueApiUrl {
 
 	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
 
-	public static final String FRIEND_DETAIL_URL = USER_URL + "getUserInfo.do";
+	public static final String FRIEND_DETAIL_URL = USER_URL + "queryUserDetail.do";
 
 	public static final String ADD_FRIEND_FROM_INFORMATION = USER_URL + "tigaseAddFriendFromMain.do";
 
@@ -77,8 +77,6 @@ public class MenueApiUrl {
 	public static final String GET_FRIENDS_URL = USER_URL + "queryMyFriends.do";
 
 	public static final String SEND_PICTURE_URL = FILE_URL + "upload.do";
-
-	public static final String SYNCHRO_THIRD_URL = THIRD_URL + "thirdBind.do";
 
 	public static final String GET_USER_INFO = USER_URL + "getUserSelfInfo.do";
 
@@ -93,6 +91,8 @@ public class MenueApiUrl {
 	private static final String RCBOSS_COMM_URL = BASE_URL_FOR_RCBOSS + "comm/";
 
 	private static final String RCBOSS_LONIN_URL = BASE_URL_FOR_RCBOSS + "login/";
+
+	private static final String RCBOSS_THIRD_URL = BASE_URL_FOR_RCBOSS + "third/";
 
 	public static final String SYNC_CONTACT_URL = RCBOSS_COMM_URL + "synchroContacts.do";
 
@@ -109,5 +109,5 @@ public class MenueApiUrl {
 
 	public static final String CHECK_USER_PHONEBIND_URL = RCBOSS_USER_URL + "checkPhone.do";
 	public static final String ASYNC_INVITE_URL = RCBOSS_COMM_URL + "inviteUserLog.do";
-
+	public static final String SYNCHRO_THIRD_URL = RCBOSS_THIRD_URL + "thirdBind.do";
 }

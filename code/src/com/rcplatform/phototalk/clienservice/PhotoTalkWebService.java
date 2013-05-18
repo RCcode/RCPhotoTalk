@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.clienservice;
 
 import android.app.Service;
 import android.content.Intent;
+import android.os.Handler;
 import android.os.IBinder;
 
 import com.rcplatform.phototalk.MenueApplication;
@@ -11,6 +12,7 @@ import com.rcplatform.phototalk.request.Request;
 
 public class PhotoTalkWebService extends Service {
 	private RCPlatformAsyncHttpClient mClient;
+	private static Handler mWebServiceHandler = new Handler();
 
 	public void onCreate() {
 		super.onCreate();
@@ -23,9 +25,15 @@ public class PhotoTalkWebService extends Service {
 		return null;
 	}
 
-	public void post(Request request) {
+	public void post(final Request request) {
 		cacheRequest(request);
-		mClient.post(request);
+		mWebServiceHandler.post(new Runnable() {
+
+			@Override
+			public void run() {
+				mClient.post(request);
+			}
+		});
 	}
 
 	public void postNameValue(Request request) {

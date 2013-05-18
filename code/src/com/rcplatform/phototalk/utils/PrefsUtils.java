@@ -147,6 +147,7 @@ public class PrefsUtils {
 			return getPreference(context, pref).getString(PREF_KEY_FACEBOOK_NAME, null);
 		}
 
+		
 		public static void refreshFacebookAsyncTime(Context context, String pref, long time) {
 			SharedPreferences sh = getPreference(context, pref);
 			sh.edit().putLong(PREF_KEY_FACEBOOK_ASYNC_TIME, time).commit();

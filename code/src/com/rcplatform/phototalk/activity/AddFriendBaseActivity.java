@@ -56,14 +56,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		mItemType = itemType;
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.my_friend_source_activity);
-		initView();
-	}
-
-	private void initView() {
+	protected void initAddFriendsView() {
 		mEtSearch = (EditText) findViewById(R.id.et_search);
 		mEtSearch.addTextChangedListener(mSearchTextChangeListener);
 		initInvateView();

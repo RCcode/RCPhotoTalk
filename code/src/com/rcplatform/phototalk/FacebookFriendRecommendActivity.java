@@ -1,23 +1,23 @@
 package com.rcplatform.phototalk;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONObject;
-
 import android.os.Bundle;
+import android.view.View;
 
+import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.facebook.widget.LoginButton;
 import com.rcplatform.phototalk.activity.FacebookAddFriendsActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
@@ -29,15 +29,42 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
 public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity {
+	private LoginButton mLoginButton;
+	private View loginLayout;
+	private View friendsLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setContentView(R.layout.facebook_recommends);
+		initAddFriendsView();
+		mLoginButton = (LoginButton) findViewById(R.id.login_button);
+		mLoginButton.setPublishPermissions(Arrays.asList("publish_actions"));
+		loginLayout = findViewById(R.id.login_layout);
+		friendsLayout = findViewById(R.id.friends_layout);
 		setItemType(PhotoTalkFriendsAdapter.TYPE_FACEBOOK);
-		if (FacebookUtil.isFacebookVlidate(this)) {
+		if (FacebookUtil.isFacebookVlidate(this))
 			getRecommentFriends();
-		}
+		else
+			mLoginButton.setUserInfoChangedCallback(this);
 
+	}
+
+	private void setShowLogin() {
+		loginLayout.setVisibility(View.VISIBLE);
+		friendsLayout.setVisibility(View.GONE);
+
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		updateUI();
+	}
+
+	private void setShowRecommends() {
+		loginLayout.setVisibility(View.GONE);
+		friendsLayout.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -58,7 +85,6 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 
 	@Override
 	protected void onInviteComplete(String... ids) {
-		// TODO Auto-generated method stub
 		super.onInviteComplete(ids);
 		DialogUtil.createMsgDialog(this, R.string.invite_success, R.string.confirm).show();
 		asyncInviteInfo(ids);
@@ -99,7 +125,8 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	@Override
 	protected void onFacebookInfoLoaded(GraphUser user, final List<ThirdPartFriend> friends) {
 		super.onFacebookInfoLoaded(user, friends);
-		PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends);
+		mLoginButton.setUserInfoChangedCallback(null);
+		PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends, FriendType.FACEBOOK);
 
 		FacebookUploadTask task = new FacebookUploadTask(this, friends, user);
 		task.setResponseListener(new RCPlatformResponseHandler() {
@@ -111,9 +138,7 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 			@Override
 			public void onFailure(int errorCode, String content) {
 				dismissLoadingDialog();
-				recommendFriends = new ArrayList<Friend>();
-				inviteFriends = ThirdPartUtils.parserToFriends(friends, FriendType.FACEBOOK);
-				setListData(recommendFriends, inviteFriends, mList);
+				recommendsLoaded(ThirdPartUtils.parserToFriends(friends, FriendType.FACEBOOK), new ArrayList<Friend>());
 			}
 		});
 		task.start();
@@ -123,5 +148,17 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	protected void onGetFacebookInfoError() {
 		super.onGetFacebookInfoError();
 		dismissLoadingDialog();
+	}
+
+	private void updateUI() {
+		if (isSessionOpened())
+			setShowRecommends();
+		else
+			setShowLogin();
+	}
+
+	private boolean isSessionOpened() {
+		Session session = Session.getActiveSession();
+		return (session != null && session.isOpened());
 	}
 }

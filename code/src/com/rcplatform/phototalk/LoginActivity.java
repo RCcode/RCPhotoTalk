@@ -233,7 +233,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			finish();
 			break;
 		case R.id.iv_registe_head:
-			showImagePickMenu(v,CROP_HEAD_IMAGE);
+			showImagePickMenu(v, CROP_HEAD_IMAGE);
 			break;
 		case R.id.login_page_signup_button:
 			final String email = mLoginIdEditText.getText().toString();
@@ -504,7 +504,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					mUser.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
 					saveUserInfo(mUser);
 					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
-					List<Friend> recommends = JSONConver.jsonToList(arrayRecommends.toString(), Friend.class);
+					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
 					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
 					loginSuccess(mUser);
 				} catch (Exception e) {

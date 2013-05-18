@@ -36,7 +36,12 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public synchronized void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends) {
+	public synchronized void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends, int type) {
+		ThirdPartFriend friendExample = new ThirdPartFriend();
+		friendExample.setType(type);
+		ObjectSet<ThirdPartFriend> result = db.queryByExample(friendExample);
+		while (result.hasNext())
+			db.delete(result.next());
 		db.store(thirdPartFriends);
 		db.commit();
 	}

@@ -168,5 +168,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_FRIEND_ID="fTName";
 		public static final String PARAM_KEY_FRIEND_URL = "headUrl";
 		public static final String PARAM_KEY_FRIEND_NICK = "friendName";
+		public static final String PARAM_KEY_MINE_INFO = "thirdInfo";
+		public static final String PARAM_KEY_FRIEND_LIST = "friendList";
 	}
 }

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.Context;
 
 import com.rcplatform.phototalk.MenueApplication;
@@ -20,16 +21,20 @@ import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.logic.MessageSender;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.ContactUtil;
 
 public class Request implements Serializable {
@@ -45,8 +50,6 @@ public class Request implements Serializable {
 	private File file;
 	private String filePath;
 	private boolean cache = false;
-
-	private static final int MSG_WHAT_LOCAL_RECOMMENDS_LOADED = 20000;
 
 	public Request() {
 		createTime = System.currentTimeMillis();
@@ -278,11 +281,10 @@ public class Request implements Serializable {
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
-					JSONObject jObj = jsonObject.getJSONObject("userInfo");
-					JSONObject jsonUser = jObj.getJSONObject("userInfo");
+					JSONObject jsonUser = jsonObject.getJSONObject("userInfo");
 					UserInfo userInfo = JSONConver.jsonToObject(jsonUser.toString(), UserInfo.class);
-					JSONArray arrayApps = jObj.getJSONArray("allApp");
-					List<AppInfo> apps = JSONConver.jsonToList(arrayApps.toString(), AppInfo.class);
+					JSONArray arrayApps = jsonObject.getJSONArray("allApp");
+					List<AppInfo> apps = JSONConver.jsonToAppInfos(arrayApps.toString());
 					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
 					listener.onSuccess(userInfo);
 				} catch (JSONException e) {
@@ -307,40 +309,102 @@ public class Request implements Serializable {
 		Thread thread = new Thread() {
 			@Override
 			public void run() {
-				final List<Friend> recommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends(type);
-				final List<Contacts> localContacts = ContactUtil.getContacts(context);
-				final RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
-
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						try {
-							JSONObject jObj = new JSONObject(content);
-							List<Friend> recommend = JSONConver.jsonToList(jObj.getJSONArray("userList").toString(), Friend.class);
-							listener.onServiceFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommend), recommend);
-						} catch (Exception e) {
-							e.printStackTrace();
-							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-						}
-					}
-
-					@Override
-					public void onFailure(int errorCode, String content) {
-						listener.onError(errorCode, content);
-					}
-				};
-
-				if (listener != null && !context.isFinishing()) {
-					context.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							listener.onLocalFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommends), recommends);
-						}
-					});
+				String url = null;
+				if (type == FriendType.FACEBOOK) {
+					url = MenueApiUrl.FACEBOOK_RECOMMENDS_URL;
+				} else if (type == FriendType.CONTACT) {
+					url = MenueApiUrl.CONTACT_RECOMMEND_URL;
 				}
-				Request request = new Request(context, "", responseHandler);
+				RCPlatformResponseHandler responseHandler = loadLocalRecommends(context, type, listener);
+				final Request request = new Request(context, url, responseHandler);
 				request.excuteAsync();
+
 			}
 		};
 		thread.start();
+	}
+
+	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, int friendType, final OnFriendsLoadedListener listener) {
+		final List<Friend> recommendsLocal = PhotoTalkDatabaseFactory.getDatabase().getRecommends(friendType);
+		RCPlatformResponseHandler responseHandler = null;
+		if (friendType == FriendType.CONTACT) {
+			final List<Contacts> localContacts = PhotoTalkDatabaseFactory.getGlobalDatabase().getContacts();
+			responseHandler = new RCPlatformResponseHandler() {
+
+				@Override
+				public void onSuccess(int statusCode, String content) {
+					try {
+						JSONObject jObj = new JSONObject(content);
+						List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("userList").toString());
+						listener.onServiceFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsService), recommendsService);
+					} catch (Exception e) {
+						e.printStackTrace();
+						onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+					}
+				}
+
+				@Override
+				public void onFailure(int errorCode, String content) {
+					listener.onError(errorCode, content);
+				}
+			};
+			if (listener != null && !context.isFinishing()) {
+				context.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						listener.onLocalFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsLocal), recommendsLocal);
+					}
+				});
+			}
+		} else if (friendType == FriendType.FACEBOOK) {
+			final List<Friend> localFacebookFriends = PhotoTalkDatabaseFactory.getDatabase().getThirdPartFriends(friendType);
+			responseHandler = new RCPlatformResponseHandler() {
+
+				@Override
+				public void onSuccess(int statusCode, String content) {
+					try {
+						JSONObject jObj = new JSONObject(content);
+						List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
+						listener.onServiceFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService), recommendsService);
+					} catch (Exception e) {
+						e.printStackTrace();
+						onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+					}
+				}
+
+				@Override
+				public void onFailure(int errorCode, String content) {
+					listener.onError(errorCode, content);
+				}
+			};
+			if (listener != null && !context.isFinishing()) {
+				context.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						listener.onLocalFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsLocal), recommendsLocal);
+					}
+				});
+			}
+		}
+		return responseHandler;
+	}
+
+	public static void executeGetFriendDetailAsync(Context context, String friendRcid, FriendDetailListener listener) {
+		RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+
+			}
+		};
+
+		Request request = new Request(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
+		request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendRcid);
+		request.excuteAsync();
 	}
 }

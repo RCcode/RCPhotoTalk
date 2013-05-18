@@ -29,23 +29,26 @@ public class XmppTool {
 			con = new XMPPConnection(connConfig);
 			con.connect();
 
-		}
-		catch (Exception xe) {
+		} catch (Exception xe) {
 			xe.printStackTrace();
 			con = null;
 		}
 	}
 
 	public static void createConnection(TigaseNode node) {
-		XmppTool.node = node;
-		if (con == null) {
-			openConnection(XmppTool.node.getIp(), XmppTool.node.getPort(), XmppTool.node.getDomain());
-		}
-
-		if (con != null) {
-			if (null == chatManager) {
-				chatManager = con.getChatManager();
+		try {
+			XmppTool.node = node;
+			if (con == null) {
+				openConnection(XmppTool.node.getIp(), XmppTool.node.getPort(), XmppTool.node.getDomain());
 			}
+
+			if (con != null) {
+				if (null == chatManager) {
+					chatManager = con.getChatManager();
+				}
+			}
+		} catch (Exception e) {
+
 		}
 	}
 
@@ -55,9 +58,13 @@ public class XmppTool {
 
 	// 关闭tigase
 	public static void closeConnection() {
-		con.disconnect();
-		con = null;
-		chatManager = null;
+		try {
+			con.disconnect();
+			con = null;
+			chatManager = null;
+		} catch (Exception e) {
+
+		}
 	}
 
 	public static boolean register(String user, String password) {
@@ -66,8 +73,7 @@ public class XmppTool {
 		try {
 			con.getAccountManager().createAccount(user, password);
 			flag = true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
@@ -82,8 +88,7 @@ public class XmppTool {
 		try {
 			con.login(user, password, XMPP_RESOURCES);
 			flag = true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
@@ -123,8 +128,7 @@ public class XmppTool {
 		try {
 			newchat.sendMessage(msg);
 			msgFlag = MessageStatus.SEND_OK;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			msgFlag = MessageStatus.SEND_ERROR;
