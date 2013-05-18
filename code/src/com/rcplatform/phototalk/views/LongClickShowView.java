@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.SoundManager;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.PlayVidoeView.OnStartPlayListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
@@ -169,27 +170,29 @@ public class LongClickShowView extends Dialog {
 		Builder.mAudioPlayer.reset();
 		Builder.mAudioPlayer.setDataSource(file.getAbsolutePath());
 		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
-		Builder.mAudioPlayer.prepare();
-//		Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
-//
-//			//
-//			public void onPrepared(MediaPlayer mp) {
-//				mp.start();
-//
-//				// if (info.getTotleLength() != info.getLimitTime())
-//				// Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 -
-//				// info.getLimitTime() * 1000);
-//				//
-//			}
-//		});
-//		Builder.mAudioPlayer.prepareAsync();
+		// Builder.mAudioPlayer.prepare();
+		
+		if (info.getTotleLength() != info.getLimitTime())
+			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
 
-		 Builder.mAudioPlayer.start();
+		Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
+
+			//
+			public void onPrepared(MediaPlayer mp) {
+				mp.start();
+
+
+				//
+			}
+		});
+		Builder.mAudioPlayer.prepareAsync();
+
+		// Builder.mAudioPlayer.start();
 
 		// final int fx = Builder.soundPool.load(file.getAbsolutePath(), 0);
-		// //soundPool.play(fx, 10, 10, 0, 0, (float) 1);
+		// // soundPool.play(fx, 10, 10, 0, 0, (float) 1);
 		// Timer timer = new Timer();
-		// timer.schedule(new TimerTask(){
+		// timer.schedule(new TimerTask() {
 		//
 		// @Override
 		// public void run() {
@@ -199,10 +202,14 @@ public class LongClickShowView extends Dialog {
 		//
 		// }, 1000);
 
+//		long offest = info.getTotleLength() * 1000 - info.getLimitTime() * 1000;
+//		SoundManager.getInstance().play(file.getAbsolutePath(), offest);
+
 	}
 
 	private void showImage(File file) {
 		currentBitmap = BitmapFactory.decodeFile(file.getPath());
+
 		Builder.mImageView.setImageBitmap(currentBitmap);
 	}
 
@@ -216,7 +223,8 @@ public class LongClickShowView extends Dialog {
 
 	public void hideDialog() {
 		hide();
-		Builder.mAudioPlayer.stop();
+//		SoundManager.getInstance().allStop();
+		 Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
