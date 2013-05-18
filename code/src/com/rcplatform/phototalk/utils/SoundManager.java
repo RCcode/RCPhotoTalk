@@ -27,7 +27,7 @@ public class SoundManager {
 
 	private final long MAX_SOUND_LENGTH = 10000l;
 
-	private final int PRIORITY_DEFAULT = 0;
+	private final int PRIORITY_DEFAULT = 1;
 
 	private SoundManager() {
 		soundMap = new HashMap<String, Integer>();
@@ -72,7 +72,7 @@ public class SoundManager {
 			public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
 				// TODO Auto-generated method stub
 				if(sampleId == stream){
-					soundPool.play(stream, 10, 10, 1, 0, 1.0f);
+					soundPool.play(stream, 10f, 10f, 1, 0, 1.0f);
 				}
 			}
 		});

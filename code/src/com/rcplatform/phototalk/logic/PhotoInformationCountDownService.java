@@ -103,7 +103,7 @@ public class PhotoInformationCountDownService {
 		if (!file.exists())
 			return;
 		if (file.isFile()) {
-			SoundManager.getInstance().release(file.getAbsolutePath());
+//			SoundManager.getInstance().release(file.getAbsolutePath());
 			file.delete();
 		} else if (file.isDirectory()) {
 			for (File f : file.listFiles()) {

@@ -167,23 +167,24 @@ public class LongClickShowView extends Dialog {
 
 	private void playAudio(File file, final Information info) throws Exception {
 
-		// Builder.mAudioPlayer.reset();
-		// Builder.mAudioPlayer.setDataSource(file.getAbsolutePath());
-		// Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
+		Builder.mAudioPlayer.reset();
+		Builder.mAudioPlayer.setDataSource(file.getAbsolutePath());
+		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
 		// Builder.mAudioPlayer.prepare();
-		// Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
-		//
-		// //
-		// public void onPrepared(MediaPlayer mp) {
-		// mp.start();
-		//
-		// // if (info.getTotleLength() != info.getLimitTime())
-		// // Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 -
-		// // info.getLimitTime() * 1000);
-		// //
-		// }
-		// });
-		// Builder.mAudioPlayer.prepareAsync();
+
+		Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
+
+			//
+			public void onPrepared(MediaPlayer mp) {
+				mp.start();
+
+				// if (info.getTotleLength() != info.getLimitTime())
+				// Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 -
+				// info.getLimitTime() * 1000);
+				//
+			}
+		});
+		Builder.mAudioPlayer.prepareAsync();
 
 		// Builder.mAudioPlayer.start();
 
@@ -199,8 +200,9 @@ public class LongClickShowView extends Dialog {
 		// }
 		//
 		// }, 1000);
-		long offest = info.getTotleLength() * 1000 - info.getLimitTime() * 1000;
-		SoundManager.getInstance().play(file.getAbsolutePath(), offest);
+
+//		long offest = info.getTotleLength() * 1000 - info.getLimitTime() * 1000;
+//		SoundManager.getInstance().play(file.getAbsolutePath(), offest);
 
 	}
 
@@ -220,7 +222,7 @@ public class LongClickShowView extends Dialog {
 
 	public void hideDialog() {
 		hide();
-		SoundManager.getInstance().allStop();
+//		SoundManager.getInstance().allStop();
 		// Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
