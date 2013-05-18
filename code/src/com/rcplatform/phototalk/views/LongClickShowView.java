@@ -1,6 +1,10 @@
 package com.rcplatform.phototalk.views;
 
 import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +30,7 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.PlayVidoeView.OnStartPlayListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
+import android.media.SoundPool;
 
 public class LongClickShowView extends Dialog {
 
@@ -67,6 +73,8 @@ public class LongClickShowView extends Dialog {
 
 		private LongClickShowView dialog;
 
+		private static SoundPool soundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
+
 		public Builder(Context context, int layoutResId) {
 			this.context = context;
 			this.layoutResId = layoutResId;
@@ -82,17 +90,12 @@ public class LongClickShowView extends Dialog {
 		 */
 		public LongClickShowView create() {
 			if (dialog == null)
-				dialog = new LongClickShowView(context,
-						android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+				dialog = new LongClickShowView(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
 			if (dialog.contentView == null) {
-				LayoutInflater inflater = (LayoutInflater) context
-						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				dialog.contentView = (RelativeLayout) inflater.inflate(
-						layoutResId, null);
-				mImageView = (ImageView) dialog.contentView
-						.findViewById(R.id.iv_rts_pic);
-				mPlayVidoeView = (PlayVidoeView) dialog.contentView
-						.findViewById(R.id.pv_rts_video);
+				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);
+				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
+				mPlayVidoeView = (PlayVidoeView) dialog.contentView.findViewById(R.id.pv_rts_video);
 				dialog.setContentView(dialog.contentView);
 			} else {
 				dialog.setContentView(dialog.contentView);
@@ -100,7 +103,6 @@ public class LongClickShowView extends Dialog {
 			Log.i("ABC", "DIALOG = " + dialog.toString());
 			/*
 			 * contentView.setOnClickListener(new View.OnClickListener(){
-			 * 
 			 * @Override public void onClick(View view) { dialog.hide(); } });
 			 */
 			return dialog;
@@ -118,7 +120,8 @@ public class LongClickShowView extends Dialog {
 			try {
 				File[] files = unZipFile(info.getUrl());
 				showZipContent(files, info);
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else if (info.getType() == InformationType.TYPE_SYSTEM_NOTICE) { // 系统消息
@@ -129,8 +132,7 @@ public class LongClickShowView extends Dialog {
 		show();
 	}
 
-	private void showZipContent(File[] fileList, Information info)
-			throws Exception {
+	private void showZipContent(File[] fileList, Information info) throws Exception {
 		for (File file : fileList) {
 			if (isImage(file.getName())) {
 				showImage(file);
@@ -162,17 +164,41 @@ public class LongClickShowView extends Dialog {
 		return PhotoTalkUtils.getUnZipDirPath(url);
 	}
 
-	private void playAudio(File file, Information info) throws Exception {
+	private void playAudio(File file, final Information info) throws Exception {
+
 		Builder.mAudioPlayer.reset();
-		Builder.mAudioPlayer.setDataSource(file.getPath());
+		Builder.mAudioPlayer.setDataSource(file.getAbsolutePath());
 		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
 		Builder.mAudioPlayer.prepare();
+//		Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
+//
+//			//
+//			public void onPrepared(MediaPlayer mp) {
+//				mp.start();
+//
+//				// if (info.getTotleLength() != info.getLimitTime())
+//				// Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 -
+//				// info.getLimitTime() * 1000);
+//				//
+//			}
+//		});
 //		Builder.mAudioPlayer.prepareAsync();
 
-		Builder.mAudioPlayer.start();
-		if (info.getTotleLength() != info.getLimitTime())
-			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000
-					- info.getLimitTime() * 1000);
+		 Builder.mAudioPlayer.start();
+
+		// final int fx = Builder.soundPool.load(file.getAbsolutePath(), 0);
+		// //soundPool.play(fx, 10, 10, 0, 0, (float) 1);
+		// Timer timer = new Timer();
+		// timer.schedule(new TimerTask(){
+		//
+		// @Override
+		// public void run() {
+		// // TODO Auto-generated method stub
+		// Builder.soundPool.play(fx, 10, 10, 1, 0, 1.0f);
+		// }
+		//
+		// }, 1000);
+
 	}
 
 	private void showImage(File file) {
@@ -200,25 +226,25 @@ public class LongClickShowView extends Dialog {
 	public void initTimer() {
 
 		glTimer = new RecordTimerLimitView(getContext());
-		params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		params.setMargins(0, 10, 40, 0);
 		glTimer.setTextSize(56);
 		glTimer.setTextColor(Color.RED);
 		glTimer.setOnTimeEndListener(new OnTimeEndListener() {
+
 			@Override
 			public void onEnd(Object statuTag, Object buttonTag) {
 				hideDialog();
 			}
 		}, null, null);
-		Builder.mPlayVidoeView
-				.setOnStartPlayListener(new OnStartPlayListener() {
-					@Override
-					public void onStart() {
-						glTimer.setVisibility(View.VISIBLE);
-					}
-				});
+		Builder.mPlayVidoeView.setOnStartPlayListener(new OnStartPlayListener() {
+
+			@Override
+			public void onStart() {
+				glTimer.setVisibility(View.VISIBLE);
+			}
+		});
 		contentView.addView(glTimer, params);
 	}
 }
