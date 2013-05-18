@@ -171,6 +171,9 @@ public class LongClickShowView extends Dialog {
 		Builder.mAudioPlayer.setDataSource(file.getAbsolutePath());
 		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
 		// Builder.mAudioPlayer.prepare();
+		
+		if (info.getTotleLength() != info.getLimitTime())
+			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
 
 		Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
 
@@ -178,9 +181,7 @@ public class LongClickShowView extends Dialog {
 			public void onPrepared(MediaPlayer mp) {
 				mp.start();
 
-				// if (info.getTotleLength() != info.getLimitTime())
-				// Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 -
-				// info.getLimitTime() * 1000);
+
 				//
 			}
 		});
@@ -223,7 +224,7 @@ public class LongClickShowView extends Dialog {
 	public void hideDialog() {
 		hide();
 //		SoundManager.getInstance().allStop();
-		// Builder.mAudioPlayer.stop();
+		 Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
