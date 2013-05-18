@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" android:drawable="@drawable/addfriend_down"/>
-     <item android:state_focused="false" android:drawable="@drawable/addfriend_up"/>
-     <item android:state_enabled="false" android:drawable="@drawable/added"/>
-	 <item android:drawable="@drawable/addfriend_up"/>
+
+    <item android:drawable="@drawable/addfriend_down" android:state_pressed="true"/>
+    <item android:drawable="@drawable/addfriend_up" android:state_enabled="true" android:state_focused="false"/>
+    <item android:drawable="@drawable/added" android:state_enabled="false" android:state_focused="false"/>
+    <item android:drawable="@drawable/addfriend_up"/>
+
 </selector>

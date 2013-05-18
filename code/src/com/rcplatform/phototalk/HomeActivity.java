@@ -47,6 +47,7 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Contract;
@@ -110,27 +111,20 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private void searchFriendDetailById(String atUserId) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request.executeGetFriendDetailAsync(this, atUserId, null);
-		FriendsProxy.getFriendDetail(this, new RCPlatformResponseHandler() {
-
+		Request.executeGetFriendDetailAsync(this, atUserId, new FriendDetailListener() {
+			
 			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					JSONObject jObj = new JSONObject(content);
-					Friend friend = JSONConver.jsonToFriend(jObj.getJSONObject("friendInfo").toString());
-					startFriendDetailActivity(friend);
-				} catch (JSONException e) {
-					showErrorConfirmDialog(R.string.net_error);
-				}
+			public void onSuccess(Friend friend) {
 				dismissLoadingDialog();
+				startFriendDetailActivity(friend);
 			}
-
+			
 			@Override
-			public void onFailure(int errorCode, String content) {
+			public void onError(int errorCode, String content) {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
-		}, atUserId);
+		},false);
 	}
 
 	private void startFriendDetailActivity(Friend friend) {

@@ -38,6 +38,7 @@ import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
@@ -505,7 +506,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					saveUserInfo(mUser);
 					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
-					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
+					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends,FriendType.CONTACT);
 					loginSuccess(mUser);
 				} catch (Exception e) {
 					e.printStackTrace();

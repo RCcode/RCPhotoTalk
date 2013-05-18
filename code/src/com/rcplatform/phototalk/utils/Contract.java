@@ -37,13 +37,13 @@ public class Contract {
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
-		initDatabase();
+		initDatabase(context);
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
 	}
 
-	private static void initDatabase() {
-		Database.BASE_DATABASE_PATH = Environment.getExternalStorageDirectory().getPath() + "/db";
+	private static void initDatabase(Activity context) {
+		Database.BASE_DATABASE_PATH = context.getFilesDir().getPath() + "/db";
 		Database.USERS_DATABASE_PATH = Database.BASE_DATABASE_PATH + "/users";
 		Utils.createNewDir(Database.USERS_DATABASE_PATH);
 		Database.REQUEST_DATABASE_PATH = Database.BASE_DATABASE_PATH;

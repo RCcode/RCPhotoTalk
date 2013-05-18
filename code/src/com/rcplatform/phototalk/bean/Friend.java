@@ -10,9 +10,9 @@ public class Friend implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	public static final int FRIEND_ADDED = 0;
-	public static final int FRIEND_NOT_ADDED = 1;
-	
+	public static final int FRIEND_ADDED = 1;
+	public static final int FRIEND_NOT_ADDED = 0;
+
 	public Friend(String nick, String cellPhone, String headUrl) {
 		this.nickName = nick;
 		this.cellPhone = cellPhone;
@@ -23,7 +23,7 @@ public class Friend implements Serializable {
 
 	private int appId;
 
-	private int added=FRIEND_NOT_ADDED;
+	private int added;
 
 	private String nickName;
 
@@ -51,6 +51,16 @@ public class Friend implements Serializable {
 
 	private String country;
 
+	private boolean deleted;
+	
+
+	public boolean isDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
 
 	public String getCountry() {
 		return country;
@@ -153,7 +163,7 @@ public class Friend implements Serializable {
 
 	public boolean isFriend() {
 		return added == FRIEND_ADDED;
-//		return false;
+		// return false;
 	}
 
 	public void setFriend(boolean isFriend) {

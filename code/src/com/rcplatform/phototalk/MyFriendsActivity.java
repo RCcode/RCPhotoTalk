@@ -36,6 +36,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Contract;
@@ -54,6 +55,8 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private List<Friend> mRecommends;
 	private ImageLoader mImageLoader;
 	private Friend mFriendShowDetail;
+
+	private List<Friend> deletedFriends = new ArrayList<Friend>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -196,8 +199,22 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
-			showDetail(friend);
+			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(MyFriendsActivity.this, friend.getRcId(), new FriendDetailListener() {
+
+				@Override
+				public void onSuccess(Friend friend) {
+					dismissLoadingDialog();
+					showDetail(friend);
+				}
+
+				@Override
+				public void onError(int errorCode, String content) {
+					dismissLoadingDialog();
+					showErrorConfirmDialog(content);
+				}
+			}, false);
 			return false;
 		}
 	};

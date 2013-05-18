@@ -10,6 +10,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.request.JSONConver;
@@ -37,8 +38,10 @@ public class AddFriendTask {
 						JSONObject jsonObject = new JSONObject(content);
 						int addType = jsonObject.getInt("isFriend");
 						Friend friend = JSONConver.jsonToObject(jsonObject.getJSONArray("userInfo").getJSONObject(0).toString(), Friend.class);
+						friend.setFriend(true);
 						friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
-						mListener.onFriendAddSuccess(friend,addType);
+						mListener.onFriendAddSuccess(friend, addType);
+						PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
 						LogicUtils.friendAdded(mContext, friend, addType);
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -78,7 +81,7 @@ public class AddFriendTask {
 	}
 
 	public static interface AddFriendListener {
-		public void onFriendAddSuccess(Friend friend,int addType);
+		public void onFriendAddSuccess(Friend friend, int addType);
 
 		public void onFriendAddFail(int statusCode, String content);
 	}

@@ -124,7 +124,6 @@ public class LogicUtils {
 	}
 
 	public static void friendAdded(Context context, Friend friend, int addType) {
-		PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
 		UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		long createTime = System.currentTimeMillis();
 		Information information = null;

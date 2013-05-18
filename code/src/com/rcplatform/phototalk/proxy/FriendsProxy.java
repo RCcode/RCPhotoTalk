@@ -78,14 +78,22 @@ public class FriendsProxy {
 						try {
 							JSONObject jObj = new JSONObject(content);
 							final List<Friend> mFriends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
-							for (Friend f : mFriends)
+							for (Friend f : mFriends) {
 								f.setFriend(true);
-							final List<Friend> mRecommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
-							for (Friend friend : mFriends) {
-								friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+								f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
 							}
+							final List<Friend> mRecommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
+							for (Friend f : mRecommends)
+								f.setFriend(false);
 							PhotoTalkDatabaseFactory.getDatabase().saveFriends(mFriends);
 							PhotoTalkDatabaseFactory.getDatabase().saveRecommends(mRecommends);
+							List<Friend> delFriends = PhotoTalkDatabaseFactory.getDatabase().getDeletedFriends();
+							for (Friend f : delFriends) {
+								if (mFriends.contains(f))
+									mFriends.remove(mFriends.indexOf(f));
+								if (mRecommends.contains(f))
+									mRecommends.remove(mRecommends.indexOf(f));
+							}
 							Collections.sort(mFriends, new Comparator<Friend>() {
 
 								@Override
@@ -138,7 +146,7 @@ public class FriendsProxy {
 		Request request = new Request(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
 		request.excuteAsync();
 	}
-	
+
 	// 田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
 		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);

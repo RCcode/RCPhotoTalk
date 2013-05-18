@@ -22,8 +22,10 @@ import com.rcplatform.phototalk.adapter.AppAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -56,8 +58,36 @@ public class FriendDetailActivity extends BaseActivity {
 		initView();
 	}
 
+	private void setFriendInfo() {
+		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead);
+		mImageLoader.displayImage(mFriend.getBackground(), ivBackground);
+		if (mFriend.getSource() != null) {
+			setFriendSource(mFriend.getSource());
+		}
+		setFriendName();
+		if (mFriend.getAppList() != null)
+			hlvApps.setAdapter(new AppAdapter(this, mFriend.getAppList(), mImageLoader));
+
+		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getGender()), mFriend.getAge()));
+	}
+
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
+		com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend.getRcId(), new FriendDetailListener() {
+
+			@Override
+			public void onSuccess(Friend friend) {
+				if (friend.getLocalName() != null && !friend.getLocalName().equals(mFriend.getLocalName())) {
+					friend.setLocalName(mFriend.getLocalName());
+					PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
+				}
+			}
+
+			@Override
+			public void onError(int errorCode, String content) {
+
+			}
+		}, true);
 		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		mAction = getIntent().getAction();
@@ -75,7 +105,7 @@ public class FriendDetailActivity extends BaseActivity {
 				new AddFriendTask(FriendDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 					@Override
-					public void onFriendAddSuccess(Friend friend,int addType) {
+					public void onFriendAddSuccess(Friend friend, int addType) {
 						mFriend.setFriend(true);
 						coverToFriendView();
 						dismissLoadingDialog();
@@ -117,21 +147,14 @@ public class FriendDetailActivity extends BaseActivity {
 		hlvApps = (HorizontalListView) findViewById(R.id.hlv_apps);
 		tvSource = (TextView) findViewById(R.id.tv_source_name);
 		tvName = (TextView) findViewById(R.id.tv_name);
-		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead);
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground);
 		btnEdit.setOnClickListener(mOnClickListener);
-		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getGender()), mFriend.getAge()));
-		if (mFriend.getSource() != null) {
-			setFriendSource(mFriend.getSource());
-		}
 		btnPerform = (Button) findViewById(R.id.btn_perform);
-		hlvApps.setAdapter(new AppAdapter(this, mFriend.getAppList(), mImageLoader));
-		setFriendName();
 		if (mAction.equals(Contract.Action.ACTION_FRIEND_DETAIL)) {
 			coverToFriendView();
 		} else if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL)) {
 			coverToRecommendView();
 		}
+		setFriendInfo();
 	}
 
 	private void setFriendSource(FriendSourse source) {
@@ -173,7 +196,7 @@ public class FriendDetailActivity extends BaseActivity {
 	};
 
 	private boolean hasChangeUserInfo() {
-		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL) && !mFriend.isFriend()) {
+		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL) && mFriend.isFriend()) {
 			return true;
 		}
 		if (mLastRemark != null && !mLastRemark.equals(mFriend.getLocalName())) {

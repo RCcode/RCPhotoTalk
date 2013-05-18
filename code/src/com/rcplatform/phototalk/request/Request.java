@@ -26,7 +26,6 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.logic.MessageSender;
@@ -36,6 +35,7 @@ import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.ContactUtil;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class Request implements Serializable {
 	/**
@@ -336,6 +336,7 @@ public class Request implements Serializable {
 					try {
 						JSONObject jObj = new JSONObject(content);
 						List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("userList").toString());
+						PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, FriendType.CONTACT);
 						listener.onServiceFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsService), recommendsService);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -365,6 +366,7 @@ public class Request implements Serializable {
 					try {
 						JSONObject jObj = new JSONObject(content);
 						List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
+						PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, FriendType.FACEBOOK);
 						listener.onServiceFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService), recommendsService);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -389,17 +391,34 @@ public class Request implements Serializable {
 		return responseHandler;
 	}
 
-	public static void executeGetFriendDetailAsync(Context context, String friendRcid, FriendDetailListener listener) {
+	public static void executeGetFriendDetailAsync(Context context, String friendRcid, final FriendDetailListener listener,boolean isUpdate) {
+		Friend friendCache = PhotoTalkDatabaseFactory.getDatabase().getFriendById(friendRcid);
+		if (!isUpdate&&friendCache != null && friendCache.getAppList() != null) {
+			listener.onSuccess(friendCache);
+			return;
+		}
 		RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					Friend friend = JSONConver.jsonToObject(jsonObject.getJSONObject("userDetail").toString(), Friend.class);
+					friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+					PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
+					if (listener != null)
+						listener.onSuccess(friend);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, content);
+				}
+
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
-
+				if (listener != null)
+					listener.onError(errorCode, content);
 			}
 		};
 

@@ -13,7 +13,7 @@ public interface PhotoTalkDatabase {
 
 	public List<Friend> getThirdPartFriends(int type);
 
-	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends,int type);
+	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends, int type);
 
 	public void saveRecordInfos(List<Information> recordInfos);
 
@@ -28,7 +28,7 @@ public interface PhotoTalkDatabase {
 	public void updateFriendRequestInformationByFriend(Friend friend);
 
 	public Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime, List<String> receivableUserIds,
-			final List<String> allReceiverIds,int state);
+			final List<String> allReceiverIds, int state);
 
 	public void saveFriends(List<Friend> friends);
 
@@ -47,5 +47,11 @@ public interface PhotoTalkDatabase {
 	public void updateTempInformationFail();
 
 	public void close();
+
+	public Friend getFriendById(String rcId);
+	
+	public void saveRecommends(List<Friend> recommends ,int friendType);
+	
+	public List<Friend> getDeletedFriends();
 
 }

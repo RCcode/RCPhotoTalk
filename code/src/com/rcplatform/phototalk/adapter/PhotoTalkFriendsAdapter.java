@@ -157,7 +157,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		Friend friend = mFriends.get(mTitles.get(groupPosition)).get(childPosition);
 		if (getChildType(groupPosition, childPosition) == TYPE_CHILD_RECOMMENT) {
 			convertView = getRecommentFriendView(convertView, parent, friend);
-		} else if (getChildType(groupPosition, childPosition) == TYPE_CONTACTS)
+		} else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_CONTACT)
 			convertView = getContactFriendView(convertView, parent, friend);
 		else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_FACEBOOK)
 			convertView = getFacebookView(convertView, parent, friend);

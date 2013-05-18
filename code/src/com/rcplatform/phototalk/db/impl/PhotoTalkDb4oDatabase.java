@@ -21,6 +21,7 @@ import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.db.PhotoTalkDatabase;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
@@ -40,8 +41,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		ThirdPartFriend friendExample = new ThirdPartFriend();
 		friendExample.setType(type);
 		ObjectSet<ThirdPartFriend> result = db.queryByExample(friendExample);
-		while (result.hasNext())
-			db.delete(result.next());
+		for (ThirdPartFriend f : result)
+			db.delete(f);
 		db.store(thirdPartFriends);
 		db.commit();
 	}
@@ -201,12 +202,15 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveFriends(List<Friend> friends) {
-		Friend friendExample = new Friend();
-		friendExample.setFriend(true);
-		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
-		for (Friend friend : localCache)
-			db.delete(friend);
-		db.store(friends);
+		ObjectSet<Friend> localCache = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return arg0.isFriend();
+			}
+		});
+		checkUpdateAndStore(localCache, friends);
 		db.commit();
 	}
 
@@ -217,7 +221,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return arg0.isFriend();
+				return arg0.isFriend() && !arg0.isDeleted();
 			}
 		}, new Comparator<Friend>() {
 
@@ -238,7 +242,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return !arg0.isFriend() && arg0.getSource().getAttrType() == type;
+				return !arg0.isFriend() && arg0.getSource().getAttrType() == type && !arg0.isDeleted();
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
@@ -253,7 +257,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return !arg0.isFriend();
+				return !arg0.isFriend() && !arg0.isDeleted();
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
@@ -263,17 +267,32 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveRecommends(List<Friend> recommends) {
-		Friend friendExample = new Friend();
-		friendExample.setFriend(false);
-		ObjectSet<Friend> localCache = db.queryByExample(friendExample);
-		for (Friend friend : localCache)
-			db.delete(friend);
-		db.store(recommends);
+		ObjectSet<Friend> localCache = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return !arg0.isFriend();
+			}
+		});
+		checkUpdateAndStore(localCache, recommends);
 		db.commit();
 	}
 
 	@Override
-	public synchronized void addFriend(Friend friend) {
+	public synchronized void addFriend(final Friend friend) {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return friend.getRcId().equals(arg0.getRcId());
+			}
+		});
+		LogUtil.e(result.size() + " is result size");
+		for (Friend f : result) {
+			db.delete(f);
+		}
 		db.store(friend);
 		db.commit();
 	}
@@ -283,12 +302,12 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		Friend friendExample = new Friend();
 		friendExample.setRcId(friend.getRcId());
 		ObjectSet<Friend> result = db.queryByExample(friendExample);
-		if (result.size() > 0) {
-			for (Friend f : result)
-				db.delete(f);
-			db.commit();
+		LogUtil.e(result.size() + " is result size");
+		for (Friend f : result) {
+			f.setDeleted(true);
+			db.store(f);
 		}
-
+		db.commit();
 	}
 
 	@Override
@@ -311,5 +330,63 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			db.store(info);
 		}
 		db.commit();
+	}
+
+	@Override
+	public synchronized Friend getFriendById(String rcId) {
+		Friend friendExample = new Friend();
+		friendExample.setRcId(rcId);
+		ObjectSet<Friend> result = db.queryByExample(friendExample);
+		if (result.hasNext()) {
+			return result.next();
+		}
+		return null;
+	}
+
+	@Override
+	public void saveRecommends(List<Friend> recommends, final int friendType) {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return arg0.getSource().getAttrType() == friendType && !arg0.isFriend();
+			}
+		});
+		checkUpdateAndStore(result, recommends);
+		db.commit();
+	}
+
+	private void checkUpdateAndStore(ObjectSet<Friend> caches, List<Friend> serviceFriends) {
+		List<Friend> localFriends = new ArrayList<Friend>();
+		localFriends.addAll(caches);
+		for (Friend fService : serviceFriends) {
+			if (localFriends.contains(fService)) {
+				Friend f = localFriends.get(localFriends.indexOf(fService));
+				f.setNickName(fService.getNickName());
+				f.setSource(fService.getSource());
+				f.setHeadUrl(fService.getHeadUrl());
+				f.setLetter(fService.getLetter());
+				db.store(f);
+			} else {
+				db.store(fService);
+			}
+		}
+	}
+
+	@Override
+	public List<Friend> getDeletedFriends() {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return arg0.isDeleted();
+			}
+		});
+		List<Friend> delFriends = new ArrayList<Friend>();
+		delFriends.addAll(result);
+		return delFriends;
 	}
 }
