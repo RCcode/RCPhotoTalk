@@ -19,6 +19,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.utils.Contract.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.SoundManager;
 
 public class PhotoInformationCountDownService {
 
@@ -102,6 +103,7 @@ public class PhotoInformationCountDownService {
 		if (!file.exists())
 			return;
 		if (file.isFile()) {
+			SoundManager.getInstance().release(file.getAbsolutePath());
 			file.delete();
 		} else if (file.isDirectory()) {
 			for (File f : file.listFiles()) {
