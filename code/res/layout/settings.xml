@@ -35,8 +35,8 @@
                     <ImageView
                         android:id="@+id/user_bg"
                         android:layout_width="fill_parent"
+                        android:layout_marginTop="8dp"
                         android:layout_height="@dimen/user_detail_bg_height"
-                        android:layout_below="@+id/tv_rcid"
                         android:scaleType="centerCrop"
                         android:src="@drawable/user_detail_bg" />
 
@@ -72,12 +72,14 @@
                             android:layout_gravity="center_vertical"
                             android:background="@drawable/send_friend_head_bg" >
 
-                            <com.rcplatform.phototalk.views.HeadImageView
+                            <com.rcplatform.phototalk.views.RoundImageView
                                 android:id="@+id/settings_account_head_portrait"
                                 android:layout_width="@dimen/user_detail_head_image_width"
                                 android:layout_height="@dimen/user_detail_head_image_width"
                                 android:layout_centerInParent="true"
-                                android:layout_marginRight="@dimen/user_detail_source_margin_left" />
+                                android:layout_marginRight="@dimen/user_detail_source_margin_left"
+                                android:background="@drawable/send_friend_head_bg"
+                                android:gravity="center" />
                         </RelativeLayout>
 
                         <LinearLayout
@@ -123,6 +125,9 @@
                                         style="@style/text_base"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:gravity="top"
+                                        android:layout_gravity="top"
+                                        android:layout_marginTop="-3dp"
                                         android:layout_marginLeft="@dimen/friend_info_age_left"
                                         android:text="24"
                                         android:textColor="#E5E5E5" />
@@ -298,6 +303,7 @@
                 android:layout_marginTop="@dimen/default_gap_2x"
                 android:background="@drawable/friend_info_send_btn"
                 android:text="@string/setting_page_clean_history"
+                android:layout_marginBottom="@dimen/default_gap_3x"
                 android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>

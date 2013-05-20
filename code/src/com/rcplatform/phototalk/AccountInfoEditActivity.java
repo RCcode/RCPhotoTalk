@@ -43,6 +43,7 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HeadImageView;
+import com.rcplatform.phototalk.views.RoundImageView;
 
 public class AccountInfoEditActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -61,7 +62,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private View mBackView;
 	private DatePicker mBirthDayPicker;
 	private TextView mTitleView;
-	private HeadImageView mMyHeadView;
+	private RoundImageView mMyHeadView;
 	private AlertDialog mBirthChooseDialog;
 	private Bitmap bitmap = null;
 	private Calendar mBirthDayCalender;
@@ -128,7 +129,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void initView() {
 		initTitle();
-		mMyHeadView = (HeadImageView) findViewById(R.id.settings_account_head_portrait);
+		mMyHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
 		mNameView = (TextView) findViewById(R.id.settings_modify_name);
 		mSexView = (TextView) findViewById(R.id.settings_modify_sex);
 		mBirthday = (TextView) findViewById(R.id.settings_modify_age);
@@ -157,14 +158,13 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void loadHeadPicture() {
 		String headUrl = userDetailInfo.getHeadUrl();
-		File file = new File(headUrl);
-		if (file.exists()) {
-			Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
-			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
-		} else {
+//		File file = new File(headUrl);
+//		if (file.exists()) {
+//			Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
+//			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
+//		} else {
 			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-		}
-
+//		}
 	}
 
 	private void setNick() {

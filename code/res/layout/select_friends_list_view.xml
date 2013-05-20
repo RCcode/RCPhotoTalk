@@ -35,7 +35,7 @@
             <com.rcplatform.phototalk.views.SelectFriendGallery
                 android:id="@+id/g_sfl_added_friends"
                 android:layout_width="fill_parent"
-                android:layout_height="56dip"
+                android:layout_height="wrap_content"
                 android:layout_toLeftOf="@+id/line_view"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"

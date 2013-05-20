@@ -23,14 +23,18 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
+import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
+import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Contract;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.HorizontalListView;
+import com.rcplatform.phototalk.views.RoundImageView;
 
 public class FriendDetailActivity extends BaseActivity {
 	private Friend mFriend;
@@ -39,7 +43,7 @@ public class FriendDetailActivity extends BaseActivity {
 	public static final String RESULT_PARAM_FRIEND = "friend";
 
 	private String mAction;
-	private HeadImageView ivHead;
+	private RoundImageView ivHead;
 	private ImageView ivBackground;
 	private Button btnEdit;
 	private TextView tvSexAge;
@@ -59,8 +63,19 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendInfo() {
-		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead);
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground);
+		
+		RCPlatformImageLoader.loadImage(FriendDetailActivity.this,
+				ImageLoader.getInstance(),
+				ImageOptionsFactory.getHeadImageOptions(),
+				mFriend.getHeadUrl(),
+				AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, ivHead,
+				R.drawable.default_head);
+		RCPlatformImageLoader.loadImage(FriendDetailActivity.this,
+				ImageLoader.getInstance(),
+				ImageOptionsFactory.getDefaultImageOptions(),
+				mFriend.getBackground(),
+				AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, ivBackground,
+				R.drawable.user_detail_bg);
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
@@ -140,7 +155,7 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void initView() {
-		ivHead = (HeadImageView) findViewById(R.id.iv_head);
+		ivHead = (RoundImageView) findViewById(R.id.iv_head);
 		ivBackground = (ImageView) findViewById(R.id.iv_bg);
 		btnEdit = (Button) findViewById(R.id.btn_edit);
 		tvSexAge = (TextView) findViewById(R.id.tv_sex_age);
