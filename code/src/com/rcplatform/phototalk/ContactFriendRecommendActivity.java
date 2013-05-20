@@ -51,6 +51,8 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 
 			@Override
 			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0)
+					return;
 				recommendFriends = recommends;
 				inviteFriends = friends;
 				setListData(recommendFriends, inviteFriends, mList);

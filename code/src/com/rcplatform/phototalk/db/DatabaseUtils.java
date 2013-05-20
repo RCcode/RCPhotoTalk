@@ -1,7 +1,7 @@
 package com.rcplatform.phototalk.db;
 
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class DatabaseUtils {
 
@@ -10,14 +10,14 @@ public class DatabaseUtils {
 	public static final String DATABSE_CONTACT = "global";
 
 	public static String getDatabasePath(UserInfo userInfo) {
-		return Contract.Database.USERS_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getRcId();
+		return Constants.Database.USERS_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getRcId();
 	}
 
 	public static String getRequestDatabasePath() {
-		return Contract.Database.REQUEST_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + DATABASE_REQUEST;
+		return Constants.Database.REQUEST_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + DATABASE_REQUEST;
 	}
 
 	public static String getGlobalDatabasePath() {
-		return Contract.Database.GLOBAL_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + DATABSE_CONTACT;
+		return Constants.Database.GLOBAL_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + DATABSE_CONTACT;
 	}
 }

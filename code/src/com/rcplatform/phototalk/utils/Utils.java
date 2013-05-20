@@ -79,16 +79,16 @@ public class Utils {
 		UserInfo userInfo = null;
 		if (cursor.moveToFirst()) {
 			userInfo = new UserInfo();
-			userInfo.setBirthday(cursor.getString(cursor.getColumnIndex(Contract.KEY_BIRTHDAY)));
-			userInfo.setEmail(cursor.getString(cursor.getColumnIndex(Contract.KEY_EMAIL)));
-			userInfo.setDeviceId(cursor.getString(cursor.getColumnIndex(Contract.KEY_DEVICE_ID)));
-			userInfo.setHeadUrl(cursor.getString(cursor.getColumnIndex(Contract.KEY_HEADURL)));
-			userInfo.setNickName(cursor.getString(cursor.getColumnIndex(Contract.KEY_NICK)));
-			userInfo.setCellPhone(cursor.getString(cursor.getColumnIndex(Contract.KEY_PHONE)));
-			userInfo.setGender(cursor.getInt(cursor.getColumnIndex(Contract.KEY_SEX)));
-			userInfo.setAllowsend(cursor.getInt(cursor.getColumnIndex(Contract.KEY_RECEIVESET)));
-			userInfo.setRcId(cursor.getString(cursor.getColumnIndex(Contract.KEY_RCID)));
-			userInfo.setToken(cursor.getString(cursor.getColumnIndex(Contract.KEY_USER_TOKEN)));
+			userInfo.setBirthday(cursor.getString(cursor.getColumnIndex(Constants.KEY_BIRTHDAY)));
+			userInfo.setEmail(cursor.getString(cursor.getColumnIndex(Constants.KEY_EMAIL)));
+			userInfo.setDeviceId(cursor.getString(cursor.getColumnIndex(Constants.KEY_DEVICE_ID)));
+			userInfo.setHeadUrl(cursor.getString(cursor.getColumnIndex(Constants.KEY_HEADURL)));
+			userInfo.setNickName(cursor.getString(cursor.getColumnIndex(Constants.KEY_NICK)));
+			userInfo.setCellPhone(cursor.getString(cursor.getColumnIndex(Constants.KEY_PHONE)));
+			userInfo.setGender(cursor.getInt(cursor.getColumnIndex(Constants.KEY_SEX)));
+			userInfo.setAllowsend(cursor.getInt(cursor.getColumnIndex(Constants.KEY_RECEIVESET)));
+			userInfo.setRcId(cursor.getString(cursor.getColumnIndex(Constants.KEY_RCID)));
+			userInfo.setToken(cursor.getString(cursor.getColumnIndex(Constants.KEY_USER_TOKEN)));
 		}
 		cursor.close();
 		return userInfo;

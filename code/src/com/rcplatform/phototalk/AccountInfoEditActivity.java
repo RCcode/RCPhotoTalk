@@ -37,7 +37,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ShowToast;
@@ -201,7 +201,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			updateUserInfo();
 			break;
 		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendActivity.class));
+			startActivity(new Intent(this, AddFriendsActivity.class));
 			break;
 		case R.id.settings_account_head_portrait:
 			showImagePickMenu(v,CROP_HEAD_IMAGE);
@@ -427,7 +427,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	private void cacheHeadImage(Bitmap bitmap) throws Exception {
-		File file = new File(getCacheDir(), Contract.HEAD_CACHE_PATH);
+		File file = new File(getCacheDir(), Constants.HEAD_CACHE_PATH);
 		FileOutputStream fos = new FileOutputStream(file);
 		bitmap.compress(CompressFormat.PNG, 100, fos);
 		String cachePath = "file://" + file.getPath();

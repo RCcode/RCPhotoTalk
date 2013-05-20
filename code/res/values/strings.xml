@@ -286,7 +286,12 @@
     <string name="registe_fail">注册失败</string>
     <string name="join_message">我已加入PhotoTalk：</string>
     <string name="no_net">没有可用网络</string>
-
+	<string name="vk_auth">绑定VK</string>
+	<string name="vk_load_fail">VK信息获取失败</string>
+	<string name="third_part_join_title">我加入PT啦！</string>
+	<string name="third_part_join_content">我加入PT啦！这有个内容啊！</string>
+    
+    
     <!-- gcm -->
     <string name="gcm_message">你有信息了</string>
     <string name="gcm_friend">有人加你为好友</string>

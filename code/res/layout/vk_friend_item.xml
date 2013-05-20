@@ -2,11 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:orientation="vertical"
     android:padding="@dimen/friends_adapter_item_padding" >
 
-    <com.facebook.widget.ProfilePictureView
-        android:id="@+id/facebook_ppv"
+    <ImageView
+        android:id="@+id/iv_vk_head"
         android:layout_width="@dimen/head_image_width"
         android:layout_height="@dimen/head_image_width" />
 
@@ -18,14 +18,13 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
         android:layout_toLeftOf="@+id/cb_invite"
-        android:layout_toRightOf="@+id/facebook_ppv" />
+        android:layout_toRightOf="@+id/iv_vk_head" />
 
     <CheckBox
         android:id="@+id/cb_invite"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-         />
+        android:layout_centerVertical="true" />
 
 </RelativeLayout>

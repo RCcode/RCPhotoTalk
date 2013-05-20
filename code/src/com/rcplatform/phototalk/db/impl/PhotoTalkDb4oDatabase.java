@@ -23,7 +23,7 @@ import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.db.PhotoTalkDatabase;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.MessageSender;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 
 public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
@@ -37,11 +37,11 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public synchronized void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends, int type) {
-		ThirdPartFriend friendExample = new ThirdPartFriend();
+	public synchronized void saveThirdPartFriends(List<ThirdPartUser> thirdPartFriends, int type) {
+		ThirdPartUser friendExample = new ThirdPartUser();
 		friendExample.setType(type);
-		ObjectSet<ThirdPartFriend> result = db.queryByExample(friendExample);
-		for (ThirdPartFriend f : result)
+		ObjectSet<ThirdPartUser> result = db.queryByExample(friendExample);
+		for (ThirdPartUser f : result)
 			db.delete(f);
 		db.store(thirdPartFriends);
 		db.commit();
@@ -54,9 +54,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized List<Friend> getThirdPartFriends(int type) {
-		ThirdPartFriend example = new ThirdPartFriend();
+		ThirdPartUser example = new ThirdPartUser();
 		example.setType(type);
-		ObjectSet<ThirdPartFriend> friends = db.queryByExample(example);
+		ObjectSet<ThirdPartUser> friends = db.queryByExample(example);
 		return ThirdPartUtils.parserToFriends(friends, type);
 	}
 
@@ -210,7 +210,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				return arg0.isFriend();
 			}
 		});
-		checkUpdateAndStore(localCache, friends);
+		updateFriendsAndStore(localCache, friends);
 		db.commit();
 	}
 
@@ -221,7 +221,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return arg0.isFriend() && !arg0.isDeleted();
+				return arg0.isFriend() && !arg0.isHiden();
 			}
 		}, new Comparator<Friend>() {
 
@@ -242,7 +242,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return !arg0.isFriend() && arg0.getSource().getAttrType() == type && !arg0.isDeleted();
+				return !arg0.isFriend() && arg0.getSource().getAttrType() == type && !arg0.isHiden();
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
@@ -257,7 +257,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public boolean match(Friend arg0) {
-				return !arg0.isFriend() && !arg0.isDeleted();
+				return !arg0.isFriend() && !arg0.isHiden();
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
@@ -267,15 +267,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveRecommends(List<Friend> recommends) {
-		ObjectSet<Friend> localCache = db.query(new Predicate<Friend>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean match(Friend arg0) {
-				return !arg0.isFriend();
-			}
-		});
-		checkUpdateAndStore(localCache, recommends);
+		ObjectSet<Friend> localCache = db.query(Friend.class);
+		updateFriendsAndStore(localCache, recommends);
 		db.commit();
 	}
 
@@ -304,7 +297,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		ObjectSet<Friend> result = db.queryByExample(friendExample);
 		LogUtil.e(result.size() + " is result size");
 		for (Friend f : result) {
-			f.setDeleted(true);
+			f.setHiden(true);
 			db.store(f);
 		}
 		db.commit();
@@ -345,30 +338,22 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public void saveRecommends(List<Friend> recommends, final int friendType) {
-		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
-
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean match(Friend arg0) {
-				return arg0.getSource().getAttrType() == friendType && !arg0.isFriend();
-			}
-		});
-		checkUpdateAndStore(result, recommends);
+		ObjectSet<Friend> result = db.query(Friend.class);
+		updateFriendsAndStore(result, recommends);
 		db.commit();
 	}
 
-	private void checkUpdateAndStore(ObjectSet<Friend> caches, List<Friend> serviceFriends) {
+	private void updateFriendsAndStore(ObjectSet<Friend> caches, List<Friend> serviceFriends) {
 		List<Friend> localFriends = new ArrayList<Friend>();
 		localFriends.addAll(caches);
 		for (Friend fService : serviceFriends) {
 			if (localFriends.contains(fService)) {
-				Friend f = localFriends.get(localFriends.indexOf(fService));
-				f.setNickName(fService.getNickName());
-				f.setSource(fService.getSource());
-				f.setHeadUrl(fService.getHeadUrl());
-				f.setLetter(fService.getLetter());
-				db.store(f);
+				Friend fLocal = localFriends.get(localFriends.indexOf(fService));
+				fLocal.setNickName(fService.getNickName());
+				fLocal.setSource(fService.getSource());
+				fLocal.setHeadUrl(fService.getHeadUrl());
+				fLocal.setLetter(fService.getLetter());
+				db.store(fLocal);
 			} else {
 				db.store(fService);
 			}
@@ -376,17 +361,38 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public List<Friend> getDeletedFriends() {
+	public List<Friend> getHidenFriends() {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean match(Friend arg0) {
-				return arg0.isDeleted();
+				return arg0.isHiden();
 			}
 		});
 		List<Friend> delFriends = new ArrayList<Friend>();
 		delFriends.addAll(result);
 		return delFriends;
+	}
+
+	@Override
+	public void updateFriend(final Friend friend) {
+		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Friend arg0) {
+				return friend.getRcId().equals(arg0.getRcId());
+			}
+		});
+		LogUtil.e(result.size() + " is result size");
+		boolean isHiden = false;
+		for (Friend f : result) {
+			isHiden = f.isHiden();
+			db.delete(f);
+		}
+		friend.setHiden(isHiden);
+		db.store(friend);
+		db.commit();
 	}
 }

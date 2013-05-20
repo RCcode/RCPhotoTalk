@@ -26,7 +26,8 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
@@ -95,7 +96,7 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 		}
 	};
 
-	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartFriend> friends) {
+	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartUser> friends) {
 
 	}
 
@@ -229,7 +230,7 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 					facebookRequestError();
 					return;
 				}
-				onFacebookInfoLoaded(user, FacebookUtil.buildFriends(users));
+				onFacebookInfoLoaded(user, ThirdPartUtils.parserFacebookUserToThirdPartUser(users));
 			}
 		});
 		request.executeAsync();

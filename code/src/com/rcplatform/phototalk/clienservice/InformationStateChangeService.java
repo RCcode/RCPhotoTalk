@@ -26,7 +26,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class InformationStateChangeService extends IntentService {
@@ -43,14 +43,14 @@ public class InformationStateChangeService extends IntentService {
 		ServiceSimpleNotice[] infos = getNotices(intent);
 		String action = intent.getAction();
 		try {
-			if (action.equals(Contract.Action.ACTION_INFORMATION_STATE_CHANGE)) {
+			if (action.equals(Constants.Action.ACTION_INFORMATION_STATE_CHANGE)) {
 				sendRequest(MenueApiUrl.NOTICE_STATE_CHANGE_URL, getEntity(infos));
-			} else if (action.equals(Contract.Action.ACTION_INFORMATION_DELETE)) {
+			} else if (action.equals(Constants.Action.ACTION_INFORMATION_DELETE)) {
 				if (infos != null)
 					sendRequest(MenueApiUrl.NOTICE_DELETE_URL, getEntity(infos));
 				else
 					sendRequest(MenueApiUrl.NOTICE_CLEAR_URL, getClearInformationEntity());
-			} else if (action.equals(Contract.Action.ACTION_INFORMATION_OVER)) {
+			} else if (action.equals(Constants.Action.ACTION_INFORMATION_OVER)) {
 				sendRequest(MenueApiUrl.NOTICE_OVER_URL, getEntity(infos));
 			}
 		} catch (Exception e) {

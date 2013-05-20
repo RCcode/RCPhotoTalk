@@ -25,7 +25,7 @@ import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class MenueApplication extends Application {
 
@@ -48,7 +48,7 @@ public class MenueApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Contract.START_COMPLETE=false;
+		Constants.START_COMPLETE=false;
 		PhotoInformationCountDownService.getInstance().setApplication(this);
 		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache())
 				.threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory()
@@ -113,11 +113,11 @@ public class MenueApplication extends Application {
 	}
 
 	public int getScreenWidth() {
-		return Contract.SCREEN_WIDTH;
+		return Constants.SCREEN_WIDTH;
 	}
 
 	public int getScreentHeight() {
-		return Contract.SCREEN_HEIGHT;
+		return Constants.SCREEN_HEIGHT;
 	}
 
 	public WindowManager.LayoutParams getMywmParams() {

@@ -40,7 +40,7 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.task.AddFriendTask.AddFriendListener;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants.Action;
 
 //github.com/RCcode/RCPhotoTalk.git
 
@@ -170,7 +170,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendListener() {
 			@Override
-			public void onFriendAddSuccess(Friend friend, int addType) {
+			public void onFriendAddSuccess(Friend f, int addType) {
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();

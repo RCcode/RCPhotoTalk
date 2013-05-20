@@ -26,7 +26,7 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class InviteFriendUploadService extends IntentService {
 	private static final String SERVICE_NAME = "invite_friend_upload";
@@ -41,10 +41,10 @@ public class InviteFriendUploadService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		String action = intent.getAction();
-		if (action.equals(Contract.Action.ACTION_UPLOAD_INTITE_CONTACT)) {
+		if (action.equals(Constants.Action.ACTION_UPLOAD_INTITE_CONTACT)) {
 			type = FriendType.CONTACT;
 			asyncInviteInfoContact();
-		} else if (action.equals(Contract.Action.ACTION_UPLOAD_INTITE_THIRDPART)) {
+		} else if (action.equals(Constants.Action.ACTION_UPLOAD_INTITE_THIRDPART)) {
 			String[] ids = (String[]) intent.getSerializableExtra(PARAM_FRIENDS_IDS);
 			type = intent.getIntExtra(PARAM_TYPE, 0);
 			asyncInviteInfoThirdPart(ids);

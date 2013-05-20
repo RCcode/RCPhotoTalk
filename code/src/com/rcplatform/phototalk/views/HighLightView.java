@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class HighLightView extends View {
 
@@ -84,8 +84,8 @@ public class HighLightView extends View {
 	private void init() {
 		mBlackBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cut_image_background);
 		mPaint = new Paint();
-		width = Contract.SCREEN_WIDTH;
-		height = Contract.SCREEN_HEIGHT;
+		width = Constants.SCREEN_WIDTH;
+		height = Constants.SCREEN_HEIGHT;
 
 	}
 

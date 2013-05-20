@@ -9,7 +9,7 @@ import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class BasePhotoChatRequest implements BasePhotoChatRequestInterface {
 
@@ -35,7 +35,7 @@ public class BasePhotoChatRequest implements BasePhotoChatRequestInterface {
 		request.setPostValueForKey(MenueApiFactory.USERID, currentUser.getRcId());
 		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
 		request.setPostValueForKey(MenueApiFactory.DEVICE_ID, android.os.Build.DEVICE);
-		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
+		request.setPostValueForKey(MenueApiFactory.APP_ID, Constants.APP_ID);
 	}
 
 	@Override

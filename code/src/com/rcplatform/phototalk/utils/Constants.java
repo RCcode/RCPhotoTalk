@@ -9,7 +9,7 @@ import android.util.DisplayMetrics;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 
-public class Contract {
+public class Constants {
 
 	public static int SCREEN_WIDTH;
 
@@ -28,6 +28,8 @@ public class Contract {
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
 	public static Map<AppInfo, UserInfo> userApps;
+	
+	 public static String VK_API_ID="2904017";
 
 	public static boolean START_COMPLETE = false;
 
@@ -41,6 +43,7 @@ public class Contract {
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
 	}
+	
 
 	private static void initDatabase(Activity context) {
 		Database.BASE_DATABASE_PATH = context.getFilesDir().getPath() + "/db";

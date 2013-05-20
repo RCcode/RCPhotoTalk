@@ -45,7 +45,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -78,6 +78,7 @@
         <!-- android:name="com.menue.photochat.TestInterfaceMainActivity" -->
         <activity
             android:name="com.rcplatform.phototalk.WelcomeActivity"
+            android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
@@ -136,10 +137,15 @@
             android:name="com.rcplatform.phototalk.AddFriendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.rcplatform.phototalk.ForgetPasswordActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.rcplatform.phototalk.VKAuthorizeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
@@ -158,8 +164,8 @@
             android:name="com.rcplatform.phototalk.MyFriendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateHidden"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.rcplatform.phototalk.MyFriendFindActivity"
             android:configChanges="orientation"
@@ -265,6 +271,12 @@
             android:theme="@style/ThemeActivity" >
         </activity>
         <activity
+            android:name="com.rcplatform.phototalk.VKRecommendActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
             android:name="com.rcplatform.phototalk.UnbindFacebookActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
@@ -277,16 +289,13 @@
         <service android:name="com.rcplatform.phototalk.clienservice.PhotoTalkWebService" />
         <service android:name="com.rcplatform.message.UserMessageService" />
         <service android:name="com.rcplatform.tigase.TigaseRegisterSerivce" />
-        
-              <service android:name="com.google.android.gcm.GCMIntentService" />
+        <service android:name="com.google.android.gcm.GCMIntentService" />
         <!--
           BroadcastReceiver that will receive intents from GCM
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
-
-
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -301,7 +310,6 @@
                 <category android:name="com.rcplatform.phototalk.gcm.push" />
             </intent-filter>
         </receiver>
-        
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

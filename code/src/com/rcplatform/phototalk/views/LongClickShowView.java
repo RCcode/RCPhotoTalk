@@ -25,7 +25,7 @@ import android.widget.RelativeLayout.LayoutParams;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.SoundManager;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -214,11 +214,11 @@ public class LongClickShowView extends Dialog {
 	}
 
 	private boolean isImage(String fileName) {
-		return fileName.endsWith(Contract.IMAGE_FORMAT);
+		return fileName.endsWith(Constants.IMAGE_FORMAT);
 	}
 
 	private boolean isAudio(String fileName) {
-		return fileName.endsWith(Contract.AUDIO_FORMAT);
+		return fileName.endsWith(Constants.AUDIO_FORMAT);
 	}
 
 	public void hideDialog() {

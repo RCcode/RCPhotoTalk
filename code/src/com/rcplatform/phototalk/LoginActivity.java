@@ -53,7 +53,7 @@ import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.task.ContactUploadTask;
 import com.rcplatform.phototalk.task.ContactUploadTask.OnUploadOverListener;
 import com.rcplatform.phototalk.task.ContactUploadTask.Status;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.ListViewUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -120,7 +120,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		Intent intent = getIntent();
-		mIsLoginPage = (Boolean) intent.getExtras().get(Contract.KEY_LOGIN_PAGE);
+		mIsLoginPage = (Boolean) intent.getExtras().get(Constants.KEY_LOGIN_PAGE);
 		setupData();
 		setupView();
 	}
@@ -163,7 +163,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mSignupButton = (Button) findViewById(R.id.login_page_signup_button);
 		mSignupButton.setOnClickListener(this);
 		mLinearAccounts = findViewById(R.id.linear_platform_accounts);
-		BaseAdapter adapter = new OtherAppsAdapter(Contract.userApps);
+		BaseAdapter adapter = new OtherAppsAdapter(Constants.userApps);
 		mLvAcccounts.setAdapter(adapter);
 		mLvAcccounts.setOnItemClickListener(new OnItemClickListener() {
 
@@ -203,7 +203,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		clearInputInfo();
 		mDescTextView.setText(R.string.user_other_account);
 		btnChange.setText(R.string.landing_page_signup);
-		if (Contract.userApps.size() > 0) {
+		if (Constants.userApps.size() > 0) {
 			mLinearAccounts.setVisibility(View.VISIBLE);
 		} else {
 			mLinearAccounts.setVisibility(View.GONE);
@@ -442,8 +442,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 						userInfo.setShowRecommends(showRecommends);
 						long lastBindTime = obj.optLong(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_TIME);
 						String lastBindNumber = obj.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
-						PrefsUtils.User.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
-						PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
+						PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
+						PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
 						loginSuccess(userInfo);
 					}
 				} catch (Exception e) {

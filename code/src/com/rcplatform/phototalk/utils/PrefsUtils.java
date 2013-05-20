@@ -2,6 +2,8 @@ package com.rcplatform.phototalk.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
 
 import com.rcplatform.phototalk.bean.UserInfo;
 
@@ -71,6 +73,7 @@ public class PrefsUtils {
 	}
 
 	public static class LoginState {
+
 		private static final String PREF_NAME = "loginstate";
 		private static final String PREF_KEY_LOGIN_USER = "loginuser";
 		private static final String PREF_KEY_HAS_USED = "hasused";
@@ -110,51 +113,126 @@ public class PrefsUtils {
 
 		private static final String PREF_KEY_LAST_SMS_SEND_TIME = "smssendtime";
 		private static final String PREF_KEY_LAST_BIND_NUMBER = "lastbindnumber";
+
 		private static final String PREF_KEY_FACEBOOK_NAME = "facebookname";
 		private static final String PREF_KEY_FACEBOOK_ASYNC_TIME = "facebookasynctime";
+		private static final String PREF_KEY_VK_SYNC_TIME = "vksynctime";
+
 		private static final String PREF_KEY_MAX_RECORDINFO_ID = "max_record_info_id";
+		private static final String PREF_KEY_VK_ACCESSTOKEN = "vk_access_token";
+		private static final String PREF_KEY_VK_USERID = "vk_userid";
+
+		public static class ThirdPart {
+
+			public static void setFacebookUserName(Context context, String pref, String userName) {
+				SharedPreferences sp = getPreference(context, pref);
+				sp.edit().putString(PREF_KEY_FACEBOOK_NAME, userName).commit();
+			}
+
+			public static String getFacebookUserName(Context context, String pref) {
+				return getPreference(context, pref).getString(PREF_KEY_FACEBOOK_NAME, null);
+			}
+
+			public static void refreshFacebookAsyncTime(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				sh.edit().putLong(PREF_KEY_FACEBOOK_ASYNC_TIME, System.currentTimeMillis()).commit();
+			}
+
+			public static long getFacebookLastAsyncTime(Context context, String pref) {
+				return getPreference(context, pref).getLong(PREF_KEY_FACEBOOK_ASYNC_TIME, 0);
+			}
+
+			public static void saveVKAccount(Context context, String pref, String accessToken, long userId) {
+				SharedPreferences prefs = getPreference(context, pref);
+				Editor editor = prefs.edit();
+				editor.putString(PREF_KEY_VK_ACCESSTOKEN, accessToken);
+				editor.putLong(PREF_KEY_VK_USERID, userId);
+				editor.commit();
+			}
+
+			public static Object[] getVKAccount(Context context, String pref) {
+				SharedPreferences prefs = getPreference(context, pref);
+				String access_token = prefs.getString(PREF_KEY_VK_ACCESSTOKEN, null);
+				long user_id = prefs.getLong(PREF_KEY_VK_USERID, 0);
+				if (access_token == null || user_id == 0)
+					return null;
+				Object[] result = new Object[2];
+				result[0] = access_token;
+				result[1] = user_id;
+				return result;
+			}
+
+			public static void refreshVKSyncTime(Context context, String pref) {
+				SharedPreferences prefs = getPreference(context, pref);
+				prefs.edit().putLong(PREF_KEY_VK_SYNC_TIME, System.currentTimeMillis()).commit();
+			}
+
+			public static long getVKSyncTime(Context context, String pref) {
+				return getPreference(context, pref).getLong(PREF_KEY_VK_SYNC_TIME, 0);
+			}
+		}
+
+		public static class MobilePhoneBind {
+			public static void saveBindedPhoneNumber(Context context, String phoneNumber, String pref) {
+				SharedPreferences sharedPreferences = getPreference(context, pref);
+				sharedPreferences.edit().putString(Constants.KEY_PHONE, phoneNumber).commit();
+			}
+
+			public static boolean willTryToBindPhone(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				String lastNumber = sh.getString(PREF_KEY_LAST_BIND_NUMBER, null);
+				return lastNumber != null && !lastNumber.equals(Constants.BIND_PHONE_NUMBER_BACKUP);
+			}
+
+			public static void setLastBindNumber(Context context, String pref, String number) {
+				SharedPreferences sh = getPreference(context, pref);
+				sh.edit().putString(PREF_KEY_LAST_BIND_NUMBER, number).commit();
+			}
+
+			public static String getLastBindNumber(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				return sh.getString(PREF_KEY_LAST_BIND_NUMBER, null);
+			}
+
+			public static long getLastBindPhoneTryTime(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				return sh.getLong(PREF_KEY_LAST_SMS_SEND_TIME, 0);
+			}
+
+			public static void setLastBindPhoneTime(Context context, long sendTime, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				sh.edit().putLong(PREF_KEY_LAST_SMS_SEND_TIME, sendTime).commit();
+			}
+
+		}
+
+		public static void setUserTrendSet(Context context, String pref, int set) {
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putInt(Constants.KEY_TRENDSET, set).commit();
+		}
 
 		public static UserInfo getUserInfo(Context context, String pref) {
 
 			SharedPreferences sp = getPreference(context, pref);
-			String rcId = sp.getString(Contract.KEY_RCID, null);
+			String rcId = sp.getString(Constants.KEY_RCID, null);
 			if (rcId == null)
 				return null;
 			UserInfo userInfo = new UserInfo();
 			userInfo.setRcId(rcId);
-			userInfo.setEmail(sp.getString(Contract.KEY_EMAIL, null));
-			userInfo.setToken(sp.getString(Contract.KEY_USER_TOKEN, null));
-			userInfo.setNickName(sp.getString(Contract.KEY_NICK, null));
-			userInfo.setHeadUrl(sp.getString(Contract.KEY_HEADURL, null));
-			userInfo.setGender(sp.getInt(Contract.KEY_SEX, 0));
-			userInfo.setAllowsend(sp.getInt(Contract.KEY_RECEIVESET, UserInfo.RECEIVE_ALL));
-			userInfo.setShareNews(sp.getInt(Contract.KEY_TRENDSET, UserInfo.TRENDS_SHOW));
-			userInfo.setBirthday(sp.getString(Contract.KEY_BIRTHDAY, null));
-			userInfo.setDeviceId(sp.getString(Contract.KEY_DEVICE_ID, null));
-			userInfo.setCellPhone(sp.getString(Contract.KEY_PHONE, null));
-			userInfo.setBackground(sp.getString(Contract.KEY_BACKGROUND, null));
-			userInfo.setTigaseId(sp.getString(Contract.KEY_TIGASE_ID, null));
-			userInfo.setTigasePwd((sp.getString(Contract.KEY_TIGASE_PASSWORD, null)));
+			userInfo.setEmail(sp.getString(Constants.KEY_EMAIL, null));
+			userInfo.setToken(sp.getString(Constants.KEY_USER_TOKEN, null));
+			userInfo.setNickName(sp.getString(Constants.KEY_NICK, null));
+			userInfo.setHeadUrl(sp.getString(Constants.KEY_HEADURL, null));
+			userInfo.setGender(sp.getInt(Constants.KEY_SEX, 0));
+			userInfo.setAllowsend(sp.getInt(Constants.KEY_RECEIVESET, UserInfo.RECEIVE_ALL));
+			userInfo.setShareNews(sp.getInt(Constants.KEY_TRENDSET, UserInfo.TRENDS_SHOW));
+			userInfo.setBirthday(sp.getString(Constants.KEY_BIRTHDAY, null));
+			userInfo.setDeviceId(sp.getString(Constants.KEY_DEVICE_ID, null));
+			userInfo.setCellPhone(sp.getString(Constants.KEY_PHONE, null));
+			userInfo.setBackground(sp.getString(Constants.KEY_BACKGROUND, null));
+			userInfo.setTigaseId(sp.getString(Constants.KEY_TIGASE_ID, null));
+			userInfo.setTigasePwd((sp.getString(Constants.KEY_TIGASE_PASSWORD, null)));
 			return userInfo;
-		}
-
-		public static void setFacebookUserName(Context context, String pref, String userName) {
-			SharedPreferences sp = getPreference(context, pref);
-			sp.edit().putString(PREF_KEY_FACEBOOK_NAME, userName).commit();
-		}
-
-		public static String getFacebookUserName(Context context, String pref) {
-			return getPreference(context, pref).getString(PREF_KEY_FACEBOOK_NAME, null);
-		}
-
-		
-		public static void refreshFacebookAsyncTime(Context context, String pref, long time) {
-			SharedPreferences sh = getPreference(context, pref);
-			sh.edit().putLong(PREF_KEY_FACEBOOK_ASYNC_TIME, time).commit();
-		}
-
-		public static long getFacebookLastAsyncTime(Context context, String pref) {
-			return getPreference(context, pref).getLong(PREF_KEY_FACEBOOK_ASYNC_TIME, 0);
 		}
 
 		/**
@@ -168,13 +246,13 @@ public class PrefsUtils {
 		 */
 		public static void saveUserInfo(Context context, String pref, UserInfo userInfo) {
 			SharedPreferences sharedPreferences = getPreference(context, pref);
-			sharedPreferences.edit().putString(Contract.KEY_EMAIL, userInfo.getEmail()).putString(Contract.KEY_USER_TOKEN, userInfo.getToken())
-					.putString(Contract.KEY_NICK, userInfo.getNickName()).putString(Contract.KEY_HEADURL, userInfo.getHeadUrl())
-					.putInt(Contract.KEY_SEX, userInfo.getGender()).putInt(Contract.KEY_RECEIVESET, userInfo.getAllowsend())
-					.putInt(Contract.KEY_TRENDSET, userInfo.getShareNews()).putString(Contract.KEY_RCID, userInfo.getRcId())
-					.putString(Contract.KEY_PHONE, userInfo.getCellPhone()).putString(Contract.KEY_TIGASE_ID, userInfo.getTigaseId())
-					.putString(Contract.KEY_TIGASE_PASSWORD, userInfo.getTigasePwd()).putString(Contract.KEY_BIRTHDAY, userInfo.getBirthday())
-					.putString(Contract.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Contract.KEY_BACKGROUND, userInfo.getBackground()).commit();
+			sharedPreferences.edit().putString(Constants.KEY_EMAIL, userInfo.getEmail()).putString(Constants.KEY_USER_TOKEN, userInfo.getToken())
+					.putString(Constants.KEY_NICK, userInfo.getNickName()).putString(Constants.KEY_HEADURL, userInfo.getHeadUrl())
+					.putInt(Constants.KEY_SEX, userInfo.getGender()).putInt(Constants.KEY_RECEIVESET, userInfo.getAllowsend())
+					.putInt(Constants.KEY_TRENDSET, userInfo.getShareNews()).putString(Constants.KEY_RCID, userInfo.getRcId())
+					.putString(Constants.KEY_PHONE, userInfo.getCellPhone()).putString(Constants.KEY_TIGASE_ID, userInfo.getTigaseId())
+					.putString(Constants.KEY_TIGASE_PASSWORD, userInfo.getTigasePwd()).putString(Constants.KEY_BIRTHDAY, userInfo.getBirthday())
+					.putString(Constants.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Constants.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
 
 		/**
@@ -183,49 +261,13 @@ public class PrefsUtils {
 		 * @param context
 		 */
 		public static void cleanUserInfoLogin(Context context) {
-			SharedPreferences sharedPreferences = context.getSharedPreferences(Contract.PREFS_FILE_USER_INFO, Context.MODE_WORLD_READABLE);
+			SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_FILE_USER_INFO, Context.MODE_WORLD_READABLE);
 			sharedPreferences.edit().clear().commit();
 		}
 
 		public static void setUserReceiveSet(Context context, String pref, int set) {
 			SharedPreferences sh = getPreference(context, pref);
-			sh.edit().putInt(Contract.KEY_RECEIVESET, set).commit();
-		}
-
-		public static void setUserTrendSet(Context context, String pref, int set) {
-			SharedPreferences sh = getPreference(context, pref);
-			sh.edit().putInt(Contract.KEY_TRENDSET, set).commit();
-		}
-
-		public static void saveBindedPhoneNumber(Context context, String phoneNumber, String pref) {
-			SharedPreferences sharedPreferences = getPreference(context, pref);
-			sharedPreferences.edit().putString(Contract.KEY_PHONE, phoneNumber).commit();
-		}
-
-		public static long getLastBindPhoneTryTime(Context context, String pref) {
-			SharedPreferences sh = getPreference(context, pref);
-			return sh.getLong(PREF_KEY_LAST_SMS_SEND_TIME, 0);
-		}
-
-		public static void setLastBindPhoneTime(Context context, long sendTime, String pref) {
-			SharedPreferences sh = getPreference(context, pref);
-			sh.edit().putLong(PREF_KEY_LAST_SMS_SEND_TIME, sendTime).commit();
-		}
-
-		public static boolean willTryToBindPhone(Context context, String pref) {
-			SharedPreferences sh = getPreference(context, pref);
-			String lastNumber = sh.getString(PREF_KEY_LAST_BIND_NUMBER, null);
-			return lastNumber != null && !lastNumber.equals(Contract.BIND_PHONE_NUMBER_BACKUP);
-		}
-
-		public static void setLastBindNumber(Context context, String pref, String number) {
-			SharedPreferences sh = getPreference(context, pref);
-			sh.edit().putString(PREF_KEY_LAST_BIND_NUMBER, number).commit();
-		}
-
-		public static String getLastBindNumber(Context context, String pref) {
-			SharedPreferences sh = getPreference(context, pref);
-			return sh.getString(PREF_KEY_LAST_BIND_NUMBER, null);
+			sh.edit().putInt(Constants.KEY_RECEIVESET, set).commit();
 		}
 
 		public static void setUserMaxRecordInfoId(Context context, String pref, int maxRecordInfoId) {
@@ -240,12 +282,12 @@ public class PrefsUtils {
 
 		public static void setBackground(Context context, String pref, String bgUrl) {
 			SharedPreferences sh = getPreference(context, pref);
-			sh.edit().putString(Contract.KEY_BACKGROUND, bgUrl).commit();
+			sh.edit().putString(Constants.KEY_BACKGROUND, bgUrl).commit();
 		}
 
 		public static String getBackground(Context context, String pref) {
 			SharedPreferences sh = getPreference(context, pref);
-			return sh.getString(Contract.KEY_BACKGROUND, null);
+			return sh.getString(Constants.KEY_BACKGROUND, null);
 		}
 	}
 }

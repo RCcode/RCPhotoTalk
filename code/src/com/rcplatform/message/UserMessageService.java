@@ -22,7 +22,7 @@ import org.json.JSONObject;
 
 import com.google.android.gcm.MetaHelper;
 import com.rcplatform.phototalk.MenueApplication;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.tigase.TigaseNode;
 import com.rcplatform.tigase.TigaseNodeUtil;
 import com.rcplatform.tigase.XmppTool;
@@ -157,9 +157,9 @@ public class UserMessageService extends Service {
 				String type = "";
 
 				if (action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
-					type = Contract.GCM_TYPE_MSG;
+					type = Constants.GCM_TYPE_MSG;
 				} else if (action.equals(MESSAGE_ACTION_FRIEND)) {
-					type = Contract.GCM_TYPE_FRIEND;
+					type = Constants.GCM_TYPE_FRIEND;
 				}
 
 				GcmTask gcmTask = new GcmTask(context, type, toRcId);
@@ -256,7 +256,7 @@ public class UserMessageService extends Service {
 			JSONObject json = new JSONObject();
 			try {
 				// TODO
-				json.put("appId", Contract.APP_ID);
+				json.put("appId", Constants.APP_ID);
 				json.put("type", type);
 				// TODO 设置真是token
 				MenueApplication app = (MenueApplication) ctx.getApplicationContext();

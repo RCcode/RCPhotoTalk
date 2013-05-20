@@ -61,7 +61,7 @@ public class MenueApiUrl {
 
 	public static final String USER_INFO_HEAD_IMAGE_URL = FILE_URL + "uploadHead.do";
 
-	public static final String FACEBOOK_RECOMMENDS_URL = USER_URL + "queryThirdUsers.do";
+	public static final String THIRDPART_RECOMMENDS_URL = USER_URL + "queryThirdUsers.do";
 
 	public static final String ADD_FRIEND_URL = USER_URL + "addFriend.do";
 

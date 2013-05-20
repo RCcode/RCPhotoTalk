@@ -8,7 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class UserInfoProvider extends ContentProvider {
@@ -16,8 +16,8 @@ public class UserInfoProvider extends ContentProvider {
 	private static final int CODE_LOGIN_USER = 0;
 	private static final int CODE_USERS = 1;
 	static {
-		mUriMatcher.addURI(Contract.Provider.PROVIDER_AUTHORITY, Contract.Provider.PROVIDER_USERS_PATH, CODE_USERS);
-		mUriMatcher.addURI(Contract.Provider.PROVIDER_AUTHORITY, Contract.Provider.PROVIDER_LOGIN_USER_PATH, CODE_LOGIN_USER);
+		mUriMatcher.addURI(Constants.Provider.PROVIDER_AUTHORITY, Constants.Provider.PROVIDER_USERS_PATH, CODE_USERS);
+		mUriMatcher.addURI(Constants.Provider.PROVIDER_AUTHORITY, Constants.Provider.PROVIDER_LOGIN_USER_PATH, CODE_LOGIN_USER);
 	}
 
 	@Override
@@ -31,9 +31,9 @@ public class UserInfoProvider extends ContentProvider {
 			final UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getContext());
 			if (userInfo != null) {
 				Cursor cursor = new AbstractCursor() {
-					private String[] columnNames = new String[] { Contract.KEY_RCID, Contract.KEY_EMAIL, Contract.KEY_USER_TOKEN,
-							Contract.KEY_NICK, Contract.KEY_HEADURL, Contract.KEY_SEX, Contract.KEY_RECEIVESET, Contract.KEY_BIRTHDAY, Contract.KEY_DEVICE_ID,
-							Contract.KEY_PHONE };
+					private String[] columnNames = new String[] { Constants.KEY_RCID, Constants.KEY_EMAIL, Constants.KEY_USER_TOKEN,
+							Constants.KEY_NICK, Constants.KEY_HEADURL, Constants.KEY_SEX, Constants.KEY_RECEIVESET, Constants.KEY_BIRTHDAY, Constants.KEY_DEVICE_ID,
+							Constants.KEY_PHONE };
 
 					@Override
 					public boolean isNull(int column) {

@@ -31,7 +31,7 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
@@ -128,7 +128,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			startActivity(new Intent(this, UserInfoActivity.class));
 			break;
 		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendActivity.class));
+			startActivity(new Intent(this, AddFriendsActivity.class));
 			break;
 		case R.id.settings_clean_history_record_btn:
 			doCleanDistory();
@@ -361,7 +361,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 */
 	private String cacheHeadImage(Bitmap bitmap) throws Exception {
 		String cachePath =null;
-		File file = new File(app.getBackgroundCachePath(), Contract.HEAD_CACHE_PATH);
+		File file = new File(app.getBackgroundCachePath(), Constants.HEAD_CACHE_PATH);
 		FileOutputStream fos = new FileOutputStream(file);
 		bitmap.compress(CompressFormat.PNG, 100, fos);
 		cachePath = file.getPath();

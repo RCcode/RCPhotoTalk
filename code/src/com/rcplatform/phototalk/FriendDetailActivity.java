@@ -27,7 +27,7 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.HorizontalListView;
@@ -79,7 +79,7 @@ public class FriendDetailActivity extends BaseActivity {
 			public void onSuccess(Friend friend) {
 				if (friend.getLocalName() != null && !friend.getLocalName().equals(mFriend.getLocalName())) {
 					friend.setLocalName(mFriend.getLocalName());
-					PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
+					PhotoTalkDatabaseFactory.getDatabase().updateFriend(friend);
 				}
 			}
 
@@ -149,9 +149,9 @@ public class FriendDetailActivity extends BaseActivity {
 		tvName = (TextView) findViewById(R.id.tv_name);
 		btnEdit.setOnClickListener(mOnClickListener);
 		btnPerform = (Button) findViewById(R.id.btn_perform);
-		if (mAction.equals(Contract.Action.ACTION_FRIEND_DETAIL)) {
+		if (mAction.equals(Constants.Action.ACTION_FRIEND_DETAIL)) {
 			coverToFriendView();
-		} else if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL)) {
+		} else if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL)) {
 			coverToRecommendView();
 		}
 		setFriendInfo();
@@ -196,7 +196,7 @@ public class FriendDetailActivity extends BaseActivity {
 	};
 
 	private boolean hasChangeUserInfo() {
-		if (mAction.equals(Contract.Action.ACTION_RECOMMEND_DETAIL) && mFriend.isFriend()) {
+		if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL) && mFriend.isFriend()) {
 			return true;
 		}
 		if (mLastRemark != null && !mLastRemark.equals(mFriend.getLocalName())) {

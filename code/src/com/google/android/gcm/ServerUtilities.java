@@ -11,7 +11,7 @@
 package com.google.android.gcm;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 import android.content.Context;
 import android.content.Intent;
@@ -134,7 +134,7 @@ public final class ServerUtilities {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("pushID", pushId);
-			json.put("appID", Contract.APP_ID);
+			json.put("appID", Constants.APP_ID);
 			json.put("packageName", MetaHelper.getAppName(context));
 			json.put("status", pushFlag);
 			json.put("deviceID", MetaHelper.getImsi(context));
@@ -207,7 +207,7 @@ public final class ServerUtilities {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("userKey", regId);
-			json.put("appId",Contract.APP_ID);
+			json.put("appId",Constants.APP_ID);
 			json.put("rcId", rcId);
 			//TODO 设置真是token
 			json.put("token", USER_TOKEN);

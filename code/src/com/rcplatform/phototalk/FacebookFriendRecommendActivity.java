@@ -21,12 +21,12 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
-import com.rcplatform.phototalk.task.FacebookUploadTask;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.FacebookUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity {
 	private LoginButton mLoginButton;
@@ -43,7 +43,7 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 		loginLayout = findViewById(R.id.login_layout);
 		friendsLayout = findViewById(R.id.friends_layout);
 		setItemType(PhotoTalkFriendsAdapter.TYPE_FACEBOOK);
-		if (FacebookUtil.isFacebookVlidate(this))
+		if (ThirdPartUtils.isFacebookVlidate(this))
 			getRecommentFriends();
 		else
 			mLoginButton.setUserInfoChangedCallback(this);
@@ -99,6 +99,8 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 
 			@Override
 			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0)
+					return;
 				dismissLoadingDialog();
 				recommendsLoaded(friends, recommends);
 			}
@@ -123,24 +125,24 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	}
 
 	@Override
-	protected void onFacebookInfoLoaded(GraphUser user, final List<ThirdPartFriend> friends) {
+	protected void onFacebookInfoLoaded(GraphUser user, final List<ThirdPartUser> friends) {
 		super.onFacebookInfoLoaded(user, friends);
 		mLoginButton.setUserInfoChangedCallback(null);
+		PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), getCurrentUser().getRcId());
 		PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends, FriendType.FACEBOOK);
+		ThirdPartInfoUploadTask task = new ThirdPartInfoUploadTask(this, friends, ThirdPartUtils.parserFacebookUserToThirdPartUser(user), FriendType.FACEBOOK,
+				new RCPlatformResponseHandler() {
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						getRecommentFriends();
+					}
 
-		FacebookUploadTask task = new FacebookUploadTask(this, friends, user);
-		task.setResponseListener(new RCPlatformResponseHandler() {
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				getRecommentFriends();
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				recommendsLoaded(ThirdPartUtils.parserToFriends(friends, FriendType.FACEBOOK), new ArrayList<Friend>());
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						recommendsLoaded(ThirdPartUtils.parserToFriends(friends, FriendType.FACEBOOK), new ArrayList<Friend>());
+					}
+				});
 		task.start();
 	}
 

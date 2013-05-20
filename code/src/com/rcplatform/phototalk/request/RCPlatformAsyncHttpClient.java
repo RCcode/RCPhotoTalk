@@ -19,7 +19,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class RCPlatformAsyncHttpClient {
 	private static final String CONTENT_TYPE_JSON = "application/json";

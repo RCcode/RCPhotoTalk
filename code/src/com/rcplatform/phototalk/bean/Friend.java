@@ -51,15 +51,15 @@ public class Friend implements Serializable {
 
 	private String country;
 
-	private boolean deleted;
+	private boolean hiden;
 	
 
-	public boolean isDeleted() {
-		return deleted;
+	public boolean isHiden() {
+		return hiden;
 	}
 
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
+	public void setHiden(boolean hiden) {
+		this.hiden = hiden;
 	}
 
 	public String getCountry() {

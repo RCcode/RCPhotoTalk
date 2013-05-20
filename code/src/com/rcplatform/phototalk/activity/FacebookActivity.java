@@ -23,7 +23,8 @@ import com.facebook.widget.WebDialog;
 import com.facebook.widget.WebDialog.OnCompleteListener;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 
@@ -38,7 +39,7 @@ public class FacebookActivity extends BaseActivity {
 
 	private UiLifecycleHelper mHelper;
 	private GraphUser mUser;
-	private List<ThirdPartFriend> mFriends;
+	private List<ThirdPartUser> mFriends;
 	private PendingAction mAction = PendingAction.NONE;
 	private String[] mInviteIds;
 	private boolean hasTryLogin = false;
@@ -104,7 +105,7 @@ public class FacebookActivity extends BaseActivity {
 		super.onResume();
 		mHelper.onResume();
 		if (!hasTryLogin) {
-			boolean isAuth = FacebookUtil.isFacebookVlidate(this);
+			boolean isAuth = ThirdPartUtils.isFacebookVlidate(this);
 			if (isAuth)
 				mAction = PendingAction.NONE;
 			else
@@ -162,7 +163,7 @@ public class FacebookActivity extends BaseActivity {
 		}
 	};
 
-	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartFriend> friends) {
+	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartUser> friends) {
 
 	}
 
@@ -203,7 +204,7 @@ public class FacebookActivity extends BaseActivity {
 					facebookRequestError();
 					return;
 				}
-				mFriends = FacebookUtil.buildFriends(users);
+				mFriends = ThirdPartUtils.parserFacebookUserToThirdPartUser(users);
 				hasFriendsLoaded = true;
 				if (hasUserInfoLoaed) {
 					onFacebookInfoLoaded(mUser, mFriends);
@@ -307,7 +308,7 @@ public class FacebookActivity extends BaseActivity {
 	}
 
 	protected boolean isFacebookAuthorize() {
-		return FacebookUtil.isFacebookVlidate(this);
+		return ThirdPartUtils.isFacebookVlidate(this);
 	}
 
 	protected void authorize() {
