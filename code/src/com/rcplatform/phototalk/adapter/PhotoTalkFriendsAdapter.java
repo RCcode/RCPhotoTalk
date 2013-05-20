@@ -321,7 +321,10 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
-		RCPlatformImageLoader.displayImage(mContext, ivHead, friend.getHeadUrl(), mImageLoader);
+		RCPlatformImageLoader.loadImage(mContext, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
+				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, ivHead, R.drawable.default_head);
+		
+//		RCPlatformImageLoader.displayImage(mContext, ivHead, friend.getHeadUrl(), mImageLoader);
 		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
 		return convertView;
 	}

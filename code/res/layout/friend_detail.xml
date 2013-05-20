@@ -4,7 +4,18 @@
     android:layout_height="wrap_content"
     android:background="@drawable/user_info_detail"
     android:orientation="vertical" >
-
+<LinearLayout android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+    
+    <TextView
+        style="@style/text_base"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:textColor="#74554a"
+        android:text="RC ID:"
+        android:textSize="@dimen/friend_info_rcid_text_size" />
     <TextView
         android:id="@+id/tv_rcid"
         style="@style/text_base"
@@ -13,14 +24,15 @@
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:textColor="#74554a"
         android:textSize="@dimen/friend_info_rcid_text_size" />
+    
+</LinearLayout>
 
     <RelativeLayout
         android:id="@+id/infos"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/friend_info_app_left" >
+        android:layout_height="wrap_content" >
 
-        <com.rcplatform.phototalk.views.HeadImageView
+        <ImageView
             android:id="@+id/iv_bg"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/user_detail_bg_height"
@@ -41,14 +53,16 @@
             android:layout_alignBottom="@+id/iv_bg"
             android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin" >
 
-            <com.rcplatform.phototalk.views.HeadImageView
+            <com.rcplatform.phototalk.views.RoundImageView
                 android:id="@+id/iv_head"
                 android:layout_width="@dimen/user_detail_head_image_width"
                 android:layout_height="@dimen/user_detail_head_image_width"
-                android:layout_marginLeft="@dimen/friend_info_app_left"
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="@dimen/user_detail_source_margin_left"
-                android:background="@drawable/default_head" />
+                android:background="@drawable/send_friend_head_bg"
+                android:gravity="center"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_head" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -146,6 +160,7 @@
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
         android:background="@drawable/app_list_bg"
+        android:visibility="gone"
         android:padding="10dp" />
     <!-- </RelativeLayout> -->
 

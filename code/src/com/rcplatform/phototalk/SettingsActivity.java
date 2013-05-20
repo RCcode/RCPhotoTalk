@@ -37,6 +37,7 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.HorizontalListView;
+import com.rcplatform.phototalk.views.RoundImageView;
 
 public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -52,7 +53,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
-	private HeadImageView mHeadView;
+	private RoundImageView mHeadView;
 	private TextView mNickView;
 	private TextView userRcId;
 	private ImageView user_bg_View;
@@ -68,7 +69,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		setContentView(R.layout.settings);
 		app = (MenueApplication) getApplication();
 		initTitle();
-		mHeadView = (HeadImageView) findViewById(R.id.settings_account_head_portrait);
+		mHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
 		mNickView = (TextView) findViewById(R.id.settings_user_nick);
 		userRcId = (TextView) findViewById(R.id.user_rc_id);
@@ -105,7 +106,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		mBack = findViewById(R.id.back);
 		mBack.setVisibility(View.VISIBLE);
 		mBack.setOnClickListener(this);
-		//
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
 		mTitleTextView.setText(getResources().getString(R.string.my_firend_setting_more_title));
 		mTitleTextView.setVisibility(View.VISIBLE);

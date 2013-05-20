@@ -4,21 +4,23 @@
     android:layout_height="wrap_content"
     >
 
-    <RelativeLayout
+   <!--  <RelativeLayout
         android:id="@+id/head_layou"
         android:layout_width="@dimen/friend_head_side"
         android:layout_height="@dimen/friend_head_side"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/friend_head_left" >
+        android:layout_marginLeft="@dimen/friend_head_left" > -->
 
         <ImageView
             android:id="@+id/iv_record_item_head"
-            android:layout_width="@dimen/friend_head_side"
-            android:layout_height="@dimen/friend_head_side"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:background="@drawable/default_head"
-            android:scaleType="fitXY" />
-    </RelativeLayout>
+            android:layout_marginLeft="@dimen/friend_head_left"
+            android:layout_centerVertical="true"
+            android:src="@drawable/default_head"
+            android:scaleType="matrix" />
+    <!-- </RelativeLayout> -->
     <ImageView android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/friend_item_bg"
@@ -38,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/friend_head_left"
-        android:layout_toRightOf="@id/head_layou"
+        android:layout_toRightOf="@id/iv_record_item_head"
         android:layout_toLeftOf="@id/btn_record_item_statu_button"
         android:orientation="vertical" >
 
