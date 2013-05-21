@@ -223,9 +223,9 @@ public class MenueApplication extends Application {
 		 if (sdCardExist) {
 		 sdDir = Environment.getExternalStorageDirectory();
 		 // 获取根目录
-		 imagePath =  "/sdcard/DCIM/Camera/photoTalk"+System.currentTimeMillis()+".jpg";
+		 imagePath =  "/sdcard/DCIM/Camera/photoTalk_"+System.currentTimeMillis()+".jpg";
 		 } else {
-		imagePath = "/stystem/DCIM/Camera/photoTalk"+System.currentTimeMillis()+".jpg";
+		imagePath = "/stystem/DCIM/Camera/photoTalk_"+System.currentTimeMillis()+".jpg";
 		 }
 		return imagePath;
 	}
