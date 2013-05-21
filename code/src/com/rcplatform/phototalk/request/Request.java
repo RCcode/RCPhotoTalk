@@ -391,8 +391,8 @@ public class Request implements Serializable {
 		return responseHandler;
 	}
 
-	public static void executeGetFriendDetailAsync(Context context, String friendRcid, final FriendDetailListener listener, boolean isUpdate) {
-		Friend friendCache = PhotoTalkDatabaseFactory.getDatabase().getFriendById(friendRcid);
+	public static void executeGetFriendDetailAsync(Context context, Friend friend, final FriendDetailListener listener, boolean isUpdate) {
+		Friend friendCache = PhotoTalkDatabaseFactory.getDatabase().getFriendById(friend.getRcId());
 		if (!isUpdate && friendCache != null && friendCache.getAppList() != null) {
 			listener.onSuccess(friendCache);
 			return;
@@ -423,7 +423,11 @@ public class Request implements Serializable {
 		};
 
 		Request request = new Request(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
-		request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendRcid);
+		request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friend.getRcId());
+		if (friend.getSource() != null)
+			request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType() + "");
+		else
+			request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_TYPE, FriendType.DEFAULT + "");
 		request.excuteAsync();
 	}
 }

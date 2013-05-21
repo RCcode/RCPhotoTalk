@@ -1,35 +1,30 @@
 package com.rcplatform.phototalk;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gcm.ServerUtilities;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-5 下午05:29:07
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author jelly.xiong@menue.com.cn
- * @version 1.0.0
- */
 public class WelcomeActivity extends BaseActivity {
 
 	private static final int INIT_SUCCESS = 100;
@@ -46,9 +41,27 @@ public class WelcomeActivity extends BaseActivity {
 
 	};
 
+	public void printHashKey() {
+
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo("com.rcplatform.phototalk", PackageManager.GET_SIGNATURES);
+			for (Signature signature : info.signatures) {
+				MessageDigest md = MessageDigest.getInstance("SHA");
+				md.update(signature.toByteArray());
+				Log.d("TEMPTAGHASH KEY:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+			}
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		// printHashKey();
 		setContentView(R.layout.loading);
 		startService(new Intent(this, PTBackgroundService.class));
 		startService(new Intent(this, PhotoTalkWebService.class));
@@ -56,7 +69,7 @@ public class WelcomeActivity extends BaseActivity {
 		Thread th = new Thread() {
 
 			public void run() {
-				Constants.init(WelcomeActivity.this);
+				Constants.initUI(WelcomeActivity.this);
 				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS, WAITING_TIME);
 			};
 		};
@@ -85,8 +98,7 @@ public class WelcomeActivity extends BaseActivity {
 		super.onDestroy();
 		try {
 			ServerUtilities.onDestroy(this);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 
 		}
 	}
@@ -96,9 +108,8 @@ public class WelcomeActivity extends BaseActivity {
 		// 用户已登录过，自动登录主页。
 		if (userInfo != null) {
 			try {
-				ServerUtilities.register(this, userInfo.getRcId(),userInfo.getToken());
-			}
-			catch (Exception e) {
+				ServerUtilities.register(this, userInfo.getRcId(), userInfo.getToken());
+			} catch (Exception e) {
 
 			}
 			getPhotoTalkApplication().setCurrentUser(userInfo);

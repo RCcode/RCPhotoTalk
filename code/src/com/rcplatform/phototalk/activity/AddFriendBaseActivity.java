@@ -283,7 +283,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 			if (friend.getSource() != null) {
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 				mFriendShowDetail = friend;
-				Request.executeGetFriendDetailAsync(AddFriendBaseActivity.this, friend.getRcId(), new FriendDetailListener() {
+				Request.executeGetFriendDetailAsync(AddFriendBaseActivity.this, friend, new FriendDetailListener() {
 
 					@Override
 					public void onSuccess(Friend friend) {
@@ -296,11 +296,17 @@ public class AddFriendBaseActivity extends BaseActivity {
 						dismissLoadingDialog();
 						showErrorConfirmDialog(content);
 					}
-				},false);
+				}, false);
+			} else if (mItemType == PhotoTalkFriendsAdapter.TYPE_FACEBOOK) {
+				onFacebookFriendItemClick(friend);
 			}
 			return false;
 		}
 	};
+
+	protected void onFacebookFriendItemClick(Friend f) {
+
+	}
 
 	private void startFriendDetail(Friend friend) {
 		Intent intent = new Intent(this, FriendDetailActivity.class);

@@ -105,10 +105,9 @@
     <string name="setting_update_tacotyid_edit_limit_hint">4-16个字母数字</string>
     <string name="setting_update_not_available_tacotyid">%s不可用，请重新输入</string>
     <string name="setting_update_name_invalid">请输入1-20字符</string>
-    
     <string name="take">将</string>
     <string name="add_friend">加为好友</string>
-    <string name= "friend_dynamic">好友动态</string>
+    <string name="friend_dynamic">好友动态</string>
 
     <!-- added jelly.xiong end -->
 
@@ -233,8 +232,6 @@
     <string name="operation_fail">操作失败</string>
     <string name="edit">编辑</string>
     <string name="friend_sex_age">%1$s,%2$d</string>
-    <string name="invite_success">邀请好友成功</string>
-    <string name="invite_fail">取消好友邀请</string>
     <string name="add_friend_title">添加好友</string>
     <string name="delete_friend">删除好友</string>
     <string name="set_friend_remark">设置好友备注名称</string>
@@ -286,13 +283,19 @@
     <string name="registe_fail">注册失败</string>
     <string name="join_message">我已加入PhotoTalk：</string>
     <string name="no_net">没有可用网络</string>
-	<string name="vk_auth">绑定VK</string>
-	<string name="vk_load_fail">VK信息获取失败</string>
-	<string name="third_part_join_title">我加入PT啦！</string>
-	<string name="third_part_join_content">我加入PT啦！这有个内容啊！</string>
-    
-    
+    <string name="vk_auth">绑定VK</string>
+    <string name="vk_load_fail">VK信息获取失败</string>
+    <string name="third_part_join_title">我加入PT啦！</string>
+    <string name="third_part_join_content">我加入PT啦！这有个内容啊！</string>
+    <string name="share_complete">分享成功</string>
+    <string name="share_fail">分享失败</string>
+    <string name="share_cancel">取消分享</string>
+    <string name="invite_success">邀请好友成功</string>
+    <string name="invite_cancel">取消好友邀请</string>
+    <string name="invite_fail">好友邀请失败</string>
+
     <!-- gcm -->
     <string name="gcm_message">你有信息了</string>
     <string name="gcm_friend">有人加你为好友</string>
+
 </resources>

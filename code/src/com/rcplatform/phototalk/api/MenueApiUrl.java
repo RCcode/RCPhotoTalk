@@ -2,8 +2,8 @@ package com.rcplatform.phototalk.api;
 
 public class MenueApiUrl {
 
-	// private static final String BASE_URL = "http://192.168.0.86:8083/";
-	private static final String BASE_URL = "http://103.247.169.150:8083/";
+	 private static final String BASE_URL = "http://192.168.0.86:8083/";
+//	private static final String BASE_URL = "http://103.247.169.150:8083/";
 	// private static final String BASE_URL = "http://192.168.0.118/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "photochat/";

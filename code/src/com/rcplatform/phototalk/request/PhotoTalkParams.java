@@ -149,6 +149,7 @@ public class PhotoTalkParams {
 
 	public static class FriendDetail {
 		public static final String PARAM_KEY_FRIEND_ID = "atRcId";
+		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
 	}
 
 	public static class AddFriendFromInformation {

@@ -88,7 +88,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
-		com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend.getRcId(), new FriendDetailListener() {
+		com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend, new FriendDetailListener() {
 
 			@Override
 			public void onSuccess(Friend friend) {

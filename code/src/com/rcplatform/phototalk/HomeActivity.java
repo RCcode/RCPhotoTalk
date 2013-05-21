@@ -4,9 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,9 +40,7 @@ import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.InformationPageController;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
@@ -109,22 +104,22 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		checkUpdate();
 	}
 
-	private void searchFriendDetailById(String atUserId) {
+	private void searchFriend(Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request.executeGetFriendDetailAsync(this, atUserId, new FriendDetailListener() {
-			
+		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
+
 			@Override
 			public void onSuccess(Friend friend) {
 				dismissLoadingDialog();
 				startFriendDetailActivity(friend);
 			}
-			
+
 			@Override
 			public void onError(int errorCode, String content) {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
-		},false);
+		}, false);
 	}
 
 	private void startFriendDetailActivity(Friend friend) {
@@ -252,13 +247,13 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			startActivity(SettingsActivity.class);
 			return;
 		}
-		String friendSuid = null;
+		Friend friend = new Friend();
 		if (LogicUtils.isSender(HomeActivity.this, information)) {
-			friendSuid = information.getReceiver().getRcId();
+			friend.setRcId(information.getReceiver().getRcId());
 		} else {
-			friendSuid = information.getSender().getRcId();
+			friend.setRcId(information.getSender().getRcId());
 		}
-		searchFriendDetailById(friendSuid);
+		searchFriend(friend);
 	}
 
 	protected void showLongClickDialog(int position) {
@@ -297,10 +292,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 						});
 					}
 
-					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL) {
-						mLongPressDialog.show(position, 1);
-					} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
-						mLongPressDialog.show(position, 0);
+					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL
+							|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
+						if (LogicUtils.isSender(this, record))
+							mLongPressDialog.show(position, 1);
+						else
+							mLongPressDialog.show(position, 0);
 					} else {
 						mLongPressDialog.show(position, 0, 1);
 					}

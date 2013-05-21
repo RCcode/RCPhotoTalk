@@ -231,26 +231,6 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		head.setProfileId(friend.getRcId());
 		TextView tvName = (TextView) convertView.findViewById(R.id.tv_nick);
 		tvName.setText(friend.getNickName());
-		CheckBox cbInvite = (CheckBox) convertView.findViewById(R.id.cb_invite);
-		cbInvite.setOnCheckedChangeListener(null);
-		if (!mWillInvateFriends.contains(friend)) {
-			cbInvite.setChecked(false);
-		} else {
-			cbInvite.setChecked(true);
-		}
-		cbInvite.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (mCheckBoxChangedListener != null) {
-					mCheckBoxChangedListener.onChange(friend, isChecked);
-				}
-				if (isChecked)
-					mWillInvateFriends.add(friend);
-				else
-					mWillInvateFriends.remove(friend);
-			}
-		});
 
 		return convertView;
 	}
@@ -323,8 +303,9 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
 		RCPlatformImageLoader.loadImage(mContext, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
 				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, ivHead, R.drawable.default_head);
-		
-//		RCPlatformImageLoader.displayImage(mContext, ivHead, friend.getHeadUrl(), mImageLoader);
+
+		// RCPlatformImageLoader.displayImage(mContext, ivHead,
+		// friend.getHeadUrl(), mImageLoader);
 		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
 		return convertView;
 	}

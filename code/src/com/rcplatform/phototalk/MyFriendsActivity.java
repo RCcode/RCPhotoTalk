@@ -202,7 +202,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
-			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(MyFriendsActivity.this, friend.getRcId(), new FriendDetailListener() {
+			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(MyFriendsActivity.this, friend, new FriendDetailListener() {
 
 				@Override
 				public void onSuccess(Friend friend) {

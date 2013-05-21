@@ -42,6 +42,8 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
+import javax.security.auth.callback.Callback;
+
 /**
  * A single request to be sent to the Facebook Platform through either the <a
  * href="https://developers.facebook.com/docs/reference/api/">Graph API</a> or <a
@@ -1818,4 +1820,5 @@ public class Request {
          */
         void onCompleted(List<GraphPlace> places, Response response);
     }
+
 }
