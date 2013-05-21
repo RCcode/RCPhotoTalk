@@ -47,7 +47,7 @@
         <RadioGroup
             android:id="@+id/rg_add_friends"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/add_friend_tab_hight"
             android:orientation="horizontal" >
 
             <RadioButton

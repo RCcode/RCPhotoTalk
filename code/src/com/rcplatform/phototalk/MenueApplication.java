@@ -48,7 +48,7 @@ public class MenueApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Constants.START_COMPLETE=false;
+		Constants.START_COMPLETE = false;
 		PhotoInformationCountDownService.getInstance().setApplication(this);
 		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
 				getApplicationContext())
@@ -181,61 +181,61 @@ public class MenueApplication extends Application {
 //				dir.mkdir();
 //			imagePath = sdUrl;
 //		} else {
-		String sdUrl = getCacheDir() + "/temp";
+			String sdUrl = getCacheDir() + "/temp";
 			File file = new File(sdUrl);
 			if (!file.exists()) {
 				file.mkdir();
 			}
-			imagePath = file.getPath();
+			imagePath = file.getAbsolutePath();
 //		}
 		return imagePath;
 	}
 
 	public String getSendZipFileCachePath() {
 		String imagePath = "";
-//		File sdDir = null;
-//		boolean sdCardExist = Environment.getExternalStorageState().equals(
-//				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
-//		if (sdCardExist) {
-//			sdDir = Environment.getExternalStorageDirectory();
-//			// 获取根目录
-//			// Logger.d(Constant.RcAdTag, "SD卡存在! ", null);
-//			String sdUrl = sdDir.toString() + "/rcplatform/phototalk/zip";
-//			File dir = new File(sdUrl);
-//			if (!dir.exists())
-//				dir.mkdir();
-//			imagePath = sdUrl;
-//		} else {
-			String sdUrl = getCacheDir() + "/zip";
-			File file = new File(sdUrl);
-			if (!file.exists()) {
-				file.mkdir();
-			}
-			imagePath = file.getPath();
-//		}
+		// File sdDir = null;
+		// boolean sdCardExist = Environment.getExternalStorageState().equals(
+		// android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		// if (sdCardExist) {
+		// sdDir = Environment.getExternalStorageDirectory();
+		// // 获取根目录
+		// // Logger.d(Constant.RcAdTag, "SD卡存在! ", null);
+		// String sdUrl = sdDir.toString() + "/rcplatform/phototalk/zip";
+		// File dir = new File(sdUrl);
+		// if (!dir.exists())
+		// dir.mkdir();
+		// imagePath = sdUrl;
+		// } else {
+		String sdUrl = getCacheDir() + "/zip";
+		File file = new File(sdUrl);
+		if (!file.exists()) {
+			file.mkdir();
+		}
+		imagePath = file.getPath();
+		// }
 		return imagePath;
 	}
 
 	public String getBackgroundCachePath() {
 		String imagePath = "";
-//		File sdDir = null;
-//		boolean sdCardExist = Environment.getExternalStorageState().equals(
-//				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
-//		if (sdCardExist) {
-//			sdDir = Environment.getExternalStorageDirectory();
-//			String sdUrl = sdDir.toString() + "/PhotoTalk";
-//			File dir = new File(sdUrl);
-//			if (!dir.exists())
-//				dir.mkdir();
-//			imagePath = sdUrl;
-//		} else {
-			// Logger.d(Constant.RcAdTag, "SD卡不存在! ", null); getCacheDir()
-			String sdUrl = getCacheDir().toString() + "/PhotoTalk";
-			File file = new File(sdUrl);
-			if (!file.exists())
-				file.mkdir();
-			imagePath = file.getAbsolutePath();
-//		}
+		// File sdDir = null;
+		// boolean sdCardExist = Environment.getExternalStorageState().equals(
+		// android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		// if (sdCardExist) {
+		// sdDir = Environment.getExternalStorageDirectory();
+		// String sdUrl = sdDir.toString() + "/PhotoTalk";
+		// File dir = new File(sdUrl);
+		// if (!dir.exists())
+		// dir.mkdir();
+		// imagePath = sdUrl;
+		// } else {
+		// Logger.d(Constant.RcAdTag, "SD卡不存在! ", null); getCacheDir()
+		String sdUrl = getCacheDir().toString() + "/PhotoTalk";
+		File file = new File(sdUrl);
+		if (!file.exists())
+			file.mkdir();
+		imagePath = file.getAbsolutePath();
+		// }
 		// Logger.d(Constant.RcAdTag, "自主广告 图片保存路径为 ：  " + imagePath, null);
 		return imagePath;
 	}

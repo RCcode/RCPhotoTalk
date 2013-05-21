@@ -7,6 +7,7 @@
     <dimen name="friend_head_side">70dp</dimen>
     <dimen name="friend_text_padding">8dp</dimen>
     <!-- 朋友列表属性 -->
+      <dimen name="add_friend_tab_hight">44dp</dimen>
     <dimen name="user_head_left">10dp</dimen>
     <dimen name="user_head_side">66dp</dimen>
 

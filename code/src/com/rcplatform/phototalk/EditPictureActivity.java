@@ -2,6 +2,7 @@ package com.rcplatform.phototalk;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
 import com.rcplatform.phototalk.views.AudioShowView;
 import com.rcplatform.phototalk.views.ColorPicker.OnColorChangeListener;
+import com.rcplatform.phototalk.views.LongClickShowView.Builder;
 import com.rcplatform.phototalk.views.ColorPickerDialog;
 import com.rcplatform.phototalk.views.EditPictureView;
 import com.rcplatform.phototalk.views.EditableViewGroup;
@@ -304,13 +306,6 @@ public class EditPictureActivity extends BaseActivity {
 										.setFocusableInTouchMode(false);
 								mEditText.getChildAt(0).setFocusable(false);
 								mEditText.getChildAt(0).clearFocus();
-//								if (((EditText) mEditText.getChildAt(0))
-//										.getText().equals("")
-//										|| ((EditText) mEditText.getChildAt(0))
-//												.getText() == null) {
-//									mEditableViewGroup.setVisibility(View.GONE);
-//								}
-
 							}
 						}
 					}
@@ -334,7 +329,8 @@ public class EditPictureActivity extends BaseActivity {
 					try {
 
 						player = new MediaPlayer();
-						player.setDataSource(voicePath);
+						FileInputStream fis = new FileInputStream(voicePath);
+						player.setDataSource(fis.getFD());
 						player.setAudioStreamType(AudioManager.STREAM_RING);
 						player.prepare();
 						player.setOnCompletionListener(new OnCompletionListener() {

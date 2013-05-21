@@ -66,7 +66,7 @@ public class AudioRecordButton extends Button {
 	}
 
 	public void setSavePath(String path) {
-		mFilePath = path + mFilePath;
+		mFilePath = path+mFilePath;
 	}
 
 	public void setVoiceHandler(Handler handler) {
@@ -184,15 +184,12 @@ public class AudioRecordButton extends Button {
 		mRecorder = new MediaRecorder();
 		mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 		mRecorder.setOutputFile(filePath);
-//		mRecorder.setOutputFormat(OutputFormat.RAW_AMR);
-//		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 		mRecorder.setOutputFormat(OutputFormat.DEFAULT);
 		mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 		try {
 			mRecorder.prepare();
 			mRecorder.start();
 			state = STATE_RECORDING;
-			// mHandler.postDelayed(mStopRecordTask, MAX_RECORD_TIME * 1000);
 		}
 		catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
