@@ -5,9 +5,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.PopupWindow;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.utils.AppSelfInfo;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.views.ColorPicker.OnColorChangeListener;
 
 public class ColorPickerDialog {
@@ -18,12 +18,12 @@ public class ColorPickerDialog {
 
     private ColorPicker mColorPicker;
 
-    private final MenueApplication application;
+    private final PhotoTalkApplication application;
 
     public ColorPickerDialog(Context context) {
         // TODO Auto-generated constructor stub
         this.mContext = context;
-        application = (MenueApplication) context.getApplicationContext();
+        application = (PhotoTalkApplication) context.getApplicationContext();
         init();
     }
 
@@ -33,8 +33,7 @@ public class ColorPickerDialog {
         mColorPicker = (ColorPicker) view.findViewById(R.id.cp);
         mPopupWindow = new PopupWindow(mContext);
         mPopupWindow.setWidth(mContext.getResources().getDimensionPixelSize(R.dimen.color_picker_width));
-        AppSelfInfo.screenHeightPx = application.getScreentHeight();
-        mPopupWindow.setHeight(AppSelfInfo.screenHeightPx / 3);
+        mPopupWindow.setHeight(Constants.SCREEN_HEIGHT / 3);
         mPopupWindow.setContentView(view);
         // mPopupWindow.setAnimationStyle(R.style.dialogWindowAnim);
         mPopupWindow.setBackgroundDrawable(null);

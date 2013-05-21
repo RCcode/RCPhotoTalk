@@ -16,7 +16,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 
 public class PlayVidoeView extends SurfaceView implements SurfaceHolder.Callback, OnPreparedListener, MediaPlayer.OnCompletionListener {
 
@@ -28,7 +28,7 @@ public class PlayVidoeView extends SurfaceView implements SurfaceHolder.Callback
 
     private int vWidth, vHeight;
 
-    private MenueApplication app;
+    private PhotoTalkApplication app;
 
     private Bitmap bitmap;
 
@@ -99,7 +99,7 @@ public class PlayVidoeView extends SurfaceView implements SurfaceHolder.Callback
         catch (IOException e) {
             e.printStackTrace();
         }
-        app = (MenueApplication) getContext().getApplicationContext();
+        app = (PhotoTalkApplication) getContext().getApplicationContext();
     }
 
     public void setFilePath(String path) {

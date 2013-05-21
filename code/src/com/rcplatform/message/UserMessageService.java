@@ -21,7 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.gcm.MetaHelper;
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.tigase.TigaseNode;
 import com.rcplatform.tigase.TigaseNodeUtil;
@@ -259,7 +259,7 @@ public class UserMessageService extends Service {
 				json.put("appId", Constants.APP_ID);
 				json.put("type", type);
 				// TODO 设置真是token
-				MenueApplication app = (MenueApplication) ctx.getApplicationContext();
+				PhotoTalkApplication app = (PhotoTalkApplication) ctx.getApplicationContext();
 
 				json.put("token", app.getCurrentUser().getToken());
 				json.put("fRcId", toRcId);

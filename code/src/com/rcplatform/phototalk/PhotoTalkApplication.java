@@ -27,13 +27,13 @@ import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.utils.Constants;
 
-public class MenueApplication extends Application {
+public class PhotoTalkApplication extends Application {
 
 	private WindowManager.LayoutParams wmParams;
 
 	private static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
 
-	private static final String CACHE_FILE_PATH = "menue/cache/photochat";
+	private static final String CACHE_FILE_PATH = "phototalk/cache/photochat";
 
 	private static final int THREAD_COUNT = 3;
 

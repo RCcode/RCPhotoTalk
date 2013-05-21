@@ -136,7 +136,7 @@ public class Constants {
 		public static final int ADD_FRIEND_PASSIVE = 1;
 	}
 
-	public static final String PREFS_FILE_USER_INFO = "com.menue.login.info.prefs";
+	public static final String PREFS_FILE_USER_INFO = "com.phototalk.login.info.prefs";
 
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 

@@ -3,22 +3,9 @@ package com.rcplatform.phototalk.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
 
 import com.rcplatform.phototalk.bean.UserInfo;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-12 下午03:31:57
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author jelly.xiong@menue.com.cn
- * @version 1.0.0
- */
 public class PrefsUtils {
 
 	private static SharedPreferences getPreference(Context context, String name) {

@@ -100,16 +100,16 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 			break;
 		case R.id.settings_user_logout_btn:
 			PrefsUtils.User.cleanUserInfoLogin(this);
-			Intent loginIntent = new Intent(this, InitPageActivity.class);
+			Intent loginIntent = new Intent(this, HomeActivity.class);
 			loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(loginIntent);
-			Process.killProcess(Process.myPid());
 			break;
 
 		case R.id.account_bind_number:
 			break;
 		case R.id.account_facebook_id:
-			startActivityForResult(new Intent(this, UnbindFacebookActivity.class), REQUEST_CODE_UNBIND_FACEBOOK);
+			// startActivityForResult(new Intent(this,
+			// UnbindFacebookActivity.class), REQUEST_CODE_UNBIND_FACEBOOK);
 			break;
 		case R.id.rela_change_password:
 			startActivity(new Intent(this, ChangePasswordActivity.class));

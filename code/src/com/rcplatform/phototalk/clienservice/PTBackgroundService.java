@@ -25,8 +25,8 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.User;
-import com.rcplatform.phototalk.MenueApplication;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
@@ -96,7 +96,7 @@ public class PTBackgroundService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		((MenueApplication) getApplication()).setService(this);
+		((PhotoTalkApplication) getApplication()).setService(this);
 		registeTimeTickReceiver();
 	}
 
@@ -341,7 +341,7 @@ public class PTBackgroundService extends Service {
 
 	private void sendSMSStateToService(String number, long time) {
 		com.rcplatform.phototalk.request.Request request = new com.rcplatform.phototalk.request.Request(getBaseContext(),
-				MenueApiUrl.UPDATE_PHONE_BIND_STATE_URL, new RCPlatformResponseHandler() {
+				PhotoTalkApiUrl.UPDATE_PHONE_BIND_STATE_URL, new RCPlatformResponseHandler() {
 
 					@Override
 					public void onSuccess(int statusCode, String content) {

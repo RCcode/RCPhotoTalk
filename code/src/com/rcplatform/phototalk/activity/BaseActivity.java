@@ -16,7 +16,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
@@ -113,8 +113,8 @@ public class BaseActivity extends Activity {
 			mProgressDialog.dismiss();
 	}
 
-	public MenueApplication getPhotoTalkApplication() {
-		return (MenueApplication) getApplication();
+	public PhotoTalkApplication getPhotoTalkApplication() {
+		return (PhotoTalkApplication) getApplication();
 	}
 
 	public UserInfo getCurrentUser() {
@@ -153,7 +153,7 @@ public class BaseActivity extends Activity {
 	}
 	
 	protected void deleteTemp() {
-		MenueApplication app = (MenueApplication) getApplication();
+		PhotoTalkApplication app = (PhotoTalkApplication) getApplication();
 		String tempFilePath = app.getSendFileCachePath();
 		File tempPic = new File(tempFilePath);
 		deleteFile(tempPic);

@@ -48,7 +48,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:text="meewll@menue.com" />
+                    />
             </RelativeLayout>
 
             <RelativeLayout

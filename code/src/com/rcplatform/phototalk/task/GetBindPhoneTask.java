@@ -4,7 +4,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
@@ -25,7 +25,7 @@ public class GetBindPhoneTask {
 	}
 
 	public void start() {
-		Request request = new Request(mContext, MenueApiUrl.CHECK_USER_PHONEBIND_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(mContext, PhotoTalkApiUrl.CHECK_USER_PHONEBIND_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {

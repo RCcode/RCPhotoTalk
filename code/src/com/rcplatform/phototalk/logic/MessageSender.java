@@ -7,7 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.rcplatform.message.UserMessageService;
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
@@ -35,7 +35,7 @@ public class MessageSender {
 	}
 
 	public static void sendInformation(Context context, Map<String, Information> informations, List<String> userIds) {
-		String currentRcid = ((MenueApplication) context.getApplicationContext()).getCurrentUser().getRcId();
+		String currentRcid = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId();
 		if (userIds != null && userIds.size() > 0) {
 			for (String rcid : userIds) {
 				Information info = informations.get(rcid);

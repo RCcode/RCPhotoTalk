@@ -7,18 +7,6 @@ import android.content.Context;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-1 下午05:37:22
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author jelly.xiong@menue.com.cn
- * @version 1.0.0
- */
 public class UserInfo implements Serializable {
 
 	public static final int SEX_SECRET = 0;

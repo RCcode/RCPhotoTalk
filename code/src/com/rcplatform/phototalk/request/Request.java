@@ -14,10 +14,10 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.bean.Friend;
@@ -119,7 +119,7 @@ public class Request implements Serializable {
 		if (params.size() == 0) {
 			return;
 		}
-		((MenueApplication) mContext.getApplicationContext()).getWebService().post(this);
+		((PhotoTalkApplication) mContext.getApplicationContext()).getWebService().post(this);
 	}
 
 	public void excutePostNameValuePairAsync() {
@@ -169,7 +169,7 @@ public class Request implements Serializable {
 				listener.onError(errorCode, content);
 			}
 		};
-		Request request = new Request(context, MenueApiUrl.LOGIN_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.LOGIN_URL, responseHandler);
 		PhotoTalkParams.buildBasicParams(context, request);
 		request.putParam(PhotoTalkParams.Login.PARAM_KEY_ACCOUNT, account);
 		request.putParam(PhotoTalkParams.Login.PARAM_KEY_PASSWORD, MD5.encodeMD5String(password));
@@ -178,7 +178,7 @@ public class Request implements Serializable {
 
 	public static void sendPhoto(final Context context, final long flag, File file, final String timeLimit, final PhotoSendListener listener,
 			final List<String> friendIds) {
-		final UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		final UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		try {
 			JSONArray jsonArray = new JSONArray();
 			for (String rcId : friendIds) {
@@ -211,13 +211,13 @@ public class Request implements Serializable {
 					@Override
 					public void onFailure(int errorCode, String content) {
 						listener.onFail(flag, errorCode, content);
-						UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+						UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
 								InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL, Integer.parseInt(timeLimit));
 					}
 				};
 			}
-			Request request = new Request(context, MenueApiUrl.SEND_PICTURE_URL, responseHandler);
+			Request request = new Request(context, PhotoTalkApiUrl.SEND_PICTURE_URL, responseHandler);
 			request.setCreateTime(flag);
 			request.setFile(file);
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
@@ -299,7 +299,7 @@ public class Request implements Serializable {
 				listener.onError(errorCode, content);
 			}
 		};
-		Request request = new Request(context, MenueApiUrl.GET_USER_INFO, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.GET_USER_INFO, responseHandler);
 		if (rcId != null)
 			request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, rcId);
 		request.excuteAsync();
@@ -312,9 +312,9 @@ public class Request implements Serializable {
 			public void run() {
 				String url = null;
 				if (type == FriendType.CONTACT) {
-					url = MenueApiUrl.CONTACT_RECOMMEND_URL;
+					url = PhotoTalkApiUrl.CONTACT_RECOMMEND_URL;
 				} else {
-					url = MenueApiUrl.THIRDPART_RECOMMENDS_URL;
+					url = PhotoTalkApiUrl.THIRDPART_RECOMMENDS_URL;
 				}
 				RCPlatformResponseHandler responseHandler = loadLocalRecommends(context, type, listener);
 				final Request request = new Request(context, url, responseHandler);
@@ -423,7 +423,7 @@ public class Request implements Serializable {
 			}
 		};
 
-		Request request = new Request(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.FRIEND_DETAIL_URL, responseHandler);
 		request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friend.getRcId());
 		if (friend.getSource() != null)
 			request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType() + "");

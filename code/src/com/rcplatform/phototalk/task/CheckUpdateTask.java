@@ -6,7 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.listener.UpdateDialogClickListener;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -23,7 +23,7 @@ public class CheckUpdateTask {
 
 	public CheckUpdateTask(Context context, boolean isAuto) {
 		mClient = new RCPlatformAsyncHttpClient();
-		mRequest = new Request(context, MenueApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
+		mRequest = new Request(context, PhotoTalkApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {

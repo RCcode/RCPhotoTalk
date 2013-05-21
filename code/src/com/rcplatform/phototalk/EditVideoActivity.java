@@ -14,18 +14,6 @@ import android.widget.MediaController;
 import com.rcplatform.phototalk.views.EditableViewGroup;
 import com.rcplatform.phototalk.views.PlayVidoeView;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-4 上午10:20:30
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author tao.fu@menue.com.cn
- * @version 1.0.0
- */
 public class EditVideoActivity extends Activity {
 
     private Button mButtonTuya;
@@ -50,7 +38,7 @@ public class EditVideoActivity extends Activity {
 
     EditableViewGroup mViewGroup;
 
-    private MenueApplication app;
+    private PhotoTalkApplication app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +50,7 @@ public class EditVideoActivity extends Activity {
 
         setContentView(mViewGroup);
         playVidoeView = (PlayVidoeView) findViewById(R.id.sf_edit_video);
-        app = (MenueApplication) getApplication();
+        app = (PhotoTalkApplication) getApplication();
         mButtonClose = (Button) findViewById(R.id.btn_edit_video_close);
         mButtonMute = (Button) findViewById(R.id.btn_edit_video_mute);
         mButtonSave = (Button) findViewById(R.id.btn_edit_video_save);

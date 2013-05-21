@@ -18,11 +18,6 @@ public class AppSelfInfo {
 	public static final String TWITTER_APP_KEY = "avqYEua265Ce3K3bBP4Q";
 	public static final String TWITTER_APP_SECRET = "xQFTT41dw3AcBqhs3H2SmB2ZPxxUsAB9tUxB4Y6g";
 
-	private static final String PATH_MIRROR = "menue/mirror_result.jpg";
-	private static final String PATH_PHOTO = "menue/photo_temp.jpg";
-	private static final String PATH_CUT_TEMP = "menue/cut_temp.jpg";
-	// private static final String PATH_SHARE_TEMP="menue/share_temp.jpg";
-
 	public static int screenWidthPx;
 	public static int screenHeightPx;
 	public static String language;
@@ -43,12 +38,6 @@ public class AppSelfInfo {
 		if (language.equals("zh")) {
 			language = language + "_" + country;
 		}
-		try {
-			initTempFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		initImageScaleInfo(context);
 
 	}
@@ -68,29 +57,6 @@ public class AppSelfInfo {
 		// R.dimen.image_scan_item_padding) * 2;
 		// ImageScaleInfo.imageScanHeadImageWidth = context.getResources()
 		// .getDimensionPixelSize(R.dimen.image_scan_head_width);
-	}
-
-	public static void initTempFile() throws IOException {
-		if (isExternalStorageUsable()) {
-			photoTempFile = new File(Environment.getExternalStorageDirectory(),
-					PATH_PHOTO);
-			mirrorResultFile = new File(
-					Environment.getExternalStorageDirectory(), PATH_MIRROR);
-			cutTempFile = new File(Environment.getExternalStorageDirectory(),
-					PATH_CUT_TEMP);
-			if (!photoTempFile.exists()) {
-				photoTempFile.createNewFile();
-
-			}
-			if (!mirrorResultFile.exists()) {
-				mirrorResultFile.createNewFile();
-
-			}
-			if (!cutTempFile.exists()) {
-				cutTempFile.createNewFile();
-			}
-
-		}
 	}
 
 	public static class ImageScaleInfo {

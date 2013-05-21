@@ -19,8 +19,8 @@ import android.content.Intent;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.rcplatform.phototalk.MenueApplication;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
@@ -44,14 +44,14 @@ public class InformationStateChangeService extends IntentService {
 		String action = intent.getAction();
 		try {
 			if (action.equals(Constants.Action.ACTION_INFORMATION_STATE_CHANGE)) {
-				sendRequest(MenueApiUrl.NOTICE_STATE_CHANGE_URL, getEntity(infos));
+				sendRequest(PhotoTalkApiUrl.NOTICE_STATE_CHANGE_URL, getEntity(infos));
 			} else if (action.equals(Constants.Action.ACTION_INFORMATION_DELETE)) {
 				if (infos != null)
-					sendRequest(MenueApiUrl.NOTICE_DELETE_URL, getEntity(infos));
+					sendRequest(PhotoTalkApiUrl.NOTICE_DELETE_URL, getEntity(infos));
 				else
-					sendRequest(MenueApiUrl.NOTICE_CLEAR_URL, getClearInformationEntity());
+					sendRequest(PhotoTalkApiUrl.NOTICE_CLEAR_URL, getClearInformationEntity());
 			} else if (action.equals(Constants.Action.ACTION_INFORMATION_OVER)) {
-				sendRequest(MenueApiUrl.NOTICE_OVER_URL, getEntity(infos));
+				sendRequest(PhotoTalkApiUrl.NOTICE_OVER_URL, getEntity(infos));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,7 @@ public class InformationStateChangeService extends IntentService {
 	}
 
 	public StringEntity getEntity(ServiceSimpleNotice... simpleInfo) throws JSONException, UnsupportedEncodingException {
-		UserInfo userInfo = ((MenueApplication) getApplication()).getCurrentUser();
+		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
 		JSONObject jsonParams = new JSONObject();
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
@@ -126,7 +126,7 @@ public class InformationStateChangeService extends IntentService {
 	}
 
 	public StringEntity getClearInformationEntity() throws Exception {
-		UserInfo userInfo = ((MenueApplication) getApplication()).getCurrentUser();
+		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
 		JSONObject jsonParams = new JSONObject();
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);

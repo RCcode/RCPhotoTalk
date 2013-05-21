@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import android.content.Context;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 
@@ -72,7 +72,7 @@ public class PhotoTalkParams {
 	}
 
 	public static void buildBasicParams(Context context, GalHttpRequest request) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getRcId());
 		request.setPostValueForKey(PARAM_KEY_TOKEN, userInfo.getToken());
 		request.setPostValueForKey(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
@@ -81,7 +81,7 @@ public class PhotoTalkParams {
 	}
 
 	public static void buildBasicParams(Context context, RCPlatformAsyncHttpClient client) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		if (userInfo != null) {
 			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getRcId());
 			client.putRequestParam(PARAM_KEY_TOKEN, userInfo.getToken());
@@ -95,7 +95,7 @@ public class PhotoTalkParams {
 	}
 
 	public static void buildBasicParams(Context context, Request request) {
-		UserInfo userInfo = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		if (userInfo != null) {
 			request.putParam(PARAM_KEY_USER_ID, userInfo.getRcId());
 			request.putParam(PARAM_KEY_TOKEN, userInfo.getToken());

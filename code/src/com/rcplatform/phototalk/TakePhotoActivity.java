@@ -16,19 +16,6 @@ import android.widget.Button;
 
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
-
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-2-27 上午10:38:21
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author tao.fu@menue.com.cn
- * @version 1.0.0
- */
 public class TakePhotoActivity extends Activity {
 
 	private static final int TAKE_ON_CLICK = 0;
@@ -132,7 +119,7 @@ public class TakePhotoActivity extends Activity {
 	}
 
 	public void deleteTemp() {
-		MenueApplication app = (MenueApplication) getApplication();
+		PhotoTalkApplication app = (PhotoTalkApplication) getApplication();
 		String tempFilePath = app.getSendFileCachePath();
 		File tempPic = new File(tempFilePath);
 		deleteFile(tempPic);

@@ -21,21 +21,9 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.TakePhotoActivity;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-2-27 上午10:46:11
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author tao.fu@menue.com.cn
- * @version 1.0.0
- */
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final int INVALID_CAMERA = -1;
@@ -48,7 +36,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static int mCurrentCameraNum;
 
-    private MenueApplication app;
+    private PhotoTalkApplication app;
 
     private SurfaceHolder mHolder;
 
@@ -91,7 +79,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
         // 设置SurfaceHolder对象的类型
         mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         this.mContext = context;
-        app = (MenueApplication) context.getApplicationContext();
+        app = (PhotoTalkApplication) context.getApplicationContext();
     }
 
     @Override
@@ -224,7 +212,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
                      }
                 }
 
-                ((MenueApplication) mContext.getApplicationContext()).setEditeBitmap(tempBitmap);
+                ((PhotoTalkApplication) mContext.getApplicationContext()).setEditeBitmap(tempBitmap);
                 mBitmap = null;
                 tempBitmap = null;
             }

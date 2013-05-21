@@ -65,7 +65,6 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.i("MENUE", "GET VIEW" + System.currentTimeMillis());
 		Friend friend = data.get(position);
 //		final int index = position;
 		if (convertView == null) {

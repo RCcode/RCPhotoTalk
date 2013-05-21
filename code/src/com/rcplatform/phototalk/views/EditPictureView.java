@@ -18,7 +18,7 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 
 public class EditPictureView extends View {
 
@@ -59,7 +59,7 @@ public class EditPictureView extends View {
 
     private int screenWidth, screenHeight;// 屏幕長寬
 
-    private MenueApplication app;
+    private PhotoTalkApplication app;
 
     private final Context context;
 
@@ -103,7 +103,7 @@ public class EditPictureView extends View {
     private void init(int w, int h) {
         screenWidth = w;
         screenHeight = h;
-        app = (MenueApplication) getContext().getApplicationContext();
+        app = (PhotoTalkApplication) getContext().getApplicationContext();
         mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
         // 保存一次一次绘制出来的图形
         mCanvas = new Canvas(mBitmap);

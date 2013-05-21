@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -82,7 +82,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 	private void doGetPassword(String email) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		mEmail = email;
-		Request request = new Request(this, MenueApiUrl.FORGET_PASSWORD_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(this, PhotoTalkApiUrl.FORGET_PASSWORD_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {

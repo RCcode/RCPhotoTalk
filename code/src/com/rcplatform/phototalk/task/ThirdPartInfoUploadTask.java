@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
@@ -21,7 +21,7 @@ public class ThirdPartInfoUploadTask {
 
 	public ThirdPartInfoUploadTask(Context context, List<ThirdPartUser> friends, ThirdPartUser user, int type,RCPlatformResponseHandler responseHandler) {
 		this.mFriendType = type;
-		mRequest = new Request(context, MenueApiUrl.SYNCHRO_THIRD_URL, responseHandler);
+		mRequest = new Request(context, PhotoTalkApiUrl.SYNCHRO_THIRD_URL, responseHandler);
 		buildPostParam(context, friends, user);
 	}
 

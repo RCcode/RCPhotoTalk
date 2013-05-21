@@ -60,14 +60,14 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private PopupWindow mImageSelectPopupWindow;
 	private Uri mImageUri;
 	private RelativeLayout viewAbout;
-	private MenueApplication app;
+	private PhotoTalkApplication app;
 	private int CAMERA_CODE = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
-		app = (MenueApplication) getApplication();
+		app = (PhotoTalkApplication) getApplication();
 		initTitle();
 		mHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
