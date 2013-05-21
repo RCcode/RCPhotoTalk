@@ -30,6 +30,8 @@
             android:id="@+id/iv_head"
             android:layout_width="@dimen/friend_head_width"
             android:layout_height="@dimen/friend_head_width"
+            android:layout_marginLeft="6dp"
+            android:src="@drawable/default_head"
             android:layout_centerVertical="true" />
 
         <ImageView
