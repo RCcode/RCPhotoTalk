@@ -1,57 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="wrap_content" >
 
-   <!--  <RelativeLayout
+    <!--
+         <RelativeLayout
         android:id="@+id/head_layou"
         android:layout_width="@dimen/friend_head_side"
         android:layout_height="@dimen/friend_head_side"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/friend_head_left" > -->
+        android:layout_marginLeft="@dimen/friend_head_left" >
+    -->
 
-        <ImageView
-            android:id="@+id/iv_record_item_head"
-            android:layout_width="@dimen/friend_head_side"
-            android:layout_height="@dimen/friend_head_side"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="@dimen/friend_head_left"
-            android:layout_centerVertical="true"
-            android:src="@drawable/default_head"
-            android:scaleType="matrix" />
+    <ImageView
+        android:id="@+id/iv_record_item_head"
+        android:layout_width="@dimen/friend_head_side"
+        android:layout_height="@dimen/friend_head_side"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/friend_head_left"
+        android:scaleType="matrix"
+        android:src="@drawable/default_head" />
     <!-- </RelativeLayout> -->
-    <ImageView android:layout_width="fill_parent"
+
+    <ImageView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/friend_item_bg"
-        />
-    
-    <ImageView android:background="@drawable/item_new_bg"
+        android:background="@drawable/friend_item_bg" />
+
+    <ImageView
         android:id="@+id/item_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_marginLeft="53dp"
-        android:visibility="invisible"
-        />
+        android:layout_marginTop="10dp"
+        android:background="@drawable/item_new_bg"
+        android:visibility="invisible" />
+
     <LinearLayout
         android:id="@+id/ll"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/friend_head_left"
-        android:layout_toRightOf="@id/iv_record_item_head"
         android:layout_toLeftOf="@id/btn_record_item_statu_button"
+        android:layout_toRightOf="@id/iv_record_item_head"
         android:orientation="vertical" >
 
         <TextView
             android:id="@+id/tv_record_item_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="@string/sightseer"
             android:textColor="#4f3e36"
-            android:singleLine="true"
-            android:ellipsize="end"
             android:textSize="18sp" />
 
         <TextView
@@ -59,9 +62,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/friend_text_padding"
+            android:ellipsize="end"
             android:singleLine="true"
             android:textColor="#a19a94"
-            android:ellipsize="end"
             android:textSize="16sp" />
     </LinearLayout>
 
@@ -73,17 +76,17 @@
         android:layout_centerInParent="true"
         android:visibility="gone" />
 
-
     <com.rcplatform.phototalk.views.RecordTimerLimitView
         android:id="@+id/btn_record_item_statu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:layout_marginRight="13dp"
         android:layout_marginTop="3dp"
         android:gravity="center_horizontal"
         android:paddingTop="6dp"
         android:textColor="#ff0000"
         android:textSize="18sp" />
+
 </RelativeLayout>
