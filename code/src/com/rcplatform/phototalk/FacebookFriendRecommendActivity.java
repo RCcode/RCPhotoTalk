@@ -26,6 +26,7 @@ import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity {
@@ -37,9 +38,11 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.facebook_recommends);
+		findViewById(R.id.wish_to_invate).setVisibility(View.GONE);
 		initAddFriendsView();
 		mLoginButton = (LoginButton) findViewById(R.id.login_button);
-		mLoginButton.setPublishPermissions(Arrays.asList("publish_actions"));
+		// ,"publish_actions"
+		mLoginButton.setPublishPermissions(Arrays.asList("basic_info"));
 		loginLayout = findViewById(R.id.login_layout);
 		friendsLayout = findViewById(R.id.friends_layout);
 		setItemType(PhotoTalkFriendsAdapter.TYPE_FACEBOOK);
@@ -153,7 +156,7 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	}
 
 	private void updateUI() {
-		if (isSessionOpened())
+		if (isSessionOpened() && ThirdPartUtils.isFacebookVlidate(this))
 			setShowRecommends();
 		else
 			setShowLogin();
@@ -162,5 +165,11 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 	private boolean isSessionOpened() {
 		Session session = Session.getActiveSession();
 		return (session != null && session.isOpened());
+	}
+
+	@Override
+	protected void onFacebookFriendItemClick(Friend f) {
+		super.onFacebookFriendItemClick(f);
+		sendInviteMessage(f.getRcId());
 	}
 }

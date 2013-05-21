@@ -27,13 +27,13 @@ import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.utils.Constants;
 
-public class MenueApplication extends Application {
+public class PhotoTalkApplication extends Application {
 
 	private WindowManager.LayoutParams wmParams;
 
 	private static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
 
-	private static final String CACHE_FILE_PATH = "menue/cache/photochat";
+	private static final String CACHE_FILE_PATH = "phototalk/cache/photochat";
 
 	private static final int THREAD_COUNT = 3;
 
@@ -48,33 +48,23 @@ public class MenueApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Constants.START_COMPLETE = false;
 		PhotoInformationCountDownService.getInstance().setApplication(this);
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
-				getApplicationContext())
-				.memoryCache(new WeakMemoryCache())
-				.threadPriority(THREAD_COUNT)
-				.memoryCacheSize(MEMORY_CACHE_SIZE)
-				.denyCacheImageMultipleSizesInMemory()
-				.imageDownloader(new BaseImageDownloader(this))
-				.defaultDisplayImageOptions(
-						ImageOptionsFactory.getDefaultImageOptions())
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache())
+				.threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory()
+				.imageDownloader(new BaseImageDownloader(this)).defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions())
 				.tasksProcessingOrder(QueueProcessingType.LIFO);
 		if (createImageCacheDir()) {
-			builder.discCache(new UnlimitedDiscCache(cacheDir,
-					new Md5FileNameGenerator()));
+			builder.discCache(new UnlimitedDiscCache(cacheDir, new Md5FileNameGenerator()));
 		}
 		ImageLoaderConfiguration config = builder.build();
 		ImageLoader.getInstance().init(config);
-
 		wmParams = new WindowManager.LayoutParams();
+		Constants.initDatabase(this);
 	}
 
 	private boolean createImageCacheDir() {
-		if (Environment.getExternalStorageState().equals(
-				Environment.MEDIA_MOUNTED)) {
-			cacheDir = new File(Environment.getExternalStorageDirectory(),
-					CACHE_FILE_PATH);
+		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+			cacheDir = new File(Environment.getExternalStorageDirectory(), CACHE_FILE_PATH);
 			if (!cacheDir.exists()) {
 				return cacheDir.mkdirs();
 			}

@@ -12,7 +12,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.rcplatform.phototalk.HomeActivity;
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
@@ -110,7 +110,7 @@ public class LogicUtils {
 	 */
 	public static boolean isSender(Context context, Information record) {
 
-		if (((MenueApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId())
+		if (((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId())
 				&& !record.getReceiver().getRcId().equals(record.getSender().getRcId()))
 			return true;
 		return false;
@@ -124,7 +124,7 @@ public class LogicUtils {
 	}
 
 	public static void friendAdded(Context context, Friend friend, int addType) {
-		UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		long createTime = System.currentTimeMillis();
 		Information information = null;
 		if (addType == Constants.FriendAddType.ADD_FRIEND_PASSIVE) {
@@ -203,7 +203,7 @@ public class LogicUtils {
 	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file) {
 		long flag = System.currentTimeMillis();
 		try {
-			UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+			UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 

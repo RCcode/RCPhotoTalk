@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import android.app.Activity;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.api.MenueApiFactory;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 
 public abstract class RCLoadTextCallBack implements GalHttpLoadTextCallBack {
@@ -24,13 +24,13 @@ public abstract class RCLoadTextCallBack implements GalHttpLoadTextCallBack {
 		try {
 			JSONObject jsonObject = new JSONObject(text);
 			int statusCode = jsonObject
-					.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-			if (statusCode == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
+					.getInt(PhotoTalkApiFactory.RESPONSE_KEY_STATUS);
+			if (statusCode == PhotoTalkApiFactory.RESPONSE_STATE_SUCCESS) {
 				onSuccess(statusCode,text);
 			} else {
 				onError(statusCode,
 						jsonObject
-								.getString(MenueApiFactory.RESPONSE_KEY_MESSAGE));
+								.getString(PhotoTalkApiFactory.RESPONSE_KEY_MESSAGE));
 			}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

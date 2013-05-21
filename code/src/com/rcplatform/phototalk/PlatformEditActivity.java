@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
@@ -174,7 +174,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 	private void updateUserInfo() {
 		String nick = etNick.getText().toString().trim();
 		if (checkInfo(nick)) {
-			Request request = new Request(this, MenueApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, mResponseHandler);
+			Request request = new Request(this, PhotoTalkApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, mResponseHandler);
 			request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());
 			request.putParam(PhotoTalkParams.PARAM_KEY_TOKEN, mUserInfo.getToken());
 			request.putParam(PhotoTalkParams.PLATFORM_ACCOUNT_LOGIN.PARAM_KEY_NICK, nick);

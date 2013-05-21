@@ -11,16 +11,6 @@ import android.util.Log;
 
 import com.rcplatform.phototalk.bean.Friend;
 
-/**
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-3-6 下午03:05:59
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author jelly.xiong@menue.com.cn
- * @version 1.0.0
- */
 @SuppressWarnings("rawtypes")
 public class PinyinComparator implements Comparator {
 

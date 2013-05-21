@@ -5,12 +5,12 @@ import com.rcplatform.phototalk.utils.Constants;
 
 public class DatabaseUtils {
 
-	public static final String BASE_DATABASE_NAME = "phototalk_database";
-	public static final String DATABASE_REQUEST = "request";
-	public static final String DATABSE_CONTACT = "global";
+	public static final String BASE_DATABASE_NAME = "pt";
+	public static final String DATABASE_REQUEST = "request.db";
+	public static final String DATABSE_CONTACT = "global.db";
 
 	public static String getDatabasePath(UserInfo userInfo) {
-		return Constants.Database.USERS_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getRcId();
+		return Constants.Database.USERS_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getRcId() + ".db";
 	}
 
 	public static String getRequestDatabasePath() {

@@ -27,7 +27,7 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 			}
 			System.out.println(mobiles.toString());
 			String msg = String.format(getResources().getString(R.string.my_firend_invite_send_short_msg), "mark.", android.os.Build.VERSION.RELEASE,
-					"http://www.menue.com/photochat/", "123458755");
+					"http://www.google.co.jp", "123458755");
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.putExtra("address", mobiles.toString().substring(0, mobiles.length() - 1));
 			intent.putExtra("sms_body", msg);

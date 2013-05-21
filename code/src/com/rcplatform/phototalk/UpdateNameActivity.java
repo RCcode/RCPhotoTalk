@@ -23,8 +23,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.utils.Constants;
@@ -32,8 +32,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ShowToast;
 
-public class UpdateNameActivity extends Activity implements
-		View.OnClickListener {
+public class UpdateNameActivity extends Activity implements View.OnClickListener {
 
 	protected static final String TAG = "ForgetPasswordActivity";
 	public static final String REQUEST_PARAM_KEY_TEXT = "text";
@@ -54,36 +53,28 @@ public class UpdateNameActivity extends Activity implements
 			mProgressbar.setVisibility(View.GONE);
 			switch (msg.what) {
 			// 已将重设密码的邮件发送到 alexlee@menu.com请注意查收.
-			case MenueApiFactory.LOGIN_SUCCESS:
-				String resetMsg = String.format(
-						getResources().getString(
-								R.string.forget_password_reset_text),
-						mEditTextView.getText().toString());
+			case PhotoTalkApiFactory.LOGIN_SUCCESS:
+				String resetMsg = String.format(getResources().getString(R.string.forget_password_reset_text), mEditTextView.getText().toString());
 				// DialogUtil.showConfirmDialog(ForgetPasswordActivity.this,
 				// resetMsg);
 				showDialog(UpdateNameActivity.this, resetMsg);
 
 				break;
 			// 密码错误
-			case MenueApiFactory.LOGIN_PASSWORD_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources()
-						.getString(R.string.reg_pwd_no_email_yes),
-						Toast.LENGTH_LONG);
+			case PhotoTalkApiFactory.LOGIN_PASSWORD_ERROR:
+				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_pwd_no_email_yes), Toast.LENGTH_LONG);
 				break;
 			// 邮箱没有注册
-			case MenueApiFactory.LOGIN_EMAIL_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources()
-						.getString(R.string.reg_email_no), Toast.LENGTH_LONG);
+			case PhotoTalkApiFactory.LOGIN_EMAIL_ERROR:
+				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_email_no), Toast.LENGTH_LONG);
 				break;
 			// 服务器异常
-			case MenueApiFactory.LOGIN_SERVER_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources()
-						.getString(R.string.reg_server_no), Toast.LENGTH_LONG);
+			case PhotoTalkApiFactory.LOGIN_SERVER_ERROR:
+				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_server_no), Toast.LENGTH_LONG);
 				break;
 			// 管理员不允许客户端登录
-			case MenueApiFactory.LOGIN_ADMIN_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources()
-						.getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
+			case PhotoTalkApiFactory.LOGIN_ADMIN_ERROR:
+				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
 				break;
 			}
 
@@ -110,22 +101,14 @@ public class UpdateNameActivity extends Activity implements
 		Intent intent = getIntent();
 		if (intent.getAction().equals("setting_update_name")) {
 			requestType = REQUEST_TYPE_NICK;
-			mTitleTextView.setText(getResources().getString(
-					R.string.settings_update_name_title));
-			mUpdateLabelHint.setText(getResources().getString(
-					R.string.settings_update_name_limited_hint));
-			mEditTextView
-					.setFilters(new InputFilter[] { new InputFilter.LengthFilter(
-							RCPlatformTextUtil.NICK_MAX_LENGTH) });
+			mTitleTextView.setText(getResources().getString(R.string.settings_update_name_title));
+			mUpdateLabelHint.setText(getResources().getString(R.string.settings_update_name_limited_hint));
+			mEditTextView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(RCPlatformTextUtil.NICK_MAX_LENGTH) });
 		} else if (intent.getAction().equals("setting_update_signature")) {
 			requestType = REQUEST_TYPE_SIGNTURE;
-			mTitleTextView.setText(getResources().getString(
-					R.string.settings_update_signature_title));
-			mUpdateLabelHint.setText(getResources().getString(
-					R.string.settings_update_signature_limited_hint));
-			mEditTextView
-					.setFilters(new InputFilter[] { new InputFilter.LengthFilter(
-							RCPlatformTextUtil.SIGNTURE_MAX_LENGTH) });
+			mTitleTextView.setText(getResources().getString(R.string.settings_update_signature_title));
+			mUpdateLabelHint.setText(getResources().getString(R.string.settings_update_signature_limited_hint));
+			mEditTextView.setFilters(new InputFilter[] { new InputFilter.LengthFilter(RCPlatformTextUtil.SIGNTURE_MAX_LENGTH) });
 		}
 		currentText = intent.getStringExtra(REQUEST_PARAM_KEY_TEXT);
 		mEditTextView.setText(currentText);
@@ -136,24 +119,17 @@ public class UpdateNameActivity extends Activity implements
 
 	private void showDialog(final Context context, String msg) {
 		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-		dialogBuilder
-				.setMessage(msg)
-				.setCancelable(false)
-				.setPositiveButton(
-						context.getResources().getString(R.string.ok),
-						new DialogInterface.OnClickListener() {
+		dialogBuilder.setMessage(msg).setCancelable(false)
+				.setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-							public void onClick(DialogInterface dialog,
-									int which) {
+					public void onClick(DialogInterface dialog, int which) {
 
-								Intent loginIntent = new Intent(context,
-										LoginActivity.class);
-								loginIntent.putExtra(Constants.KEY_LOGIN_PAGE,
-										true);
-								startActivity(loginIntent);
-								finish();
-							}
-						});
+						Intent loginIntent = new Intent(context, LoginActivity.class);
+						loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
+						startActivity(loginIntent);
+						finish();
+					}
+				});
 		dialogBuilder.create().show();
 	}
 
@@ -193,8 +169,7 @@ public class UpdateNameActivity extends Activity implements
 		case REQUEST_TYPE_SIGNTURE:
 			isRight = RCPlatformTextUtil.isSigntureMatches(text);
 			if (!isRight)
-				DialogUtil.showToast(getApplicationContext(),
-						R.string.text_too_long, Toast.LENGTH_SHORT);
+				DialogUtil.showToast(getApplicationContext(), R.string.text_too_long, Toast.LENGTH_SHORT);
 			break;
 		}
 		return isRight;
@@ -202,13 +177,11 @@ public class UpdateNameActivity extends Activity implements
 
 	private boolean checkNickName(String nick) {
 		if (TextUtils.isEmpty(nick.trim())) {
-			DialogUtil.showToast(getApplicationContext(),
-					R.string.register_nick_length_error, Toast.LENGTH_SHORT);
+			DialogUtil.showToast(getApplicationContext(), R.string.register_nick_length_error, Toast.LENGTH_SHORT);
 			return false;
 		}
 		if (!RCPlatformTextUtil.isNickMatches(nick)) {
-			DialogUtil.showToast(getApplicationContext(),
-					R.string.register_nick_empty, Toast.LENGTH_SHORT);
+			DialogUtil.showToast(getApplicationContext(), R.string.register_nick_empty, Toast.LENGTH_SHORT);
 			return false;
 		}
 		return true;
@@ -218,11 +191,8 @@ public class UpdateNameActivity extends Activity implements
 		final int PWD_MIN_SIZE = 1;
 		final int PWD_MAX_SIZE = 20;
 		if (PWD_MIN_SIZE > label.length() || PWD_MAX_SIZE < label.length()) {
-			DialogUtil.createMsgDialog(
-					this,
-					getResources().getString(
-							R.string.setting_update_name_invalid),
-					getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.setting_update_name_invalid), getResources().getString(android.R.string.ok))
+					.show();
 			return false;
 		}
 		return true;
@@ -236,13 +206,9 @@ public class UpdateNameActivity extends Activity implements
 		Pattern emailPattern = Pattern
 				.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$");
 		final int SMLL_SIZE = 0;
-		if (SMLL_SIZE == emailId.length()
-				|| !emailPattern.matcher(emailId).matches()) {
-			DialogUtil.createMsgDialog(
-					this,
-					getResources().getString(
-							R.string.register_noinput_address_info),
-					getResources().getString(android.R.string.ok)).show();
+		if (SMLL_SIZE == emailId.length() || !emailPattern.matcher(emailId).matches()) {
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_noinput_address_info), getResources().getString(android.R.string.ok))
+					.show();
 			return false;
 		} else {
 			return true;
@@ -251,15 +217,11 @@ public class UpdateNameActivity extends Activity implements
 
 	private void doGetPassword(final Context context, String email) {
 
-		GalHttpRequest request = GalHttpRequest.requestWithURL(this,
-				MenueApiUrl.FORGET_PASSWORD_URL);
-		request.setPostValueForKey(MenueApiFactory.EMAIL, email);
-		request.setPostValueForKey(MenueApiFactory.TOKEN,
-				MenueApiFactory.TOKEN_DEFAULT);
-		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale
-				.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.DEVICE_ID,
-				android.os.Build.DEVICE);
+		GalHttpRequest request = GalHttpRequest.requestWithURL(this, PhotoTalkApiUrl.FORGET_PASSWORD_URL);
+		request.setPostValueForKey(PhotoTalkApiFactory.EMAIL, email);
+		request.setPostValueForKey(PhotoTalkApiFactory.TOKEN, PhotoTalkApiFactory.TOKEN_DEFAULT);
+		request.setPostValueForKey(PhotoTalkApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
+		request.setPostValueForKey(PhotoTalkApiFactory.DEVICE_ID, android.os.Build.DEVICE);
 		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
 
 			@Override
@@ -268,12 +230,8 @@ public class UpdateNameActivity extends Activity implements
 				try {
 					System.out.println(text);
 					JSONObject obj = new JSONObject(text);
-					int state = obj.getInt(MenueApiFactory.RESPONSE_KEY_STATUS);
-					// if (state == MenueApiFactory.RESPONSE_STATE_SUCCESS) {
-					// mHandler.sendMessage(mHandler.obtainMessage(state));
-					// } else {
+					int state = obj.getInt(PhotoTalkApiFactory.RESPONSE_KEY_STATUS);
 					mHandler.sendMessage(mHandler.obtainMessage(state));
-					// }
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -281,8 +239,7 @@ public class UpdateNameActivity extends Activity implements
 
 			@Override
 			public void loadFail() {
-				mHandler.sendMessage(mHandler
-						.obtainMessage(MenueApiFactory.LOGIN_SERVER_ERROR));
+				mHandler.sendMessage(mHandler.obtainMessage(PhotoTalkApiFactory.LOGIN_SERVER_ERROR));
 			}
 		});
 

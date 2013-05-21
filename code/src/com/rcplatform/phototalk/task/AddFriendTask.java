@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
@@ -29,7 +29,7 @@ public class AddFriendTask {
 	public AddFriendTask(Context context, UserInfo userInfo, AddFriendListener listener, Friend... friends) {
 		this.mContext = context;
 		this.mListener = listener;
-		mRequest = new Request(context, MenueApiUrl.ADD_FRIEND_URL, new RCPlatformResponseHandler() {
+		mRequest = new Request(context, PhotoTalkApiUrl.ADD_FRIEND_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {

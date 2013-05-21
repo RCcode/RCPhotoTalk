@@ -21,21 +21,8 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.rcplatform.phototalk.MenueApplication;
-import com.rcplatform.phototalk.utils.MenueLog;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-2-27 上午10:46:11
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author tao.fu@menue.com.cn
- * @version 1.0.0
- */
 public class VideoRecordView extends SurfaceView implements SurfaceHolder.Callback {
 
     private static final String TAG = "VideoRecordView";
@@ -68,7 +55,7 @@ public class VideoRecordView extends SurfaceView implements SurfaceHolder.Callba
 
     private boolean isShowCamera = false;
 
-    private MenueApplication app;
+    private PhotoTalkApplication app;
 
     private Camera.Parameters parameters;
 
@@ -104,7 +91,6 @@ public class VideoRecordView extends SurfaceView implements SurfaceHolder.Callba
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         screenWidth = app.getScreenWidth();
         screenHeight = app.getScreenWidth() * mProfile.videoFrameWidth / mProfile.videoFrameHeight;
-        MenueLog.log(TAG, "onMeasure Width " + screenWidth + "  Height " + screenHeight);
         super.onMeasure(MeasureSpec.makeMeasureSpec(screenWidth, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(screenHeight, MeasureSpec.EXACTLY));
     }
 
@@ -116,7 +102,7 @@ public class VideoRecordView extends SurfaceView implements SurfaceHolder.Callba
         // 设置SurfaceHolder对象的类型
         holder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
         this.context = context;
-        app = (MenueApplication) context.getApplicationContext();
+        app = (PhotoTalkApplication) context.getApplicationContext();
         initRecordParams();
     }
 
@@ -246,19 +232,16 @@ public class VideoRecordView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        MenueLog.log(TAG, "videRecordView surfaceCreated");
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        MenueLog.log(TAG, "videRecordView surfaceChanged");
         initCamera();
 
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        MenueLog.log(TAG, "videRecordView surfaceDestroyed");
         // 释放手机摄像头
         stopRecord(false);
         releaseCamera();

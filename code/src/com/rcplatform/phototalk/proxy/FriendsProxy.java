@@ -12,8 +12,8 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
@@ -28,13 +28,13 @@ import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 public class FriendsProxy {
 
 	public static List<Friend> getContactRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, MenueApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
 		request.excuteAsync();
 		return null;
 	}
 
 	public static void searchFriendsAsync(Context context, RCPlatformResponseHandler responseHandler, String keyWords) {
-		Request request = new Request(context, MenueApiUrl.SEARCH_FRIENDS_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.SEARCH_FRIENDS_URL, responseHandler);
 		request.putParam(PhotoTalkParams.SearchFriends.PARAM_KEY_KEYWORDS, keyWords);
 		request.excuteAsync();
 	}
@@ -60,7 +60,7 @@ public class FriendsProxy {
 	}
 
 	private static void loadFriendsFromService(final Activity context, final OnFriendsLoadedListener listener) {
-		Request request = new Request(context, MenueApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(context, PhotoTalkApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, final String content) {
@@ -129,61 +129,61 @@ public class FriendsProxy {
 	}
 
 	public static void getUserInfo(Context context, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, MenueApiUrl.GET_USER_INFO, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.GET_USER_INFO, responseHandler);
 		request.excuteAsync();
 	}
 
 	// 田镇源 发送图片时 请求好友列表
 	public static void getMyFriendlist(Context context, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, MenueApiUrl.GET_FRIENDS_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_URL, responseHandler);
 		request.excuteAsync();
 	}
 
 	// 田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
-		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);
-		request.putParam(MenueApiFactory.NICK, nick);
-		request.putParam(MenueApiFactory.BIRTHDAY, birthday);
-		request.putParam(MenueApiFactory.SEX, sex);
+		Request request = new Request(context, PhotoTalkApiUrl.USER_INFO_UPDATE_URL, responseHandler);
+		request.putParam(PhotoTalkApiFactory.NICK, nick);
+		request.putParam(PhotoTalkApiFactory.BIRTHDAY, birthday);
+		request.putParam(PhotoTalkApiFactory.SEX, sex);
 		request.setFile(file);
 		request.excuteAsync();
 	}
 
 	// 上传头像
 	public static void upUserInfoHeadImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, MenueApiUrl.USER_INFO_HEAD_IMAGE_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.USER_INFO_HEAD_IMAGE_URL, responseHandler);
 		request.setFile(file);
 		request.excuteAsync();
 	}
 
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, MenueApiUrl.USER_INFO_UPDATE_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.USER_INFO_UPDATE_URL, responseHandler);
 		request.setFile(file);
 		request.excuteAsync();
 	}
 
 	public static void deleteFriend(Context context, RCPlatformResponseHandler responseHandler, String friendSuid) {
-		Request request = new Request(context, MenueApiUrl.DELETE_FRIEND_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.DELETE_FRIEND_URL, responseHandler);
 		request.putParam(PhotoTalkParams.DelFriends.PARAM_KEY_FRIEND_ID, friendSuid);
 		request.excuteAsync();
 	}
 
 	public static void updateFriendRemark(Context context, RCPlatformResponseHandler responseHandler, String friendSuid, String remark) {
-		Request request = new Request(context, MenueApiUrl.UPDATE_FRIEND_REMARK_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.UPDATE_FRIEND_REMARK_URL, responseHandler);
 		request.putParam(PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_REMARK, remark);
 		request.putParam(PhotoTalkParams.UpdateFriendRemark.PARAM_KEY_FRIEND_ID, friendSuid);
 		request.excuteAsync();
 	}
 
 	public static Friend getFriendDetail(Context context, RCPlatformResponseHandler responseHandler, String friendSuid) {
-		Request request = new Request(context, MenueApiUrl.FRIEND_DETAIL_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.FRIEND_DETAIL_URL, responseHandler);
 		request.putParam(PhotoTalkParams.FriendDetail.PARAM_KEY_FRIEND_ID, friendSuid);
 		request.excuteAsync();
 		return null;
 	}
 
 	public static void addFriendFromInformation(Context context, RCPlatformResponseHandler responseHandler, Information info) {
-		Request request = new Request(context, MenueApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.ADD_FRIEND_FROM_INFORMATION, responseHandler);
 		JSONArray array = new JSONArray();
 		array.put(info.getSender().getRcId());
 		request.putParam(PhotoTalkParams.AddFriendFromInformation.PARAM_KEY_FRIEND_IDS, array.toString());
@@ -191,7 +191,7 @@ public class FriendsProxy {
 	}
 
 	public static void deleteRecommendFriend(Context context, RCPlatformResponseHandler responseHandler, Friend friend) {
-		Request request = new Request(context, MenueApiUrl.DELETE_RECOMMEND_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.DELETE_RECOMMEND_URL, responseHandler);
 		request.putParam(PhotoTalkParams.DelRecommend.PARAM_KEY_FRIEND_ID, friend.getRcId());
 		request.putParam(PhotoTalkParams.DelRecommend.PARAM_KEY_RECOMMEND_TYPE, friend.getSource().getAttrType() + "");
 		request.excuteAsync();

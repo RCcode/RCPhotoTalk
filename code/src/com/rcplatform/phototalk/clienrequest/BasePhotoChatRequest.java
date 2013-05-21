@@ -4,8 +4,8 @@ import java.util.Locale;
 
 import android.content.Context;
 
-import com.rcplatform.phototalk.MenueApplication;
-import com.rcplatform.phototalk.api.MenueApiFactory;
+import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
@@ -25,17 +25,17 @@ public class BasePhotoChatRequest implements BasePhotoChatRequestInterface {
 		super();
 		this.context = context;
 		this.callBack = callBack;
-		currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
+		currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request = GalHttpRequest.requestWithURL(context, url);
 	}
 
 	@Override
 	public void createBody() {
-		request.setPostValueForKey(MenueApiFactory.TOKEN, currentUser.getToken());
-		request.setPostValueForKey(MenueApiFactory.USERID, currentUser.getRcId());
-		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.DEVICE_ID, android.os.Build.DEVICE);
-		request.setPostValueForKey(MenueApiFactory.APP_ID, Constants.APP_ID);
+		request.setPostValueForKey(PhotoTalkApiFactory.TOKEN, currentUser.getToken());
+		request.setPostValueForKey(PhotoTalkApiFactory.USERID, currentUser.getRcId());
+		request.setPostValueForKey(PhotoTalkApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
+		request.setPostValueForKey(PhotoTalkApiFactory.DEVICE_ID, android.os.Build.DEVICE);
+		request.setPostValueForKey(PhotoTalkApiFactory.APP_ID, Constants.APP_ID);
 	}
 
 	@Override

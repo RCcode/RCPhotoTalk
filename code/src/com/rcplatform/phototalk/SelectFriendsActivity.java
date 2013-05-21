@@ -38,7 +38,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
-import com.rcplatform.phototalk.api.MenueApiFactory;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -78,7 +78,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	private String tempFilePath;
 
-	private MenueApplication app;
+	private PhotoTalkApplication app;
 
 	private String timeLimit;
 
@@ -95,7 +95,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		app = (MenueApplication) getApplication();
+		app = (PhotoTalkApplication) getApplication();
 		timeLimit = getIntent().getStringExtra("timeLimit");
 		if (timeLimit == null) {
 			timeLimit = "10";
@@ -240,7 +240,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			fs.clear();
 			return friends;
 		} else {
-			sendStringMessage(MSG_WHAT_ERROR, jsonObject.getString(MenueApiFactory.RESPONSE_KEY_MESSAGE));
+			sendStringMessage(MSG_WHAT_ERROR, jsonObject.getString(PhotoTalkApiFactory.RESPONSE_KEY_MESSAGE));
 			return null;
 		}
 	}
@@ -311,7 +311,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	}
 
 	private boolean isRequestStatusOK(JSONObject jsonObject) throws JSONException {
-		return jsonObject.getInt(MenueApiFactory.RESPONSE_KEY_STATUS) == MenueApiFactory.RESPONSE_STATE_SUCCESS;
+		return jsonObject.getInt(PhotoTalkApiFactory.RESPONSE_KEY_STATUS) == PhotoTalkApiFactory.RESPONSE_STATE_SUCCESS;
 	}
 
 	@Override

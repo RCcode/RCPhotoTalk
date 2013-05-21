@@ -1,9 +1,10 @@
 package com.rcplatform.phototalk.utils;
 
+import java.io.File;
 import java.util.Map;
 
 import android.app.Activity;
-import android.os.Environment;
+import android.content.Context;
 import android.util.DisplayMetrics;
 
 import com.rcplatform.phototalk.bean.AppInfo;
@@ -28,39 +29,36 @@ public class Constants {
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
 	public static Map<AppInfo, UserInfo> userApps;
-	
-	 public static String VK_API_ID="2904017";
 
-	public static boolean START_COMPLETE = false;
-	
+	public static String VK_API_ID = "2904017";
 
-	public static void init(Activity context) {
+	private static final String DB_DIR = "db";
+
+	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
-		final String fileDirPath=context.getFilesDir().getPath();
-		initDatabase(context,fileDirPath);
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
 	}
-	
 
-	private static void initDatabase(Activity context,String path) {
-		Database.BASE_DATABASE_PATH = path+ "/db";
-		Database.USERS_DATABASE_PATH = Database.BASE_DATABASE_PATH + "/users";
-		Utils.createNewDir(Database.USERS_DATABASE_PATH);
-		Database.REQUEST_DATABASE_PATH = Database.BASE_DATABASE_PATH;
-		Database.GLOBAL_DATABASE_PATH = Database.BASE_DATABASE_PATH;
+	public static void initDatabase(Context context) {
+		if (Database.DB_DIR == null) {
+			Database.DB_DIR = context.getDir(DB_DIR, Context.MODE_PRIVATE);
+			Database.BASE_DATABASE_PATH = Database.DB_DIR.getAbsolutePath();
+			Database.USERS_DATABASE_PATH = Database.BASE_DATABASE_PATH + "/users";
+			Utils.createNewDir(Database.USERS_DATABASE_PATH);
+			Database.REQUEST_DATABASE_PATH = Database.BASE_DATABASE_PATH;
+			Database.GLOBAL_DATABASE_PATH = Database.BASE_DATABASE_PATH;
+		}
 	}
 
 	public static class Database {
-
+		public static File DB_DIR;
 		public static String BASE_DATABASE_PATH;
-
 		public static String USERS_DATABASE_PATH;
-
 		public static String REQUEST_DATABASE_PATH;
 		public static String GLOBAL_DATABASE_PATH;
 	}
@@ -138,7 +136,7 @@ public class Constants {
 		public static final int ADD_FRIEND_PASSIVE = 1;
 	}
 
-	public static final String PREFS_FILE_USER_INFO = "com.menue.login.info.prefs";
+	public static final String PREFS_FILE_USER_INFO = "com.phototalk.login.info.prefs";
 
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 

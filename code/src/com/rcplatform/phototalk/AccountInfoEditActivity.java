@@ -32,7 +32,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
-import com.rcplatform.phototalk.api.MenueApiFactory;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
@@ -54,7 +54,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	protected static final int REQUEST_CAMERA = 1013;
 
 	public static final String RESULT_PARAM_USER = "userInfo";
-	private MenueApplication app;
+	private PhotoTalkApplication app;
 	private TextView mNameView;
 	private TextView mSexView;
 	private TextView mBirthday;
@@ -78,7 +78,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_edit_account_info);
-		app = (MenueApplication) getApplication();
+		app = (PhotoTalkApplication) getApplication();
 		userDetailInfo = app.getCurrentUser();
 		sex = new String[] {getString(R.string.male), getString(R.string.famale) };
 		// sex = new String[] { getString(R.string.sex_secret),
@@ -92,7 +92,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		public void handleMessage(Message msg) {
 
 			switch (msg.what) {
-			case MenueApiFactory.RESPONSE_STATE_SUCCESS:
+			case PhotoTalkApiFactory.RESPONSE_STATE_SUCCESS:
 				mMyHeadView.setImageBitmap(bitmap);// 把拍摄的照片转成圆角显示在预览控件
 				// mSexView.setText(sex);
 				if (userDetailInfo != null) {
@@ -109,16 +109,16 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					mBirthday.setText("" + userDetailInfo.getBirthday());
 				}
 				break;
-			case MenueApiFactory.LOGIN_PASSWORD_ERROR:
+			case PhotoTalkApiFactory.LOGIN_PASSWORD_ERROR:
 				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_pwd_no_email_yes), Toast.LENGTH_LONG);
 				break;
-			case MenueApiFactory.LOGIN_EMAIL_ERROR:
+			case PhotoTalkApiFactory.LOGIN_EMAIL_ERROR:
 				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_email_no), Toast.LENGTH_LONG);
 				break;
-			case MenueApiFactory.LOGIN_SERVER_ERROR:
+			case PhotoTalkApiFactory.LOGIN_SERVER_ERROR:
 				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_server_no), Toast.LENGTH_LONG);
 				break;
-			case MenueApiFactory.LOGIN_ADMIN_ERROR:
+			case PhotoTalkApiFactory.LOGIN_ADMIN_ERROR:
 				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
 				break;
 			}

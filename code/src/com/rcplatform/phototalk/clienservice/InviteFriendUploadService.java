@@ -19,9 +19,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
@@ -74,7 +74,7 @@ public class InviteFriendUploadService extends IntentService {
 	}
 
 	private HttpEntity getEntity(List<String> ids) throws JSONException, UnsupportedEncodingException {
-		UserInfo userInfo = ((MenueApplication) getApplication()).getCurrentUser();
+		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
@@ -91,7 +91,7 @@ public class InviteFriendUploadService extends IntentService {
 	}
 
 	private void sendRequest(HttpEntity entity) {
-		HttpPost post = new HttpPost(MenueApiUrl.ASYNC_INVITE_URL);
+		HttpPost post = new HttpPost(PhotoTalkApiUrl.ASYNC_INVITE_URL);
 		post.setEntity(entity);
 		try {
 			HttpResponse res = new DefaultHttpClient().execute(post);

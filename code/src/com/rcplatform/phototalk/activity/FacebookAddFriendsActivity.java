@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk.activity;
 
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Dialog;
@@ -10,12 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
 import com.facebook.Request;
 import com.facebook.Request.GraphUserListCallback;
-import com.facebook.RequestAsyncTask;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.SessionState;
@@ -29,10 +28,8 @@ import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.FacebookUtil;
 
 public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements UserInfoChangedCallback {
-	private static final List<String> PERMISSIONS = Arrays.asList("publish_actions");
 
 	private static final int MSG_DEAUTHORIZE_SUCCESS = 100;
 	private static final int MSG_DEAUTHORIZE_ERROR = 101;
@@ -40,6 +37,8 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 
 	private UiLifecycleHelper mHelper;
 	private String[] mInviteIds;
+
+	private boolean getFacebookInfoOver = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -97,11 +96,11 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 	};
 
 	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartUser> friends) {
-
+		getFacebookInfoOver = true;
 	}
 
 	protected void onGetFacebookInfoError() {
-
+		getFacebookInfoOver = true;
 	}
 
 	private void facebookRequestError() {
@@ -118,21 +117,27 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 		for (String id : mInviteIds) {
 			sbIds.append(id).append(",");
 		}
-		WebDialog dialog = new WebDialog.RequestsDialogBuilder(this, Session.getActiveSession())
-				.setMessage(getString(R.string.my_firend_invite_send_short_msg)).setTo(sbIds.substring(0, sbIds.length() - 1))
-				.setOnCompleteListener(new OnCompleteListener() {
-					@Override
-					public void onComplete(Bundle values, FacebookException error) {
-						if (error != null) {
-							showErrorConfirmDialog(error.getMessage());
-						} else if (values != null && values.size() == 0) {
-							showErrorConfirmDialog(R.string.invite_fail);
-						} else {
-							onInviteComplete(mInviteIds);
-							mInviteIds = null;
-						}
+		Bundle bundler = new Bundle();
+		bundler.putString("link", "http://www.google.co.jp");
+		bundler.putString("caption", "{*actor*} just posted this!");
+		bundler.putString("description", "description of my link.  Click the link to find out more.");
+		bundler.putString("name", "Name of this link!");
+		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
+		bundler.putString("to", sbIds.substring(0, sbIds.length() - 1));
+		WebDialog dialog = new WebDialog.FeedDialogBuilder(this, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
+
+			@Override
+			public void onComplete(Bundle values, FacebookException error) {
+				if (error == null) {
+					final String postId = values.getString("post_id");
+					if (postId != null) {
+						onInviteComplete(mInviteIds);
 					}
-				}).build();
+				} else {
+					showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? getString(R.string.invite_fail) : error.getMessage());
+				}
+			}
+		}).build();
 		dialog.show();
 	}
 
@@ -196,27 +201,39 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 		th.start();
 	}
 
-	private void sendJoinMessageOnFacebook() {
-		Bundle postParams = new Bundle();
-		postParams.putString("name", "这是朕的一个测试");
-		postParams.putString("caption", "我就要发个story");
-		postParams.putString("description", "这尼玛=。=为啥服务器都减负了就我加负呢！");
-		postParams.putString("link", "http://www.google.co.jp");
-		postParams.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
-		Request.Callback callback = new Request.Callback() {
-			public void onCompleted(Response response) {
+	private void sendJoinMessageOnFacebook(String uid) {
+		Bundle bundler = new Bundle();
+		bundler.putString("link", "http://www.google.co.jp");
+		bundler.putString("caption", "{*actor*} just posted this!");
+		bundler.putString("description", "description of my link.  Click the link to find out more.");
+		bundler.putString("name", "Name of this link!");
+		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
+		bundler.putString("to", uid);
+		WebDialog dialog = new WebDialog.FeedDialogBuilder(this, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
+
+			@Override
+			public void onComplete(Bundle values, FacebookException error) {
+				if (error == null) {
+					final String postId = values.getString("post_id");
+					if (postId != null) {
+						showErrorConfirmDialog(R.string.share_complete);
+					} else {
+						showErrorConfirmDialog(R.string.share_cancel);
+					}
+				} else {
+					showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? getString(R.string.share_cancel) : error.getMessage());
+				}
+				if (!getFacebookInfoOver)
+					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			}
-		};
-		Request request = new Request(Session.getActiveSession(), "me/feed", postParams, HttpMethod.POST, callback);
-		RequestAsyncTask task = new RequestAsyncTask(request);
-		task.execute();
+		}).build();
+		dialog.show();
 	}
 
 	@Override
 	public void onUserInfoFetched(final GraphUser user) {
 		if (user != null) {
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-			sendJoinMessageOnFacebook();
+			sendJoinMessageOnFacebook(user.getId());
 			getFacebookFriends(user);
 		}
 	}
@@ -234,5 +251,8 @@ public class FacebookAddFriendsActivity extends AddFriendBaseActivity implements
 			}
 		});
 		request.executeAsync();
+	}
+
+	protected void postToWall(String userID) {
 	}
 }

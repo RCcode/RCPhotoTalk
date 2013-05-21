@@ -3,7 +3,7 @@ package com.rcplatform.phototalk.views;
 import java.io.File;
 import java.io.IOException;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 
 import android.content.Context;

@@ -74,7 +74,7 @@ public class LongPressDialog extends Dialog {
 
         @Override
         public void onClick(View v) {
-            // TODO Auto-generated method stub
+            // TODO Auto-generated method stub.
             int index = (Integer) v.getTag();
             if (mListener != null)
                 mListener.onClick(listPostion, index);

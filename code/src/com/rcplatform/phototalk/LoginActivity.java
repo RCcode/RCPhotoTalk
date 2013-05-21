@@ -34,8 +34,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.ImagePickActivity;
-import com.rcplatform.phototalk.api.MenueApiFactory;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
@@ -267,7 +267,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			int loginType = invalidate(email2, psw2);
 			if (loginType != -1) {
 				// ------------------测试暂加----------------------------
-				if (loginType == MenueApiFactory.LOGIN_TYPE_PHONE)
+				if (loginType == PhotoTalkApiFactory.LOGIN_TYPE_PHONE)
 					email2 = "+86" + email2;
 				// --------------------------------------------------
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
@@ -330,9 +330,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private int checkAccount(String account) {
 		if (account.matches(EMAIL_REGEX))
-			return MenueApiFactory.LOGIN_TYPE_EMAIL;
+			return PhotoTalkApiFactory.LOGIN_TYPE_EMAIL;
 		else if (account.matches(RCID_REGEX))
-			return MenueApiFactory.LOGIN_TYPE_RCID;
+			return PhotoTalkApiFactory.LOGIN_TYPE_RCID;
 		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok)).show();
 		return -1;
 	}
@@ -427,7 +427,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Iterator<UserInfo> itUsers = userApps.values().iterator();
 		UserInfo userInfo = itUsers.next();
-		Request request = new Request(this, MenueApiUrl.CHECK_USER_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(this, PhotoTalkApiUrl.CHECK_USER_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -486,7 +486,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private void tigaseRegiste(Context context, final String email, String password, final String nick) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request request = new Request(context, MenueApiUrl.SIGNUP_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(context, PhotoTalkApiUrl.SIGNUP_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {

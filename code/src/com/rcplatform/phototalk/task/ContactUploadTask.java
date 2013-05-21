@@ -16,7 +16,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Handler;
 
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
@@ -103,7 +103,7 @@ public class ContactUploadTask {
 						mCurrentTime++;
 						try {
 							HttpClient client = new DefaultHttpClient();
-							HttpPost post = new HttpPost(MenueApiUrl.SYNC_CONTACT_URL);
+							HttpPost post = new HttpPost(PhotoTalkApiUrl.SYNC_CONTACT_URL);
 							post.setEntity(new StringEntity(entity, "UTF-8"));
 							HttpResponse response = client.execute(post);
 							if (response.getStatusLine().getStatusCode() == 200) {

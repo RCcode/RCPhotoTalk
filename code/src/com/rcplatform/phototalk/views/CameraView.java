@@ -21,22 +21,10 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.rcplatform.phototalk.MenueApplication;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.TakePhotoActivity;
 import com.rcplatform.phototalk.utils.Utils;
 
-/**
- * 标题、简要说明. <br>
- * 类详细说明.
- * <p>
- * Copyright: Menue,Inc Copyright (c) 2013-2-27 上午10:46:11
- * <p>
- * Team:Menue Beijing
- * <p>
- * 
- * @author tao.fu@menue.com.cn
- * @version 1.0.0
- */
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static final int INVALID_CAMERA = -1;
@@ -49,7 +37,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static int mCurrentCameraNum;
 
-	private MenueApplication app;
+    private PhotoTalkApplication app;
 
 	private SurfaceHolder mHolder;
 
@@ -85,16 +73,16 @@ private static int round;
 	}
 
 	private void init(Context context) {
-		// 获得SurfaceHolder对象
-		mHolder = getHolder();
-		// 指定用于捕捉拍照事件的SurfaceHolder.Callback对象
-		mHolder.addCallback(this);
-		// 设置SurfaceHolder对象的类型
-		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-		this.mContext = context;
-		app = (MenueApplication) context.getApplicationContext();
-	}
-
+        // 获得SurfaceHolder对象
+        mHolder = getHolder();
+        // 指定用于捕捉拍照事件的SurfaceHolder.Callback对象
+        mHolder.addCallback(this);
+        // 设置SurfaceHolder对象的类型
+        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+        this.mContext = context;
+        app = (PhotoTalkApplication) context.getApplicationContext();
+    }
+	
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		mNumCamera = Camera.getNumberOfCameras();
@@ -229,13 +217,12 @@ private static int round;
 				// tempBitmap = mBitmap;
 				// }
 				// }
-
-				((MenueApplication) mContext.getApplicationContext())
-						.setEditeBitmap(tempBitmap);
-				mBitmap = null;
-				tempBitmap = null;
-			}
-			((TakePhotoActivity) mContext).startOtherActivity();
+				((PhotoTalkApplication) mContext.getApplicationContext()).setEditeBitmap(tempBitmap);
+                mBitmap = null;
+                tempBitmap = null;
+            }
+            ((TakePhotoActivity) mContext).startOtherActivity();
+            // }
 			// }
 		}
 	};
@@ -261,7 +248,6 @@ private static int round;
 			degrees = 270;
 			break;
 		}
-
 		int result;
 		if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
 			result = (info.orientation + degrees) % 360;

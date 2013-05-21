@@ -54,7 +54,7 @@ public class VideoRecordActivity extends BaseMediaActivity {
 
     private LinearLayout mLinerLyoutTimer;
 
-    private MenueApplication app;
+    private PhotoTalkApplication app;
 
     private String seconds;
 
@@ -69,7 +69,7 @@ public class VideoRecordActivity extends BaseMediaActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.video_record_view);
-        app = (MenueApplication) getApplication();
+        app = (PhotoTalkApplication) getApplication();
         mVideoRecordView = (VideoRecordView) findViewById(R.id.sf_video_record_record);
         mButtonStart = (Button) findViewById(R.id.btn_video_record_start_stop);
         mTextViewTimerM = (TextView) findViewById(R.id.tv_video_record_timer_minute);

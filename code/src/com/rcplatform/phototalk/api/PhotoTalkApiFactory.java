@@ -2,7 +2,7 @@ package com.rcplatform.phototalk.api;
 
 import com.rcplatform.phototalk.bean.UserInfo;
 
-public class MenueApiFactory {
+public class PhotoTalkApiFactory {
 
 	// 返回状态。
 	public static final int RESPONSE_STATE_SUCCESS = 0;

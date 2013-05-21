@@ -15,7 +15,7 @@ import com.db4o.ObjectContainer;
 import com.db4o.ObjectSet;
 import com.db4o.config.AndroidSupport;
 import com.db4o.config.EmbeddedConfiguration;
-import com.rcplatform.phototalk.api.MenueApiUrl;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
@@ -39,7 +39,7 @@ public class RequestDb4oDatabase extends PhotoTalkRequestDatabase {
 
 	@Override
 	public void saveRequest(Request request) {
-		if (request.getUrl().equals(MenueApiUrl.SEND_PICTURE_URL)) {
+		if (request.getUrl().equals(PhotoTalkApiUrl.SEND_PICTURE_URL)) {
 			List<RequestCache> caches = slipRequest(request);
 			saveRequest(caches);
 		} else {

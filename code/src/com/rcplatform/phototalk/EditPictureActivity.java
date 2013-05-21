@@ -118,7 +118,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private LinearLayout mEditText;
 
-	private MenueApplication app;
+	private PhotoTalkApplication app;
 
 	private ColorPickerDialog colorPickerDialog;
 
@@ -224,7 +224,7 @@ public class EditPictureActivity extends BaseActivity {
 
 		mEditableViewGroup = (EditableViewGroup) findViewById(R.id.edit_group);
 		mEditableViewGroup.setDrawingCacheEnabled(true);
-		app = (MenueApplication) getApplication();
+		app = (PhotoTalkApplication) getApplication();
 		audioBtn.setSavePath(app.getSendFileCachePath());
 		// mEditePicView = (EditPictureView) findViewById(R.id.sf_edite_pic);
 		mEditePicView = new EditPictureView(this);

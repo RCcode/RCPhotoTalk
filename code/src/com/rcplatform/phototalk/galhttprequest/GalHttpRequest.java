@@ -286,7 +286,6 @@ public class GalHttpRequest {
 
                             @Override
                             public void run() {
-                                Log.w("MENUE", "rsps=" + content);
                                 photoChatHttpLoadTextCallBack.textLoaded(content, tmeptime);
                             }
                         });

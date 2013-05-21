@@ -172,7 +172,7 @@ public class Utils {
 	public static int getVerCode(Context context) {
 		int verCode = -1;
 		try {
-			verCode = context.getPackageManager().getPackageInfo("com.menue.photosticker", 0).versionCode;
+			verCode = context.getPackageManager().getPackageInfo("com.rcplatform.phototalk", 0).versionCode;
 		} catch (NameNotFoundException e) {
 			Log.e("msg", e.getMessage());
 		}
@@ -188,7 +188,7 @@ public class Utils {
 	public static String getVerName(Context context) {
 		String verName = "";
 		try {
-			verName = context.getPackageManager().getPackageInfo("com.menue.photosticker", 0).versionName;
+			verName = context.getPackageManager().getPackageInfo("com.rcplatform.phototalk", 0).versionName;
 		} catch (NameNotFoundException e) {
 			Log.e("msg", e.getMessage());
 		}
