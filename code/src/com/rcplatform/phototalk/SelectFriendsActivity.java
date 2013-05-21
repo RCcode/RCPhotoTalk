@@ -178,6 +178,8 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		}
 		File file = new File(tempFilePath);
 		if (file.exists()) {
+			//删除 录音和照片 zip 压缩包不删除
+			deleteTemp();
 			sendPicture(tempFilePath, timeLimit, sendData);
 		} else {
 			sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
@@ -277,25 +279,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	};
 
 	private long timeSnap;
-
-	public void deleteTemp() {
-		MenueApplication app = (MenueApplication) getApplication();
-		String tempFilePath = app.getSendFileCachePath();
-		File tempPic = new File(tempFilePath);
-		deleteFile(tempPic);
-	}
-
-	public void deleteFile(File file) {
-		if (file.isDirectory()) {
-			File[] files = file.listFiles();
-			for (File file2 : files) {
-				deleteFile(file2);
-			}
-		} else {
-			System.out.println("select----->" + file.getPath());
-			file.delete();
-		}
-	}
 
 	private void sendPicture(String imagePath, final String timeLimit, final List<SelectFriend> friends) {
 		timeSnap = System.currentTimeMillis();

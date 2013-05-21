@@ -176,7 +176,7 @@ public class Request implements Serializable {
 		request.excuteAsync();
 	}
 
-	public static void sendPhoto(final Context context, final long flag, File file, String timeLimit, final PhotoSendListener listener,
+	public static void sendPhoto(final Context context, final long flag, File file, final String timeLimit, final PhotoSendListener listener,
 			final List<String> friendIds) {
 		final UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		try {
@@ -198,7 +198,8 @@ public class Request implements Serializable {
 							List<String> userIds = buildUserIds(jsonObject.getJSONArray("users"));
 							long flag = jsonObject.getLong("time");
 							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
-									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
+									Integer.parseInt(timeLimit));
 							MessageSender.sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag);
 						} catch (JSONException e) {
@@ -212,7 +213,7 @@ public class Request implements Serializable {
 						listener.onFail(flag, errorCode, content);
 						UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+								InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL, Integer.parseInt(timeLimit));
 					}
 				};
 			}
@@ -227,7 +228,7 @@ public class Request implements Serializable {
 			e.printStackTrace();
 			listener.onFail(flag, RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-					InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+					InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL, Integer.parseInt(timeLimit));
 		}
 	}
 

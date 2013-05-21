@@ -41,11 +41,13 @@ public class PhotoInformationCountDownService {
 	}
 
 	public void addInformation(Information info) {
-		info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
-		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
-		mShowingInformations.put(PhotoTalkUtils.getInformationTagBase(info), info);
-		sendDelayMessage(info);
-		startCountDown(info);
+		if (!mShowingInformations.containsKey(PhotoTalkUtils.getInformationTagBase(info))) {
+			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
+			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
+			mShowingInformations.put(PhotoTalkUtils.getInformationTagBase(info), info);
+			sendDelayMessage(info);
+			startCountDown(info);
+		}
 	}
 
 	private void startCountDown(Information info) {
@@ -103,7 +105,7 @@ public class PhotoInformationCountDownService {
 		if (!file.exists())
 			return;
 		if (file.isFile()) {
-//			SoundManager.getInstance().release(file.getAbsolutePath());
+			// SoundManager.getInstance().release(file.getAbsolutePath());
 			file.delete();
 		} else if (file.isDirectory()) {
 			for (File f : file.listFiles()) {

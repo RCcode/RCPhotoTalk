@@ -10,8 +10,9 @@
     <dimen name="header_footer_top_bottom_padding">12dp</dimen>
 
     <!-- 朋友列表属性 -->
+    <dimen name="add_friend_tab_hight">38dp</dimen>
     <dimen name="friend_tiem_hight">66dp</dimen>
-    <dimen name="friend_head_left">8dp</dimen>
+    <dimen name="friend_head_left">4dp</dimen>
     <dimen name="friend_head_side">66dp</dimen>
     <dimen name="friend_text_padding">6dp</dimen>
     <!-- 朋友信息属性 -->

@@ -25,7 +25,7 @@
             android:layout_width="@dimen/friend_head_side"
             android:layout_height="@dimen/friend_head_side"
             android:background="@drawable/default_head"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/friend_head_left"
             android:layout_centerVertical="true"
             android:scaleType="fitXY" />
 

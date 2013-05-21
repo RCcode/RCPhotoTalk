@@ -9,6 +9,7 @@
 <dimen name="user_head_left">10dp</dimen>
 <dimen name="user_head_side">66dp</dimen>
     <!--朋友信息属性  -->
+      <dimen name="add_friend_tab_hight">44dp</dimen>
 <dimen name="friend_info_edit_left">20dp</dimen>
 <dimen name="friend_info_sex_layout_top">7dp</dimen>
 <dimen name="friend_info_photo_left">9dp</dimen>

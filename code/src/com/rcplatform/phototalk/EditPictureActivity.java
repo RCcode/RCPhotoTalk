@@ -2,6 +2,7 @@ package com.rcplatform.phototalk;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -57,6 +58,7 @@ import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
 import com.rcplatform.phototalk.views.AudioShowView;
 import com.rcplatform.phototalk.views.ColorPicker.OnColorChangeListener;
+import com.rcplatform.phototalk.views.LongClickShowView.Builder;
 import com.rcplatform.phototalk.views.ColorPickerDialog;
 import com.rcplatform.phototalk.views.EditPictureView;
 import com.rcplatform.phototalk.views.EditableViewGroup;
@@ -121,10 +123,6 @@ public class EditPictureActivity extends BaseActivity {
 	private ColorPickerDialog colorPickerDialog;
 
 	private int softInputHight;
-
-	private String tempFilePath;
-
-	// private Dialog waitDialog;
 
 	private boolean enableSave = true;
 
@@ -304,13 +302,6 @@ public class EditPictureActivity extends BaseActivity {
 										.setFocusableInTouchMode(false);
 								mEditText.getChildAt(0).setFocusable(false);
 								mEditText.getChildAt(0).clearFocus();
-//								if (((EditText) mEditText.getChildAt(0))
-//										.getText().equals("")
-//										|| ((EditText) mEditText.getChildAt(0))
-//												.getText() == null) {
-//									mEditableViewGroup.setVisibility(View.GONE);
-//								}
-
 							}
 						}
 					}
@@ -334,7 +325,8 @@ public class EditPictureActivity extends BaseActivity {
 					try {
 
 						player = new MediaPlayer();
-						player.setDataSource(voicePath);
+						FileInputStream fis = new FileInputStream(voicePath);
+						player.setDataSource(fis.getFD());
 						player.setAudioStreamType(AudioManager.STREAM_RING);
 						player.prepare();
 						player.setOnCompletionListener(new OnCompletionListener() {
@@ -397,7 +389,7 @@ public class EditPictureActivity extends BaseActivity {
 				if (enableSave) {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
-					saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+					saveEditedPictrue(mEditableViewGroup.getDrawingCache(),app.getCameraPath());
 
 				}
 				break;
@@ -405,7 +397,7 @@ public class EditPictureActivity extends BaseActivity {
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
 				isSave = true;
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache(),app.getSendFileCachePath() + "/Photochat.jpg");
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
@@ -550,7 +542,7 @@ public class EditPictureActivity extends BaseActivity {
 		colorPickerDialog.showDialog(mButtonTuya);
 	}
 
-	private PopupWindow mPopuTimeLimit;
+//	private PopupWindow mPopuTimeLimit;
 
 	private void showTimeLimitView() {
 		// if (timeChooseDialog == null) {
@@ -602,19 +594,13 @@ public class EditPictureActivity extends BaseActivity {
 		return mWheel.getCurrentItem();
 	}
 
-	public void saveEditedPictrue(final Bitmap bitmap) {
+	public void saveEditedPictrue(final Bitmap bitmap,final String path) {
 		// showDialog();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				// if (!Environment.getExternalStorageState().equals(
-				// Environment.MEDIA_MOUNTED)) {
-				// handler.sendEmptyMessage(NO_SDC);
-				// return;
-				// }
-				tempFilePath = app.getSendFileCachePath() + "/Photochat.jpg";
-				File file = new File(tempFilePath);
+				File file = new File(path);
 				try {
 					if (file.exists()) {
 						file.delete();
@@ -707,8 +693,10 @@ public class EditPictureActivity extends BaseActivity {
 			e.printStackTrace();
 		}
 		String timelimit = (String) mButtonTimeLimit.getText();
-		File file = new File(tempFilePath);
+		File file = new File(tempPath);
 		if (file.exists()) {
+		//压缩成功后删除录音和照片文件
+			deleteTemp();
 			sendPicture("", tempPath, timelimit, friend);
 		}
 	}
@@ -721,34 +709,33 @@ public class EditPictureActivity extends BaseActivity {
 		LogicUtils.sendPhoto(this, timeLimit, friends, file);
 	}
 
-	private String buildUserArray(Friend friend, long time, String timeLimit) {
-		try {
-			JSONArray array = new JSONArray();
-			List<Information> infoRecords = new ArrayList<Information>();
-			Information record;
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("userId", friend.getRcId());
-			array.put(jsonObject);
-
-			record = new Information();
-			record.setCreatetime(time);
-			RecordUser user = new RecordUser();
-			record.setSender(user);
-			user = new RecordUser();
-			user.setNick(friend.getNickName());
-			user.setHeadUrl(friend.getHeadUrl());
-			record.setReceiver(user);
-			record.setUrl(tempFilePath);
-			record.setLimitTime(Integer.parseInt(timeLimit));
-			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
-			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
-			infoRecords.add(record);
-			app.addSendRecords(time, infoRecords);
-			return array.toString();
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
+//	private String buildUserArray(Friend friend, long time, String timeLimit) {
+//		try {
+//			JSONArray array = new JSONArray();
+//			List<Information> infoRecords = new ArrayList<Information>();
+//			Information record;
+//			JSONObject jsonObject = new JSONObject();
+//			jsonObject.put("userId", friend.getRcId());
+//			array.put(jsonObject);
+//			record = new Information();
+//			record.setCreatetime(time);
+//			RecordUser user = new RecordUser();
+//			record.setSender(user);
+//			user = new RecordUser();
+//			user.setNick(friend.getNickName());
+//			user.setHeadUrl(friend.getHeadUrl());
+//			record.setReceiver(user);
+//			record.setUrl(tempFilePath);
+//			record.setLimitTime(Integer.parseInt(timeLimit));
+//			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
+//			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+//			infoRecords.add(record);
+//			app.addSendRecords(time, infoRecords);
+//			return array.toString();
+//		} catch (JSONException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return null;
+//	}
 }

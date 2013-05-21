@@ -1,5 +1,7 @@
 package com.rcplatform.phototalk.activity;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -148,5 +150,23 @@ public class BaseActivity extends Activity {
 		dismissLoadingDialog();
 		ImageLoader.getInstance().stop();
 		super.onDestroy();
+	}
+	
+	protected void deleteTemp() {
+		MenueApplication app = (MenueApplication) getApplication();
+		String tempFilePath = app.getSendFileCachePath();
+		File tempPic = new File(tempFilePath);
+		deleteFile(tempPic);
+	}
+
+	protected void deleteFile(File file) {
+		if (file.isDirectory()) {
+			File[] files = file.listFiles();
+			for (File file2 : files) {
+				deleteFile(file2);
+			}
+		} else {
+			file.delete();
+		}
 	}
 }

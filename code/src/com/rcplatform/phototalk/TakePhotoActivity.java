@@ -63,7 +63,7 @@ public class TakePhotoActivity extends Activity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.take_photo_view);
-		deleteTemp();
+//		deleteTemp();
 		intent = getIntent();
 		mButtonTake = (Button) findViewById(R.id.btn_take_photo_take);
 		mButtonOpenFlashLight = (Button) findViewById(R.id.btn_take_photo_flashlight);

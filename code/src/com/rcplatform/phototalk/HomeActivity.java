@@ -342,27 +342,21 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		Information infoRecord = (Information) adapter.getItem(position);
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
-			if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
+			if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
+					|| infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
+				if (mShowDialog == null) {
+					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
+					mShowDialog = builder.create();
+				}
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(PhotoTalkUtils.getInformationTagBase(infoRecord)
 						+ Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
 				limitView.setBackgroundDrawable(null);
-				(limitView).scheuleTask(infoRecord);
-				if (mShowDialog == null) {
-					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
-					mShowDialog = builder.create();
-				}
 				mShowDialog.ShowDialog(infoRecord);
+				(limitView).scheuleTask(infoRecord);
 				LogicUtils.startShowPhotoInformation(infoRecord);
 				isShow = true;
 				// 把数据里面的状态更改为3，已查看
-			} else if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
-				if (mShowDialog == null) {
-					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
-					mShowDialog = builder.create();
-				}
-				mShowDialog.ShowDialog(infoRecord);
-				isShow = true;
 			}
 		}
 
