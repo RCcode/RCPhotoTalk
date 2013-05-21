@@ -126,8 +126,6 @@ public class EditPictureActivity extends BaseActivity {
 
 	private String tempFilePath;
 
-	// private Dialog waitDialog;
-
 	private boolean enableSave = true;
 
 	private WheelView mWheel;
@@ -393,7 +391,7 @@ public class EditPictureActivity extends BaseActivity {
 				if (enableSave) {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
-					saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+					saveEditedPictrue(mEditableViewGroup.getDrawingCache(),app.getCameraPath());
 
 				}
 				break;
@@ -401,7 +399,7 @@ public class EditPictureActivity extends BaseActivity {
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
 				isSave = true;
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache());
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache(),app.getSendFileCachePath() + "/Photochat.jpg");
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
@@ -598,19 +596,13 @@ public class EditPictureActivity extends BaseActivity {
 		return mWheel.getCurrentItem();
 	}
 
-	public void saveEditedPictrue(final Bitmap bitmap) {
+	public void saveEditedPictrue(final Bitmap bitmap,final String path) {
 		// showDialog();
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				// if (!Environment.getExternalStorageState().equals(
-				// Environment.MEDIA_MOUNTED)) {
-				// handler.sendEmptyMessage(NO_SDC);
-				// return;
-				// }
-				tempFilePath = app.getSendFileCachePath() + "/Photochat.jpg";
-				File file = new File(tempFilePath);
+				File file = new File(path);
 				try {
 					if (file.exists()) {
 						file.delete();
@@ -703,7 +695,7 @@ public class EditPictureActivity extends BaseActivity {
 			e.printStackTrace();
 		}
 		String timelimit = (String) mButtonTimeLimit.getText();
-		File file = new File(tempFilePath);
+		File file = new File(tempPath);
 		if (file.exists()) {
 			sendPicture("", tempPath, timelimit, friend);
 		}

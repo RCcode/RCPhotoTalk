@@ -215,6 +215,20 @@ public class MenueApplication extends Application {
 		// }
 		return imagePath;
 	}
+	public String getCameraPath() {
+		String imagePath = "";
+		 File sdDir = null;
+		 boolean sdCardExist = Environment.getExternalStorageState().equals(
+		 android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		 if (sdCardExist) {
+		 sdDir = Environment.getExternalStorageDirectory();
+		 // 获取根目录
+		 imagePath =  "/sdcard/DCIM/Camera/photoTalk"+System.currentTimeMillis()+".jpg";
+		 } else {
+		imagePath = "/stystem/DCIM/Camera/photoTalk"+System.currentTimeMillis()+".jpg";
+		 }
+		return imagePath;
+	}
 
 	public String getBackgroundCachePath() {
 		String imagePath = "";
