@@ -15,7 +15,6 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
@@ -27,13 +26,6 @@ import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class FriendsProxy {
-
-	public static List<Friend> getFacebookRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, MenueApiUrl.FACEBOOK_RECOMMENDS_URL, responseHandler);
-		request.putParam("attrType", FriendType.FACEBOOK + "");
-		request.excuteAsync();
-		return null;
-	}
 
 	public static List<Friend> getContactRecommendFriendsAsync(Context context, RCPlatformResponseHandler responseHandler) {
 		Request request = new Request(context, MenueApiUrl.CONTACT_RECOMMEND_URL, responseHandler);
@@ -87,7 +79,7 @@ public class FriendsProxy {
 								f.setFriend(false);
 							PhotoTalkDatabaseFactory.getDatabase().saveFriends(mFriends);
 							PhotoTalkDatabaseFactory.getDatabase().saveRecommends(mRecommends);
-							List<Friend> delFriends = PhotoTalkDatabaseFactory.getDatabase().getDeletedFriends();
+							List<Friend> delFriends = PhotoTalkDatabaseFactory.getDatabase().getHidenFriends();
 							for (Friend f : delFriends) {
 								if (mFriends.contains(f))
 									mFriends.remove(mFriends.indexOf(f));

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white" >
+
+    <LinearLayout
+        android:id="@+id/login_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:text="@string/vk_auth"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/friends_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <EditText
+            android:id="@+id/et_search"
+            style="@style/text_base"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/wish_to_invate"
+            android:layout_below="@+id/et_search" >
+
+            <ExpandableListView
+                android:id="@+id/my_friend_listview"
+                style="@style/expand_listview_base"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:divider="@color/line_bg_color"
+                android:listSelector="#00000000" />
+
+            <ExpandableListView
+                android:id="@+id/lv_search"
+                style="@style/expand_listview_base"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone" />
+        </FrameLayout>
+
+        <include
+            android:id="@+id/wish_to_invate"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            layout="@layout/will_invited_list" />
+    </RelativeLayout>
+
+</FrameLayout>

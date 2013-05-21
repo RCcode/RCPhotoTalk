@@ -28,12 +28,12 @@ public class PhotoTalkUtils {
 
 	public static String getFilePath(String url) {
 		StringBuilder sbPath = new StringBuilder();
-		sbPath.append(Contract.PhotoInformationCache.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
+		sbPath.append(Constants.PhotoInformationCache.FILE_PATH).append("/").append(MD5.encodeMD5String(url));
 		return sbPath.toString();
 	}
 
 	public static String getUnZipDirPath(String url) {
-		return getFilePath(url) + Contract.PhotoInformationCache.UNZIP_SUFFIX;
+		return getFilePath(url) + Constants.PhotoInformationCache.UNZIP_SUFFIX;
 	}
 	
 	public static String getInformationTagBase(Information information){

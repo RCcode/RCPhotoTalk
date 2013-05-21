@@ -18,8 +18,9 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.task.FacebookUploadTask;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 
 public class UserInfoActivity extends FacebookActivity implements OnClickListener {
 	private TextView user_Email;
@@ -116,7 +117,8 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 	private void showDeAuthorizeDialog(int type) {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
-			mDeAuthDialog = new AlertDialog.Builder(this).setMessage(R.string.dialog_confirm_deauth).setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener).create();
+			mDeAuthDialog = new AlertDialog.Builder(this).setMessage(R.string.dialog_confirm_deauth)
+					.setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener).create();
 		}
 		mDeAuthorizeDialogListener.setType(type);
 		mDeAuthDialog.show();
@@ -145,22 +147,22 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 	};
 
 	@Override
-	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartFriend> friends) {
+	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartUser> friends) {
 		super.onFacebookInfoLoaded(user, friends);
 		setAuthText();
-		FacebookUploadTask task = new FacebookUploadTask(this, friends, user);
-		task.setResponseListener(new RCPlatformResponseHandler() {
+		ThirdPartInfoUploadTask task = new ThirdPartInfoUploadTask(this, friends, ThirdPartUtils.parserFacebookUserToThirdPartUser(user), FriendType.FACEBOOK,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				dismissLoadingDialog();
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						dismissLoadingDialog();
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+					}
+				});
 		task.start();
 	}
 

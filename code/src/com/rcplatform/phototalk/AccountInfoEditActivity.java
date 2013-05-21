@@ -37,12 +37,13 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HeadImageView;
+import com.rcplatform.phototalk.views.RoundImageView;
 
 public class AccountInfoEditActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -61,7 +62,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private View mBackView;
 	private DatePicker mBirthDayPicker;
 	private TextView mTitleView;
-	private HeadImageView mMyHeadView;
+	private RoundImageView mMyHeadView;
 	private AlertDialog mBirthChooseDialog;
 	private Bitmap bitmap = null;
 	private Calendar mBirthDayCalender;
@@ -128,7 +129,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void initView() {
 		initTitle();
-		mMyHeadView = (HeadImageView) findViewById(R.id.settings_account_head_portrait);
+		mMyHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
 		mNameView = (TextView) findViewById(R.id.settings_modify_name);
 		mSexView = (TextView) findViewById(R.id.settings_modify_sex);
 		mBirthday = (TextView) findViewById(R.id.settings_modify_age);
@@ -157,14 +158,13 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void loadHeadPicture() {
 		String headUrl = userDetailInfo.getHeadUrl();
-		File file = new File(headUrl);
-		if (file.exists()) {
-			Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
-			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
-		} else {
+//		File file = new File(headUrl);
+//		if (file.exists()) {
+//			Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
+//			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
+//		} else {
 			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-		}
-
+//		}
 	}
 
 	private void setNick() {
@@ -201,7 +201,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			updateUserInfo();
 			break;
 		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendActivity.class));
+			startActivity(new Intent(this, AddFriendsActivity.class));
 			break;
 		case R.id.settings_account_head_portrait:
 			showImagePickMenu(v,CROP_HEAD_IMAGE);
@@ -427,7 +427,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	private void cacheHeadImage(Bitmap bitmap) throws Exception {
-		File file = new File(getCacheDir(), Contract.HEAD_CACHE_PATH);
+		File file = new File(getCacheDir(), Constants.HEAD_CACHE_PATH);
 		FileOutputStream fos = new FileOutputStream(file);
 		bitmap.compress(CompressFormat.PNG, 100, fos);
 		String cachePath = "file://" + file.getPath();

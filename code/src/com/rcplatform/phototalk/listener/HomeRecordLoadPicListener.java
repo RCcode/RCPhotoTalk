@@ -12,7 +12,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.MessageSender;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;

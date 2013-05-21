@@ -36,6 +36,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public static final int TYPE_RECOMMENDS = 0;
 	public static final int TYPE_CONTACTS = 1;
 	public static final int TYPE_FACEBOOK = 2;
+	public static final int TYPE_VK = 5;
 	public static final int TYPE_FRIEND_ADDED = 3;
 	public static final int TYPE_FRIEND_NEW = 4;
 
@@ -43,6 +44,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public static final int TYPE_CHILD_CONTACT = 1;
 	public static final int TYPE_CHILD_FACEBOOK = 2;
 	public static final int TYPE_CHILD_FRIEND_ADDED = 3;
+	public static final int TYPE_CHILD_VK = 4;
 
 	private Map<Integer, List<Friend>> mFriends = new HashMap<Integer, List<Friend>>();
 	private List<Integer> mTitles = new ArrayList<Integer>();
@@ -163,6 +165,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			convertView = getFacebookView(convertView, parent, friend);
 		else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_FRIEND_ADDED)
 			convertView = getFriendView(convertView, parent, friend, childPosition);
+		else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_VK)
+			convertView = getVKFriendsView(convertView, parent, friend);
 		return convertView;
 	}
 
@@ -317,8 +321,42 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
-		RCPlatformImageLoader.displayImage(mContext, ivHead, friend.getHeadUrl(), mImageLoader);
+		RCPlatformImageLoader.loadImage(mContext, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
+				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, ivHead, R.drawable.default_head);
+		
+//		RCPlatformImageLoader.displayImage(mContext, ivHead, friend.getHeadUrl(), mImageLoader);
 		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
+		return convertView;
+	}
+
+	private View getVKFriendsView(View convertView, ViewGroup parent, final Friend friend) {
+		if (convertView == null) {
+			convertView = mInflater.inflate(R.layout.vk_friend_item, null);
+		}
+		ImageView head = (ImageView) convertView.findViewById(R.id.iv_vk_head);
+		TextView tvName = (TextView) convertView.findViewById(R.id.tv_nick);
+		tvName.setText(friend.getNickName());
+		CheckBox cbInvite = (CheckBox) convertView.findViewById(R.id.cb_invite);
+		cbInvite.setOnCheckedChangeListener(null);
+		if (!mWillInvateFriends.contains(friend)) {
+			cbInvite.setChecked(false);
+		} else {
+			cbInvite.setChecked(true);
+		}
+		cbInvite.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (mCheckBoxChangedListener != null) {
+					mCheckBoxChangedListener.onChange(friend, isChecked);
+				}
+				if (isChecked)
+					mWillInvateFriends.add(friend);
+				else
+					mWillInvateFriends.remove(friend);
+			}
+		});
+		RCPlatformImageLoader.displayImage(mContext, head, friend.getHeadUrl(), mImageLoader);
 		return convertView;
 	}
 
@@ -333,12 +371,14 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			return TYPE_CHILD_CONTACT;
 		else if (type == TYPE_FRIEND_ADDED || type == TYPE_FRIEND_NEW)
 			return TYPE_CHILD_FRIEND_ADDED;
+		else if (type == TYPE_VK)
+			return TYPE_CHILD_VK;
 		return -1;
 	}
 
 	@Override
 	public int getChildTypeCount() {
-		return 4;
+		return 5;
 	}
 
 	@Override

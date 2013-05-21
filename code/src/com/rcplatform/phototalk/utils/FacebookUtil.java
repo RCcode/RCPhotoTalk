@@ -22,28 +22,13 @@ import com.facebook.model.GraphUser;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.GetFriendsListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartAccessTokenKeeper;
 
 public class FacebookUtil {
 
-	public static boolean isFacebookVlidate(Context context) {
-		SharedPreferencesTokenCachingStrategy strategy = new SharedPreferencesTokenCachingStrategy(context);
-		Bundle bundle = strategy.load();
-		boolean vlidated = false;
-		if (bundle != null) {
-			String token = bundle.getString(SharedPreferencesTokenCachingStrategy.TOKEN_KEY);
-			long expirationDate = bundle.getLong(SharedPreferencesTokenCachingStrategy.EXPIRATION_DATE_KEY);
-			if (token != null && !isTokenExpiration(expirationDate))
-				vlidated = true;
-		}
-		return vlidated;
-	}
 
-	private static boolean isTokenExpiration(long expirationDate) {
-		return System.currentTimeMillis() > expirationDate;
-	}
 
 	public static void getFacebookFriends(Activity context, final GetFriendsListener listener) {
 		Session session = Session.getActiveSession();
@@ -86,11 +71,11 @@ public class FacebookUtil {
 		}
 	}
 
-	public static List<ThirdPartFriend> buildFriends(List<GraphUser> users) {
-		List<ThirdPartFriend> friends = new ArrayList<ThirdPartFriend>();
+	public static List<ThirdPartUser> buildFriends(List<GraphUser> users) {
+		List<ThirdPartUser> friends = new ArrayList<ThirdPartUser>();
 		if (users != null) {
 			for (GraphUser user : users) {
-				ThirdPartFriend friend = new ThirdPartFriend();
+				ThirdPartUser friend = new ThirdPartUser();
 				friend.setId(user.getId());
 				friend.setNick(user.getName());
 				friend.setHeadUrl(user.getLink());
@@ -182,38 +167,7 @@ public class FacebookUtil {
 		public void onComplete(GraphUser user);
 	}
 
-	public static void deAuthorize(Activity context, final OnDeAuthorizeListener listener) {
-		if (isFacebookVlidate(context)) {
-			Session session = Session.getActiveSession();
-			StatusCallback callback = new StatusCallback() {
-
-				@Override
-				public void call(final Session session, SessionState state, Exception exception) {
-					if (state.isOpened()) {
-						new Thread() {
-							@Override
-							public void run() {
-								Request request = new Request(session, "me/permissions");
-								request.setHttpMethod(HttpMethod.DELETE);
-								Response response = request.executeAndWait();
-								if (response.getError() == null) {
-									listener.onSuccess();
-								} else {
-									listener.onFail(response.getError().getErrorMessage());
-								}
-								response.getError();
-							}
-						}.start();
-					}
-				}
-			};
-			if (session != null && !session.isClosed() && !session.isOpened()) {
-				session.openForRead(new OpenRequest(context).setCallback(callback));
-			} else {
-				session = Session.openActiveSession(context, false, callback);
-			}
-		}
-	}
+	
 
 	public static void deAuthorize(Session session) {
 

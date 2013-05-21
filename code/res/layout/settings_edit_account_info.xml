@@ -3,8 +3,7 @@
     android:id="@id/add_friend_activity_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:layout_margin="0.0dip"
-    android:background="#f3f3f3" >
+     android:background="@drawable/app_backgroud">
 
     <include layout="@layout/base_top_navigate" android:id="@+id/title"/>
 
@@ -24,12 +23,15 @@
 
             <!-- line1 -->
 
-            <com.rcplatform.phototalk.views.HeadImageView
+            <com.rcplatform.phototalk.views.RoundImageView
                 android:id="@id/settings_account_head_portrait"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:scaleType="fitCenter"
+                android:background="@drawable/send_friend_head_bg"
+                android:gravity="center"
                 android:src="@drawable/default_head" />
 
             <RelativeLayout
@@ -47,6 +49,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
+                    android:textColor="#313131"
+                    android:textSize="20sp"
                     android:text="@string/nick" >
                 </TextView>
 
@@ -56,6 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:textSize="20sp"
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/right_arrow"
                     android:gravity="center_vertical" />
@@ -76,6 +81,8 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
+                    android:textColor="#313131"
+                    android:textSize="20sp"
                     android:text="@string/sex" >
                 </TextView>
 
@@ -85,6 +92,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:textSize="20sp"
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/right_arrow"
                     android:gravity="center_vertical" />
@@ -104,6 +112,8 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
+                    android:textColor="#313131"
+                    android:textSize="20sp"
                     android:gravity="center_vertical"
                     android:text="@string/birthday" >
                 </TextView>
@@ -114,6 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:textSize="20sp"
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/right_arrow"
                     android:gravity="center_vertical" />

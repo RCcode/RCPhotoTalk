@@ -1,6 +1,6 @@
 package com.rcplatform.phototalk.thirdpart.bean;
 
-public class ThirdPartFriend {
+public class ThirdPartUser {
 	private String id;
 	private String nick;
 	private String headUrl;

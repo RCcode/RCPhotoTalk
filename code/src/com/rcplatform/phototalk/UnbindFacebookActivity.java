@@ -24,7 +24,7 @@ import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartAccessTokenKeeper;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -120,7 +120,7 @@ public class UnbindFacebookActivity extends Activity implements View.OnClickList
 		request.setPostValueForKey(MenueApiFactory.TOKEN, MenueApiFactory.TOKEN_DEFAULT);
 		request.setPostValueForKey(MenueApiFactory.TACOTYID, tacotyid);
 		request.setPostValueForKey(MenueApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
-		request.setPostValueForKey(MenueApiFactory.APP_ID, Contract.APP_ID);
+		request.setPostValueForKey(MenueApiFactory.APP_ID, Constants.APP_ID);
 		request.setPostValueForKey(MenueApiFactory.DEVICE_ID, android.os.Build.DEVICE);
 		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
 

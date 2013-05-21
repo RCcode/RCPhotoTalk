@@ -93,7 +93,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 			finish();
 			break;
 		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendActivity.class));
+			startActivity(new Intent(this, AddFriendsActivity.class));
 			break;
 		case R.id.settings_account_tacotyid_pandle:
 			startActivity(new Intent(this, AccountInfoActivity.class));
@@ -144,7 +144,7 @@ public class AccountInfoActivity extends BaseActivity implements View.OnClickLis
 			public void onBindSuccess(String phoneNumber) {
 				mUserInfo.setCellPhone(phoneNumber);
 				setPhoneNumer(phoneNumber);
-				PrefsUtils.User.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mUserInfo.getRcId());
+				PrefsUtils.User.MobilePhoneBind.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mUserInfo.getRcId());
 			}
 
 			@Override

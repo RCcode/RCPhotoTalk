@@ -26,8 +26,8 @@ import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
-import com.rcplatform.phototalk.utils.Contract;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -127,13 +127,13 @@ public class LogicUtils {
 		UserInfo currentUser = ((MenueApplication) context.getApplicationContext()).getCurrentUser();
 		long createTime = System.currentTimeMillis();
 		Information information = null;
-		if (addType == Contract.FriendAddType.ADD_FRIEND_PASSIVE) {
+		if (addType == Constants.FriendAddType.ADD_FRIEND_PASSIVE) {
 			RecordUser sender = new RecordUser(friend.getRcId(), friend.getNickName(), friend.getHeadUrl(), friend.getTigaseId());
 			RecordUser receiver = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
 					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM, sender, receiver, createTime);
 			PhotoTalkDatabaseFactory.getDatabase().updateFriendRequestInformationByFriend(friend);
-		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
+		} else if (addType == Constants.FriendAddType.ADD_FRIEND_ACTIVE) {
 			RecordUser receiver = new RecordUser(friend.getRcId(), friend.getNickName(), friend.getHeadUrl(), friend.getTigaseId());
 			RecordUser sender = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,

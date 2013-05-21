@@ -24,7 +24,7 @@ import android.widget.ViewFlipper;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.views.PageIndicator;
 
 public class InitPageActivity extends BaseActivity implements
@@ -65,7 +65,7 @@ public class InitPageActivity extends BaseActivity implements
 
 				Intent loginIntent = new Intent(InitPageActivity.this,
 						LoginActivity.class);
-				loginIntent.putExtra(Contract.KEY_LOGIN_PAGE, true);
+				loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
 				startActivityForResult(loginIntent, REQUEST_CODE_LOGIN);
 			}
 		});
@@ -76,7 +76,7 @@ public class InitPageActivity extends BaseActivity implements
 			public void onClick(View v) {
 				Intent loginIntent = new Intent(InitPageActivity.this,
 						LoginActivity.class);
-				loginIntent.putExtra(Contract.KEY_LOGIN_PAGE, false);
+				loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, false);
 				startActivityForResult(loginIntent, REQUEST_CODE_LOGIN);
 			}
 		});

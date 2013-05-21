@@ -1,9 +1,12 @@
 package com.rcplatform.phototalk.views;
 
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.utils.Utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -19,9 +22,22 @@ public class HeadImageView extends ImageView {
 
 	@Override
 	public void setImageBitmap(Bitmap bm) {
-		// TODO Auto-generated method stub
-//		Bitmap bitmap = Utils.getRectBitmap(bm);
-		super.setImageBitmap(Utils.getRoundedCornerBitmap(bm));
-//		super.setImageBitmap(bm);
+		 super.setBackgroundDrawable(new BitmapDrawable(bm));
+		super.setImageResource(R.drawable.gallery_head_bg);
 	}
+
+	@Override
+	public void setBackgroundResource(int resid) {
+		// TODO Auto-generated method stub
+		super.setBackgroundResource(resid);
+		System.out.println("--setBackgroundResource-");
+	}
+
+	@Override
+	public void setImageResource(int resId) {
+		// TODO Auto-generated method stub
+		super.setBackgroundResource(resId);
+		super.setImageResource(R.drawable.gallery_head_bg);
+	}
+
 }

@@ -39,7 +39,7 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class MyFriendsActivity extends BaseActivity implements OnClickListener {
@@ -56,8 +56,6 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private ImageLoader mImageLoader;
 	private Friend mFriendShowDetail;
 
-	private List<Friend> deletedFriends = new ArrayList<Friend>();
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,6 +71,9 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0) {
+					return;
+				}
 				dismissLoadingDialog();
 				sendFriendLoadedMessage(friends, recommends);
 			}
@@ -224,9 +225,9 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (!friend.isFriend()) {
-			intent.setAction(Contract.Action.ACTION_RECOMMEND_DETAIL);
+			intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
 		} else {
-			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
+			intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
 		}
 		startActivityForResult(intent, REQUEST_KEY_DETAIL);
 	}

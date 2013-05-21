@@ -18,7 +18,7 @@ import com.rcplatform.phototalk.MenueApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 

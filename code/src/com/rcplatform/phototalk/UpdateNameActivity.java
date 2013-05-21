@@ -27,7 +27,7 @@ import com.rcplatform.phototalk.api.MenueApiFactory;
 import com.rcplatform.phototalk.api.MenueApiUrl;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ShowToast;
@@ -148,7 +148,7 @@ public class UpdateNameActivity extends Activity implements
 
 								Intent loginIntent = new Intent(context,
 										LoginActivity.class);
-								loginIntent.putExtra(Contract.KEY_LOGIN_PAGE,
+								loginIntent.putExtra(Constants.KEY_LOGIN_PAGE,
 										true);
 								startActivity(loginIntent);
 								finish();

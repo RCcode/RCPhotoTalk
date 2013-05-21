@@ -310,10 +310,10 @@ public class Request implements Serializable {
 			@Override
 			public void run() {
 				String url = null;
-				if (type == FriendType.FACEBOOK) {
-					url = MenueApiUrl.FACEBOOK_RECOMMENDS_URL;
-				} else if (type == FriendType.CONTACT) {
+				if (type == FriendType.CONTACT) {
 					url = MenueApiUrl.CONTACT_RECOMMEND_URL;
+				} else {
+					url = MenueApiUrl.THIRDPART_RECOMMENDS_URL;
 				}
 				RCPlatformResponseHandler responseHandler = loadLocalRecommends(context, type, listener);
 				final Request request = new Request(context, url, responseHandler);
@@ -324,7 +324,7 @@ public class Request implements Serializable {
 		thread.start();
 	}
 
-	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, int friendType, final OnFriendsLoadedListener listener) {
+	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, final int friendType, final OnFriendsLoadedListener listener) {
 		final List<Friend> recommendsLocal = PhotoTalkDatabaseFactory.getDatabase().getRecommends(friendType);
 		RCPlatformResponseHandler responseHandler = null;
 		if (friendType == FriendType.CONTACT) {
@@ -357,7 +357,7 @@ public class Request implements Serializable {
 					}
 				});
 			}
-		} else if (friendType == FriendType.FACEBOOK) {
+		} else {
 			final List<Friend> localFacebookFriends = PhotoTalkDatabaseFactory.getDatabase().getThirdPartFriends(friendType);
 			responseHandler = new RCPlatformResponseHandler() {
 
@@ -366,7 +366,7 @@ public class Request implements Serializable {
 					try {
 						JSONObject jObj = new JSONObject(content);
 						List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
-						PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, FriendType.FACEBOOK);
+						PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, friendType);
 						listener.onServiceFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService), recommendsService);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -391,9 +391,9 @@ public class Request implements Serializable {
 		return responseHandler;
 	}
 
-	public static void executeGetFriendDetailAsync(Context context, String friendRcid, final FriendDetailListener listener,boolean isUpdate) {
+	public static void executeGetFriendDetailAsync(Context context, String friendRcid, final FriendDetailListener listener, boolean isUpdate) {
 		Friend friendCache = PhotoTalkDatabaseFactory.getDatabase().getFriendById(friendRcid);
-		if (!isUpdate&&friendCache != null && friendCache.getAppList() != null) {
+		if (!isUpdate && friendCache != null && friendCache.getAppList() != null) {
 			listener.onSuccess(friendCache);
 			return;
 		}
@@ -405,7 +405,7 @@ public class Request implements Serializable {
 					JSONObject jsonObject = new JSONObject(content);
 					Friend friend = JSONConver.jsonToObject(jsonObject.getJSONObject("userDetail").toString(), Friend.class);
 					friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
-					PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
+					PhotoTalkDatabaseFactory.getDatabase().updateFriend(friend);
 					if (listener != null)
 						listener.onSuccess(friend);
 				} catch (JSONException e) {

@@ -11,7 +11,7 @@ import com.rcplatform.phototalk.listener.UpdateDialogClickListener;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class CheckUpdateTask {
@@ -76,7 +76,7 @@ public class CheckUpdateTask {
 	public void start() {
 		if (isAutoRequest) {
 			long lastCheckTime = PrefsUtils.AppInfo.getLastCheckUpdateTime(mContext);
-			if ((System.currentTimeMillis() - lastCheckTime) < Contract.UPDATE_CHECK_WAITING_TIME)
+			if ((System.currentTimeMillis() - lastCheckTime) < Constants.UPDATE_CHECK_WAITING_TIME)
 				return;
 		}
 		mClient.post(mRequest);

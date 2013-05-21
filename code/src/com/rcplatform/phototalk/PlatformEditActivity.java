@@ -199,8 +199,8 @@ public class PlatformEditActivity extends ImagePickActivity {
 				PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
 				long lastBindTime = jsonObject.optLong(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_TIME);
 				String lastBindNumber = jsonObject.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
-				PrefsUtils.User.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
-				PrefsUtils.User.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
+				PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
+				PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
 				loginSuccess(userInfo);
 			} catch (Exception e) {
 				e.printStackTrace();

@@ -6,14 +6,14 @@ import java.util.Map;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.thirdpart.bean.ThirdPartFriend;
+import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 
 public interface PhotoTalkDatabase {
 	public boolean hasFriend(String suid);
 
 	public List<Friend> getThirdPartFriends(int type);
 
-	public void saveThirdPartFriends(List<ThirdPartFriend> thirdPartFriends, int type);
+	public void saveThirdPartFriends(List<ThirdPartUser> thirdPartFriends, int type);
 
 	public void saveRecordInfos(List<Information> recordInfos);
 
@@ -49,9 +49,11 @@ public interface PhotoTalkDatabase {
 	public void close();
 
 	public Friend getFriendById(String rcId);
-	
-	public void saveRecommends(List<Friend> recommends ,int friendType);
-	
-	public List<Friend> getDeletedFriends();
+
+	public void saveRecommends(List<Friend> recommends, int friendType);
+
+	public List<Friend> getHidenFriends();
+
+	public void updateFriend(Friend friend);
 
 }

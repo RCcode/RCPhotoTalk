@@ -25,7 +25,7 @@ import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
-import com.rcplatform.phototalk.utils.Contract;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class MenueApplication extends Application {
 
@@ -48,14 +48,21 @@ public class MenueApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		Contract.START_COMPLETE=false;
+		Constants.START_COMPLETE=false;
 		PhotoInformationCountDownService.getInstance().setApplication(this);
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache())
-				.threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory()
-				.imageDownloader(new BaseImageDownloader(this)).defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions())
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(
+				getApplicationContext())
+				.memoryCache(new WeakMemoryCache())
+				.threadPriority(THREAD_COUNT)
+				.memoryCacheSize(MEMORY_CACHE_SIZE)
+				.denyCacheImageMultipleSizesInMemory()
+				.imageDownloader(new BaseImageDownloader(this))
+				.defaultDisplayImageOptions(
+						ImageOptionsFactory.getDefaultImageOptions())
 				.tasksProcessingOrder(QueueProcessingType.LIFO);
 		if (createImageCacheDir()) {
-			builder.discCache(new UnlimitedDiscCache(cacheDir, new Md5FileNameGenerator()));
+			builder.discCache(new UnlimitedDiscCache(cacheDir,
+					new Md5FileNameGenerator()));
 		}
 		ImageLoaderConfiguration config = builder.build();
 		ImageLoader.getInstance().init(config);
@@ -64,8 +71,10 @@ public class MenueApplication extends Application {
 	}
 
 	private boolean createImageCacheDir() {
-		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			cacheDir = new File(Environment.getExternalStorageDirectory(), CACHE_FILE_PATH);
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			cacheDir = new File(Environment.getExternalStorageDirectory(),
+					CACHE_FILE_PATH);
 			if (!cacheDir.exists()) {
 				return cacheDir.mkdirs();
 			}
@@ -113,11 +122,11 @@ public class MenueApplication extends Application {
 	}
 
 	public int getScreenWidth() {
-		return Contract.SCREEN_WIDTH;
+		return Constants.SCREEN_WIDTH;
 	}
 
 	public int getScreentHeight() {
-		return Contract.SCREEN_HEIGHT;
+		return Constants.SCREEN_HEIGHT;
 	}
 
 	public WindowManager.LayoutParams getMywmParams() {
@@ -160,7 +169,8 @@ public class MenueApplication extends Application {
 	public String getSendFileCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -180,10 +190,12 @@ public class MenueApplication extends Application {
 		}
 		return imagePath;
 	}
+
 	public String getSendZipFileCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -207,7 +219,8 @@ public class MenueApplication extends Application {
 	public String getBackgroundCachePath() {
 		String imagePath = "";
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -229,11 +242,13 @@ public class MenueApplication extends Application {
 	}
 
 	public void deleteSendFileCache(String fileName) {
-		File file = new File(getSendFileCachePath());
-		if (file.exists()) {
-			File file2 = new File(file, fileName);
-			if (file2.exists()) {
-				file2.delete();
+		if (fileName != null) {
+			File file = new File(getSendFileCachePath());
+			if (file.exists()) {
+				File file2 = new File(file, fileName);
+				if (file2.exists()) {
+					file2.delete();
+				}
 			}
 		}
 	}

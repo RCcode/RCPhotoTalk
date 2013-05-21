@@ -21,7 +21,7 @@ import android.widget.TabHost;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
@@ -92,9 +92,9 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
 	private void addTabs() {
 		// TODO Auto-generated method stub
-		mHost.addTab(mHost.newTabSpec(TAB_CONTACTS).setIndicator(TAB_CONTACTS).setContent(new Intent(this, ContactFriendRecommendActivity.class).setAction("action.meneu.phonebook_friend")));
-		mHost.addTab(mHost.newTabSpec(TAB_FACEBOOK).setIndicator(TAB_FACEBOOK).setContent(new Intent(this, FacebookFriendRecommendActivity.class).setAction("action.meneu.facebook_friend")));
-		mHost.addTab(mHost.newTabSpec(TAB_VK).setIndicator(TAB_VK).setContent(new Intent(this, FacebookFriendRecommendActivity.class).setAction("action.meneu.facebook_friend")));
+		mHost.addTab(mHost.newTabSpec(TAB_CONTACTS).setIndicator(TAB_CONTACTS).setContent(new Intent(this, ContactFriendRecommendActivity.class)));
+		mHost.addTab(mHost.newTabSpec(TAB_FACEBOOK).setIndicator(TAB_FACEBOOK).setContent(new Intent(this, FacebookFriendRecommendActivity.class)));
+		mHost.addTab(mHost.newTabSpec(TAB_VK).setIndicator(TAB_VK).setContent(new Intent(this, VKRecommendActivity.class)));
 		mHost.addTab(mHost.newTabSpec(TAB_SEARCH).setIndicator(TAB_SEARCH).setContent(new Intent(this, SearchFriendsActivity.class)));
 	}
 

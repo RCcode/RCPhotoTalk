@@ -50,8 +50,8 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
-import com.rcplatform.phototalk.utils.Contract;
-import com.rcplatform.phototalk.utils.Contract.Action;
+import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
@@ -131,9 +131,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (!friend.isFriend()) {
-			intent.setAction(Contract.Action.ACTION_RECOMMEND_DETAIL);
+			intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
 		} else {
-			intent.setAction(Contract.Action.ACTION_FRIEND_DETAIL);
+			intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
 		}
 		startActivity(intent);
 	}
@@ -158,7 +158,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private void relogin() {
 		Intent loginIntent = new Intent(this, LoginActivity.class);
-		loginIntent.putExtra(Contract.KEY_LOGIN_PAGE, true);
+		loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
 		startActivity(loginIntent);
 		finish();
 	}
@@ -545,7 +545,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	public void onFriendAdded(Information friend, int addType) {
-		if (addType == Contract.FriendAddType.ADD_FRIEND_PASSIVE) {
+		if (addType == Constants.FriendAddType.ADD_FRIEND_PASSIVE) {
 			List<Information> infos = getAdapterData();
 			if (infos != null && infos.size() > 0) {
 				for (Information information : infos) {
@@ -556,7 +556,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				}
 				adapter.notifyDataSetChanged();
 			}
-		} else if (addType == Contract.FriendAddType.ADD_FRIEND_ACTIVE) {
+		} else if (addType == Constants.FriendAddType.ADD_FRIEND_ACTIVE) {
 			friend.setReceiveTime(System.currentTimeMillis());
 			List<Information> infos = new ArrayList<Information>();
 			infos.add(friend);
