@@ -697,6 +697,8 @@ public class EditPictureActivity extends BaseActivity {
 		String timelimit = (String) mButtonTimeLimit.getText();
 		File file = new File(tempPath);
 		if (file.exists()) {
+		//压缩成功后删除录音和照片文件
+			deleteTemp();
 			sendPicture("", tempPath, timelimit, friend);
 		}
 	}
