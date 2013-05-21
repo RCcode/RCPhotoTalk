@@ -20,6 +20,6 @@ public class RoundImageView extends ImageView {
 	@Override
 	public void setImageBitmap(Bitmap bm) {
 		
-		super.setImageBitmap(Utils.getRoundedCornerBitmap(Utils.getRectBitmap(bm)));
+		super.setImageBitmap(Utils.getRoundedCornerBitmap(bm));
 	}
 }
