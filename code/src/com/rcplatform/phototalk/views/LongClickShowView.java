@@ -3,6 +3,10 @@ package com.rcplatform.phototalk.views;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -165,45 +169,17 @@ public class LongClickShowView extends Dialog {
 		return PhotoTalkUtils.getUnZipDirPath(url);
 	}
 
-	private void playAudio(File file, final Information info) throws Exception {
+	private void playAudio(final File file, final Information info) throws Exception {
 
+		FileInputStream fis = new FileInputStream(file.getAbsolutePath());
 		Builder.mAudioPlayer.reset();
-		Builder.mAudioPlayer.setDataSource(file.getAbsolutePath());
-		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_SYSTEM);
-		// Builder.mAudioPlayer.prepare();
-		
+		Builder.mAudioPlayer.setDataSource(fis.getFD());
+		Builder.mAudioPlayer.prepare();
+		Builder.mAudioPlayer.start();
+		fis.close();
+
 		if (info.getTotleLength() != info.getLimitTime())
 			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
-
-		Builder.mAudioPlayer.setOnPreparedListener(new OnPreparedListener() {
-
-			//
-			public void onPrepared(MediaPlayer mp) {
-				mp.start();
-
-
-				//
-			}
-		});
-		Builder.mAudioPlayer.prepareAsync();
-
-		// Builder.mAudioPlayer.start();
-
-		// final int fx = Builder.soundPool.load(file.getAbsolutePath(), 0);
-		// // soundPool.play(fx, 10, 10, 0, 0, (float) 1);
-		// Timer timer = new Timer();
-		// timer.schedule(new TimerTask() {
-		//
-		// @Override
-		// public void run() {
-		// // TODO Auto-generated method stub
-		// Builder.soundPool.play(fx, 10, 10, 1, 0, 1.0f);
-		// }
-		//
-		// }, 1000);
-
-//		long offest = info.getTotleLength() * 1000 - info.getLimitTime() * 1000;
-//		SoundManager.getInstance().play(file.getAbsolutePath(), offest);
 
 	}
 
@@ -223,8 +199,7 @@ public class LongClickShowView extends Dialog {
 
 	public void hideDialog() {
 		hide();
-//		SoundManager.getInstance().allStop();
-		 Builder.mAudioPlayer.stop();
+		Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
