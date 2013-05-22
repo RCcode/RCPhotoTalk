@@ -479,14 +479,16 @@ public class PTBackgroundService extends Service {
 
 		@Override
 		public void onReceive(Context context, final Intent intent) {
-			Thread thread = new Thread() {
-				public void run() {
-					List<Information> locals = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
-					List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(UserMessageService.MESSAGE_CONTENT_KEY));
-					LogicUtils.informationFilter(getBaseContext(), gcms, locals);
+			if (mCurrentUser != null) {
+				Thread thread = new Thread() {
+					public void run() {
+						List<Information> locals = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
+						List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(UserMessageService.MESSAGE_CONTENT_KEY));
+						LogicUtils.informationFilter(getBaseContext(), gcms, locals);
+					};
 				};
-			};
-			thread.start();
-		}
+				thread.start();
+			}
+		};
 	};
 }
