@@ -11,20 +11,21 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/receive_setting" />
 
     <RelativeLayout
         android:id="@+id/rela_resetting"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_margin="10dp"
-        android:background="@drawable/init_page_login_button_selector"
-        android:padding="5dp" >
+        android:background="@drawable/popup_btn" >
 
         <TextView
             android:id="@+id/tv_resetting_current"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true" />
 
         <ImageView
@@ -39,20 +40,22 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         android:text="@string/dynamic_setting" />
 
     <RelativeLayout
         android:id="@+id/rela_dysetting"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="44dp"
         android:layout_margin="10dp"
-        android:background="@drawable/init_page_login_button_selector"
-        android:padding="5dp" >
+        android:background="@drawable/popup_btn"
+         >
 
         <TextView
             android:id="@+id/tv_dysetting_current"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true" />
 
         <ImageView

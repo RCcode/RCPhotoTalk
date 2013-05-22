@@ -107,7 +107,7 @@
                                         android:text="Name"
                                         android:textStyle="bold"
                                         android:textColor="#FFFFFF"
-                                        android:textSize="22sp" />
+                                        android:textSize="@dimen/user_detail_nick_size" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -119,6 +119,7 @@
                                         android:id="@+id/tv_sex"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginTop="3dp"
                                         android:background="@drawable/boy_icon" />
 
                                     <TextView
@@ -148,7 +149,7 @@
                                     android:text="RC ID:"
                                     android:layout_marginTop="10dp"
                                     android:textColor="#534d48"
-                                    android:textSize="16sp" />
+                                    android:textSize="@dimen/user_detail_rcid_size" />
 
                                 <TextView
                                     android:id="@+id/user_rc_id"
@@ -158,7 +159,7 @@
                                     android:layout_height="@dimen/user_detail_head_width_half"
                                     android:text="123456"
                                     android:textColor="#534d48"
-                                    android:textSize="16sp" />
+                                    android:textSize="@dimen/user_detail_rcid_size" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
