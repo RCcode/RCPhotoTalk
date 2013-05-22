@@ -32,6 +32,7 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
 
@@ -162,11 +163,24 @@ public class GCMIntentService extends GCMBaseIntentService {
 	protected void onMessage(Context context, Intent intent) {
 		Log.i(TAG, "Received message. Extras: " + intent.getExtras());
 
+		int count = 0;
+		
+		
 		String typeStr = intent.getStringExtra("type");
+		String msg = intent.getStringExtra("extra");
 		int type = Integer.parseInt(typeStr);
+		if(1== type || 2 == type){
+			Intent it = new Intent();
+			it.setAction(UserMessageService.MESSAGE_RECIVE_BROADCAST);
+			it.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, msg);
+			context.sendBroadcast(it);
+		}
 		switch (type) {
 			case 1:
-				generateMessageNotification(context,context.getText(R.string.gcm_message).toString());
+				count = ServerUtilities.getGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE)+1;
+				ServerUtilities.setGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE, count);
+				generateMessageNotification(context,context.getString(R.string.gcm_message,count).toString());
+
 				break;
 			case 2:
 				generateMessageNotification(context,context.getText(R.string.gcm_friend).toString());
@@ -260,6 +274,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.contentView.setTextViewText(R.id.gcm_decs, msg);
 			notification.when = System.currentTimeMillis();
 			notification.defaults |= Notification.DEFAULT_SOUND;
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);;
 			Intent notificationIntent = new Intent(context, WelcomeActivity.class);
 			// set intent so it does not start a new activity

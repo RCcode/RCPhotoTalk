@@ -295,7 +295,7 @@
     <string name="invite_fail">好友邀请失败</string>
 
     <!-- gcm -->
-    <string name="gcm_message">你有信息了</string>
+    <string name="gcm_message">你有%1$d条信息了</string>
     <string name="gcm_friend">有人加你为好友</string>
 
 </resources>
