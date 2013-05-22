@@ -37,7 +37,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 	private static int mCurrentCameraNum;
 
-    private PhotoTalkApplication app;
+	private PhotoTalkApplication app;
 
 	private SurfaceHolder mHolder;
 
@@ -56,7 +56,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean isShowCamera = false;
 
 	private boolean isAutoFocus;
-private static int round;
+	private static int round;
+
 	public CameraView(Context context) {
 		super(context);
 		init(context);
@@ -73,16 +74,16 @@ private static int round;
 	}
 
 	private void init(Context context) {
-        // 获得SurfaceHolder对象
-        mHolder = getHolder();
-        // 指定用于捕捉拍照事件的SurfaceHolder.Callback对象
-        mHolder.addCallback(this);
-        // 设置SurfaceHolder对象的类型
-        mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        this.mContext = context;
-        app = (PhotoTalkApplication) context.getApplicationContext();
-    }
-	
+		// 获得SurfaceHolder对象
+		mHolder = getHolder();
+		// 指定用于捕捉拍照事件的SurfaceHolder.Callback对象
+		mHolder.addCallback(this);
+		// 设置SurfaceHolder对象的类型
+		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		this.mContext = context;
+		app = (PhotoTalkApplication) context.getApplicationContext();
+	}
+
 	@Override
 	public void surfaceCreated(SurfaceHolder holder) {
 		mNumCamera = Camera.getNumberOfCameras();
@@ -198,9 +199,11 @@ private static int round;
 				Matrix matrix = new Matrix();
 				matrix.reset();
 				// if (mBitmap.getWidth() > mBitmap.getHeight()) {
-				// if (mCurrentCameraNum == mFrontCameraNum) {
-				// matrix.setRotate(270);
-				// } else {
+				if (mCurrentCameraNum == mFrontCameraNum) {
+					matrix.setRotate(270);
+				} else {
+					matrix.setRotate(round);
+				}
 				// matrix.setRotate(90);
 				// }
 				// tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
@@ -208,7 +211,6 @@ private static int round;
 				// mBitmap.recycle();
 				// } else {
 				// if (mCurrentCameraNum == mFrontCameraNum) {
-				matrix.setRotate(round);
 				tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
 						mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 				mBitmap.recycle();
@@ -217,12 +219,13 @@ private static int round;
 				// tempBitmap = mBitmap;
 				// }
 				// }
-				((PhotoTalkApplication) mContext.getApplicationContext()).setEditeBitmap(tempBitmap);
-                mBitmap = null;
-                tempBitmap = null;
-            }
-            ((TakePhotoActivity) mContext).startOtherActivity();
-            // }
+				((PhotoTalkApplication) mContext.getApplicationContext())
+						.setEditeBitmap(tempBitmap);
+				mBitmap = null;
+				tempBitmap = null;
+			}
+			((TakePhotoActivity) mContext).startOtherActivity();
+			// }
 			// }
 		}
 	};
