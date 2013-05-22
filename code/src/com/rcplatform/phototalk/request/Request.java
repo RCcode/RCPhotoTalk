@@ -156,7 +156,7 @@ public class Request implements Serializable {
 						public void onError(int errorCode, String content) {
 							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 						}
-					}, user.getRcId());
+					}, user.getRcId(), user.getToken());
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
@@ -274,7 +274,7 @@ public class Request implements Serializable {
 		return ids;
 	}
 
-	public static void executeGetMyInfo(final Context context, final OnUserInfoLoadedListener listener, String rcId) {
+	public static void executeGetMyInfo(final Context context, final OnUserInfoLoadedListener listener, String rcId, String token) {
 		RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
 
 			@Override
@@ -301,6 +301,8 @@ public class Request implements Serializable {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_USER_INFO, responseHandler);
 		if (rcId != null)
 			request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, rcId);
+		if (token != null)
+			request.putParam(PhotoTalkParams.PARAM_KEY_TOKEN, token);
 		request.excuteAsync();
 	}
 
