@@ -137,4 +137,8 @@ public class PhotoInformationCountDownService {
 	public Information getShowingInformationByTag(String informationTag) {
 		return mShowingInformations.get(informationTag);
 	}
+
+	public void finishAllShowingMessage() {
+		mCountDownTimer.cancel();
+	}
 }
