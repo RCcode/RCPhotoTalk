@@ -25,7 +25,8 @@ public class PhotoTalkParams {
 
 	public static class ChangePassword {
 		public static final String PARAM_KEY_CHECK_PASSWORD = "pwd";
-		public static final String PARAM_KEY_NEW_PASSWORD = "newpwd";
+		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
+		public static final String PARAM_KEY_OLD_PASSWORD = "pwd";
 	}
 	public static class SendPhoto{
 		public static final String PARAM_KEY_FLAG="time";

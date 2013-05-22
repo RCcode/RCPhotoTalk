@@ -28,6 +28,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -148,6 +149,10 @@ public class EditPictureActivity extends BaseActivity {
 
 	private TextView tvVoiceRecordSecond;
 	private EditText editText;
+	private ImageView voice_volume_bg;
+	private ImageView iv_voice_volume;
+	private ImageView voice_volume_gride;
+
 	private Handler voiceRecordHandler = new Handler() {
 		private boolean isRecording = false;
 		private Integer recordLast;
@@ -199,6 +204,10 @@ public class EditPictureActivity extends BaseActivity {
 		setContentView(R.layout.edit_picture_view2);
 		tooShortLayout = (RelativeLayout) findViewById(R.id.layout_voice_record_too_short);
 		recordDisplayLayout = (RelativeLayout) findViewById(R.id.layout_voice_record);
+		voice_volume_bg = (ImageView) findViewById(R.id.voice_volume_bg);
+		iv_voice_volume = (ImageView) findViewById(R.id.iv_voice_volume);
+		voice_volume_gride = (ImageView) findViewById(R.id.voice_volume_gride);
+
 		tvVoiceRecordSecond = (TextView) findViewById(R.id.tv_record_second);
 		friend = (Friend) getIntent().getSerializableExtra("friend");
 		audioBtn = (AudioRecordButton) findViewById(R.id.audioBtn);
@@ -208,6 +217,29 @@ public class EditPictureActivity extends BaseActivity {
 			@Override
 			public void onRecording(int recordedSecord, int amplitude) {
 				// TODO Auto-generated method stub
+				int height = voice_volume_bg.getHeight();
+				System.out.println("amplitude=====>"+amplitude);
+				if (height > 0) {
+					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
+					if (amplitude > 22000) {
+						iv_voice_volume
+								.setBackgroundResource(R.drawable.voice_volume_full);
+						layoutParams.height = LayoutParams.WRAP_CONTENT;
+						voice_volume_gride.setVisibility(View.INVISIBLE);
+					} else {
+						iv_voice_volume
+								.setBackgroundResource(R.drawable.voice_volume);
+						voice_volume_gride.setVisibility(View.VISIBLE);
+						if (amplitude > 17000) {
+							layoutParams.height = 55;
+						} else if (amplitude > 6000 && amplitude < 17000) {
+							layoutParams.height = 35;
+						} else if (amplitude < 6000) {
+							layoutParams.height = 20;
+						}
+						iv_voice_volume.setLayoutParams(layoutParams);
+					}
+				}
 
 			}
 
@@ -389,7 +421,8 @@ public class EditPictureActivity extends BaseActivity {
 				if (enableSave) {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
-					saveEditedPictrue(mEditableViewGroup.getDrawingCache(),app.getCameraPath());
+					saveEditedPictrue(mEditableViewGroup.getDrawingCache(),
+							app.getCameraPath());
 
 				}
 				break;
@@ -397,7 +430,8 @@ public class EditPictureActivity extends BaseActivity {
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
 				isSave = true;
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache(),app.getSendFileCachePath() + "/Photochat.jpg");
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache(),
+						app.getSendFileCachePath() + "/Photochat.jpg");
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
@@ -475,16 +509,17 @@ public class EditPictureActivity extends BaseActivity {
 				final Paint paint = editText.getPaint();
 				editText.setFocusable(true);
 				editText.setOnFocusChangeListener(new OnFocusChangeListener() {
-					
+
 					@Override
 					public void onFocusChange(View v, boolean hasFocus) {
 						// TODO Auto-generated method stub
-//						editText.setFocusable(true);
-						if(!hasFocus){
-							if(editText.getText()==null||editText.getText().length()==0){
+						// editText.setFocusable(true);
+						if (!hasFocus) {
+							if (editText.getText() == null
+									|| editText.getText().length() == 0) {
 								mEditText.setVisibility(View.GONE);
 								mEditText = null;
-								}
+							}
 						}
 					}
 				});
@@ -505,7 +540,7 @@ public class EditPictureActivity extends BaseActivity {
 					@Override
 					public void afterTextChanged(Editable s) {
 						float length = paint.measureText(s.toString());
-						if(length==0){
+						if (length == 0) {
 							mEditText.setVisibility(View.GONE);
 							mEditText = null;
 						}
@@ -514,8 +549,8 @@ public class EditPictureActivity extends BaseActivity {
 						}
 					}
 				});
-					mEditableViewGroup.addEditeTextView(mEditText);
-					setSaveable(true);
+				mEditableViewGroup.addEditeTextView(mEditText);
+				setSaveable(true);
 			}
 			break;
 
@@ -542,7 +577,7 @@ public class EditPictureActivity extends BaseActivity {
 		colorPickerDialog.showDialog(mButtonTuya);
 	}
 
-//	private PopupWindow mPopuTimeLimit;
+	// private PopupWindow mPopuTimeLimit;
 
 	private void showTimeLimitView() {
 		// if (timeChooseDialog == null) {
@@ -594,7 +629,7 @@ public class EditPictureActivity extends BaseActivity {
 		return mWheel.getCurrentItem();
 	}
 
-	public void saveEditedPictrue(final Bitmap bitmap,final String path) {
+	public void saveEditedPictrue(final Bitmap bitmap, final String path) {
 		// showDialog();
 		new Thread(new Runnable() {
 
@@ -687,15 +722,14 @@ public class EditPictureActivity extends BaseActivity {
 		try {
 			tempPath = app.getSendZipFileCachePath() + "/"
 					+ System.currentTimeMillis() + ".zip";
-			ZipUtil.ZipFolder(
-					app.getSendFileCachePath(),tempPath);
+			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempPath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		String timelimit = (String) mButtonTimeLimit.getText();
 		File file = new File(tempPath);
 		if (file.exists()) {
-		//压缩成功后删除录音和照片文件
+			// 压缩成功后删除录音和照片文件
 			deleteTemp();
 			sendPicture("", tempPath, timelimit, friend);
 		}
@@ -709,33 +743,34 @@ public class EditPictureActivity extends BaseActivity {
 		LogicUtils.sendPhoto(this, timeLimit, friends, file);
 	}
 
-//	private String buildUserArray(Friend friend, long time, String timeLimit) {
-//		try {
-//			JSONArray array = new JSONArray();
-//			List<Information> infoRecords = new ArrayList<Information>();
-//			Information record;
-//			JSONObject jsonObject = new JSONObject();
-//			jsonObject.put("userId", friend.getRcId());
-//			array.put(jsonObject);
-//			record = new Information();
-//			record.setCreatetime(time);
-//			RecordUser user = new RecordUser();
-//			record.setSender(user);
-//			user = new RecordUser();
-//			user.setNick(friend.getNickName());
-//			user.setHeadUrl(friend.getHeadUrl());
-//			record.setReceiver(user);
-//			record.setUrl(tempFilePath);
-//			record.setLimitTime(Integer.parseInt(timeLimit));
-//			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
-//			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
-//			infoRecords.add(record);
-//			app.addSendRecords(time, infoRecords);
-//			return array.toString();
-//		} catch (JSONException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		return null;
-//	}
+	// private String buildUserArray(Friend friend, long time, String timeLimit)
+	// {
+	// try {
+	// JSONArray array = new JSONArray();
+	// List<Information> infoRecords = new ArrayList<Information>();
+	// Information record;
+	// JSONObject jsonObject = new JSONObject();
+	// jsonObject.put("userId", friend.getRcId());
+	// array.put(jsonObject);
+	// record = new Information();
+	// record.setCreatetime(time);
+	// RecordUser user = new RecordUser();
+	// record.setSender(user);
+	// user = new RecordUser();
+	// user.setNick(friend.getNickName());
+	// user.setHeadUrl(friend.getHeadUrl());
+	// record.setReceiver(user);
+	// record.setUrl(tempFilePath);
+	// record.setLimitTime(Integer.parseInt(timeLimit));
+	// record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
+	// record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+	// infoRecords.add(record);
+	// app.addSendRecords(time, infoRecords);
+	// return array.toString();
+	// } catch (JSONException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// return null;
+	// }
 }

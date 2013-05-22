@@ -40,7 +40,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	@Override
 	public void onStartLoad() {
-		record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_LOADING);
+		record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		updateView(View.VISIBLE, context.getString(R.string.receive_downloading));
 	}
 
@@ -59,7 +59,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	@Override
 	public void onDownloadFail() {
-		record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL);
+		record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 		updateView(View.GONE, context.getResources().getString(R.string.receive_fail));
 	}

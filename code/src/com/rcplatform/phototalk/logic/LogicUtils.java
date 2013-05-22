@@ -72,12 +72,15 @@ public class LogicUtils {
 					// 状态改变
 					if (serviceInfo.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 						// 好友请求信息
-						localInfo.setStatu(serviceInfo.getStatu());
+						if (localInfo.getStatu() < serviceInfo.getStatu()) {
+							localInfo.setStatu(serviceInfo.getStatu());
+							updateInfos.add(localInfo);
+						}
 					} else if (serviceInfo.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 						// 图片信息
-						if (InformationState.isServiceState(localInfo.getStatu()) && localInfo.getStatu() > serviceInfo.getStatu()) {
-							updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, localInfo);
-						} else {
+						if (localInfo.getStatu() < serviceInfo.getStatu()) {
+//							updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, localInfo);
+//						} else {
 							localInfo.setStatu(serviceInfo.getStatu());
 							updateInfos.add(localInfo);
 						}
@@ -251,7 +254,7 @@ public class LogicUtils {
 			record.setReceiver(user);
 			// 信息类型为发图，状态正在发送
 			record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
-			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+			record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 			record.setTotleLength(timeLimit);
 			record.setLimitTime(timeLimit);
 			record.setUrl(file.getPath());

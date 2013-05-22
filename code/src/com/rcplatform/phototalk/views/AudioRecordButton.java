@@ -80,9 +80,9 @@ public class AudioRecordButton extends Button {
 			// TODO Auto-generated method stub
 			if (state == STATE_RECORDING) {
 				mOnRecordingListener.onRecording(mRecordedSeconds++, mRecorder.getMaxAmplitude());
-				mHandler.postDelayed(mRecordingListenerTask, 1000);
+				mHandler.postDelayed(mRecordingListenerTask, 50);
 
-				if (mRecordedSeconds > maxRecoedSize) {
+				if (mRecordedSeconds > maxRecoedSize*20) {
 					stopRecord();
 				}
 			}

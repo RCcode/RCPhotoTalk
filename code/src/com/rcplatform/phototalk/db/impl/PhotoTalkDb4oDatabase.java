@@ -310,19 +310,19 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	public synchronized void updateTempInformationFail() {
 		Information infoExample = new Information();
 		infoExample.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
-		infoExample.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+		infoExample.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		ObjectSet<Information> result = db.query(new Predicate<Information>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean match(Information arg0) {
 				return arg0.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& InformationState.PhotoInformationState.STATU_NOTICE_SENDING == arg0.getStatu();
+						&& InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING == arg0.getStatu();
 			}
 		});
 		while (result.hasNext()) {
 			Information info = result.next();
-			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 			db.store(info);
 		}
 		db.commit();

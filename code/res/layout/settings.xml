@@ -105,8 +105,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Name"
+                                        android:textStyle="bold"
                                         android:textColor="#FFFFFF"
-                                        android:textSize="18sp" />
+                                        android:textSize="22sp" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -137,14 +138,15 @@
                             <LinearLayout
                                 android:layout_width="fill_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
                                 android:orientation="horizontal" >
 
                                 <TextView
                                     style="@style/text_base"
                                     android:layout_width="wrap_content"
                                     android:layout_height="@dimen/user_detail_head_width_half"
-                                    android:gravity="center_vertical"
                                     android:text="RC ID:"
+                                    android:layout_marginTop="10dp"
                                     android:textColor="#534d48"
                                     android:textSize="16sp" />
 
@@ -152,8 +154,8 @@
                                     android:id="@+id/user_rc_id"
                                     style="@style/text_base"
                                     android:layout_width="wrap_content"
+                                    android:layout_marginTop="10dp"
                                     android:layout_height="@dimen/user_detail_head_width_half"
-                                    android:gravity="center_vertical"
                                     android:text="123456"
                                     android:textColor="#534d48"
                                     android:textSize="16sp" />

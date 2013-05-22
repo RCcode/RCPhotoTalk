@@ -38,9 +38,6 @@ import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class Request implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private Context mContext;
 	private long createTime;
@@ -122,10 +119,11 @@ public class Request implements Serializable {
 		((PhotoTalkApplication) mContext.getApplicationContext()).getWebService().post(this);
 	}
 
-	public void excutePostNameValuePairAsync() {
+	public void executePostNameValuePairAsync() {
 		if (params.size() == 0) {
 			return;
 		}
+		((PhotoTalkApplication) mContext.getApplicationContext()).getWebService().postNameValue(this);
 	}
 
 	/**
@@ -143,12 +141,13 @@ public class Request implements Serializable {
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
-					UserInfo user = buildUserInfo(content);
+					final UserInfo user = buildUserInfo(content);
 					user.setShowRecommends(UserInfo.NOT_FIRST_TIME);
 					executeGetMyInfo(context, new OnUserInfoLoadedListener() {
 
 						@Override
 						public void onSuccess(UserInfo userInfo) {
+							userInfo.setEmail(user.getEmail());
 							userInfo.setShowRecommends(UserInfo.NOT_FIRST_TIME);
 							listener.onSuccess(userInfo);
 						}
@@ -213,7 +212,7 @@ public class Request implements Serializable {
 						listener.onFail(flag, errorCode, content);
 						UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL, Integer.parseInt(timeLimit));
+								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
 					}
 				};
 			}
@@ -228,7 +227,7 @@ public class Request implements Serializable {
 			e.printStackTrace();
 			listener.onFail(flag, RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-					InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL, Integer.parseInt(timeLimit));
+					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
 		}
 	}
 

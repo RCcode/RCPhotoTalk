@@ -51,14 +51,14 @@
     <dimen name="user_detail_top_margin">20dp</dimen>
     <dimen name="user_detail_userinfo_padding">5dp</dimen>
     <!-- 下面三个必须是一半一半的比例要不出问题 -->
-    <dimen name="user_detail_user_infos_height">100dp</dimen>
-    <dimen name="user_detail_head_image_width">90dp</dimen>
+    <dimen name="user_detail_user_infos_height">110dp</dimen>
+    <dimen name="user_detail_head_image_width">100dp</dimen>
     <dimen name="app_list_height">60dp</dimen>
-    <dimen name="user_detail_user_infos_bottom_margin">-50dp</dimen>
-    <dimen name="user_detail_head_width_half">50dp</dimen>
+    <dimen name="user_detail_user_infos_bottom_margin">-55dp</dimen>
+    <dimen name="user_detail_head_width_half">55dp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <dimen name="user_detail_">-50dp</dimen>
-    <dimen name="user_detail_source_height">50dp</dimen>
+    <dimen name="user_detail_">-55dp</dimen>
+    <dimen name="user_detail_source_height">55dp</dimen>
     <dimen name="user_detail_info_padding">5dp</dimen>
     <dimen name="user_detail_source_margin_left">10dp</dimen>
     <dimen name="app_icon_width">55dp</dimen>

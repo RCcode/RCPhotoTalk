@@ -25,12 +25,16 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.User;
+import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
+import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.ContactUploadTask;
@@ -41,6 +45,7 @@ import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
@@ -62,7 +67,6 @@ public class PTBackgroundService extends Service {
 	private BroadcastReceiver mBindPhoneStateReceiver;
 
 	private PendingIntent mCheckBindStatePI;
-	private PendingIntent mFacebookAsyncPI;
 
 	private GetBindPhoneTask mGetBindPhoneTask;
 	private ThirdPartInfoUploadTask mFacebookAsyncTask;
@@ -73,24 +77,15 @@ public class PTBackgroundService extends Service {
 	}
 
 	public void setCurrentUser(UserInfo currentUser) {
-		if (mCurrentUser == null || (currentUser.getRcId() != mCurrentUser.getRcId())) {
+
+		if (mCurrentUser == null || (currentUser.getRcId().equals(mCurrentUser.getRcId()))) {
 			cancelCurrentBindCheckTask();
-			cancelCurrentThirdAsync();
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
-			// startThirdpartAsync();
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
+		} else {
+			this.mCurrentUser = currentUser;
 		}
-	}
-
-	private void cancelCurrentThirdAsync() {
-		AlarmManager mananger = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-		if (mFacebookAsyncPI != null) {
-			mananger.cancel(mFacebookAsyncPI);
-			mFacebookAsyncPI = null;
-		}
-		if (mFacebookAsyncTask != null)
-			mFacebookAsyncTask = null;
 	}
 
 	@Override
@@ -98,6 +93,7 @@ public class PTBackgroundService extends Service {
 		super.onCreate();
 		((PhotoTalkApplication) getApplication()).setService(this);
 		registeTimeTickReceiver();
+		registeGCMReceiver();
 	}
 
 	private void registeTimeTickReceiver() {
@@ -140,6 +136,11 @@ public class PTBackgroundService extends Service {
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
 		mConnectivityReceiver = new ConnectivityReceiver();
 		registerReceiver(mConnectivityReceiver, filter);
+	}
+
+	private void registeGCMReceiver() {
+		IntentFilter filter = new IntentFilter(Action.ACTION_GCM_MESSAGE);
+		registerReceiver(mGCMReceiver, filter);
 	}
 
 	private void uploadContact() {
@@ -473,4 +474,21 @@ public class PTBackgroundService extends Service {
 			}
 		}.start();
 	}
+
+	private BroadcastReceiver mGCMReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, final Intent intent) {
+			if (mCurrentUser != null) {
+				Thread thread = new Thread() {
+					public void run() {
+						List<Information> locals = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
+						List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(UserMessageService.MESSAGE_CONTENT_KEY));
+						LogicUtils.informationFilter(getBaseContext(), gcms, locals);
+					};
+				};
+				thread.start();
+			}
+		};
+	};
 }

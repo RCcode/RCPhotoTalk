@@ -234,12 +234,12 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statu.setText(getTimeText(R.string.receive_looked, record.getReceiveTime()));
 
 			// 状态为5 表示正在下载
-		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOADING) {
+		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
 			holder.statuButton.stopTask();
 			// 7 下载失败
-		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL) {
+		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(R.string.receive_fail);
 			holder.statuButton.stopTask();
@@ -266,11 +266,11 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(getTimeText(R.string.send_looked, record.getReceiveTime()));
 			// 0 表示正在发送
-		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING) {
+		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.send_sending);
 			// 6 表示发送失败
-		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
+		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(R.string.send_fail);
 		}
@@ -288,9 +288,9 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		new AddFriendTask(activity, activity.getCurrentUser(), new AddFriendListener() {
 
 			@Override
-			public void onFriendAddSuccess(Friend friend,int addType) {
-//				record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
-//				notifyDataSetChanged();
+			public void onFriendAddSuccess(Friend friend, int addType) {
+				// record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+				// notifyDataSetChanged();
 				activity.dismissLoadingDialog();
 			}
 
@@ -300,29 +300,33 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				activity.showErrorConfirmDialog(content);
 			}
 		}, friend).execute();
-//		FriendsProxy.addFriendFromInformation(context, new RCPlatformResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(int statusCode, String content) {
-//				try {
-//					JSONObject jsonObject = new JSONObject(content);
-//					Friend friend = JSONConver.jsonToObject(jsonObject.getJSONObject("userInfo").toString(), Friend.class);
-//					record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
-//					notifyDataSetChanged();
-//					activity.dismissLoadingDialog();
-//					LogicUtils.informationFriendAdded(context, record, friend);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-//				}
-//			}
-//
-//			@Override
-//			public void onFailure(int errorCode, String content) {
-//				activity.dismissLoadingDialog();
-//				activity.showErrorConfirmDialog(content);
-//			}
-//		}, record);
+		// FriendsProxy.addFriendFromInformation(context, new
+		// RCPlatformResponseHandler() {
+		//
+		// @Override
+		// public void onSuccess(int statusCode, String content) {
+		// try {
+		// JSONObject jsonObject = new JSONObject(content);
+		// Friend friend =
+		// JSONConver.jsonToObject(jsonObject.getJSONObject("userInfo").toString(),
+		// Friend.class);
+		// record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+		// notifyDataSetChanged();
+		// activity.dismissLoadingDialog();
+		// LogicUtils.informationFriendAdded(context, record, friend);
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL,
+		// context.getString(R.string.net_error));
+		// }
+		// }
+		//
+		// @Override
+		// public void onFailure(int errorCode, String content) {
+		// activity.dismissLoadingDialog();
+		// activity.showErrorConfirmDialog(content);
+		// }
+		// }, record);
 	}
 
 	public String getStatuTime(String prefix, String postfix, long time) {
