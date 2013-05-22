@@ -145,8 +145,9 @@ public class FriendsProxy {
 		request.putParam(PhotoTalkApiFactory.NICK, nick);
 		request.putParam(PhotoTalkApiFactory.BIRTHDAY, birthday);
 		request.putParam(PhotoTalkApiFactory.SEX, sex);
-		request.setFile(file);
-		request.excuteAsync();
+		if (file != null)
+			request.setFile(file);
+		request.executePostNameValuePairAsync();
 	}
 
 	// 上传头像

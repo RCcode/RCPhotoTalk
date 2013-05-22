@@ -1,5 +1,7 @@
 package com.rcplatform.phototalk;
 
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -7,12 +9,17 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class ChangePasswordActivity extends BaseActivity implements OnClickListener {
@@ -25,6 +32,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 	private Button btnConfirmPassword;
 
 	private TextView tvForget;
+	private String mCurrentPassword;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +82,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			showErrorConfirmDialog(R.string.register_password_error);
 			return;
 		}
+		mCurrentPassword = MD5.md5Hash(currentPassword);
 		UserSettingProxy.checkCurrentPassword(this, new RCPlatformResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -84,7 +93,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			public void onFailure(int errorCode, String content) {
 				showErrorConfirmDialog(content);
 			}
-		}, MD5.md5Hash(currentPassword));
+		}, mCurrentPassword);
 	}
 
 	private void commitNewPassword(String newPassword, String passwordConfirm) {
@@ -105,14 +114,23 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				showErrorConfirmDialog(R.string.password_change_complete);
-				finish();
+				try {
+					DialogUtil.showToast(getApplicationContext(), R.string.password_change_complete, Toast.LENGTH_SHORT);
+					String token = new JSONObject(content).getString("token");
+					UserInfo userInfo = getCurrentUser();
+					userInfo.setToken(token);
+					PrefsUtils.LoginState.setLoginUser(ChangePasswordActivity.this, userInfo);
+					finish();
+				} catch (Exception e) {
+					e.printStackTrace();
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
+				}
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
 				showErrorConfirmDialog(content);
 			}
-		}, MD5.md5Hash(newPassword));
+		}, MD5.md5Hash(newPassword), mCurrentPassword);
 	}
 }

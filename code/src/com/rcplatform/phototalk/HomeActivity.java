@@ -40,6 +40,7 @@ import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.InformationPageController;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
@@ -260,8 +261,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		if (adapter != null) {
 			Information record = adapter.getData().get(position);
 			if (record != null) {
-				if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOADING
-						|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
+				if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING
 						|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 					return;
 				} else {
@@ -292,8 +292,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 						});
 					}
 
-					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_LOAD_FAIL
-							|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL) {
+					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
 						if (LogicUtils.isSender(this, record))
 							mLongPressDialog.show(position, 1);
 						else
@@ -309,7 +308,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private void reSendPhoto(final Information information) {
 		List<String> friendIds = new ArrayList<String>();
 		friendIds.add(information.getReceiver().getRcId());
-		information.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
+		information.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
 		adapter.notifyDataSetChanged();
 		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
@@ -570,8 +569,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		List<Information> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (Information info : localInfos) {
-				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
-						&& info.getCreatetime() == flag) {
+				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING && info.getCreatetime() == flag) {
 					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 				}
 			}
@@ -594,9 +593,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		List<Information> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (Information info : localInfos) {
-				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING
-						&& info.getCreatetime() == flag) {
-					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING && info.getCreatetime() == flag) {
+					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 				}
 			}
 			adapter.notifyDataSetChanged();
@@ -608,7 +607,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
 			if (index != -1) {
-				localInfos.get(index).setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_FAIL);
+				localInfos.get(index).setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 				adapter.notifyDataSetChanged();
 			}
 		}

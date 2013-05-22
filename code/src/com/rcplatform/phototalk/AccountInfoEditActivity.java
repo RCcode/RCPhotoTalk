@@ -80,7 +80,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		setContentView(R.layout.settings_edit_account_info);
 		app = (PhotoTalkApplication) getApplication();
 		userDetailInfo = app.getCurrentUser();
-		sex = new String[] {getString(R.string.male), getString(R.string.famale) };
+		sex = new String[] { getString(R.string.male), getString(R.string.famale) };
 		// sex = new String[] { getString(R.string.sex_secret),
 		// getString(R.string.male), getString(R.string.famale) };
 		initView();
@@ -158,13 +158,13 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void loadHeadPicture() {
 		String headUrl = userDetailInfo.getHeadUrl();
-//		File file = new File(headUrl);
-//		if (file.exists()) {
-//			Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
-//			mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
-//		} else {
-			ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-//		}
+		// File file = new File(headUrl);
+		// if (file.exists()) {
+		// Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
+		// mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
+		// } else {
+		ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
+		// }
 	}
 
 	private void setNick() {
@@ -204,7 +204,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			startActivity(new Intent(this, AddFriendsActivity.class));
 			break;
 		case R.id.settings_account_head_portrait:
-			showImagePickMenu(v,CROP_HEAD_IMAGE);
+			showImagePickMenu(v, CROP_HEAD_IMAGE);
 			break;
 		case R.id.rela_edit_nick:
 			Intent intentName = new Intent(this, UpdateNameActivity.class);
@@ -227,7 +227,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
-						userDetailInfo.setGender(which+1);
+						userDetailInfo.setGender(which + 1);
 						setSex();
 						dialog.dismiss();
 					}
@@ -362,15 +362,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				}
 			}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
 		}
-		// e.printStackTrace();
-		// }
-		// }
-		//
-		// @Override
-		// public void onLoadFail(String error) {
-		// }
-		// });
-		// }
 		finish();
 	}
 
@@ -399,7 +390,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				nHeight = mMyHeadView.getHeight();
 				nWidth = mMyHeadView.getWidth();
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
-
 				bitmap = Utils.getRectBitmap(bitmap);
 				if (bitmap != null) {
 					cacheHeadImage(bitmap);

@@ -74,7 +74,7 @@ public class UserMessageService extends Service {
 
 	public static final String MESSAGE_RCID_KEY = "rcid";
 
-	private static final String GCM_URL = "http://192.168.0.56:8080/phototalk/user/pushOfflineMsg.do";
+	private static final String GCM_URL = "http://192.168.0.86:8083/photochat/user/pushOfflineMsg.do";
 
 	private Context ctx;
 
@@ -162,7 +162,7 @@ public class UserMessageService extends Service {
 					type = Constants.GCM_TYPE_FRIEND;
 				}
 
-				GcmTask gcmTask = new GcmTask(context, type, toRcId);
+				GcmTask gcmTask = new GcmTask(context, type, toRcId,msg);
 				timer.schedule(gcmTask, 10000);
 				gcmTimers.put(timerKey, timer);
 			}
@@ -241,11 +241,15 @@ public class UserMessageService extends Service {
 		private String type;
 
 		private String toRcId;
+		
+		private String extra;
 
-		GcmTask(Context ctx, String type, String toRcId) {
+		GcmTask(Context ctx, String type, String toRcId,String extra) {
 			this.ctx = ctx;
 			this.type = type;
 			this.toRcId = toRcId;
+			this.extra = extra;
+			
 		}
 
 		@Override
@@ -266,6 +270,7 @@ public class UserMessageService extends Service {
 				json.put("deviceId", MetaHelper.getMACAddress(ctx));
 				json.put("rcId", app.getCurrentUser().getRcId());
 				json.put("language", "");
+				json.put("extra",extra);
 				/*
 				 * json.put("packageName", MetaHelper.getAppName(context));
 				 * json.put("status", STATUS_CREATE_USERINFO);

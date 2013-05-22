@@ -15,8 +15,10 @@ import com.rcplatform.phototalk.utils.Constants;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -38,7 +40,7 @@ public final class ServerUtilities {
 
 	public static final String SENDER_ID = "867870064836";
 
-	private static String serverUrl = "http://192.168.0.56:8080/phototalk/user/syncUserkey.do";
+	private static String serverUrl = "http://192.168.0.86:8083/photochat/user/syncUserkey.do";
 
 	private static String serverLogUrl = "http://push.rcplatformhk.com/gcm/boss/receivePushStatus.do";
 
@@ -49,6 +51,8 @@ public final class ServerUtilities {
 	public final static String STATUS_RECIVIE_MSG_INSTALLED = "1001";
 
 	public final static String STATUS_RECIVIE_MSG_NEW_APP = "1002";
+	
+	public final static String GCM_MSG_USER_MESSAGE = "user_message";
 	
 	private static AsyncTask<Void, Void, Void> mRegisterTask;
 
@@ -78,6 +82,8 @@ public final class ServerUtilities {
 				registerUserID(ctx, regId);
 			}
 		}
+		
+		setGcmMessageCount(ctx,GCM_MSG_USER_MESSAGE,0);
 	}
 
 	public static void onDestroy(Context ctx) {
@@ -304,5 +310,18 @@ public final class ServerUtilities {
 	 */
 	static void unregister(final Context context, final String regId) {
 
+	}
+	
+	
+	static void setGcmMessageCount(final Context context,String key, int count){
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		pref.edit().putInt(key, count).commit();
+	}
+	
+	static int getGcmMessageCount(final Context context,String key){
+		int count = 0;
+		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
+		count = pref.getInt(key, count);
+		return count;
 	}
 }

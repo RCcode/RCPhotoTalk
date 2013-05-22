@@ -111,6 +111,11 @@ public class Constants {
 		public static final String ACTION_RELOGIN = "com.rcplatform.phototalk.action.RELOGIN";
 
 		public static final String ACTION_OTHER_DEVICE_LOGIN = "com.rcplatform.phototalk.action.OTHER_DEVICE_LOGIN";
+		/**
+		 * gcm消息action
+		 */
+		public static final String ACTION_GCM_MESSAGE = "com.rcplatform.phototalk.action.GCM_MESSAGE";
+
 	}
 
 	public static class Provider {

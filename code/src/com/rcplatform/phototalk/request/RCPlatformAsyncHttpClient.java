@@ -132,6 +132,8 @@ public class RCPlatformAsyncHttpClient {
 						int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
 						if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
 							onRequestSuccess(context, state, content, request);
+						} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {
+							context.sendBroadcast(new Intent(Action.ACTION_OTHER_DEVICE_LOGIN));
 						} else {
 							responseHandler.onFailure(state, jsonObject.getString(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_MESSAGE));
 						}

@@ -22,9 +22,10 @@ public class UserSettingProxy {
 		request.excuteAsync();
 	}
 
-	public static void changePassword(Context context, RCPlatformResponseHandler responseHandler, String newPassword) {
+	public static void changePassword(Context context, RCPlatformResponseHandler responseHandler, String newPassword, String oldPassword) {
 		Request request = new Request(context, PhotoTalkApiUrl.UPDATE_LOGIN_PASSWORD_URL, responseHandler);
 		request.putParam(PhotoTalkParams.ChangePassword.PARAM_KEY_NEW_PASSWORD, newPassword);
+		request.putParam(PhotoTalkParams.ChangePassword.PARAM_KEY_OLD_PASSWORD, oldPassword);
 		request.excuteAsync();
 	}
 }
