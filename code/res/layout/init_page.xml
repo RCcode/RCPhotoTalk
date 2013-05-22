@@ -15,7 +15,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/loading720_1280" />
+            android:src="@drawable/base_top_navigate_background" />
 
         <ImageView
             android:layout_width="fill_parent"

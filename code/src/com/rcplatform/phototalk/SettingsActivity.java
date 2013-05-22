@@ -249,14 +249,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 							@Override
 							public void onSuccess(int statusCode, String content) {
 								// 上传成功
-								System.out.println("---content------>"+content);
 								userInfo.setBackground(decodeUtil(content,"background"));
 								PrefsUtils.User.saveUserInfo(SettingsActivity.this, userInfo.getRcId(), userInfo);
 							}
 
 							@Override
 							public void onFailure(int errorCode, String content) {
-								System.out.println("fail--content-->"+content);
 								// 上传失败
 							}
 						});
