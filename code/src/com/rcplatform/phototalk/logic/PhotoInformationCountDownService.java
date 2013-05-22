@@ -32,7 +32,6 @@ public class PhotoInformationCountDownService {
 
 	private Application mApplication;
 	private Map<String, Information> mShowingInformations = new HashMap<String, Information>();
-	private List<Message> mCountDownMsgs = new ArrayList<Message>();
 	private ThreadPoolExecutor mPool;
 	private Timer mCountDownTimer = new Timer();
 
@@ -45,7 +44,6 @@ public class PhotoInformationCountDownService {
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
 			mShowingInformations.put(PhotoTalkUtils.getInformationTagBase(info), info);
-			sendDelayMessage(info);
 			startCountDown(info);
 		}
 	}
@@ -54,18 +52,16 @@ public class PhotoInformationCountDownService {
 		mCountDownTimer.schedule(new InformationCountDownTask(info), 0, COUNT_DOWN_SPACEING);
 	}
 
-	private void sendDelayMessage(Information info) {
+	private void sendShowEndMessage(Information info) {
 		Message msg = mCountDownHandler.obtainMessage();
-		msg.obj = PhotoTalkUtils.getInformationTagBase(info);
-		mCountDownMsgs.add(msg);
-		mCountDownHandler.sendMessageDelayed(msg, info.getTotleLength() * 1000);
+		msg.obj = info;
+		mCountDownHandler.sendMessage(msg);
 	}
 
 	private Handler mCountDownHandler = new Handler() {
 		public void handleMessage(Message msg) {
-			mCountDownMsgs.remove(msg);
-			String key = (String) msg.obj;
-			Information info = mShowingInformations.get(key);
+			// String key = (String) msg.obj;
+			Information info = (Information) msg.obj;
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
 			MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
 			LogicUtils.updateInformationState(mApplication, Action.ACTION_INFORMATION_STATE_CHANGE, info);
@@ -128,17 +124,20 @@ public class PhotoInformationCountDownService {
 			mInfo.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
 			mInfo.setLimitTime(mInfo.getLimitTime() - 1);
 			if (mInfo.getLimitTime() <= 0) {
+				sendShowEndMessage(mInfo);
 				cancel();
 			}
 		}
 
 	}
 
-	public Information getShowingInformationByTag(String informationTag) {
-		return mShowingInformations.get(informationTag);
-	}
-
 	public void finishAllShowingMessage() {
 		mCountDownTimer.cancel();
+		mCountDownTimer = new Timer();
+		for (Information info : mShowingInformations.values()) {
+			info.setLimitTime(0);
+			sendShowEndMessage(info);
+		}
+		mShowingInformations.clear();
 	}
 }

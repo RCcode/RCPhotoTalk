@@ -78,7 +78,7 @@ public class PTBackgroundService extends Service {
 
 	public void setCurrentUser(UserInfo currentUser) {
 
-		if (mCurrentUser == null || (currentUser.getRcId().equals(mCurrentUser.getRcId()))) {
+		if (mCurrentUser == null || (!currentUser.getRcId().equals(mCurrentUser.getRcId()))) {
 			cancelCurrentBindCheckTask();
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();

@@ -465,6 +465,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	protected void onDestroy() {
+		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
