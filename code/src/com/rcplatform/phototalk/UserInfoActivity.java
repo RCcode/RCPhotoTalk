@@ -12,17 +12,23 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.facebook.model.GraphUser;
-import com.rcplatform.phototalk.activity.FacebookActivity;
+import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.thirdpart.utils.FacebookClient;
+import com.rcplatform.phototalk.thirdpart.utils.FacebookClient.OnAuthorizeSuccessListener;
+import com.rcplatform.phototalk.thirdpart.utils.FacebookClient.OnDeAuthorizeListener;
+import com.rcplatform.phototalk.thirdpart.utils.FacebookClient.OnGetFacebookInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
-public class UserInfoActivity extends FacebookActivity implements OnClickListener {
+public class UserInfoActivity extends BaseActivity implements OnClickListener {
+
+	private FacebookClient mFacebookClient;
 	private TextView user_Email;
 	private TextView user_Phone;
 	private TextView user_rcId;
@@ -41,10 +47,35 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.user_info);
-		setAutoLogin(false);
+		mFacebookClient = new FacebookClient(this);
+		mFacebookClient.onCreate(savedInstanceState);
 		initTitle();
 		initView();
 		setTextView();
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		mFacebookClient.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mFacebookClient.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		mFacebookClient.onDestroy();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		mFacebookClient.onActivityResult(requestCode, resultCode, data);
 	}
 
 	private void initTitle() {
@@ -54,7 +85,6 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
 		mTitleTextView.setText(getResources().getString(R.string.user_message));
 		mTitleTextView.setVisibility(View.VISIBLE);
-
 	}
 
 	public void initView() {
@@ -74,7 +104,7 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 	}
 
 	private void setAuthText() {
-		if (isFacebookAuthorize()) {
+		if (ThirdPartUtils.isFacebookVlidate(this)) {
 			tvFacebookAuth.setText(R.string.authorized);
 		} else {
 			tvFacebookAuth.setText(R.string.unauthorized);
@@ -92,10 +122,10 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.user_facebook_layout:
-			if (isFacebookAuthorize()) {
+			if (ThirdPartUtils.isFacebookVlidate(this)) {
 				showDeAuthorizeDialog(FriendType.FACEBOOK);
 			} else {
-				authorize();
+				authorizeFacebook();
 			}
 			break;
 		case R.id.user_vk_layout:
@@ -112,6 +142,33 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 			this.finish();
 			break;
 		}
+	}
+
+	private void authorizeFacebook() {
+		mFacebookClient.authorize(new OnAuthorizeSuccessListener() {
+
+			@Override
+			public void onAuthorizeSuccess() {
+				setAuthText();
+				getFacebookInfo();
+			}
+		});
+	}
+
+	private void getFacebookInfo() {
+		mFacebookClient.getFacebookInfo(new OnGetFacebookInfoSuccessListener() {
+
+			@Override
+			public void onGetFail() {
+			}
+
+			@Override
+			public void onGetFacebookInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends) {
+				PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), getCurrentUser().getRcId());
+				PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends, FriendType.FACEBOOK);
+				new ThirdPartInfoUploadTask(getApplicationContext(), friends, user, FriendType.FACEBOOK, null);
+			}
+		});
 	}
 
 	private void showDeAuthorizeDialog(int type) {
@@ -136,7 +193,17 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 			switch (which) {
 			case DialogInterface.BUTTON_NEGATIVE:
 				if (mType == FriendType.FACEBOOK) {
-					deAuthorize();
+					mFacebookClient.deAuthorize(new OnDeAuthorizeListener() {
+
+						@Override
+						public void onDeAuthorizeSuccess() {
+							setAuthText();
+						}
+
+						@Override
+						public void onDeAuthorizeFail() {
+						}
+					});
 				}
 				break;
 			case DialogInterface.BUTTON_POSITIVE:
@@ -145,31 +212,4 @@ public class UserInfoActivity extends FacebookActivity implements OnClickListene
 			}
 		}
 	};
-
-	@Override
-	protected void onFacebookInfoLoaded(GraphUser user, List<ThirdPartUser> friends) {
-		super.onFacebookInfoLoaded(user, friends);
-		setAuthText();
-		ThirdPartInfoUploadTask task = new ThirdPartInfoUploadTask(this, friends, ThirdPartUtils.parserFacebookUserToThirdPartUser(user), FriendType.FACEBOOK,
-				new RCPlatformResponseHandler() {
-
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						dismissLoadingDialog();
-					}
-
-					@Override
-					public void onFailure(int errorCode, String content) {
-						dismissLoadingDialog();
-					}
-				});
-		task.start();
-	}
-
-	@Override
-	protected void onGetFacebookInfoError() {
-		super.onGetFacebookInfoError();
-		dismissLoadingDialog();
-		setAuthText();
-	}
 }

@@ -13,14 +13,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
 import com.rcplatform.phototalk.ImageCutActivity;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.SettingsActivity;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -78,13 +76,16 @@ public class ImagePickActivity extends BaseActivity {
 		if (resultCode == Activity.RESULT_OK) {
 
 			if (REQUEST_CODE_CAMERA == requestCode || REQUEST_CODE_GALLARY == requestCode) {
+				if (data != null && data.getData() != null) {
+					mImageUri = data.getData();
+				}
 				switch (cropMode) {
-					case CROP_BACKGROUND_IMAGE:
-						cutImage(mImageUri, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
-						break;
-					case CROP_HEAD_IMAGE:
-						cutImage(mImageUri, HEAD_WIDTH, HEAD_HEIGHT);
-						break;
+				case CROP_BACKGROUND_IMAGE:
+					cutImage(mImageUri, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+					break;
+				case CROP_HEAD_IMAGE:
+					cutImage(mImageUri, HEAD_WIDTH, HEAD_HEIGHT);
+					break;
 				}
 			} else if (CROP_PICTURE == requestCode) {
 				if (data != null && data.getData() != null) {
@@ -118,8 +119,8 @@ public class ImagePickActivity extends BaseActivity {
 		if (mImageSelectPopupWindow == null) {
 			View detailsView = LayoutInflater.from(this).inflate(R.layout.picker_head_source_layout, null, false);
 
-			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow().getWindowManager().getDefaultDisplay().getWidth(), ((Activity) this)
-			        .getWindow().getWindowManager().getDefaultDisplay().getHeight());
+			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow().getWindowManager().getDefaultDisplay().getWidth(), ((Activity) this).getWindow()
+					.getWindowManager().getDefaultDisplay().getHeight());
 
 			mImageSelectPopupWindow.setFocusable(true);
 			mImageSelectPopupWindow.setOutsideTouchable(true);
@@ -198,11 +199,9 @@ public class ImagePickActivity extends BaseActivity {
 				nHeight = mImageView.getHeight();
 				nWidth = mImageView.getWidth();
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
-			}
-			catch (OutOfMemoryError e) {
+			} catch (OutOfMemoryError e) {
 				e.printStackTrace();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			return bitmap;

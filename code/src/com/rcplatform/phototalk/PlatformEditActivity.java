@@ -184,7 +184,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 				request.setFile(new File(mHeadImagePath));
 			}
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-			request.excutePostNameValuePairAsync();
+			request.executePostNameValuePairAsync();
 		}
 	}
 

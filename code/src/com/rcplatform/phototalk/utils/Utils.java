@@ -54,6 +54,8 @@ public class Utils {
 		List<PackageInfo> packages = manager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
 		for (PackageInfo info : packages) {
 			if (info.packageName.startsWith("com.rcplatform")) {
+				if (info.packageName.equals("com.rcplatform.phototalk"))
+					continue;
 				UserInfo userInfo = getAppLoginUser(context, info.packageName);
 				if (userInfo != null) {
 					AppInfo appInfo = new AppInfo();
