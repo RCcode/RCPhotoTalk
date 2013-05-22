@@ -35,6 +35,7 @@ import com.google.android.gcm.GCMBaseIntentService;
 import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
+import com.rcplatform.phototalk.utils.Constants;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -171,7 +172,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		int type = Integer.parseInt(typeStr);
 		if(1== type || 2 == type){
 			Intent it = new Intent();
-			it.setAction(UserMessageService.MESSAGE_RECIVE_BROADCAST);
+			it.setAction( Constants.Action.ACTION_GCM_MESSAGE);
 			it.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, msg);
 			context.sendBroadcast(it);
 		}
