@@ -40,7 +40,7 @@
                 style="@style/expand_listview_base"
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:divider="@color/line_bg_color"
+                android:divider="@null"
                 android:listSelector="#00000000" />
 
             <ExpandableListView

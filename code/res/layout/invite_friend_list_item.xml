@@ -9,8 +9,6 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/default_gap_2x"
-        android:paddingLeft="@dimen/default_gap_2x"
         android:paddingTop="@dimen/default_gap_2x" >
 
         <LinearLayout
@@ -18,6 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/default_gap"
             android:layout_toRightOf="@id/add_friend_list_item_portrait"
             android:orientation="vertical" >
 

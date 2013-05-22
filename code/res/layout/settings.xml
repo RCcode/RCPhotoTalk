@@ -35,8 +35,8 @@
                     <ImageView
                         android:id="@+id/user_bg"
                         android:layout_width="fill_parent"
-                        android:layout_marginTop="8dp"
                         android:layout_height="@dimen/user_detail_bg_height"
+                        android:layout_marginTop="8dp"
                         android:scaleType="centerCrop"
                         android:src="@drawable/user_detail_bg" />
 
@@ -105,9 +105,9 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="Name"
-                                        android:textStyle="bold"
                                         android:textColor="#FFFFFF"
-                                        android:textSize="@dimen/user_detail_nick_size" />
+                                        android:textSize="@dimen/user_detail_nick_size"
+                                        android:textStyle="bold" />
                                 </LinearLayout>
 
                                 <LinearLayout
@@ -127,10 +127,10 @@
                                         style="@style/text_base"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:gravity="top"
                                         android:layout_gravity="top"
-                                        android:layout_marginTop="-3dp"
                                         android:layout_marginLeft="@dimen/friend_info_age_left"
+                                        android:layout_marginTop="-3dp"
+                                        android:gravity="top"
                                         android:text="24"
                                         android:textColor="#E5E5E5" />
                                 </LinearLayout>
@@ -146,8 +146,8 @@
                                     style="@style/text_base"
                                     android:layout_width="wrap_content"
                                     android:layout_height="@dimen/user_detail_head_width_half"
-                                    android:text="RC ID:"
                                     android:layout_marginTop="10dp"
+                                    android:text="RC ID:"
                                     android:textColor="#534d48"
                                     android:textSize="@dimen/user_detail_rcid_size" />
 
@@ -155,8 +155,8 @@
                                     android:id="@+id/user_rc_id"
                                     style="@style/text_base"
                                     android:layout_width="wrap_content"
-                                    android:layout_marginTop="10dp"
                                     android:layout_height="@dimen/user_detail_head_width_half"
+                                    android:layout_marginTop="10dp"
                                     android:text="123456"
                                     android:textColor="#534d48"
                                     android:textSize="@dimen/user_detail_rcid_size" />
@@ -175,139 +175,138 @@
                     android:layout_marginTop="10dp"
                     android:background="@drawable/app_list_bg"
                     android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/default_gap"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/popup_bg"
+                    android:orientation="vertical" >
+
+                    <RelativeLayout
+                        android:id="@id/settings_account_tacotyid_pandle"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="7dp"
+                            android:gravity="center_vertical"
+                            android:text="好友动态"
+                            android:textColor="#313131" >
+                        </TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/right_arrow" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/line_back" />
+
+                    <RelativeLayout
+                        android:id="@+id/use_account_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="7dp"
+                            android:gravity="center_vertical"
+                            android:text="我的帐号"
+                            android:textColor="#313131" >
+                        </TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/right_arrow" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/line_back" />
+
+                    <RelativeLayout
+                        android:id="@+id/settings_user_edit_rc_id_action"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="7dp"
+                            android:gravity="center_vertical"
+                            android:text="设置"
+                            android:textColor="#313131" >
+                        </TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/right_arrow" />
+                    </RelativeLayout>
+
+                    <ImageView
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/line_back" />
+
+                    <RelativeLayout
+                        android:id="@+id/rela_about"
+                        android:layout_width="match_parent"
+                        android:layout_height="44dp" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="7dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/about"
+                            android:textColor="#313131" >
+                        </TextView>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="5dp"
+                            android:src="@drawable/right_arrow" />
+                    </RelativeLayout>
+                </LinearLayout>
+               
             </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/popup_bg"
-                android:orientation="vertical" >
-
-                <RelativeLayout
-                    android:id="@id/settings_account_tacotyid_pandle"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="7dp"
-                        android:gravity="center_vertical"
-                        android:text="好友动态"
-                        android:textColor="#313131" >
-                    </TextView>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
-                        android:src="@drawable/right_arrow" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/line_back" />
-
-                <RelativeLayout
-                    android:id="@+id/use_account_message"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="7dp"
-                        android:gravity="center_vertical"
-                        android:text="我的帐号"
-                        android:textColor="#313131" >
-                    </TextView>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
-                        android:src="@drawable/right_arrow" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/line_back" />
-
-                <RelativeLayout
-                    android:id="@+id/settings_user_edit_rc_id_action"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="7dp"
-                        android:gravity="center_vertical"
-                        android:text="设置"
-                        android:textColor="#313131" >
-                    </TextView>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
-                        android:src="@drawable/right_arrow" />
-                </RelativeLayout>
-
-                <ImageView
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/line_back" />
-
-                <RelativeLayout
-                    android:id="@+id/rela_about"
-                    android:layout_width="match_parent"
-                    android:layout_height="44dp" >
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="7dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/about"
-                        android:textColor="#313131" >
-                    </TextView>
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="5dp"
-                        android:src="@drawable/right_arrow" />
-                </RelativeLayout>
-            </LinearLayout>
-
-            <Button
-                android:id="@id/settings_clean_history_record_btn"
-                style="@style/LandingPageButton"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                android:layout_marginTop="@dimen/default_gap_2x"
-                android:background="@drawable/friend_info_send_btn"
-                android:text="@string/setting_page_clean_history"
-                android:layout_marginBottom="@dimen/default_gap_3x"
-                android:textColor="@android:color/white" />
+         <Button
+                    android:id="@id/settings_clean_history_record_btn"
+                    style="@style/LandingPageButton"
+                    android:layout_marginBottom="@dimen/default_gap_3x"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:layout_marginTop="@dimen/default_gap_2x"
+                    android:background="@drawable/friend_info_send_btn"
+                    android:text="@string/setting_page_clean_history"
+                    android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 
