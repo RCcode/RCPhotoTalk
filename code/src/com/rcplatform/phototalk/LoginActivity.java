@@ -145,7 +145,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mIvHead.setOnClickListener(this);
 		btnChange = (TextView) findViewById(R.id.choosebutton);
 		btnChange.setOnClickListener(this);
-		btnChange.setVisibility(View.VISIBLE);
+//		btnChange.setVisibility(View.VISIBLE);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
 		mTitleTextView.setVisibility(View.VISIBLE);
 		mLvAcccounts = (ListView) findViewById(R.id.lv_apps_account);

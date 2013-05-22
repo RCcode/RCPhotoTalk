@@ -67,7 +67,6 @@
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
-                android:layout_marginLeft="@dimen/friend_info_left"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -88,6 +87,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="#FFFFFF"
+                            android:textStyle="bold"
                             android:textSize="@dimen/friend_info_nick_text_size" />
 
                         <Button
@@ -109,6 +109,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
+                            android:layout_marginTop="1dp"
                             android:background="@drawable/boy_icon" />
 
                         <TextView

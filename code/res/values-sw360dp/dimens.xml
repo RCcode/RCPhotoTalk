@@ -64,6 +64,8 @@
     <dimen name="app_list_height">60dp</dimen>
     <dimen name="user_detail_user_infos_bottom_margin">-55dp</dimen>
     <dimen name="user_detail_head_width_half">55dp</dimen>
+     <dimen name="user_detail_nick_size">22sp</dimen>
+     <dimen name="user_detail_rcid_size">16sp</dimen>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <dimen name="user_detail_">-55dp</dimen>
     <dimen name="user_detail_source_height">55dp</dimen>

@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/home_search_bar"
         android:cacheColorHint="@null"
-        android:divider="@color/line_bg_color"
+        android:divider="@null"
         android:dividerHeight="1dp"
         android:focusableInTouchMode="false"
         android:listSelector="#00000000"
