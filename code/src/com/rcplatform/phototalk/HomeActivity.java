@@ -621,8 +621,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			Bundle extras = intent.getExtras();
 			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
 			LogUtil.e(msg);
-			// DialogUtil.showToast(getApplicationContext(), msg,
-			// Toast.LENGTH_LONG);
 			List<Information> informations = JSONConver.jsonToInformations(msg);
 			filteInformations(informations);
 		}

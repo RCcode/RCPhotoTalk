@@ -79,8 +79,6 @@ public class LogicUtils {
 					} else if (serviceInfo.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 						// 图片信息
 						if (localInfo.getStatu() < serviceInfo.getStatu()) {
-//							updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, localInfo);
-//						} else {
 							localInfo.setStatu(serviceInfo.getStatu());
 							updateInfos.add(localInfo);
 						}
