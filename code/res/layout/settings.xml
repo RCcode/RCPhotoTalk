@@ -104,7 +104,6 @@
                                         style="@style/text_base"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Name"
                                         android:textColor="#FFFFFF"
                                         android:textSize="@dimen/user_detail_nick_size"
                                         android:textStyle="bold" />
@@ -131,7 +130,6 @@
                                         android:layout_marginLeft="@dimen/friend_info_age_left"
                                         android:layout_marginTop="-3dp"
                                         android:gravity="top"
-                                        android:text="24"
                                         android:textColor="#E5E5E5" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -157,7 +155,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="@dimen/user_detail_head_width_half"
                                     android:layout_marginTop="10dp"
-                                    android:text="123456"
                                     android:textColor="#534d48"
                                     android:textSize="@dimen/user_detail_rcid_size" />
                             </LinearLayout>

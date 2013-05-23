@@ -147,11 +147,20 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
+                    android:layout_toLeftOf="@+id/vk_iv_right"
                     android:gravity="center_vertical"
-                    android:text="VKontakte" >
+                    android:text="@string/vkontakte" >
                 </TextView>
 
+                <TextView
+                    android:id="@+id/tv_vk_authstate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toLeftOf="@+id/vk_iv_right" />
+
                 <ImageView
+                    android:id="@+id/vk_iv_right"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

@@ -28,4 +28,9 @@ public class UserSettingProxy {
 		request.putParam(PhotoTalkParams.ChangePassword.PARAM_KEY_OLD_PASSWORD, oldPassword);
 		request.excuteAsync();
 	}
+
+	public static void getAllAppInfo(Context context, RCPlatformResponseHandler responseHandler) {
+		Request request = new Request(context, PhotoTalkApiUrl.GET_ALL_APPS_URL, responseHandler);
+		request.excuteAsync();
+	}
 }

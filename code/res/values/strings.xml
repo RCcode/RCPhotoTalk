@@ -222,6 +222,7 @@
     <string name="contact_friend">通讯录好友</string>
     <string name="facebook_friend">facebook好友</string>
     <string name="deauthorize_complete">解除绑定成功</string>
+    <string name="deauthorize_fail">解除绑定失败</string>
     <string name="use_new_info">在PhotoTalk中使用新的个人资料</string>
     <string name="use_info_below">使用以下个人资料</string>
     <string name="user_info">个人资料</string>

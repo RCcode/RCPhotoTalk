@@ -128,7 +128,10 @@ public class PrefsUtils {
 			public static long getFacebookLastAsyncTime(Context context, String pref) {
 				return getPreference(context, pref).getLong(PREF_KEY_FACEBOOK_ASYNC_TIME, 0);
 			}
-
+			public static void clearFacebookAccount(Context context, String pref){
+				SharedPreferences sh = getPreference(context, pref);
+				sh.edit().remove(PREF_KEY_FACEBOOK_ASYNC_TIME).remove(PREF_KEY_FACEBOOK_NAME).commit();
+			}
 			public static void saveVKAccount(Context context, String pref, String accessToken, long userId) {
 				SharedPreferences prefs = getPreference(context, pref);
 				Editor editor = prefs.edit();
@@ -137,6 +140,13 @@ public class PrefsUtils {
 				editor.commit();
 			}
 
+			/**
+			 * index=0-token，String index=1-userId，long
+			 * 
+			 * @param context
+			 * @param pref
+			 * @return
+			 */
 			public static Object[] getVKAccount(Context context, String pref) {
 				SharedPreferences prefs = getPreference(context, pref);
 				String access_token = prefs.getString(PREF_KEY_VK_ACCESSTOKEN, null);
@@ -147,6 +157,11 @@ public class PrefsUtils {
 				result[0] = access_token;
 				result[1] = user_id;
 				return result;
+			}
+
+			public static void clearVKAccount(Context context, String pref) {
+				SharedPreferences prefs = getPreference(context, pref);
+				prefs.edit().remove(PREF_KEY_VK_SYNC_TIME).remove(PREF_KEY_VK_USERID).remove(PREF_KEY_VK_SYNC_TIME).commit();
 			}
 
 			public static void refreshVKSyncTime(Context context, String pref) {
