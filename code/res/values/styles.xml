@@ -26,7 +26,7 @@
     </style>
 
     <style name="LandingPageButton">
-        <item name="android:textSize">22.0sp</item>
+        <item name="android:textSize">20.0sp</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">48.0dip</item>

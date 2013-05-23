@@ -14,27 +14,25 @@
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/base_top_navigate_background" />
+            android:background="@drawable/init_page_one" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/login_background" />
+            android:background="@drawable/init_page_two" />
 
         <ImageView
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/base_top_navigate_background" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:scaleType="fitXY"
-            android:src="@drawable/login_background" />
+            android:background="@drawable/init_page_three" />
     </ViewFlipper>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/logo" />
 
     <com.rcplatform.phototalk.views.PageIndicator
         android:id="@+id/page_indicator_other"
@@ -62,8 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_launcher"
-            android:visibility="gone" />
-        -->
+            android:visibility="gone" />        -->
 
         <Button
             android:id="@id/init_page_login_button"

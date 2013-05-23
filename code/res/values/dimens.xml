@@ -32,7 +32,7 @@
     <dimen name="friend_info_title_top">6dp</dimen>
     <!-- 默认间距 -->
     
-    <dimen name="init_indicator_bottom">46dp</dimen>
+    <dimen name="init_indicator_bottom">26dp</dimen>
     <dimen name="init_btn_padding">33dp</dimen>
     <dimen name="init_btn_bottom">58dp</dimen>
     <dimen name="default_gap">8dp</dimen>

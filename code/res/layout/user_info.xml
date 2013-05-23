@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f3" >
+    android:background="@drawable/app_backgroud" >
 
     <include
         android:id="@+id/top_layout"
@@ -11,7 +11,7 @@
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/login_out_btn"
+        android:layout_above="@+id/reset_pw_btn"
         android:layout_below="@+id/top_layout" >
 
         <LinearLayout
@@ -21,20 +21,19 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/popup_btn" >
+                android:background="@drawable/user_info_item_bg" >
 
-                <TextView
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
-                    android:gravity="center_vertical"
-                    android:text="邮箱地址" >
-                </TextView>
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:background="@drawable/email_icon" >
+                </ImageView>
 
                 <TextView
                     android:id="@+id/user_email"
@@ -42,50 +41,29 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp" />
+                    android:textSize="20sp"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:textColor="#919191" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/popup_btn" >
+                android:background="@drawable/user_info_item_bg" >
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
-                    android:gravity="center_vertical"
-                    android:text="电话号码" >
-                </TextView>
-
-                <TextView
-                    android:id="@+id/user_phone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/popup_btn" >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
+                    android:layout_marginLeft="12dp"
                     android:gravity="center_vertical"
-                    android:text="RC ID" >
+                    android:text="RC ID"
+                    android:textStyle="bold"
+                    android:textColor="#313131"
+                    android:textSize="20sp" >
                 </TextView>
 
                 <TextView
@@ -94,34 +72,64 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp" />
+                    android:textSize="20sp"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:textColor="#919191" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/user_info_item_bg" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:background="@drawable/phone_icon" >
+                </ImageView>
+
+                <TextView
+                    android:id="@+id/user_phone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:textSize="20sp"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:textColor="#919191" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/user_facebook_layout"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/popup_btn" >
+                android:background="@drawable/user_info_item_bg" >
 
-                <TextView
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
-                    android:layout_toLeftOf="@+id/tv_facebook_authstate"
-                    android:gravity="center_vertical"
-                    android:text="@string/facebook" >
-                </TextView>
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:background="@drawable/facebook_icon" >
+                </ImageView>
 
                 <TextView
                     android:id="@+id/tv_facebook_authstate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/iv_to_right" />
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/iv_to_right"
+                    android:textSize="20sp"
+                    android:textColor="#919191" />
 
                 <ImageView
                     android:id="@+id/iv_to_right"
@@ -129,35 +137,36 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/default_gap"
                     android:src="@drawable/right_arrow" />
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/user_vk_layout"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
-                android:background="@drawable/popup_btn" >
+                android:background="@drawable/user_info_item_bg" >
 
-                <TextView
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_marginLeft="7dp"
-                    android:layout_toLeftOf="@+id/vk_iv_right"
-                    android:gravity="center_vertical"
-                    android:text="@string/vkontakte" >
-                </TextView>
+                    android:layout_marginLeft="@dimen/default_gap"
+                    android:background="@drawable/vk_icon" >
+                </ImageView>
 
                 <TextView
                     android:id="@+id/tv_vk_authstate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:layout_toLeftOf="@+id/vk_iv_right" />
+                    android:layout_marginRight="5dp"
+                    android:layout_toLeftOf="@+id/vk_iv_right"
+                    android:textSize="20sp"
+                    android:textColor="#919191" />
 
                 <ImageView
                     android:id="@+id/vk_iv_right"
@@ -165,24 +174,22 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
+                    android:layout_marginRight="@dimen/default_gap"
                     android:src="@drawable/right_arrow" />
             </RelativeLayout>
-
-            <Button
-                android:id="@+id/reset_pw_btn"
-                android:layout_width="match_parent"
-                android:layout_height="44dp"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                android:layout_marginTop="14dp"
-                android:background="@drawable/popup_btn"
-                android:gravity="left|center_vertical"
-                android:paddingLeft="7dp"
-                android:text="修改登陆密码" >
-            </Button>
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/reset_pw_btn"
+        style="@style/LandingPageButton"
+        android:layout_marginLeft="@dimen/default_gap"
+        android:layout_marginRight="@dimen/default_gap"
+        android:background="@drawable/modify_btn"
+        android:layout_above="@+id/login_out_btn"
+        android:text="修改登陆密码"
+        android:textColor="#313131" >
+    </Button>
 
     <Button
         android:id="@+id/login_out_btn"
@@ -193,7 +200,8 @@
         android:layout_marginRight="@dimen/default_gap"
         android:layout_marginTop="@dimen/default_gap_2x"
         android:background="@drawable/friend_info_send_btn"
+        android:textColor="@android:color/white"
         android:text="注销"
-        android:textColor="@android:color/white" />
+         />
 
 </RelativeLayout>

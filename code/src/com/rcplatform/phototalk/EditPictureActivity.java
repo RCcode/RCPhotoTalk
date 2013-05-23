@@ -22,7 +22,9 @@ import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -669,6 +671,8 @@ public class EditPictureActivity extends BaseActivity {
 						send();
 					}
 				} else {
+					//保存成功后 刷新本地相册
+					EditPictureActivity.this.getBaseContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
 					Toast.makeText(EditPictureActivity.this,
 							R.string.save_success, Toast.LENGTH_SHORT).show();
 				}

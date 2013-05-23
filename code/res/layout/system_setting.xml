@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/app_backgroud"
     android:orientation="vertical" >
 
     <include layout="@layout/base_top_navigate" />
@@ -10,22 +10,28 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/default_gap"
+        android:textSize="20sp"
+        android:textColor="#919191"
+        android:layout_marginLeft="@dimen/default_gap"
         android:text="@string/receive_setting" />
 
     <RelativeLayout
         android:id="@+id/rela_resetting"
         android:layout_width="fill_parent"
-        android:layout_height="44dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/popup_btn" >
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/default_gap"
+        android:layout_marginLeft="@dimen/default_gap"
+        android:layout_marginRight="@dimen/default_gap"
+        android:background="@drawable/modify_btn" >
 
         <TextView
             android:id="@+id/tv_resetting_current"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:textColor="#313131"
+            android:textSize="20sp"
+            android:layout_marginLeft="@dimen/default_gap"
             android:layout_centerVertical="true" />
 
         <ImageView
@@ -33,30 +39,36 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="@dimen/default_gap"
             android:src="@drawable/right_arrow" />
     </RelativeLayout>
 
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="@dimen/default_gap"
+        android:textSize="20sp"
+        android:textColor="#919191"
+        android:layout_marginLeft="@dimen/default_gap"
         android:text="@string/dynamic_setting" />
 
     <RelativeLayout
         android:id="@+id/rela_dysetting"
         android:layout_width="fill_parent"
-        android:layout_height="44dp"
-        android:layout_margin="10dp"
-        android:background="@drawable/popup_btn"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/default_gap"
+        android:layout_marginLeft="@dimen/default_gap"
+        android:layout_marginRight="@dimen/default_gap"
+        android:background="@drawable/modify_btn"
          >
 
         <TextView
             android:id="@+id/tv_dysetting_current"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:textColor="#313131"
+            android:textSize="20sp"
+            android:layout_marginLeft="@dimen/default_gap"
             android:layout_centerVertical="true" />
 
         <ImageView
@@ -64,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="@dimen/default_gap"
             android:src="@drawable/right_arrow" />
     </RelativeLayout>
 
