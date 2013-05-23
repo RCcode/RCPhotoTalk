@@ -34,6 +34,28 @@
         android:layout_marginTop="48dp"
         android:background="@drawable/logo" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="14dp"
+        android:text="分享瞬间"
+        android:textColor="#FF4000"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+    
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/page_indicator_other"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="25dp"
+        android:text="分享生活中每一个精彩瞬间"
+        android:textColor="#EAEAEA"
+        android:textSize="20sp" />
+
     <com.rcplatform.phototalk.views.PageIndicator
         android:id="@+id/page_indicator_other"
         style="@style/pageIndicator"
@@ -60,7 +82,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:src="@drawable/ic_launcher"
-            android:visibility="gone" />        -->
+            android:visibility="gone" />
+        -->
 
         <Button
             android:id="@id/init_page_login_button"

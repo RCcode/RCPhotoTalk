@@ -138,7 +138,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:src="@drawable/right_arrow" />
+                    android:src="@drawable/app_arrow" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -175,7 +175,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:src="@drawable/right_arrow" />
+                    android:src="@drawable/app_arrow" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

@@ -50,7 +50,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private Button editBtn;
 	private UserInfo userInfo;
 	private RelativeLayout edit_rcId, use_account_message;
-	private HorizontalListView mHrzListView;
+//	private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
 	private RoundImageView mHeadView;
@@ -79,7 +79,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		edit_rcId.setOnClickListener(this);
 		use_account_message = (RelativeLayout) findViewById(R.id.use_account_message);
 		use_account_message.setOnClickListener(this);
-		mHrzListView = (HorizontalListView) findViewById(R.id.my_friend_details_apps_listview);
+//		mHrzListView = (HorizontalListView) findViewById(R.id.my_friend_details_apps_listview);
 		mCleanBtn = (Button) findViewById(R.id.settings_clean_history_record_btn);
 		mCleanBtn.setOnClickListener(this);
 		user_bg_View = (ImageView) findViewById(R.id.user_bg);
