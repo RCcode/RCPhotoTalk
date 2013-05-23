@@ -3,7 +3,7 @@
 
     <!-- 朋友列表属性 -->
     <dimen name="friend_tiem_hight">74dp</dimen>
-    <dimen name="friend_head_left">4dp</dimen>
+    <dimen name="friend_head_left">8dp</dimen>
     <dimen name="friend_head_side">70dp</dimen>
     <dimen name="friend_text_padding">8dp</dimen>
     <!-- 朋友列表属性 -->

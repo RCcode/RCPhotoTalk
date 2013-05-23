@@ -4,12 +4,12 @@
     android:layout_height="wrap_content"
     android:background="#ffffff"
     android:gravity="center_vertical"
+    android:padding="@dimen/default_gap"
     android:orientation="horizontal" >
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/default_gap_2x" >
+        android:layout_height="wrap_content" >
 
         <LinearLayout
             android:id="@+id/showText"
