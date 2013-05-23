@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.thirdpart.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -9,7 +10,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 
+import com.hp.hpl.sparta.Document;
+import com.perm.kate.api.Album;
 import com.perm.kate.api.Api;
+import com.perm.kate.api.Photo;
 import com.perm.kate.api.User;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.VKAuthorizeActivity;
@@ -80,8 +84,7 @@ public class VKClient {
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-					mApi.sendMessage(mUid, 0, mContext.getString(R.string.third_part_join_content), mContext.getString(R.string.third_part_join_title), null,
-							null, null, null, null, null, null);
+					mApi.createWallPost(mUid, "加入PT发上墙啊发上墙", null, null, false, false, false, null, null, null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -129,7 +132,6 @@ public class VKClient {
 					mDeAuthorizeListener.onDeAuthorizeFail();
 				break;
 			case MSG_WHAT_DEAUTHORIZE_SUCCESS:
-				PrefsUtils.User.ThirdPart.clearVKAccount(mContext, mContext.getCurrentUser().getRcId());
 				if (mDeAuthorizeListener != null)
 					mDeAuthorizeListener.onDeAuthorizeSuccess();
 				break;
@@ -139,15 +141,11 @@ public class VKClient {
 
 	public void deAuthorize(OnDeAuthorizeListener listener) {
 		mDeAuthorizeListener = listener;
+		mContext.showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
 		Thread thread = new Thread() {
 			public void run() {
-				try {
-					mApi.unregisterDevice(mToken);
-					mVKHandler.sendEmptyMessage(MSG_WHAT_DEAUTHORIZE_SUCCESS);
-				} catch (Exception e) {
-					e.printStackTrace();
-					mVKHandler.sendEmptyMessage(MSG_WHAT_DEAUTHORIZE_FAIL);
-				}
+				PrefsUtils.User.ThirdPart.clearVKAccount(mContext, mContext.getCurrentUser().getRcId());
+				mVKHandler.sendEmptyMessage(MSG_WHAT_DEAUTHORIZE_SUCCESS);
 			};
 		};
 		thread.start();
@@ -159,8 +157,10 @@ public class VKClient {
 
 				for (String id : friendIds) {
 					try {
-						mApi.sendMessage(Long.parseLong(id), 0, mContext.getString(R.string.my_firend_invite_send_short_msg),
-								mContext.getString(R.string.invate_friend), null, null, null, null, null, null, null);
+						List<String> attachments = new ArrayList<String>();
+						attachments.add("http://www.google.co.jp");
+						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.my_firend_invite_send_short_msg), attachments, null, false, false,
+								false, null, null, null, null);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
