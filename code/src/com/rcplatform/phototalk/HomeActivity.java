@@ -115,6 +115,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		InformationPageController.getInstance().setupController(this);
 		initViewAndListener();
 		loadDataFromDataBase();
+		onNewTrends();
 		checkUpdate();
 		checkTrends();
 	}
