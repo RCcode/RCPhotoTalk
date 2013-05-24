@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.controller.SettingPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.JSONConver;
@@ -48,8 +49,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private Button mCleanBtn;
 	private Button editBtn;
 	private UserInfo userInfo;
-	private RelativeLayout edit_rcId, use_account_message,my_friend_dynamic;
-//	private HorizontalListView mHrzListView;
+	private RelativeLayout edit_rcId, use_account_message, my_friend_dynamic;
+	// private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
 	private RoundImageView mHeadView;
@@ -69,6 +70,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings);
+		SettingPageController.getInstance().setActivity(this);
 		app = (PhotoTalkApplication) getApplication();
 		initTitle();
 		mImageLoader = ImageLoader.getInstance();
@@ -86,11 +88,11 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		use_account_message.setOnClickListener(this);
 		// mHrzListView = (HorizontalListView)
 		// findViewById(R.id.my_friend_details_apps_listview);
-		my_friend_dynamic = (RelativeLayout)findViewById(R.id.my_friend_dynamic);
+		my_friend_dynamic = (RelativeLayout) findViewById(R.id.my_friend_dynamic);
 		my_friend_dynamic.setOnClickListener(this);
-		
-		
-//		mHrzListView = (HorizontalListView) findViewById(R.id.my_friend_details_apps_listview);
+
+		// mHrzListView = (HorizontalListView)
+		// findViewById(R.id.my_friend_details_apps_listview);
 		mCleanBtn = (Button) findViewById(R.id.settings_clean_history_record_btn);
 		mCleanBtn.setOnClickListener(this);
 		user_bg_View = (ImageView) findViewById(R.id.user_bg);
@@ -276,6 +278,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		SettingPageController.getInstance().destroy();
 	}
 
 	public String decodeUtil(String content, String name) {

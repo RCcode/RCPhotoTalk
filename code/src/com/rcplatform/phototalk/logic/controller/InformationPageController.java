@@ -117,6 +117,11 @@ public class InformationPageController {
 			mActivity.onNewInformation(infos.get(PhotoTalkDatabase.UPDATED_INFORMATION), infos.get(PhotoTalkDatabase.NEW_INFORMATION));
 	}
 
+	public void onNewTread() {
+		if (mActivity != null)
+			mActivity.onNewTrends();
+	}
+
 	public void destroy() {
 		mActivity = null;
 	}
