@@ -58,6 +58,7 @@ public class FriendDynamicActivity extends BaseActivity {
 	private final int GET_UPDOWN = 2;
 	private final int UPDATE_UI = 3;
 	private int pageSize = 1;
+	private String time = "0";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +86,13 @@ public class FriendDynamicActivity extends BaseActivity {
 					public void onPullDownToRefresh(
 							PullToRefreshBase refreshView) {
 						// TODO Auto-generated method stub
-						pageSize++;
 						getFriendDynamic(1, GET_PULLDOWN);
 					}
 
 					@Override
 					public void onPullUpToRefresh(PullToRefreshBase refreshView) {
 						// TODO Auto-generated method stub
+						pageSize++;
 						getFriendDynamic(pageSize, GET_UPDOWN);
 					}
 				});
@@ -105,6 +106,9 @@ public class FriendDynamicActivity extends BaseActivity {
 	}
 
 	private void getFriendDynamic(final int page, final int type) {
+		if (type == GET_PULLDOWN) {
+			time = "0";
+		}
 		FriendsProxy.getMyFriendDynamic(
 				FriendDynamicActivity.this,
 				new RCPlatformResponseHandler() {
@@ -123,7 +127,7 @@ public class FriendDynamicActivity extends BaseActivity {
 					}
 				}, PrefsUtils.User.getShowedMaxTrendsId(
 						getApplicationContext(), getCurrentUser().getRcId()),
-				page, 10, "0");
+				page, 10, time);
 	}
 
 	private Handler myHandler = new Handler() {
@@ -142,12 +146,10 @@ public class FriendDynamicActivity extends BaseActivity {
 				break;
 			case GET_UPDOWN:
 				List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
-				if (listDynamic != null) {
-					uplist.addAll(listDynamic);
-
+				if (uplist != null) {
+					listDynamic.clear();
+					listDynamic.addAll(uplist);
 				}
-				listDynamic.clear();
-				listDynamic.addAll(uplist);
 				friendDynameicList.onRefreshComplete();
 				adpter.notifyDataSetChanged();
 				break;
@@ -178,7 +180,9 @@ public class FriendDynamicActivity extends BaseActivity {
 					getCurrentUser().getRcId(), n);
 			myHandler.obtainMessage(UPDATE_UI).sendToTarget();
 		}
-
+		if (jsonObject.has("time")) {
+			time = jsonObject.getString("time");
+		}
 		return friends;
 	}
 
