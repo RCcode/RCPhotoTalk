@@ -42,9 +42,9 @@ public class RCPlatformImageLoader {
 		imageLoader.displayImage(url, imageView);
 	}
 
-	public static synchronized void LoadPictureForList(final Context context, final ProgressBar bar, final TextView statu, ListView listView, ImageLoader imageLoader, DisplayImageOptions options, final Information record) {
+	public static synchronized void LoadPictureForList(final Context context,ListView listView, ImageLoader imageLoader, DisplayImageOptions options, final Information record) {
 		String url = record.getUrl();
-		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(url), new HomeRecordLoadPicListener(listView, bar, statu, context, record));
+		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(url), new HomeRecordLoadPicListener(listView, context, record));
 	}
 
 	public static boolean isFileExist(Context context, String url) {

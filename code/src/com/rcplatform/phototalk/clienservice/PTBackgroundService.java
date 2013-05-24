@@ -3,6 +3,7 @@ package com.rcplatform.phototalk.clienservice;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlarmManager;
@@ -14,7 +15,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.telephony.SmsManager;
 
 import com.facebook.Request;
@@ -33,7 +36,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -50,6 +53,8 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class PTBackgroundService extends Service {
+
+	private static final int MSG_WHAT_NEWINFOS = 20000;
 
 	private static final long BIND_STATE_CHECK_DELAY_TIME = 30 * 1000;
 	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 30;
@@ -479,16 +484,25 @@ public class PTBackgroundService extends Service {
 
 		@Override
 		public void onReceive(Context context, final Intent intent) {
+			LogUtil.e("gcm receive informations....");
 			if (mCurrentUser != null) {
 				Thread thread = new Thread() {
 					public void run() {
-						List<Information> locals = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
 						List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(UserMessageService.MESSAGE_CONTENT_KEY));
-						LogicUtils.informationFilter(getBaseContext(), gcms, locals);
+						Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(gcms, mCurrentUser);
+						Message msg = newInformationHandler.obtainMessage();
+						msg.what = MSG_WHAT_NEWINFOS;
+						msg.obj = result;
+						newInformationHandler.sendMessage(msg);
 					};
 				};
 				thread.start();
 			}
+		};
+	};
+	private static Handler newInformationHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
 		};
 	};
 }

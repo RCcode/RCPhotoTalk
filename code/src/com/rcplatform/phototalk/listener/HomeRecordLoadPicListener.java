@@ -21,19 +21,13 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	private final ListView listView;
 
-	private ProgressBar bar;
-
-	private TextView statu;
 
 	private final Context context;
 
 	private final Information record;
 
-	public HomeRecordLoadPicListener(ListView listView, ProgressBar bar, TextView textView, Context context, Information record) {
-		super();
+	public HomeRecordLoadPicListener(ListView listView,Context context, Information record) {
 		this.listView = listView;
-		this.bar = bar;
-		this.statu = textView;
 		this.context = context;
 		this.record = record;
 	}
@@ -73,29 +67,29 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	private void updateView(int visibitity, String text) {
 		String baseTag = PhotoTalkUtils.getInformationTagBase(record);
-		if (bar == null) {
-			if (listView != null) {
-				bar = (ProgressBar) listView.findViewWithTag(baseTag + ProgressBar.class.getName());
-			}
-		}
-		if (bar != null) {
-			String barTag = (String) bar.getTag();
-			if (barTag.equals(baseTag + ProgressBar.class.getName())) {
+		if (listView != null) {
+			ProgressBar bar = (ProgressBar) listView.findViewWithTag(baseTag + ProgressBar.class.getName());
+			if (bar != null)
 				bar.setVisibility(visibitity);
-			}
-		}
-
-		if (statu == null) {
-			if (listView != null) {
-				statu = (TextView) listView.findViewWithTag(baseTag + TextView.class.getName());
-			}
-		}
-
-		if (statu != null) {
-			String statuTag = (String) statu.getTag();
-			if (statuTag.equals(baseTag + TextView.class.getName())) {
+			TextView statu = (TextView) listView.findViewWithTag(baseTag + TextView.class.getName());
+			if (statu != null)
 				statu.setText(text);
-			}
+
 		}
+		//
+		// if (statu == null) {
+		// if (listView != null) {
+		// statu = (TextView) listView.findViewWithTag(baseTag +
+		// TextView.class.getName());
+		// if()
+		// }
+		// }
+		//
+		// if (statu != null) {
+		// String statuTag = (String) statu.getTag();
+		// if (statuTag.equals(baseTag + TextView.class.getName())) {
+		//
+		// }
+		// }
 	}
 }

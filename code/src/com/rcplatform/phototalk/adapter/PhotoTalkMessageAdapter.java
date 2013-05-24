@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -47,11 +48,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private Information mPressedInformation;
 	private int mPressedPosition = -1;
+	private ListView mList;
 
-	public PhotoTalkMessageAdapter(Context context, List<Information> data) {
+	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list) {
 		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = ImageLoader.getInstance();
+		this.mList = list;
 	}
 
 	@Override
@@ -202,8 +205,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			RCPlatformImageLoader
-					.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
+			RCPlatformImageLoader.LoadPictureForList(context, mList, mImageLoader, ImageOptionsFactory.getReceiveImageOption(),
+					record);
 			holder.statuButton.stopTask();
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
@@ -216,7 +219,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.receive_downloading);
-				RCPlatformImageLoader.LoadPictureForList(context, holder.bar, holder.statu, null, mImageLoader, ImageOptionsFactory.getReceiveImageOption(),
+				RCPlatformImageLoader.LoadPictureForList(context,  mList, mImageLoader, ImageOptionsFactory.getReceiveImageOption(),
 						record);
 				holder.statuButton.stopTask();
 			}

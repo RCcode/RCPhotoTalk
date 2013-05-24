@@ -152,14 +152,14 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
 			TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 			final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
-//			View sourceView = convertView.findViewById(R.id.add_friend_list_item_source);
+			View sourceView = convertView.findViewById(R.id.add_friend_list_item_source);
 			FriendSourse source = friend.getSource();
-//			if (source == null) {
-//				sourceView.setVisibility(View.GONE);
-//			} else {
-//				sourceView.setVisibility(View.VISIBLE);
+			if (source == null) {
+				sourceView.setVisibility(View.GONE);
+			} else {
+				sourceView.setVisibility(View.VISIBLE);
 				TextView tvFrom = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_from);
-//				TextView tvName = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_name);
+				TextView tvName = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_name);
 				switch (source.getAttrType()) {
 				case FriendType.CONTACT:
 					tvFrom.setText(R.string.contact_friend);
@@ -168,8 +168,8 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					tvFrom.setText(R.string.facebook_friend);
 					break;
 				}
-//				tvName.setText(source.getName());
-//			}
+				tvName.setText(source.getName());
+			}
 
 			RCPlatformImageLoader.loadImage(SearchFriendsActivity.this, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
 					AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, portraitImage, R.drawable.default_head);

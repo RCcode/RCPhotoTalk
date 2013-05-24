@@ -82,7 +82,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			showErrorConfirmDialog(R.string.register_password_error);
 			return;
 		}
-		mCurrentPassword = MD5.md5Hash(currentPassword);
+		mCurrentPassword = MD5.encodeMD5String(currentPassword);
 		UserSettingProxy.checkCurrentPassword(this, new RCPlatformResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -131,6 +131,6 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			public void onFailure(int errorCode, String content) {
 				showErrorConfirmDialog(content);
 			}
-		}, MD5.md5Hash(newPassword), mCurrentPassword);
+		}, MD5.encodeMD5String(newPassword), mCurrentPassword);
 	}
 }

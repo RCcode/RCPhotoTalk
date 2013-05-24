@@ -109,6 +109,9 @@ public class PrefsUtils {
 		private static final String PREF_KEY_VK_ACCESSTOKEN = "vk_access_token";
 		private static final String PREF_KEY_VK_USERID = "vk_userid";
 
+		private static final String PREF_KEY_TRENDS_MAX_ID = "trendsmaxid";
+		private static final String PREF_KEY_TRENDS_SHOWED_MAX_ID = "showedtrendsmaxid";
+
 		public static class ThirdPart {
 
 			public static void setFacebookUserName(Context context, String pref, String userName) {
@@ -128,10 +131,12 @@ public class PrefsUtils {
 			public static long getFacebookLastAsyncTime(Context context, String pref) {
 				return getPreference(context, pref).getLong(PREF_KEY_FACEBOOK_ASYNC_TIME, 0);
 			}
-			public static void clearFacebookAccount(Context context, String pref){
+
+			public static void clearFacebookAccount(Context context, String pref) {
 				SharedPreferences sh = getPreference(context, pref);
 				sh.edit().remove(PREF_KEY_FACEBOOK_ASYNC_TIME).remove(PREF_KEY_FACEBOOK_NAME).commit();
 			}
+
 			public static void saveVKAccount(Context context, String pref, String accessToken, long userId) {
 				SharedPreferences prefs = getPreference(context, pref);
 				Editor editor = prefs.edit();
@@ -290,6 +295,31 @@ public class PrefsUtils {
 		public static String getBackground(Context context, String pref) {
 			SharedPreferences sh = getPreference(context, pref);
 			return sh.getString(Constants.KEY_BACKGROUND, null);
+		}
+
+		public static void saveShowedMaxTrendsId(Context context, String pref, int id) {
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putInt(PREF_KEY_TRENDS_SHOWED_MAX_ID, id).commit();
+		}
+
+		public static int getShowedMaxTrendsId(Context context, String pref) {
+			return getPreference(context, pref).getInt(PREF_KEY_TRENDS_SHOWED_MAX_ID, 0);
+		}
+
+		public static void saveMaxTrendsId(Context context, String pref, int id) {
+			SharedPreferences sh = getPreference(context, pref);
+			sh.edit().putInt(PREF_KEY_TRENDS_MAX_ID, id).commit();
+		}
+
+		public static int getMaxTrendsId(Context context, String pref) {
+			return getPreference(context, pref).getInt(PREF_KEY_TRENDS_MAX_ID, 0);
+		}
+		
+		public static void saveMaxTrendUrl(Context context, String pref,String url){
+			
+		}
+		public static String getMaxTrendUrl(Context context, String pref){
+			return null;
 		}
 	}
 }

@@ -1,14 +1,17 @@
 package com.rcplatform.phototalk.utils;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.bean.AppInfo;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 
 public class PhotoTalkUtils {
-
-
 
 	public static String getSexString(Context context, int sex) {
 		String result = null;
@@ -35,8 +38,22 @@ public class PhotoTalkUtils {
 	public static String getUnZipDirPath(String url) {
 		return getFilePath(url) + Constants.PhotoInformationCache.UNZIP_SUFFIX;
 	}
-	
-	public static String getInformationTagBase(Information information){
-			return information.getReceiver().getRcId()+"|"+information.getSender().getRcId()+"|"+information.getCreatetime();
+
+	public static String getInformationTagBase(Information information) {
+		return information.getReceiver().getRcId() + "|" + information.getSender().getRcId() + "|" + information.getCreatetime();
+	}
+
+	public static Friend userToFriend(UserInfo userInfo) {
+		Friend friend = new Friend();
+		friend.setRcId(userInfo.getRcId());
+		friend.setBackground(userInfo.getBirthday());
+		friend.setGender(userInfo.getGender());
+		friend.setAppList(new ArrayList<AppInfo>(Constants.userApps.keySet()));
+		friend.setCellPhone(userInfo.getCellPhone());
+		friend.setHeadUrl(userInfo.getHeadUrl());
+		friend.setBackground(userInfo.getBackground());
+		friend.setFriend(true);
+		friend.setNickName(userInfo.getNickName());
+		return friend;
 	}
 }

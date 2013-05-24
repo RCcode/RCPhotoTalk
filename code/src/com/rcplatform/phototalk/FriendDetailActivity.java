@@ -22,19 +22,16 @@ import com.rcplatform.phototalk.adapter.AppAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.HorizontalListView;
 import com.rcplatform.phototalk.views.RoundImageView;
-//github.com/RCcode/RCPhotoTalk.git
 
 public class FriendDetailActivity extends BaseActivity {
 	private Friend mFriend;
@@ -45,12 +42,12 @@ public class FriendDetailActivity extends BaseActivity {
 	private String mAction;
 	private RoundImageView ivHead;
 	private ImageView ivBackground;
-	private Button btnEdit;
 	private TextView tvSexAge;
 	private HorizontalListView hlvApps;
 	private TextView tvSource;
 	private Button btnPerform;
 	private PopupWindow mRemarkEditWindow;
+	private View linearSource;
 
 	private String mLastRemark;
 
@@ -63,19 +60,11 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendInfo() {
-		
-		RCPlatformImageLoader.loadImage(FriendDetailActivity.this,
-				ImageLoader.getInstance(),
-				ImageOptionsFactory.getHeadImageOptions(),
-				mFriend.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, ivHead,
-				R.drawable.default_head);
-		RCPlatformImageLoader.loadImage(FriendDetailActivity.this,
-				ImageLoader.getInstance(),
-				ImageOptionsFactory.getDefaultImageOptions(),
-				mFriend.getBackground(),
-				AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, ivBackground,
-				R.drawable.user_detail_bg);
+
+		RCPlatformImageLoader.loadImage(FriendDetailActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getHeadImageOptions(), mFriend.getHeadUrl(),
+				AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, ivHead, R.drawable.default_head);
+		RCPlatformImageLoader.loadImage(FriendDetailActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getDefaultImageOptions(),
+				mFriend.getBackground(), AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, ivBackground, R.drawable.user_detail_bg);
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
@@ -88,21 +77,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
-		com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend, new FriendDetailListener() {
-
-			@Override
-			public void onSuccess(Friend friend) {
-				if (friend.getLocalName() != null && !friend.getLocalName().equals(mFriend.getLocalName())) {
-					friend.setLocalName(mFriend.getLocalName());
-					PhotoTalkDatabaseFactory.getDatabase().updateFriend(friend);
-				}
-			}
-
-			@Override
-			public void onError(int errorCode, String content) {
-
-			}
-		}, true);
+		com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend, null, true);
 		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		mAction = getIntent().getAction();
@@ -110,7 +85,6 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void coverToRecommendView() {
 		hlvApps.setVisibility(View.GONE);
-		btnEdit.setVisibility(View.GONE);
 		btnPerform.setText(R.string.add_to_friend);
 		btnPerform.setOnClickListener(new OnClickListener() {
 
@@ -145,7 +119,6 @@ public class FriendDetailActivity extends BaseActivity {
 				startTakePhotoActivity();
 			}
 		});
-		btnEdit.setVisibility(View.VISIBLE);
 	}
 
 	private void startTakePhotoActivity() {
@@ -155,14 +128,13 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void initView() {
+		linearSource = findViewById(R.id.linear_source);
 		ivHead = (RoundImageView) findViewById(R.id.iv_head);
 		ivBackground = (ImageView) findViewById(R.id.iv_bg);
-		btnEdit = (Button) findViewById(R.id.btn_edit);
 		tvSexAge = (TextView) findViewById(R.id.tv_sex_age);
 		hlvApps = (HorizontalListView) findViewById(R.id.hlv_apps);
 		tvSource = (TextView) findViewById(R.id.tv_source_name);
 		tvName = (TextView) findViewById(R.id.tv_name);
-		btnEdit.setOnClickListener(mOnClickListener);
 		btnPerform = (Button) findViewById(R.id.btn_perform);
 		if (mAction.equals(Constants.Action.ACTION_FRIEND_DETAIL)) {
 			coverToFriendView();
@@ -170,6 +142,10 @@ public class FriendDetailActivity extends BaseActivity {
 			coverToRecommendView();
 		}
 		setFriendInfo();
+		if (mFriend.getRcId().equals(getCurrentUser().getRcId())) {
+			linearSource.setVisibility(View.GONE);
+		}
+
 	}
 
 	private void setFriendSource(FriendSourse source) {
@@ -184,17 +160,6 @@ public class FriendDetailActivity extends BaseActivity {
 		tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName());
 	}
 
-	private OnClickListener mOnClickListener = new OnClickListener() {
-
-		@Override
-		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.btn_edit:
-				showRemaikWindow(v);
-				break;
-			}
-		}
-	};
 	private TextView tvName;
 
 	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {

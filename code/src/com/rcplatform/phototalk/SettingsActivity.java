@@ -37,7 +37,6 @@ import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.views.HorizontalListView;
 import com.rcplatform.phototalk.views.RoundImageView;
 
 public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
@@ -50,7 +49,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private Button editBtn;
 	private UserInfo userInfo;
 	private RelativeLayout edit_rcId, use_account_message;
-//	private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
 	private RoundImageView mHeadView;
@@ -62,6 +60,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private RelativeLayout viewAbout;
 	private PhotoTalkApplication app;
 	private int CAMERA_CODE = 0;
+	private View newTrend;
+	private ImageView ivTrend;
+	private ImageLoader mImageLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +70,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		setContentView(R.layout.settings);
 		app = (PhotoTalkApplication) getApplication();
 		initTitle();
+		mImageLoader = ImageLoader.getInstance();
+		newTrend = findViewById(R.id.rela_new_trend);
+		ivTrend = (ImageView) findViewById(R.id.iv_trend_head);
 		mHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
 		mNickView = (TextView) findViewById(R.id.settings_user_nick);
@@ -79,7 +83,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		edit_rcId.setOnClickListener(this);
 		use_account_message = (RelativeLayout) findViewById(R.id.use_account_message);
 		use_account_message.setOnClickListener(this);
-//		mHrzListView = (HorizontalListView) findViewById(R.id.my_friend_details_apps_listview);
+		// mHrzListView = (HorizontalListView)
+		// findViewById(R.id.my_friend_details_apps_listview);
 		mCleanBtn = (Button) findViewById(R.id.settings_clean_history_record_btn);
 		mCleanBtn.setOnClickListener(this);
 		user_bg_View = (ImageView) findViewById(R.id.user_bg);
@@ -334,7 +339,14 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		return cachePath;
 	}
 
-	private void getUserInfo() {
+	public void onNewTrend(boolean show, String url) {
+		if (!show)
+			newTrend.setVisibility(View.GONE);
+		else {
+			newTrend.setVisibility(View.VISIBLE);
+			RCPlatformImageLoader.displayImage(this, ivTrend, url, mImageLoader);
+		}
 
 	}
+
 }
