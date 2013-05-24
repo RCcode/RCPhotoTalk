@@ -204,7 +204,7 @@
                     android:orientation="vertical" >
 
                     <RelativeLayout
-                        android:id="@id/settings_account_tacotyid_pandle"
+                        android:id="@+id/my_friend_dynamic"
                         android:layout_width="match_parent"
                         android:layout_height="44dp" >
 
