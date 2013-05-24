@@ -3,7 +3,6 @@ package com.rcplatform.phototalk;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +32,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
@@ -45,10 +43,10 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
-import com.rcplatform.phototalk.utils.PinyinComparator;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
 
@@ -116,7 +114,13 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 					SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
 					seleFriends.add(seleFriend);
 				}
-//				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
+				SelectFriend user = new SelectFriend();
+				user.setNickName(app.getCurrentUser().getNickName());
+				user.setRcId(app.getCurrentUser().getRcId());
+				user.setHeadUrl(app.getCurrentUser().getHeadUrl());
+				user.setLetter(RCPlatformTextUtil.getLetter(getCurrentUser().getNickName()));
+				seleFriends.add(user);
+				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
 				getFriends();
 			};
 		};
@@ -171,14 +175,14 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			tempFilePath = app.getSendZipFileCachePath() +"/"+System.currentTimeMillis()+ ".zip";
+			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		File file = new File(tempFilePath);
 		if (file.exists()) {
-			//删除 录音和照片 zip 压缩包不删除
+			// 删除 录音和照片 zip 压缩包不删除
 			deleteTemp();
 			sendPicture(tempFilePath, timeLimit, sendData);
 		} else {
@@ -213,35 +217,16 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		});
 	}
 
-	private List<SelectFriend> jsonToFriends(String json) throws JSONException {
+	private void jsonToFriends(String json) throws JSONException {
 		JSONObject jsonObject = new JSONObject(json);
 		if (isRequestStatusOK(jsonObject)) {
 			JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
-			Gson gson = new Gson();
-			List<SelectFriend> friends = gson.fromJson(myFriendsArray.toString(), new com.google.gson.reflect.TypeToken<ArrayList<SelectFriend>>() {
-			}.getType());
-			List<Friend> friendsCache = new ArrayList<Friend>();
+			List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
 			for (Friend friend : friends) {
 				friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
 				friend.setFriend(true);
-				friendsCache.add(friend);
 			}
-			PhotoTalkDatabaseFactory.getDatabase().saveFriends(friendsCache);
-			SelectFriend user = new SelectFriend();
-			user.setNickName(app.getCurrentUser().getNickName());
-			user.setRcId(app.getCurrentUser().getRcId());
-			user.setHeadUrl(app.getCurrentUser().getHeadUrl());
-			friends.add(user);
-
-			TreeSet<SelectFriend> fs = new TreeSet<SelectFriend>(new PinyinComparator());
-			fs.addAll(friends);
-			friends.clear();
-			friends.addAll(fs);
-			fs.clear();
-			return friends;
-		} else {
-			sendStringMessage(MSG_WHAT_ERROR, jsonObject.getString(PhotoTalkApiFactory.RESPONSE_KEY_MESSAGE));
-			return null;
+			PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
 		}
 	}
 
@@ -401,13 +386,9 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
-					List<SelectFriend> friends = jsonToFriends(content);
-					if (friends != null && friends.size() > 0) {
-						mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
-					}
+					jsonToFriends(content);
 				} catch (JSONException e) {
 					e.printStackTrace();
-//					sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
 				}
 			}
 

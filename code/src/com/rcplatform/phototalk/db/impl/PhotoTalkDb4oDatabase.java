@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.db.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -340,13 +341,13 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void saveRecommends(List<Friend> recommends, final int friendType) {
+	public synchronized void saveRecommends(List<Friend> recommends, final int friendType) {
 		ObjectSet<Friend> result = db.query(Friend.class);
 		updateFriendsAndStore(result, recommends);
 		db.commit();
 	}
 
-	private void updateFriendsAndStore(ObjectSet<Friend> caches, List<Friend> serviceFriends) {
+	private synchronized void updateFriendsAndStore(ObjectSet<Friend> caches, List<Friend> serviceFriends) {
 		List<Friend> localFriends = new ArrayList<Friend>();
 		localFriends.addAll(caches);
 		for (Friend fService : serviceFriends) {
@@ -364,7 +365,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public List<Friend> getHidenFriends() {
+	public synchronized List<Friend> getHidenFriends() {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
 			private static final long serialVersionUID = 1L;
 
@@ -379,7 +380,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void updateFriend(final Friend friend) {
+	public synchronized void updateFriend(final Friend friend) {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
 			private static final long serialVersionUID = 1L;
 
@@ -397,5 +398,74 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		friend.setHiden(isHiden);
 		db.store(friend);
 		db.commit();
+	}
+
+	@Override
+	public synchronized Map<Integer, List<Information>> filterNewInformations(Collection<Information> newInformations, UserInfo currentUser) {
+		long receiveTime = System.currentTimeMillis();
+		List<Information> updatedInfos = new ArrayList<Information>();
+		List<Information> newInfos = new ArrayList<Information>();
+		List<Information> localInformations = new ArrayList<Information>();
+		localInformations.addAll(db.query(Information.class));
+		for (Information newInfo : newInformations) {
+			newInfo.setReceiveTime(receiveTime);
+			if (localInformations.contains(newInfo)) {
+				Information localInfo = localInformations.get(localInformations.indexOf(newInfo));
+				localInfo = updateInformation(currentUser, localInfo, newInfo);
+				if (localInfo != null)
+					db.store(localInfo);
+				updatedInfos.add(localInfo);
+			} else {
+				db.store(newInfo);
+				newInfos.add(newInfo);
+			}
+		}
+		db.commit();
+		Map<Integer, List<Information>> result = new HashMap<Integer, List<Information>>();
+		result.put(NEW_INFORMATION, newInfos);
+		result.put(UPDATED_INFORMATION, updatedInfos);
+		return result;
+	}
+
+	private Information updateInformation(UserInfo userInfo, Information localInformation, Information newInformation) {
+		Information informationUpdated = null;
+		if (newInformation.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
+			informationUpdated = updateFriendRequestInformation(localInformation, newInformation);
+		} else if (newInformation.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
+			if (userInfo.getRcId().equals(newInformation.getSender().getRcId())
+					&& !newInformation.getReceiver().getRcId().equals(newInformation.getSender().getRcId())) {
+				informationUpdated = updateInformationSended(localInformation, newInformation);
+			}
+		}
+		return informationUpdated;
+	}
+
+	private Information updateInformationSended(Information localInformation, Information newInformation) {
+		switch (localInformation.getStatu()) {
+		case InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING:
+			localInformation.setStatu(newInformation.getStatu());
+			break;
+		case InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD: {
+			int newState = newInformation.getStatu();
+			if (newState == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
+					|| newState == InformationState.PhotoInformationState.STATU_NOTICE_OPENED)
+				localInformation.setStatu(newState);
+		}
+			break;
+		case InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED: {
+			int newState = newInformation.getStatu();
+			if (newState == InformationState.PhotoInformationState.STATU_NOTICE_OPENED)
+				localInformation.setStatu(newState);
+		}
+			break;
+		default:
+			break;
+		}
+		return localInformation;
+	}
+
+	private Information updateFriendRequestInformation(Information localInformation, Information newInformation) {
+		localInformation.setStatu(newInformation.getStatu());
+		return localInformation;
 	}
 }

@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.db;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,10 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 
 public interface PhotoTalkDatabase {
+	public static final Integer NEW_INFORMATION=1;
+	public static final Integer UPDATED_INFORMATION=2;
+	
+	
 	public boolean hasFriend(String suid);
 
 	public List<Friend> getThirdPartFriends(int type);
@@ -28,7 +33,7 @@ public interface PhotoTalkDatabase {
 	public void updateFriendRequestInformationByFriend(Friend friend);
 
 	public Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime, List<String> receivableUserIds,
-			final List<String> allReceiverIds, int state,int totleLength);
+			final List<String> allReceiverIds, int state, int totleLength);
 
 	public void saveFriends(List<Friend> friends);
 
@@ -55,5 +60,7 @@ public interface PhotoTalkDatabase {
 	public List<Friend> getHidenFriends();
 
 	public void updateFriend(Friend friend);
+
+	public Map<Integer, List<Information>> filterNewInformations(Collection<Information> newInformations, UserInfo currentUser);
 
 }

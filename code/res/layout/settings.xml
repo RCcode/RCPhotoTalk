@@ -222,7 +222,8 @@
                         android:layout_height="44dp" >
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:id="@+id/tv_friend_trends"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
@@ -230,6 +231,31 @@
                             android:text="好友动态"
                             android:textColor="#313131" >
                         </TextView>
+
+                        <RelativeLayout
+                            android:id="@+id/rela_new_trend"
+                            android:layout_width="@dimen/trend_new_icon_width"
+                            android:layout_height="@dimen/trend_new_icon_width"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="5dp"
+                            android:layout_toRightOf="@+id/tv_friend_trends"
+                            android:visibility="gone" >
+
+                            <ImageView
+                                android:id="@+id/iv_trend_head"
+                                android:layout_width="fill_parent"
+                                android:layout_height="fill_parent"
+                                android:layout_marginRight="@dimen/new_point_margin"
+                                android:layout_marginTop="@dimen/new_point_margin"
+                                android:src="@drawable/ic_launcher" />
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_alignParentTop="true"
+                                android:src="@drawable/item_new_bg" />
+                        </RelativeLayout>
 
                         <ImageView
                             android:layout_width="wrap_content"

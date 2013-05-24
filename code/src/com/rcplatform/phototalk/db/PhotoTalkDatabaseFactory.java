@@ -14,15 +14,15 @@ public class PhotoTalkDatabaseFactory {
 		mDatabase = new PhotoTalkDb4oDatabase(userInfo);
 	}
 
-	public static PhotoTalkDatabase getDatabase() {
+	public static synchronized PhotoTalkDatabase getDatabase() {
 		return mDatabase;
 	}
 
-	public static RequestDatabase getRequestDatabase() {
+	public static synchronized RequestDatabase getRequestDatabase() {
 		return RequestDb4oDatabase.getInstance();
 	}
 
-	public static GlobalDatabase getGlobalDatabase() {
+	public static synchronized GlobalDatabase getGlobalDatabase() {
 		return PhotoTalkDb4oGlobalDatabase.getInstance();
 	}
 

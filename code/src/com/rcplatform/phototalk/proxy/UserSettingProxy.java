@@ -33,4 +33,12 @@ public class UserSettingProxy {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_ALL_APPS_URL, responseHandler);
 		request.excuteAsync();
 	}
+
+	public static Request checkTrends(Context context, RCPlatformResponseHandler responseHandler, int maxTrendId) {
+		Request request = new Request(context, PhotoTalkApiUrl.CHECK_TRENDS_URL, responseHandler);
+		request.putParam(PhotoTalkParams.CheckTrends.PARAM_KEY_TRENDID, maxTrendId + "");
+		request.excuteAsync();
+		return request;
+	}
+
 }

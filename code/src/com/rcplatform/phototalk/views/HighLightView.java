@@ -23,6 +23,10 @@ public class HighLightView extends View {
 	private Rect mBlackRectTop;
 
 	private Rect mBlackRectBottom;
+	
+	private Rect mBlackRectLeft;
+
+	private Rect mBlackRectRight;
 
 	private Rect mTransportRect;
 
@@ -72,7 +76,7 @@ public class HighLightView extends View {
 	private final int SCALE_MARGIN = 1;
 
 	// 屏幕逻辑宽
-	private final int SCALE_FULL = 16;
+	private final int SCALE_FULL = 8;
 
 	public HighLightView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -114,7 +118,9 @@ public class HighLightView extends View {
 
 		mTransportRect = new Rect(transX, transY, transW, transH);
 		mBlackRectTop = new Rect(0, 0, width, transY);
-		mBlackRectBottom = new Rect(0, height - transH - transY, width, transY);
+		mBlackRectBottom = new Rect(0, height - transY, width, height);
+		mBlackRectLeft = new Rect(0,transY,transX,height - transY);
+		mBlackRectRight = new Rect(width - transX ,transY,width,height - transY);
 		invalidate();
 	}
 
@@ -363,12 +369,14 @@ public class HighLightView extends View {
 
 		canvas.drawBitmap(mBlackBitmap, null, mBlackRectTop, mPaint);
 		canvas.drawBitmap(mBlackBitmap, null, mBlackRectBottom, mPaint);
+		canvas.drawBitmap(mBlackBitmap, null, mBlackRectLeft, mPaint);
+		canvas.drawBitmap(mBlackBitmap, null, mBlackRectRight, mPaint);
 		mPaint.setColor(getResources().getColor(R.color.cut_image_boarder));
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeWidth(boaderWidth);
-		canvas.drawLine(mTransportRect.left, mTransportRect.top - boaderWidth / 2, mTransportRect.right, mTransportRect.top - boaderWidth / 2, mPaint);
-		canvas.drawLine(mTransportRect.left, mTransportRect.bottom + boaderWidth / 2, mTransportRect.right, mTransportRect.bottom + boaderWidth / 2,
-		                mPaint);
+//		canvas.drawLine(mTransportRect.left, mTransportRect.top - boaderWidth / 2, mTransportRect.right, mTransportRect.top - boaderWidth / 2, mPaint);
+//		canvas.drawLine(mTransportRect.left, mTransportRect.bottom + boaderWidth / 2, mTransportRect.right, mTransportRect.bottom + boaderWidth / 2,
+//		                mPaint);
 	}
 
 	public Rect getTranRectInWindow() {

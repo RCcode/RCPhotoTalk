@@ -33,6 +33,7 @@ import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.pulltorefresh.library.PullToRefreshBase;
 import com.rcplatform.phototalk.pulltorefresh.library.PullToRefreshListView;
@@ -41,6 +42,7 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PinyinComparator;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.HeadImageView;
 
@@ -54,6 +56,7 @@ public class FriendDynamicActivity extends BaseActivity {
 	private PopupWindow firendMsgPop;
 	private final int GET_PULLDOWN = 1;
 	private final int GET_UPDOWN = 2;
+	private final int UPDATE_UI = 3;
 	private int pageSize = 1;
 
 	@Override
@@ -102,13 +105,13 @@ public class FriendDynamicActivity extends BaseActivity {
 	}
 
 	private void getFriendDynamic(final int page, final int type) {
-		FriendsProxy.getMyFriendDynamic(FriendDynamicActivity.this,
+		FriendsProxy.getMyFriendDynamic(
+				FriendDynamicActivity.this,
 				new RCPlatformResponseHandler() {
 					@Override
 					public void onSuccess(int statusCode, String content) {
 						try {
 							List<FriendDynamic> list = jsonToFriendDynamic(content);
-							System.out.println("list--->" + list.size());
 							myHandler.obtainMessage(type, list).sendToTarget();
 						} catch (Exception e) {
 							// TODO: handle exception
@@ -118,7 +121,9 @@ public class FriendDynamicActivity extends BaseActivity {
 					@Override
 					public void onFailure(int errorCode, String content) {
 					}
-				}, 0, page, 10, "0");
+				}, PrefsUtils.User.getShowedMaxTrendsId(
+						getApplicationContext(), getCurrentUser().getRcId()),
+				page, 10, "0");
 	}
 
 	private Handler myHandler = new Handler() {
@@ -146,7 +151,8 @@ public class FriendDynamicActivity extends BaseActivity {
 				friendDynameicList.onRefreshComplete();
 				adpter.notifyDataSetChanged();
 				break;
-			default:
+			case UPDATE_UI:
+				InformationPageController.getInstance().onNewTread();
 				break;
 			}
 
@@ -165,6 +171,14 @@ public class FriendDynamicActivity extends BaseActivity {
 						myFriendsArray.toString(),
 						new com.google.gson.reflect.TypeToken<ArrayList<FriendDynamic>>() {
 						}.getType());
+
+		if (jsonObject.has("trendId")) {
+			int n = jsonObject.getInt("trendId");
+			PrefsUtils.User.saveShowedMaxTrendsId(getApplicationContext(),
+					getCurrentUser().getRcId(), n);
+			myHandler.obtainMessage(UPDATE_UI).sendToTarget();
+		}
+
 		return friends;
 	}
 

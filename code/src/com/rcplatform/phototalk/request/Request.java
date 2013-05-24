@@ -125,7 +125,9 @@ public class Request implements Serializable {
 		}
 		((PhotoTalkApplication) mContext.getApplicationContext()).getWebService().postNameValue(this);
 	}
-
+	public void cancel(){
+		setResponseHandler(null);
+	}
 	/**
 	 * 登陆接口，获取用户的信息
 	 * 

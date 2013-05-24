@@ -3,6 +3,10 @@ package com.rcplatform.phototalk;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -38,10 +42,13 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
-import com.rcplatform.phototalk.logic.InformationPageController;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.logic.controller.SettingPageController;
+import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.JSONConver;
+import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
@@ -49,6 +56,7 @@ import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
@@ -69,6 +77,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
 	private static final int MSG_WHAT_REGISTE_INFORMATION_RECEIVER = 2;
+
+	protected static final int MSG_TIGASE_NEW_INFORMATION = 3;
 
 	private SnapListView mInformationList;
 
@@ -92,8 +102,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private PhotoTalkMessageAdapter adapter;
 
 	private CheckUpdateTask mCheckUpdateTask;
+	private Request checkTrendRequest;
 
 	private boolean isInformationReceiverRegiste = false;
+
+	private ImageView iconTrendNew;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,6 +116,29 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		initViewAndListener();
 		loadDataFromDataBase();
 		checkUpdate();
+		checkTrends();
+	}
+
+	private void checkTrends() {
+		checkTrendRequest = UserSettingProxy.checkTrends(this, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				// {"message":null,"status":1,"headUrl":"" trendId}
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					int trendId = jsonObject.getInt("trendId");
+					PrefsUtils.User.saveMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId(), trendId);
+					onNewTrends();
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+			}
+		}, PrefsUtils.User.getShowedMaxTrendsId(this, getCurrentUser().getRcId()));
 	}
 
 	private void searchFriend(Friend friend) {
@@ -149,6 +185,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private void logout() {
 		startActivity(InitPageActivity.class);
+		checkTrendRequest.cancel();
 		finish();
 	}
 
@@ -156,6 +193,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		Intent loginIntent = new Intent(this, LoginActivity.class);
 		loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
 		startActivity(loginIntent);
+		checkTrendRequest.cancel();
 		finish();
 	}
 
@@ -179,6 +217,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void initViewAndListener() {
+		iconTrendNew = (ImageView) findViewById(R.id.iv_trend_new);
 		mInformationList = (SnapListView) findViewById(R.id.lv_home);
 		mInformationList.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
@@ -237,6 +276,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				Information information = (Information) adapter.getItem(arg2);
+				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
+					return;
 				showFriendDetail(information);
 
 			}
@@ -245,7 +287,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private void showFriendDetail(Information information) {
 		if (information.getSender().getRcId().equals(information.getReceiver().getRcId())) {
-			startActivity(SettingsActivity.class);
+			Friend friend = PhotoTalkUtils.userToFriend(getCurrentUser());
+			startFriendDetailActivity(friend);
 			return;
 		}
 		Friend friend = new Friend();
@@ -332,8 +375,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, null, null, mInformationList, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(),
-				record);
+		RCPlatformImageLoader.LoadPictureForList(this, mInformationList, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
 	}
 
 	private void show(int position) {
@@ -437,13 +479,16 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			case MSG_WHAT_INFORMATION_LOADED:
 				initOrRefreshListView((List<Information>) msg.obj);
 				break;
+			case MSG_TIGASE_NEW_INFORMATION:
+				InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
+				break;
 			}
 		};
 	};
 
 	private void initOrRefreshListView(List<Information> data) {
 		if (adapter == null) {
-			adapter = new PhotoTalkMessageAdapter(this, data);
+			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList);
 			mInformationList.setAdapter(adapter);
 		} else {
 			adapter.addData(data);
@@ -618,9 +663,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			LogUtil.e("tigase receive informations...");
 			Bundle extras = intent.getExtras();
 			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
-			LogUtil.e(msg);
 			List<Information> informations = JSONConver.jsonToInformations(msg);
 			filteInformations(informations);
 		}
@@ -629,8 +674,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private void filteInformations(final List<Information> infos) {
 		Thread th = new Thread() {
 			public void run() {
-				List<Information> newInfos = LogicUtils.informationFilter(HomeActivity.this, infos, getAdapterData());
-				sendDataLoadedMessage(newInfos, MSG_WHAT_INFORMATION_LOADED);
+				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
+				Message msg = myHandler.obtainMessage();
+				msg.what = MSG_TIGASE_NEW_INFORMATION;
+				msg.obj = result;
+				myHandler.sendMessage(msg);
 			};
 		};
 		th.start();
@@ -663,5 +711,28 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private void stopTigaseService() {
 		Intent intent = new Intent(this, UserMessageService.class);
 		stopService(intent);
+	}
+
+	public void onNewInformation(List<Information> infosNeedUpdate, List<Information> infosNew) {
+		List<Information> localInformation = getAdapterData();
+		for (Information info : infosNeedUpdate) {
+			if (localInformation != null && localInformation.contains(info)) {
+				localInformation.get(localInformation.indexOf(info)).setStatu(info.getStatu());
+			}
+		}
+		sendDataLoadedMessage(infosNew, MSG_WHAT_INFORMATION_LOADED);
+	}
+
+	public void onNewTrends() {
+		int maxTrendId = PrefsUtils.User.getMaxTrendsId(this, getCurrentUser().getRcId());
+		int showedMaxTrendId = PrefsUtils.User.getShowedMaxTrendsId(this, getCurrentUser().getRcId());
+		if (showedMaxTrendId < maxTrendId) {
+			iconTrendNew.setVisibility(View.VISIBLE);
+			String url = PrefsUtils.User.getMaxTrendUrl(this, getCurrentUser().getRcId());
+			SettingPageController.getInstance().onNewTrends(true, url);
+		} else {
+			iconTrendNew.setVisibility(View.GONE);
+			SettingPageController.getInstance().onNewTrends(false, null);
+		}
 	}
 }

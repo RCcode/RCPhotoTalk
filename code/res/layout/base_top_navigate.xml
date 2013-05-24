@@ -57,8 +57,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:background="@drawable/top_line"
         android:layout_toLeftOf="@id/choosebutton"
+        android:background="@drawable/top_line"
         android:visibility="gone" />
 
     <TextView
@@ -69,6 +69,17 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="7dp"
         android:layout_toLeftOf="@id/title_line"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/iv_trend_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="@dimen/new_point_margin"
+        android:layout_marginTop="@dimen/new_point_margin"
+        android:src="@drawable/item_new_bg"
         android:visibility="gone" />
 
 </RelativeLayout>

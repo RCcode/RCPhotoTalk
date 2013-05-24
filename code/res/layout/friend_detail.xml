@@ -90,13 +90,6 @@
                             android:textStyle="bold"
                             android:textSize="@dimen/friend_info_nick_text_size" />
 
-                        <Button
-                            android:id="@+id/btn_edit"
-                            style="@style/text_base"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/friend_info_edit_left"
-                            android:background="@drawable/friend_info_edit_btn" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -124,6 +117,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linear_source"
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/user_detail_head_width_half"
                     android:gravity="center_vertical"

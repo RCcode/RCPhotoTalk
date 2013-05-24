@@ -28,12 +28,14 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
 		public static final String PARAM_KEY_OLD_PASSWORD = "pwd";
 	}
-	public static class SendPhoto{
-		public static final String PARAM_KEY_FLAG="time";
-		public static final String PARAM_KEY_TIME_LIMIT="timeLimit";
-		public static final String PARAM_KEY_USERS="userArray";
+
+	public static class SendPhoto {
+		public static final String PARAM_KEY_FLAG = "time";
+		public static final String PARAM_KEY_TIME_LIMIT = "timeLimit";
+		public static final String PARAM_KEY_USERS = "userArray";
 		public static final String PARAM_KEY_RECEIVER_ID = "rcId";
 	}
+
 	public static class UserSetting {
 		public static final String PARAM_KEY_TREND_SETTING = "shareNews";
 		public static final String PARAM_KEY_RECEIVE_SETTING = "allowSend";
@@ -63,7 +65,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_PASSWORD = "pwd";
 		public static final String PARAM_KEY_NICK = "nickName";
 		public static final String PARAM_KEY_COUNTRY = "country";
-		public static final String PARAM_KEY_TIMEZONE= "timeZone";
+		public static final String PARAM_KEY_TIMEZONE = "timeZone";
 	}
 
 	public static class PLATFORM_ACCOUNT_LOGIN {
@@ -156,21 +158,25 @@ public class PhotoTalkParams {
 	public static class AddFriendFromInformation {
 		public static final String PARAM_KEY_FRIEND_IDS = "friendIds";
 	}
-	
-	public static class SyncInviteInfo{
-		public static final String PARAM_KEY_TYPE="attrType";
-		public static final String PARAM_KEY_INVITED_IDS="accounts";
+
+	public static class SyncInviteInfo {
+		public static final String PARAM_KEY_TYPE = "attrType";
+		public static final String PARAM_KEY_INVITED_IDS = "accounts";
 	}
-	
-	public static class ThirdPartBind{
-		public static final String PARAM_KEY_ACCOUNT="loginName";
-		public static final String PARAM_KEY_NICK="loginNick";
-		public static final String PARAM_KEY_HEAD_URL="headUrl";
-		public static final String PARAM_KEY_THIRD_TYPE="attrType";
-		public static final String PARAM_KEY_FRIEND_ID="fTName";
+
+	public static class ThirdPartBind {
+		public static final String PARAM_KEY_ACCOUNT = "loginName";
+		public static final String PARAM_KEY_NICK = "loginNick";
+		public static final String PARAM_KEY_HEAD_URL = "headUrl";
+		public static final String PARAM_KEY_THIRD_TYPE = "attrType";
+		public static final String PARAM_KEY_FRIEND_ID = "fTName";
 		public static final String PARAM_KEY_FRIEND_URL = "headUrl";
 		public static final String PARAM_KEY_FRIEND_NICK = "friendName";
 		public static final String PARAM_KEY_MINE_INFO = "thirdInfo";
 		public static final String PARAM_KEY_FRIEND_LIST = "friendList";
+	}
+
+	public static class CheckTrends {
+		public static final String PARAM_KEY_TRENDID = "trendId";
 	}
 }
