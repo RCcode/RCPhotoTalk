@@ -127,6 +127,12 @@
             android:theme="@style/Theme.Friend_Detail"
             android:windowSoftInputMode="adjustPan" />
         <activity
+            android:name=".FriendDynamicActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Friend_Detail"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
             android:name="com.rcplatform.phototalk.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
