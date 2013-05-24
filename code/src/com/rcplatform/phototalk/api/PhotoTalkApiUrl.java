@@ -77,7 +77,7 @@ public class PhotoTalkApiUrl {
 
 	public static final String DELETE_RECOMMEND_URL = USER_URL + "delRecommendFriend.do";
 	public static final String GET_FRIENDS_URL = USER_URL + "queryMyFriends.do";
-	public static final String GET_FRIENDS_DYNAMIC_URL = USER_URL + "queryUserTrends.do";
+	public static final String GET_FRIENDS_DYNAMIC_URL = SETTING_URL + "queryUserTrends.do";
 
 	public static final String SEND_PICTURE_URL = FILE_URL + "upload.do";
 

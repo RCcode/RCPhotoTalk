@@ -4,29 +4,40 @@ import java.util.List;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.FriendDynamicActivity.FriendDynamic;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
+import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.FriendDetailActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.SettingsActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.BackgroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FriendDynamicListAdpter extends BaseAdapter {
 	private Context context;
 	private ViewHolder viewHolder;
 	private List<FriendDynamic> list;
+	ProgressDialog mProgressDialog;
 
 	public FriendDynamicListAdpter(Context context, List<FriendDynamic> list) {
 		this.context = context;
@@ -52,7 +63,7 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(
@@ -60,12 +71,18 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 			viewHolder = new ViewHolder();
 			viewHolder.headView = (ImageView) convertView
 					.findViewById(R.id.friend_head);
+			viewHolder.add_app_layout = (LinearLayout) convertView
+					.findViewById(R.id.add_app_layout);
+			viewHolder.add_friend_layout = (LinearLayout) convertView
+					.findViewById(R.id.add_friend_layout);
 			viewHolder.friendNick = (TextView) convertView
 					.findViewById(R.id.friend_nick);
 			viewHolder.friendMessage = (TextView) convertView
 					.findViewById(R.id.friend_message);
 			viewHolder.sendTime = (TextView) convertView
 					.findViewById(R.id.send_time);
+			viewHolder.appMessage = (TextView) convertView
+					.findViewById(R.id.app_name);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
@@ -79,34 +96,77 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 				viewHolder.headView, R.drawable.default_head);
 		// viewHolder.headView
 		// 为加为好友 根据状态进行设置不同的信息内容
+		viewHolder.headView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				toFriend(list.get(position).getfRcId());
+			}
+		});
+		viewHolder.friendNick.setText(list.get(position).getfRcName());
+		viewHolder.friendNick.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				toFriend(list.get(position).getfRcId());
+			}
+		});
+
 		if (list.get(position).getType() == 1) {
-			viewHolder.friendMessage.setText("加入了 "
-					+ list.get(position).getOtherName());
+
+			viewHolder.add_friend_layout.setVisibility(View.GONE);
+			viewHolder.add_app_layout.setVisibility(View.VISIBLE);
+			viewHolder.appMessage.setText(list.get(position).getOtherName());
 		} else {
-			// 设置张三字体颜色为蓝色
-			setSpannaberText(viewHolder.friendMessage, list.get(position)
-					.getOtherName());
+			viewHolder.add_friend_layout.setVisibility(View.VISIBLE);
+			viewHolder.add_app_layout.setVisibility(View.GONE);
+			viewHolder.friendMessage.setText(list.get(position).getOtherName());
 		}
+		viewHolder.friendMessage.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				toFriend(list.get(position).getOtherId());
+			}
+		});
+
 		Long time = Long.decode(list.get(position).getCreateTime());
 		viewHolder.sendTime.setText(RCPlatformTextUtil.getTextFromTimeToNow(
 				context, time));
 		return convertView;
 	}
 
-	public void setSpannaberText(TextView view, String str) {
-		String strs = context.getResources().getString(R.string.take) + str
-				+ context.getResources().getString(R.string.add_friend);
-		int start = context.getResources().getString(R.string.take).length();
-		int end = start + str.length();
-		SpannableStringBuilder style = new SpannableStringBuilder(strs);
-		style.setSpan(new BackgroundColorSpan(Color.BLUE), start, end,
-				Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-		view.setText(style);
-	}
-
 	public class ViewHolder {
 		private ImageView headView;
-		private TextView friendNick, friendMessage, sendTime;
+		private TextView friendNick, friendMessage, sendTime, appMessage;
+		private LinearLayout add_friend_layout, add_app_layout;
+
+		public TextView getAppMessage() {
+			return appMessage;
+		}
+
+		public void setAppMessage(TextView appMessage) {
+			this.appMessage = appMessage;
+		}
+
+		public LinearLayout getAdd_friend_layout() {
+			return add_friend_layout;
+		}
+
+		public void setAdd_friend_layout(LinearLayout add_friend_layout) {
+			this.add_friend_layout = add_friend_layout;
+		}
+
+		public LinearLayout getAdd_app_layout() {
+			return add_app_layout;
+		}
+
+		public void setAdd_app_layout(LinearLayout add_app_layout) {
+			this.add_app_layout = add_app_layout;
+		}
 
 		public ImageView getHeadView() {
 			return headView;
@@ -140,5 +200,62 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 			this.sendTime = sendTime;
 		}
 
+	}
+
+	private void startFriendDetailActivity(Friend friend) {
+		Intent intent = new Intent(context, FriendDetailActivity.class);
+		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
+		if (!friend.isFriend()) {
+			intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
+		} else {
+			intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
+		}
+		context.startActivity(intent);
+	}
+
+	private void toFriend(String rcid) {
+		Friend friend = new Friend();
+		friend.setRcId(rcid);
+		getFriendInfo(friend);
+	}
+
+	private void getFriendInfo(Friend friend) {
+		showLoadingDialog(false);
+		Request.executeGetFriendDetailAsync(context, friend,
+				new FriendDetailListener() {
+
+					@Override
+					public void onSuccess(Friend friend) {
+						dismissLoadingDialog();
+						startFriendDetailActivity(friend);
+					}
+
+					@Override
+					public void onError(int errorCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				}, false);
+	}
+
+	public void showErrorConfirmDialog(String msg) {
+		DialogUtil.createErrorInfoDialog(context, msg).show();
+	}
+
+	public void showLoadingDialog(boolean cancelAble) {
+		if (mProgressDialog == null) {
+			mProgressDialog = new ProgressDialog(context);
+		}
+		mProgressDialog.setCancelable(cancelAble);
+		mProgressDialog.setTitle(null);
+		mProgressDialog.setMessage(null);
+		if (!mProgressDialog.isShowing()) {
+			mProgressDialog.show();
+		}
+	}
+
+	public void dismissLoadingDialog() {
+		if (mProgressDialog != null && mProgressDialog.isShowing())
+			mProgressDialog.dismiss();
 	}
 }

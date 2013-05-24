@@ -139,9 +139,12 @@ public class FriendsProxy {
 		request.excuteAsync();
 	}
 	// 田镇源 发送图片时 请求好友动态
-	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler,int trendId) {
+	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler,int trendId,int page,int size,String time) {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_DYNAMIC_URL, responseHandler);
 		request.putParam("trendId", trendId+"");
+		request.putParam("page", page+"");
+		request.putParam("size", size+"");
+		request.putParam("time", time);
 		request.excuteAsync();
 	}
 

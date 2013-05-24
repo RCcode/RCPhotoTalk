@@ -173,6 +173,8 @@ public class LongClickShowView extends Dialog {
 
 		FileInputStream fis = new FileInputStream(file.getAbsolutePath());
 		Builder.mAudioPlayer.reset();
+//		Builder.mAudioPlayer.setVolume(arg0, arg1)
+		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 		Builder.mAudioPlayer.setDataSource(fis.getFD());
 		Builder.mAudioPlayer.prepare();
 		Builder.mAudioPlayer.start();

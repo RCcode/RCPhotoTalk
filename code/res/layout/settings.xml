@@ -40,15 +40,6 @@
                         android:scaleType="centerCrop"
                         android:src="@drawable/user_detail_bg" />
 
-                    <Button
-                        android:id="@+id/settings_user_info_edit_action"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="15dp"
-                        android:background="@drawable/user_info_edit_btn" />
-
                     <LinearLayout
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
@@ -56,6 +47,16 @@
                         android:layout_alignTop="@+id/rela_userinfo"
                         android:background="#50000000"
                         android:orientation="horizontal" />
+
+                    <Button
+                        android:id="@+id/settings_user_info_edit_action"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignBottom="@id/user_bg"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:background="@drawable/user_info_edit_btn" />
 
                     <LinearLayout
                         android:id="@+id/rela_userinfo"
@@ -162,7 +163,8 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-              <!--   <com.rcplatform.phototalk.views.HorizontalListView
+                <!--
+                     <com.rcplatform.phototalk.views.HorizontalListView
                     android:id="@+id/my_friend_details_apps_listview"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/app_list_height"
@@ -170,7 +172,9 @@
                     android:layout_marginLeft="@dimen/friend_info_app_left"
                     android:layout_marginRight="@dimen/friend_info_app_right"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/app_list_back"/> -->
+                    android:background="@drawable/app_list_back"/>
+                -->
+
                 <LinearLayout
                     android:id="@+id/my_friend_details_apps_listview"
                     android:layout_width="match_parent"
@@ -180,25 +184,28 @@
                     android:layout_marginRight="2dp"
                     android:layout_marginTop="5dp"
                     android:background="@drawable/app_list_back"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView android:layout_width="40dp"
-                        android:layout_height="40dp" 
-                        android:layout_marginLeft="10dp"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/one"/>
-                    <ImageView android:layout_width="40dp"
-                        android:layout_height="40dp" 
                         android:layout_marginLeft="10dp"
+                        android:background="@drawable/one" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/two"/>
-                    <ImageView android:layout_width="40dp"
-                        android:layout_height="40dp" 
                         android:layout_marginLeft="10dp"
+                        android:background="@drawable/two" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_gravity="center_vertical"
-                        android:background="@drawable/three"/>
-                    
-                    
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/three" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -320,18 +327,18 @@
                             android:src="@drawable/app_arrow" />
                     </RelativeLayout>
                 </LinearLayout>
-               
             </LinearLayout>
-         <Button
-                    android:id="@id/settings_clean_history_record_btn"
-                    style="@style/LandingPageButton"
-                    android:layout_marginBottom="@dimen/default_gap_3x"
-                    android:layout_marginLeft="@dimen/default_gap"
-                    android:layout_marginRight="@dimen/default_gap"
-                    android:layout_marginTop="@dimen/default_gap_2x"
-                    android:background="@drawable/friend_info_send_btn"
-                    android:text="@string/setting_page_clean_history"
-                    android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@id/settings_clean_history_record_btn"
+                style="@style/LandingPageButton"
+                android:layout_marginBottom="@dimen/default_gap_3x"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="@dimen/default_gap_2x"
+                android:background="@drawable/friend_info_send_btn"
+                android:text="@string/setting_page_clean_history"
+                android:textColor="@android:color/white" />
         </LinearLayout>
     </ScrollView>
 
