@@ -243,6 +243,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(R.string.receive_fail);
 			holder.statuButton.stopTask();
+			holder.statuButton.setVisibility(View.VISIBLE);
+			holder.statuButton.setBackgroundResource(R.drawable.send_failed);
 		}
 
 	}

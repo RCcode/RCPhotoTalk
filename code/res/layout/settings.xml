@@ -104,7 +104,6 @@
                                         style="@style/text_base"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="Name"
                                         android:textColor="#FFFFFF"
                                         android:textSize="@dimen/user_detail_nick_size"
                                         android:textStyle="bold" />
@@ -131,7 +130,6 @@
                                         android:layout_marginLeft="@dimen/friend_info_age_left"
                                         android:layout_marginTop="-3dp"
                                         android:gravity="top"
-                                        android:text="24"
                                         android:textColor="#E5E5E5" />
                                 </LinearLayout>
                             </LinearLayout>
@@ -157,7 +155,6 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="@dimen/user_detail_head_width_half"
                                     android:layout_marginTop="10dp"
-                                    android:text="123456"
                                     android:textColor="#534d48"
                                     android:textSize="@dimen/user_detail_rcid_size" />
                             </LinearLayout>
@@ -165,7 +162,7 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-                <com.rcplatform.phototalk.views.HorizontalListView
+              <!--   <com.rcplatform.phototalk.views.HorizontalListView
                     android:id="@+id/my_friend_details_apps_listview"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/app_list_height"
@@ -173,15 +170,43 @@
                     android:layout_marginLeft="@dimen/friend_info_app_left"
                     android:layout_marginRight="@dimen/friend_info_app_right"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/app_list_bg"
-                    android:visibility="gone" />
+                    android:background="@drawable/app_list_back"/> -->
+                <LinearLayout
+                    android:id="@+id/my_friend_details_apps_listview"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/app_list_height"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/app_list_back"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="40dp" 
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/one"/>
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="40dp" 
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/two"/>
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="40dp" 
+                        android:layout_marginLeft="10dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/three"/>
+                    
+                    
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/default_gap"
                     android:layout_marginTop="4dp"
-                    android:background="@drawable/popup_bg"
+                    android:background="@drawable/user_info_item_bg"
                     android:orientation="vertical" >
 
                     <RelativeLayout
@@ -205,7 +230,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="5dp"
-                            android:src="@drawable/right_arrow" />
+                            android:src="@drawable/app_arrow" />
                     </RelativeLayout>
 
                     <ImageView
@@ -234,7 +259,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="5dp"
-                            android:src="@drawable/right_arrow" />
+                            android:src="@drawable/app_arrow" />
                     </RelativeLayout>
 
                     <ImageView
@@ -263,7 +288,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="5dp"
-                            android:src="@drawable/right_arrow" />
+                            android:src="@drawable/app_arrow" />
                     </RelativeLayout>
 
                     <ImageView
@@ -292,7 +317,7 @@
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="5dp"
-                            android:src="@drawable/right_arrow" />
+                            android:src="@drawable/app_arrow" />
                     </RelativeLayout>
                 </LinearLayout>
                

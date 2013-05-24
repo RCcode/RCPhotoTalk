@@ -158,7 +158,7 @@ public class FriendsProxy {
 	}
 
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
-		Request request = new Request(context, PhotoTalkApiUrl.USER_INFO_UPDATE_URL, responseHandler);
+		Request request = new Request(context, PhotoTalkApiUrl.USER_BACKGROUND_UPDATE_URL, responseHandler);
 		request.setFile(file);
 		request.excuteAsync();
 	}

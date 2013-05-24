@@ -116,7 +116,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 					SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
 					seleFriends.add(seleFriend);
 				}
-				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
+//				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
 				getFriends();
 			};
 		};

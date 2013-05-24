@@ -3,7 +3,7 @@
 
     <!-- 朋友列表属性 -->
     <dimen name="friend_tiem_hight">74dp</dimen>
-    <dimen name="friend_head_left">4dp</dimen>
+    <dimen name="friend_head_left">8dp</dimen>
     <dimen name="friend_head_side">70dp</dimen>
     <dimen name="friend_text_padding">8dp</dimen>
     <!-- 朋友列表属性 -->
@@ -27,7 +27,7 @@
     <dimen name="friend_info_send_top">13dp</dimen>
     <dimen name="friend_info_title_top">10dp</dimen>
     <!-- 默认间距 -->
-       <dimen name="init_indicator_bottom">51dp</dimen>
+       <dimen name="init_indicator_bottom">20dp</dimen>
     <dimen name="init_btn_padding">25dp</dimen>
     <dimen name="init_btn_bottom">44dp</dimen>
     <dimen name="default_gap">8dp</dimen>

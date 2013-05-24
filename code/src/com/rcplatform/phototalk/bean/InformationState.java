@@ -25,11 +25,11 @@ public class InformationState {
 
 		// 表示正在查看（此状态和服务器和数据库都没关系，只是一个用来临时记录正在查看中的一个变量）
 		public static final int STATU_NOTICE_SHOWING = 4;
-
 		// 表示正在下载（此状态和服务器和数据库都没关系，只是一个用来临时记录正在查看中的一个变量）
 		public static final int STATU_NOTICE_SENDING_OR_LOADING = 1;
 
 		public static final int STATU_NOTICE_SEND_OR_LOAD_FAIL = -1;
 
 	}
+	
 }

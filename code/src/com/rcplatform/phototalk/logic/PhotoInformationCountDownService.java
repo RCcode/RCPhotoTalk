@@ -1,9 +1,7 @@
 package com.rcplatform.phototalk.logic;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -19,7 +17,6 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
-import com.rcplatform.phototalk.utils.SoundManager;
 
 public class PhotoInformationCountDownService {
 
@@ -63,7 +60,9 @@ public class PhotoInformationCountDownService {
 			// String key = (String) msg.obj;
 			Information info = (Information) msg.obj;
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
-			MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
+			if (!info.getReceiver().getRcId().equals(info.getSender().getRcId())) {
+				MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
+			}
 			LogicUtils.updateInformationState(mApplication, Action.ACTION_INFORMATION_STATE_CHANGE, info);
 			InformationPageController.getInstance().photoInformationShowEnd(info);
 			mPool.execute(new ClearPhotoInformationCacheTask(info));

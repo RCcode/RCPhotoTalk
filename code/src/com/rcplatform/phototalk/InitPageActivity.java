@@ -53,9 +53,9 @@ public class InitPageActivity extends BaseActivity implements
 		mGestureDetector = new GestureDetector(this);
 		mGestureDetector.setIsLongpressEnabled(true);
 		inAnimation_Alpha = new AlphaAnimation(0.0f, 1.0f);
-		inAnimation_Alpha.setDuration(200);
+		inAnimation_Alpha.setDuration(400);
 		outAnimation_Alpha = new AlphaAnimation(1.0f, 0.0f);
-		outAnimation_Alpha.setDuration(200);
+		outAnimation_Alpha.setDuration(400);
 
 		Button mLoginButton = (Button) findViewById(R.id.init_page_login_button);
 		mLoginButton.setOnClickListener(new View.OnClickListener() {

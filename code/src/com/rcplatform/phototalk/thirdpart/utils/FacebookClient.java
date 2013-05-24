@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class FacebookClient {
 	private static final int MSG_DEAUTHORIZE_SUCCESS = 100;
@@ -34,7 +35,7 @@ public class FacebookClient {
 	private static final int MSG_NET_ERROR = 102;
 
 	private OnAuthorizeSuccessListener mAuthListener;
-	private OnGetFacebookInfoSuccessListener mGetInfoSuccessListener;
+	private OnGetThirdPartInfoSuccessListener mGetInfoSuccessListener;
 	private OnDeAuthorizeListener mDeAuthorizeListener;
 
 	private UiLifecycleHelper mUiLifecycleHelper;
@@ -90,7 +91,7 @@ public class FacebookClient {
 		return null;
 	}
 
-	public void sendInviteMessageToUser(String uid) {
+	public void sendInviteMessageToUser(final String uid, final OnInviteSuccessListener listener) {
 		Bundle bundler = new Bundle();
 		bundler.putString("link", "http://www.google.co.jp");
 		bundler.putString("caption", "{*actor*} just posted this!");
@@ -106,6 +107,8 @@ public class FacebookClient {
 					final String postId = values.getString("post_id");
 					if (postId != null) {
 						mContext.showErrorConfirmDialog(R.string.invite_success);
+						if (listener != null)
+							listener.onInviteSuccess(uid);
 					} else {
 						mContext.showErrorConfirmDialog(R.string.invite_cancel);
 					}
@@ -210,23 +213,13 @@ public class FacebookClient {
 		});
 	}
 
-	public static interface OnAuthorizeSuccessListener {
-		public void onAuthorizeSuccess();
-	}
-
-	public static interface OnGetFacebookInfoSuccessListener {
-		public void onGetFacebookInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends);
-
-		public void onGetFail();
-	}
-
 	public void authorize(OnAuthorizeSuccessListener listener) {
 		this.mAuthListener = listener;
 		mAction = FacebookAction.AUTHORIZE;
 		openSession();
 	}
 
-	public void getFacebookInfo(OnGetFacebookInfoSuccessListener listener) {
+	public void getFacebookInfo(OnGetThirdPartInfoSuccessListener listener) {
 		this.mGetInfoSuccessListener = listener;
 		mAction = FacebookAction.GET_INFO;
 		openSession();
@@ -242,7 +235,7 @@ public class FacebookClient {
 	}
 
 	private void onFacebookInfosLoaded(ThirdPartUser user, List<ThirdPartUser> friends) {
-		mGetInfoSuccessListener.onGetFacebookInfoSuccess(user, friends);
+		mGetInfoSuccessListener.onGetInfoSuccess(user, friends);
 	}
 
 	private void onFacebookInfoLoadFail() {
@@ -261,6 +254,7 @@ public class FacebookClient {
 				try {
 					if (response.getConnection().getResponseCode() == 200 && response.getError() == null) {
 						FacebookUtil.clearFacebookVlidated(mContext);
+						PrefsUtils.User.ThirdPart.clearFacebookAccount(mContext, mContext.getCurrentUser().getRcId());
 						mHandler.sendEmptyMessage(MSG_DEAUTHORIZE_SUCCESS);
 					} else {
 						if (response.getConnection().getResponseCode() != 200) {
@@ -302,9 +296,11 @@ public class FacebookClient {
 		};
 	};
 
-	public static interface OnDeAuthorizeListener {
-		public void onDeAuthorizeSuccess();
+	public static interface OnInviteSuccessListener {
+		public void onInviteSuccess(String uid);
+	}
 
-		public void onDeAuthorizeFail();
+	public boolean isAuthorize() {
+		return ThirdPartUtils.isFacebookVlidate(mContext);
 	}
 }

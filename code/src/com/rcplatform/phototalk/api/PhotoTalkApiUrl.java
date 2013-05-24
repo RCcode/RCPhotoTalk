@@ -2,12 +2,12 @@ package com.rcplatform.phototalk.api;
 
 public class PhotoTalkApiUrl {
 
-	private static final String BASE_URL = "http://192.168.0.86:8083/";
-//	 private static final String BASE_URL = "http://192.168.0.56:8080/";
+	 private static final String BASE_URL = "http://192.168.0.86:8083/";
+//	private static final String BASE_URL = "http://192.168.0.56:8080/";
 	// private static final String BASE_URL = "http://103.247.169.150:8083/";
 	// private static final String BASE_URL = "http://192.168.0.118/";
 
-	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "photochat/";
+	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "phototalk/";
 
 	private static final String USER_URL = BASE_URL_FOR_PHOTOTALK + "user/";
 
@@ -58,6 +58,7 @@ public class PhotoTalkApiUrl {
 	public static final String USER_INFO_URL = USER_URL + "getPUser.do";
 
 	public static final String USER_INFO_UPDATE_URL = FILE_URL + "userUpload.do";
+	public static final String USER_BACKGROUND_UPDATE_URL = FILE_URL + "uploadBackground.do";
 	public static final String USER_INFO_BACKGROUND_URL = FILE_URL + "uploadBackground.do";
 
 	public static final String USER_INFO_HEAD_IMAGE_URL = FILE_URL + "uploadHead.do";
@@ -112,4 +113,5 @@ public class PhotoTalkApiUrl {
 	public static final String CHECK_USER_PHONEBIND_URL = RCBOSS_USER_URL + "checkPhone.do";
 	public static final String ASYNC_INVITE_URL = RCBOSS_COMM_URL + "inviteUserLog.do";
 	public static final String SYNCHRO_THIRD_URL = RCBOSS_THIRD_URL + "thirdBind.do";
+	public static final String GET_ALL_APPS_URL = RCBOSS_USER_URL + "getAllAppInfo.do";
 }

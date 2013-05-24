@@ -17,6 +17,7 @@ import android.hardware.Camera.Size;
 import android.media.AudioManager;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -199,7 +200,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				Matrix matrix = new Matrix();
 				matrix.reset();
 				// if (mBitmap.getWidth() > mBitmap.getHeight()) {
-				if (mCurrentCameraNum == mFrontCameraNum) {
+				if (mCurrentCameraNum == 1) {
 					matrix.setRotate(270);
 				} else {
 					matrix.setRotate(round);
@@ -266,22 +267,21 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	public void takePhoto() {
 		if (!isShowCamera)
 			return;
+		mCamera.takePicture(null, null, mPictureCallback);
+	}
 
-		if (!isAutoFocus) {
-			mCamera.takePicture(null, null, mPictureCallback);
-		} else {
-			mCamera.autoFocus(new AutoFocusCallback() {
+	public void takeFocuse() {
+		mCamera.autoFocus(new AutoFocusCallback() {
 
-				@Override
-				public void onAutoFocus(boolean success, Camera camera) {
-					if (success) {
-						camera.takePicture(null, null, mPictureCallback);
-					} else {
-						camera.takePicture(null, null, mPictureCallback);
-					}
-				}
-			});
-		}
+			@Override
+			public void onAutoFocus(boolean success, Camera camera) {
+				// if (success) {
+				// camera.takePicture(null, null, mPictureCallback);
+				// } else {
+				// camera.takePicture(null, null, mPictureCallback);
+				// }
+			}
+		});
 	}
 
 	public boolean setLightStatu() {
@@ -441,4 +441,10 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		isShowCamera = false;
 	}
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		takeFocuse();
+		return super.onTouchEvent(event);
+	}
 }

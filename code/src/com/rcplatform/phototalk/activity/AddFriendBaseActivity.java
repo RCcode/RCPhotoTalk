@@ -199,7 +199,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 		final HorizontalScrollView hsv = (HorizontalScrollView) view.findViewById(R.id.hs_wish_list);
 		mLinearInvate = (LinearLayout) view.findViewById(R.id.linear_wish);
 		if (mLinearInvate.getChildCount() == 0) {
-			view.setVisibility(View.INVISIBLE);
+			view.setVisibility(View.GONE);
 		}
 		mLinearInvate.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 
@@ -207,7 +207,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 			public void onGlobalLayout() {
 				hsv.smoothScrollTo(mLinearInvate.getWidth(), 0);
 				if (mLinearInvate.getChildCount() == 0) {
-					view.setVisibility(View.INVISIBLE);
+					view.setVisibility(View.GONE);
 				} else {
 					view.setVisibility(View.VISIBLE);
 				}

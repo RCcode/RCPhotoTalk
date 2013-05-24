@@ -1,18 +1,13 @@
 package com.rcplatform.phototalk;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.facebook.Session;
-import com.facebook.model.GraphUser;
-import com.facebook.widget.LoginButton;
-import com.rcplatform.phototalk.activity.FacebookAddFriendsActivity;
+import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
@@ -23,74 +18,81 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.thirdpart.utils.FacebookClient;
+import com.rcplatform.phototalk.thirdpart.utils.FacebookClient.OnInviteSuccessListener;
+import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
+import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Constants.Action;
-import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
-public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity {
-	private LoginButton mLoginButton;
-	private View loginLayout;
-	private View friendsLayout;
+public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
+	private FacebookClient mFacebookClient;
+	private boolean hasTryLogin = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.facebook_recommends);
 		findViewById(R.id.wish_to_invate).setVisibility(View.GONE);
+		mFacebookClient = new FacebookClient(this);
+		mFacebookClient.onCreate(savedInstanceState);
 		initAddFriendsView();
-		mLoginButton = (LoginButton) findViewById(R.id.login_button);
-		// ,"publish_actions"
-		mLoginButton.setPublishPermissions(Arrays.asList("basic_info"));
-		loginLayout = findViewById(R.id.login_layout);
-		friendsLayout = findViewById(R.id.friends_layout);
 		setItemType(PhotoTalkFriendsAdapter.TYPE_FACEBOOK);
-		if (ThirdPartUtils.isFacebookVlidate(this))
+		if (mFacebookClient.isAuthorize())
 			getRecommentFriends();
-		else
-			mLoginButton.setUserInfoChangedCallback(this);
-
-	}
-
-	private void setShowLogin() {
-		loginLayout.setVisibility(View.VISIBLE);
-		friendsLayout.setVisibility(View.GONE);
-
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		updateUI();
-	}
-
-	private void setShowRecommends() {
-		loginLayout.setVisibility(View.GONE);
-		friendsLayout.setVisibility(View.VISIBLE);
+		mFacebookClient.onResume();
+		if (!mFacebookClient.isAuthorize() && !hasTryLogin)
+			authorize();
 	}
 
 	@Override
-	protected void onInviteButtonClick(Set<Friend> willInvateFriends) {
-		super.onInviteButtonClick(willInvateFriends);
-		if (willInvateFriends != null && willInvateFriends.size() > 0) {
-			String[] ids = new String[willInvateFriends.size()];
-			Iterator<Friend> itFriends = willInvateFriends.iterator();
-			int i = 0;
-			while (itFriends.hasNext()) {
-				Friend friend = itFriends.next();
-				ids[i] = friend.getRcId();
-				i++;
+	protected void onPause() {
+		super.onPause();
+		hasTryLogin = false;
+		mFacebookClient.onPause();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		mFacebookClient.onDestroy();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		mFacebookClient.onActivityResult(requestCode, resultCode, data);
+		hasTryLogin = true;
+	}
+
+	private void authorize() {
+		mFacebookClient.authorize(new OnAuthorizeSuccessListener() {
+
+			@Override
+			public void onAuthorizeSuccess() {
+				getFacebookInfos();
 			}
-			sendInviteMessage(ids);
-		}
+		});
 	}
 
-	@Override
-	protected void onInviteComplete(String... ids) {
-		super.onInviteComplete(ids);
-		DialogUtil.createMsgDialog(this, R.string.invite_success, R.string.confirm).show();
-		asyncInviteInfo(ids);
+	private void getFacebookInfos() {
+		mFacebookClient.getFacebookInfo(new OnGetThirdPartInfoSuccessListener() {
+
+			@Override
+			public void onGetFail() {
+			}
+
+			@Override
+			public void onGetInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends) {
+				onFacebookInfoLoaded(user, friends);
+			}
+		});
 	}
 
 	private void asyncInviteInfo(String... ids) {
@@ -127,49 +129,36 @@ public class FacebookFriendRecommendActivity extends FacebookAddFriendsActivity 
 		setListData(recommendFriends, inviteFriends, mList);
 	}
 
-	@Override
-	protected void onFacebookInfoLoaded(GraphUser user, final List<ThirdPartUser> friends) {
-		super.onFacebookInfoLoaded(user, friends);
-		mLoginButton.setUserInfoChangedCallback(null);
+	protected void onFacebookInfoLoaded(ThirdPartUser user, final List<ThirdPartUser> friends) {
 		PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), getCurrentUser().getRcId());
 		PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends, FriendType.FACEBOOK);
-		ThirdPartInfoUploadTask task = new ThirdPartInfoUploadTask(this, friends, ThirdPartUtils.parserFacebookUserToThirdPartUser(user), FriendType.FACEBOOK,
-				new RCPlatformResponseHandler() {
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						getRecommentFriends();
-					}
+		ThirdPartInfoUploadTask task = new ThirdPartInfoUploadTask(this, friends, user, FriendType.FACEBOOK, new RCPlatformResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				getRecommentFriends();
+			}
 
-					@Override
-					public void onFailure(int errorCode, String content) {
-						dismissLoadingDialog();
-						recommendsLoaded(ThirdPartUtils.parserToFriends(friends, FriendType.FACEBOOK), new ArrayList<Friend>());
-					}
-				});
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				recommendsLoaded(ThirdPartUtils.parserToFriends(friends, FriendType.FACEBOOK), new ArrayList<Friend>());
+			}
+		});
 		task.start();
 	}
 
-	@Override
 	protected void onGetFacebookInfoError() {
-		super.onGetFacebookInfoError();
 		dismissLoadingDialog();
 	}
 
-	private void updateUI() {
-		if (isSessionOpened() && ThirdPartUtils.isFacebookVlidate(this))
-			setShowRecommends();
-		else
-			setShowLogin();
-	}
-
-	private boolean isSessionOpened() {
-		Session session = Session.getActiveSession();
-		return (session != null && session.isOpened());
-	}
-
-	@Override
 	protected void onFacebookFriendItemClick(Friend f) {
 		super.onFacebookFriendItemClick(f);
-		sendInviteMessage(f.getRcId());
+		mFacebookClient.sendInviteMessageToUser(f.getRcId(), new OnInviteSuccessListener() {
+
+			@Override
+			public void onInviteSuccess(String uid) {
+				asyncInviteInfo(uid);
+			}
+		});
 	}
 }
