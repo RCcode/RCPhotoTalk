@@ -138,6 +138,12 @@ public class FriendsProxy {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_URL, responseHandler);
 		request.excuteAsync();
 	}
+	// 田镇源 发送图片时 请求好友动态
+	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler,int trendId) {
+		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_DYNAMIC_URL, responseHandler);
+		request.putParam("trendId", trendId+"");
+		request.excuteAsync();
+	}
 
 	// 田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
@@ -156,7 +162,6 @@ public class FriendsProxy {
 		request.setFile(file);
 		request.excuteAsync();
 	}
-
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
 		Request request = new Request(context, PhotoTalkApiUrl.USER_BACKGROUND_UPDATE_URL, responseHandler);
 		request.setFile(file);

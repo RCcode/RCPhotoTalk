@@ -49,7 +49,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private Button mCleanBtn;
 	private Button editBtn;
 	private UserInfo userInfo;
-	private RelativeLayout edit_rcId, use_account_message;
+	private RelativeLayout edit_rcId, use_account_message,my_friend_dynamic;
 //	private HorizontalListView mHrzListView;
 	private View mBack;
 	private TextView mTitleTextView;
@@ -79,6 +79,10 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		edit_rcId.setOnClickListener(this);
 		use_account_message = (RelativeLayout) findViewById(R.id.use_account_message);
 		use_account_message.setOnClickListener(this);
+		my_friend_dynamic = (RelativeLayout)findViewById(R.id.my_friend_dynamic);
+		my_friend_dynamic.setOnClickListener(this);
+		
+		
 //		mHrzListView = (HorizontalListView) findViewById(R.id.my_friend_details_apps_listview);
 		mCleanBtn = (Button) findViewById(R.id.settings_clean_history_record_btn);
 		mCleanBtn.setOnClickListener(this);
@@ -137,6 +141,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		switch (v.getId()) {
 		case R.id.back:
 			finish();
+			break;
+		case R.id.my_friend_dynamic:
+			startActivityForResult(new Intent(this, FriendDynamicActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
 		case R.id.settings_user_info_edit_action:
 			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
