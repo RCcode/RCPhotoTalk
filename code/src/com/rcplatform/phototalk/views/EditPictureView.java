@@ -76,7 +76,7 @@ public class EditPictureView extends View {
     // public static int color = Color.RED;
     public int color;
 
-    public static int srokeWidth = 15;
+    public static int srokeWidth = 10;
 
     /**
      * 得到画笔

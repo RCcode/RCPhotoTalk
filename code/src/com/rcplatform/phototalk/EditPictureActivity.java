@@ -220,7 +220,6 @@ public class EditPictureActivity extends BaseActivity {
 			public void onRecording(int recordedSecord, int amplitude) {
 				// TODO Auto-generated method stub
 				int height = voice_volume_bg.getHeight();
-				System.out.println("amplitude=====>"+amplitude);
 				if (height > 0) {
 					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
 					if (amplitude > 22000) {
