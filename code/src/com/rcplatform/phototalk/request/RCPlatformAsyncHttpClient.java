@@ -74,8 +74,6 @@ public class RCPlatformAsyncHttpClient {
 					try {
 						JSONObject jsonObject = new JSONObject(content);
 						int state = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
-						if (state == 10000)
-							state = 0;
 						if (state == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS) {
 							onRequestSuccess(context, state, content, request);
 						} else if (state == RCPlatformResponse.ResponseStatus.RESPONSE_NEED_LOGIN) {

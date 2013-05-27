@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
@@ -100,6 +101,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		userInfo = getPhotoTalkApplication().getCurrentUser();
 		viewAbout = (RelativeLayout) findViewById(R.id.rela_about);
 		viewAbout.setOnClickListener(this);
+		InformationPageController.getInstance().onNewTread();
 		setUserInfo(userInfo);
 		getAllApps();
 	}

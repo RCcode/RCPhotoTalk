@@ -77,7 +77,8 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
-		com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend, null, true);
+		if (!mFriend.getRcId().equals(getCurrentUser().getRcId()))
+			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend, null, true);
 		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		mAction = getIntent().getAction();

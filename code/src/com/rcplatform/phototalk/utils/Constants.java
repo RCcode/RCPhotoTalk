@@ -147,8 +147,8 @@ public class Constants {
 
 	public static final String BIND_PHONE_NUMBER = "+18146193618";
 
-	// public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
-	public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
+	 public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
+//	public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
 
 	// 头像图片本地缓存地址
 
