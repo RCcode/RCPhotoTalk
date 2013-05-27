@@ -41,4 +41,9 @@ public class UserSettingProxy {
 		return request;
 	}
 
+	public static void requestSMS(Context context, RCPlatformResponseHandler responseHandler, String number) {
+//		Request request=new Request(context, PhotoTalkApiUrl., responseHandler);
+//		request.excuteAsync();
+	}
+
 }

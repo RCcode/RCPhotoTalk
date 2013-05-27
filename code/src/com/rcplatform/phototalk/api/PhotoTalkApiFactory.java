@@ -136,7 +136,6 @@ public class PhotoTalkApiFactory {
 	// 登录类型
 	public static final int LOGIN_TYPE_EMAIL = 0;
 	public static final int LOGIN_TYPE_RCID = 2;
-	public static final int LOGIN_TYPE_PHONE = 1;
 
 	// 登录错误处理
 	public static final int LOGIN_ADMIN_ERROR = -1; // 参数异常

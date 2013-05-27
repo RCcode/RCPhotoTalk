@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -44,6 +45,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	private AlertDialog mDeAuthDialog;
 	private DeAuthorizeDialogListener mDeAuthorizeDialogListener;
 	private TextView tvVKAuth;
+	private View phoneLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +98,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	}
 
 	public void initView() {
+		phoneLayout = findViewById(R.id.rela_phone);
+		phoneLayout.setOnClickListener(this);
 		user_Email = (TextView) findViewById(R.id.user_email);
 		user_Phone = (TextView) findViewById(R.id.user_phone);
 		user_rcId = (TextView) findViewById(R.id.user_rcid);
@@ -162,6 +166,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		case R.id.back:
 			startActivity(new Intent(this, SettingsActivity.class));
 			this.finish();
+			break;
+		case R.id.rela_phone:
+			if (TextUtils.isEmpty(getCurrentUser().getCellPhone())) {
+				startActivity(BindPhoneActivity.class);
+			}
 			break;
 		}
 	}
@@ -276,4 +285,10 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			}
 		}
 	};
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		user_Phone.setText(getCurrentUser().getCellPhone());
+	}
 }

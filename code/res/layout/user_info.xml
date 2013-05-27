@@ -83,6 +83,7 @@
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
+                android:id="@+id/rela_phone"
                 android:background="@drawable/user_info_item_bg" >
 
                 <ImageView

@@ -1,14 +1,21 @@
 package com.rcplatform.phototalk.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Resources.NotFoundException;
 import android.util.DisplayMetrics;
 
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.DatabaseUtils;
 
 public class Constants {
 
@@ -52,6 +59,25 @@ public class Constants {
 			Utils.createNewDir(Database.USERS_DATABASE_PATH);
 			Database.REQUEST_DATABASE_PATH = Database.BASE_DATABASE_PATH;
 			Database.GLOBAL_DATABASE_PATH = Database.BASE_DATABASE_PATH;
+		}
+	}
+
+	public static void initCountryDatabase(Context context) {
+		File temp = new File(DatabaseUtils.getCountryCodeDatabasePath());
+		if (!temp.exists()) {
+			try {
+				InputStream is = context.getResources().openRawResource(R.raw.country_code);
+				FileOutputStream fos = new FileOutputStream(temp);
+				byte[] buffer = new byte[1024];
+				int count = 0;
+				while ((count = is.read(buffer)) != -1) {
+					fos.write(buffer, 0, count);
+				}
+				fos.close();
+				is.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -147,8 +173,8 @@ public class Constants {
 
 	public static final String BIND_PHONE_NUMBER = "+18146193618";
 
-	 public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
-//	public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
+	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
+	// public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
 
 	// 头像图片本地缓存地址
 

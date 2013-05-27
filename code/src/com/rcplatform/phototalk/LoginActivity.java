@@ -96,7 +96,9 @@ public class LoginActivity extends ImagePickActivity implements
 	private TextView btnChange;
 
 	// 正则，必须由数字字母组成
-	private final String RCID_REGEX = "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
+	// private final String RCID_REGEX =
+	// "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
+	private final String RCID_REGEX = "\\d{7,}";
 	private final String EMAIL_REGEX = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
 
 	// 密码正则表达式
@@ -314,10 +316,6 @@ public class LoginActivity extends ImagePickActivity implements
 			String psw2 = mPswEditText.getText().toString().trim();
 			int loginType = invalidate(email2, psw2);
 			if (loginType != -1) {
-				// ------------------测试暂加----------------------------
-				if (loginType == PhotoTalkApiFactory.LOGIN_TYPE_PHONE)
-					email2 = "+86" + email2;
-				// --------------------------------------------------
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 				// login(this, mHandler, email2, psw2, loginType);
 				tigaseLogin(this, email2, psw2);
@@ -602,7 +600,6 @@ public class LoginActivity extends ImagePickActivity implements
 									getString(R.string.net_error));
 						}
 					}
-
 					@Override
 					public void onFailure(int errorCode, String content) {
 						dismissLoadingDialog();
