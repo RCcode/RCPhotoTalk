@@ -29,7 +29,7 @@
     <!-- 默认间距 -->
        <dimen name="init_indicator_bottom">20dp</dimen>
     <dimen name="init_btn_padding">25dp</dimen>
-    <dimen name="init_btn_bottom">44dp</dimen>
+    <dimen name="init_btn_bottom">30dp</dimen>
     <dimen name="default_gap">8dp</dimen>
     <dimen name="default_gap_2x">16dp</dimen>
     <dimen name="default_gap_3x">24dp</dimen>

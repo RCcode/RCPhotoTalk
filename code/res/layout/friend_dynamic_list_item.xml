@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
+    android:background="@color/white"
     android:layout_height="wrap_content" >
 
     <ImageView
         android:id="@+id/friend_head"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/friend_head_side"
+        android:layout_height="@dimen/friend_head_side"
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:background="@drawable/default_head" />
