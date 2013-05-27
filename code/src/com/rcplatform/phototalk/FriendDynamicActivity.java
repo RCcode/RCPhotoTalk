@@ -139,6 +139,8 @@ public class FriendDynamicActivity extends BaseActivity {
 			case GET_PULLDOWN:
 				List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
 				if (downlist != null) {
+					downlist.addAll(listDynamic);
+					listDynamic.clear();
 					listDynamic.addAll(downlist);
 				}
 				friendDynameicList.onRefreshComplete();
@@ -147,7 +149,7 @@ public class FriendDynamicActivity extends BaseActivity {
 			case GET_UPDOWN:
 				List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
 				if (uplist != null) {
-					listDynamic.clear();
+//					listDynamic.clear();
 					listDynamic.addAll(uplist);
 				}
 				friendDynameicList.onRefreshComplete();

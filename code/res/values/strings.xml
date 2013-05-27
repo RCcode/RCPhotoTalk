@@ -19,8 +19,8 @@
     <string name="registe_email_hint">邮箱地址</string>
     <string name="setting_page_clean_history">清空记录</string>
     <string name="login_username_hint">邮箱地址,RCID</string>
-    <string name="login_nick_hint">姓名</string>
-    <string name="login_password_hint">密码</string>
+    <string name="login_nick_hint">昵称（20个字符以内）</string>
+    <string name="login_password_hint">密码（6-20个字符）</string>
     <string name="login_forget_psw_hint">忘记密码</string>
     <string name="login_already_account_hint">已有RC账号？点此</string>
     <string name="no_rc_account">没有RC账号？点此</string>
@@ -38,7 +38,7 @@
     <string name="register_nick_hint">昵称（20个字符以内）</string>
     <string name="register_nick_error">输入的姓名含有特殊字符，请重新输入</string>
     <string name="login_input_password">请输入密码</string>
-    <string name="reg_bubble_desc_text">注册rc账号后你可以使用此账号登录任何一个rc提供的服务。</string>
+    <string name="reg_bubble_desc_text">注册后你可以登录任何RC应用!</string>
     <string name="forget_password_title">忘记密码</string>
     <string name="forget_password_text_hint">请输入已注册的邮箱地址，我们将向该邮箱地址发送电子邮件。</string>
     <string name="forget_password_email_address_text">输入注册的邮箱地址</string>
@@ -86,6 +86,7 @@
     <string name="settings_update_editor_hint">enter text...</string>
     <string name="settings_tacoty_account_info_title">RC账号信息</string>
     <string name="setting_update_login_password">修改登录密码</string>
+    <string name="login_out">注销</string>
     <string name="setting_update_set_newlogin_password">设置新密码</string>
     <string name="setting_update_check_password_hint">为验证你为用户本人，请输入现密码</string>
     <string name="setting_update_password1_hint">6位以上字母数字</string>
@@ -95,7 +96,7 @@
     <string name="setting_update_new_password">请输入新密码</string>
     <string name="setting_update_new_confirm_password">请输入确认密码</string>
     <string name="setting_update_twice_password_invalid">两次密码输入不一致，请重新输入</string>
-    <string name="setting_update_set_tacotyid_title">设置ID</string>
+    <string name="setting_update_set_rcid_title">设置ID</string>
     <string name="setting_update_facebook_unbind_title">Facebook账号</string>
     <string name="setting_update_facebook_unbind_btn">解除绑定</string>
     <string name="setting_update_facebook_unbind">未绑定</string>
@@ -220,6 +221,7 @@
     <string name="rcid">RC ID</string>
 
     <!-- add friends -->
+    <string name="phone">电话号码</string>
     <string name="contact_friend">通讯录好友</string>
     <string name="facebook_friend">facebook好友</string>
     <string name="deauthorize_complete">解除绑定成功</string>
@@ -245,6 +247,7 @@
     <string name="receive_all">所有人</string>
     <string name="receive_friend">我的好友</string>
     <string name="setting">设置</string>
+    <string name="my_account">我的帐户</string>
     <string name="input_current_password">为验证你为用户本人，请输入现密码</string>
     <string name="two_password_not_same">两次密码输入不一致，请重新输入</string>
     <string name="password_change_complete">修改密码成功</string>
@@ -294,6 +297,15 @@
     <string name="invite_success">邀请好友成功</string>
     <string name="invite_cancel">取消好友邀请</string>
     <string name="invite_fail">好友邀请失败</string>
+    <string name="init_message_title_one">分享瞬间</string>
+    <string name="init_message_text_one">分享生活中每一个精彩的瞬间</string>
+    <string name="init_message_title_two">照片处理</string>
+    <string name="init_message_text_two">用语音、涂鸦使照片更有趣</string>
+    <string name="init_message_title_three">限时销毁</string>
+    <string name="init_message_text_three">照片查看后自动销毁，不用担心隐私被泄露</string>
+    <string name="init_regist_agreement">注册即表示您接受服务条款和隐私政策</string>
+    
+    
 
     <!-- gcm -->
     <string name="gcm_message">你有%1$d条信息了</string>

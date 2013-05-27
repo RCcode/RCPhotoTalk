@@ -198,28 +198,18 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 						data.length, options);
 				Bitmap tempBitmap = null;
 				Matrix matrix = new Matrix();
-				matrix.reset();
+//				matrix.reset();
 				// if (mBitmap.getWidth() > mBitmap.getHeight()) {
 				if (mCurrentCameraNum == 1) {
-					matrix.setRotate(270);
+//					matrix.setRotate(270);
+					matrix.postRotate(270);
+					matrix.preScale(1, -1); 
 				} else {
 					matrix.setRotate(round);
 				}
-				// matrix.setRotate(90);
-				// }
-				// tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
-				// mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
-				// mBitmap.recycle();
-				// } else {
-				// if (mCurrentCameraNum == mFrontCameraNum) {
 				tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
 						mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 				mBitmap.recycle();
-				// }else{
-				// // Utils.get
-				// tempBitmap = mBitmap;
-				// }
-				// }
 				((PhotoTalkApplication) mContext.getApplicationContext())
 						.setEditeBitmap(tempBitmap);
 				mBitmap = null;

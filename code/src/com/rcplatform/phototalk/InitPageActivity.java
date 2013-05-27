@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,7 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
@@ -40,6 +42,7 @@ public class InitPageActivity extends BaseActivity implements
 	private static final int FLING_MIN_VELOCITY = 200;
 	private int numView = 0;
 	private ViewFlipper pager;
+	private TextView init_message_title,init_message_text;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,10 @@ public class InitPageActivity extends BaseActivity implements
 		inAnimation_Alpha.setDuration(400);
 		outAnimation_Alpha = new AlphaAnimation(1.0f, 0.0f);
 		outAnimation_Alpha.setDuration(400);
-
+		init_message_title = (TextView)findViewById(R.id.init_message_title);
+		init_message_text = (TextView)findViewById(R.id.init_message_text);
+		init_message_title.setShadowLayer(3F, 3F,1F, Color.BLACK); 
+		init_message_text.setShadowLayer(3F, 3F,1F, Color.BLACK); 
 		Button mLoginButton = (Button) findViewById(R.id.init_page_login_button);
 		mLoginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -199,6 +205,20 @@ public class InitPageActivity extends BaseActivity implements
 		return false;
 	}
 	public void onCheckMain(int n) {
+		switch (n) {
+		case 0:
+			init_message_title.setText(R.string.init_message_title_one);
+			init_message_text.setText(R.string.init_message_text_one);
+			break;
+		case 1:
+			init_message_title.setText(R.string.init_message_title_two);
+			init_message_text.setText(R.string.init_message_text_two);
+			break;
+		case 2:
+			init_message_title.setText(R.string.init_message_title_three);
+			init_message_text.setText(R.string.init_message_text_three);
+			break;
+		}
 		pager.setDisplayedChild(n);
 		mPageIndicator.setActiveDot(n);
 	}

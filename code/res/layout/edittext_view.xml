@@ -8,9 +8,10 @@
     <EditText
         android:id="@+id/et_editText_view"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:textSize="36sp"
+        android:layout_height="35dp"
+        android:textSize="22sp"
         android:gravity="center"
+        android:layout_gravity="center_vertical"
         android:textColor="#ffffffff"
         android:singleLine="true"
         android:focusable="true"

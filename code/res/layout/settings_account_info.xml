@@ -38,7 +38,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
-                    android:text="邮箱地址" >
+                    android:text="@string/registe_email_hint" >
                 </TextView>
 
                 <TextView
@@ -65,7 +65,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
-                    android:text="电话号码" >
+                    android:text="@string/phone" >
                 </TextView>
 
                 <TextView
@@ -77,7 +77,7 @@
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/right_arrow"
                     android:gravity="center_vertical"
-                    android:text="未绑定" />
+                    android:text="@string/unauthorized" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -106,7 +106,7 @@
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/right_arrow"
                     android:gravity="center_vertical"
-                    android:text="设置ID" />
+                    android:text="@string/setting_update_set_rcid_title" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -135,7 +135,7 @@
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/right_arrow"
                     android:gravity="center_vertical"
-                    android:text="未绑定" />
+                    android:text="@string/unauthorized" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -153,7 +153,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="7dp"
                     android:gravity="center_vertical"
-                    android:text="修改登录密码" />
+                    android:text="@string/change_password" />
 
                 <TextView
                     android:id="@+id/account_modify_password"
@@ -177,7 +177,7 @@
         android:layout_marginLeft="@dimen/default_gap"
         android:layout_marginRight="@dimen/default_gap"
         android:background="@drawable/button_selector_red"
-        android:text="注销"
+        android:text="@string/login_out"
         android:textColor="@android:color/white" />
 
 </RelativeLayout>

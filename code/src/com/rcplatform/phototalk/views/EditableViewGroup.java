@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,7 @@ public class EditableViewGroup extends ViewGroup {
 
 	private int y;
 
-	private int lastY;
+	private int screenHeight;
 
 	private boolean isMove;
 
@@ -40,15 +41,21 @@ public class EditableViewGroup extends ViewGroup {
 
 	public EditableViewGroup(Context context) {
 		super(context);
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay(); 
+		screenHeight = display.getHeight();
 	}
 
 	public EditableViewGroup(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		 Display display = ((Activity) context).getWindowManager().getDefaultDisplay(); 
+		screenHeight = display.getHeight(); 
 	}
 
 	public EditableViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay(); 
+		screenHeight = display.getHeight();
 	}
 
 	@Override
@@ -63,11 +70,7 @@ public class EditableViewGroup extends ViewGroup {
 		specSize_Widht = MeasureSpec.getSize(widthMeasureSpec);
 		specSize_Heigth = MeasureSpec.getSize(heightMeasureSpec);
 
-		Log.i("Futao", "specSize_Widht = " + specSize_Widht
-				+ " specSize_Heigth = " + specSize_Heigth);
-		Log.i("Futao", "count = " + getChildCount());
 		setMeasuredDimension(specSize_Widht, specSize_Heigth);
-		// super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
 		View v = getChildAt(0);
 		v.measure(MeasureSpec.makeMeasureSpec(specSize_Widht,
@@ -130,17 +133,16 @@ public class EditableViewGroup extends ViewGroup {
 				stat = false;
 			}
 			if (isMove) {
+				if(y<120){
+					y=120;
+				}else if(y>screenHeight-190){
+					y= screenHeight-190;
+				}
 				editTextView.layout(0, y, getChildAt(1).getMeasuredWidth(), y
 						+ getChildAt(1).getMeasuredHeight());
 			}
 			break;
 		case MotionEvent.ACTION_UP:
-//			if (((EditText) editTextView.getChildAt(0)) != null) {
-//			}
-//			if (((EditText) editTextView.getChildAt(0)).getText().equals("")
-//					|| ((EditText) editTextView.getChildAt(0)).getText() == null) {
-//				editTextView.setVisibility(View.GONE);
-//			}
 
 			if (!isMove && stat) {
 				showInputMethod(((Activity) getContext()));

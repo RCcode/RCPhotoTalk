@@ -18,10 +18,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.URLSpan;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -29,6 +35,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -60,7 +67,8 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
-public class LoginActivity extends ImagePickActivity implements View.OnClickListener {
+public class LoginActivity extends ImagePickActivity implements
+		View.OnClickListener {
 
 	public static final String RESULT_KEY_USERINFO = "userinfo";
 	private String mGoogleAccount;
@@ -76,17 +84,15 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private EditText mPswEditText;
 
-	private View mLine2View;
-
 	private ListView mLvAcccounts;
-
+	private TextView init_regist_agreement_text;
 	private Button mLoginButton;
 
 	private Button mSignupButton;
 
 	private Button mForgetPswButton;
 	private View mLinearAccounts;
-	private ImageView mIvHead;
+	// private ImageView mIvHead;
 	private TextView btnChange;
 
 	// 正则，必须由数字字母组成
@@ -99,7 +105,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private void startPlatformUserEditActivity(Map<AppInfo, UserInfo> userApps) {
 		Intent intent = new Intent(this, PlatformEditActivity.class);
-		intent.putExtra(PlatformEditActivity.PARAM_USER_APPS, (HashMap<AppInfo, UserInfo>) userApps);
+		intent.putExtra(PlatformEditActivity.PARAM_USER_APPS,
+				(HashMap<AppInfo, UserInfo>) userApps);
 		startActivity(intent);
 	}
 
@@ -122,7 +129,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
 		Intent intent = getIntent();
-		mIsLoginPage = (Boolean) intent.getExtras().get(Constants.KEY_LOGIN_PAGE);
+		mIsLoginPage = (Boolean) intent.getExtras().get(
+				Constants.KEY_LOGIN_PAGE);
 		setupData();
 		setupView();
 	}
@@ -141,10 +149,12 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	}
 
 	private void setupView() {
-		findViewById(R.id.title_linear_back).setOnClickListener(this);
-		findViewById(R.id.back).setVisibility(View.VISIBLE);
-		mIvHead = (ImageView) findViewById(R.id.iv_registe_head);
-		mIvHead.setOnClickListener(this);
+		ImageButton back_btn = (ImageButton) findViewById(R.id.back);
+		back_btn.setVisibility(View.VISIBLE);
+		back_btn.setOnClickListener(this);
+		init_regist_agreement_text = (TextView) findViewById(R.id.init_regist_agreement_text);
+		// mIvHead = (ImageView) findViewById(R.id.iv_registe_head);
+		// mIvHead.setOnClickListener(this);
 		btnChange = (TextView) findViewById(R.id.choosebutton);
 		btnChange.setOnClickListener(this);
 		// btnChange.setVisibility(View.VISIBLE);
@@ -152,11 +162,10 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mTitleTextView.setVisibility(View.VISIBLE);
 		mLvAcccounts = (ListView) findViewById(R.id.lv_apps_account);
 		mDescTextView = (TextView) findViewById(R.id.reg_bubble_desc_text);
-
+		mDescTextView.setVisibility(View.GONE);
 		mLoginIdEditText = (EditText) findViewById(R.id.login_id);
 		mNickEditText = (EditText) findViewById(R.id.login_nick);
 		mPswEditText = (EditText) findViewById(R.id.login_password);
-		mLine2View = findViewById(R.id.login_field_line2);
 
 		mForgetPswButton = (Button) findViewById(R.id.login_page_forget_password_button);
 		mForgetPswButton.setOnClickListener(this);
@@ -170,8 +179,10 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLvAcccounts.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Map<AppInfo, UserInfo> userApps = (Map<AppInfo, UserInfo>) parent.getAdapter().getItem(position);
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Map<AppInfo, UserInfo> userApps = (Map<AppInfo, UserInfo>) parent
+						.getAdapter().getItem(position);
 				checkPlatformUser(userApps);
 			}
 		});
@@ -189,21 +200,36 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLinearAccounts.setVisibility(View.GONE);
 		mLoginIdEditText.setText(mGoogleAccount);
 		mDescTextView.setText(R.string.reg_bubble_desc_text);
+		mDescTextView.setVisibility(View.VISIBLE);
 		mTitleTextView.setText(R.string.login_title_bubble_text);
-		mLine2View.setVisibility(View.VISIBLE);
 		mForgetPswButton.setVisibility(View.GONE);
 		mLvAcccounts.setVisibility(View.GONE);
 		mNickEditText.setVisibility(View.VISIBLE);
 		mLoginButton.setVisibility(View.GONE);
 		mSignupButton.setVisibility(View.VISIBLE);
+		init_regist_agreement_text.setVisibility(View.VISIBLE);
+
+		SpannableString msp = new SpannableString(
+				getString(R.string.init_regist_agreement));
+		msp.setSpan(new ForegroundColorSpan(Color.BLUE), 8, 12,
+				Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 设置前景色为洋红色
+		msp.setSpan(new ForegroundColorSpan(Color.BLUE), 13, 17,
+				Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 设置前景色为洋红色
+		msp.setSpan(new URLSpan("http://www.baidu.com"), 8, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		msp.setSpan(new URLSpan("http://www.baidu.com"), 13, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		init_regist_agreement_text.setText(msp);
+		init_regist_agreement_text.setMovementMethod(LinkMovementMethod
+				.getInstance());
+
 		mLoginIdEditText.setHint(getString(R.string.registe_email_hint));
 		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT);
-		mIvHead.setVisibility(View.GONE);
+		// mIvHead.setVisibility(View.GONE);
 	}
 
 	private void showLoginView() {
 		clearInputInfo();
 		mDescTextView.setText(R.string.user_other_account);
+		mDescTextView.setVisibility(View.GONE);
 		btnChange.setText(R.string.landing_page_signup);
 		if (Constants.userApps.size() > 0) {
 			mLinearAccounts.setVisibility(View.VISIBLE);
@@ -211,15 +237,16 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			mLinearAccounts.setVisibility(View.GONE);
 		}
 		mTitleTextView.setText(R.string.login_title_login_bubble_text);
-		mLine2View.setVisibility(View.GONE);
 		mForgetPswButton.setVisibility(View.VISIBLE);
 		mLvAcccounts.setVisibility(View.VISIBLE);
 		mNickEditText.setVisibility(View.GONE);
 		mLoginButton.setVisibility(View.VISIBLE);
 		mSignupButton.setVisibility(View.GONE);
+		init_regist_agreement_text.setVisibility(View.GONE);
 		mLoginIdEditText.setHint(getString(R.string.login_username_hint));
-		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-		mIvHead.setVisibility(View.GONE);
+		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT
+				| InputType.TYPE_TEXT_VARIATION_PASSWORD);
+		// mIvHead.setVisibility(View.GONE);
 	}
 
 	private void clearInputInfo() {
@@ -232,34 +259,51 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	public void onClick(View v) {
 
 		switch (v.getId()) {
-		case R.id.title_linear_back:
+		case R.id.back:
 			finish();
 			break;
-		case R.id.iv_registe_head:
-			showImagePickMenu(v, CROP_HEAD_IMAGE);
-			break;
+
+		// case R.id.iv_registe_head:
+		// showImagePickMenu(v, CROP_HEAD_IMAGE);
+		// break;
 		case R.id.login_page_signup_button:
 			final String email = mLoginIdEditText.getText().toString();
 			final String nick = mNickEditText.getText().toString();
 			final String psw = mPswEditText.getText().toString();
 			if (invalidate(this, email, nick, psw)) {
-				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
-				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
-						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(
+						LoginActivity.this);
+				dialogBuilder
+						.setMessage(
+								getResources()
+										.getString(
+												R.string.register_confirm_email_address,
+												email))
+						.setCancelable(false)
+						.setPositiveButton(
+								getResources().getString(R.string.modify),
+								new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-							}
-						}).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+									}
+								})
+						.setNegativeButton(
+								getResources().getString(R.string.ok),
+								new DialogInterface.OnClickListener() {
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								dialog.cancel();
-								tigaseRegiste(LoginActivity.this, email, psw, nick);
-								// register(LoginActivity.this, email, psw,
-								// nick);
-							}
-						});
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										dialog.cancel();
+										tigaseRegiste(LoginActivity.this,
+												email, psw, nick);
+										// register(LoginActivity.this, email,
+										// psw,
+										// nick);
+									}
+								});
 				dialogBuilder.create().show();
 			}
 			break;
@@ -302,8 +346,10 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	 * 
 	 * @return
 	 */
-	private boolean invalidate(Context context, String emailId, String nickName, String psw2) {
-		if (checkEmail(emailId) && checkNickName(nickName) && checkPassword(psw2)) {
+	private boolean invalidate(Context context, String emailId,
+			String nickName, String psw2) {
+		if (checkEmail(emailId) && checkNickName(nickName)
+				&& checkPassword(psw2)) {
 			return true;
 		}
 		return false;
@@ -315,12 +361,16 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkEmail(String emailId) {
 		// 邮箱正则表达式
 		if (TextUtils.isEmpty(emailId)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_empty), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this,
+					getResources().getString(R.string.registe_email_empty),
+					getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
 		if (!emailPattern.matcher(emailId).matches()) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this,
+					getResources().getString(R.string.registe_email_error),
+					getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -331,7 +381,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			return PhotoTalkApiFactory.LOGIN_TYPE_EMAIL;
 		else if (account.matches(RCID_REGEX))
 			return PhotoTalkApiFactory.LOGIN_TYPE_RCID;
-		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(
+				this,
+				getResources().getString(
+						R.string.login_email_phone_tacotyid_is_null),
+				getResources().getString(R.string.ok)).show();
 		return -1;
 	}
 
@@ -341,7 +395,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkNickName(String nickeName) {
 		// 昵称正则表达式
 		if (!RCPlatformTextUtil.isNickMatches(nickeName)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_nick_empty), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this,
+					getResources().getString(R.string.register_nick_empty),
+					getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -354,11 +410,15 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkPassword(String psw) {
 
 		if (TextUtils.isEmpty(psw)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_password_empty), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this,
+					getResources().getString(R.string.registe_password_empty),
+					getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		if (!RCPlatformTextUtil.isPasswordMatches(psw)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_password_error), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this,
+					getResources().getString(R.string.register_password_error),
+					getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -367,7 +427,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	@Override
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
 		super.onImageReceive(imageBaseUri, imagePath);
-		showImage(imagePath, imageBaseUri, mIvHead);
+		// showImage(imagePath, imageBaseUri, mIvHead);
 	}
 
 	class OtherAppsAdapter extends BaseAdapter {
@@ -387,7 +447,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null)
-				convertView = getLayoutInflater().inflate(R.layout.other_app_item, null);
+				convertView = getLayoutInflater().inflate(
+						R.layout.other_app_item, null);
 			TextView tv = (TextView) convertView.findViewById(R.id.tv_account);
 			UserInfo userInfo = users.get(position);
 			tv.setText(userInfo.getEmail());
@@ -425,37 +486,50 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Iterator<UserInfo> itUsers = userApps.values().iterator();
 		UserInfo userInfo = itUsers.next();
-		Request request = new Request(this, PhotoTalkApiUrl.CHECK_USER_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(this, PhotoTalkApiUrl.CHECK_USER_URL,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				dismissLoadingDialog();
-				try {
-					JSONObject obj = new JSONObject(content);
-					int showRecommends = obj.getInt("showRecommends");
-					if (showRecommends == UserInfo.FIRST_TIME) {
-						startPlatformUserEditActivity(userApps);
-					} else {
-						UserInfo userInfo = JSONConver.jsonToUserInfo(obj.getJSONObject("userInfoAll").toString());
-						userInfo.setShowRecommends(showRecommends);
-						long lastBindTime = obj.optLong(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_TIME);
-						String lastBindNumber = obj.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
-						PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
-						PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
-						loginSuccess(userInfo);
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						dismissLoadingDialog();
+						try {
+							JSONObject obj = new JSONObject(content);
+							int showRecommends = obj.getInt("showRecommends");
+							if (showRecommends == UserInfo.FIRST_TIME) {
+								startPlatformUserEditActivity(userApps);
+							} else {
+								UserInfo userInfo = JSONConver
+										.jsonToUserInfo(obj.getJSONObject(
+												"userInfoAll").toString());
+								userInfo.setShowRecommends(showRecommends);
+								long lastBindTime = obj
+										.optLong(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_TIME);
+								String lastBindNumber = obj
+										.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
+								PrefsUtils.User.MobilePhoneBind
+										.setLastBindNumber(
+												getApplicationContext(),
+												userInfo.getRcId(),
+												lastBindNumber);
+								PrefsUtils.User.MobilePhoneBind
+										.setLastBindPhoneTime(
+												getApplicationContext(),
+												lastBindTime,
+												userInfo.getRcId());
+								loginSuccess(userInfo);
+							}
+						} catch (Exception e) {
+							e.printStackTrace();
+							showErrorConfirmDialog(R.string.net_error);
+						}
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
-					showErrorConfirmDialog(R.string.net_error);
-				}
-			}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				});
 		PhotoTalkParams.buildBasicParams(this, request);
 		request.putParam(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
 		request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
@@ -463,10 +537,13 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	}
 
 	private void loginSuccess(final UserInfo userInfo) {
-		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME && !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
-			ContactUploadTask task = ContactUploadTask.getInstance(LoginActivity.this);
+		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME
+				&& !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
+			ContactUploadTask task = ContactUploadTask
+					.getInstance(LoginActivity.this);
 			if (task.getStatus() == Status.STATUS_RUNNING) {
-				showLoadingDialog(LOADING_NO_MSG, R.string.uploading_contacts, false);
+				showLoadingDialog(LOADING_NO_MSG, R.string.uploading_contacts,
+						false);
 				task.setOnUploadOverListener(new OnUploadOverListener() {
 
 					@Override
@@ -482,52 +559,63 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		closePage(userInfo);
 	}
 
-	private void tigaseRegiste(Context context, final String email, String password, final String nick) {
+	private void tigaseRegiste(Context context, final String email,
+			String password, final String nick) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		Request request = new Request(context, PhotoTalkApiUrl.SIGNUP_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(context, PhotoTalkApiUrl.SIGNUP_URL,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				LogUtil.e(content);
-				try {
-					JSONObject jsonObject = new JSONObject(content);
-					mUser = new UserInfo();
-					mUser.setEmail(email);
-					mUser.setNickName(nick);
-					mUser.setShowRecommends(UserInfo.FIRST_TIME);
-					mUser.setToken(jsonObject.getString("token"));
-					mUser.setTigaseId(jsonObject.getString("tgId"));
-					mUser.setTigasePwd(jsonObject.getString("tgpwd"));
-					mUser.setRcId(jsonObject.getString("rcId"));
-					mUser.setDeviceId(PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-					mUser.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
-					saveUserInfo(mUser);
-					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
-					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
-					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends, FriendType.CONTACT);
-					loginSuccess(mUser);
-				} catch (Exception e) {
-					e.printStackTrace();
-					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
-				}
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		});
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						LogUtil.e(content);
+						try {
+							JSONObject jsonObject = new JSONObject(content);
+							mUser = new UserInfo();
+							mUser.setEmail(email);
+							mUser.setNickName(nick);
+							mUser.setShowRecommends(UserInfo.FIRST_TIME);
+							mUser.setToken(jsonObject.getString("token"));
+							mUser.setTigaseId(jsonObject.getString("tgId"));
+							mUser.setTigasePwd(jsonObject.getString("tgpwd"));
+							mUser.setRcId(jsonObject.getString("rcId"));
+							mUser.setDeviceId(PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
+							mUser.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
+							saveUserInfo(mUser);
+							JSONArray arrayRecommends = jsonObject
+									.getJSONArray("recommendUsers");
+							List<Friend> recommends = JSONConver
+									.jsonToFriends(arrayRecommends.toString());
+							PhotoTalkDatabaseFactory.getDatabase()
+									.saveRecommends(recommends,
+											FriendType.CONTACT);
+							loginSuccess(mUser);
+						} catch (Exception e) {
+							e.printStackTrace();
+							onFailure(
+									RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL,
+									getString(R.string.net_error));
+						}
+					}
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				});
 		PhotoTalkParams.buildBasicParams(context, request);
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_EMAIL, email);
-		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_PASSWORD, MD5.encodeMD5String(password));
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_PASSWORD,
+				MD5.encodeMD5String(password));
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_NICK, nick);
-		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Locale.getDefault().getCountry());
-		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Locale
+				.getDefault().getCountry());
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_TIMEZONE,
+				Utils.getTimeZoneId(context) + "");
 		request.excuteAsync();
 	}
 
-	private void tigaseLogin(Context context, final String account, String password) {
+	private void tigaseLogin(Context context, final String account,
+			String password) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Request.executeLogin(context, new OnUserInfoLoadedListener() {
 
