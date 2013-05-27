@@ -61,7 +61,7 @@ public class WelcomeActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		 printHashKey();
+		printHashKey();
 		setContentView(R.layout.loading);
 		startService(new Intent(this, PTBackgroundService.class));
 		startService(new Intent(this, PhotoTalkWebService.class));
@@ -70,6 +70,7 @@ public class WelcomeActivity extends BaseActivity {
 
 			public void run() {
 				Constants.initUI(WelcomeActivity.this);
+				Constants.initCountryDatabase(WelcomeActivity.this);
 				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS, WAITING_TIME);
 			};
 		};

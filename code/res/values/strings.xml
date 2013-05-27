@@ -300,4 +300,10 @@
     <string name="gcm_message">你有%1$d条信息了</string>
     <string name="gcm_friend">有人加你为好友</string>
 
+    <!-- bind phone number -->
+    <string name="input_mobile_phone">输入要绑定的手机号</string>
+    <string name="input_your_number">输入您的电话号码</string>
+    <string name="commit">提交</string>
+    <string name="country_code">(+%1$s)%2$s</string>
+
 </resources>

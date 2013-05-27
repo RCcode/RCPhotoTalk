@@ -45,7 +45,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -74,7 +74,6 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
-
         <activity
             android:name="com.rcplatform.phototalk.WelcomeActivity"
             android:configChanges="orientation"
@@ -100,6 +99,11 @@
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
             android:name="com.rcplatform.phototalk.AboutActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
+            android:name="com.rcplatform.phototalk.BindPhoneActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
@@ -267,6 +271,7 @@
             android:theme="@style/ThemeActivity" />
         <activity
             android:name="com.rcplatform.phototalk.UserInfoActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity" />
         <activity
@@ -300,7 +305,7 @@
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"

@@ -90,7 +90,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private TextView btnChange;
 
 	// 正则，必须由数字字母组成
-	private final String RCID_REGEX = "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
+	// private final String RCID_REGEX =
+	// "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
+	private final String RCID_REGEX = "\\d{7,}";
 	private final String EMAIL_REGEX = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
 
 	// 密码正则表达式
@@ -145,7 +147,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mIvHead.setOnClickListener(this);
 		btnChange = (TextView) findViewById(R.id.choosebutton);
 		btnChange.setOnClickListener(this);
-//		btnChange.setVisibility(View.VISIBLE);
+		// btnChange.setVisibility(View.VISIBLE);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
 		mTitleTextView.setVisibility(View.VISIBLE);
 		mLvAcccounts = (ListView) findViewById(R.id.lv_apps_account);
@@ -266,10 +268,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			String psw2 = mPswEditText.getText().toString().trim();
 			int loginType = invalidate(email2, psw2);
 			if (loginType != -1) {
-				// ------------------测试暂加----------------------------
-				if (loginType == PhotoTalkApiFactory.LOGIN_TYPE_PHONE)
-					email2 = "+86" + email2;
-				// --------------------------------------------------
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 				// login(this, mHandler, email2, psw2, loginType);
 				tigaseLogin(this, email2, psw2);
@@ -506,7 +504,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					saveUserInfo(mUser);
 					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
-					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends,FriendType.CONTACT);
+					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends, FriendType.CONTACT);
 					loginSuccess(mUser);
 				} catch (Exception e) {
 					e.printStackTrace();
