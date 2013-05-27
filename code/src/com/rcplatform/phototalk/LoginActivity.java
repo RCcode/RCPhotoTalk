@@ -633,9 +633,11 @@ public class LoginActivity extends ImagePickActivity implements
 			}
 
 			@Override
-			public void onOthreAppUserInfoLoaded(List<UserInfo> userInfos) {
-				
+			public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
+				dismissLoadingDialog();
+				startPlatformUserEditActivity(userInfos);
 			}
+
 		}, account, password);
 	}
 

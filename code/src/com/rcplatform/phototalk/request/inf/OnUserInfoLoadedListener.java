@@ -1,7 +1,8 @@
 package com.rcplatform.phototalk.request.inf;
 
-import java.util.List;
+import java.util.Map;
 
+import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 
 public interface OnUserInfoLoadedListener {
@@ -9,5 +10,5 @@ public interface OnUserInfoLoadedListener {
 
 	public void onError(int errorCode, String content);
 	
-	public void onOthreAppUserInfoLoaded(List<UserInfo> userInfos);
+	public void onOthreAppUserInfoLoaded(Map<AppInfo,UserInfo> userInfos);
 }
