@@ -1,5 +1,8 @@
 package com.rcplatform.tigase;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
@@ -18,8 +21,45 @@ public class XmppTool {
 
 	private static TigaseNode node = null;
 
+	private static String user;
+	private static String password;
+	
 	public enum MessageStatus {
 		USER_OFFLINE, SEND_OK, SEND_ERROR
+	};
+	
+	
+
+	private static Timer connectCheckTimer = new Timer();
+
+	private static TimerTask connectCheckTask = new TimerTask() {
+
+		public void run() {
+			if (null != con) {
+				if (!con.isConnected()) {
+					try {
+						con.connect();
+					}
+					catch (XMPPException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				if(!con.isAuthenticated()){
+					try {
+	                    con.login(user, password, XMPP_RESOURCES);
+                    }
+                    catch (XMPPException e) {
+	                    // TODO Auto-generated catch block
+	                    e.printStackTrace();
+                    }
+				}
+			} else {
+				openConnection(XmppTool.node.getIp(), XmppTool.node.getPort(), XmppTool.node.getDomain());
+			}
+		}
+
 	};
 
 	// 建立xmpp 连接
@@ -29,10 +69,13 @@ public class XmppTool {
 			con = new XMPPConnection(connConfig);
 			con.connect();
 
-		} catch (Exception xe) {
+		}
+		catch (Exception xe) {
 			xe.printStackTrace();
 			con = null;
 		}
+
+		connectCheckTimer.schedule(connectCheckTask, 6000, 6000);
 	}
 
 	public static void createConnection(TigaseNode node) {
@@ -47,7 +90,8 @@ public class XmppTool {
 					chatManager = con.getChatManager();
 				}
 			}
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 
 		}
 	}
@@ -62,7 +106,9 @@ public class XmppTool {
 			con.disconnect();
 			con = null;
 			chatManager = null;
-		} catch (Exception e) {
+			connectCheckTimer.cancel();
+		}
+		catch (Exception e) {
 
 		}
 	}
@@ -73,7 +119,8 @@ public class XmppTool {
 		try {
 			con.getAccountManager().createAccount(user, password);
 			flag = true;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
@@ -85,10 +132,13 @@ public class XmppTool {
 	// 登录tigase
 	public static boolean login(String user, String password) {
 		boolean flag = false;
+		XmppTool.user = user;
+		XmppTool.password = password;
 		try {
 			con.login(user, password, XMPP_RESOURCES);
 			flag = true;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			flag = false;
 			e.printStackTrace();
@@ -128,7 +178,8 @@ public class XmppTool {
 		try {
 			newchat.sendMessage(msg);
 			msgFlag = MessageStatus.SEND_OK;
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			msgFlag = MessageStatus.SEND_ERROR;
