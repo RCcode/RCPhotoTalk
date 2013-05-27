@@ -148,6 +148,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	private void setBirthday() {
+		System.out.println("userDetailInfo.getBirthday()--->"+userDetailInfo.getBirthday());
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			mBirthday.setText(userDetailInfo.getBirthday());
 			isChance = true;

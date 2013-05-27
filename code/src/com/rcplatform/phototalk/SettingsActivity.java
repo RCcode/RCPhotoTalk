@@ -57,6 +57,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private RoundImageView mHeadView;
 	private TextView mNickView;
 	private TextView userRcId;
+	private TextView userAge;
 	private ImageView user_bg_View;
 	private PopupWindow mImageSelectPopupWindow;
 	private Uri mImageUri;
@@ -81,6 +82,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		mHeadView.setOnClickListener(this);
 		mNickView = (TextView) findViewById(R.id.settings_user_nick);
 		userRcId = (TextView) findViewById(R.id.user_rc_id);
+		userAge = (TextView) findViewById(R.id.tv_age);
 		editBtn = (Button) findViewById(R.id.settings_user_info_edit_action);
 		editBtn.setOnClickListener(this);
 		edit_rcId = (RelativeLayout) findViewById(R.id.settings_user_edit_rc_id_action);
@@ -130,6 +132,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView, R.drawable.default_head);
 		mNickView.setText("" + userInfo.getNickName());
 		userRcId.setText("" + userInfo.getRcId());
+		userAge.setText("" + userInfo.getAge());
 		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getDefaultImageOptions(),
 				userInfo.getBackground(), AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, user_bg_View, R.drawable.user_detail_bg);
 	}

@@ -48,7 +48,7 @@ public class FriendDetailActivity extends BaseActivity {
 	private Button btnPerform;
 	private PopupWindow mRemarkEditWindow;
 	private View linearSource;
-
+private TextView tv_rcid;
 	private String mLastRemark;
 
 	@Override
@@ -133,6 +133,7 @@ public class FriendDetailActivity extends BaseActivity {
 		ivHead = (RoundImageView) findViewById(R.id.iv_head);
 		ivBackground = (ImageView) findViewById(R.id.iv_bg);
 		tvSexAge = (TextView) findViewById(R.id.tv_sex_age);
+		tv_rcid = (TextView)findViewById(R.id.tv_rcid);
 		hlvApps = (HorizontalListView) findViewById(R.id.hlv_apps);
 		tvSource = (TextView) findViewById(R.id.tv_source_name);
 		tvName = (TextView) findViewById(R.id.tv_name);
@@ -159,6 +160,8 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void setFriendName() {
 		tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName());
+		tv_rcid.setText(mFriend.getRcId());
+	
 	}
 
 	private TextView tvName;

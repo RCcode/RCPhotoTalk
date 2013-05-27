@@ -11,13 +11,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/default_gap"
         android:orientation="horizontal" >
 
         <ImageButton
-            android:id="@id/back"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
+            android:id="@+id/back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:background="@drawable/base_back_btn"
             android:visibility="gone" />
@@ -27,6 +26,7 @@
             style="@style/titleTextStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:layout_marginLeft="2dp"
             android:singleLine="true"
             android:visibility="gone" />
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="7dp"
+        android:layout_marginRight="5dp"
         android:gravity="center"
         android:visibility="gone" />
 
@@ -57,6 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+         android:layout_marginRight="4dp"
         android:layout_toLeftOf="@id/choosebutton"
         android:background="@drawable/top_line"
         android:visibility="gone" />
@@ -67,7 +68,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginRight="7dp"
+        android:layout_marginRight="8dp"
         android:layout_toLeftOf="@id/title_line"
         android:visibility="gone" />
 

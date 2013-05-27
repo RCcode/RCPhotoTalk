@@ -76,7 +76,7 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 		case R.id.rela_dysetting:
 			showTrendSetDialog();
 			break;
-		case R.id.title_linear_back:
+		case R.id.back:
 			finishPage();
 			break;
 		}

@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
@@ -129,8 +130,8 @@ public class RCPlatformTextUtil {
 
 	public static int getAgeByBirthday(String birthday) {
 		try {
-			long birthTime = mDateFormat.parse(birthday).getTime();
-			return (int) ((System.currentTimeMillis() - birthTime) / (1000 * 60 * 60 * 24 * 365));
+			long age = (System.currentTimeMillis()-mDateFormat.parse(birthday).getTime());
+			return (int) (age/ (1000L * 60 * 60 * 24 * 365));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

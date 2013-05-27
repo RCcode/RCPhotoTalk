@@ -149,7 +149,6 @@ public class LoginActivity extends ImagePickActivity implements
 	}
 
 	private void setupView() {
-		findViewById(R.id.title_linear_back).setOnClickListener(this);
 		ImageButton back_btn = (ImageButton) findViewById(R.id.back);
 		back_btn.setVisibility(View.VISIBLE);
 		back_btn.setOnClickListener(this);
@@ -264,9 +263,6 @@ public class LoginActivity extends ImagePickActivity implements
 			finish();
 			break;
 
-		case R.id.title_linear_back:
-			finish();
-			break;
 		// case R.id.iv_registe_head:
 		// showImagePickMenu(v, CROP_HEAD_IMAGE);
 		// break;
