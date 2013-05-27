@@ -86,6 +86,7 @@
     <string name="settings_update_editor_hint">enter text...</string>
     <string name="settings_tacoty_account_info_title">RC账号信息</string>
     <string name="setting_update_login_password">修改登录密码</string>
+    <string name="login_out">注销</string>
     <string name="setting_update_set_newlogin_password">设置新密码</string>
     <string name="setting_update_check_password_hint">为验证你为用户本人，请输入现密码</string>
     <string name="setting_update_password1_hint">6位以上字母数字</string>
@@ -95,7 +96,7 @@
     <string name="setting_update_new_password">请输入新密码</string>
     <string name="setting_update_new_confirm_password">请输入确认密码</string>
     <string name="setting_update_twice_password_invalid">两次密码输入不一致，请重新输入</string>
-    <string name="setting_update_set_tacotyid_title">设置ID</string>
+    <string name="setting_update_set_rcid_title">设置ID</string>
     <string name="setting_update_facebook_unbind_title">Facebook账号</string>
     <string name="setting_update_facebook_unbind_btn">解除绑定</string>
     <string name="setting_update_facebook_unbind">未绑定</string>
@@ -220,6 +221,7 @@
     <string name="rcid">RC ID</string>
 
     <!-- add friends -->
+    <string name="phone">电话号码</string>
     <string name="contact_friend">通讯录好友</string>
     <string name="facebook_friend">facebook好友</string>
     <string name="deauthorize_complete">解除绑定成功</string>
@@ -245,6 +247,7 @@
     <string name="receive_all">所有人</string>
     <string name="receive_friend">我的好友</string>
     <string name="setting">设置</string>
+    <string name="my_account">我的帐户</string>
     <string name="input_current_password">为验证你为用户本人，请输入现密码</string>
     <string name="two_password_not_same">两次密码输入不一致，请重新输入</string>
     <string name="password_change_complete">修改密码成功</string>

@@ -227,7 +227,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:text="好友动态"
+                            android:text="@string/friend_dynamic"
                             android:textColor="#313131" >
                         </TextView>
 
@@ -281,7 +281,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:text="我的帐号"
+                            android:text="@string/my_account"
                             android:textColor="#313131" >
                         </TextView>
 
@@ -310,7 +310,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:text="设置"
+                            android:text="@string/setting"
                             android:textColor="#313131" >
                         </TextView>
 
