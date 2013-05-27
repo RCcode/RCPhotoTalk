@@ -1,21 +1,21 @@
 package com.rcplatform.phototalk.utils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.Locale;
 import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources.NotFoundException;
+import android.net.wifi.WifiManager;
 import android.util.DisplayMetrics;
 
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.DatabaseUtils;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
 
 public class Constants {
 
@@ -49,6 +49,12 @@ public class Constants {
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
+		String language = Locale.getDefault().getLanguage();
+		if (language.equals(Locale.CHINESE.toString())) {
+			language = language + "_" + Locale.getDefault().getCountry();
+		}
+		PhotoTalkParams.PARAM_VALUE_LANGUAGE = language;
+		PhotoTalkParams.PARAM_VALUE_DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();
 	}
 
 	public static void initDatabase(Context context) {

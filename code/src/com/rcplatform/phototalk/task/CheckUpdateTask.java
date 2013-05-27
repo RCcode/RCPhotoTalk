@@ -35,7 +35,7 @@ public class CheckUpdateTask {
 						if (isAutoRequest && newVersion.equals(PrefsUtils.AppInfo.getNeverAttentionVersion(mContext))) {
 							return;
 						}
-						String updateContent = jsonObject.getString("notice");
+						String updateContent = jsonObject.getString("verText");
 						String updateUrl = jsonObject.getString("appUrl");
 						if (mOnUpdateCheckListener != null) {
 							mOnUpdateCheckListener.onHasUpdate(newVersion, updateContent, updateUrl);

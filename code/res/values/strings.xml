@@ -283,7 +283,6 @@
     <string name="added_friend">我将%1$s加为好友</string>
     <string name="added_friend_confirm">%1$s已反加我为好友</string>
     <string name="registe_fail">注册失败</string>
-    <string name="join_message">我已加入PhotoTalk：</string>
     <string name="no_net">没有可用网络</string>
     <string name="vk_auth">绑定VK</string>
     <string name="vk_load_fail">VK信息获取失败</string>
@@ -305,5 +304,17 @@
     <string name="input_your_number">输入您的电话号码</string>
     <string name="commit">提交</string>
     <string name="country_code">(+%1$s)%2$s</string>
+    <string name="change_phone_number">修改手机号</string>
+    <string name="resend_sms">重新发送短信</string>
+    <string name="resend_sms_second">重新发送短信(%1$d秒)</string>
+    <string name="bind_phone">绑定手机号</string>
+    <string name="input_validate">请输入发送到+86 186-0126-1111的4位验证码</string>
+    <string name="input_correct_validate">请输入正确验证码</string>
+    <string name="input_correct_phonenumber">请输入正确手机号</string>
+    <string name="sms_sended">验证短信已发送</string>
+    <string name="phone_number_validate">电话号码验证</string>
+    
+    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:，注册后加我ID:%1$s</string>
+    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:</string>
 
 </resources>

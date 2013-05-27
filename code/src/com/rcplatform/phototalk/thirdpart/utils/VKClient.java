@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk.thirdpart.utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -10,10 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 
-import com.hp.hpl.sparta.Document;
-import com.perm.kate.api.Album;
 import com.perm.kate.api.Api;
-import com.perm.kate.api.Photo;
 import com.perm.kate.api.User;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.VKAuthorizeActivity;
@@ -84,7 +80,7 @@ public class VKClient {
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-					mApi.createWallPost(mUid, "加入PT发上墙啊发上墙", null, null, false, false, false, null, null, null, null);
+					mApi.createWallPost(mUid,mContext.getString(R.string.join_message), null, null, false, false, false, null, null, null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -159,8 +155,8 @@ public class VKClient {
 					try {
 						List<String> attachments = new ArrayList<String>();
 						attachments.add("http://www.google.co.jp");
-						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.my_firend_invite_send_short_msg), attachments, null, false, false,
-								false, null, null, null, null);
+						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()), attachments,
+								null, false, false, false, null, null, null, null);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

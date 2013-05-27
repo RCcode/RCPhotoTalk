@@ -158,6 +158,11 @@ public class Request implements Serializable {
 						public void onError(int errorCode, String content) {
 							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 						}
+
+						@Override
+						public void onOthreAppUserInfoLoaded(List<UserInfo> userInfos) {
+							
+						}
 					}, user.getRcId(), user.getToken());
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -543,6 +543,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
+
+			@Override
+			public void onOthreAppUserInfoLoaded(List<UserInfo> userInfos) {
+				
+			}
 		}, account, password);
 	}
 
