@@ -17,36 +17,35 @@
             style="@style/text_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/input_validate" />
+            android:text="@string/input_mobile_phone" />
 
-        <EditText
-            android:id="@+id/et_validate"
+        <Button
+            android:id="@+id/btn_country_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:inputType="number"
-            android:maxLength="4" />
+            android:gravity="left|center_vertical" />
+
+        <TextView
+            style="@style/text_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/input_your_number" />
+
+        <EditText
+            android:id="@+id/et_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/btn_commit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/commit" />
-
-        <Button
-            android:id="@+id/btn_resend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:text="@string/resend_sms" />
-
-        <Button
-            android:id="@+id/btn_change_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/change_phone_number" />
+            android:text="@string/next" />
     </LinearLayout>
 
 </LinearLayout>

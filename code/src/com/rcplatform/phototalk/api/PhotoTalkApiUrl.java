@@ -117,4 +117,6 @@ public class PhotoTalkApiUrl {
 	public static final String ASYNC_INVITE_URL = RCBOSS_COMM_URL + "inviteUserLog.do";
 	public static final String SYNCHRO_THIRD_URL = RCBOSS_THIRD_URL + "thirdBind.do";
 	public static final String GET_ALL_APPS_URL = RCBOSS_USER_URL + "getAllAppInfo.do";
+	public static final String REQUEST_SMS_URL = RCBOSS_USER_URL + "downSms.do";
+	public static final String BIND_PHONE_URL = RCBOSS_USER_URL + "checkSms.do";
 }

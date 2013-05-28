@@ -631,6 +631,13 @@ public class LoginActivity extends ImagePickActivity implements
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
+
+			@Override
+			public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
+				dismissLoadingDialog();
+				startPlatformUserEditActivity(userInfos);
+			}
+
 		}, account, password);
 	}
 
