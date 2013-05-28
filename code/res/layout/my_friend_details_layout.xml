@@ -73,13 +73,13 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@id/friend_detail_tacoty"
+                    android:id="@+id/friend_detail_tacoty"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ID:1234567698" />
 
                 <TextView
-                    android:id="@id/friend_detail_mark"
+                    android:id="@+id/friend_detail_mark"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="生活与工作" />
