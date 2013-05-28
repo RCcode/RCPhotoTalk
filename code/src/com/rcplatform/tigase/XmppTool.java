@@ -180,13 +180,10 @@ public class XmppTool {
 			msgFlag = MessageStatus.SEND_OK;
 		}
 		catch (Exception e) {
-			// TODO Auto-generated catch block
+			//发送失败消息入库
+			
 			e.printStackTrace();
 			msgFlag = MessageStatus.SEND_ERROR;
-		}
-		if (!presence.isAvailable()) {
-			msgFlag = MessageStatus.USER_OFFLINE;
-			// TODO gcm
 		}
 
 		return msgFlag;
