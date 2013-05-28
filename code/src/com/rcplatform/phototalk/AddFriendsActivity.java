@@ -60,7 +60,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
 		ImageView btn_continue_line = (ImageView)findViewById(R.id.btn_continue_line);
 		btnContinue.setOnClickListener(this);
-		if (getIntent().getData() != null) {
+		if (getIntent().getData() != null||getIntent().getStringExtra("from").equals("base")) {
 			btnContinue.setVisibility(View.GONE);
 			btn_continue_line.setVisibility(View.GONE);
 

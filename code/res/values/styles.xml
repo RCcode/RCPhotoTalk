@@ -123,7 +123,7 @@
     </style>
 
     <style name="AppBG" parent="@android:style/Theme.Light.NoTitleBar">
-        <item name="android:background">@drawable/loading720_1280</item>
+        <item name="android:background">@drawable/loading</item>
     </style>
     <!--
               文本内容1

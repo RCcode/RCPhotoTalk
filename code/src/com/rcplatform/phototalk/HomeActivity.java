@@ -28,6 +28,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.message.UserMessageService;
@@ -528,15 +529,10 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		menu.add(R.string.home_clear_all_record);
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		LogicUtils.showInformationClearDialog(this);
-		return super.onOptionsItemSelected(item);
-	}
+//	LogicUtils.showInformationClearDialog(this);
 
 	private List<Information> getAdapterData() {
 		if (adapter == null)

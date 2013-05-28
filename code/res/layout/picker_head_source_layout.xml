@@ -13,7 +13,7 @@
         android:orientation="vertical" >
 
         <Button
-            android:id="@id/picker_head_source_camera"
+            android:id="@+id/picker_head_source_camera"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginLeft="@dimen/default_gap"
@@ -26,7 +26,7 @@
             android:textColor="#534d48" />
 
         <Button
-            android:id="@id/picker_head_source_gallary"
+            android:id="@+id/picker_head_source_gallary"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginLeft="@dimen/default_gap"
@@ -39,7 +39,7 @@
             android:textColor="#534d48"  />
 
         <Button
-            android:id="@id/picker_head_cancel"
+            android:id="@+id/picker_head_cancel"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_marginBottom="@dimen/default_gap_2x"

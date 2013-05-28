@@ -250,6 +250,7 @@ public class EditPictureActivity extends BaseActivity {
 				voicePath = savePath;
 				audioBtn.setVisibility(4);
 				make_voice.setVisibility(0);
+				mButtonTimeLimit.setClickable(false);
 				voice_size.setText(n + "s");
 
 			}
@@ -394,6 +395,7 @@ public class EditPictureActivity extends BaseActivity {
 				if (file.exists()) {
 					file.delete();
 				}
+				mButtonTimeLimit.setClickable(true);
 				audioBtn.setVisibility(0);
 				make_voice.setVisibility(4);
 				break;

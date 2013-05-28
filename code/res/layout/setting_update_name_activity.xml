@@ -1,6 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/white"
+    android:background="@drawable/app_backgroud"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 	<include layout="@layout/base_top_navigate"/>
@@ -55,18 +55,19 @@
                 android:background="@null"
                 android:maxLength="60"
                 android:padding="@dimen/default_gap"
+                android:drawableBottom="@drawable/edit_button_selector"
                 android:textColor="@android:color/black" />
 
         </LinearLayout>
 
         <Button
-            android:id="@id/settings_update_confirm_button"
+            android:id="@+id/settings_update_confirm_button"
             style="@style/LandingPageButton"  
             android:layout_below="@id/login_fields"
             android:layout_marginLeft="@dimen/default_gap_2x"
             android:layout_marginRight="@dimen/default_gap_2x"
             android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/button_selector_yellow"
+            android:background="@drawable/login_btn"
             android:text="@string/ok"
             android:textColor="@android:color/white" />
 
