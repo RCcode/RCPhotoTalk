@@ -48,16 +48,16 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private final Context context;
 
-	private final ImageLoader mImageLoader;
+	private ImageLoader mImageLoader;
 
 	private Information mPressedInformation;
 	private int mPressedPosition = -1;
 	private ListView mList;
 
-	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list) {
+	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list,ImageLoader imageLoader) {
 		this.data.addAll(data);
 		this.context = context;
-		this.mImageLoader = ImageLoader.getInstance();
+		this.mImageLoader = imageLoader;
 		this.mList = list;
 	}
 

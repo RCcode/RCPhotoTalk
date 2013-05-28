@@ -40,7 +40,6 @@ import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
@@ -107,12 +106,14 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private boolean isInformationReceiverRegiste = false;
 
 	private ImageView iconTrendNew;
+	private ImageLoader mImageLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
 		InformationPageController.getInstance().setupController(this);
+		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
 		loadDataFromDataBase();
 		onNewTrends();
@@ -489,7 +490,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private void initOrRefreshListView(List<Information> data) {
 		if (adapter == null) {
-			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList);
+			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList, mImageLoader);
 			mInformationList.setAdapter(adapter);
 		} else {
 			adapter.addData(data);
@@ -520,6 +521,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		if (mLongPressDialog != null && mLongPressDialog.isShowing())
 			mLongPressDialog.dismiss();
 		ImageLoader.getInstance().clearMemoryCache();
+		ImageLoader.getInstance().stop();
 		unregisteInformationReceiver();
 		super.onDestroy();
 	}
