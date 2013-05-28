@@ -192,16 +192,13 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			// TODO Auto-generated method stub
 			if (camera != null) {
-				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 2;
+//				BitmapFactory.Options options = new BitmapFactory.Options();
+//				options.inSampleSize = 2;
 				Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0,
-						data.length, options);
+						data.length, null);
 				Bitmap tempBitmap = null;
 				Matrix matrix = new Matrix();
-//				matrix.reset();
-				// if (mBitmap.getWidth() > mBitmap.getHeight()) {
 				if (mCurrentCameraNum == 1) {
-//					matrix.setRotate(270);
 					matrix.postRotate(270);
 					matrix.preScale(1, -1); 
 				} else {
@@ -375,12 +372,21 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					parameters.set("orientation", "portrait");
 					w = app.getScreenWidth();
 					h = app.getScreentHeight();
+					if(w<480){
+						w = 480;
+						h = 800;
+					}
 				}
 				if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 					parameters.set("orientation", "landscape");
 					w = app.getScreentHeight();
 					h = app.getScreenWidth();
+					if(h<480){
+						h = 480;
+						w = 800;
+					}
 				}
+				
 				if (mCurrentCameraNum == mFrontCameraNum) {
 					parameters.setRotation(270);
 				} else {

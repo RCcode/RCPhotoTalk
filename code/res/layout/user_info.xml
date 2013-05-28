@@ -202,7 +202,7 @@
         android:layout_marginTop="@dimen/default_gap_2x"
         android:background="@drawable/friend_info_send_btn"
         android:textColor="@android:color/white"
-        android:text="@string/setting_update_login_password"
+        android:text="@string/login_out_account"
          />
 
 </RelativeLayout>

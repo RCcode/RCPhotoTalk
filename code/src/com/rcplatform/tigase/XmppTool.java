@@ -1,5 +1,7 @@
 package com.rcplatform.tigase;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -10,6 +12,9 @@ import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
+
+import com.rcplatform.phototalk.bean.TigaseMassage;
+import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
 
 public class XmppTool {
 
@@ -24,6 +29,8 @@ public class XmppTool {
 	private static String user;
 	private static String password;
 	
+	private static TigaseDb4oDatabase db = new TigaseDb4oDatabase();
+	
 	public enum MessageStatus {
 		USER_OFFLINE, SEND_OK, SEND_ERROR
 	};
@@ -35,6 +42,7 @@ public class XmppTool {
 	private static TimerTask connectCheckTask = new TimerTask() {
 
 		public void run() {
+			//检测连接状态
 			if (null != con) {
 				if (!con.isConnected()) {
 					try {
@@ -58,6 +66,21 @@ public class XmppTool {
 			} else {
 				openConnection(XmppTool.node.getIp(), XmppTool.node.getPort(), XmppTool.node.getDomain());
 			}
+			
+			//检测发送失败消息
+			if(null != con){
+				if(con.isConnected()){
+					List<TigaseMassage> list = db.getTigaseMassages();
+					for(int i = 0;i < list.size(); i++){
+						TigaseMassage msg = list.get(i);
+						MessageStatus sendStatus =  sendMessage(msg.getToUser(),msg.getMassage());
+						if(MessageStatus.SEND_OK == sendStatus){
+							db.deleteTigaseMassage(msg);
+						}
+					}
+				}
+			}
+			
 		}
 
 	};
@@ -100,7 +123,6 @@ public class XmppTool {
 		return userName + "@" + node.getDomain();
 	}
 
-	// 关闭tigase
 	public static void closeConnection() {
 		try {
 			con.disconnect();
@@ -129,7 +151,6 @@ public class XmppTool {
 		return flag;
 	}
 
-	// 登录tigase
 	public static boolean login(String user, String password) {
 		boolean flag = false;
 		XmppTool.user = user;
@@ -144,6 +165,19 @@ public class XmppTool {
 			e.printStackTrace();
 		}
 		return flag;
+	}
+	
+	public static void sendMessageBackup(String toUser, String msgStr){
+		MessageStatus sendStatus = XmppTool.sendMessage(toUser, msgStr);
+		if (MessageStatus.SEND_OK != sendStatus) {
+			//记录到 message
+			TigaseMassage massage = new TigaseMassage();
+			massage.setMassage(msgStr);
+			massage.setToUser(toUser);
+			List<TigaseMassage> list = new ArrayList<TigaseMassage>();
+			list.add(massage);
+			db.saveTigaseMassages(list);
+		}
 	}
 
 	public static MessageStatus sendMessage(String to, String msg) {
@@ -173,20 +207,14 @@ public class XmppTool {
 
 		MessageStatus msgFlag = MessageStatus.SEND_ERROR;
 		String toUser = to + "@" + node.getDomain().trim();
-		Presence presence = con.getRoster().getPresence(toUser);
 		Chat newchat = chatManager.createChat(toUser, null);
 		try {
 			newchat.sendMessage(msg);
 			msgFlag = MessageStatus.SEND_OK;
 		}
 		catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			msgFlag = MessageStatus.SEND_ERROR;
-		}
-		if (!presence.isAvailable()) {
-			msgFlag = MessageStatus.USER_OFFLINE;
-			// TODO gcm
 		}
 
 		return msgFlag;
