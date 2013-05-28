@@ -9,11 +9,26 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <Button
-        android:id="@+id/btn_next"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp" />
+        android:layout_marginBottom="10dp" >
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/imagecut_button_margin"
+            android:background="@drawable/btn_imagecut_cancel" />
+
+        <Button
+            android:id="@+id/btn_next"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/imagecut_button_margin"
+            android:background="@drawable/btn_imagecut_confirm" />
+    </RelativeLayout>
 
 </RelativeLayout>

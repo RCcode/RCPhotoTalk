@@ -289,8 +289,6 @@ public class Utils {
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
-		// options.outHeight=200;
-		// options.outWidth=200;
 		BitmapFactory.decodeFile(filename, options);
 		// Calculate inSampleSize
 		int inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight, rotateAngel);
@@ -401,7 +399,7 @@ public class Utils {
 			// inSampleSize++;
 			// }
 		}
-		if (inSampleSize % 2 > 0) {
+		if (inSampleSize != 1 && inSampleSize % 2 > 0) {
 			inSampleSize++;
 		}
 		return inSampleSize;
@@ -416,7 +414,9 @@ public class Utils {
 		String fileName = null;
 		Uri filePathUri = uri;
 		if (uri != null) {
-			if (uri.getScheme().toString().compareTo("content") == 0) // content://开头的uri
+			if (uri.getScheme() == null) {
+				fileName = uri.toString();
+			} else if (uri.getScheme().toString().compareTo("content") == 0) // content://开头的uri
 			{
 				String[] proj = { MediaStore.Images.Media.DATA };
 				Cursor actualimagecursor = context.getContentResolver().query(uri, proj, null, null, null);

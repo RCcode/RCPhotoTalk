@@ -53,7 +53,7 @@ public class AppAdapter extends BaseAdapter {
 		}
 		AppInfo appInfo = mApps.get(position);
 		ImageView iv = (ImageView) convertView;
-		RCPlatformImageLoader.displayImage(mContext, iv, appInfo.getPicUrl(), mImageLoader);
+		mImageLoader.displayImage(appInfo.getPicUrl(), iv);
 		return convertView;
 	}
 

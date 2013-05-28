@@ -179,4 +179,7 @@ public class PhotoTalkParams {
 	public static class CheckTrends {
 		public static final String PARAM_KEY_TRENDID = "trendId";
 	}
+	public static class RequestSMS{
+		public static final String PARAM_KEY_NUMBER="number";
+	}
 }

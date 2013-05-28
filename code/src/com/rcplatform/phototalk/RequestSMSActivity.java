@@ -51,7 +51,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private void initView() {
 		Button btnCommit = (Button) findViewById(R.id.btn_commit);
 		btnCountryCode = (Button) findViewById(R.id.btn_country_code);
-		etNumber=(EditText) findViewById(R.id.et_number);
+		etNumber = (EditText) findViewById(R.id.et_number);
 		btnCommit.setOnClickListener(this);
 		btnCountryCode.setOnClickListener(this);
 		if (mCountryCode != null)
@@ -91,7 +91,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, number);
+			}, "+" + mCountryCode.getCountryCode() + number);
 		}
 	}
 

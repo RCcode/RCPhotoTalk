@@ -128,13 +128,11 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	}
 
 	private void setUserInfo(UserInfo userInfo) {
-		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getHeadImageOptions(), userInfo.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, mHeadView, R.drawable.default_head);
+		mImageLoader.displayImage(userInfo.getHeadUrl(), mHeadView, ImageOptionsFactory.getHeadImageOptions());
+		mImageLoader.displayImage(userInfo.getBackground(), user_bg_View, ImageOptionsFactory.getDefaultImageOptions());
 		mNickView.setText("" + userInfo.getNickName());
 		userRcId.setText("" + userInfo.getRcId());
 		userAge.setText("" + userInfo.getAge());
-		RCPlatformImageLoader.loadImage(SettingsActivity.this, ImageLoader.getInstance(), ImageOptionsFactory.getDefaultImageOptions(),
-				userInfo.getBackground(), AppSelfInfo.ImageScaleInfo.circleUserHeadRadius, user_bg_View, R.drawable.user_detail_bg);
 	}
 
 	private void initTitle() {
@@ -361,7 +359,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			newTrend.setVisibility(View.GONE);
 		else {
 			newTrend.setVisibility(View.VISIBLE);
-			RCPlatformImageLoader.displayImage(this, ivTrend, url, mImageLoader);
+			mImageLoader.displayImage(url, ivTrend);
 		}
 
 	}

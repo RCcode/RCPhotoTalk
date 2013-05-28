@@ -27,10 +27,8 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
-import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
-import com.rcplatform.phototalk.utils.AppSelfInfo;
 
 public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public static final int TYPE_RECOMMENDS = 0;
@@ -263,9 +261,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			}
 //			tvName.setText(source.getName());
 		}
-
-		RCPlatformImageLoader.loadImage(mContext, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, portraitImage, R.drawable.default_head);
+		mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 		portraitImage.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -301,11 +297,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
-		RCPlatformImageLoader.loadImage(mContext, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, ivHead, R.drawable.default_head);
-
-		// RCPlatformImageLoader.displayImage(mContext, ivHead,
-		// friend.getHeadUrl(), mImageLoader);
+		LogUtil.e(friend.getHeadUrl()+"");
+		mImageLoader.displayImage( friend.getHeadUrl(), ivHead);
 		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
 		return convertView;
 	}
@@ -337,7 +330,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 					mWillInvateFriends.remove(friend);
 			}
 		});
-		RCPlatformImageLoader.displayImage(mContext, head, friend.getHeadUrl(), mImageLoader);
+		mImageLoader.displayImage(friend.getHeadUrl(), head);
 		return convertView;
 	}
 

@@ -181,7 +181,6 @@ public class Request implements Serializable {
 
 							@Override
 							public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
-								// TODO Auto-generated method stub
 								
 							}
 						}, user.getRcId(), user.getToken());

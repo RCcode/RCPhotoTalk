@@ -91,7 +91,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 	private void setUserInfo() {
 		etNick.setText(mUserInfo.getNickName());
 		mHeadImagePath = mUserInfo.getHeadUrl();
-		RCPlatformImageLoader.displayImage(this, ivHead, mUserInfo.getHeadUrl(), mImageLoader);
+		mImageLoader.displayImage( mUserInfo.getHeadUrl(), ivHead);
 	}
 
 	class AccountAdapter extends BaseAdapter {
@@ -131,7 +131,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 			TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
 			ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 			TextView tvAppName = (TextView) convertView.findViewById(R.id.tv_app_name);
-			RCPlatformImageLoader.displayImage(PlatformEditActivity.this, ivHead, userInfo.getHeadUrl(), mImageLoader);
+			mImageLoader.displayImage(userInfo.getHeadUrl(), ivHead);
 			tvNick.setText(userInfo.getNickName());
 			tvAppName.setText(appInfo.getAppName());
 			return convertView;
