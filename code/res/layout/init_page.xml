@@ -89,7 +89,7 @@
         -->
 
         <Button
-            android:id="@id/init_page_login_button"
+            android:id="@+id/init_page_login_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/init_page_login_button_selector"
@@ -97,7 +97,7 @@
             android:textColor="#2a2928" />
 
         <Button
-            android:id="@id/init_page_signup_button"
+            android:id="@+id/init_page_signup_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/init_btn_padding"

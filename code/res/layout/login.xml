@@ -55,7 +55,7 @@
             android:orientation="vertical" >
 
             <EditText
-                android:id="@id/login_id"
+                android:id="@+id/login_id"
                 style="@style/login_edittext"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/ui_element_unit"
@@ -64,7 +64,7 @@
                 android:inputType="textEmailAddress" />
 
             <EditText
-                android:id="@id/login_nick"
+                android:id="@+id/login_nick"
                 style="@style/login_edittext"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/ui_element_unit"
@@ -74,7 +74,7 @@
                 android:maxLength="20" />
 
             <EditText
-                android:id="@id/login_password"
+                android:id="@+id/login_password"
                 style="@style/login_edittext"
                 android:layout_width="fill_parent"
                 android:layout_height="@dimen/ui_element_unit"
@@ -117,7 +117,7 @@
             android:visibility="gone" />
 
         <Button
-            android:id="@id/login_page_forget_password_button"
+            android:id="@+id/login_page_forget_password_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/login_page_login_button"

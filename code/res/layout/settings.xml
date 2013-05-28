@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/add_friend_activity_layout"
+    android:id="@+id/add_friend_activity_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/app_backgroud" >
@@ -8,7 +8,7 @@
     <include layout="@layout/base_top_navigate" />
 
     <ScrollView
-        android:id="@id/settings_general_scrollview"
+        android:id="@+id/settings_general_scrollview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_below="@+id/title"
@@ -355,7 +355,7 @@
             </LinearLayout>
 
             <Button
-                android:id="@id/settings_clean_history_record_btn"
+                android:id="@+id/settings_clean_history_record_btn"
                 style="@style/LandingPageButton"
                 android:layout_marginBottom="@dimen/default_gap_3x"
                 android:layout_marginLeft="@dimen/default_gap"

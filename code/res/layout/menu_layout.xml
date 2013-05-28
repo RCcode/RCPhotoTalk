@@ -1,0 +1,40 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="#000000"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/menu_add_btn"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:drawableTop="@drawable/title_add_friend_up"
+        android:text="@string/add_friend_title"
+        android:textColor="#FFFFFF"
+        android:background="@null"
+        android:layout_toLeftOf="@+id/line"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/line"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:background="@drawable/menu_line"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/menu_take_score_btn"
+        android:layout_toRightOf="@+id/line"
+         android:background="@null"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+           android:layout_centerVertical="true"
+        android:drawableTop="@drawable/take_score"
+        android:text="@string/take_score"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+</RelativeLayout>
