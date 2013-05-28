@@ -94,9 +94,9 @@ public class FacebookClient {
 	public void sendInviteMessageToUser(final String uid, final OnInviteSuccessListener listener) {
 		Bundle bundler = new Bundle();
 		bundler.putString("link", "http://www.google.co.jp");
-		bundler.putString("caption", "{*actor*} just posted this!");
-		bundler.putString("description", "description of my link.  Click the link to find out more.");
-		bundler.putString("name", "Name of this link!");
+		bundler.putString("caption", mContext.getString(R.string.app_name));
+		bundler.putString("description", mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()));
+		bundler.putString("name", mContext.getString(R.string.app_name));
 		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
 		bundler.putString("to", uid);
 		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
@@ -123,9 +123,9 @@ public class FacebookClient {
 	public void sendJoinMessage() {
 		Bundle bundler = new Bundle();
 		bundler.putString("link", "http://www.google.co.jp");
-		bundler.putString("caption", "{*actor*} just posted this!");
-		bundler.putString("description", "description of my link.  Click the link to find out more.");
-		bundler.putString("name", "Name of this link!");
+		bundler.putString("caption", mContext.getString(R.string.app_name));
+		bundler.putString("description", mContext.getString(R.string.join_message));
+		bundler.putString("name", mContext.getString(R.string.app_name));
 		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
 		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
 

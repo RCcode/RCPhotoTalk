@@ -123,13 +123,12 @@
                                         android:background="@drawable/boy_icon" />
 
                                     <TextView
-                                        android:id="@+id/tv_sex_age"
+                                        android:id="@+id/tv_age"
                                         style="@style/text_base"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:layout_gravity="top"
                                         android:layout_marginLeft="@dimen/friend_info_age_left"
-                                        android:layout_marginTop="-3dp"
                                         android:gravity="top"
                                         android:textColor="#E5E5E5" />
                                 </LinearLayout>
@@ -228,7 +227,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:text="好友动态"
+                            android:text="@string/friend_dynamic"
                             android:textColor="#313131" >
                         </TextView>
 
@@ -282,7 +281,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:text="我的帐号"
+                            android:text="@string/my_account"
                             android:textColor="#313131" >
                         </TextView>
 
@@ -311,7 +310,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:text="设置"
+                            android:text="@string/setting"
                             android:textColor="#313131" >
                         </TextView>
 

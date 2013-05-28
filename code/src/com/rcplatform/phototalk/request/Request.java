@@ -125,9 +125,11 @@ public class Request implements Serializable {
 		}
 		((PhotoTalkApplication) mContext.getApplicationContext()).getWebService().postNameValue(this);
 	}
-	public void cancel(){
+
+	public void cancel() {
 		setResponseHandler(null);
 	}
+
 	/**
 	 * 登陆接口，获取用户的信息
 	 * 
@@ -143,22 +145,47 @@ public class Request implements Serializable {
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
-					final UserInfo user = buildUserInfo(content);
-					user.setShowRecommends(UserInfo.NOT_FIRST_TIME);
-					executeGetMyInfo(context, new OnUserInfoLoadedListener() {
-
-						@Override
-						public void onSuccess(UserInfo userInfo) {
-							userInfo.setEmail(user.getEmail());
-							userInfo.setShowRecommends(UserInfo.NOT_FIRST_TIME);
-							listener.onSuccess(userInfo);
+					JSONObject jsonObject = new JSONObject(content);
+					int firstTime = jsonObject.getInt("showRecommends");
+					if (firstTime == UserInfo.FIRST_TIME) {
+						JSONArray arrayOthers = jsonObject.getJSONArray("otherInfos");
+						Map<AppInfo, UserInfo> result = new HashMap<AppInfo, UserInfo>();
+						for (int i = 0; i < arrayOthers.length(); i++) {
+							JSONObject jsonApp = arrayOthers.getJSONObject(i);
+							AppInfo appInfo = new AppInfo();
+							appInfo.setAppName(jsonApp.getString("appName"));
+							UserInfo userInfo = new UserInfo();
+							userInfo.setRcId(jsonApp.getString("rcId"));
+							userInfo.setNickName(jsonApp.getString("nickName"));
+							userInfo.setHeadUrl(jsonApp.getString("headUrl"));
+							result.put(appInfo, userInfo);
 						}
+						if(listener!=null)
+							listener.onOthreAppUserInfoLoaded(result);
+					} else {
+						final UserInfo user = buildUserInfo(content);
+						user.setShowRecommends(UserInfo.NOT_FIRST_TIME);
+						executeGetMyInfo(context, new OnUserInfoLoadedListener() {
 
-						@Override
-						public void onError(int errorCode, String content) {
-							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-						}
-					}, user.getRcId(), user.getToken());
+							@Override
+							public void onSuccess(UserInfo userInfo) {
+								userInfo.setEmail(user.getEmail());
+								userInfo.setShowRecommends(UserInfo.NOT_FIRST_TIME);
+								listener.onSuccess(userInfo);
+							}
+
+							@Override
+							public void onError(int errorCode, String content) {
+								onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+							}
+
+							@Override
+							public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
+								// TODO Auto-generated method stub
+								
+							}
+						}, user.getRcId(), user.getToken());
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));

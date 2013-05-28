@@ -571,7 +571,6 @@ public class EditPictureActivity extends BaseActivity {
 						@Override
 						public void onColorChange(int color) {
 							mEditePicView.setColor(color);
-							Log.i("ABC", "COLOR" + color);
 						}
 					});
 		}
@@ -745,35 +744,4 @@ public class EditPictureActivity extends BaseActivity {
 		friends.add(friend);
 		LogicUtils.sendPhoto(this, timeLimit, friends, file);
 	}
-
-	// private String buildUserArray(Friend friend, long time, String timeLimit)
-	// {
-	// try {
-	// JSONArray array = new JSONArray();
-	// List<Information> infoRecords = new ArrayList<Information>();
-	// Information record;
-	// JSONObject jsonObject = new JSONObject();
-	// jsonObject.put("userId", friend.getRcId());
-	// array.put(jsonObject);
-	// record = new Information();
-	// record.setCreatetime(time);
-	// RecordUser user = new RecordUser();
-	// record.setSender(user);
-	// user = new RecordUser();
-	// user.setNick(friend.getNickName());
-	// user.setHeadUrl(friend.getHeadUrl());
-	// record.setReceiver(user);
-	// record.setUrl(tempFilePath);
-	// record.setLimitTime(Integer.parseInt(timeLimit));
-	// record.setType(InformationType.TYPE_PICTURE_OR_VIDEO);
-	// record.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING);
-	// infoRecords.add(record);
-	// app.addSendRecords(time, infoRecords);
-	// return array.toString();
-	// } catch (JSONException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// return null;
-	// }
 }

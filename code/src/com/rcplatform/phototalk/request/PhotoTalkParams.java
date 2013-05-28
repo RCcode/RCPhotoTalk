@@ -18,9 +18,9 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_USER_ID = "rcId";
 	public static String PARAM_KEY_APP_ID = "appId";
 
-	public static String PARAM_VALUE_TOKEN_DEFAULT = "000000";
-	public static String PARAM_VALUE_LANGUAGE = Locale.getDefault().getLanguage();
-	public static String PARAM_VALUE_DEVICE_ID = android.os.Build.SERIAL;
+	public static String PARAM_VALUE_TOKEN_DEFAULT =UserInfo.DEFAULT_TOKEN;
+	public static String PARAM_VALUE_LANGUAGE;
+	public static String PARAM_VALUE_DEVICE_ID;
 	public static String PARAM_VALUE_APP_ID = "1";
 
 	public static class ChangePassword {

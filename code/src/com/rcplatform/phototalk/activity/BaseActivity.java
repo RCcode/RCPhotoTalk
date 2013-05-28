@@ -122,7 +122,7 @@ public class BaseActivity extends Activity {
 	}
 
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
-		findViewById(R.id.title_linear_back).setOnClickListener(onClickListener);
+		findViewById(R.id.back).setOnClickListener(onClickListener);
 		TextView tv = (TextView) findViewById(R.id.titleContent);
 		tv.setVisibility(View.VISIBLE);
 		tv.setText(textResId);

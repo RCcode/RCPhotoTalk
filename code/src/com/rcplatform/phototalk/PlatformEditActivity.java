@@ -150,7 +150,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 		@Override
 		public void onViewClick(View v) {
 			switch (v.getId()) {
-			case R.id.title_linear_back:
+			case R.id.back:
 				finish();
 				break;
 			case R.id.iv_head:

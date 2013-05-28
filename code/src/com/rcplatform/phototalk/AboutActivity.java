@@ -36,7 +36,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 		case R.id.tv_check_update:
 			checkUpdate();
 			break;
-		case R.id.title_linear_back:
+		case R.id.back:
 			finish();
 			break;
 		}

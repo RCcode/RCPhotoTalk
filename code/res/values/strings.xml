@@ -86,6 +86,7 @@
     <string name="settings_update_editor_hint">enter text...</string>
     <string name="settings_tacoty_account_info_title">RC账号信息</string>
     <string name="setting_update_login_password">修改登录密码</string>
+    <string name="login_out">注销</string>
     <string name="setting_update_set_newlogin_password">设置新密码</string>
     <string name="setting_update_check_password_hint">为验证你为用户本人，请输入现密码</string>
     <string name="setting_update_password1_hint">6位以上字母数字</string>
@@ -95,7 +96,7 @@
     <string name="setting_update_new_password">请输入新密码</string>
     <string name="setting_update_new_confirm_password">请输入确认密码</string>
     <string name="setting_update_twice_password_invalid">两次密码输入不一致，请重新输入</string>
-    <string name="setting_update_set_tacotyid_title">设置ID</string>
+    <string name="setting_update_set_rcid_title">设置ID</string>
     <string name="setting_update_facebook_unbind_title">Facebook账号</string>
     <string name="setting_update_facebook_unbind_btn">解除绑定</string>
     <string name="setting_update_facebook_unbind">未绑定</string>
@@ -220,6 +221,7 @@
     <string name="rcid">RC ID</string>
 
     <!-- add friends -->
+    <string name="phone">电话号码</string>
     <string name="contact_friend">通讯录好友</string>
     <string name="facebook_friend">facebook好友</string>
     <string name="deauthorize_complete">解除绑定成功</string>
@@ -245,6 +247,7 @@
     <string name="receive_all">所有人</string>
     <string name="receive_friend">我的好友</string>
     <string name="setting">设置</string>
+    <string name="my_account">我的帐户</string>
     <string name="input_current_password">为验证你为用户本人，请输入现密码</string>
     <string name="two_password_not_same">两次密码输入不一致，请重新输入</string>
     <string name="password_change_complete">修改密码成功</string>
@@ -283,7 +286,6 @@
     <string name="added_friend">我将%1$s加为好友</string>
     <string name="added_friend_confirm">%1$s已反加我为好友</string>
     <string name="registe_fail">注册失败</string>
-    <string name="join_message">我已加入PhotoTalk：</string>
     <string name="no_net">没有可用网络</string>
     <string name="vk_auth">绑定VK</string>
     <string name="vk_load_fail">VK信息获取失败</string>
@@ -314,5 +316,17 @@
     <string name="input_your_number">输入您的电话号码</string>
     <string name="commit">提交</string>
     <string name="country_code">(+%1$s)%2$s</string>
+    <string name="change_phone_number">修改手机号</string>
+    <string name="resend_sms">重新发送短信</string>
+    <string name="resend_sms_second">重新发送短信(%1$d秒)</string>
+    <string name="bind_phone">绑定手机号</string>
+    <string name="input_validate">请输入发送到+86 186-0126-1111的4位验证码</string>
+    <string name="input_correct_validate">请输入正确验证码</string>
+    <string name="input_correct_phonenumber">请输入正确手机号</string>
+    <string name="sms_sended">验证短信已发送</string>
+    <string name="phone_number_validate">电话号码验证</string>
+    
+    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:，注册后加我ID:%1$s</string>
+    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:</string>
 
 </resources>

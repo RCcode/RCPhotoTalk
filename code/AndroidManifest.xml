@@ -98,12 +98,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
+            android:name="com.rcplatform.phototalk.BindPhoneActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
             android:name="com.rcplatform.phototalk.AboutActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.BindPhoneActivity"
+            android:name="com.rcplatform.phototalk.RequestSMSActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
@@ -285,12 +290,6 @@
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
-        <activity
-            android:name="com.rcplatform.phototalk.UnbindFacebookActivity"
-            android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-            android:theme="@style/ThemeActivity" >
         </activity>
 
         <service android:name="com.rcplatform.phototalk.clienservice.PTBackgroundService" />

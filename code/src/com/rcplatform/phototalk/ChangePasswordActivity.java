@@ -67,7 +67,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 		case R.id.btn_confirm_password:
 			commitNewPassword(etNewPassword.getText().toString().trim(), etConfirmPassword.getText().toString());
 			break;
-		case R.id.title_linear_back:
+		case R.id.back:
 			finish();
 			break;
 		}

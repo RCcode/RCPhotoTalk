@@ -316,7 +316,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.title_linear_back:
+		case R.id.back:
 			finish();
 			break;
 		case R.id.choosebutton:

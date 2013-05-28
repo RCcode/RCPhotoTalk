@@ -188,7 +188,7 @@
         android:layout_marginRight="@dimen/default_gap"
         android:background="@drawable/modify_btn"
         android:layout_above="@+id/login_out_btn"
-        android:text="修改登陆密码"
+        android:text="@string/setting_update_login_password"
         android:textColor="#313131" >
     </Button>
 
@@ -202,7 +202,7 @@
         android:layout_marginTop="@dimen/default_gap_2x"
         android:background="@drawable/friend_info_send_btn"
         android:textColor="@android:color/white"
-        android:text="注销"
+        android:text="@string/setting_update_login_password"
          />
 
 </RelativeLayout>

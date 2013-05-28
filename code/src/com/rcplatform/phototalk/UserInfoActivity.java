@@ -169,7 +169,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.rela_phone:
 			if (TextUtils.isEmpty(getCurrentUser().getCellPhone())) {
-				startActivity(BindPhoneActivity.class);
+				startActivity(RequestSMSActivity.class);
 			}
 			break;
 		}
