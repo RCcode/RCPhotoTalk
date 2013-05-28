@@ -23,7 +23,7 @@ public class HighLightView extends View {
 	private Rect mBlackRectTop;
 
 	private Rect mBlackRectBottom;
-	
+
 	private Rect mBlackRectLeft;
 
 	private Rect mBlackRectRight;
@@ -72,15 +72,8 @@ public class HighLightView extends View {
 
 	private int cropHeight;
 
-	// 边界逻辑比例值
-	private final int SCALE_MARGIN = 1;
-
-	// 屏幕逻辑宽
-	private final int SCALE_FULL = 8;
-
 	public HighLightView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		init();
 
 	}
@@ -99,28 +92,27 @@ public class HighLightView extends View {
 	}
 
 	private void initBackground() {
-		// TODO Auto-generated method stub
 		int transX = 0;
 		int transW = 0;
 		int transH = 0;
 		int transY = 0;
 		if (cropWidth >= cropHeight) {
-			transX = width * SCALE_MARGIN / SCALE_FULL;
-			transW = width * (SCALE_FULL - SCALE_MARGIN * 2) / SCALE_FULL;
-			transH = transW * cropHeight / cropWidth;
+			transX = 0;
+			transW = width;
+			transH = (int) (transW * (cropHeight / (float) cropWidth));
 			transY = (height - transH) / 2;
 		} else {
-			transY = height * SCALE_MARGIN / SCALE_FULL;
-			transH = height * (SCALE_FULL - SCALE_MARGIN * 2) / SCALE_FULL;
-			transW = transH * cropWidth / cropHeight;
-			transX = (width - transW) / 2;
+			// transY = height * SCALE_MARGIN / SCALE_FULL;
+			// transH = height * (SCALE_FULL - SCALE_MARGIN * 2) / SCALE_FULL;
+			// transW = transH * cropWidth / cropHeight;
+			// transX = (width - transW) / 2;
 		}
 
-		mTransportRect = new Rect(transX, transY, transW, transH);
+		mTransportRect = new Rect(transX, transY, transX + transW, transY + transH);
 		mBlackRectTop = new Rect(0, 0, width, transY);
 		mBlackRectBottom = new Rect(0, height - transY, width, height);
-		mBlackRectLeft = new Rect(0,transY,transX,height - transY);
-		mBlackRectRight = new Rect(width - transX ,transY,width,height - transY);
+		mBlackRectLeft = new Rect(0, transY, transX, height - transY);
+		mBlackRectRight = new Rect(width - transX, transY, width, height - transY);
 		invalidate();
 	}
 
@@ -129,7 +121,6 @@ public class HighLightView extends View {
 		mBitmap.setBitmap(bitmap);
 		bitmapRect = new RectF(0, 0, mBitmap.getWidth(), mBitmap.getHeight());
 		initCanvas();
-		minZoom();
 		center();
 		invalidate();
 
@@ -170,8 +161,8 @@ public class HighLightView extends View {
 		float point2X = event.getX(1);
 		float point2Y = event.getY(1);
 
-		return point1X > bitmapRect.left && point2X > bitmapRect.left && point1X < bitmapRect.right && point2X < bitmapRect.right
-		        && point1Y > bitmapRect.top && point2Y > bitmapRect.top && point1Y < bitmapRect.bottom && point2Y < bitmapRect.bottom;
+		return point1X > bitmapRect.left && point2X > bitmapRect.left && point1X < bitmapRect.right && point2X < bitmapRect.right && point1Y > bitmapRect.top
+				&& point2Y > bitmapRect.top && point1Y < bitmapRect.bottom && point2Y < bitmapRect.bottom;
 	}
 
 	private void midPoint(PointF point, MotionEvent event) {
@@ -189,176 +180,187 @@ public class HighLightView extends View {
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		switch (event.getAction() & MotionEvent.ACTION_MASK) {
-			case MotionEvent.ACTION_DOWN:
-				if (!isTouchPointOnBitmap(event))
-					break;
+		case MotionEvent.ACTION_DOWN:
+			if (!isTouchPointOnBitmap(event))
+				break;
+			prev.set(event.getX(), event.getY());
+			mode = DRAG;
+			break;
+		case MotionEvent.ACTION_POINTER_DOWN:
+			dist = spacing(event);
+			if (spacing(event) > 10f && isTwoPointAllInBitmap(event)) {
+				midPoint(mid, event);
+				mode = ZOOM;
+			}
+			break;
+		case MotionEvent.ACTION_UP:
+		case MotionEvent.ACTION_POINTER_UP:
+			// CheckView();
+			mode = NONE;
+			break;
+		case MotionEvent.ACTION_MOVE:
+			if (mode == DRAG) {
+				float moveX = event.getX() - prev.x;
+				float moveY = event.getY() - prev.y;
+				moveBitmap(getLandScapeMoveSize(moveX), getportraitMoveSize(moveY));
 				prev.set(event.getX(), event.getY());
-
-				mode = DRAG;
-				break;
-			case MotionEvent.ACTION_POINTER_DOWN:
-				dist = spacing(event);
-				if (spacing(event) > 10f && isTwoPointAllInBitmap(event)) {
-					midPoint(mid, event);
-					mode = ZOOM;
+			} else if (mode == ZOOM) {
+				float newDist = spacing(event);
+				if (newDist > 10f) {
+					float tScale = newDist / dist;
+					changeScale(tScale - 1);
+					dist = newDist;
 				}
-				break;
-			case MotionEvent.ACTION_UP:
-			case MotionEvent.ACTION_POINTER_UP:
-				CheckView();
-				mode = NONE;
-				break;
-			case MotionEvent.ACTION_MOVE:
-				if (mode == DRAG) {
-					int moveX = (int) (event.getX() - prev.x);
-					int moveY = (int) (event.getY() - prev.y);
-					moveBitmap(moveX, moveY);
-					prev.set(event.getX(), event.getY());
-				} else if (mode == ZOOM) {
-					float newDist = spacing(event);
-					if (newDist > 10f) {
-						float tScale = newDist / dist;
-						Log.i(VIEW_LOG_TAG, "scale size is " + tScale);
-						changeScale(tScale - 1);
-						dist = newDist;
-					}
-				}
-				break;
+			}
+			break;
 		}
 		invalidate();
 		return true;
 	}
 
-	private void CheckView() {
-		if ((isWidthMin() || isHeightMin())
-		        && (bitmapRect.left < mTransportRect.left || bitmapRect.top < mTransportRect.top || bitmapRect.right > mTransportRect.right || bitmapRect.bottom > mTransportRect.bottom)) {
-			rebackToCentre();
+	private float getLandScapeMoveSize(float moveX) {
+		float size = 0;
+		if (isWidthOutBoarder(moveX)) {
+			if ((bitmapRect.left + moveX) >= mTransportRect.left) {
+				size = mTransportRect.left - bitmapRect.left;
+			} else if ((bitmapRect.right + moveX) <= mTransportRect.right) {
+				size = mTransportRect.right - bitmapRect.right;
+			} else {
+				size = 0;
+			}
+		} else {
+			size = moveX / 2;
 		}
+		return size;
 	}
 
-	private void center() {
-		center(true, true);
+	private float getportraitMoveSize(float moveY) {
+		float size = 0;
+		if (isHeightOutBoarder(moveY)) {
+			if ((bitmapRect.top + moveY) >= mTransportRect.top) {
+				size = mTransportRect.top - bitmapRect.top;
+			} else if ((bitmapRect.bottom + moveY) <= mTransportRect.bottom) {
+				size = mTransportRect.bottom - bitmapRect.bottom;
+			} else {
+				size = 0;
+			}
+		} else {
+			size = moveY / 2;
+		}
+		return size;
 	}
 
-	private boolean isWidthMin() {
-		return bitmapRect.width() <= mMinBitmapRect.width() || Math.abs(bitmapRect.width() - mMinBitmapRect.width()) < 10;
+	private boolean isWidthOutBoarder(float moveX) {
+		return !(bitmapRect.left + moveX <= mTransportRect.left && bitmapRect.right + moveX >= mTransportRect.right);
 	}
 
-	private boolean isHeightMin() {
-		return bitmapRect.height() <= mMinBitmapRect.height() || Math.abs(bitmapRect.height() - mMinBitmapRect.height()) < 10;
+	private boolean isHeightOutBoarder(float moveY) {
+		return !(bitmapRect.top + moveY <= mTransportRect.top && bitmapRect.bottom + moveY >= mTransportRect.bottom);
 	}
 
 	public Bitmap getBitmapHighLight() {
-		Bitmap bitmap = Bitmap.createBitmap(mCanvasBitmap, mTransportRect.left, mTransportRect.top, mTransportRect.width(), mTransportRect.height());
-		return bitmap;
+		Bitmap temp = Bitmap.createBitmap(mCanvasBitmap, mTransportRect.left, mTransportRect.top, mTransportRect.width(), mTransportRect.height());
+		Bitmap result = Bitmap.createScaledBitmap(temp, cropWidth, cropHeight, false);
+		temp.recycle();
+		temp = null;
+		System.gc();
+		return result;
 	}
 
 	/**
 	 */
-	protected void center(boolean horizontal, boolean vertical) {
-		float height = bitmapRect.height();
-		float width = bitmapRect.width();
-		float deltaX = 0, deltaY = 0;
-		if (vertical) {
-			int screenHeight = this.height;
-			if (height < screenHeight) {
-				deltaY = (screenHeight - height) / 2 - bitmapRect.top;
-			} else if (bitmapRect.top > 0) {
-				deltaY = -bitmapRect.top;
-			} else if (bitmapRect.bottom < screenHeight) {
-				deltaY = this.height - bitmapRect.bottom;
-			}
-		}
-
-		if (horizontal) {
-			int screenWidth = this.width;
-			if (width < screenWidth) {
-				deltaX = (screenWidth - width) / 2 - bitmapRect.left;
-			} else if (bitmapRect.left > 0) {
-				deltaX = -bitmapRect.left;
-			} else if (bitmapRect.right < screenWidth) {
-				deltaX = screenWidth - bitmapRect.right;
-			}
-		}
-		bitmapRect.left = deltaX;
-		bitmapRect.right = bitmapRect.right + deltaX;
-		bitmapRect.top = deltaY;
-		bitmapRect.bottom = bitmapRect.bottom + deltaY;
+	protected void center() {
 		fitHighLight();
 		mMinBitmapRect = new RectF(bitmapRect);
+		moveToCentre();
 	}
 
-	private void rebackToCentre() {
-		float deltaX = 0, deltaY = 0;
-		if (bitmapRect.left < mTransportRect.left) {
-			deltaX = mTransportRect.left - bitmapRect.left;
-		} else if (bitmapRect.right > mTransportRect.right) {
-			deltaX = mTransportRect.right - bitmapRect.right;
-		}
-		if (bitmapRect.top < mTransportRect.top)
-			deltaY = mTransportRect.top - bitmapRect.top;
-		else if (bitmapRect.bottom > mTransportRect.bottom)
-			deltaY = mTransportRect.bottom - bitmapRect.bottom;
-		bitmapRect.left = bitmapRect.left + deltaX;
-		bitmapRect.right = bitmapRect.right + deltaX;
-		bitmapRect.top = bitmapRect.top + deltaY;
-		bitmapRect.bottom = bitmapRect.bottom + deltaY;
+	private void moveToCentre() {
+		float width = bitmapRect.width();
+		float height = bitmapRect.height();
+		bitmapRect.left = mTransportRect.left;
+		bitmapRect.right = bitmapRect.left + width;
+		bitmapRect.top = mTransportRect.top;
+		bitmapRect.bottom = bitmapRect.top + height;
 	}
 
 	private void fitHighLight() {
-		if (bitmapRect.width() > bitmapRect.height()) {
-			float scale = mTransportRect.width() / bitmapRect.width();
-			changeScale(scale - 1);
-		} else {
-			float scale = mTransportRect.height() / bitmapRect.height();
-			changeScale(scale - 1);
+		float scale = getMaxScale();
+		if (scale > 0) {
+			int widthChage = (int) (bitmapRect.width() * (scale - 1));
+			int heightChange = (int) (bitmapRect.height() * (scale - 1));
+			bitmapRect.right = bitmapRect.right + widthChage;
+			bitmapRect.bottom = bitmapRect.bottom + heightChange;
 		}
+	}
+
+	private float getMaxScale() {
+		float widthScale = mTransportRect.width() / bitmapRect.width();
+		float heightScale = mTransportRect.height() / bitmapRect.height();
+		if (widthScale > heightScale)
+			return widthScale;
+		return heightScale;
 	}
 
 	private void changeScale(float scale) {
 		float widthChange = bitmapRect.width() * scale;
 		float heightChange = bitmapRect.height() * scale;
 		if (mMinBitmapRect != null) {
-			if (isBitmapBigEnough(widthChange, heightChange) || isBitmapSmallEnouth(widthChange, heightChange))
+			if (isBitmapSmallEnouth(widthChange, heightChange))
 				return;
 		}
 		zoom(widthChange, heightChange);
 	}
 
 	private void zoom(float widthChange, float heightChange) {
-		if (bitmapRect.left <= mTransportRect.left) {
+		if (bitmapRect.left >= mTransportRect.left) {
 			bitmapRect.right = bitmapRect.right + widthChange;
-		} else if (bitmapRect.right >= mTransportRect.right) {
+		} else if (bitmapRect.right <= mTransportRect.right) {
 			bitmapRect.left = bitmapRect.left - widthChange;
 		} else {
-			bitmapRect.left = bitmapRect.left - widthChange / 2;
-			bitmapRect.right = bitmapRect.right + widthChange / 2;
+			float[] landscapeZoom = getLandscapeZoom(widthChange);
+			bitmapRect.left = bitmapRect.left - landscapeZoom[0];
+			bitmapRect.right = bitmapRect.right + landscapeZoom[1];
 		}
-		if (bitmapRect.top <= mTransportRect.top) {
+		if (bitmapRect.top >= mTransportRect.top) {
 			bitmapRect.bottom = bitmapRect.bottom + heightChange;
-		} else if (bitmapRect.bottom >= mTransportRect.bottom) {
+		} else if (bitmapRect.bottom <= mTransportRect.bottom) {
 			bitmapRect.top = bitmapRect.top - heightChange;
 		} else {
-			bitmapRect.top = bitmapRect.top - heightChange / 2;
-			bitmapRect.bottom = bitmapRect.bottom + heightChange / 2;
+			float[] portraitZoom = getPortraitZoom(heightChange);
+			bitmapRect.top = bitmapRect.top - portraitZoom[0];
+			bitmapRect.bottom = bitmapRect.bottom + portraitZoom[1];
 		}
 	}
 
-	private boolean isBitmapBigEnough(float widthChange, float heightChange) {
-		float scale = 0;
-		if (bitmapRect.width() >= bitmapRect.height() && (bitmapRect.height() + heightChange) > mTransportRect.height()) {
-			scale = mTransportRect.height() / bitmapRect.height() - 1;
-		} else if (bitmapRect.width() < bitmapRect.height() && (bitmapRect.width() + widthChange) > mTransportRect.width()) {
-			scale = mTransportRect.width() / bitmapRect.width() - 1;
+	private float[] getLandscapeZoom(float widthChange) {
+		float[] scapeZoom = new float[2];
+		if (Math.abs((bitmapRect.left - mTransportRect.left)) <= Math.abs(widthChange / 2) && widthChange < 0) {
+			scapeZoom[0] = bitmapRect.left - mTransportRect.left;
+			scapeZoom[1] = widthChange - scapeZoom[0];
+		} else if (Math.abs(mTransportRect.right - bitmapRect.right) <= Math.abs(widthChange / 2) && widthChange < 0) {
+			scapeZoom[1] = mTransportRect.right - bitmapRect.right;
+			scapeZoom[0] = widthChange - scapeZoom[1];
 		} else {
-			return false;
+			scapeZoom[0] = widthChange / 2;
+			scapeZoom[1] = widthChange / 2;
 		}
-		if (scale > 0) {
-			float width = bitmapRect.width() * scale;
-			float height = bitmapRect.height() * scale;
-			zoom(width, height);
+		return scapeZoom;
+	}
+
+	private float[] getPortraitZoom(float heightChnage) {
+		float[] portraitZoom = new float[2];
+		if (Math.abs(mTransportRect.top - bitmapRect.top) <= Math.abs(heightChnage / 2) && heightChnage < 0) {
+			portraitZoom[0] = bitmapRect.top - mTransportRect.top;
+			portraitZoom[1] = heightChnage - portraitZoom[0];
+		} else if (Math.abs(bitmapRect.bottom - mTransportRect.bottom) <= Math.abs(heightChnage / 2) && heightChnage < 0) {
+			portraitZoom[1] = mTransportRect.bottom - bitmapRect.bottom;
+			portraitZoom[0] = heightChnage - portraitZoom[1];
+		} else {
+			portraitZoom[0] = heightChnage / 2;
+			portraitZoom[1] = heightChnage / 2;
 		}
-		return true;
+		return portraitZoom;
 	}
 
 	private boolean isBitmapSmallEnouth(float widthChange, float heightChange) {
@@ -374,56 +376,6 @@ public class HighLightView extends View {
 		mPaint.setColor(getResources().getColor(R.color.cut_image_boarder));
 		mPaint.setStyle(Paint.Style.STROKE);
 		mPaint.setStrokeWidth(boaderWidth);
-//		canvas.drawLine(mTransportRect.left, mTransportRect.top - boaderWidth / 2, mTransportRect.right, mTransportRect.top - boaderWidth / 2, mPaint);
-//		canvas.drawLine(mTransportRect.left, mTransportRect.bottom + boaderWidth / 2, mTransportRect.right, mTransportRect.bottom + boaderWidth / 2,
-//		                mPaint);
-	}
-
-	public Rect getTranRectInWindow() {
-		int[] locations = new int[2];
-		getLocationInWindow(locations);
-		int locationX = locations[0];
-		int locationY = locations[1];
-		Rect result;
-		if (height >= width) {
-			result = new Rect(locationX, locationY + (height - width) / 2, locationX + width, locationY + (height - width) / 2 + width);
-		} else {
-			result = new Rect(locationX + (width - height) / 2 + boaderWidth, locationY + boaderWidth, locationX + (width - height) / 2 + height
-			        - boaderWidth, locationY + height - boaderWidth);
-		}
-		return result;
-	}
-
-	public static Bitmap createRepeater(int width, int height, Bitmap src) {
-		int widthCount = width / src.getWidth() + 1;
-		int heightCount = height / src.getHeight() + 1;
-		int count = widthCount * heightCount;
-		Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
-		Canvas canvas = new Canvas(bitmap);
-		for (int idx = 0; idx < count; ++idx) {
-			int hindex = idx / widthCount;
-			int windex = idx % widthCount;
-			canvas.drawBitmap(src, windex * src.getWidth(), hindex * src.getHeight(), null);
-		}
-
-		return bitmap;
-	}
-
-	private void minZoom() {
-		float width = bitmapRect.width();
-		float height = bitmapRect.height();
-		if (width > mTransportRect.width() || height > mTransportRect.height()) {
-			float scale = 0;
-			if (width >= height) {
-				scale = (width - mTransportRect.width()) / width;
-			} else {
-				scale = (height - mTransportRect.height()) / height;
-			}
-			float widthChange = width * scale;
-			float heightChange = height * scale;
-			bitmapRect.right = bitmapRect.right - widthChange;
-			bitmapRect.bottom = bitmapRect.bottom - heightChange;
-		}
 	}
 
 	class MoveImage {
@@ -482,68 +434,10 @@ public class HighLightView extends View {
 	}
 
 	public void recyle() {
-		// mCanvasBitmap.recycle();
-		// mBitmap.getBitmap().recycle();
 		mBlackBitmap.recycle();
 	}
 
-	private void moveBitmap(int moveX, int moveY) {
-		if (bitmapRect.width() > mTransportRect.width()) {
-			if (moveX < 0 && bitmapRect.right <= mTransportRect.right) {
-				moveX = 0;
-				float rightPading = mTransportRect.right - bitmapRect.right;
-				if (rightPading > 0) {
-					bitmapRect.right = bitmapRect.right + rightPading;
-					bitmapRect.left = bitmapRect.left + rightPading;
-				}
-			} else if (moveX > 0 && bitmapRect.left >= mTransportRect.left) {
-				moveX = 0;
-				float leftPadding = bitmapRect.left - mTransportRect.left;
-				if (leftPadding > 0) {
-					bitmapRect.left = bitmapRect.left - leftPadding;
-					bitmapRect.right = bitmapRect.right - leftPadding;
-				}
-			}
-		} else if (bitmapRect.width() <= mTransportRect.width()) {
-			if ((bitmapRect.left <= mTransportRect.left && moveX < 0) || bitmapRect.right > mTransportRect.right && moveX >= 0)
-				moveX = 0;
-		}
-		if (bitmapRect.height() > mTransportRect.height()) {
-			if (moveY < 0 && bitmapRect.bottom <= mTransportRect.bottom) {
-				moveY = 0;
-				float bottomPading = mTransportRect.bottom - bitmapRect.bottom;
-				if (bottomPading > 0) {
-					bitmapRect.bottom = bitmapRect.bottom + bottomPading;
-					bitmapRect.top = bitmapRect.top + bottomPading;
-				}
-			} else if (moveY > 0 && bitmapRect.top >= mTransportRect.top) {
-				moveY = 0;
-				float topPadding = bitmapRect.top - mTransportRect.top;
-				if (topPadding > 0) {
-					bitmapRect.top = bitmapRect.top - topPadding;
-					bitmapRect.bottom = bitmapRect.bottom - topPadding;
-				}
-			}
-		} else if (bitmapRect.height() <= mTransportRect.height()) {
-			if ((bitmapRect.top <= mTransportRect.top && moveY < 0) || bitmapRect.bottom >= mTransportRect.bottom && moveY >= 0) {
-				moveY = 0;
-				if (moveY < 0) {
-					float topPadding = mTransportRect.top - bitmapRect.top;
-					if (topPadding > 0) {
-						bitmapRect.top = bitmapRect.top + topPadding;
-						bitmapRect.bottom = bitmapRect.bottom + topPadding;
-					}
-				} else {
-					float bottomPadding = bitmapRect.bottom - mTransportRect.bottom;
-					if (bottomPadding > 0) {
-						bitmapRect.top = bitmapRect.top - bottomPadding;
-						bitmapRect.bottom = bitmapRect.bottom - bottomPadding;
-					}
-				}
-			}
-
-		}
-		//
+	private void moveBitmap(float moveX, float moveY) {
 		bitmapRect.left = bitmapRect.left + moveX;
 		bitmapRect.right = bitmapRect.right + moveX;
 		bitmapRect.top = bitmapRect.top + moveY;

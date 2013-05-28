@@ -79,16 +79,14 @@ public class ImagePickActivity extends BaseActivity {
 				if (data != null && data.getData() != null) {
 					mImageUri = data.getData();
 				}
-				if (mImageUri != null)
-					onImageReceive(mImageUri, Utils.getRealPath(this, mImageUri));
-				// switch (cropMode) {
-				// case CROP_BACKGROUND_IMAGE:
-				// cutImage(mImageUri, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
-				// break;
-				// case CROP_HEAD_IMAGE:
-				// cutImage(mImageUri, HEAD_WIDTH, HEAD_HEIGHT);
-				// break;
-				// }
+				switch (cropMode) {
+				case CROP_BACKGROUND_IMAGE:
+					cutImage(mImageUri, BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
+					break;
+				case CROP_HEAD_IMAGE:
+					cutImage(mImageUri, HEAD_WIDTH, HEAD_HEIGHT);
+					break;
+				}
 			} else if (CROP_PICTURE == requestCode) {
 				if (data != null && data.getData() != null) {
 					mImageUri = data.getData();
