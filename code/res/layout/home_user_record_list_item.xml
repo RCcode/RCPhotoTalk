@@ -19,10 +19,7 @@
         android:layout_height="@dimen/friend_head_side"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/friend_head_left"
-        android:scaleType="matrix"
-        android:src="@drawable/default_head" />
-    <!-- </RelativeLayout> -->
+        android:layout_marginLeft="@dimen/friend_head_left" />
 
     <ImageView
         android:layout_width="fill_parent"

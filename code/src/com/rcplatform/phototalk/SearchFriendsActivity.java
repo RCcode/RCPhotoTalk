@@ -170,9 +170,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				}
 				tvName.setText(source.getName());
 			}
-
-			RCPlatformImageLoader.loadImage(SearchFriendsActivity.this, mImageLoader, ImageOptionsFactory.getPublishImageOptions(), friend.getHeadUrl(),
-					AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, portraitImage, R.drawable.default_head);
+			mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 			// view friend detail.
 			portraitImage.setOnClickListener(new View.OnClickListener() {
 

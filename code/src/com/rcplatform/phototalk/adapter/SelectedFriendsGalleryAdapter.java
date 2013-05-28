@@ -66,13 +66,11 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		Friend friend = data.get(position);
-//		final int index = position;
+		// final int index = position;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.selected_friends_galleryt_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.selected_friends_galleryt_item, null);
 			holder = new ViewHolder();
-			holder.head = (HeadImageView) convertView
-					.findViewById(R.id.iv_sfgi_head);
+			holder.head = (HeadImageView) convertView.findViewById(R.id.iv_sfgi_head);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -86,24 +84,19 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 		// }
 		// });
 
-//		File file = ImageLoader.getInstance().getDiscCache()
-//				.get(new Md5FileNameGenerator().generate(friend.getHeadUrl()));
-//		System.out.println("-file---------->" + file);
-//		if (file.exists()) {
-//			System.out.println("文件存在");
-//			Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
-//			bitmap = Utils.getRectBitmap(bitmap);
-//			holder.head.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
-//		} else {
-//			System.out.println("文件不存在");
-//		}
+		// File file = ImageLoader.getInstance().getDiscCache()
+		// .get(new Md5FileNameGenerator().generate(friend.getHeadUrl()));
+		// System.out.println("-file---------->" + file);
+		// if (file.exists()) {
+		// System.out.println("文件存在");
+		// Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+		// bitmap = Utils.getRectBitmap(bitmap);
+		// holder.head.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
+		// } else {
+		// System.out.println("文件不存在");
+		// }
 		// else {
-		
-		 RCPlatformImageLoader.loadImage(context, mImageLoader,
-		 ImageOptionsFactory.getPublishImageOptions(),
-		 friend.getHeadUrl(),
-		 AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx,
-		 holder.head, R.drawable.default_head);
+		mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
 		//
 		// }
 		return convertView;
@@ -119,8 +112,7 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 		return data;
 	}
 
-	public void setOnGalleryItemClickListener(
-			OnGalleryItemClickListener clickListener) {
+	public void setOnGalleryItemClickListener(OnGalleryItemClickListener clickListener) {
 		this.clickListener = clickListener;
 	}
 

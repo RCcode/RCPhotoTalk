@@ -376,7 +376,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, mInformationList, ImageLoader.getInstance(), ImageOptionsFactory.getReceiveImageOption(), record);
+		RCPlatformImageLoader.LoadPictureForList(this, mInformationList, record);
 	}
 
 	private void show(int position) {

@@ -1,11 +1,8 @@
 package com.rcplatform.phototalk.adapter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,16 +12,9 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.SelectFriend;
-import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
-import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
-import com.rcplatform.phototalk.utils.AppSelfInfo;
 
 public class SelectedFriendsListAdapter extends BaseAdapter {
 
@@ -79,13 +69,10 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 		// friend.setPostion(position);
 		final int index = position;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.selected_friends_list_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.selected_friends_list_item, null);
 			holder = new ViewHolder();
-			holder.head = (ImageView) convertView
-					.findViewById(R.id.iv_sfli_head);
-			holder.name = (TextView) convertView
-					.findViewById(R.id.tv_sfli_name);
+			holder.head = (ImageView) convertView.findViewById(R.id.iv_sfli_head);
+			holder.name = (TextView) convertView.findViewById(R.id.tv_sfli_name);
 			holder.checkBox = (CheckBox) convertView.findViewById(R.id.cb_sfli);
 			holder.tvLetter = (TextView) convertView.findViewById(R.id.alpha);
 			convertView.setTag(holder);
@@ -101,21 +88,15 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				if (((CheckBox) v).isChecked()) {
 					data.get(index).setIsChosed(true);
-					mCheckBoxChangedListener.onChange(data.get(index), true,
-							index);
+					mCheckBoxChangedListener.onChange(data.get(index), true, index);
 				} else {
 					data.get(index).setIsChosed(false);
-					mCheckBoxChangedListener.onChange(data.get(index), false,
-							index);
+					mCheckBoxChangedListener.onChange(data.get(index), false, index);
 				}
 			}
 		});
 		holder.checkBox.setChecked(data.get(index).getIsChosed());
-		RCPlatformImageLoader.loadImage(context, mImageLoader,
-				ImageOptionsFactory.getPublishImageOptions(),
-				friend.getHeadUrl(),
-				AppSelfInfo.ImageScaleInfo.thumbnailImageWidthPx, holder.head,
-				R.drawable.default_head);
+		mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
 		holder.name.setText(friend.getNickName());
 		String letter = friend.getLetter();
 		if (!isNeedToShowLetter(position)) {
@@ -130,8 +111,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 	}
 
 	private boolean isNeedToShowLetter(int position) {
-		return position > 0 ? (!mLetters[position]
-				.equals(mLetters[position - 1])) : true;
+		return position > 0 ? (!mLetters[position].equals(mLetters[position - 1])) : true;
 	}
 
 	class ViewHolder {
@@ -145,8 +125,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 		public TextView tvLetter;
 	}
 
-	public void setOnCheckBoxChangedListener(
-			OnCheckBoxChangedListener mCheckBoxChangedListener) {
+	public void setOnCheckBoxChangedListener(OnCheckBoxChangedListener mCheckBoxChangedListener) {
 		this.mCheckBoxChangedListener = mCheckBoxChangedListener;
 	}
 

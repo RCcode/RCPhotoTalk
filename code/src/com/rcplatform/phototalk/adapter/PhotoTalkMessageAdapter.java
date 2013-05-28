@@ -1,9 +1,11 @@
 package com.rcplatform.phototalk.adapter;
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
@@ -74,7 +80,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		//
 		final Information record = data.get(position);
-		ViewHolder holder=null;
+		ViewHolder holder = null;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(R.layout.home_user_record_list_item, null);
 			holder = new ViewHolder();
@@ -117,9 +123,9 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO || record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			if (!LogicUtils.isSender(context, record)) {
-				initPhotoInformationReceiverView(record, statuTag, buttonTag,holder);
+				initPhotoInformationReceiverView(record, statuTag, buttonTag, holder);
 			} else {
-				initPhotoInformationSenderView(record,holder);
+				initPhotoInformationSenderView(record, holder);
 			}
 		} else if (record.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {// 是通知
 			holder.bar.setVisibility(View.GONE);
@@ -129,10 +135,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 			// 如果是对方添加我
 			if (!LogicUtils.isSender(context, record)) {
-				initFriendInformationReceiverView(record,holder);
+				initFriendInformationReceiverView(record, holder);
 			} else { // 我添加别人为好友
 				// 1 如果对方设置了所有人都可以发送图片，那么item里面显示 状态显示：添加 XX为好友，隐藏按钮， 对应上面 1
-				initFriendInformationSenderView(record,holder);
+				initFriendInformationSenderView(record, holder);
 			}
 		} else if (record.getType() == InformationType.TYPE_SYSTEM_NOTICE) {
 			holder.bar.setVisibility(View.GONE);
@@ -141,11 +147,9 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		}
 
 		if (LogicUtils.isSender(context, record)) {
-			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getReceiver().getHeadUrl(),
-					AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
+			mImageLoader.displayImage(record.getReceiver().getHeadUrl(), holder.head);
 		} else {
-			RCPlatformImageLoader.loadImage(context, mImageLoader, ImageOptionsFactory.getListHeadOption(), record.getSender().getHeadUrl(),
-					AppSelfInfo.ImageScaleInfo.bigImageWidthPx, holder.head, R.drawable.default_head);
+			mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
 		}
 		if (record.getType() != InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			if (!LogicUtils.isSender(context, record)) {
@@ -157,7 +161,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		return convertView;
 	}
 
-	private void initFriendInformationSenderView(Information record,ViewHolder holder) {
+	private void initFriendInformationSenderView(Information record, ViewHolder holder) {
 		holder.statuButton.setVisibility(View.VISIBLE);
 		holder.statuButton.setEnabled(false);
 		if (record.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
@@ -171,7 +175,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		}
 	}
 
-	private void initFriendInformationReceiverView(final Information record,ViewHolder holder) {
+	private void initFriendInformationReceiverView(final Information record, ViewHolder holder) {
 		holder.statuButton.setVisibility(View.VISIBLE);
 		// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 		if (record.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
@@ -198,13 +202,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	}
 
-	private void initPhotoInformationReceiverView(final Information record, String statuTag, String buttonTag,ViewHolder holder) {
+	private void initPhotoInformationReceiverView(final Information record, String statuTag, String buttonTag, ViewHolder holder) {
 		holder.statuButton.setBackgroundDrawable(null);
 		holder.statuButton.setText(null);
 		if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			RCPlatformImageLoader.LoadPictureForList(context, mList, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
+			RCPlatformImageLoader.LoadPictureForList(context, mList, record);
 			holder.statuButton.stopTask();
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
@@ -217,7 +221,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.receive_downloading);
-				RCPlatformImageLoader.LoadPictureForList(context, mList, mImageLoader, ImageOptionsFactory.getReceiveImageOption(), record);
+				RCPlatformImageLoader.LoadPictureForList(context, mList, record);
 				holder.statuButton.stopTask();
 			}
 			// 状态为4.表示正在查看
@@ -249,7 +253,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	}
 
-	private void initPhotoInformationSenderView(Information record,ViewHolder holder) {
+	private void initPhotoInformationSenderView(Information record, ViewHolder holder) {
 		// 如果当前用户是发送者
 		holder.statuButton.setVisibility(View.VISIBLE);
 		holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
@@ -368,15 +372,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		View touchView;
 		ImageView head;
 		ImageView item_new;
-
 		TextView name;
-
 		TextView statu;
-
 		RecordTimerLimitView statuButton;
-
 		RelativeLayout timerLayout;
-
 		ProgressBar bar;
 	}
 
@@ -406,5 +405,4 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	public int getPressedPosition() {
 		return mPressedPosition;
 	}
-
 }
