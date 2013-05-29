@@ -121,7 +121,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, validate);
+			}, validate,mNumberTemp);
 		}
 	}
 
@@ -147,16 +147,19 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void requestReSendSMS() {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
+				dismissLoadingDialog();
 				showErrorConfirmDialog(R.string.sms_sended);
 				mCountDownTask = new CountDownTask().execute();
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
 		}, mNumberTemp);

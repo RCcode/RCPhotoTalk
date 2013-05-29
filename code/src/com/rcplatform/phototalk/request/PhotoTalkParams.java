@@ -74,28 +74,6 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_IMAGE = "file";
 	}
 
-	public static void buildBasicParams(Context context, GalHttpRequest request) {
-		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getRcId());
-		request.setPostValueForKey(PARAM_KEY_TOKEN, userInfo.getToken());
-		request.setPostValueForKey(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
-		request.setPostValueForKey(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
-		request.setPostValueForKey(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
-	}
-
-	public static void buildBasicParams(Context context, RCPlatformAsyncHttpClient client) {
-		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-		if (userInfo != null) {
-			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getRcId());
-			client.putRequestParam(PARAM_KEY_TOKEN, userInfo.getToken());
-		} else {
-			client.putRequestParam(PARAM_KEY_USER_ID, UserInfo.DEFAULT_USER_ID);
-			client.putRequestParam(PARAM_KEY_TOKEN, UserInfo.DEFAULT_TOKEN);
-		}
-		client.putRequestParam(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
-		client.putRequestParam(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
-		client.putRequestParam(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
-	}
 
 	public static void buildBasicParams(Context context, Request request) {
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
@@ -180,6 +158,10 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_TRENDID = "trendId";
 	}
 	public static class RequestSMS{
-		public static final String PARAM_KEY_NUMBER="number";
+		public static final String PARAM_KEY_NUMBER="phone";
+	}
+	public static class BindPhone{
+		public static final String PARAM_KEY_NUMBER="phone";
+		public static final String PARAM_KEY_CODE="code";
 	}
 }

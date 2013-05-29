@@ -35,6 +35,7 @@ import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.ContactUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class Request implements Serializable {
@@ -160,7 +161,7 @@ public class Request implements Serializable {
 							userInfo.setHeadUrl(jsonApp.getString("headUrl"));
 							result.put(appInfo, userInfo);
 						}
-						if(listener!=null)
+						if (listener != null)
 							listener.onOthreAppUserInfoLoaded(result);
 					} else {
 						final UserInfo user = buildUserInfo(content);
@@ -181,7 +182,7 @@ public class Request implements Serializable {
 
 							@Override
 							public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
-								
+
 							}
 						}, user.getRcId(), user.getToken());
 					}
@@ -302,15 +303,21 @@ public class Request implements Serializable {
 		return ids;
 	}
 
-	public static void executeGetMyInfo(final Context context, final OnUserInfoLoadedListener listener, String rcId, String token) {
+	public static void executeGetMyInfo(final Context context, final OnUserInfoLoadedListener listener, final String rcId, String token) {
 		RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
+					long time = jsonObject.getLong("time");
+					String lastBindPhone = jsonObject.getString("phone");
+					String cellPhone = jsonObject.getString("cellPhone");
+					PrefsUtils.User.MobilePhoneBind.setLastBindNumber(context, rcId, lastBindPhone);
+					PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(context, time, rcId);
 					JSONObject jsonUser = jsonObject.getJSONObject("userInfo");
 					UserInfo userInfo = JSONConver.jsonToObject(jsonUser.toString(), UserInfo.class);
+					userInfo.setCellPhone(cellPhone);
 					JSONArray arrayApps = jsonObject.getJSONArray("allApp");
 					List<AppInfo> apps = JSONConver.jsonToAppInfos(arrayApps.toString());
 					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);

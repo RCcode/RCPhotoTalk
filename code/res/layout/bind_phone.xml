@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:inputType="number"
-            android:maxLength="4" />
+            android:maxLength="6" />
 
         <Button
             android:id="@+id/btn_commit"

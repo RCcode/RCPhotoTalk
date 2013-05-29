@@ -227,6 +227,12 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	}
 
+	protected void clearInviteFriends() {
+		willInvateFriends.clear();
+		mLinearInvate.removeAllViews();
+		refreshList();
+	}
+
 	/**
 	 * 传入参数是通讯录信息伪装成的好友对象，phone是手机号，nick是名字
 	 * 

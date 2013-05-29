@@ -55,7 +55,7 @@ public class InviteFriendUploadService extends IntentService {
 		Uri uri = Uri.parse("content://sms/sent");
 		String[] projection = new String[] { "address", "body" };
 		Cursor cursor = getContentResolver().query(uri, projection, null, null, "date desc");
-		String inviteMessage = getString(R.string.my_firend_invite_send_short_msg);
+		String inviteMessage = getString(R.string.invite_msg_match);
 		while (cursor.moveToNext()) {
 			String body = cursor.getString(cursor.getColumnIndex("body"));
 			if (body.contains(inviteMessage)) {

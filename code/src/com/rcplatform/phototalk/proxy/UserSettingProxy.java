@@ -47,8 +47,10 @@ public class UserSettingProxy {
 		request.excuteAsync();
 	}
 
-	public static void bindPhone(Context context, RCPlatformResponseHandler responseHandler, String validate) {
+	public static void bindPhone(Context context, RCPlatformResponseHandler responseHandler, String validate,String phoneNumber) {
 		Request request = new Request(context, PhotoTalkApiUrl.BIND_PHONE_URL, responseHandler);
+		request.putParam(PhotoTalkParams.BindPhone.PARAM_KEY_NUMBER, phoneNumber);
+		request.putParam(PhotoTalkParams.BindPhone.PARAM_KEY_CODE, validate);
 		request.excuteAsync();
 	}
 
