@@ -391,7 +391,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				nHeight = mMyHeadView.getHeight();
 				nWidth = mMyHeadView.getWidth();
 				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
-				bitmap = Utils.getRectBitmap(bitmap);
 				if (bitmap != null) {
 					cacheHeadImage(bitmap);
 				}

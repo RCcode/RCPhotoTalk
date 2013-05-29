@@ -34,16 +34,15 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private static TreeSet<Friend> friendsAdded;
 
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_friends);
 		friendsAdded = new TreeSet<Friend>(new Comparator<Friend>() {
 
 			@Override
 			public int compare(Friend lhs, Friend rhs) {
-				// TODO Auto-generated method stub
 				if (lhs.getRcId().equals(rhs.getRcId())) {
 					return 0;
 				}
@@ -54,23 +53,19 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	}
 
 	private void initView() {
-		// TODO Auto-generated method stub
 
 		Button btnContinue = (Button) findViewById(R.id.btn_continue);
-
-		ImageView btn_continue_line = (ImageView)findViewById(R.id.btn_continue_line);
+		ImageView btn_continue_line = (ImageView) findViewById(R.id.btn_continue_line);
 		btnContinue.setOnClickListener(this);
-		if (getIntent().getData() != null||getIntent().getStringExtra("from").equals("base")) {
+		if (getIntent().getData() != null || (getIntent().getStringExtra("from") != null && getIntent().getStringExtra("from").equals("base"))) {
 			btnContinue.setVisibility(View.GONE);
 			btn_continue_line.setVisibility(View.GONE);
-
 		}
 		RadioGroup rgTabs = (RadioGroup) findViewById(R.id.rg_add_friends);
 		rgTabs.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
 				switch (checkedId) {
 				case R.id.tab_contact:
 					mHost.setCurrentTabByTag(TAB_CONTACTS);
@@ -91,7 +86,6 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	}
 
 	private void addTabs() {
-		// TODO Auto-generated method stub
 		mHost.addTab(mHost.newTabSpec(TAB_CONTACTS).setIndicator(TAB_CONTACTS).setContent(new Intent(this, ContactFriendRecommendActivity.class)));
 		mHost.addTab(mHost.newTabSpec(TAB_FACEBOOK).setIndicator(TAB_FACEBOOK).setContent(new Intent(this, FacebookFriendRecommendActivity.class)));
 		mHost.addTab(mHost.newTabSpec(TAB_VK).setIndicator(TAB_VK).setContent(new Intent(this, VKRecommendActivity.class)));
@@ -100,7 +94,6 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.btn_continue:
 			startActivity(new Intent(this, HomeActivity.class));
@@ -111,7 +104,6 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
 		super.onDestroy();
 		LogicUtils.uploadFriendInvite(this, Action.ACTION_UPLOAD_INTITE_CONTACT, FriendType.CONTACT);
 		friendsAdded.clear();
@@ -120,7 +112,6 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		// TODO Auto-generated method stub
 		WindowManager.LayoutParams params = getWindow().getAttributes();
 		//
 		// if () {
@@ -134,7 +125,8 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		// params.softInputMode =
 		// WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
 		// }
-		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && friendsAdded.size() > 0 && params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
+		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && friendsAdded.size() > 0
+				&& params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
 			Intent intent = new Intent();
 			intent.putExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS, new ArrayList<Friend>(friendsAdded));
 			setResult(Activity.RESULT_OK, intent);

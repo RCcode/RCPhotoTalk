@@ -34,6 +34,7 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 			intent.setType("vnd.android-dir/mms-sms");
 			startActivity(intent);
 		}
+		clearInviteFriends();
 	}
 
 	@Override

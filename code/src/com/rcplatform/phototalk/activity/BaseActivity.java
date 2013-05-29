@@ -236,7 +236,6 @@ public class BaseActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					BaseActivity.this.finish();
 					Intent intent = new Intent(BaseActivity.this,AddFriendsActivity.class);
 					intent.putExtra("from", "base");
 					startActivity(intent);
