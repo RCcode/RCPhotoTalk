@@ -40,7 +40,7 @@ public final class ServerUtilities {
 
 	public static final String SENDER_ID = "867870064836";
 
-	private static String serverUrl = "http://192.168.0.86:8083/photochat/user/syncUserkey.do";
+	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
 
 	private static String serverLogUrl = "http://push.rcplatformhk.com/gcm/boss/receivePushStatus.do";
 
