@@ -49,7 +49,6 @@ public class BaseActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		baseContext = this;
 		view = getWindow().getDecorView();
@@ -58,7 +57,6 @@ public class BaseActivity extends Activity {
 
 	@Override
 	public void setContentView(View view) {
-		// TODO Auto-generated method stub
 		super.setContentView(view);
 	}
 
@@ -88,7 +86,6 @@ public class BaseActivity extends Activity {
 			};
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			logoutDialog = builder.setMessage(R.string.other_device_login)
-					.setPositiveButton(R.string.cancel, listener)
 					.setNegativeButton(R.string.relogin, listener)
 					.setCancelable(false).create();
 		}
@@ -118,7 +115,6 @@ public class BaseActivity extends Activity {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		// TODO Auto-generated method stub
 		hideSoftKeyboard(getCurrentFocus());
 		return super.onTouchEvent(event);
 	}
@@ -210,14 +206,12 @@ public class BaseActivity extends Activity {
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		// TODO Auto-generated method stub
 		menu.add("menu");// 必须创建一项
 		return super.onCreateOptionsMenu(menu);
 	}
 
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
-		// TODO Auto-generated method stub
 		if (view != null) {
 			showMenu(view);
 		}
@@ -242,7 +236,6 @@ public class BaseActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
 					BaseActivity.this.finish();
 					Intent intent = new Intent(BaseActivity.this,AddFriendsActivity.class);
 					intent.putExtra("from", "base");
@@ -255,8 +248,6 @@ public class BaseActivity extends Activity {
 				
 				@Override
 				public void onClick(View v) {
-					// TODO Auto-generated method stub
-					
 					SystemMessageUtil.enterPage("market://details?id=com.androidlord.optimizationbox", baseContext);
 				}
 			});

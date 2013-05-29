@@ -121,7 +121,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, validate);
+			}, validate,mNumberTemp);
 		}
 	}
 

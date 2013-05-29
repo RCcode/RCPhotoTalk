@@ -8,10 +8,9 @@ import com.rcplatform.phototalk.R;
 
 public class ImageOptionsFactory {
 
-
 	private static final int DEFAULT_HEAD_DRAWABLE = R.drawable.default_head;
 
-	private static DisplayImageOptions defaultImageOption = new DisplayImageOptions.Builder().cacheOnDisc().bitmapConfig(Config.RGB_565)
+	private static DisplayImageOptions defaultImageOption = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc().bitmapConfig(Config.RGB_565)
 			.showStubImage(DEFAULT_HEAD_DRAWABLE).showImageOnFail(DEFAULT_HEAD_DRAWABLE).showImageForEmptyUri(DEFAULT_HEAD_DRAWABLE)
 			.imageScaleType(ImageScaleType.EXACTLY).build();
 	private static DisplayImageOptions mHeadImageOptions;

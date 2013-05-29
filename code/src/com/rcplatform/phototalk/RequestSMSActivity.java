@@ -75,15 +75,16 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	}
 
 	private void requestSms() {
-		final String number = etNumber.getText().toString();
+		String number = etNumber.getText().toString();
 		if (isNumberEnable(number)) {
+			final String phoneNumber= "+" + mCountryCode.getCountryCode() + number;
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
 
 				@Override
 				public void onSuccess(int statusCode, String content) {
 					dismissLoadingDialog();
-					startBindPhoneActivity(number);
+					startBindPhoneActivity(phoneNumber);
 				}
 
 				@Override
@@ -91,7 +92,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, "+" + mCountryCode.getCountryCode() + number);
+			},phoneNumber);
 		}
 	}
 

@@ -180,6 +180,10 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_TRENDID = "trendId";
 	}
 	public static class RequestSMS{
-		public static final String PARAM_KEY_NUMBER="number";
+		public static final String PARAM_KEY_NUMBER="phone";
+	}
+	public static class BindPhone{
+		public static final String PARAM_KEY_NUMBER="phone";
+		public static final String PARAM_KEY_CODE="code";
 	}
 }
