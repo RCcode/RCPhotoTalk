@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -55,5 +56,13 @@ public class PhotoTalkUtils {
 		friend.setFriend(true);
 		friend.setNickName(userInfo.getNickName());
 		return friend;
+	}
+
+	public static File getUserHead(UserInfo userInfo) {
+		return new File(Constants.USER_IMAGE_DIR, userInfo.getRcId() + "/" + "head");
+	}
+
+	public static File getUserBackground(UserInfo userInfo) {
+		return new File(Constants.USER_IMAGE_DIR, userInfo.getRcId() + "/" + "background");
 	}
 }

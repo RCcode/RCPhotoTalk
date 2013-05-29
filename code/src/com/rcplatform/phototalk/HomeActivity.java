@@ -225,7 +225,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
 		title_line = (ImageView) findViewById(R.id.title_line);
-		title_line.setVisibility(View.VISIBLE);
+//		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
 		mBtFriendList.setBackgroundResource(R.drawable.friendlist_btn);

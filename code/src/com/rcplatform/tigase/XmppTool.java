@@ -97,8 +97,11 @@ public class XmppTool {
 			xe.printStackTrace();
 			con = null;
 		}
-
+		try {
 		connectCheckTimer.schedule(connectCheckTask, 6000, 6000);
+		}catch(Exception e){
+			
+		}
 	}
 
 	public static void createConnection(TigaseNode node) {

@@ -5,18 +5,18 @@ import com.rcplatform.phototalk.bean.UserInfo;
 public class PhotoTalkApiFactory {
 
 	// 返回状态。
-	public static final int RESPONSE_STATE_SUCCESS = 0;
+//	public static final int RESPONSE_STATE_SUCCESS = 0;
 
 	// 无用户信息
-	public static final int RESPONSE_STATE_SUCCESS_NO_FRIEND = 1;
+//	public static final int RESPONSE_STATE_SUCCESS_NO_FRIEND = 1;
 
 	// 无用任何好友
-	public static final int RESPONSE_STATE_SUCCESS_NO_MYFRIEND = 2;
+//	public static final int RESPONSE_STATE_SUCCESS_NO_MYFRIEND = 2;
 
 	// 电话本为空
-	public static final int RESPONSE_STATE_SUCCESS_NO_CONTACT = 3;
+//	public static final int RESPONSE_STATE_SUCCESS_NO_CONTACT = 3;
 
-	public static final String RESPONSE_KEY_STATUS = "status";
+//	public static final String RESPONSE_KEY_STATUS = "status";
 
 	public static final String RESPONSE_KEY_MESSAGE = "message";
 

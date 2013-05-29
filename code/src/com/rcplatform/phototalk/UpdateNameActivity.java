@@ -215,34 +215,4 @@ public class UpdateNameActivity extends Activity implements View.OnClickListener
 		}
 	}
 
-	private void doGetPassword(final Context context, String email) {
-
-		GalHttpRequest request = GalHttpRequest.requestWithURL(this, PhotoTalkApiUrl.FORGET_PASSWORD_URL);
-		request.setPostValueForKey(PhotoTalkApiFactory.EMAIL, email);
-		request.setPostValueForKey(PhotoTalkApiFactory.TOKEN, PhotoTalkApiFactory.TOKEN_DEFAULT);
-		request.setPostValueForKey(PhotoTalkApiFactory.LANGUAGE, Locale.getDefault().getLanguage());
-		request.setPostValueForKey(PhotoTalkApiFactory.DEVICE_ID, android.os.Build.DEVICE);
-		request.startAsynRequestString(new GalHttpLoadTextCallBack() {
-
-			@Override
-			public void textLoaded(String text) {
-				System.out.println(text.toString());
-				try {
-					System.out.println(text);
-					JSONObject obj = new JSONObject(text);
-					int state = obj.getInt(PhotoTalkApiFactory.RESPONSE_KEY_STATUS);
-					mHandler.sendMessage(mHandler.obtainMessage(state));
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void loadFail() {
-				mHandler.sendMessage(mHandler.obtainMessage(PhotoTalkApiFactory.LOGIN_SERVER_ERROR));
-			}
-		});
-
-	}
-
 }

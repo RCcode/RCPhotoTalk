@@ -151,9 +151,9 @@ public class FriendsProxy {
 	// 田镇源 上传修改个人信息方法
 	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
 		Request request = new Request(context, PhotoTalkApiUrl.USER_INFO_UPDATE_URL, responseHandler);
-		request.putParam(PhotoTalkApiFactory.NICK, nick);
-		request.putParam(PhotoTalkApiFactory.BIRTHDAY, birthday);
-		request.putParam(PhotoTalkApiFactory.SEX, sex);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_NICK, nick);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_BIRTHDAY, birthday);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_GENDER, sex);
 		if (file != null)
 			request.setFile(file);
 		request.executePostNameValuePairAsync();

@@ -1,7 +1,6 @@
 package com.rcplatform.phototalk;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,14 +12,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -32,100 +25,49 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
-import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.ShowToast;
 import com.rcplatform.phototalk.utils.Utils;
-import com.rcplatform.phototalk.views.HeadImageView;
 import com.rcplatform.phototalk.views.RoundImageView;
 
 public class AccountInfoEditActivity extends ImagePickActivity implements View.OnClickListener {
 
 	private static final int REQUESTCODE_NAME = 1010;
-	private static final int REQUESTCODE_SIGNATURE = 1011;
 
 	protected static final int REQUEST_GALLARY = 1012;
 	protected static final int REQUEST_CAMERA = 1013;
 
 	public static final String RESULT_PARAM_USER = "userInfo";
-	private PhotoTalkApplication app;
 	private TextView mNameView;
 	private TextView mSexView;
 	private TextView mBirthday;
-	// private TextView mSignatureView;
 	private View mBackView;
 	private DatePicker mBirthDayPicker;
 	private TextView mTitleView;
 	private RoundImageView mMyHeadView;
 	private AlertDialog mBirthChooseDialog;
-	private Bitmap bitmap = null;
 	private Calendar mBirthDayCalender;
-	private int selectedSex;
-	private String headPath;
 	private UserInfo userDetailInfo;
 	private String[] sex;
 	private boolean isHeadChange = false;
 	private boolean isChance = false;
 	private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	private ImageLoader mImageLoader;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_edit_account_info);
-		app = (PhotoTalkApplication) getApplication();
-		userDetailInfo = app.getCurrentUser();
+		userDetailInfo = getPhotoTalkApplication().getCurrentUser();
 		sex = new String[] { getString(R.string.male), getString(R.string.famale) };
-		// sex = new String[] { getString(R.string.sex_secret),
-		// getString(R.string.male), getString(R.string.famale) };
+		mImageLoader = ImageLoader.getInstance();
 		initView();
 	}
-
-	private Handler mHandler2 = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-
-			switch (msg.what) {
-			case PhotoTalkApiFactory.RESPONSE_STATE_SUCCESS:
-				mMyHeadView.setImageBitmap(bitmap);// 把拍摄的照片转成圆角显示在预览控件
-				// mSexView.setText(sex);
-				if (userDetailInfo != null) {
-					mNameView.setText("" + userDetailInfo.getNickName());
-
-					selectedSex = Integer.valueOf(userDetailInfo.getGender()) - 1;
-					if (selectedSex == -1) {
-						mSexView.setText(R.string.settings_select_sex_private);
-					} else {
-						// String[] arraySex =
-						// getResources().getStringArray(R.array.settings_page_sex_arrays);
-						// mSexView.setText(arraySex[selectedSex]);
-					}
-					mBirthday.setText("" + userDetailInfo.getBirthday());
-				}
-				break;
-			case PhotoTalkApiFactory.LOGIN_PASSWORD_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_pwd_no_email_yes), Toast.LENGTH_LONG);
-				break;
-			case PhotoTalkApiFactory.LOGIN_EMAIL_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_email_no), Toast.LENGTH_LONG);
-				break;
-			case PhotoTalkApiFactory.LOGIN_SERVER_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_server_no), Toast.LENGTH_LONG);
-				break;
-			case PhotoTalkApiFactory.LOGIN_ADMIN_ERROR:
-				ShowToast.showToast(AccountInfoEditActivity.this, getResources().getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
-				break;
-			}
-
-		}
-
-	};
 
 	private void initView() {
 		initTitle();
@@ -157,14 +99,14 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	private void loadHeadPicture() {
-		String headUrl = userDetailInfo.getHeadUrl();
-		// File file = new File(headUrl);
-		// if (file.exists()) {
-		// Bitmap bitmap = BitmapFactory.decodeFile(headUrl);
-		// mMyHeadView.setImageBitmap(Utils.getRoundedCornerBitmap(bitmap));
-		// } else {
-		ImageLoader.getInstance().displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-		// }
+		File fileHead = PhotoTalkUtils.getUserHead(getCurrentUser());
+		if (fileHead.exists()) {
+			String urlLocal = "file:///" + fileHead.getPath();
+			mImageLoader.displayImage(urlLocal, mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
+		} else {
+			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
+		}
+
 	}
 
 	private void setNick() {
@@ -309,7 +251,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
 		super.onImageReceive(imageBaseUri, imagePath);
 		isChance = true;
-		new LoadImageTask().execute(imageBaseUri, Uri.parse(imagePath));
+		isHeadChange = true;
+		Utils.copyFile(new File(imagePath), PhotoTalkUtils.getUserHead(getCurrentUser()));
+		new LoadImageTask(mMyHeadView).execute(imageBaseUri, Uri.parse(imagePath));
 	}
 
 	@Override
@@ -319,16 +263,12 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	@Override
-	protected void onDestroy() {
-
-		super.onDestroy();
-	}
-
-	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			updateUserInfo();
-			return true;
+			startActivity(new Intent(AccountInfoEditActivity.this,SettingsActivity.class));
+			this.finish();
+			return false;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -336,12 +276,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private void updateUserInfo() {
 		// 资料发生改变 上传服务器
 		if (isChance) {
-
 			File file = null;
-			UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
-			if (isHeadChange && !TextUtils.isEmpty(headPath)) {
-				file = new File(headPath);
-			}
+			if (isHeadChange)
+				file = PhotoTalkUtils.getUserHead(getCurrentUser());
 			FriendsProxy.upUserInfo(this, file, new RCPlatformResponseHandler() {
 
 				@Override
@@ -361,67 +298,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 				}
 			}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
+			getPhotoTalkApplication().setCurrentUser(userDetailInfo);
+			setResult(Activity.RESULT_OK);
 		}
 		finish();
-	}
-
-	private void setResultParam() {
-		Intent intent = new Intent();
-		intent.putExtra(RESULT_PARAM_USER, userDetailInfo);
-		setResult(Activity.RESULT_OK, intent);
-	}
-
-	class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		}
-
-		@Override
-		protected Bitmap doInBackground(Uri... params) {
-			Uri imageUri = params[0];
-			headPath = params[1].getPath();
-			Bitmap bitmap = null;
-			try {
-				int rotateAngel = Utils.getUriImageAngel(AccountInfoEditActivity.this, imageUri);
-				int nWidth = 0, nHeight = 0;
-				nHeight = mMyHeadView.getHeight();
-				nWidth = mMyHeadView.getWidth();
-				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
-				if (bitmap != null) {
-					cacheHeadImage(bitmap);
-				}
-			} catch (OutOfMemoryError e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return bitmap;
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap result) {
-			super.onPostExecute(result);
-			dismissLoadingDialog();
-			if (result == null) {
-				DialogUtil.showToast(getApplicationContext(), R.string.image_unsupport, Toast.LENGTH_SHORT);
-				finish();
-			} else {
-				isHeadChange = true;
-				mMyHeadView.setImageBitmap(result);
-			}
-		}
-	}
-
-	private void cacheHeadImage(Bitmap bitmap) throws Exception {
-		File file = new File(getCacheDir(), Constants.HEAD_CACHE_PATH);
-		FileOutputStream fos = new FileOutputStream(file);
-		bitmap.compress(CompressFormat.PNG, 100, fos);
-		String cachePath = "file://" + file.getPath();
-		userDetailInfo.setHeadUrl(cachePath);
-		fos.flush();
-		fos.close();
 	}
 }

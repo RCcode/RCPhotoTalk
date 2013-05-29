@@ -40,6 +40,9 @@ public class Constants {
 	public static String VK_API_ID = "2904017";
 
 	private static final String DB_DIR = "db";
+	private static final String USER_DIR_NAME = "user";
+
+	public static File USER_IMAGE_DIR;
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -55,6 +58,7 @@ public class Constants {
 		}
 		PhotoTalkParams.PARAM_VALUE_LANGUAGE = language;
 		PhotoTalkParams.PARAM_VALUE_DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();
+		USER_IMAGE_DIR = context.getDir(USER_DIR_NAME, Context.MODE_PRIVATE);
 	}
 
 	public static void initDatabase(Context context) {
