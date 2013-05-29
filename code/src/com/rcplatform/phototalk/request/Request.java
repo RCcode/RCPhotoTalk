@@ -164,13 +164,12 @@ public class Request implements Serializable {
 						if (listener != null)
 							listener.onOthreAppUserInfoLoaded(result);
 					} else {
-						final UserInfo user = buildUserInfo(content);
-						user.setShowRecommends(UserInfo.NOT_FIRST_TIME);
+						String token = jsonObject.getString("token");
+						String rcId = jsonObject.getString("rcId");
 						executeGetMyInfo(context, new OnUserInfoLoadedListener() {
 
 							@Override
 							public void onSuccess(UserInfo userInfo) {
-								userInfo.setEmail(user.getEmail());
 								userInfo.setShowRecommends(UserInfo.NOT_FIRST_TIME);
 								listener.onSuccess(userInfo);
 							}
@@ -184,7 +183,7 @@ public class Request implements Serializable {
 							public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
 
 							}
-						}, user.getRcId(), user.getToken());
+						}, rcId, token);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -268,18 +267,6 @@ public class Request implements Serializable {
 		this.filePath = filePath;
 	}
 
-	private static UserInfo buildUserInfo(String content) throws Exception {
-		UserInfo userInfo = new UserInfo();
-		JSONObject jsonObject = new JSONObject(content);
-		userInfo.setToken(jsonObject.getString("token"));
-		userInfo.setTigaseId(jsonObject.getString("tgId"));
-		userInfo.setTigasePwd(jsonObject.getString("tgpwd"));
-		userInfo.setRcId(jsonObject.getString("rcId"));
-		userInfo.setEmail(jsonObject.optString("email", null));
-		userInfo.setNickName(jsonObject.optString("nickName", null));
-		return userInfo;
-	}
-
 	public Context getContext() {
 		return mContext;
 	}
@@ -313,11 +300,13 @@ public class Request implements Serializable {
 					long time = jsonObject.getLong("time");
 					String lastBindPhone = jsonObject.getString("phone");
 					String cellPhone = jsonObject.getString("cellPhone");
+					String email = jsonObject.getString("email");
 					PrefsUtils.User.MobilePhoneBind.setLastBindNumber(context, rcId, lastBindPhone);
 					PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(context, time, rcId);
 					JSONObject jsonUser = jsonObject.getJSONObject("userInfo");
 					UserInfo userInfo = JSONConver.jsonToObject(jsonUser.toString(), UserInfo.class);
 					userInfo.setCellPhone(cellPhone);
+					userInfo.setEmail(email);
 					JSONArray arrayApps = jsonObject.getJSONArray("allApp");
 					List<AppInfo> apps = JSONConver.jsonToAppInfos(arrayApps.toString());
 					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);

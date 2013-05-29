@@ -30,6 +30,7 @@ import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class LogicUtils {
@@ -192,6 +193,7 @@ public class LogicUtils {
 
 	private static void doLogoutOperation(Context context) {
 		PrefsUtils.LoginState.clearLoginInfo(context);
+		FacebookUtil.clearFacebookVlidated(context);
 	}
 
 	public static void relogin(Context context) {

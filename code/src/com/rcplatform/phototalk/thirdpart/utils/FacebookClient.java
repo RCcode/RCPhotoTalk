@@ -25,7 +25,6 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
-import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -157,7 +156,7 @@ public class FacebookClient {
 	protected void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		LogUtil.e("go into facebook status call back");
 		if (exception != null) {
-			DialogUtil.createMsgDialog(mContext, exception.getMessage(), mContext.getString(R.string.confirm)).show();
+			mContext.showErrorConfirmDialog(exception.getMessage());
 			return;
 		}
 		if (state == SessionState.OPENED)
