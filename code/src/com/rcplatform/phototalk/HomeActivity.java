@@ -17,7 +17,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +27,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.message.UserMessageService;
@@ -83,8 +81,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private SnapListView mInformationList;
 
 	private Button mTakePhoto;
-
-	private Button mRecord;
 
 	protected LongClickShowView mShowDialog;
 
@@ -224,13 +220,12 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		mInformationList = (SnapListView) findViewById(R.id.lv_home);
 		mInformationList.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
-		mRecord = (Button) findViewById(R.id.btn_home_record);
 
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
 		title_line = (ImageView) findViewById(R.id.title_line);
-		title_line.setVisibility(View.VISIBLE);
+//		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
 		mBtFriendList.setBackgroundResource(R.drawable.friendlist_btn);
@@ -257,13 +252,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
-			}
-		});
-		mRecord.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(HomeActivity.this, VideoRecordActivity.class));
 			}
 		});
 		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {

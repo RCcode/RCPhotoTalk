@@ -7,7 +7,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,11 +39,12 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 	private EditText mEditText;
 
-	private ImageView mSearchButton;
+//	private ImageView mSearchButton;
 
 	private ListView mListView;
-
+private TextView search_hint_text;
 	private ImageLoader mImageLoader;
+	private Button seach_delete_btn;
 
 	private SearchFriendsAdapter mAdapter;
 
@@ -55,6 +58,19 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 	private void initView() {
 		mEditText = (EditText) findViewById(R.id.search_et);
+		seach_delete_btn = (Button)findViewById(R.id.seach_delete_btn);
+		search_hint_text = (TextView)findViewById(R.id.search_hint_text);
+		seach_delete_btn.setVisibility(View.GONE);
+		seach_delete_btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mEditText.setText("");
+				mEditText.setFocusable(true);
+				seach_delete_btn.setVisibility(View.GONE);
+			}
+		});
 		mEditText.setOnKeyListener(new OnKeyListener() {
 			private long lastPressTime = 0l;
 
@@ -69,8 +85,34 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				return false;
 			}
 		});
-		mSearchButton = (ImageView) findViewById(R.id.search_btn);
-		mSearchButton.setOnClickListener(this);
+		mEditText.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				if(mEditText.getText()!=null&&mEditText.getText().length()>0){
+					seach_delete_btn.setVisibility(View.VISIBLE);
+				}else{
+					seach_delete_btn.setVisibility(View.GONE);
+					
+				}
+			}
+		});
+//		mSearchButton = (ImageView) findViewById(R.id.search_btn);
+//		mSearchButton.setOnClickListener(this);
 		mListView = (ListView) findViewById(R.id.search_result_list);
 		mAdapter = new SearchFriendsAdapter();
 		mListView.setAdapter(mAdapter);
@@ -83,9 +125,9 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		case R.id.back:
 			finish();
 			break;
-		case R.id.search_btn:
-			search();
-			break;
+//		case R.id.search_btn:
+//			search();
+//			break;
 		}
 	}
 
@@ -106,6 +148,11 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					JSONObject jsonObject = new JSONObject(content);
 					List<Friend> resultFriends = JSONConver.jsonToFriends(jsonObject.getJSONArray("userList").toString());
 					mAdapter.setData(resultFriends);
+					if(mAdapter.getCount()==0){
+						search_hint_text.setVisibility(View.VISIBLE);
+					}else{
+						search_hint_text.setVisibility(View.GONE);
+					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -152,14 +199,12 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
 			TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 			final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
-//			View sourceView = convertView.findViewById(R.id.add_friend_list_item_source);
 			FriendSourse source = friend.getSource();
 			TextView tvFrom = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_from);
 			if (source == null) {
 				tvFrom.setVisibility(View.GONE);
 			} else {
 				tvFrom.setVisibility(View.VISIBLE);
-				TextView tvName = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 				switch (source.getAttrType()) {
 				case FriendType.CONTACT:
 					tvFrom.setText(R.string.contact_friend);
@@ -168,7 +213,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					tvFrom.setText(R.string.facebook_friend);
 					break;
 				}
-				tvName.setText(source.getName());
 			}
 			mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 			// view friend detail.

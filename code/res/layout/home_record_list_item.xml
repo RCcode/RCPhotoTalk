@@ -36,7 +36,6 @@
 	        android:layout_height="wrap_content"
 	        android:textSize="24sp"
 	        android:textColor="#6a6c6c"
-	        android:text="@string/sightseer"
 	        />
 	    <TextView 
 	        android:id="@+id/tv_record_item_statu"

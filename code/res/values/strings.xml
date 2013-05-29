@@ -6,19 +6,17 @@
     <string name="hello_world">Hello world!</string>
     <string name="version">1.0.0</string>
     <string name="version_str">v1.0.0</string>
-    
     <string name="ok">ok</string>
     <string name="cancel">cancel</string>
     <string name="modify">修改</string>
     <string name="net_error">网络错误!</string>
     <string name="firend_list_invite_friend_title">邀请朋友</string>
     <string name="firend_list_used_photochat_friend_title">使用PhotoTalk的好友</string>
-    
     <string name="my_firend_title">好友</string>
     <string name="my_friends_added">我的好友</string>
-    <string name="my_friends_new">新的好友</string> 
-    
-    
+    <string name="my_friends_new">新的好友</string>
+
+    <!-- 添加好友页面 -->
     <string name="my_firend_setting_more_title">更多</string>
     <string name="user_message">RC帐号信息</string>
     <string name="my_firend_suggested_title">好友推荐</string>
@@ -26,8 +24,10 @@
     <string name="my_firend_no_friend_hint">\t\t  No friends here!\nFind some friends now.</string>
     <string name="add_friend_search_key_hint_text">"Email、手机号、ID"</string>
     <string name="add_friend_from_phonebook_hint_text">从手机通讯录查找</string>
+    <string name="friends_already_use_app">使用PhotoTalk的好友</string>
     <string name="add_friend_from_facebook_hint_text">从Facebook好友查找</string>
     <string name="friend_detail_send_photo_hint_text">发送图片</string>
+    <!-- 设置个人信息页面  更新昵称 包括暂时取消的更新个性签名 -->
     <string name="settings_select_sex">选择性别</string>
     <string name="settings_select_sex_private">保密</string>
     <string name="settings_update_person_info_title">修改个人资料</string>
@@ -38,10 +38,13 @@
     <string name="settings_update_editor_hint">enter text...</string>
     <string name="settings_tacoty_account_info_title">RC账号信息</string>
     <string name="setting_update_login_password">修改登录密码</string>
+    <string name="search_hint">未找到相关用户</string>
     <string name="login_out">注销</string>
     <string name="login_out_account">注销账户</string>
-    
-    <!--忘记密码页面  -->
+    <string name="deauthorize_complete">解除绑定成功</string>
+    <string name="deauthorize_fail">解除绑定失败</string>
+
+    <!-- 忘记密码页面 -->
     <string name="setting_update_set_rcid_title">设置ID</string>
     <string name="setting_update_facebook_unbind_title">Facebook账号</string>
     <string name="setting_update_facebook_unbind_btn">解除绑定</string>
@@ -50,7 +53,6 @@
     <string name="two_password_not_same">两次密码输入不一致，请重新输入</string>
     <string name="password_change_complete">修改密码成功</string>
     <string name="change_password">修改登录密码</string>
-    
     <string name="setting_update_name_invalid">请输入1-20字符</string>
     <string name="take">将</string>
     <string name="add_friend">加为好友</string>
@@ -58,56 +60,31 @@
     <string name="friend_dynamic">好友动态</string>
 
     <!-- added jelly.xiong end -->
-
-
-    <!-- added futao start -->
+    <!-- 录音界面 -->
     <string name="voice_too_short">录音时间太短</string>
     <string name="voice_record">按住录音</string>
+    <!-- 头像 背景 设置弹出按钮 -->
     <string name="camera">相机</string>
     <string name="photo">相册</string>
-    <string name="close">关闭</string>
-    <string name="addtext">文字</string>
-    <string name="tuya">涂鸦</string>
-    <string name="edite_pic_time_limit">限时</string>
-    <string name="save">保存</string>
-    <string name="sent">发送</string>
-    <string name="video_record_start">开始</string>
-    <string name="video_record_stop">停止</string>
-    <string name="video_record_timer_minutes">00</string>
-    <string name="video_record_timer_seconds">10</string>
-    <string name="video_record_sure">确定</string>
-    <string name="video_preview">预览</string>
-    <string name="edit_video_mute">静音</string>
-    <string name="undo">撤销</string>
-    <string name="redo">恢复</string>
+    <string name="no_sdc">没有找到SD卡</string>
+
+    <!-- 编辑图片页面 -->
     <string name="saving">正在保存...</string>
     <string name="save_success">保存成功</string>
     <string name="send_success">发送成功</string>
     <string name="save_fail">保存失败</string>
+    <!-- 发送图片时选择好友页面 -->
     <string name="please_select_contact">请选择联系人</string>
     <string name="select_friend_title">发给</string>
     <string name="receive_data_error">返回数据异常</string>
-    <!-- home view -->
-    <string name="sightseer">游客</string>
-    <string name="statu_send">Send</string>
-    <string name="statu_added_you">Added you as Friend</string>
-    <string name="home_record_add">add</string>
-    <string name="home_record_added">added</string>
-    <string name="home_record_as_friend">as friend</string>
-    <string name="home_record_will_add_you_as_friend">will add you as friend</string>
-    <string name="home_record_added_you_as_friend">added you as friend</string>
-    <string name="home_record_waitting">waitting</string>
-    <string name="home_record_waitting_and_confirm">waitting for confirm add as friend</string>
-    <string name="home_clear_all_record">清空所有记录</string>
-    <!-- pull to refresh -->
-
+    <string name="operation">操作</string>
+    
     <string name="pull_to_refresh_footer_release_label">let it go to load</string>
     <string name="pull_to_refresh_footer_pull_label">pull up to load more</string>
     <string name="pull_to_refresh_footer_refreshing_label">loading\u2026</string>
-    <string name="operation">操作</string>
-    <string name="no_sdc">no_sdcard</string>
-    <!-- added futao end -->
+    
     <!-- facebook -->
+    
     <string name="com_facebook_dialogloginactivity_ok_button">OK</string>
     <string name="com_facebook_loginview_log_out_button">Log Out</string>
     <string name="com_facebook_loginview_log_in_button">Log In</string>
@@ -138,7 +115,8 @@
     <string name="follow_fail">follow fail</string>
     <string name="follow_unfollow_fail">cancel follow fail</string>
     <string name="app_id">416524281769335</string>
-    <!-- facebook end -->
+    
+    <!-- home 页面 -->
     <string name="resend">重新发送</string>
     <string name="delete">删除</string>
     <string name="reload">重新下载</string>
@@ -146,7 +124,6 @@
     <string name="contact">通讯录</string>
     <string name="facebook">Facebook</string>
     <string name="vkontakte">VKontakte</string>
-    <string name="friends_already_use_app">使用PhotoTalk的好友</string>
     <string name="uploading_contacts">正在上传通讯录</string>
     <string name="invate_friend">邀请好友</string>
 
@@ -167,21 +144,22 @@
     <string name="rcid">RC ID</string>
 
     <!-- add friends -->
-    <string name="phone">电话号码</string>
     <string name="contact_friend">通讯录好友</string>
     <string name="facebook_friend">facebook好友</string>
-    <string name="deauthorize_complete">解除绑定成功</string>
-    <string name="deauthorize_fail">解除绑定失败</string>
+    <!-- <string name="phone">电话号码</string>-->
+     
+    <string name="next">下一步</string>
     <string name="use_new_info">在PhotoTalk中使用新的个人资料</string>
     <string name="use_info_below">使用以下个人资料</string>
     <string name="user_info">个人资料</string>
-    <string name="next">下一步</string>
     <string name="image_pick_fail">图片获取失败</string>
-    <string name="operation_fail">操作失败</string>
+    <string name="operation_fail">操作失败</string> 
     <string name="edit">编辑</string>
     <string name="friend_sex_age">%1$s,%2$d</string>
     <string name="add_friend_title">添加好友</string>
     <string name="take_score">评分</string>
+    
+    
     <string name="delete_friend">删除好友</string>
     <string name="set_friend_remark">设置好友备注名称</string>
     <string name="remark_hint">输入备注名</string>
@@ -232,6 +210,7 @@
     <string name="invite_success">邀请好友成功</string>
     <string name="invite_cancel">取消好友邀请</string>
     <string name="invite_fail">好友邀请失败</string>
+    
     <string name="init_message_title_one">分享瞬间</string>
     <string name="init_message_text_one">分享生活中每一个精彩的瞬间</string>
     <string name="init_message_title_two">照片处理</string>
@@ -305,8 +284,7 @@
     <string name="forget_password_email_address_text">输入注册的邮箱地址</string>
     <string name="forget_password_reset_text">已将重设密码的邮件发送到 %s请注意查收</string>
     <string name="account_name">账号名称</string>
-    
-    
+
     <!-- app_about 页面 -->
     <string name="update_now">马上升级</string>
     <string name="update_dialog_title">%1$s v%2$s版本上线</string>

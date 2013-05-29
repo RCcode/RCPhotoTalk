@@ -1,5 +1,8 @@
 package com.rcplatform.phototalk.activity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -53,6 +56,8 @@ public class ImagePickActivity extends BaseActivity {
 	private final int BACKGROUND_HEIGHT = 350;
 
 	private final int BACKGROUND_WIDTH = 710;
+
+	private List<Bitmap> bitmaps = new ArrayList<Bitmap>();
 
 	protected void startCamera() {
 		Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -172,6 +177,14 @@ public class ImagePickActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if (bitmaps.size() > 0) {
+			for (Bitmap bitmap : bitmaps) {
+				if (bitmap != null && !bitmap.isRecycled()) {
+					bitmap.recycle();
+				}
+			}
+			bitmaps.clear();
+		}
 	}
 
 	public class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
@@ -214,6 +227,7 @@ public class ImagePickActivity extends BaseActivity {
 			if (result == null) {
 				DialogUtil.showToast(getApplicationContext(), R.string.image_unsupport, Toast.LENGTH_SHORT);
 			} else {
+				bitmaps.add(result);
 				mImageView.setImageBitmap(result);
 			}
 		}

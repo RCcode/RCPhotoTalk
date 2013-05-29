@@ -19,6 +19,7 @@
         android:layout_height="@dimen/friend_head_side"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
         android:layout_marginLeft="@dimen/friend_head_left" />
 
     <ImageView
@@ -51,7 +52,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@string/sightseer"
             android:textColor="#4f3e36"
             android:textSize="18sp" />
 

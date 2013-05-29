@@ -148,6 +148,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 			mVkClient.sendInviteMessage(vkIds);
 			showErrorConfirmDialog(R.string.invite_success);
 			uploadInviteInfo(vkIds);
+			clearInviteFriends();
 		}
 	};
 

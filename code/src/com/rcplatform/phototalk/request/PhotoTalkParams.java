@@ -28,7 +28,11 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
 		public static final String PARAM_KEY_OLD_PASSWORD = "pwd";
 	}
-
+public static class ChangeUserInfo{
+	public static final String PARAM_KEY_NICK = "nick";
+	public static final String PARAM_KEY_BIRTHDAY = "birthday";
+	public static final String PARAM_KEY_GENDER = "gender";
+}
 	public static class SendPhoto {
 		public static final String PARAM_KEY_FLAG = "time";
 		public static final String PARAM_KEY_TIME_LIMIT = "timeLimit";
@@ -74,28 +78,6 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_IMAGE = "file";
 	}
 
-	public static void buildBasicParams(Context context, GalHttpRequest request) {
-		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-		request.setPostValueForKey(PARAM_KEY_USER_ID, userInfo.getRcId());
-		request.setPostValueForKey(PARAM_KEY_TOKEN, userInfo.getToken());
-		request.setPostValueForKey(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
-		request.setPostValueForKey(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
-		request.setPostValueForKey(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
-	}
-
-	public static void buildBasicParams(Context context, RCPlatformAsyncHttpClient client) {
-		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-		if (userInfo != null) {
-			client.putRequestParam(PARAM_KEY_USER_ID, userInfo.getRcId());
-			client.putRequestParam(PARAM_KEY_TOKEN, userInfo.getToken());
-		} else {
-			client.putRequestParam(PARAM_KEY_USER_ID, UserInfo.DEFAULT_USER_ID);
-			client.putRequestParam(PARAM_KEY_TOKEN, UserInfo.DEFAULT_TOKEN);
-		}
-		client.putRequestParam(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
-		client.putRequestParam(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
-		client.putRequestParam(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
-	}
 
 	public static void buildBasicParams(Context context, Request request) {
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();

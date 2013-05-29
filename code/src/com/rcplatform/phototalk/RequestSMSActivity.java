@@ -40,12 +40,18 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 		initBackButton(R.string.bind_phone, this);
 		mCountryCodeDatabase = PhotoTalkDatabaseFactory.getCountryCodeDatabase();
 		allCountryCodes = mCountryCodeDatabase.getAllCountry();
+		mCountryCodeDatabase.close();
 		CountryCode temp = new CountryCode();
 		temp.setCountryShort(Locale.getDefault().getCountry());
 		int index = allCountryCodes.indexOf(temp);
 		if (index != -1) {
 			mCountryCode = allCountryCodes.get(index);
 		}
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
 	}
 
 	private void initView() {
@@ -77,7 +83,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private void requestSms() {
 		String number = etNumber.getText().toString();
 		if (isNumberEnable(number)) {
-			final String phoneNumber= "+" + mCountryCode.getCountryCode() + number;
+			final String phoneNumber = "+" + mCountryCode.getCountryCode() + number;
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
 
@@ -92,7 +98,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			},phoneNumber);
+			}, phoneNumber);
 		}
 	}
 
