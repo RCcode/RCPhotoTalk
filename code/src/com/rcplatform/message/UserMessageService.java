@@ -79,7 +79,7 @@ public class UserMessageService extends Service {
 
 	public static final String MESSAGE_RCID_KEY = "rcid";
 
-	private static final String GCM_URL = "http://192.168.0.86:8083/photochat/user/pushOfflineMsg.do";
+	private static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
 
 	private Context ctx;
 
