@@ -51,7 +51,7 @@ public class AddFriendBaseActivity extends BaseActivity {
 	protected ExpandableListView mSearchList;
 	protected List<Friend> recommendFriends;
 	protected List<Friend> inviteFriends;
-
+private Button seach_delete_btn;
 	private Friend mFriendShowDetail;
 	private Set<Friend> willInvateFriends = new HashSet<Friend>();
 	private Map<String, TextView> willInvateViews = new HashMap<String, TextView>();
@@ -66,6 +66,18 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 	protected void initAddFriendsView() {
 		mEtSearch = (EditText) findViewById(R.id.et_search);
+		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
+		seach_delete_btn.setVisibility(View.GONE);
+		seach_delete_btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				mEtSearch.setText("");
+				mEtSearch.setFocusable(true);
+				seach_delete_btn.setVisibility(View.GONE);
+			}
+		});
 		mEtSearch.addTextChangedListener(mSearchTextChangeListener);
 		initInvateView();
 		mList = (ExpandableListView) findViewById(R.id.my_friend_listview);
@@ -95,12 +107,15 @@ public class AddFriendBaseActivity extends BaseActivity {
 
 		@Override
 		public void afterTextChanged(Editable s) {
-			String searchText = s.toString().trim().toLowerCase();
-			if (!TextUtils.isEmpty(searchText)) {
-				searchFriends(searchText);
+			String searchText = mEtSearch.getText().toString();
+//			String searchText = s.toString().trim().toLowerCase();
+			if (searchText!=null&&searchText.length()>0) {
+				searchFriends(searchText.toLowerCase());
+				seach_delete_btn.setVisibility(View.VISIBLE);
 				mList.setVisibility(View.GONE);
 				mSearchList.setVisibility(View.VISIBLE);
 			} else {
+				seach_delete_btn.setVisibility(View.GONE);
 				mSearchList.setVisibility(View.GONE);
 				mList.setVisibility(View.VISIBLE);
 			}
@@ -112,13 +127,14 @@ public class AddFriendBaseActivity extends BaseActivity {
 			return;
 		List<Friend> resultFriends = new ArrayList<Friend>();
 		for (Friend friend : recommendFriends) {
-			if (friend.getSource().getName().toLowerCase().contains(keyWord)) {
+			
+			if (friend.getSource().getName()!=null&&friend.getSource().getName().toLowerCase().contains(keyWord)) {
 				resultFriends.add(friend);
 			}
 		}
 		List<Friend> resultInvite = new ArrayList<Friend>();
 		for (Friend friend : inviteFriends) {
-			if (friend.getNickName().toLowerCase().contains(keyWord)) {
+			if (friend.getNickName()!=null&&friend.getNickName().toLowerCase().contains(keyWord)) {
 				resultInvite.add(friend);
 			}
 		}

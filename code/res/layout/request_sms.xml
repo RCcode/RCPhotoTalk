@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@drawable/app_backgroud"
     android:orientation="vertical" >
 
     <include layout="@layout/base_top_navigate" />
@@ -24,6 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:background="@drawable/modify_btn"
             android:gravity="left|center_vertical" />
 
         <TextView
@@ -45,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+             android:background="@drawable/modify_btn"
             android:text="@string/next" />
     </LinearLayout>
 

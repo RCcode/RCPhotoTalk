@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnCreateContextMenuListener;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
@@ -55,6 +56,7 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	private List<Friend> mRecommends;
 	private ImageLoader mImageLoader;
 	private Friend mFriendShowDetail;
+	private Button seach_delete_btn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +76,20 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0) {
 					return;
 				}
-				dismissLoadingDialog();
-				sendFriendLoadedMessage(friends, recommends);
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						List<Friend> localFriends=PhotoTalkDatabaseFactory.getDatabase().getFriends();
+						List<Friend> localRecommends=PhotoTalkDatabaseFactory.getDatabase().getRecommends();
+						sendFriendLoadedMessage(localFriends, localRecommends);
+					}
+				};
+				thread.start();
 			}
 
 			@Override
 			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-				if (friends.size() == 0 && recommends.size() == 0) {
+				if (friends.size() == 1) {
 					return;
 				}
 				dismissLoadingDialog();
@@ -143,7 +152,18 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 			}
 		});
 		etSearch = (EditText) findViewById(R.id.et_search);
+		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
+		seach_delete_btn.setVisibility(View.GONE);
+		seach_delete_btn.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				etSearch.setText("");
+				etSearch.setFocusable(true);
+				seach_delete_btn.setVisibility(View.GONE);
+			}
+		});
 		etSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -160,9 +180,11 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				if (TextUtils.isEmpty(keyWords)) {
 					mSearchList.setVisibility(View.GONE);
 					mList.setVisibility(View.VISIBLE);
+					seach_delete_btn.setVisibility(View.GONE);
 				} else {
 					search(keyWords);
 					mList.setVisibility(View.GONE);
+					seach_delete_btn.setVisibility(View.VISIBLE);
 					mSearchList.setVisibility(View.VISIBLE);
 				}
 			}
@@ -241,7 +263,6 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				etSearch.setText(null);
 				break;
 			}
-
 		}
 
 	};

@@ -36,10 +36,8 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
-import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.SelectFriend;
-import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
@@ -107,12 +105,14 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		Thread th = new Thread() {
 			public void run() {
 				List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-				List<SelectFriend> seleFriends = new ArrayList<SelectFriend>();
-				for (Friend friend : friends) {
-					SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
-					seleFriends.add(seleFriend);
+				if (friends.size() > 1) {
+					List<SelectFriend> seleFriends = new ArrayList<SelectFriend>();
+					for (Friend friend : friends) {
+						SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
+						seleFriends.add(seleFriend);
+					}
+					mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
 				}
-				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
 				getFriends();
 			};
 		};
@@ -154,7 +154,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		mTvContentTitle.setText(R.string.select_friend_title);
 
 		mBtBack.setVisibility(View.VISIBLE);
-		mBtBack.setBackgroundResource(R.drawable.base_back_arrow);
 		mBtBack.setOnClickListener(this);
 
 		mBtAddFriend = (TextView) findViewById(R.id.choosebutton);
@@ -208,27 +207,34 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		});
 	}
 
-	private void jsonToFriends(String json) throws JSONException {
-		JSONObject jsonObject = new JSONObject(json);
-		if (isRequestStatusOK(jsonObject)) {
-			JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
-			List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
-			for (Friend friend : friends) {
-				friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
-				friend.setFriend(true);
-			}
-			PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
-			if (friends.size() > 0
-					&& (mFriendListView.getAdapter() == null || (mFriendListView.getAdapter() != null && mFriendListView.getAdapter().getCount() == 1))) {
-				List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-				List<SelectFriend> seleFriends = new ArrayList<SelectFriend>();
-				for (Friend friend : localFriends) {
-					SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
-					seleFriends.add(seleFriend);
+	private void jsonToFriends(final String json) throws JSONException {
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					JSONObject jsonObject = new JSONObject(json);
+					JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
+					List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
+					for (Friend friend : friends) {
+						friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+						friend.setFriend(true);
+					}
+					PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
+					if (mFriendListView.getAdapter() == null) {
+						List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+						List<SelectFriend> seleFriends = new ArrayList<SelectFriend>();
+						for (Friend friend : localFriends) {
+							SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
+							seleFriends.add(seleFriend);
+						}
+						mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
-			}
-		}
+			};
+		};
+		thread.start();
+
 	}
 
 	private void sendStringMessage(int what, String content) {
@@ -267,10 +273,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		List<Friend> fs = new ArrayList<Friend>();
 		fs.addAll(friends);
 		LogicUtils.sendPhoto(this, timeLimit, fs, file);
-	}
-
-	private boolean isRequestStatusOK(JSONObject jsonObject) throws JSONException {
-		return jsonObject.getInt(PhotoTalkApiFactory.RESPONSE_KEY_STATUS) == PhotoTalkApiFactory.RESPONSE_STATE_SUCCESS;
 	}
 
 	@Override

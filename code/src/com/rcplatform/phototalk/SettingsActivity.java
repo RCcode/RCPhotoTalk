@@ -29,7 +29,8 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.RoundImageView;
 
-public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
+public class SettingsActivity extends ImagePickActivity implements
+		View.OnClickListener {
 
 	private static final int REQUEST_CODE_EDIT_INFO = 100;
 	protected static final int REQUEST_CODE_GALLARY = 1012;
@@ -45,6 +46,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private TextView userRcId;
 	private TextView userAge;
 	private ImageView user_bg_View;
+	private ImageView tv_sex;
 	private RelativeLayout viewAbout;
 	private int CAMERA_CODE = 0;
 	private View newTrend;
@@ -59,6 +61,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		initTitle();
 		mImageLoader = ImageLoader.getInstance();
 		newTrend = findViewById(R.id.rela_new_trend);
+		tv_sex = (ImageView) findViewById(R.id.tv_sex);
 		ivTrend = (ImageView) findViewById(R.id.iv_trend_head);
 		mHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
@@ -85,6 +88,22 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 	private void setUserInfo(UserInfo userInfo) {
 		setUserImage();
+		switch (userInfo.getGender()) {
+		case 0:
+			tv_sex.setVisibility(View.GONE);
+			break;
+		case 1:
+			tv_sex.setVisibility(View.VISIBLE);
+			tv_sex.setBackgroundResource(R.drawable.boy_icon);
+			break;
+		case 2:
+			tv_sex.setVisibility(View.VISIBLE);
+			tv_sex.setBackgroundResource(R.drawable.girl_icon);
+			break;
+		default:
+			tv_sex.setVisibility(View.GONE);
+			break;
+		}
 		mNickView.setText("" + userInfo.getNickName());
 		userRcId.setText("" + userInfo.getRcId());
 		userAge.setText("" + userInfo.getAge());
@@ -94,17 +113,21 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		File fileHead = PhotoTalkUtils.getUserHead(getCurrentUser());
 		if (fileHead.exists()) {
 			String urlLocal = "file:///" + fileHead.getPath();
-			mImageLoader.displayImage(urlLocal, mHeadView, ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(urlLocal, mHeadView,
+					ImageOptionsFactory.getHeadImageOptions());
 		} else {
-			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView,
+					ImageOptionsFactory.getHeadImageOptions());
 		}
 
-		File fileBackground = PhotoTalkUtils.getUserBackground(getCurrentUser());
+		File fileBackground = PhotoTalkUtils
+				.getUserBackground(getCurrentUser());
 		if (fileBackground.exists()) {
 			String urlLocal = "file:///" + fileBackground.getPath();
 			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getHeadImageOptions());
 		} else {
-			mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(getCurrentUser().getBackground(),
+					user_bg_View, ImageOptionsFactory.getHeadImageOptions());
 		}
 	}
 
@@ -113,12 +136,15 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		mBack.setVisibility(View.VISIBLE);
 		mBack.setOnClickListener(this);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
-		mTitleTextView.setText(getResources().getString(R.string.my_firend_setting_more_title));
+		mTitleTextView.setText(getResources().getString(
+				R.string.my_firend_setting_more_title));
 		mTitleTextView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this,
+				getResources().getString(R.string.login_error),
+				getResources().getString(R.string.ok)).show();
 	}
 
 	@Override
@@ -131,7 +157,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			startActivity(new Intent(this, FriendDynamicActivity.class));
 			break;
 		case R.id.settings_user_info_edit_action:
-			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
+			startActivityForResult(new Intent(this,
+					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
+			this.finish();
 			break;
 		case R.id.use_account_message:
 			startActivity(new Intent(this, UserInfoActivity.class));
@@ -169,13 +197,17 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		case 1:
 			// 背景上传
 			upUpdateUserBackground(imagePath);
-			Utils.copyFile(new File(imagePath), PhotoTalkUtils.getUserBackground(getCurrentUser()));
-			new LoadImageTask(user_bg_View).execute(imageBaseUri, Uri.parse(imagePath));
+			Utils.copyFile(new File(imagePath),
+					PhotoTalkUtils.getUserBackground(getCurrentUser()));
+			new LoadImageTask(user_bg_View).execute(imageBaseUri,
+					Uri.parse(imagePath));
 			break;
 		case 2:
 			upUserInfoHeadImage(imagePath);
-			Utils.copyFile(new File(imagePath), PhotoTalkUtils.getUserHead(getCurrentUser()));
-			new LoadImageTask(mHeadView).execute(imageBaseUri, Uri.parse(imagePath));
+			Utils.copyFile(new File(imagePath),
+					PhotoTalkUtils.getUserHead(getCurrentUser()));
+			new LoadImageTask(mHeadView).execute(imageBaseUri,
+					Uri.parse(imagePath));
 			break;
 		}
 
@@ -200,21 +232,22 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		try {
 			file = new File(imageUrl);
 			if (file != null) {
-				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						// 上传成功
-						// userInfo.setBackground(decodeUtil(content,
-						// "background"));
-						// PrefsUtils.User.saveUserInfo(SettingsActivity.this,
-						// userInfo.getRcId(), userInfo);
-					}
+				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file,
+						new RCPlatformResponseHandler() {
+							@Override
+							public void onSuccess(int statusCode, String content) {
+								// 上传成功
+								// userInfo.setBackground(decodeUtil(content,
+								// "background"));
+								// PrefsUtils.User.saveUserInfo(SettingsActivity.this,
+								// userInfo.getRcId(), userInfo);
+							}
 
-					@Override
-					public void onFailure(int errorCode, String content) {
-						// 上传失败
-					}
-				});
+							@Override
+							public void onFailure(int errorCode, String content) {
+								// 上传失败
+							}
+						});
 			}
 
 		} catch (Exception e) {
@@ -233,7 +266,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		try {
 			contentJson = new JSONObject(content);
 			if (contentJson.has("userInfo")) {
-				JSONObject json = new JSONObject(contentJson.getString("userInfo"));
+				JSONObject json = new JSONObject(
+						contentJson.getString("userInfo"));
 				if (json.has("headUrl")) {
 					headUrl = json.getString(name);
 				}
@@ -247,20 +281,21 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private void upUserInfoHeadImage(String path) {
 		// 资料发生改变 上传服务器
 		File file = new File(path);
-		FriendsProxy.upUserInfoHeadImage(this, file, new RCPlatformResponseHandler() {
+		FriendsProxy.upUserInfoHeadImage(this, file,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				// userInfo.setHeadUrl(decodeUtil(content, "headUrl"));
-				// PrefsUtils.User.saveUserInfo(SettingsActivity.this,
-				// userInfo.getRcId(), userInfo);
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						// userInfo.setHeadUrl(decodeUtil(content, "headUrl"));
+						// PrefsUtils.User.saveUserInfo(SettingsActivity.this,
+						// userInfo.getRcId(), userInfo);
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
+					@Override
+					public void onFailure(int errorCode, String content) {
 
-			}
-		});
+					}
+				});
 	}
 
 	public void onNewTrend(boolean show, String url) {

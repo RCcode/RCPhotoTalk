@@ -41,7 +41,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.ImagePickActivity;
-import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
@@ -94,7 +93,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private View mLinearAccounts;
 	// private ImageView mIvHead;
 	private TextView btnChange;
-
+	public static final int LOGIN_TYPE_EMAIL = 0;
+	public static final int LOGIN_TYPE_RCID = 2;
 	// 正则，必须由数字字母组成
 	// private final String RCID_REGEX =
 	// "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
@@ -348,9 +348,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private int checkAccount(String account) {
 		if (account.matches(EMAIL_REGEX))
-			return PhotoTalkApiFactory.LOGIN_TYPE_EMAIL;
+			return LOGIN_TYPE_EMAIL;
 		else if (account.matches(RCID_REGEX))
-			return PhotoTalkApiFactory.LOGIN_TYPE_RCID;
+			return LOGIN_TYPE_RCID;
 		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok)).show();
 		return -1;
 	}

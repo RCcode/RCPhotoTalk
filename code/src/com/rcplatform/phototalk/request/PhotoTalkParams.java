@@ -28,7 +28,11 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
 		public static final String PARAM_KEY_OLD_PASSWORD = "pwd";
 	}
-
+public static class ChangeUserInfo{
+	public static final String PARAM_KEY_NICK = "nick";
+	public static final String PARAM_KEY_BIRTHDAY = "birthday";
+	public static final String PARAM_KEY_GENDER = "gender";
+}
 	public static class SendPhoto {
 		public static final String PARAM_KEY_FLAG = "time";
 		public static final String PARAM_KEY_TIME_LIMIT = "timeLimit";

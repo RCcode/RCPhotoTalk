@@ -29,7 +29,6 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.FriendDynamicListAdpter;
-import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;

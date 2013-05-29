@@ -90,7 +90,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	private void setBirthday() {
-		System.out.println("userDetailInfo.getBirthday()--->" + userDetailInfo.getBirthday());
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			mBirthday.setText(userDetailInfo.getBirthday());
 			isChance = true;
@@ -267,7 +266,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			updateUserInfo();
-			return true;
+			startActivity(new Intent(AccountInfoEditActivity.this,SettingsActivity.class));
+			this.finish();
+			return false;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
