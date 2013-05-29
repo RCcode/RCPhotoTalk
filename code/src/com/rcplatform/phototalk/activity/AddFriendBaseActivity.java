@@ -108,6 +108,8 @@ public class AddFriendBaseActivity extends BaseActivity {
 	};
 
 	private void searchFriends(String keyWord) {
+		if(recommendFriends==null||inviteFriends==null)
+			return;
 		List<Friend> resultFriends = new ArrayList<Friend>();
 		for (Friend friend : recommendFriends) {
 			if (friend.getSource().getName().toLowerCase().contains(keyWord)) {

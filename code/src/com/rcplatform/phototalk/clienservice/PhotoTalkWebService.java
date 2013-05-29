@@ -7,6 +7,7 @@ import android.os.IBinder;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.Request;
 
@@ -18,6 +19,7 @@ public class PhotoTalkWebService extends Service {
 		super.onCreate();
 		((PhotoTalkApplication) getApplication()).setWebService(this);
 		mClient = new RCPlatformAsyncHttpClient();
+		LogUtil.e("webservice service oncreate over");
 	};
 
 	@Override

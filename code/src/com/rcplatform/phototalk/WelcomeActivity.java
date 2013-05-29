@@ -20,6 +20,8 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -58,35 +60,35 @@ public class WelcomeActivity extends BaseActivity {
 
 	}
 
+	private void startBackgroundService() {
+		startService(new Intent(this, PhotoTalkWebService.class));
+		startService(new Intent(this, PTBackgroundService.class));
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		printHashKey();
 		setContentView(R.layout.loading);
-		startService(new Intent(this, PTBackgroundService.class));
-		startService(new Intent(this, PhotoTalkWebService.class));
+		startBackgroundService();
 		checkNetwork();
 		Thread th = new Thread() {
 
 			public void run() {
+				LogUtil.e("welcome thread start");
 				Constants.initUI(WelcomeActivity.this);
 				Constants.initCountryDatabase(WelcomeActivity.this);
 				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS, WAITING_TIME);
 			};
 		};
 		th.start();
-		// 判断版本更新
-		executeUpdate();
+		LogUtil.e("welcome oncreate over");
 	}
 
 	private void checkNetwork() {
 		if (!Utils.isNetworkEnable(this)) {
 			DialogUtil.showToast(this, R.string.no_net, Toast.LENGTH_SHORT);
 		}
-	}
-
-	private void executeUpdate() {
-
 	}
 
 	@Override

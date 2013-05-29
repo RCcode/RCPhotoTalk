@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -31,12 +34,14 @@ import com.perm.kate.api.User;
 import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
+import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -99,6 +104,7 @@ public class PTBackgroundService extends Service {
 		((PhotoTalkApplication) getApplication()).setService(this);
 		registeTimeTickReceiver();
 		registeGCMReceiver();
+		LogUtil.e("background service oncreate over");
 	}
 
 	private void registeTimeTickReceiver() {
@@ -136,6 +142,7 @@ public class PTBackgroundService extends Service {
 		uploadContact();
 		return super.onStartCommand(intent, flags, startId);
 	}
+
 
 	private void registeNetConnectionReceiver() {
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);

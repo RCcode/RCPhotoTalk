@@ -23,6 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
@@ -32,7 +33,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ShowToast;
 
-public class UpdateNameActivity extends Activity implements View.OnClickListener {
+public class UpdateNameActivity extends BaseActivity implements View.OnClickListener {
 
 	protected static final String TAG = "ForgetPasswordActivity";
 	public static final String REQUEST_PARAM_KEY_TEXT = "text";

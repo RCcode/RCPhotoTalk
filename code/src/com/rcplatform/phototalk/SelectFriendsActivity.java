@@ -66,8 +66,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	private int mDisplayableCount;
 
-	private UserInfo mUserInfo;
-
 	private final int MSG_WHAT_ERROR = 100;
 
 	private final int MSG_CACHE_FINISH = 200;
@@ -114,12 +112,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 					SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
 					seleFriends.add(seleFriend);
 				}
-				SelectFriend user = new SelectFriend();
-				user.setNickName(app.getCurrentUser().getNickName());
-				user.setRcId(app.getCurrentUser().getRcId());
-				user.setHeadUrl(app.getCurrentUser().getHeadUrl());
-				user.setLetter(RCPlatformTextUtil.getLetter(getCurrentUser().getNickName()));
-				seleFriends.add(user);
 				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
 				getFriends();
 			};
@@ -129,7 +121,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
 		progressBar.setVisibility(View.VISIBLE);
 	}
@@ -227,6 +218,16 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				friend.setFriend(true);
 			}
 			PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
+			if (friends.size() > 0
+					&& (mFriendListView.getAdapter() == null || (mFriendListView.getAdapter() != null && mFriendListView.getAdapter().getCount() == 1))) {
+				List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+				List<SelectFriend> seleFriends = new ArrayList<SelectFriend>();
+				for (Friend friend : localFriends) {
+					SelectFriend seleFriend = SelectFriend.parseSelectFriend(friend);
+					seleFriends.add(seleFriend);
+				}
+				mHandler.obtainMessage(MSG_CACHE_FINISH, seleFriends).sendToTarget();
+			}
 		}
 	}
 
@@ -253,11 +254,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				progressBar.setVisibility(View.GONE);
 				break;
 			case MSG_SEND_SUCCESS:
-				// Intent intent = new Intent(SelectFriendsActivity.this,
-				// HomeActivity.class);
-				// intent.putExtra("from", this.getClass().getName());
-				// intent.putExtra("time", timeSnap);
-				// startActivity(intent);
 				break;
 			}
 		};
@@ -271,28 +267,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		List<Friend> fs = new ArrayList<Friend>();
 		fs.addAll(friends);
 		LogicUtils.sendPhoto(this, timeLimit, fs, file);
-		// FriendsProxy.postZip(
-		// SelectFriendsActivity.this,
-		// file,
-		// new RCPlatformResponseHandler() {
-		//
-		// @Override
-		// public void onSuccess(int statusCode, String content) {
-		// // TODO Auto-generated method stub
-		// deleteTemp();
-		// mHandler.obtainMessage(MSG_SEND_SUCCESS).sendToTarget();
-		// }
-		//
-		// @Override
-		// public void onFailure(int errorCode, String content) {
-		// // TODO Auto-generated method stub
-		// sendStringMessage(MSG_WHAT_ERROR,
-		// getString(R.string.net_error));
-		// }
-		// },
-		// String.valueOf(timeSnap), desc, timeLimit,
-		// buildUserArray(friends, timeSnap));
-
 	}
 
 	private boolean isRequestStatusOK(JSONObject jsonObject) throws JSONException {

@@ -55,6 +55,7 @@ public class PhotoTalkUtils {
 		friend.setBackground(userInfo.getBackground());
 		friend.setFriend(true);
 		friend.setNickName(userInfo.getNickName());
+		friend.setLetter(RCPlatformTextUtil.getLetter(userInfo.getNickName()));
 		return friend;
 	}
 

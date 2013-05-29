@@ -1,7 +1,6 @@
 package com.rcplatform.phototalk;
 
 import java.io.File;
-import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -18,16 +17,12 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
-import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.proxy.UserSettingProxy;
-import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -86,26 +81,6 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		viewAbout.setOnClickListener(this);
 		InformationPageController.getInstance().onNewTread();
 		setUserInfo(getCurrentUser());
-		getAllApps();
-	}
-
-	private void getAllApps() {
-		UserSettingProxy.getAllAppInfo(this, new RCPlatformResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					List<AppInfo> apps = JSONConver.jsonToAppInfos(new JSONObject(content).getJSONArray("allApps").toString());
-					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-			}
-		});
 	}
 
 	private void setUserInfo(UserInfo userInfo) {
@@ -127,7 +102,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		File fileBackground = PhotoTalkUtils.getUserBackground(getCurrentUser());
 		if (fileBackground.exists()) {
 			String urlLocal = "file:///" + fileBackground.getPath();
-			mImageLoader.displayImage(urlLocal, mHeadView, ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getHeadImageOptions());
 		} else {
 			mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getHeadImageOptions());
 		}

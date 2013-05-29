@@ -21,7 +21,7 @@ public class LogUtil {
 	//是否将日志写到文件中
 	private static final boolean Log_IN_FILE = false;
 	private static final boolean Log_WITH_POSTION = false;
-	private static final String LOG_TAG = "Carddaren";
+	private static final String LOG_TAG = "PhotoTalk";
 	private static final String LOG_FILE = LOG_TAG + ".log";
 	
 	private static long curTime;

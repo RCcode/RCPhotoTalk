@@ -32,6 +32,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
+import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
@@ -113,9 +114,29 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
 		loadDataFromDataBase();
+		getAllPlatformApps();
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
+	}
+
+	private void getAllPlatformApps() {
+		UserSettingProxy.getAllAppInfo(this, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				try {
+					List<AppInfo> apps = JSONConver.jsonToAppInfos(new JSONObject(content).getJSONArray("allApps").toString());
+					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+			}
+		});
 	}
 
 	private void checkTrends() {
@@ -520,7 +541,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		return true;
 	}
 
-//	LogicUtils.showInformationClearDialog(this);
+	// LogicUtils.showInformationClearDialog(this);
 
 	private List<Information> getAdapterData() {
 		if (adapter == null)
