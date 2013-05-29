@@ -12,7 +12,6 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;

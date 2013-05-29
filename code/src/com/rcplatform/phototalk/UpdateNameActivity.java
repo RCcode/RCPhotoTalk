@@ -23,7 +23,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.rcplatform.phototalk.api.PhotoTalkApiFactory;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest.GalHttpLoadTextCallBack;
@@ -46,41 +45,6 @@ public class UpdateNameActivity extends Activity implements View.OnClickListener
 	private static final int REQUEST_TYPE_NICK = 0;
 
 	private int requestType = -1;
-	private Handler mHandler = new Handler() {
-
-		@Override
-		public void handleMessage(Message msg) {
-			mProgressbar.setVisibility(View.GONE);
-			switch (msg.what) {
-			// 已将重设密码的邮件发送到 alexlee@menu.com请注意查收.
-			case PhotoTalkApiFactory.LOGIN_SUCCESS:
-				String resetMsg = String.format(getResources().getString(R.string.forget_password_reset_text), mEditTextView.getText().toString());
-				// DialogUtil.showConfirmDialog(ForgetPasswordActivity.this,
-				// resetMsg);
-				showDialog(UpdateNameActivity.this, resetMsg);
-
-				break;
-			// 密码错误
-			case PhotoTalkApiFactory.LOGIN_PASSWORD_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_pwd_no_email_yes), Toast.LENGTH_LONG);
-				break;
-			// 邮箱没有注册
-			case PhotoTalkApiFactory.LOGIN_EMAIL_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_email_no), Toast.LENGTH_LONG);
-				break;
-			// 服务器异常
-			case PhotoTalkApiFactory.LOGIN_SERVER_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_server_no), Toast.LENGTH_LONG);
-				break;
-			// 管理员不允许客户端登录
-			case PhotoTalkApiFactory.LOGIN_ADMIN_ERROR:
-				ShowToast.showToast(UpdateNameActivity.this, getResources().getString(R.string.reg_admin_no), Toast.LENGTH_LONG);
-				break;
-			}
-
-		}
-
-	};
 
 	private View mBack;
 	private TextView mTitleTextView;
