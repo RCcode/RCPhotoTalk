@@ -17,76 +17,76 @@ public class PhotoTalkApiFactory {
 //	public static final int RESPONSE_STATE_SUCCESS_NO_CONTACT = 3;
 
 //	public static final String RESPONSE_KEY_STATUS = "status";
-
+/*
 	public static final String RESPONSE_KEY_MESSAGE = "message";
 
-	public static final String RESPONSE_KEY_TIME = "time";
+	public static final String RESPONSE_KEY_TIME = "time";*/
 
-	public static final int ORDER_BY_TIME = 2;
+//	public static final int ORDER_BY_TIME = 2;
+//
+//	public static final int ORDER_BY_HOT = 1;
+//
+//	public static final int FOLLOW_TYPE = 1; // 关注
 
-	public static final int ORDER_BY_HOT = 1;
+//	public static final int UNFOLLOW_TYPE = 0; // 取消关注
+//
+//	public static final String REQUEST_KEY_USER_TOKEN = "token";
+//
+//	public static final String REQUEST_KEY_USER_ID = "userId";
+//
+//	public static final String REQUEST_KEY_SORT = "sort";
+//
+//	public static final String REQUEST_KEY_SIZE = "size";
 
-	public static final int FOLLOW_TYPE = 1; // 关注
-
-	public static final int UNFOLLOW_TYPE = 0; // 取消关注
-
-	public static final String REQUEST_KEY_USER_TOKEN = "token";
-
-	public static final String REQUEST_KEY_USER_ID = "userId";
-
-	public static final String REQUEST_KEY_SORT = "sort";
-
-	public static final String REQUEST_KEY_SIZE = "size";
-
-	public static final String REQUEST_KEY_PAGE = "page";
-
-	public static final String REQUEST_KEY_TIME = "time";
+//	public static final String REQUEST_KEY_PAGE = "page";
+//
+//	public static final String REQUEST_KEY_TIME = "time";
 
 	/*
 	 * 城市信息图片的用户相关 author : jason.wu
 	 * {"token":"1","userId":"0","page":"1","size":
 	 * "20","sort":"0","language":"zh_CN","themeId":"1"}
 	 */
-	public static final String PWD = "pwd";
-
-	public static final String NEW_PWD = "newpwd";
-
-	public static final String TACOTYID = "tacotyId";
-
-	public static final String ADDRESS = "addr";
+//	public static final String PWD = "pwd";
+//
+//	public static final String NEW_PWD = "newpwd";
+//
+//	public static final String TACOTYID = "tacotyId";
+//
+//	public static final String ADDRESS = "addr";
 
 	// 手机系统
-	public static final String SYSTEM = "system";
+//	public static final String SYSTEM = "system";
+//
+//	public static final String MODEL = "model";
+//
+//	public static final String USER = "user";
+//
+//	public static final String EMAIL = "email";
+//	public static final String ACCOUNT = "account";
+//	public static final String LOGIN_TYPE = "type";
+//	public static final String TAGLIST = "tagList";
 
-	public static final String MODEL = "model";
+//	public static final String TOKEN = "token";
+//
+//	public static final String USERID = "userId";
+//
+//	public static final String SEUSERID = "seUserId";
+//
+//	public static final String SESUID = "seSuid";
+//
+//	public static final String USERID_FRIEND = "atUserId";
 
-	public static final String USER = "user";
-
-	public static final String EMAIL = "email";
-	public static final String ACCOUNT = "account";
-	public static final String LOGIN_TYPE = "type";
-	public static final String TAGLIST = "tagList";
-
-	public static final String TOKEN = "token";
-
-	public static final String USERID = "userId";
-
-	public static final String SEUSERID = "seUserId";
-
-	public static final String SESUID = "seSuid";
-
-	public static final String USERID_FRIEND = "atUserId";
-
-	public static final String FRIENDS = "friends";
-
-	public static final String PAGE = "page";
-
-	public static final String SIZE = "size";
-
-	public static final String SORT = "sort";
-
-	public static final String RECEIVESET = "receiveSet";
-
+//	public static final String FRIENDS = "friends";
+//
+//	public static final String PAGE = "page";
+//
+//	public static final String SIZE = "size";
+//
+//	public static final String SORT = "sort";
+//
+//	public static final String RECEIVESET = "receiveSet";
+//
 	public static final String SIGNATURE = "signature";
 
 	public static final String THEMEID = "themeId";
