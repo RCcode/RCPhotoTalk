@@ -152,14 +152,12 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
 			TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 			final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
-//			View sourceView = convertView.findViewById(R.id.add_friend_list_item_source);
 			FriendSourse source = friend.getSource();
 			TextView tvFrom = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_from);
 			if (source == null) {
 				tvFrom.setVisibility(View.GONE);
 			} else {
 				tvFrom.setVisibility(View.VISIBLE);
-				TextView tvName = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 				switch (source.getAttrType()) {
 				case FriendType.CONTACT:
 					tvFrom.setText(R.string.contact_friend);
@@ -168,7 +166,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					tvFrom.setText(R.string.facebook_friend);
 					break;
 				}
-				tvName.setText(source.getName());
 			}
 			mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 			// view friend detail.

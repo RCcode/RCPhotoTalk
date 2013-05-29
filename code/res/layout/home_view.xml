@@ -35,13 +35,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/take_photo_button_selector" />
 
-        <Button
-            android:id="@+id/btn_home_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dip"
-            android:background="@drawable/record_normal"
-            android:visibility="gone" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -35,7 +35,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginRight="@dimen/take_photo_left"
-            android:layout_toLeftOf="@id/btn_edit_pic_tuya"
+            android:layout_toLeftOf="@+id/btn_edit_pic_tuya"
             android:background="@drawable/undo_button_selector" />
 
         <ImageView
@@ -50,7 +50,7 @@
         android:id="@+id/select_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/ll"
+        android:layout_above="@+id/ll"
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="@dimen/take_photo_left"
         android:background="@drawable/wheelview_bg" >

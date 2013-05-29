@@ -51,7 +51,6 @@
             android:layout_height="wrap_content"
             android:ellipsize="end"
             android:singleLine="true"
-            android:text="@string/sightseer"
             android:textColor="#4f3e36"
             android:textSize="18sp" />
 

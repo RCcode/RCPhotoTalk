@@ -84,8 +84,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private Button mTakePhoto;
 
-	private Button mRecord;
-
 	protected LongClickShowView mShowDialog;
 
 	private boolean isShow;
@@ -224,7 +222,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		mInformationList = (SnapListView) findViewById(R.id.lv_home);
 		mInformationList.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
-		mRecord = (Button) findViewById(R.id.btn_home_record);
 
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
@@ -257,13 +254,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			@Override
 			public void onClick(View v) {
 				startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
-			}
-		});
-		mRecord.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				startActivity(new Intent(HomeActivity.this, VideoRecordActivity.class));
 			}
 		});
 		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
