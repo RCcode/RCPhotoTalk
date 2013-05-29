@@ -38,6 +38,7 @@
     <string name="settings_update_editor_hint">enter text...</string>
     <string name="settings_tacoty_account_info_title">RC账号信息</string>
     <string name="setting_update_login_password">修改登录密码</string>
+    <string name="search_hint">未找到相关用户</string>
     <string name="login_out">注销</string>
     <string name="login_out_account">注销账户</string>
     <string name="deauthorize_complete">解除绑定成功</string>
@@ -147,16 +148,18 @@
     <string name="facebook_friend">facebook好友</string>
     <!-- <string name="phone">电话号码</string>-->
      
+    <string name="next">下一步</string>
     <string name="use_new_info">在PhotoTalk中使用新的个人资料</string>
     <string name="use_info_below">使用以下个人资料</string>
     <string name="user_info">个人资料</string>
-    <string name="next">下一步</string>
     <string name="image_pick_fail">图片获取失败</string>
-    <string name="operation_fail">操作失败</string>
+    <string name="operation_fail">操作失败</string> 
     <string name="edit">编辑</string>
     <string name="friend_sex_age">%1$s,%2$d</string>
     <string name="add_friend_title">添加好友</string>
     <string name="take_score">评分</string>
+    
+    
     <string name="delete_friend">删除好友</string>
     <string name="set_friend_remark">设置好友备注名称</string>
     <string name="remark_hint">输入备注名</string>
@@ -207,6 +210,7 @@
     <string name="invite_success">邀请好友成功</string>
     <string name="invite_cancel">取消好友邀请</string>
     <string name="invite_fail">好友邀请失败</string>
+    
     <string name="init_message_title_one">分享瞬间</string>
     <string name="init_message_text_one">分享生活中每一个精彩的瞬间</string>
     <string name="init_message_title_two">照片处理</string>

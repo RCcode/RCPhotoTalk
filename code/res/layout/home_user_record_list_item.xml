@@ -19,6 +19,7 @@
         android:layout_height="@dimen/friend_head_side"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
         android:layout_marginLeft="@dimen/friend_head_left" />
 
     <ImageView

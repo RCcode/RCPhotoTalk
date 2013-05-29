@@ -3,6 +3,7 @@ package com.rcplatform.phototalk;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,16 +52,16 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 			break;
 		case R.id.contact_us_btn:
 
-			Intent email = new Intent(android.content.Intent.ACTION_SEND);
+			Intent email = new Intent(android.content.Intent.ACTION_SEND,Uri.fromParts("mailto", "rctalk.service@gmail.com", null));
 			email.setType("plain/text");
-			String[] emailReciver = new String[] { "rctalk.service@gmail.com" };
+//			String[] emailReciver = new String[] { "rctalk.service@gmail.com" };
 			String emailSubject = SystemMessageUtil.getLanguage(baseContext)
 					+ SystemMessageUtil.getAppName(baseContext)
 					+ SystemMessageUtil.getPhoneNumber(baseContext)
 					+ SystemMessageUtil.getNetworkName(baseContext)
 					+ SystemMessageUtil.getImsi(baseContext);
 			// 设置邮件默认地址
-			email.putExtra(android.content.Intent.EXTRA_EMAIL, emailReciver);
+//			email.putExtra(android.content.Intent.EXTRA_EMAIL, emailReciver);
 			// 设置邮件默认标题
 			// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
 			// emailSubject);

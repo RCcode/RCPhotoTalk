@@ -1,20 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@id/my_friend_activity_layout"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/white" >
-    <EditText
-        android:id="@+id/et_search"
-        style="@style/text_base"
+    android:background="@drawable/app_backgroud" >
+
+    <RelativeLayout
+        android:id="@+id/home_search_bar"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="60dp"
+        android:background="@drawable/seach_bg" >
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="@drawable/seach_edit_text"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="40dp"
+            android:singleLine="true"
+            android:textColor="#3f3f3f"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/seach_delete_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/et_search"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/seach_text_delete_btn" />
+        <!-- The speaker button -->
+
+    </RelativeLayout>
+
+   <!--  <TextView
+        android:id="@+id/search_hint_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/home_search_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/default_gap_2x"
+        android:text="@string/search_hint"
+        android:textColor="#1B1B1B"
+        android:textSize="25sp"
+        android:visibility="gone" /> -->
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/wish_to_invate"
-        android:layout_below="@+id/et_search" >
+        android:layout_below="@id/home_search_bar" >
 
         <ExpandableListView
             android:id="@+id/my_friend_listview"
