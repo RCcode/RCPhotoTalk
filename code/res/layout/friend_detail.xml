@@ -45,6 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignBottom="@id/iv_bg"
+            android:layout_marginTop="30dp"
             android:layout_alignTop="@+id/rela_userinfo"
             android:background="#50000000" />
 
@@ -75,7 +76,8 @@
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:orientation="vertical" >
 
                 <LinearLayout

@@ -124,10 +124,10 @@ public class SettingsActivity extends ImagePickActivity implements
 				.getUserBackground(getCurrentUser());
 		if (fileBackground.exists()) {
 			String urlLocal = "file:///" + fileBackground.getPath();
-			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
 		} else {
 			mImageLoader.displayImage(getCurrentUser().getBackground(),
-					user_bg_View, ImageOptionsFactory.getHeadImageOptions());
+					user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
 		}
 	}
 

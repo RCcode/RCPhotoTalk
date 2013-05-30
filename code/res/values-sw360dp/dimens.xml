@@ -63,7 +63,7 @@
     <dimen name="user_detail_head_image_width">90dp</dimen>
     <dimen name="user_head_image_width_bg">96dp</dimen>
     <dimen name="app_list_height">60dp</dimen>
-    <dimen name="user_detail_user_infos_bottom_margin">-55dp</dimen>
+    <dimen name="user_detail_user_infos_bottom_margin">-30dp</dimen>
     <dimen name="user_detail_head_width_half">55dp</dimen>
     <dimen name="user_detail_nick_size">22sp</dimen>
     <dimen name="user_detail_rcid_size">16sp</dimen>
