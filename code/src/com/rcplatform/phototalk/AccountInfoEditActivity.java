@@ -266,7 +266,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			updateUserInfo();
-			startActivity(new Intent(AccountInfoEditActivity.this, SettingsActivity.class));
 			return false;
 		}
 		return super.onKeyDown(keyCode, event);
