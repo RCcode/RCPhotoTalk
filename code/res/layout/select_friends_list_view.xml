@@ -27,6 +27,7 @@
             android:background="@drawable/list_divider" />
 
         <RelativeLayout
+            android:id="@+id/send_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/select_send_bottom_bg"

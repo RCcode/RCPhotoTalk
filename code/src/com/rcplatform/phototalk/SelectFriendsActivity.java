@@ -29,6 +29,7 @@ import android.widget.Gallery;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private ImageButton mBtBack;
 
 	private TextView mBtAddFriend;
+	private RelativeLayout send_layout;
 	private List<SelectFriend> list;
 	private List<SelectFriend> sendData = new ArrayList<SelectFriend>();
 
@@ -127,6 +129,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	private void initViewOrListener() {
 		mFriendListView = (ListView) findViewById(R.id.lv_sfl_friends);
+		send_layout = (RelativeLayout)findViewById(R.id.send_layout);
 		mGallery = (Gallery) findViewById(R.id.g_sfl_added_friends);
 		mButtonSend = (Button) findViewById(R.id.btn_sfl_send);
 		progressBar = (ProgressBar) findViewById(R.id.pb_select_friend);
@@ -141,6 +144,9 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				((SelectedFriendsListAdapter) mFriendListView.getAdapter()).notifyDataSetChanged();
 				sendData.remove(position);
 				((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).notifyDataSetChanged();
+				if(sendData.size()==0){
+					send_layout.setVisibility(View.GONE);
+				}
 				// 修改
 				mGallery.setNextFocusRightId(mGallery.getNextFocusLeftId());
 			}
@@ -148,7 +154,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(this, sendData);
 		mGallery.setAdapter(adapter);
 		alignGalleryToLeft(mGallery);
-
+		send_layout.setVisibility(View.GONE);
 		mButtonSend.setOnClickListener(this);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setText(R.string.select_friend_title);
@@ -193,6 +199,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				if (isChecked) {
 					if (!sendData.contains(friend)) {
 						sendData.add(myFriend);
+						send_layout.setVisibility(View.VISIBLE);
 					}
 				} else {
 					sendData.remove(myFriend);

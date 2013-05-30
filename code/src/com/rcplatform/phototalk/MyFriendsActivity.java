@@ -192,15 +192,18 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void search(String keyWords) {
+		if(keyWords!=null){
+			keyWords = keyWords.toLowerCase();
+		}
 		List<Friend> resultRecommends = new ArrayList<Friend>();
 		for (Friend friend : mRecommends) {
-			if (friend.getNickName().contains(keyWords)) {
+			if (friend.getNickName()!=null&&friend.getNickName().toLowerCase().contains(keyWords)) {
 				resultRecommends.add(friend);
 			}
 		}
 		List<Friend> resultFriends = new ArrayList<Friend>();
 		for (Friend friend : mFriends) {
-			if (friend.getNickName().contains(keyWords)) {
+			if (friend.getNickName()!=null&&friend.getNickName().toLowerCase().contains(keyWords)) {
 				resultFriends.add(friend);
 			}
 		}
