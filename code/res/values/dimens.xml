@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- pull to refresh -->
+    <dimen name="user_head_left">10dp</dimen>
+    <dimen name="user_head_side">66dp</dimen>
+    <dimen name="user_head_image_width_bg">96dp</dimen>
+    
 
     <dimen name="indicator_right_padding">10dp</dimen>
     <dimen name="indicator_corner_radius">12dp</dimen>
