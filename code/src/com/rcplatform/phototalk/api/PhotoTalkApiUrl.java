@@ -119,4 +119,5 @@ public class PhotoTalkApiUrl {
 	public static final String GET_ALL_APPS_URL = RCBOSS_USER_URL + "getAllAppInfo.do";
 	public static final String REQUEST_SMS_URL = RCBOSS_USER_URL + "downSms.do";
 	public static final String BIND_PHONE_URL = RCBOSS_USER_URL + "checkSms.do";
+	public static final String LOGOUT_URL = RCBOSS_USER_URL + "userLogout.do";
 }

@@ -350,6 +350,11 @@ public class Request implements Serializable {
 		thread.start();
 	}
 
+	public static void executeLogoutAsync(Context context) {
+		Request request = new Request(context, PhotoTalkApiUrl.LOGOUT_URL, null);
+		request.excuteAsync();
+	}
+
 	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, final int friendType, final OnFriendsLoadedListener listener) {
 		final List<Friend> recommendsLocal = PhotoTalkDatabaseFactory.getDatabase().getRecommends(friendType);
 		RCPlatformResponseHandler responseHandler = null;

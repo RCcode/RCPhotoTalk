@@ -43,6 +43,8 @@ public class Constants {
 	private static final String USER_DIR_NAME = "user";
 
 	public static File USER_IMAGE_DIR;
+	
+	public static final int INFORMATION_PAGE_SIZE=20;
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();

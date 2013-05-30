@@ -70,6 +70,7 @@ public class WelcomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		printHashKey();
 		setContentView(R.layout.loading);
+		cancelRelogin();
 		startBackgroundService();
 		checkNetwork();
 		Thread th = new Thread() {

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
@@ -22,10 +23,11 @@ import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -58,6 +60,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private boolean isChance = false;
 	private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private ImageLoader mImageLoader;
+	private AlertDialog updateFailDialog;
+	private String newHeadPath;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +96,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private void setBirthday() {
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			mBirthday.setText(userDetailInfo.getBirthday());
-			isChance = true;
 		} else {
 			mBirthday.setText(null);
 		}
@@ -180,6 +183,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, monthOfYear, dayOfMonth);
 		userDetailInfo.setBirthday(mDateFormat.format(new Date(calendar.getTimeInMillis())));
+		isChance = true;
 		setBirthday();
 	}
 
@@ -252,7 +256,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		super.onImageReceive(imageBaseUri, imagePath);
 		isChance = true;
 		isHeadChange = true;
-		Utils.copyFile(new File(imagePath), PhotoTalkUtils.getUserHead(getCurrentUser()));
+		newHeadPath = imagePath;
 		new LoadImageTask(mMyHeadView).execute(imageBaseUri, Uri.parse(imagePath));
 	}
 
@@ -274,23 +278,68 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private void updateUserInfo() {
 		// 资料发生改变 上传服务器
 		if (isChance) {
-			File file = null;
-			if (isHeadChange)
-				file = PhotoTalkUtils.getUserHead(getCurrentUser());
-			FriendsProxy.upUserInfo(this, file, new RCPlatformResponseHandler() {
-
-				@Override
-				public void onSuccess(int statusCode, String content) {
-				}
-
-				@Override
-				public void onFailure(int errorCode, String content) {
-				}
-			}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
-			PrefsUtils.User.saveUserInfo(getApplicationContext(), userDetailInfo.getRcId(), userDetailInfo);
-			getPhotoTalkApplication().setCurrentUser(userDetailInfo);
-			setResult(Activity.RESULT_OK);
+			startUpdate();
+		} else {
+			finish();
 		}
-		finish();
+	}
+
+	private void startUpdate() {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		File file = null;
+		if (isHeadChange)
+			file = new File(newHeadPath);
+		FriendsProxy.upUserInfo(this, file, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String url = jsonObject.getString("headUrl");
+					if (!TextUtils.isEmpty(url)) {
+						userDetailInfo.setHeadUrl(url);
+						Utils.copyFile(new File(newHeadPath), PhotoTalkUtils.getUserHead(getCurrentUser()));
+					}
+					PrefsUtils.User.saveUserInfo(getApplicationContext() , userDetailInfo.getRcId(), userDetailInfo);
+					getPhotoTalkApplication().setCurrentUser(userDetailInfo);
+					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
+					setResult(Activity.RESULT_OK);
+					finish();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				showUpdateFailDialog();
+			}
+		}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
+	}
+
+	private void showUpdateFailDialog() {
+		if (updateFailDialog == null) {
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						finish();
+						break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						startUpdate();
+						break;
+					}
+					dialog.dismiss();
+				}
+			};
+			updateFailDialog = new AlertDialog.Builder(this).setMessage(R.string.update_fail).setPositiveButton(R.string.cancel, listener)
+					.setNegativeButton(R.string.retry, listener).setCancelable(false).create();
+		}
+		updateFailDialog.show();
 	}
 }

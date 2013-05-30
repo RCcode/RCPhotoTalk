@@ -1,11 +1,9 @@
 package com.rcplatform.phototalk.adapter;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,10 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
-import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
@@ -32,12 +26,10 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.task.AddFriendTask.AddFriendListener;
-import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
@@ -54,7 +46,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	private int mPressedPosition = -1;
 	private ListView mList;
 
-	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list,ImageLoader imageLoader) {
+	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list, ImageLoader imageLoader) {
 		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = imageLoader;
@@ -157,6 +149,11 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			} else {
 				holder.name.setText(record.getReceiver().getNick());
 			}
+		}
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
+			holder.name.getPaint().setFakeBoldText(true);
+		} else {
+			holder.name.getPaint().setFakeBoldText(false);
 		}
 		return convertView;
 	}
@@ -387,6 +384,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		for (Information info : data) {
 			this.data.addFirst(info);
 		}
+	}
+
+	public void addDataAtLast(List<Information> data) {
+		this.data.addAll(data);
 	}
 
 	public static interface OnInformationPressListener {

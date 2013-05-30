@@ -79,8 +79,8 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				Thread thread = new Thread() {
 					@Override
 					public void run() {
-						List<Friend> localFriends=PhotoTalkDatabaseFactory.getDatabase().getFriends();
-						List<Friend> localRecommends=PhotoTalkDatabaseFactory.getDatabase().getRecommends();
+						List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+						List<Friend> localRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
 						sendFriendLoadedMessage(localFriends, localRecommends);
 					}
 				};
@@ -135,15 +135,17 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 				ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
 				int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-				final int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
-				final int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
+				int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+				int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
 				if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+					final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList.getExpandableListAdapter()).getChild(group, child);
+					if (getCurrentUser().getRcId().equals(friend.getRcId()))
+						return;
 					menu.setHeaderTitle(R.string.delete_friend);
 					menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 						@Override
 						public boolean onMenuItemClick(MenuItem item) {
-							Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList.getExpandableListAdapter()).getChild(group, child);
 							deleteFriend(friend);
 							return false;
 						}

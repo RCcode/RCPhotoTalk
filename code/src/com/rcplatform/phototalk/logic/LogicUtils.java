@@ -194,6 +194,7 @@ public class LogicUtils {
 	private static void doLogoutOperation(Context context) {
 		PrefsUtils.LoginState.clearLoginInfo(context);
 		FacebookUtil.clearFacebookVlidated(context);
+		Request.executeLogoutAsync(context);
 	}
 
 	public static void relogin(Context context) {

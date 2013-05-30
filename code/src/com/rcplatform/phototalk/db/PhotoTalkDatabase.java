@@ -10,10 +10,9 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 
 public interface PhotoTalkDatabase {
-	public static final Integer NEW_INFORMATION=1;
-	public static final Integer UPDATED_INFORMATION=2;
-	
-	
+	public static final Integer NEW_INFORMATION = 1;
+	public static final Integer UPDATED_INFORMATION = 2;
+
 	public boolean hasFriend(String suid);
 
 	public List<Friend> getThirdPartFriends(int type);
@@ -62,5 +61,7 @@ public interface PhotoTalkDatabase {
 	public void updateFriend(Friend friend);
 
 	public Map<Integer, List<Information>> filterNewInformations(Collection<Information> newInformations, UserInfo currentUser);
+
+	public List<Information> getInformationByPage(int page, int pageSize);
 
 }

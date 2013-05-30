@@ -53,5 +53,4 @@ public class UserSettingProxy {
 		request.putParam(PhotoTalkParams.BindPhone.PARAM_KEY_CODE, validate);
 		request.excuteAsync();
 	}
-
 }

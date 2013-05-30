@@ -2,7 +2,6 @@ package com.rcplatform.phototalk;
 
 import java.io.File;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
@@ -18,7 +17,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
-import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
@@ -33,15 +31,13 @@ public class PhotoTalkApplication extends Application {
 
 	private static final int MEMORY_CACHE_SIZE = 2 * 1024 * 1024;
 
-	private static final String CACHE_FILE_PATH = "phototalk/cache/photochat";
+	private static final String CACHE_FILE_PATH = "phototalk/cache";
 
 	private static final int THREAD_COUNT = 3;
 
 	private Bitmap editeBitmap;
 
 	public File cacheDir;
-
-	public Map<Long, List<Information>> sendRecords;
 
 	private final Map<String, Activity> mActivityMap = new HashMap<String, Activity>();
 
@@ -133,27 +129,6 @@ public class PhotoTalkApplication extends Application {
 
 	public void removeActivity(String key) {
 		mActivityMap.remove(key);
-	}
-
-	public void addSendRecords(long key, List<Information> list) {
-		if (sendRecords == null)
-			sendRecords = new HashMap<Long, List<Information>>();
-		sendRecords.put(key, list);
-
-	}
-
-	public List<Information> getSendRecordsList(long key) {
-		if (sendRecords == null)
-			return null;
-		else
-			return sendRecords.get(key);
-	}
-
-	public Map<Long, List<Information>> getSendRecords() {
-		if (sendRecords == null)
-			return null;
-		else
-			return sendRecords;
 	}
 
 	public String getSendFileCachePath() {

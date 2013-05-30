@@ -127,6 +127,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login);
+		cancelRelogin();
 		Intent intent = getIntent();
 		mIsLoginPage = (Boolean) intent.getExtras().get(Constants.KEY_LOGIN_PAGE);
 		setupData();

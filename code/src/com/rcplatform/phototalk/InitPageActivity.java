@@ -29,8 +29,9 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.views.PageIndicator;
 
-public class InitPageActivity extends BaseActivity implements
-		OnGestureListener, OnTouchListener {
+public class InitPageActivity extends BaseActivity implements OnGestureListener, OnTouchListener {
+
+	public static final String REQUEST_PARAM_RELOGIN = "relogin";
 
 	private PageIndicator mPageIndicator;
 	public static final int REQUEST_CODE_LOGIN = 100;
@@ -42,13 +43,17 @@ public class InitPageActivity extends BaseActivity implements
 	private static final int FLING_MIN_VELOCITY = 200;
 	private int numView = 0;
 	private ViewFlipper pager;
-	private TextView init_message_title,init_message_text;
+	private TextView init_message_title, init_message_text;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.init_page);
+		cancelRelogin();
 		initView();
+		if (getIntent().getBooleanExtra(REQUEST_PARAM_RELOGIN, false)) {
+			startLoginActivity();
+		}
 	}
 
 	private void initView() {
@@ -59,20 +64,16 @@ public class InitPageActivity extends BaseActivity implements
 		inAnimation_Alpha.setDuration(400);
 		outAnimation_Alpha = new AlphaAnimation(1.0f, 0.0f);
 		outAnimation_Alpha.setDuration(400);
-		init_message_title = (TextView)findViewById(R.id.init_message_title);
-		init_message_text = (TextView)findViewById(R.id.init_message_text);
-		init_message_title.setShadowLayer(3F, 3F,1F, Color.BLACK); 
-		init_message_text.setShadowLayer(3F, 3F,1F, Color.BLACK); 
+		init_message_title = (TextView) findViewById(R.id.init_message_title);
+		init_message_text = (TextView) findViewById(R.id.init_message_text);
+		init_message_title.setShadowLayer(3F, 3F, 1F, Color.BLACK);
+		init_message_text.setShadowLayer(3F, 3F, 1F, Color.BLACK);
 		Button mLoginButton = (Button) findViewById(R.id.init_page_login_button);
 		mLoginButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
-				Intent loginIntent = new Intent(InitPageActivity.this,
-						LoginActivity.class);
-				loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
-				startActivityForResult(loginIntent, REQUEST_CODE_LOGIN);
+				startLoginActivity();
 			}
 		});
 		Button mSignupButton = (Button) findViewById(R.id.init_page_signup_button);
@@ -80,8 +81,7 @@ public class InitPageActivity extends BaseActivity implements
 
 			@Override
 			public void onClick(View v) {
-				Intent loginIntent = new Intent(InitPageActivity.this,
-						LoginActivity.class);
+				Intent loginIntent = new Intent(InitPageActivity.this, LoginActivity.class);
 				loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, false);
 				startActivityForResult(loginIntent, REQUEST_CODE_LOGIN);
 			}
@@ -110,6 +110,12 @@ public class InitPageActivity extends BaseActivity implements
 		// });
 	}
 
+	private void startLoginActivity() {
+		Intent loginIntent = new Intent(InitPageActivity.this, LoginActivity.class);
+		loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
+		startActivityForResult(loginIntent, REQUEST_CODE_LOGIN);
+	}
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -126,8 +132,7 @@ public class InitPageActivity extends BaseActivity implements
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
-			UserInfo userInfo = (UserInfo) data
-					.getSerializableExtra(LoginActivity.RESULT_KEY_USERINFO);
+			UserInfo userInfo = (UserInfo) data.getSerializableExtra(LoginActivity.RESULT_KEY_USERINFO);
 			if (userInfo.getShowRecommends() == 1) {
 				startActivity(HomeActivity.class);
 			} else {
@@ -150,19 +155,16 @@ public class InitPageActivity extends BaseActivity implements
 	}
 
 	@Override
-	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-			float velocityY) {
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		// TODO Auto-generated method stub
-		if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE
-				&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+		if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 			pager.setInAnimation(inAnimation_Alpha);
 			pager.setOutAnimation(outAnimation_Alpha);
-			if (numView < pager.getChildCount()-1) {
+			if (numView < pager.getChildCount() - 1) {
 				numView++;
 				onCheckMain(numView);
 			}
-		} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE
-				&& Math.abs(velocityX) > FLING_MIN_VELOCITY) {
+		} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 			pager.setInAnimation(inAnimation_Alpha);
 			pager.setOutAnimation(outAnimation_Alpha);
 			if (numView > 0) {
@@ -170,13 +172,13 @@ public class InitPageActivity extends BaseActivity implements
 				onCheckMain(numView);
 			}
 		}
-//		上下滑动判断
-//		if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE
-//				&& Math.abs(velocityY) > FLING_MIN_VELOCITY) {
-//		} else if (e2.getY() - e1.getY() > FLING_MIN_DISTANCE
-//				&& Math.abs(velocityY) > FLING_MIN_VELOCITY) {
-//		}
-		
+		// 上下滑动判断
+		// if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE
+		// && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
+		// } else if (e2.getY() - e1.getY() > FLING_MIN_DISTANCE
+		// && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
+		// }
+
 		return false;
 	}
 
@@ -187,8 +189,7 @@ public class InitPageActivity extends BaseActivity implements
 	}
 
 	@Override
-	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-			float distanceY) {
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -204,6 +205,7 @@ public class InitPageActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 	public void onCheckMain(int n) {
 		switch (n) {
 		case 0:

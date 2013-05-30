@@ -10,13 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -26,7 +22,6 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.AddFriendsActivity;
@@ -46,7 +41,12 @@ public class BaseActivity extends Activity {
 	protected Context baseContext;
 	private PopupWindow mImageSelectPopupWindow;
 	private View view;
+	private boolean needRelogin = true;
 
+	protected void cancelRelogin(){
+		needRelogin=false;
+	}
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -85,9 +85,7 @@ public class BaseActivity extends Activity {
 				}
 			};
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			logoutDialog = builder.setMessage(R.string.other_device_login)
-					.setNegativeButton(R.string.relogin, listener)
-					.setCancelable(false).create();
+			logoutDialog = builder.setMessage(R.string.other_device_login).setNegativeButton(R.string.relogin, listener).setCancelable(false).create();
 		}
 		logoutDialog.show();
 	}
@@ -99,14 +97,18 @@ public class BaseActivity extends Activity {
 	}
 
 	private void registeOtherDeviceLoginReceiver() {
-		IntentFilter filter = new IntentFilter(Action.ACTION_OTHER_DEVICE_LOGIN);
-		registerReceiver(mOtherDeviceLoginReceiver, filter);
+		if (needRelogin) {
+			IntentFilter filter = new IntentFilter(Action.ACTION_OTHER_DEVICE_LOGIN);
+			registerReceiver(mOtherDeviceLoginReceiver, filter);
+		}
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		unregisterReceiver(mOtherDeviceLoginReceiver);
+		if (needRelogin) {
+			unregisterReceiver(mOtherDeviceLoginReceiver);
+		}
 	}
 
 	protected void hideSoftKeyboard(View view) {
@@ -119,13 +121,11 @@ public class BaseActivity extends Activity {
 		return super.onTouchEvent(event);
 	}
 
-
 	protected void startActivity(Class<? extends Activity> clazz) {
 		startActivity(new Intent(this, clazz));
 	}
 
-	public void showLoadingDialog(int titleResId, int msgResId,
-			boolean cancelAble) {
+	public void showLoadingDialog(int titleResId, int msgResId, boolean cancelAble) {
 		if (mProgressDialog == null) {
 			mProgressDialog = new ProgressDialog(this);
 		}
@@ -220,31 +220,26 @@ public class BaseActivity extends Activity {
 
 	protected void showMenu(View view) {
 		if (mImageSelectPopupWindow == null) {
-			View detailsView = LayoutInflater.from(this).inflate(
-					R.layout.menu_layout, null, false);
+			View detailsView = LayoutInflater.from(this).inflate(R.layout.menu_layout, null, false);
 
-			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow()
-					.getWindowManager().getDefaultDisplay().getWidth(),
-					LayoutParams.WRAP_CONTENT);
+			mImageSelectPopupWindow = new PopupWindow(detailsView, getWindow().getWindowManager().getDefaultDisplay().getWidth(), LayoutParams.WRAP_CONTENT);
 
 			mImageSelectPopupWindow.setFocusable(true);
 			mImageSelectPopupWindow.setOutsideTouchable(true);
 			mImageSelectPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-			Button menu_add_btn = (Button) detailsView
-					.findViewById(R.id.menu_add_btn);
+			Button menu_add_btn = (Button) detailsView.findViewById(R.id.menu_add_btn);
 			menu_add_btn.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(BaseActivity.this,AddFriendsActivity.class);
+					Intent intent = new Intent(BaseActivity.this, AddFriendsActivity.class);
 					intent.putExtra("from", "base");
 					startActivity(intent);
 				}
 			});
-			Button menu_take_score_btn = (Button) detailsView
-					.findViewById(R.id.menu_take_score_btn);
+			Button menu_take_score_btn = (Button) detailsView.findViewById(R.id.menu_take_score_btn);
 			menu_take_score_btn.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					SystemMessageUtil.enterPage("market://details?id=com.androidlord.optimizationbox", baseContext);
