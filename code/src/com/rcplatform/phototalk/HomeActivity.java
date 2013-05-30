@@ -13,13 +13,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Rect;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.AsyncTask.Status;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -75,7 +79,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
-	private static final int MSG_WHAT_REGISTE_INFORMATION_RECEIVER = 2;
+	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 
 	protected static final int MSG_TIGASE_NEW_INFORMATION = 3;
 
@@ -92,7 +96,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private TextView mBtFriendList;
 
 	private TextView mBtMore;
-	private ImageView title_line;
 
 	private LongPressDialog mLongPressDialog;
 
@@ -106,14 +109,22 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private ImageView iconTrendNew;
 	private ImageLoader mImageLoader;
 
+	private AsyncTask<Void, Void, List<Information>> loadInformationTask;
+
+	private boolean hasNextPage = true;
+
+	private View loadingFooter;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
+		registeInformationReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
-		loadDataFromDataBase();
+		// loadDataFromDataBase();
+		loadLocalInformation();
 		getAllPlatformApps();
 		onNewTrends();
 		checkUpdate();
@@ -144,7 +155,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
-				// {"message":null,"status":1,"headUrl":"" trendId}
 				try {
 					JSONObject jsonObject = new JSONObject(content);
 					int trendId = jsonObject.getInt("trendId");
@@ -210,23 +220,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	}
 
 	private void relogin() {
-		Intent loginIntent = new Intent(this, LoginActivity.class);
-		loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
+		Intent loginIntent = new Intent(this, InitPageActivity.class);
+		loginIntent.putExtra(InitPageActivity.REQUEST_PARAM_RELOGIN, true);
 		startActivity(loginIntent);
 		checkTrendRequest.cancel();
 		finish();
-	}
-
-	private void loadDataFromDataBase() {
-		new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				List<Information> data = PhotoTalkDatabaseFactory.getDatabase().getRecordInfos();
-				sendDataLoadedMessage(data, MSG_WHAT_INFORMATION_LOADED);
-				myHandler.sendEmptyMessage(MSG_WHAT_REGISTE_INFORMATION_RECEIVER);
-			}
-		}).start();
 	}
 
 	private void sendDataLoadedMessage(List<Information> infos, int what) {
@@ -245,8 +243,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
-		title_line = (ImageView) findViewById(R.id.title_line);
-//		title_line.setVisibility(View.VISIBLE);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
 		mBtFriendList.setVisibility(View.VISIBLE);
 		mBtFriendList.setBackgroundResource(R.drawable.friendlist_btn);
@@ -291,8 +287,16 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
 						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
 					return;
-				showFriendDetail(information);
-
+				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
+					if (LogicUtils.isSender(HomeActivity.this, information)) {
+						reSendPhoto(information);
+					} else {
+						reLoadPictrue(information);
+					}
+				} else {
+					showFriendDetail(information);
+				}
 			}
 		});
 	}
@@ -404,7 +408,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(PhotoTalkUtils.getInformationTagBase(infoRecord)
 						+ Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
-				limitView.setBackgroundDrawable(null);
+				// limitView.setBackgroundDrawable(null);
+				limitView.setBackgroundResource(R.drawable.item_time_bg);
 				mShowDialog.ShowDialog(infoRecord);
 				(limitView).scheuleTask(infoRecord);
 				LogicUtils.startShowPhotoInformation(infoRecord);
@@ -412,7 +417,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 				// 把数据里面的状态更改为3，已查看
 			}
 		}
-
 	}
 
 	public int getPostionFromTouch(MotionEvent ev, ListView listview) {
@@ -485,17 +489,30 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case MSG_WHAT_REGISTE_INFORMATION_RECEIVER:
-				registeInformationReceiver();
-				break;
 			case MSG_WHAT_INFORMATION_LOADED:
 				initOrRefreshListView((List<Information>) msg.obj);
 				break;
 			case MSG_TIGASE_NEW_INFORMATION:
 				InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
 				break;
+			case MSG_WHAT_LOCAL_INFORMATION_LOADED:
+				addListData((List<Information>) msg.obj);
+				break;
 			}
-		};
+		}
+	};
+
+	private void addListData(List<Information> localInformations) {
+		if (adapter == null) {
+			adapter = new PhotoTalkMessageAdapter(this, localInformations, mInformationList, mImageLoader);
+			loadingFooter = getLayoutInflater().inflate(R.layout.information_loading_item, null);
+			mInformationList.addFooterView(loadingFooter);
+			mInformationList.setAdapter(adapter);
+			mInformationList.setOnScrollListener(mScrollListener);
+		} else {
+			adapter.addDataAtLast(localInformations);
+			adapter.notifyDataSetChanged();
+		}
 	};
 
 	private void initOrRefreshListView(List<Information> data) {
@@ -741,6 +758,53 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		} else {
 			iconTrendNew.setVisibility(View.GONE);
 			SettingPageController.getInstance().onNewTrends(false, null);
+		}
+	}
+
+	private OnScrollListener mScrollListener = new OnScrollListener() {
+
+		@Override
+		public void onScrollStateChanged(AbsListView view, int scrollState) {
+			switch (scrollState) {
+			case SCROLL_STATE_FLING:
+			case SCROLL_STATE_TOUCH_SCROLL:
+				break;
+			}
+		}
+
+		@Override
+		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+			if (mInformationList.getAdapter().getCount() - view.getLastVisiblePosition() <= 2) {
+				loadLocalInformation();
+			}
+		}
+	};
+
+	private void loadLocalInformation() {
+		if (hasNextPage && (loadInformationTask == null || loadInformationTask.getStatus() == Status.FINISHED)) {
+			loadInformationTask = new LoadLocalInformationsTask().execute();
+		}
+	}
+
+	class LoadLocalInformationsTask extends AsyncTask<Void, Void, List<Information>> {
+
+		@Override
+		protected List<Information> doInBackground(Void... params) {
+			int start = 0;
+			if (mInformationList.getAdapter() != null)
+				start = mInformationList.getAdapter().getCount();
+			return PhotoTalkDatabaseFactory.getDatabase().getInformationByPage(start, Constants.INFORMATION_PAGE_SIZE);
+		}
+
+		@Override
+		protected void onPostExecute(List<Information> result) {
+			super.onPostExecute(result);
+			if (result.size() > 0)
+				addListData(result);
+			if (result.size() < Constants.INFORMATION_PAGE_SIZE) {
+				hasNextPage = false;
+				mInformationList.removeFooterView(loadingFooter);
+			}
 		}
 	}
 }

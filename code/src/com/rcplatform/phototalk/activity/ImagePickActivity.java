@@ -107,7 +107,6 @@ public class ImagePickActivity extends BaseActivity {
 	}
 
 	protected void onImageCutSuccess(String tmpPath) {
-		// TODO Auto-generated method stub
 
 	}
 

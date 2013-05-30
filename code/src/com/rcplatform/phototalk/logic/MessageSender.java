@@ -13,7 +13,6 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.request.JSONConver;
-import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class MessageSender {
 	public static void sendInformation(Context context, String tigaseId, String rcId, Information... informations) {

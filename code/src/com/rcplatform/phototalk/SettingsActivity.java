@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
@@ -26,11 +28,11 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.RoundImageView;
 
-public class SettingsActivity extends ImagePickActivity implements
-		View.OnClickListener {
+public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
 	private static final int REQUEST_CODE_EDIT_INFO = 100;
 	protected static final int REQUEST_CODE_GALLARY = 1012;
@@ -113,21 +115,17 @@ public class SettingsActivity extends ImagePickActivity implements
 		File fileHead = PhotoTalkUtils.getUserHead(getCurrentUser());
 		if (fileHead.exists()) {
 			String urlLocal = "file:///" + fileHead.getPath();
-			mImageLoader.displayImage(urlLocal, mHeadView,
-					ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(urlLocal, mHeadView, ImageOptionsFactory.getHeadImageOptions());
 		} else {
-			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView,
-					ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getHeadImageOptions());
 		}
 
-		File fileBackground = PhotoTalkUtils
-				.getUserBackground(getCurrentUser());
+		File fileBackground = PhotoTalkUtils.getUserBackground(getCurrentUser());
 		if (fileBackground.exists()) {
 			String urlLocal = "file:///" + fileBackground.getPath();
 			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getHeadImageOptions());
 		} else {
-			mImageLoader.displayImage(getCurrentUser().getBackground(),
-					user_bg_View, ImageOptionsFactory.getHeadImageOptions());
+			mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getHeadImageOptions());
 		}
 	}
 
@@ -136,15 +134,12 @@ public class SettingsActivity extends ImagePickActivity implements
 		mBack.setVisibility(View.VISIBLE);
 		mBack.setOnClickListener(this);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
-		mTitleTextView.setText(getResources().getString(
-				R.string.my_firend_setting_more_title));
+		mTitleTextView.setText(getResources().getString(R.string.my_firend_setting_more_title));
 		mTitleTextView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this,
-				getResources().getString(R.string.login_error),
-				getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
 	}
 
 	@Override
@@ -157,8 +152,7 @@ public class SettingsActivity extends ImagePickActivity implements
 			startActivity(new Intent(this, FriendDynamicActivity.class));
 			break;
 		case R.id.settings_user_info_edit_action:
-			startActivityForResult(new Intent(this,
-					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
+			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
 		case R.id.use_account_message:
 			startActivity(new Intent(this, UserInfoActivity.class));
@@ -195,18 +189,10 @@ public class SettingsActivity extends ImagePickActivity implements
 		switch (CAMERA_CODE) {
 		case 1:
 			// 背景上传
-			upUpdateUserBackground(imagePath);
-			Utils.copyFile(new File(imagePath),
-					PhotoTalkUtils.getUserBackground(getCurrentUser()));
-			new LoadImageTask(user_bg_View).execute(imageBaseUri,
-					Uri.parse(imagePath));
+			upUpdateUserBackground(imagePath, imageBaseUri);
 			break;
 		case 2:
-			upUserInfoHeadImage(imagePath);
-			Utils.copyFile(new File(imagePath),
-					PhotoTalkUtils.getUserHead(getCurrentUser()));
-			new LoadImageTask(mHeadView).execute(imageBaseUri,
-					Uri.parse(imagePath));
+			upUserInfoHeadImage(imagePath, imageBaseUri);
 			break;
 		}
 
@@ -226,31 +212,33 @@ public class SettingsActivity extends ImagePickActivity implements
 		}
 	}
 
-	public void upUpdateUserBackground(final String imageUrl) {
-		File file = null;
-		try {
-			file = new File(imageUrl);
-			if (file != null) {
-				FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file,
-						new RCPlatformResponseHandler() {
-							@Override
-							public void onSuccess(int statusCode, String content) {
-								// 上传成功
-								// userInfo.setBackground(decodeUtil(content,
-								// "background"));
-								// PrefsUtils.User.saveUserInfo(SettingsActivity.this,
-								// userInfo.getRcId(), userInfo);
-							}
+	public void upUpdateUserBackground(final String imageUrl, final Uri imageUri) {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		File file = new File(imageUrl);
+		FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String url = jsonObject.getString("background");
+					getCurrentUser().setBackground(url);
+					PrefsUtils.User.setBackground(SettingsActivity.this, getCurrentUser().getRcId(), url);
+					Utils.copyFile(new File(imageUrl), PhotoTalkUtils.getUserBackground(getCurrentUser()));
+					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
+					new LoadImageTask(user_bg_View).execute(imageUri, Uri.parse(imageUrl));
+				} catch (JSONException e) {
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
+					e.printStackTrace();
+				}
 
-							@Override
-							public void onFailure(int errorCode, String content) {
-								// 上传失败
-							}
-						});
 			}
 
-		} catch (Exception e) {
-		}
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		});
 	}
 
 	@Override
@@ -265,8 +253,7 @@ public class SettingsActivity extends ImagePickActivity implements
 		try {
 			contentJson = new JSONObject(content);
 			if (contentJson.has("userInfo")) {
-				JSONObject json = new JSONObject(
-						contentJson.getString("userInfo"));
+				JSONObject json = new JSONObject(contentJson.getString("userInfo"));
 				if (json.has("headUrl")) {
 					headUrl = json.getString(name);
 				}
@@ -277,24 +264,35 @@ public class SettingsActivity extends ImagePickActivity implements
 		return headUrl;
 	}
 
-	private void upUserInfoHeadImage(String path) {
+	private void upUserInfoHeadImage(final String path, final Uri imageUri) {
 		// 资料发生改变 上传服务器
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		File file = new File(path);
-		FriendsProxy.upUserInfoHeadImage(this, file,
-				new RCPlatformResponseHandler() {
+		FriendsProxy.upUserInfoHeadImage(this, file, new RCPlatformResponseHandler() {
 
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						// userInfo.setHeadUrl(decodeUtil(content, "headUrl"));
-						// PrefsUtils.User.saveUserInfo(SettingsActivity.this,
-						// userInfo.getRcId(), userInfo);
-					}
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				try {
+					JSONObject jsonObject = new JSONObject(content);
+					String url = jsonObject.getString("headUrl");
+					getCurrentUser().setHeadUrl(url);
+					PrefsUtils.User.saveUserInfo(SettingsActivity.this, getCurrentUser().getRcId(), getCurrentUser());
+					Utils.copyFile(new File(path), PhotoTalkUtils.getUserHead(getCurrentUser()));
+					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
+					new LoadImageTask(mHeadView).execute(imageUri, Uri.parse(path));
+				} catch (JSONException e) {
+					e.printStackTrace();
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
+				}
 
-					@Override
-					public void onFailure(int errorCode, String content) {
+			}
 
-					}
-				});
+			@Override
+			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		});
 	}
 
 	public void onNewTrend(boolean show, String url) {

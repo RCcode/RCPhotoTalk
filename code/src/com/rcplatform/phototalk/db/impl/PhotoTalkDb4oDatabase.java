@@ -69,23 +69,24 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized List<Information> getRecordInfos() {
-
-		Query query = db.query();
-		query.constrain(Information.class);
-		ObjectSet<Information> infos = query.sortBy(new Comparator<Information>() {
-
-			@Override
-			public int compare(Information lhs, Information rhs) {
-				if (rhs.getReceiveTime() > lhs.getReceiveTime())
-					return 1;
-				else if (rhs.getReceiveTime() < lhs.getReceiveTime())
-					return -1;
-				return 0;
-			}
-		}).execute();
+		ObjectSet<Information> infos = queryInformations();
 		List<Information> result = new ArrayList<Information>();
-		result.addAll(infos);
+		if (infos != null)
+			result.addAll(infos);
 		return result;
+	}
+
+	private ObjectSet<Information> queryInformations() {
+		try {
+			Query query = db.query();
+			query.constrain(Information.class);
+			query.descend("receiveTime").orderDescending();
+			ObjectSet<Information> infos = query.execute();
+			return infos;
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	@Override
@@ -302,6 +303,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		LogUtil.e(result.size() + " is result size");
 		for (Friend f : result) {
 			f.setHiden(true);
+			f.setFriend(false);
 			db.store(f);
 		}
 		db.commit();
@@ -467,5 +469,21 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	private Information updateFriendRequestInformation(Information localInformation, Information newInformation) {
 		localInformation.setStatu(newInformation.getStatu());
 		return localInformation;
+	}
+
+	@Override
+	public synchronized List<Information> getInformationByPage(int start, int pageSize) {
+		ObjectSet<Information> localInformations = queryInformations();
+		List<Information> result = new ArrayList<Information>();
+		if (localInformations != null) {
+			int end = start + pageSize;
+			for (int i = start; i < end; i++) {
+				if (i >= localInformations.size())
+					break;
+				Information information = localInformations.get(i);
+				result.add(information);
+			}
+		}
+		return result;
 	}
 }
