@@ -18,6 +18,7 @@ public class ImageOptionsFactory {
 			.showImageForEmptyUri(DEFAULT_HEAD_DRAWABLE)
 			.imageScaleType(ImageScaleType.EXACTLY).build();
 	private static DisplayImageOptions mHeadImageOptions;
+	private static DisplayImageOptions mBackImageOptions;
 
 	public static DisplayImageOptions getHeadImageOptions() {
 		if (mHeadImageOptions == null)
@@ -28,12 +29,12 @@ public class ImageOptionsFactory {
 	}
 
 	public static DisplayImageOptions getUserBackImageOptions() {
-		if (mHeadImageOptions == null)
-			mHeadImageOptions = new DisplayImageOptions.Builder()
+		if (mBackImageOptions == null)
+			mBackImageOptions = new DisplayImageOptions.Builder()
 					.showImageForEmptyUri(R.drawable.user_detail_bg)
 					.showStubImage(R.drawable.user_detail_bg)
 					.showImageOnFail(R.drawable.user_detail_bg).build();
-		return mHeadImageOptions;
+		return mBackImageOptions;
 	}
 
 	public static DisplayImageOptions getDefaultImageOptions() {

@@ -67,7 +67,7 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="marquee"
                 android:singleLine="true"
-                android:textColor="#00FFFF"
+                android:textColor="#003399"
                 android:textSize="14sp" />
 
             <TextView

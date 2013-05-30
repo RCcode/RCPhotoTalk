@@ -56,7 +56,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignBottom="@id/user_bg"
                         android:layout_marginRight="15dp"
-                        android:layout_marginBottom="15dp"
+                        android:layout_marginBottom="8dp"
                         android:background="@drawable/user_info_edit_btn" />
 
                     <LinearLayout
