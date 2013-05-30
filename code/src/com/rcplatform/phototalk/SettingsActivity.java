@@ -159,7 +159,6 @@ public class SettingsActivity extends ImagePickActivity implements
 		case R.id.settings_user_info_edit_action:
 			startActivityForResult(new Intent(this,
 					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
-			this.finish();
 			break;
 		case R.id.use_account_message:
 			startActivity(new Intent(this, UserInfoActivity.class));

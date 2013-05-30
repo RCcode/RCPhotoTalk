@@ -266,8 +266,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			updateUserInfo();
-			startActivity(new Intent(AccountInfoEditActivity.this,SettingsActivity.class));
-			this.finish();
+			startActivity(new Intent(AccountInfoEditActivity.this, SettingsActivity.class));
 			return false;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -283,21 +282,13 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 				@Override
 				public void onSuccess(int statusCode, String content) {
-					Gson gson = new Gson();
-					try {
-						JSONObject obj = new JSONObject(content);
-						UserInfo userInfo = gson.fromJson(obj.getJSONObject("userInfo").toString(), UserInfo.class);
-						PrefsUtils.User.saveUserInfo(getApplicationContext(), userDetailInfo.getRcId(), userInfo);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
 				}
 
 				@Override
 				public void onFailure(int errorCode, String content) {
-
 				}
 			}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
+			PrefsUtils.User.saveUserInfo(getApplicationContext(), userDetailInfo.getRcId(), userDetailInfo);
 			getPhotoTalkApplication().setCurrentUser(userDetailInfo);
 			setResult(Activity.RESULT_OK);
 		}

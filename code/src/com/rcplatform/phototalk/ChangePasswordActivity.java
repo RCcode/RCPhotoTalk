@@ -82,15 +82,18 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			showErrorConfirmDialog(R.string.register_password_error);
 			return;
 		}
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		mCurrentPassword = MD5.encodeMD5String(currentPassword);
 		UserSettingProxy.checkCurrentPassword(this, new RCPlatformResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
+				dismissLoadingDialog();
 				mViewSwitcher.showNext();
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
 		}, mCurrentPassword);
@@ -109,7 +112,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			showErrorConfirmDialog(R.string.two_password_not_same);
 			return;
 		}
-
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		UserSettingProxy.changePassword(this, new RCPlatformResponseHandler() {
 
 			@Override
@@ -129,6 +132,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 
 			@Override
 			public void onFailure(int errorCode, String content) {
+				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
 		}, MD5.encodeMD5String(newPassword), mCurrentPassword);
