@@ -30,7 +30,6 @@ import com.google.gson.Gson;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.FriendDynamicListAdpter;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
