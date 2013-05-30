@@ -62,7 +62,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void setFriendInfo() {
 		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead, ImageOptionsFactory.getHeadImageOptions());
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getDefaultImageOptions());
+		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getUserBackImageOptions());
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
