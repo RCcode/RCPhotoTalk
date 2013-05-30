@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -188,6 +190,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 		mBtAddFriend.setOnClickListener(this);
 
 		etSearch = (EditText) findViewById(R.id.et_search);
+//		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
+//        imm.hideSoftInputFromWindow(etSearch.getWindowToken(),0); 
+
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
 		seach_delete_btn.setVisibility(View.GONE);
 		seach_delete_btn.setOnClickListener(new OnClickListener() {
