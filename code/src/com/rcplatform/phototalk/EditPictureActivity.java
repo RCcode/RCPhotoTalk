@@ -250,7 +250,8 @@ public class EditPictureActivity extends BaseActivity {
 				voicePath = savePath;
 				audioBtn.setVisibility(4);
 				make_voice.setVisibility(0);
-				mButtonTimeLimit.setClickable(false);
+//				mButtonTimeLimit.setClickable(false);
+				mButtonTimeLimit.setVisibility(View.GONE);
 				voice_size.setText(n + "s");
 
 			}
@@ -341,7 +342,6 @@ public class EditPictureActivity extends BaseActivity {
 					}
 				});
 	}
-
 	private final OnClickListener clickListener = new OnClickListener() {
 
 		@Override
@@ -395,12 +395,12 @@ public class EditPictureActivity extends BaseActivity {
 				if (file.exists()) {
 					file.delete();
 				}
-				mButtonTimeLimit.setClickable(true);
+//				mButtonTimeLimit.setClickable(true);
+				mButtonTimeLimit.setVisibility(View.VISIBLE);
 				audioBtn.setVisibility(0);
 				make_voice.setVisibility(4);
 				break;
 			case TUYA_ON_CLICK:
-
 				if (mEditePicView.openOrCloseTuya()) {
 					mButtonTuya.setBackgroundResource(R.drawable.scrawl_press);
 					showColorPickerDialog();

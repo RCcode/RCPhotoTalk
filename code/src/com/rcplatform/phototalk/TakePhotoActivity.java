@@ -84,9 +84,11 @@ public class TakePhotoActivity extends Activity {
 				if (mFromDegrees == 0) {
 					mFromDegrees = 180;
 					mToDegrees = 0;
+					mButtonOpenFlashLight.setVisibility(View.GONE);
 				} else {
 					mFromDegrees = 0;
 					mToDegrees = 180;
+					mButtonOpenFlashLight.setVisibility(View.VISIBLE);
 				}
 				Animation animation = new Rotate3dAnimation(mFromDegrees,
 						mToDegrees, mButtonChangeCamera.getWidth() / 2,

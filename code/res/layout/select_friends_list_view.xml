@@ -2,66 +2,97 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#ececec" >
+    android:background="@drawable/app_backgroud" >
+
+    <include
+        android:id="@+id/title_navigate"
+        layout="@layout/base_top_navigate" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:layout_above="@+id/send_layout"
+        android:layout_below="@+id/title_navigate"
         android:orientation="vertical" >
 
-        <include layout="@layout/base_top_navigate" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
+            android:background="@drawable/seach_bg" >
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:background="@drawable/seach_edit_text"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:paddingLeft="40dp"
+                android:singleLine="true"
+                android:textColor="#3f3f3f"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/seach_delete_btn"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignRight="@+id/et_search"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/seach_text_delete_btn" />
+        </RelativeLayout>
 
         <ListView
             android:id="@+id/lv_sfl_friends"
             android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="fill_parent"
             android:cacheColorHint="#00000000"
             android:divider="@null"
             android:fadingEdge="none" >
         </ListView>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/send_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/select_send_bottom_bg"
+        >
+
+        <Gallery
+            android:id="@+id/g_sfl_added_friends"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:layout_toLeftOf="@+id/line_view"
+            android:clickable="false"
+            android:focusable="false"
+            android:isScrollContainer="false" />
 
         <ImageView
-            android:layout_width="fill_parent"
+            android:id="@+id/line_view"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/list_divider" />
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/btn_sfl_send"
+            android:background="@drawable/select_send_line" />
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
+        <Button
+            android:id="@+id/btn_sfl_send"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/select_send_bottom_bg"
-            android:orientation="horizontal" >
-
-            <com.rcplatform.phototalk.views.SelectFriendGallery
-                android:id="@+id/g_sfl_added_friends"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/line_view"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="16dp"
-                android:clickable="false"
-                android:focusable="false"
-                android:isScrollContainer="false" />
-
-            <ImageView
-                android:id="@+id/line_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toLeftOf="@+id/btn_sfl_send"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/select_send_line" />
-
-            <Button
-                android:id="@+id/btn_sfl_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/seach_send_btn" />
-        </RelativeLayout>
-    </LinearLayout>
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/seach_send_btn" />
+    </RelativeLayout>
 
     <ProgressBar
         android:id="@+id/pb_select_friend"

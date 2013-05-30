@@ -44,6 +44,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_alignBottom="@id/user_bg"
+                        android:layout_marginTop="30dp"
                         android:layout_alignTop="@+id/rela_userinfo"
                         android:background="#50000000"
                         android:orientation="horizontal" />
@@ -68,9 +69,10 @@
                         android:padding="@dimen/user_detail_info_padding" >
 
                         <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="@dimen/user_head_image_width_bg"
+                            android:layout_height="@dimen/user_head_image_width_bg"
                             android:layout_gravity="center_vertical"
+                            android:padding="3dp"
                             android:background="@drawable/send_friend_head_bg" >
 
                             <com.rcplatform.phototalk.views.RoundImageView
@@ -78,14 +80,16 @@
                                 android:layout_width="@dimen/user_detail_head_image_width"
                                 android:layout_height="@dimen/user_detail_head_image_width"
                                 android:layout_centerInParent="true"
+                                android:src="@drawable/default_head"
+                                android:scaleType="centerInside"
                                 android:layout_marginRight="@dimen/user_detail_source_margin_left"
-                                android:background="@drawable/send_friend_head_bg"
                                 android:gravity="center" />
                         </RelativeLayout>
 
                         <LinearLayout
                             android:layout_width="fill_parent"
-                            android:layout_height="fill_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:orientation="vertical" >
 
                             <LinearLayout
@@ -113,6 +117,7 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
+                                    android:visibility="gone"
                                     android:orientation="horizontal" >
 
                                     <ImageView
@@ -132,32 +137,33 @@
                                         android:gravity="top"
                                         android:textColor="#E5E5E5" />
                                 </LinearLayout>
-                            </LinearLayout>
-
-                            <LinearLayout
-                                android:layout_width="fill_parent"
+                                
+                                 <LinearLayout
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal" >
+                                    <!-- android:layout_height="@dimen/user_detail_head_width_half" -->
 
                                 <TextView
                                     style="@style/text_base"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/user_detail_head_width_half"
-                                    android:layout_marginTop="10dp"
+                                    android:layout_height="wrap_content"
                                     android:text="RC ID:"
-                                    android:textColor="#534d48"
+                                    android:textColor="#FFFFFF"
                                     android:textSize="@dimen/user_detail_rcid_size" />
 
                                 <TextView
                                     android:id="@+id/user_rc_id"
                                     style="@style/text_base"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="@dimen/user_detail_head_width_half"
-                                    android:layout_marginTop="10dp"
-                                    android:textColor="#534d48"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#FFFFFF"
                                     android:textSize="@dimen/user_detail_rcid_size" />
                             </LinearLayout>
+                            </LinearLayout>
+
+                           
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>

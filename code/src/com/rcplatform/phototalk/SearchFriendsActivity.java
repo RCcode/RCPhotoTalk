@@ -35,14 +35,15 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.AppSelfInfo;
 
-public class SearchFriendsActivity extends BaseActivity implements View.OnClickListener {
+public class SearchFriendsActivity extends BaseActivity implements
+		View.OnClickListener {
 
 	private EditText mEditText;
 
-//	private ImageView mSearchButton;
+	// private ImageView mSearchButton;
 
 	private ListView mListView;
-private TextView search_hint_text;
+	private TextView search_hint_text;
 	private ImageLoader mImageLoader;
 	private Button seach_delete_btn;
 
@@ -58,11 +59,11 @@ private TextView search_hint_text;
 
 	private void initView() {
 		mEditText = (EditText) findViewById(R.id.search_et);
-		seach_delete_btn = (Button)findViewById(R.id.seach_delete_btn);
-		search_hint_text = (TextView)findViewById(R.id.search_hint_text);
+		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
+		search_hint_text = (TextView) findViewById(R.id.search_hint_text);
 		seach_delete_btn.setVisibility(View.GONE);
 		seach_delete_btn.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
@@ -86,33 +87,35 @@ private TextView search_hint_text;
 			}
 		});
 		mEditText.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				if(mEditText.getText()!=null&&mEditText.getText().length()>0){
+				if (mEditText.getText() != null
+						&& mEditText.getText().length() > 0) {
 					seach_delete_btn.setVisibility(View.VISIBLE);
-				}else{
+				} else {
 					seach_delete_btn.setVisibility(View.GONE);
-					
+
 				}
 			}
 		});
-//		mSearchButton = (ImageView) findViewById(R.id.search_btn);
-//		mSearchButton.setOnClickListener(this);
+		// mSearchButton = (ImageView) findViewById(R.id.search_btn);
+		// mSearchButton.setOnClickListener(this);
 		mListView = (ListView) findViewById(R.id.search_result_list);
 		mAdapter = new SearchFriendsAdapter();
 		mListView.setAdapter(mAdapter);
@@ -125,9 +128,9 @@ private TextView search_hint_text;
 		case R.id.back:
 			finish();
 			break;
-//		case R.id.search_btn:
-//			search();
-//			break;
+		// case R.id.search_btn:
+		// search();
+		// break;
 		}
 	}
 
@@ -146,11 +149,13 @@ private TextView search_hint_text;
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
-					List<Friend> resultFriends = JSONConver.jsonToFriends(jsonObject.getJSONArray("userList").toString());
+					List<Friend> resultFriends = JSONConver
+							.jsonToFriends(jsonObject.getJSONArray("userList")
+									.toString());
 					mAdapter.setData(resultFriends);
-					if(mAdapter.getCount()==0){
+					if (mAdapter.getCount() == 0) {
 						search_hint_text.setVisibility(View.VISIBLE);
-					}else{
+					} else {
 						search_hint_text.setVisibility(View.GONE);
 					}
 				} catch (JSONException e) {
@@ -169,22 +174,23 @@ private TextView search_hint_text;
 
 	private void doFriendAdd(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
+		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(),
+				new AddFriendTask.AddFriendListener() {
 
-			@Override
-			public void onFriendAddSuccess(Friend f,int addType) {
-				dismissLoadingDialog();
-				friend.setFriend(true);
-				mAdapter.notifyDataSetChanged();
-				AddFriendsActivity.addFriend(friend);
-			}
+					@Override
+					public void onFriendAddSuccess(Friend f, int addType) {
+						dismissLoadingDialog();
+						friend.setFriend(true);
+						mAdapter.notifyDataSetChanged();
+						AddFriendsActivity.addFriend(friend);
+					}
 
-			@Override
-			public void onFriendAddFail(int statusCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		}, friend).execute();
+					@Override
+					public void onFriendAddFail(int statusCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				}, friend).execute();
 	}
 
 	class SearchFriendsAdapter extends BaseAdapter {
@@ -193,14 +199,19 @@ private TextView search_hint_text;
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = getLayoutInflater().inflate(R.layout.add_friend_list_item, null);
+				convertView = getLayoutInflater().inflate(
+						R.layout.add_friend_list_item, null);
 			}
 			Friend friend = mFriends.get(position);
-			ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
-			TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
-			final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
+			ImageView portraitImage = (ImageView) convertView
+					.findViewById(R.id.add_friend_list_item_portrait);
+			TextView nickTextView = (TextView) convertView
+					.findViewById(R.id.add_friend_list_item_name);
+			final Button addFriendBtn = (Button) convertView
+					.findViewById(R.id.add_friend_button);
 			FriendSourse source = friend.getSource();
-			TextView tvFrom = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_from);
+			TextView tvFrom = (TextView) convertView
+					.findViewById(R.id.add_friend_list_item_source_from);
 			if (source == null) {
 				tvFrom.setVisibility(View.GONE);
 			} else {

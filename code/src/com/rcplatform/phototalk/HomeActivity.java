@@ -320,8 +320,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		if (adapter != null) {
 			Information record = adapter.getData().get(position);
 			if (record != null) {
-				if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING
-						|| record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
+				if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING || record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)) {
 					return;
 				} else {
 					if (mLongPressDialog == null) {

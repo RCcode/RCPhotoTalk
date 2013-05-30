@@ -84,6 +84,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			ObjectSet<Information> infos = query.execute();
 			return infos;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return null;
 		}
 

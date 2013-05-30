@@ -45,6 +45,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignBottom="@id/iv_bg"
+            android:layout_marginTop="30dp"
             android:layout_alignTop="@+id/rela_userinfo"
             android:background="#50000000" />
 
@@ -55,20 +56,28 @@
             android:layout_alignBottom="@+id/iv_bg"
             android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin" >
 
-            <com.rcplatform.phototalk.views.RoundImageView
-                android:id="@+id/iv_head"
-                android:layout_width="@dimen/user_detail_head_image_width"
-                android:layout_height="@dimen/user_detail_head_image_width"
+            <RelativeLayout
+                android:layout_width="@dimen/user_head_image_width_bg"
+                android:layout_height="@dimen/user_head_image_width_bg"
                 android:layout_gravity="center_vertical"
-                android:layout_marginRight="@dimen/user_detail_source_margin_left"
                 android:background="@drawable/send_friend_head_bg"
-                android:gravity="center"
-                android:scaleType="fitCenter"
-                android:src="@drawable/default_head" />
+                android:padding="3dp" >
+
+                <com.rcplatform.phototalk.views.RoundImageView
+                    android:id="@+id/iv_head"
+                    android:layout_width="@dimen/user_detail_head_image_width"
+                    android:layout_height="@dimen/user_detail_head_image_width"
+                    android:layout_centerInParent="true"
+                    android:layout_marginRight="@dimen/user_detail_source_margin_left"
+                    android:gravity="center"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/default_head" />
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:orientation="vertical" >
 
                 <LinearLayout
@@ -96,6 +105,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:orientation="horizontal" >
 
                         <ImageView
@@ -115,13 +125,12 @@
                             android:textColor="#E5E5E5"
                             android:textSize="@dimen/friend_info_age_text_size" />
                     </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
+                   <!--  android:layout_height="@dimen/user_detail_head_width_half"
+                      android:gravity="center_vertical" -->
+                    <LinearLayout
                     android:id="@+id/linear_source"
                     android:layout_width="wrap_content"
-                    android:layout_height="@dimen/user_detail_head_width_half"
-                    android:gravity="center_vertical"
+                    android:layout_height="wrap_content"
                     android:orientation="horizontal" >
 
                     <ImageView
@@ -135,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/friend_info_name_left"
-                        android:textColor="#4f3e36" />
+                        android:textColor="#FFFFFF" />
 
                     <TextView
                         android:id="@+id/tv_source_value"
@@ -143,8 +152,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/friend_info_phone_left"
-                        android:textColor="#8a837b" />
+                        android:textColor="#FFFFFF" />
                 </LinearLayout>
+                    
+                </LinearLayout>
+
+                
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

@@ -30,7 +30,6 @@ import com.google.gson.Gson;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.FriendDynamicListAdpter;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.SelectFriend;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
@@ -53,6 +52,7 @@ public class FriendDynamicActivity extends BaseActivity {
 	private ImageButton back_btn;
 	private TextView titleContent;
 	private PopupWindow firendMsgPop;
+	private final int GET_FIRST = 0;
 	private final int GET_PULLDOWN = 1;
 	private final int GET_UPDOWN = 2;
 	private final int UPDATE_UI = 3;
@@ -100,13 +100,17 @@ public class FriendDynamicActivity extends BaseActivity {
 				listDynamic);
 		friendDynameicList.setAdapter(adpter);
 
-		getFriendDynamic(pageSize, GET_PULLDOWN);
+		getFriendDynamic(pageSize, GET_FIRST);
 
 	}
 
 	private void getFriendDynamic(final int page, final int type) {
+		int trendId = PrefsUtils.User.getShowedMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId());
 		if (type == GET_PULLDOWN) {
 			time = "0";
+		}else if(type == GET_FIRST){
+			time = "0";
+			trendId=0;
 		}
 		FriendsProxy.getMyFriendDynamic(
 				FriendDynamicActivity.this,
@@ -124,8 +128,7 @@ public class FriendDynamicActivity extends BaseActivity {
 					@Override
 					public void onFailure(int errorCode, String content) {
 					}
-				}, PrefsUtils.User.getShowedMaxTrendsId(
-						getApplicationContext(), getCurrentUser().getRcId()),
+				}, trendId,
 				page, 10, time);
 	}
 
@@ -141,6 +144,15 @@ public class FriendDynamicActivity extends BaseActivity {
 					downlist.addAll(listDynamic);
 					listDynamic.clear();
 					listDynamic.addAll(downlist);
+				}
+				friendDynameicList.onRefreshComplete();
+				adpter.notifyDataSetChanged();
+				break;
+				
+			case GET_FIRST:
+				List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
+				if (list != null) {
+					listDynamic.addAll(list);
 				}
 				friendDynameicList.onRefreshComplete();
 				adpter.notifyDataSetChanged();
