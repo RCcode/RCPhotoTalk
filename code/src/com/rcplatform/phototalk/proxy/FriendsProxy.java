@@ -276,6 +276,7 @@ public class FriendsProxy {
 				request.excuteAsync();
 			};
 		};
+		thread.start();
 	}
 
 	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, final int friendType, final LoadFriendsListener listener) {
