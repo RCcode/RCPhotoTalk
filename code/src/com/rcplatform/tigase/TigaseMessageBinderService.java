@@ -127,6 +127,7 @@ public class TigaseMessageBinderService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		ctx = this;
 	}
 
 	@Override
@@ -134,7 +135,7 @@ public class TigaseMessageBinderService extends Service {
 		super.onDestroy();
 	}
 
-	public void tigaseLogin(String name, String password) {
+	public void tigaseLogin( String name, String password) {
 		TigaseManager.getInstance().setLoginInfo(name, password);
 		TigaseManager.getInstance().asyncConnect();
 		TigaseManager.getInstance().setChatManagerListener(chatListener);
@@ -147,7 +148,7 @@ public class TigaseMessageBinderService extends Service {
 		TigaseManager.getInstance().sendMessageBackup(toUser, msgStr);
 		// 需要 gcm 推送的消息
 		if (action.equals(MESSAGE_ACTION_FRIEND) || action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
-			String timerKey = XmppTool.getFullUser(toUser) + action;
+			String timerKey =TigaseManager.getInstance().getFullUser(toUser) + action;
 			Timer timer = new Timer();
 			String type = "";
 
@@ -163,6 +164,7 @@ public class TigaseMessageBinderService extends Service {
 		}
 
 	}
+
 
 	// 注册接收消息监听器
 	public void setOnMessageReciver(TigaseMessageReceiver messageReceiver) {
