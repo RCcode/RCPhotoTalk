@@ -279,6 +279,16 @@ public class UserMessageService extends Service {
 				json.put("rcId", app.getCurrentUser().getRcId());
 				json.put("language", "");
 				json.put("extra", extra);
+				/*
+				 * json.put("packageName", MetaHelper.getAppName(context));
+				 * json.put("status", STATUS_CREATE_USERINFO);
+				 * json.put("deviceID", MetaHelper.getImsi(context));
+				 * json.put("clientMac", MetaHelper.getMACAddress(context));
+				 * json.put("osVersion", MetaHelper.getOsVersion(context));
+				 * json.put("language", MetaHelper.getLanguage(context));
+				 * json.put("timeZone", MetaHelper.getTimeZone(context));
+				 * json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
+				 */
 			}
 			catch (JSONException e1) {
 				// TODO Auto-generated catch block
