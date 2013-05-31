@@ -39,7 +39,6 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
-import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -87,41 +86,6 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 				sendFriendLoadedMessage(friends, recommends);
 			}
 		});
-//		FriendsProxy.getMyFriend(this, new OnFriendsLoadedListener() {
-//
-//			@Override
-//			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-//				if (PrefsUtils.User.hasLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId())) {
-//					return;
-//				}
-//				Thread thread = new Thread() {
-//					@Override
-//					public void run() {
-//						PrefsUtils.User.setLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId());
-//						List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-//						List<Friend> localRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
-//						sendFriendLoadedMessage(localFriends, localRecommends);
-//					}
-//				};
-//				thread.start();
-//			}
-//
-//			@Override
-//			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-//				if (!PrefsUtils.User.hasLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId())) {
-//					return;
-//				}
-//				dismissLoadingDialog();
-//				sendFriendLoadedMessage(friends, recommends);
-//			}
-//
-//			@Override
-//			public void onError(int errorCode, String content) {
-//				dismissLoadingDialog();
-//				showErrorConfirmDialog(content);
-//			}
-//		});
-//		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {

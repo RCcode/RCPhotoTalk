@@ -1,8 +1,6 @@
 package com.rcplatform.phototalk.proxy;
 
 import java.io.File;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -14,7 +12,9 @@ import android.content.Context;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
+import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
@@ -23,7 +23,8 @@ import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
-import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
+import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
@@ -38,91 +39,6 @@ public class FriendsProxy {
 	public static void searchFriendsAsync(Context context, RCPlatformResponseHandler responseHandler, String keyWords) {
 		Request request = new Request(context, PhotoTalkApiUrl.SEARCH_FRIENDS_URL, responseHandler);
 		request.putParam(PhotoTalkParams.SearchFriends.PARAM_KEY_KEYWORDS, keyWords);
-		request.excuteAsync();
-	}
-
-	public static void getMyFriend(final Activity context, final OnFriendsLoadedListener listener) {
-		Thread thread = new Thread() {
-			@Override
-			public void run() {
-				final List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-				final List<Friend> recommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
-				if (!context.isFinishing()) {
-					context.runOnUiThread(new Runnable() {
-						@Override
-						public void run() {
-							listener.onLocalFriendsLoaded(friends, recommends);
-							loadFriendsFromService(context, listener);
-						}
-					});
-				}
-			}
-		};
-		thread.start();
-	}
-
-	private static void loadFriendsFromService(final Activity context, final OnFriendsLoadedListener listener) {
-		Request request = new Request(context, PhotoTalkApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, final String content) {
-				Thread thread = new Thread() {
-					@Override
-					public void run() {
-						try {
-							JSONObject jObj = new JSONObject(content);
-							final List<Friend> mFriends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
-							for (Friend f : mFriends) {
-								f.setFriend(true);
-								f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
-							}
-							final List<Friend> mRecommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
-							for (Friend f : mRecommends)
-								f.setFriend(false);
-							PhotoTalkDatabaseFactory.getDatabase().saveFriends(mFriends);
-							PhotoTalkDatabaseFactory.getDatabase().saveRecommends(mRecommends);
-							List<Friend> delFriends = PhotoTalkDatabaseFactory.getDatabase().getHidenFriends();
-							for (Friend f : delFriends) {
-								if (mFriends.contains(f))
-									mFriends.remove(mFriends.indexOf(f));
-								if (mRecommends.contains(f))
-									mRecommends.remove(mRecommends.indexOf(f));
-							}
-							Collections.sort(mFriends, new Comparator<Friend>() {
-
-								@Override
-								public int compare(Friend lhs, Friend rhs) {
-									return lhs.getLetter().compareTo(rhs.getLetter());
-								}
-							});
-							runOnUiThread(context, new Runnable() {
-
-								@Override
-								public void run() {
-									listener.onServiceFriendsLoaded(mFriends, mRecommends);
-								}
-							});
-
-						} catch (Exception e) {
-							e.printStackTrace();
-							runOnUiThread(context, new Runnable() {
-
-								@Override
-								public void run() {
-									listener.onError(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-								}
-							});
-						}
-					}
-				};
-				thread.start();
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-				listener.onError(errorCode, content);
-			}
-		});
 		request.excuteAsync();
 	}
 
@@ -344,5 +260,126 @@ public class FriendsProxy {
 			};
 		};
 		thread.start();
+	}
+
+	public static void getRecommends(final BaseActivity context, final int type, final LoadFriendsListener listener) {
+		Thread thread = new Thread() {
+			public void run() {
+				String url = null;
+				if (type == FriendType.CONTACT) {
+					url = PhotoTalkApiUrl.CONTACT_RECOMMEND_URL;
+				} else {
+					url = PhotoTalkApiUrl.THIRDPART_RECOMMENDS_URL;
+				}
+				RCPlatformResponseHandler responseHandler = loadLocalRecommends(context, type, listener);
+				final Request request = new Request(context, url, responseHandler);
+				request.excuteAsync();
+			};
+		};
+	}
+
+	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, final int friendType, final LoadFriendsListener listener) {
+		final List<Friend> recommendsLocal = PhotoTalkDatabaseFactory.getDatabase().getRecommends(friendType);
+		RCPlatformResponseHandler responseHandler = null;
+		if (friendType == FriendType.CONTACT) {
+			final List<Contacts> localContacts = PhotoTalkDatabaseFactory.getGlobalDatabase().getContacts();
+			final boolean needServiceData = (localContacts.size() == 0);
+			responseHandler = new RCPlatformResponseHandler() {
+
+				@Override
+				public void onSuccess(int statusCode, final String content) {
+					Thread thread = new Thread() {
+						@Override
+						public void run() {
+							try {
+								JSONObject jObj = new JSONObject(content);
+								final List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("userList").toString());
+								PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, FriendType.CONTACT);
+								context.runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsService), recommendsService);
+									}
+								});
+
+							} catch (Exception e) {
+								e.printStackTrace();
+								context.runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+									}
+								});
+							}
+						}
+					};
+					thread.start();
+				}
+
+				@Override
+				public void onFailure(int errorCode, String content) {
+					listener.onLoadedFail(content);
+				}
+			};
+			if (listener != null && !context.isFinishing() && !needServiceData) {
+				context.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsLocal), recommendsLocal);
+					}
+				});
+			}
+		} else {
+			final List<Friend> localFacebookFriends = PhotoTalkDatabaseFactory.getDatabase().getThirdPartFriends(friendType);
+			final boolean needServiceData = (localFacebookFriends.size() == 0);
+			responseHandler = new RCPlatformResponseHandler() {
+
+				@Override
+				public void onSuccess(int statusCode, final String content) {
+					Thread thread = new Thread() {
+						public void run() {
+							try {
+								JSONObject jObj = new JSONObject(content);
+								final List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
+								PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, friendType);
+								context.runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService), recommendsService);
+									}
+								});
+							} catch (Exception e) {
+								e.printStackTrace();
+								context.runOnUiThread(new Runnable() {
+
+									@Override
+									public void run() {
+										onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+									}
+								});
+							}
+						};
+					};
+
+				}
+
+				@Override
+				public void onFailure(int errorCode, String content) {
+					listener.onLoadedFail(content);
+				}
+			};
+			if (listener != null && !context.isFinishing() && !needServiceData) {
+				context.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsLocal), recommendsLocal);
+					}
+				});
+			}
+		}
+		return responseHandler;
 	}
 }
