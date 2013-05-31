@@ -16,7 +16,7 @@ public class TigaseMessageBinderService extends Service {
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
     public class LocalBinder extends Binder {
-    	TigaseMessageBinderService getService() {
+    	public TigaseMessageBinderService getService() {
             // Return this instance of LocalService so clients can call public methods
             return TigaseMessageBinderService.this;
         }

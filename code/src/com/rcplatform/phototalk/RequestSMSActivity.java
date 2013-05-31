@@ -3,6 +3,7 @@ package com.rcplatform.phototalk;
 import java.util.List;
 import java.util.Locale;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,6 +22,9 @@ import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 
 public class RequestSMSActivity extends BaseActivity implements OnClickListener {
+
+	private static final int REQUEST_CODE_BIND = 100;
+
 	private EditText etNumber;
 	private Button btnCountryCode;
 	private AlertDialog mCountryChooseDialog;
@@ -105,7 +109,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private void startBindPhoneActivity(String number) {
 		Intent intent = new Intent(this, BindPhoneActivity.class);
 		intent.putExtra(BindPhoneActivity.REQUEST_PAMAM_NUMBER, number);
-		startActivity(intent);
+		startActivityForResult(intent, REQUEST_CODE_BIND);
 	}
 
 	private boolean isNumberEnable(String number) {
@@ -135,5 +139,15 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 			}).create();
 		}
 		mCountryChooseDialog.show();
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if(resultCode==Activity.RESULT_OK&&requestCode==REQUEST_CODE_BIND){
+			setResult(Activity.RESULT_OK);
+			finish();
+		}
+			
 	}
 }

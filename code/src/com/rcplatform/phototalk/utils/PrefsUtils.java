@@ -112,6 +112,8 @@ public class PrefsUtils {
 		private static final String PREF_KEY_TRENDS_MAX_ID = "trendsmaxid";
 		private static final String PREF_KEY_TRENDS_SHOWED_MAX_ID = "showedtrendsmaxid";
 		private static final String PREF_KEY_TRENDS_MAX_URL = "trendsmaxurl";
+		private static final String PREF_KEY_ATTENTION_BIND_PHONE = "hasattentiontobindphone";
+		private static final String PREF_KEY_LOADED_FRIENDS = "loadedfriends";
 
 		public static class ThirdPart {
 
@@ -181,6 +183,15 @@ public class PrefsUtils {
 		}
 
 		public static class MobilePhoneBind {
+
+			public static void setAttentionToBindPhone(Context context, String pref) {
+				getPreference(context, pref).edit().putBoolean(PREF_KEY_ATTENTION_BIND_PHONE, true).commit();
+			}
+
+			public static boolean hasAttentionToBindPhone(Context context, String pref) {
+				return getPreference(context, pref).getBoolean(PREF_KEY_ATTENTION_BIND_PHONE, false);
+			}
+
 			public static void saveBindedPhoneNumber(Context context, String phoneNumber, String pref) {
 				SharedPreferences sharedPreferences = getPreference(context, pref);
 				sharedPreferences.edit().putString(Constants.KEY_PHONE, phoneNumber).commit();
@@ -189,7 +200,7 @@ public class PrefsUtils {
 			public static boolean willTryToBindPhone(Context context, String pref) {
 				SharedPreferences sh = getPreference(context, pref);
 				String lastNumber = sh.getString(PREF_KEY_LAST_BIND_NUMBER, null);
-				return lastNumber != null && !lastNumber.equals(Constants.BIND_PHONE_NUMBER_BACKUP);
+				return lastNumber == null || (lastNumber != null && !lastNumber.equals(Constants.BIND_PHONE_NUMBER_BACKUP));
 			}
 
 			public static void setLastBindNumber(Context context, String pref, String number) {
@@ -325,12 +336,11 @@ public class PrefsUtils {
 		}
 
 		public static void setLoadedFriends(Context context, String pref) {
-
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_LOADED_FRIENDS, true).commit();
 		}
 
 		public static boolean hasLoadedFriends(Context context, String pref) {
-			return false;
+			return getPreference(context, pref).getBoolean(PREF_KEY_LOADED_FRIENDS, false);
 		}
-
 	}
 }

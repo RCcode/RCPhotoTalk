@@ -13,8 +13,31 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.request.JSONConver;
+import com.rcplatform.tigase.TigaseMessageBinderService;
 
 public class MessageSender {
+	private static final MessageSender instance = new MessageSender();
+	private TigaseMessageBinderService mService;
+
+	public MessageSender() {
+	}
+
+	public static synchronized MessageSender getInstance() {
+		return instance;
+	}
+
+	public synchronized void setTigaseService(TigaseMessageBinderService service) {
+		mService = service;
+	}
+
+	public synchronized void stop() {
+		mService = null;
+	}
+	
+	public void sendInformation(){
+		
+	}
+
 	public static void sendInformation(Context context, String tigaseId, String rcId, Information... informations) {
 		String message = JSONConver.informationToJSON(informations);
 		Intent intent = new Intent();

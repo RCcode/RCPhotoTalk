@@ -38,9 +38,11 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
+import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class MyFriendsActivity extends BaseActivity implements OnClickListener {
@@ -68,41 +70,58 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void getFriends() {
-
-		FriendsProxy.getMyFriend(this, new OnFriendsLoadedListener() {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		FriendsProxy.getFriendsAndRecommends(this, new LoadFriendsListener() {
 
 			@Override
-			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0) {
-					return;
+			public void onLoadedFail(String reason) {
+				dismissLoadingDialog();
+				if (!PrefsUtils.User.hasLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId())) {
+					showErrorConfirmDialog(reason);
 				}
-				Thread thread = new Thread() {
-					@Override
-					public void run() {
-						List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-						List<Friend> localRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
-						sendFriendLoadedMessage(localFriends, localRecommends);
-					}
-				};
-				thread.start();
 			}
 
 			@Override
-			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-				if (friends.size() == 1) {
-					return;
-				}
+			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				dismissLoadingDialog();
 				sendFriendLoadedMessage(friends, recommends);
 			}
-
-			@Override
-			public void onError(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
 		});
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+//		FriendsProxy.getMyFriend(this, new OnFriendsLoadedListener() {
+//
+//			@Override
+//			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+//				if (PrefsUtils.User.hasLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId())) {
+//					return;
+//				}
+//				Thread thread = new Thread() {
+//					@Override
+//					public void run() {
+//						PrefsUtils.User.setLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId());
+//						List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+//						List<Friend> localRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
+//						sendFriendLoadedMessage(localFriends, localRecommends);
+//					}
+//				};
+//				thread.start();
+//			}
+//
+//			@Override
+//			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+//				if (!PrefsUtils.User.hasLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId())) {
+//					return;
+//				}
+//				dismissLoadingDialog();
+//				sendFriendLoadedMessage(friends, recommends);
+//			}
+//
+//			@Override
+//			public void onError(int errorCode, String content) {
+//				dismissLoadingDialog();
+//				showErrorConfirmDialog(content);
+//			}
+//		});
+//		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {
@@ -194,18 +213,18 @@ public class MyFriendsActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void search(String keyWords) {
-		if(keyWords!=null){
+		if (keyWords != null) {
 			keyWords = keyWords.toLowerCase();
 		}
 		List<Friend> resultRecommends = new ArrayList<Friend>();
 		for (Friend friend : mRecommends) {
-			if (friend.getNickName()!=null&&friend.getNickName().toLowerCase().contains(keyWords)) {
+			if (friend.getNickName() != null && friend.getNickName().toLowerCase().contains(keyWords)) {
 				resultRecommends.add(friend);
 			}
 		}
 		List<Friend> resultFriends = new ArrayList<Friend>();
 		for (Friend friend : mFriends) {
-			if (friend.getNickName()!=null&&friend.getNickName().toLowerCase().contains(keyWords)) {
+			if (friend.getNickName() != null && friend.getNickName().toLowerCase().contains(keyWords)) {
 				resultFriends.add(friend);
 			}
 		}
