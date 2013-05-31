@@ -114,6 +114,10 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private boolean hasNextPage = true;
 
 	private View loadingFooter;
+	
+	public static final String INTENT_KEY_STATE="state";
+	
+	private TextView tvTigaseState;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +133,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
+		tvTigaseState=(TextView) findViewById(R.id.tv_test);
+		registeTigaseStateReceiver();
 	}
 
 	private void getAllPlatformApps() {
@@ -540,6 +546,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	@Override
 	protected void onDestroy() {
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
+		unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
@@ -807,4 +814,17 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			}
 		}
 	}
+	
+	private void registeTigaseStateReceiver(){
+		IntentFilter filter=new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
+		registerReceiver(mTigaseStateChangeReceiver, filter);
+	}
+	private BroadcastReceiver mTigaseStateChangeReceiver=new BroadcastReceiver() {
+		
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String newState=intent.getStringExtra("INTENT_KEY_STATE");
+			tvTigaseState.setText(newState+"");
+		}
+	};
 }

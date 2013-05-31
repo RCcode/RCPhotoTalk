@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +25,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.view.ViewGroup.MarginLayoutParams;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
@@ -65,7 +63,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	// density 为1.5的手机上的px
 	private int galleryLeftPaddingPx = 20;
-
 	// density 为1.5的手机上的px
 	private int gallerySpacePx = 25;
 
@@ -120,13 +117,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 				List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase()
 						.getFriends();
 				if (friends.size() > 1) {
-					// List<SelectFriend> seleFriends = new
-					// ArrayList<SelectFriend>();
-					// for (Friend friend : friends) {
-					// SelectFriend seleFriend =
-					// SelectFriend.parseSelectFriend(friend);
-					// seleFriends.add(seleFriend);
-					// }
 					mHandler.obtainMessage(MSG_CACHE_FINISH, friends)
 							.sendToTarget();
 				}
