@@ -27,16 +27,12 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
-import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
-import com.rcplatform.phototalk.utils.AppSelfInfo;
 
-public class SearchFriendsActivity extends BaseActivity implements
-		View.OnClickListener {
+public class SearchFriendsActivity extends BaseActivity implements View.OnClickListener {
 
 	private EditText mEditText;
 
@@ -89,15 +85,13 @@ public class SearchFriendsActivity extends BaseActivity implements
 		mEditText.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				// TODO Auto-generated method stub
 
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 				// TODO Auto-generated method stub
 
 			}
@@ -105,8 +99,7 @@ public class SearchFriendsActivity extends BaseActivity implements
 			@Override
 			public void afterTextChanged(Editable s) {
 				// TODO Auto-generated method stub
-				if (mEditText.getText() != null
-						&& mEditText.getText().length() > 0) {
+				if (mEditText.getText() != null && mEditText.getText().length() > 0) {
 					seach_delete_btn.setVisibility(View.VISIBLE);
 				} else {
 					seach_delete_btn.setVisibility(View.GONE);
@@ -149,9 +142,7 @@ public class SearchFriendsActivity extends BaseActivity implements
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
-					List<Friend> resultFriends = JSONConver
-							.jsonToFriends(jsonObject.getJSONArray("userList")
-									.toString());
+					List<Friend> resultFriends = JSONConver.jsonToFriends(jsonObject.getJSONArray("userList").toString());
 					mAdapter.setData(resultFriends);
 					if (mAdapter.getCount() == 0) {
 						search_hint_text.setVisibility(View.VISIBLE);
@@ -174,23 +165,22 @@ public class SearchFriendsActivity extends BaseActivity implements
 
 	private void doFriendAdd(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(),
-				new AddFriendTask.AddFriendListener() {
+		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
-					@Override
-					public void onFriendAddSuccess(Friend f, int addType) {
-						dismissLoadingDialog();
-						friend.setFriend(true);
-						mAdapter.notifyDataSetChanged();
-						AddFriendsActivity.addFriend(friend);
-					}
+			@Override
+			public void onFriendAddSuccess(Friend f, int addType) {
+				dismissLoadingDialog();
+				friend.setFriend(true);
+				mAdapter.notifyDataSetChanged();
+				AddFriendsActivity.addFriend(friend);
+			}
 
-					@Override
-					public void onFriendAddFail(int statusCode, String content) {
-						dismissLoadingDialog();
-						showErrorConfirmDialog(content);
-					}
-				}, friend).execute();
+			@Override
+			public void onFriendAddFail(int statusCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		}, friend).execute();
 	}
 
 	class SearchFriendsAdapter extends BaseAdapter {
@@ -199,32 +189,13 @@ public class SearchFriendsActivity extends BaseActivity implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				convertView = getLayoutInflater().inflate(
-						R.layout.add_friend_list_item, null);
+				convertView = getLayoutInflater().inflate(R.layout.add_friend_list_item, null);
 			}
 			Friend friend = mFriends.get(position);
-			ImageView portraitImage = (ImageView) convertView
-					.findViewById(R.id.add_friend_list_item_portrait);
-			TextView nickTextView = (TextView) convertView
-					.findViewById(R.id.add_friend_list_item_name);
-			final Button addFriendBtn = (Button) convertView
-					.findViewById(R.id.add_friend_button);
-			FriendSourse source = friend.getSource();
-			TextView tvFrom = (TextView) convertView
-					.findViewById(R.id.add_friend_list_item_source_from);
-			if (source == null) {
-				tvFrom.setVisibility(View.GONE);
-			} else {
-				tvFrom.setVisibility(View.VISIBLE);
-				switch (source.getAttrType()) {
-				case FriendType.CONTACT:
-					tvFrom.setText(R.string.contact_friend);
-					break;
-				case FriendType.FACEBOOK:
-					tvFrom.setText(R.string.facebook_friend);
-					break;
-				}
-			}
+			ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
+			TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
+			final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
+			setFriendSourceInfo(convertView, friend);
 			mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 			// view friend detail.
 			portraitImage.setOnClickListener(new View.OnClickListener() {
@@ -243,6 +214,28 @@ public class SearchFriendsActivity extends BaseActivity implements
 				addFriendBtn.setEnabled(false);
 			}
 			return convertView;
+		}
+
+		private void setFriendSourceInfo(View convertView, Friend friend) {
+			View sourceView = convertView.findViewById(R.id.linear_friend_source);
+			FriendSourse source = friend.getSource();
+
+			if (source == null) {
+				sourceView.setVisibility(View.GONE);
+			} else {
+				sourceView.setVisibility(View.VISIBLE);
+				TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
+				TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
+				switch (source.getAttrType()) {
+				case FriendType.CONTACT:
+					tvFrom.setText(R.string.contact_friend);
+					break;
+				case FriendType.FACEBOOK:
+					tvFrom.setText(R.string.facebook_friend);
+					break;
+				}
+				tvName.setText(source.getName());
+			}
 		}
 
 		@Override

@@ -31,6 +31,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <!-- GCM connects to Google Services. -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -295,6 +296,7 @@
         <service android:name="com.rcplatform.message.UserMessageService" />
         <service android:name="com.rcplatform.tigase.TigaseRegisterSerivce" />
         <service android:name="com.google.android.gcm.GCMIntentService" />
+        <service android:name="com.rcplatform.tigase.TigaseMessageBinderService" />
         <!--
           BroadcastReceiver that will receive intents from GCM
           services and handle them to the custom IntentService.

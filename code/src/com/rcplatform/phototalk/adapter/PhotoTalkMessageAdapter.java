@@ -150,7 +150,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				holder.name.setText(record.getReceiver().getNick());
 			}
 		}
-		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
+		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(context, record)
+				&& record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.name.getPaint().setFakeBoldText(true);
 		} else {
 			holder.name.getPaint().setFakeBoldText(false);

@@ -227,7 +227,8 @@ public class Request implements Serializable {
 							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
 									Integer.parseInt(timeLimit));
-							MessageSender.sendInformation(context, informations, userIds);
+//							MessageSender.sendInformation(context, informations, userIds);
+							MessageSender.getInstance().sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag);
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -258,7 +259,7 @@ public class Request implements Serializable {
 					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
 		}
 	}
-
+	
 	public String getFilePath() {
 		return filePath;
 	}

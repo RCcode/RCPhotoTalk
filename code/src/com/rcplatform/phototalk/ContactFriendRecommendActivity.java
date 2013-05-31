@@ -10,7 +10,8 @@ import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 
 public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 	@Override
@@ -26,8 +27,7 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 				mobiles.append(f.getCellPhone()).append(";");
 			}
 			System.out.println(mobiles.toString());
-			String msg = String.format(getResources().getString(R.string.my_firend_invite_send_short_msg), "mark.", android.os.Build.VERSION.RELEASE,
-					"http://www.google.co.jp", "123458755");
+			String msg = String.format(getResources().getString(R.string.invite_message), getCurrentUser().getRcId());
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.putExtra("address", mobiles.toString().substring(0, mobiles.length() - 1));
 			intent.putExtra("sms_body", msg);
@@ -47,29 +47,46 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 	}
 
 	private void getContactRecommends() {
-
-		com.rcplatform.phototalk.request.Request.executeGetRecommends(this, FriendType.CONTACT, new OnFriendsLoadedListener() {
+		FriendsProxy.getRecommends(this, FriendType.CONTACT, new LoadFriendsListener() {
 
 			@Override
-			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0)
-					return;
-				recommendFriends = recommends;
-				inviteFriends = friends;
-				setListData(recommendFriends, inviteFriends, mList);
+			public void onLoadedFail(String reason) {
+
 			}
 
 			@Override
-			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				recommendFriends = recommends;
 				inviteFriends = friends;
 				setListData(recommendFriends, inviteFriends, mList);
-			}
-
-			@Override
-			public void onError(int errorCode, String content) {
-
 			}
 		});
+		// com.rcplatform.phototalk.request.Request.executeGetRecommends(this,
+		// FriendType.CONTACT, new OnFriendsLoadedListener() {
+		//
+		// @Override
+		// public void onServiceFriendsLoaded(List<Friend> friends, List<Friend>
+		// recommends) {
+		// if (mList.getExpandableListAdapter() != null &&
+		// mList.getExpandableListAdapter().getGroupCount() > 0)
+		// return;
+		// recommendFriends = recommends;
+		// inviteFriends = friends;
+		// setListData(recommendFriends, inviteFriends, mList);
+		// }
+		//
+		// @Override
+		// public void onLocalFriendsLoaded(List<Friend> friends, List<Friend>
+		// recommends) {
+		// recommendFriends = recommends;
+		// inviteFriends = friends;
+		// setListData(recommendFriends, inviteFriends, mList);
+		// }
+		//
+		// @Override
+		// public void onError(int errorCode, String content) {
+		//
+		// }
+		// });
 	}
 }

@@ -177,6 +177,7 @@
         android:id="@+id/btn_perform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="18sp"
         android:layout_marginBottom="@dimen/friend_info_send_top"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"

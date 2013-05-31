@@ -122,7 +122,8 @@ public class LogicUtils {
 	public static void informationFriendAdded(Context context, Information information, Friend friend) {
 		if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
-			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
+//			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
+			MessageSender.getInstance().sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
 		}
 	}
 
@@ -147,7 +148,8 @@ public class LogicUtils {
 			PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infos);
 		}
 		if (information != null) {
-			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
+			MessageSender.getInstance().sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
+//			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
 			InformationPageController.getInstance().friendAdded(information, addType);
 		}
 	}

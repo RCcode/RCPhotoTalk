@@ -39,6 +39,8 @@ public class ContactUploadTask {
 					PrefsUtils.AppInfo.setContactsUploaded(mContext);
 				else
 					PrefsUtils.AppInfo.setLastContactUploadTime(mContext);
+				if (!PrefsUtils.LoginState.hasAppUsed(mContext))
+					PrefsUtils.LoginState.setAppUsed(mContext);
 				break;
 			case MSG_KEY_UPLOAD_FAIL:
 				mTask = new ContactUploadTask(mContext);
@@ -83,7 +85,6 @@ public class ContactUploadTask {
 			boolean hasUpdate = false;
 			List<Contacts> contacts = ContactUtil.getContacts(mContext);
 			if (!PrefsUtils.LoginState.hasAppUsed(mContext)) {
-				PrefsUtils.LoginState.setAppUsed(mContext);
 				hasUpdate = true;
 			} else {
 				List<Contacts> contactsLocal = PhotoTalkDatabaseFactory.getGlobalDatabase().getContacts();

@@ -14,8 +14,10 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
@@ -101,27 +103,43 @@ public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	}
 
 	private void getRecommentFriends() {
-		Request.executeGetRecommends(this, FriendType.FACEBOOK, new OnFriendsLoadedListener() {
-
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		FriendsProxy.getRecommends(this, FriendType.FACEBOOK, new LoadFriendsListener() {
+			
 			@Override
-			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0)
-					return;
+			public void onLoadedFail(String reason) {
+				dismissLoadingDialog();
+			}
+			
+			@Override
+			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				dismissLoadingDialog();
 				recommendsLoaded(friends, recommends);
-			}
-
-			@Override
-			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-				dismissLoadingDialog();
-				recommendsLoaded(friends, recommends);
-			}
-
-			@Override
-			public void onError(int errorCode, String content) {
-				dismissLoadingDialog();
 			}
 		});
+		
+		
+//		Request.executeGetRecommends(this, FriendType.FACEBOOK, new OnFriendsLoadedListener() {
+//
+//			@Override
+//			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+//				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0)
+//					return;
+//				dismissLoadingDialog();
+//				recommendsLoaded(friends, recommends);
+//			}
+//
+//			@Override
+//			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+//				dismissLoadingDialog();
+//				recommendsLoaded(friends, recommends);
+//			}
+//
+//			@Override
+//			public void onError(int errorCode, String content) {
+//				dismissLoadingDialog();
+//			}
+//		});
 	}
 
 	private void recommendsLoaded(List<Friend> inviteFriends, List<Friend> recommends) {

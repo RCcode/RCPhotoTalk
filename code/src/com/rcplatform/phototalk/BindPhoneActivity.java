@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -121,7 +122,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, validate,mNumberTemp);
+			}, validate, mNumberTemp);
 		}
 	}
 
@@ -134,9 +135,8 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void finishToUserInfoActivity() {
-		Intent intent = new Intent(this, UserInfoActivity.class);
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		startActivity(intent);
+		setResult(Activity.RESULT_OK);
+		finish();
 	}
 
 	@Override

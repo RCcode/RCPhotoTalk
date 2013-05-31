@@ -173,7 +173,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if(1== type || 2 == type){
 			Intent it = new Intent();
 			it.setAction( Constants.Action.ACTION_GCM_MESSAGE);
-			it.putExtra(UserMessageService.MESSAGE_CONTENT_KEY, msg);
+			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, msg);
 			context.sendBroadcast(it);
 		}
 		switch (type) {

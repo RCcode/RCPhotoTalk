@@ -60,7 +60,8 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	private static void notifyServer(Context context, Information record) {
 		if (!record.getReceiver().getRcId().equals(record.getSender().getRcId())) {
-			MessageSender.sendInformation(context, record.getSender().getTigaseId(), record.getSender().getRcId(), record);
+			MessageSender.getInstance().sendInformation(context, record.getSender().getTigaseId(), record.getSender().getRcId(), record);
+//			MessageSender.sendInformation(context, record.getSender().getTigaseId(), record.getSender().getRcId(), record);
 			LogicUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 		}
 	}

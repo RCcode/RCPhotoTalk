@@ -8,16 +8,22 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
-import android.os.AsyncTask.Status;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -33,7 +39,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.activity.MenueBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
@@ -42,11 +47,11 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
@@ -68,6 +73,9 @@ import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListen
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
+import com.rcplatform.tigase.TigaseMessageBinderService;
+import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
+import com.rcplatform.tigase.TigaseMessageReceiver;
 
 /**
  * 主界面. <br>
@@ -76,7 +84,7 @@ import com.rcplatform.phototalk.views.SnapShowListener;
  * 
  * @version 1.0.0
  */
-public class HomeActivity extends MenueBaseActivity implements SnapShowListener {
+public class HomeActivity extends MenueBaseActivity implements SnapShowListener, TigaseMessageReceiver {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
@@ -104,9 +112,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 
 	private CheckUpdateTask mCheckUpdateTask;
 	private Request checkTrendRequest;
-
-	private boolean isInformationReceiverRegiste = false;
-
 	private ImageView iconTrendNew;
 	private ImageLoader mImageLoader;
 
@@ -116,20 +121,51 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 
 	private View loadingFooter;
 
+	public static final String INTENT_KEY_STATE = "state";
+
+	private TextView tvTigaseState;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		registeInformationReceiver();
+		registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
-		// loadDataFromDataBase();
 		loadLocalInformation();
 		getAllPlatformApps();
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
+		tvTigaseState = (TextView) findViewById(R.id.tv_test);
+		bindTigaseService();
+		checkBindPhone();
+	}
+
+	private void checkBindPhone() {
+		String rcId = getCurrentUser().getRcId();
+		if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && !PrefsUtils.User.MobilePhoneBind.willTryToBindPhone(this, rcId)
+				&& !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
+			PrefsUtils.User.MobilePhoneBind.setAttentionToBindPhone(this, rcId);
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_NEGATIVE:
+						startActivity(RequestSMSActivity.class);
+						break;
+					case DialogInterface.BUTTON_POSITIVE:
+						dialog.dismiss();
+						break;
+					}
+				}
+			};
+			AlertDialog dialog = new AlertDialog.Builder(this).setMessage(R.string.bind_phone_attention).setNegativeButton(R.string.bind_now, listener)
+					.setPositiveButton(R.string.bind_later, listener).create();
+			dialog.show();
+		}
 	}
 
 	private void getAllPlatformApps() {
@@ -158,8 +194,10 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
+					String url = jsonObject.getString("headUrl");
 					int trendId = jsonObject.getInt("trendId");
 					PrefsUtils.User.saveMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId(), trendId);
+					PrefsUtils.User.saveMaxTrendUrl(getApplicationContext(), getCurrentUser().getRcId(), url);
 					onNewTrends();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -540,7 +578,9 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 
 	@Override
 	protected void onDestroy() {
+		unBindTigaseService();
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
+		unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
@@ -550,7 +590,7 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 			mLongPressDialog.dismiss();
 		ImageLoader.getInstance().clearMemoryCache();
 		ImageLoader.getInstance().stop();
-		unregisteInformationReceiver();
+//		unregisteInformationReceiver();
 		super.onDestroy();
 	}
 
@@ -679,18 +719,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 		}
 	}
 
-	private BroadcastReceiver mInformationReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			LogUtil.e("tigase receive informations...");
-			Bundle extras = intent.getExtras();
-			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
-			List<Information> informations = JSONConver.jsonToInformations(msg);
-			filteInformations(informations);
-		}
-	};
-
 	private void filteInformations(final List<Information> infos) {
 		Thread th = new Thread() {
 			public void run() {
@@ -702,35 +730,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 			};
 		};
 		th.start();
-	}
-
-	private void registeInformationReceiver() {
-		IntentFilter filter = new IntentFilter(UserMessageService.MESSAGE_RECIVE_BROADCAST);
-		registerReceiver(mInformationReceiver, filter);
-		isInformationReceiverRegiste = true;
-		startTigaseService();
-	}
-
-	private void startTigaseService() {
-		UserInfo currentUser = getCurrentUser();
-		Intent intent = new Intent(this, UserMessageService.class);
-		Bundle bundle = new Bundle();
-		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, currentUser.getTigaseId());
-		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePwd());
-		intent.putExtras(bundle);
-		startService(intent);
-	}
-
-	private void unregisteInformationReceiver() {
-		if (isInformationReceiverRegiste)
-			unregisterReceiver(mInformationReceiver);
-		isInformationReceiverRegiste = false;
-		stopTigaseService();
-	}
-
-	private void stopTigaseService() {
-		Intent intent = new Intent(this, UserMessageService.class);
-		stopService(intent);
 	}
 
 	public void onNewInformation(List<Information> infosNeedUpdate, List<Information> infosNew) {
@@ -802,4 +801,51 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener 
 			}
 		}
 	}
+	private void registeTigaseStateChangeReceiver(){
+		IntentFilter filter=new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
+		registerReceiver(mTigaseStateChangeReceiver, filter);
+	}
+	
+	private BroadcastReceiver mTigaseStateChangeReceiver = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String newState = intent.getStringExtra(INTENT_KEY_STATE);
+			tvTigaseState.setText(newState + "");
+		}
+	};
+
+	private void bindTigaseService() {
+		Intent service = new Intent(this, TigaseMessageBinderService.class);
+		bindService(service, tigaseServiceConnection, Context.BIND_AUTO_CREATE);
+	}
+
+	private void unBindTigaseService() {
+		MessageSender.getInstance().stop();
+		unbindService(tigaseServiceConnection);
+	}
+
+	@Override
+	public boolean onMessageHandle(String msg, String from) {
+		LogUtil.e("tigase receive informations...");
+		List<Information> informations = JSONConver.jsonToInformations(msg);
+		filteInformations(informations);
+		return false;
+	}
+
+	private ServiceConnection tigaseServiceConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			LocalBinder binder = (LocalBinder) service;
+			binder.getService().setOnMessageReciver(HomeActivity.this);
+			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(), getCurrentUser().getTigasePwd());
+			MessageSender.getInstance().setTigaseService(binder.getService());
+		}
+	};
 }

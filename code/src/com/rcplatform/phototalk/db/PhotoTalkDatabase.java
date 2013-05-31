@@ -63,5 +63,5 @@ public interface PhotoTalkDatabase {
 	public Map<Integer, List<Information>> filterNewInformations(Collection<Information> newInformations, UserInfo currentUser);
 
 	public List<Information> getInformationByPage(int page, int pageSize);
-
+	
 }
