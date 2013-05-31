@@ -259,7 +259,7 @@ public class Request implements Serializable {
 					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
 		}
 	}
-
+	
 	public String getFilePath() {
 		return filePath;
 	}

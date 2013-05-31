@@ -18,11 +18,11 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Rect;
 import android.os.AsyncTask;
+import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.os.AsyncTask.Status;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -39,7 +39,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
@@ -47,7 +46,6 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
@@ -74,8 +72,8 @@ import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListen
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
-import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageBinderService;
+import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
 
 /**
@@ -113,9 +111,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 
 	private CheckUpdateTask mCheckUpdateTask;
 	private Request checkTrendRequest;
-
-	private boolean isInformationReceiverRegiste = false;
-
 	private ImageView iconTrendNew;
 	private ImageLoader mImageLoader;
 
@@ -133,7 +128,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-//		registeInformationReceiver();
+		registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
@@ -143,7 +138,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 		checkUpdate();
 		checkTrends();
 		tvTigaseState = (TextView) findViewById(R.id.tv_test);
-//		registeTigaseStateReceiver();
 		bindTigaseService();
 		checkBindPhone();
 	}
@@ -585,7 +579,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 	protected void onDestroy() {
 		unBindTigaseService();
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
-//		unregisterReceiver(mTigaseStateChangeReceiver);
+		unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
@@ -729,18 +723,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 			}
 		}
 	}
-//
-//	private BroadcastReceiver mInformationReceiver = new BroadcastReceiver() {
-//
-//		@Override
-//		public void onReceive(Context context, Intent intent) {
-//			LogUtil.e("tigase receive informations...");
-//			Bundle extras = intent.getExtras();
-//			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
-//			List<Information> informations = JSONConver.jsonToInformations(msg);
-//			filteInformations(informations);
-//		}
-//	};
 
 	private void filteInformations(final List<Information> infos) {
 		Thread th = new Thread() {
@@ -754,35 +736,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 		};
 		th.start();
 	}
-
-//	private void registeInformationReceiver() {
-//		IntentFilter filter = new IntentFilter(UserMessageService.MESSAGE_RECIVE_BROADCAST);
-//		registerReceiver(mInformationReceiver, filter);
-//		isInformationReceiverRegiste = true;
-//		startTigaseService();
-//	}
-
-//	private void startTigaseService() {
-//		UserInfo currentUser = getCurrentUser();
-//		Intent intent = new Intent(this, UserMessageService.class);
-//		Bundle bundle = new Bundle();
-//		bundle.putString(TigaseMessageBinderService.TIGASE_USER_NAME_KEY, currentUser.getTigaseId());
-//		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePwd());
-//		intent.putExtras(bundle);
-//		startService(intent);
-//	}
-
-//	private void unregisteInformationReceiver() {
-//		if (isInformationReceiverRegiste)
-//			unregisterReceiver(mInformationReceiver);
-//		isInformationReceiverRegiste = false;
-//		stopTigaseService();
-//	}
-//
-//	private void stopTigaseService() {
-//		Intent intent = new Intent(this, UserMessageService.class);
-//		stopService(intent);
-//	}
 
 	public void onNewInformation(List<Information> infosNeedUpdate, List<Information> infosNew) {
 		List<Information> localInformation = getAdapterData();
@@ -853,12 +806,11 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 			}
 		}
 	}
-
-	private void registeTigaseStateReceiver() {
-		IntentFilter filter = new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
+	private void registeTigaseStateChangeReceiver(){
+		IntentFilter filter=new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
 		registerReceiver(mTigaseStateChangeReceiver, filter);
 	}
-
+	
 	private BroadcastReceiver mTigaseStateChangeReceiver = new BroadcastReceiver() {
 
 		@Override

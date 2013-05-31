@@ -208,14 +208,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveFriends(List<Friend> friends) {
-		ObjectSet<Friend> localCache = db.query(new Predicate<Friend>() {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			public boolean match(Friend arg0) {
-				return arg0.isFriend();
-			}
-		});
+		ObjectSet<Friend> localCache = db.query(Friend.class);
 		updateFriendsAndStore(localCache, friends);
 		db.commit();
 	}
@@ -360,6 +353,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				fLocal.setSource(fService.getSource());
 				fLocal.setHeadUrl(fService.getHeadUrl());
 				fLocal.setLetter(fService.getLetter());
+				fLocal.setFriend(fService.isFriend());
+				fLocal.setHiden(false);
 				db.store(fLocal);
 			} else {
 				db.store(fService);
