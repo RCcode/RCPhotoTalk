@@ -29,7 +29,7 @@ public class TigaseMessageBinderService extends Service {
     }
 	
 	//发送消息至tagise
-	public void sendMessage(String msg,String to){
+	public void sendMessage(String msg,String toUser,String toRcID, String action){
 		
 	}
 	
