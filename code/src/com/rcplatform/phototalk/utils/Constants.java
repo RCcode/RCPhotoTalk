@@ -153,6 +153,8 @@ public class Constants {
 		 * gcm消息action
 		 */
 		public static final String ACTION_GCM_MESSAGE = "com.rcplatform.phototalk.action.GCM_MESSAGE";
+		
+		public static final String ACTION_TIGASE_STATE_CHANGE="com.rcplatform.phototalk.action.TIGASE_STATE_CHANGE";
 
 	}
 
