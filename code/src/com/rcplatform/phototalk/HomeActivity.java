@@ -114,9 +114,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 	private boolean hasNextPage = true;
 
 	private View loadingFooter;
-	
-	public static final String INTENT_KEY_STATE="state";
-	
+
+	public static final String INTENT_KEY_STATE = "state";
+
 	private TextView tvTigaseState;
 
 	@Override
@@ -133,7 +133,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
-		tvTigaseState=(TextView) findViewById(R.id.tv_test);
+		tvTigaseState = (TextView) findViewById(R.id.tv_test);
 		registeTigaseStateReceiver();
 	}
 
@@ -163,8 +163,10 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
+					String url = jsonObject.getString("headUrl");
 					int trendId = jsonObject.getInt("trendId");
 					PrefsUtils.User.saveMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId(), trendId);
+					PrefsUtils.User.saveMaxTrendUrl(getApplicationContext(), getCurrentUser().getRcId(), url);
 					onNewTrends();
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -814,17 +816,18 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 			}
 		}
 	}
-	
-	private void registeTigaseStateReceiver(){
-		IntentFilter filter=new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
+
+	private void registeTigaseStateReceiver() {
+		IntentFilter filter = new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
 		registerReceiver(mTigaseStateChangeReceiver, filter);
 	}
-	private BroadcastReceiver mTigaseStateChangeReceiver=new BroadcastReceiver() {
-		
+
+	private BroadcastReceiver mTigaseStateChangeReceiver = new BroadcastReceiver() {
+
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String newState=intent.getStringExtra(INTENT_KEY_STATE);
-			tvTigaseState.setText(newState+"");
+			String newState = intent.getStringExtra(INTENT_KEY_STATE);
+			tvTigaseState.setText(newState + "");
 		}
 	};
 }

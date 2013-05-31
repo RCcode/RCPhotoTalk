@@ -111,6 +111,7 @@ public class PrefsUtils {
 
 		private static final String PREF_KEY_TRENDS_MAX_ID = "trendsmaxid";
 		private static final String PREF_KEY_TRENDS_SHOWED_MAX_ID = "showedtrendsmaxid";
+		private static final String PREF_KEY_TRENDS_MAX_URL = "trendsmaxurl";
 
 		public static class ThirdPart {
 
@@ -314,12 +315,22 @@ public class PrefsUtils {
 		public static int getMaxTrendsId(Context context, String pref) {
 			return getPreference(context, pref).getInt(PREF_KEY_TRENDS_MAX_ID, 0);
 		}
-		
-		public static void saveMaxTrendUrl(Context context, String pref,String url){
-			
+
+		public static void saveMaxTrendUrl(Context context, String pref, String url) {
+			getPreference(context, pref).edit().putString(PREF_KEY_TRENDS_MAX_URL, url).commit();
 		}
-		public static String getMaxTrendUrl(Context context, String pref){
-			return null;
+
+		public static String getMaxTrendUrl(Context context, String pref) {
+			return getPreference(context, pref).getString(PREF_KEY_TRENDS_MAX_URL, null);
 		}
+
+		public static void setLoadedFriends(Context context, String pref) {
+
+		}
+
+		public static boolean hasLoadedFriends(Context context, String pref) {
+			return false;
+		}
+
 	}
 }
