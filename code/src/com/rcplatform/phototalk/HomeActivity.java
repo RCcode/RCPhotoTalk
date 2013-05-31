@@ -823,7 +823,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			String newState=intent.getStringExtra("INTENT_KEY_STATE");
+			String newState=intent.getStringExtra(INTENT_KEY_STATE);
 			tvTigaseState.setText(newState+"");
 		}
 	};
