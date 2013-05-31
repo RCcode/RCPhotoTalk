@@ -20,8 +20,8 @@ public class ImageOptionsFactory {
 	}
 
 	public static DisplayImageOptions getUserBackImageOptions() {
-		if (mHeadImageOptions == null)
-			mHeadImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.user_detail_bg).showStubImage(R.drawable.user_detail_bg)
+		if (mBackImageOptions == null)
+			mBackImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.user_detail_bg).showStubImage(R.drawable.user_detail_bg)
 					.showImageOnFail(R.drawable.user_detail_bg).build();
 		return mBackImageOptions;
 	}
