@@ -100,6 +100,10 @@ public class Constants {
 		public static String REQUEST_DATABASE_PATH;
 		public static String GLOBAL_DATABASE_PATH;
 	}
+	
+	public static class Message{
+		public static final String MESSAGE_CONTENT_KEY = "message_content";
+	}
 
 	public static class Action {
 
