@@ -2,6 +2,7 @@ package com.rcplatform.phototalk;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,6 +47,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	private DeAuthorizeDialogListener mDeAuthorizeDialogListener;
 	private TextView tvVKAuth;
 	private View phoneLayout;
+	private static final int REQUEST_CODE_BINDPHONE = 731;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +88,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		mFacebookClient.onActivityResult(requestCode, resultCode, data);
 		mVKClient.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (requestCode == REQUEST_CODE_BINDPHONE) {
+				user_Phone.setText(getCurrentUser().getCellPhone());
+			}
+		}
 	}
 
 	private void initTitle() {
@@ -285,10 +292,4 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			}
 		}
 	};
-
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		user_Phone.setText(getCurrentUser().getCellPhone());
-	}
 }

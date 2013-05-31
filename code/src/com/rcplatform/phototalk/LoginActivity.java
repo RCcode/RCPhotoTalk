@@ -109,11 +109,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		startActivity(intent);
 	}
 
-	private UserInfo mUser;
-
 	private void saveUserInfo(UserInfo userInfo) {
 		PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
-		getPhotoTalkApplication().setCurrentUser(userInfo);
 	}
 
 	private void closePage(UserInfo userInfo) {
@@ -513,20 +510,21 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				LogUtil.e(content);
 				try {
 					JSONObject jsonObject = new JSONObject(content);
-					mUser = new UserInfo();
-					mUser.setEmail(email);
-					mUser.setNickName(nick);
-					mUser.setShowRecommends(UserInfo.FIRST_TIME);
-					mUser.setToken(jsonObject.getString("token"));
-					mUser.setTigaseId(jsonObject.getString("tgId"));
-					mUser.setTigasePwd(jsonObject.getString("tgpwd"));
-					mUser.setRcId(jsonObject.getString("rcId"));
-					mUser.setDeviceId(PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-					mUser.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
+					UserInfo userInfo = new UserInfo();
+					userInfo.setEmail(email);
+					userInfo.setNickName(nick);
+					userInfo.setShowRecommends(UserInfo.FIRST_TIME);
+					userInfo.setToken(jsonObject.getString("token"));
+					userInfo.setTigaseId(jsonObject.getString("tgId"));
+					userInfo.setTigasePwd(jsonObject.getString("tgpwd"));
+					userInfo.setRcId(jsonObject.getString("rcId"));
+					userInfo.setDeviceId(PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
+					userInfo.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
+					getPhotoTalkApplication().setCurrentUser(userInfo);
 					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
 					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends, FriendType.CONTACT);
-					loginSuccess(mUser);
+					loginSuccess(userInfo);
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
@@ -555,6 +553,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			@Override
 			public void onSuccess(UserInfo userInfo) {
 				dismissLoadingDialog();
+				getPhotoTalkApplication().setCurrentUser(userInfo);
 				loginSuccess(userInfo);
 			}
 

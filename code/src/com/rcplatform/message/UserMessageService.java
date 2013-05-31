@@ -45,6 +45,7 @@ import android.util.Log;
 
 public class UserMessageService extends Service {
 
+
 	private static final int MSG_WHAT_XMPP_CONNECT_SUCCESS = 101;
 
 	public static final String TIGASE_USER_NAME_KEY = "tg_id";
@@ -82,7 +83,6 @@ public class UserMessageService extends Service {
 	private static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
 
 	private Context ctx;
-
 	private HashMap<String, Timer> gcmTimers;
 
 	private boolean hasRegisteSendReceiver = false;
@@ -114,8 +114,7 @@ public class UserMessageService extends Service {
 
 						try {
 							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
-						}
-						catch (XMPPException e) {
+						} catch (XMPPException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
@@ -179,7 +178,6 @@ public class UserMessageService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -204,8 +202,7 @@ public class UserMessageService extends Service {
 					XmppTool.login(name + "@" + node.getDomain(), password);
 					XmppTool.setChatManagerListener(chatListener);
 					xmppHandler.sendEmptyMessage(MSG_WHAT_XMPP_CONNECT_SUCCESS);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 
 				}
 			};
@@ -218,12 +215,12 @@ public class UserMessageService extends Service {
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 
-				case MSG_WHAT_XMPP_CONNECT_SUCCESS:
-					IntentFilter intentFilter = new IntentFilter();
-					intentFilter.addAction(MESSAGE_SEND_BROADCAST);
-					registerReceiver(sendBroadcastReceiver, intentFilter);
-					hasRegisteSendReceiver = true;
-					break;
+			case MSG_WHAT_XMPP_CONNECT_SUCCESS:
+				IntentFilter intentFilter = new IntentFilter();
+				intentFilter.addAction(MESSAGE_SEND_BROADCAST);
+				registerReceiver(sendBroadcastReceiver, intentFilter);
+				hasRegisteSendReceiver = true;
+				break;
 			}
 		};
 	};
@@ -321,25 +318,20 @@ public class UserMessageService extends Service {
 				}
 				reader.close();
 				content = builder.toString();
-			}
-			catch (ConnectException e) {
+			} catch (ConnectException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
 					output.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				try {
 					is.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				if (conn != null)
 					conn.disconnect();

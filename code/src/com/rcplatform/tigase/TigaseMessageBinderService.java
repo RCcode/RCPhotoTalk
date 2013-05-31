@@ -55,7 +55,7 @@ public class TigaseMessageBinderService extends Service {
 
 	private TigaseMessageReceiver messageRecevier = null;
 
-	private HashMap<String, Timer> gcmTimers;
+	private HashMap<String, Timer> gcmTimers=new HashMap<String, Timer>();
 
 	ChatManagerListener chatListener = new ChatManagerListener() {
 
@@ -111,7 +111,7 @@ public class TigaseMessageBinderService extends Service {
 	 */
 	public class LocalBinder extends Binder {
 
-		TigaseMessageBinderService getService() {
+		public TigaseMessageBinderService getService() {
 			// Return this instance of LocalService so clients can call public
 			// methods
 			return TigaseMessageBinderService.this;

@@ -62,7 +62,8 @@ public class PhotoInformationCountDownService {
 			Information info = (Information) msg.obj;
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
 			if (!info.getReceiver().getRcId().equals(info.getSender().getRcId())) {
-				MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
+//				MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
+				MessageSender.getInstance().sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
 			}
 			LogicUtils.updateInformationState(mApplication, Action.ACTION_INFORMATION_STATE_CHANGE, info);
 			InformationPageController.getInstance().photoInformationShowEnd(info);

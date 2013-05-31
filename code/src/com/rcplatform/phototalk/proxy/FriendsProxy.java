@@ -12,6 +12,7 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
@@ -21,7 +22,9 @@ import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class FriendsProxy {
@@ -137,12 +140,13 @@ public class FriendsProxy {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_URL, responseHandler);
 		request.excuteAsync();
 	}
+
 	// 田镇源 发送图片时 请求好友动态
-	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler,int trendId,int page,int size,String time) {
+	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler, int trendId, int page, int size, String time) {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_DYNAMIC_URL, responseHandler);
-		request.putParam("trendId", trendId+"");
-		request.putParam("page", page+"");
-		request.putParam("size", size+"");
+		request.putParam("trendId", trendId + "");
+		request.putParam("page", page + "");
+		request.putParam("size", size + "");
 		request.putParam("time", time);
 		request.excuteAsync();
 	}
@@ -164,6 +168,7 @@ public class FriendsProxy {
 		request.setFile(file);
 		request.excuteAsync();
 	}
+
 	public static void upUserBackgroundImage(Context context, File file, RCPlatformResponseHandler responseHandler) {
 		Request request = new Request(context, PhotoTalkApiUrl.USER_BACKGROUND_UPDATE_URL, responseHandler);
 		request.setFile(file);
@@ -203,5 +208,141 @@ public class FriendsProxy {
 		request.putParam(PhotoTalkParams.DelRecommend.PARAM_KEY_FRIEND_ID, friend.getRcId());
 		request.putParam(PhotoTalkParams.DelRecommend.PARAM_KEY_RECOMMEND_TYPE, friend.getSource().getAttrType() + "");
 		request.excuteAsync();
+	}
+
+	public static void getFriends(final BaseActivity context, final LoadFriendsListener listener) {
+		Thread thread = new Thread() {
+			public void run() {
+				if (PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
+					final List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+					context.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							listener.onFriendsLoaded(friends, null);
+						}
+					});
+				}
+				getMyFriendlist(context, new RCPlatformResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, final String content) {
+						Thread thread = new Thread() {
+							public void run() {
+								try {
+									JSONObject jsonObject = new JSONObject(content);
+									JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
+									List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
+									for (Friend friend : friends) {
+										friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+										friend.setFriend(true);
+									}
+									PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
+									if (!PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
+										PrefsUtils.User.setLoadedFriends(context, context.getCurrentUser().getRcId());
+										final List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+										context.runOnUiThread(new Runnable() {
+
+											@Override
+											public void run() {
+												listener.onFriendsLoaded(localFriends, null);
+											}
+										});
+
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									context.runOnUiThread(new Runnable() {
+
+										@Override
+										public void run() {
+											listener.onLoadedFail(context.getString(R.string.net_error));
+										}
+									});
+
+								}
+							};
+						};
+						thread.start();
+					}
+
+					@Override
+					public void onFailure(int errorCode, String content) {
+						listener.onLoadedFail(content);
+					}
+				});
+			};
+		};
+		thread.start();
+	}
+
+	public static void getFriendsAndRecommends(final BaseActivity context, final LoadFriendsListener listener) {
+		Thread thread = new Thread() {
+			public void run() {
+				if (PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
+					final List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+					final List<Friend> recommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
+					context.runOnUiThread(new Runnable() {
+
+						@Override
+						public void run() {
+							listener.onFriendsLoaded(friends, recommends);
+						}
+					});
+				}
+				Request request = new Request(context, PhotoTalkApiUrl.GET_MY_FRIENDS_URL, new RCPlatformResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, final String content) {
+						Thread thread = new Thread() {
+							@Override
+							public void run() {
+								try {
+									JSONObject jObj = new JSONObject(content);
+									List<Friend> friends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
+									for (Friend f : friends) {
+										f.setFriend(true);
+										f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
+									}
+									List<Friend> recommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
+									for (Friend f : recommends)
+										f.setFriend(false);
+									PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
+									PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
+									if (!PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
+										PrefsUtils.User.setLoadedFriends(context, context.getCurrentUser().getRcId());
+										final List<Friend> myFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+										final List<Friend> myRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends();
+										runOnUiThread(context, new Runnable() {
+
+											@Override
+											public void run() {
+												listener.onFriendsLoaded(myFriends, myRecommends);
+											}
+										});
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									runOnUiThread(context, new Runnable() {
+										@Override
+										public void run() {
+											listener.onLoadedFail(context.getString(R.string.net_error));
+										}
+									});
+								}
+							}
+						};
+						thread.start();
+					}
+
+					@Override
+					public void onFailure(int errorCode, String content) {
+						listener.onLoadedFail(content);
+					}
+				});
+				request.excuteAsync();
+			};
+		};
+		thread.start();
 	}
 }

@@ -4,10 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,18 +38,15 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.request.JSONConver;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
-import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 
-public class SelectFriendsActivity extends BaseActivity implements
-		OnClickListener {
+public class SelectFriendsActivity extends BaseActivity implements OnClickListener {
 
 	private ListView mFriendListView;
 
@@ -107,23 +100,25 @@ public class SelectFriendsActivity extends BaseActivity implements
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
 		initViewOrListener();
-		getLocalFriends();
+		getFriends();
 
 	}
 
-	private void getLocalFriends() {
-		Thread th = new Thread() {
-			public void run() {
-				List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase()
-						.getFriends();
-				if (friends.size() > 1) {
-					mHandler.obtainMessage(MSG_CACHE_FINISH, friends)
-							.sendToTarget();
+	private void getFriends() {
+		FriendsProxy.getFriends(this, new LoadFriendsListener() {
+
+			@Override
+			public void onLoadedFail(String reason) {
+				if (!PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
+					showErrorConfirmDialog(reason);
 				}
-				getFriends();
-			};
-		};
-		th.start();
+			}
+
+			@Override
+			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
+			}
+		});
 	}
 
 	@Override
@@ -145,8 +140,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		mGallery.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					final int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 				// Friend friend = sendData.get(position);
 				sendData.remove(position);
 				if (sendData.size() == 0) {
@@ -162,8 +156,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 				}
 			}
 		});
-		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(
-				this, sendData);
+		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(this, sendData);
 		mGallery.setAdapter(adapter);
 		alignGalleryToLeft(mGallery);
 		send_layout.setVisibility(View.GONE);
@@ -180,8 +173,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 		mBtAddFriend.setOnClickListener(this);
 
 		etSearch = (EditText) findViewById(R.id.et_search);
-//		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-//        imm.hideSoftInputFromWindow(etSearch.getWindowToken(),0); 
+		// InputMethodManager imm =
+		// (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		// imm.hideSoftInputFromWindow(etSearch.getWindowToken(),0);
 
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
 		seach_delete_btn.setVisibility(View.GONE);
@@ -198,13 +192,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 		etSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
 			@Override
@@ -230,8 +222,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		}
 		List<Friend> resultRecommends = new ArrayList<Friend>();
 		for (Friend friend : resultData) {
-			if (friend.getNickName() != null
-					&& friend.getNickName().toLowerCase().contains(keyWords)) {
+			if (friend.getNickName() != null && friend.getNickName().toLowerCase().contains(keyWords)) {
 				resultRecommends.add(friend);
 			}
 		}
@@ -247,8 +238,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			tempFilePath = app.getSendZipFileCachePath() + "/"
-					+ System.currentTimeMillis() + ".zip";
+			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -259,22 +249,18 @@ public class SelectFriendsActivity extends BaseActivity implements
 			deleteTemp();
 			sendPicture(tempFilePath, timeLimit, sendData);
 		} else {
-			sendStringMessage(MSG_WHAT_ERROR,
-					getString(R.string.receive_data_error));
+			sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
 		}
 
 	}
 
 	private void setAdapterDataSetChanged() {
-		((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
-				.notifyDataSetChanged();
-		((SelectedFriendsListAdapter) mFriendListView.getAdapter())
-				.notifyDataSetChanged();
+		((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).notifyDataSetChanged();
+		((SelectedFriendsListAdapter) mFriendListView.getAdapter()).notifyDataSetChanged();
 	}
 
 	private void initFriendListAdapter(List<Friend> list) {
-		SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(
-				SelectFriendsActivity.this, listData, sendData);
+		SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(SelectFriendsActivity.this, listData, sendData);
 		mFriendListView.setAdapter(adapter);
 		adapter.setOnCheckBoxChangedListener(new OnCheckBoxChangedListener() {
 
@@ -295,55 +281,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 					}
 				}
 				setAdapterDataSetChanged();
-				// if (sendData.size() > 0) {
-				//
-				// ((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
-				// .notifyDataSetChanged();
-				// if (sendData.size() > mDisplayableCount)
-				// mGallery.setSelection(sendData.size()
-				// - mDisplayableCount);
-				// else {
-				// mGallery.setSelection(0);
-				// }
 			}
 		});
-	}
-
-	private void jsonToFriends(final String json) throws JSONException {
-		Thread thread = new Thread() {
-			public void run() {
-				try {
-					JSONObject jsonObject = new JSONObject(json);
-					JSONArray myFriendsArray = jsonObject
-							.getJSONArray("myUsers");
-					List<Friend> friends = JSONConver
-							.jsonToFriends(myFriendsArray.toString());
-					for (Friend friend : friends) {
-						friend.setLetter(RCPlatformTextUtil.getLetter(friend
-								.getNickName()));
-						friend.setFriend(true);
-					}
-					PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
-					if (mFriendListView.getAdapter() == null) {
-						List<Friend> localFriends = PhotoTalkDatabaseFactory
-								.getDatabase().getFriends();
-						// List<SelectFriend> seleFriends = new
-						// ArrayList<SelectFriend>();
-						// for (Friend friend : localFriends) {
-						// SelectFriend seleFriend =
-						// SelectFriend.parseSelectFriend(friend);
-						// seleFriends.add(seleFriend);
-						// }
-						mHandler.obtainMessage(MSG_CACHE_FINISH, localFriends)
-								.sendToTarget();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			};
-		};
-		thread.start();
-
 	}
 
 	private void sendStringMessage(int what, String content) {
@@ -360,8 +299,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 			switch (msg.what) {
 			case MSG_WHAT_ERROR:
 				progressBar.setVisibility(View.GONE);
-				DialogUtil.showToast(getApplicationContext(), (String) msg.obj,
-						Toast.LENGTH_SHORT);
+				DialogUtil.showToast(getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT);
 				break;
 
 			case MSG_CACHE_FINISH:
@@ -383,8 +321,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private long timeSnap;
 
-	private void sendPicture(String imagePath, final String timeLimit,
-			final List<Friend> friends) {
+	private void sendPicture(String imagePath, final String timeLimit, final List<Friend> friends) {
 		timeSnap = System.currentTimeMillis();
 		final File file = new File(imagePath);
 		LogicUtils.sendPhoto(this, timeLimit, friends, file);
@@ -396,13 +333,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 		switch (v.getId()) {
 		case R.id.btn_sfl_send:
 			if (sendData == null || sendData.size() <= 0) {
-				Toast.makeText(SelectFriendsActivity.this,
-						R.string.please_select_contact, 1).show();
+				Toast.makeText(SelectFriendsActivity.this, R.string.please_select_contact, 1).show();
 				return;
 			} else {
 				catchBitampOnSDC();
-				Intent intent = new Intent(SelectFriendsActivity.this,
-						HomeActivity.class);
+				Intent intent = new Intent(SelectFriendsActivity.this, HomeActivity.class);
 				intent.putExtra("from", this.getClass().getName());
 				intent.putExtra("time", timeSnap);
 				startActivity(intent);
@@ -414,47 +349,37 @@ public class SelectFriendsActivity extends BaseActivity implements
 			break;
 
 		case R.id.choosebutton:
-			startActivity(new Intent(SelectFriendsActivity.this,
-					AddFriendsActivity.class));
+			startActivity(new Intent(SelectFriendsActivity.this, AddFriendsActivity.class));
 			break;
 		}
 	}
 
 	private void alignGalleryToLeft(Gallery gallery) {
 		DisplayMetrics metrics = getResources().getDisplayMetrics();
-		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT,
-				LayoutParams.WRAP_CONTENT);
+		LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		measureView(mButtonSend, params);
 
 		int rightMargin = ((MarginLayoutParams) mButtonSend.getLayoutParams()).rightMargin;
 		int leftMargin = ((MarginLayoutParams) mButtonSend.getLayoutParams()).leftMargin;
 
-		int gallerLeftPaddingDip = DisplayUtil.px2dip(galleryLeftPaddingPx,
-				1.5f);
+		int gallerLeftPaddingDip = DisplayUtil.px2dip(galleryLeftPaddingPx, 1.5f);
 		int gallerySpaceDip = DisplayUtil.px2dip(gallerySpacePx, 1.5f);
 
-		galleryLeftPaddingPx = (int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, gallerLeftPaddingDip, metrics);
-		gallerySpacePx = (int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, gallerySpaceDip, metrics);
+		galleryLeftPaddingPx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gallerLeftPaddingDip, metrics);
+		gallerySpacePx = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, gallerySpaceDip, metrics);
 
 		mGallery.setSpacing(gallerySpacePx);
-		int w = getResources().getDisplayMetrics().widthPixels
-				- mButtonSend.getMeasuredWidth() - rightMargin - leftMargin
-				- galleryLeftPaddingPx;
+		int w = getResources().getDisplayMetrics().widthPixels - mButtonSend.getMeasuredWidth() - rightMargin - leftMargin - galleryLeftPaddingPx;
 
-		View itemView = LayoutInflater.from(this).inflate(
-				R.layout.selected_friends_galleryt_item, null);
+		View itemView = LayoutInflater.from(this).inflate(R.layout.selected_friends_galleryt_item, null);
 		measureView(itemView, params);
 
 		int itemWidth = itemView.getMeasuredWidth();
 
 		mDisplayableCount = (w) / (itemWidth + gallerySpacePx);
 
-		MarginLayoutParams layoutParams = (MarginLayoutParams) mGallery
-				.getLayoutParams();
-		layoutParams.setMargins(-(w - itemWidth), layoutParams.topMargin,
-				layoutParams.rightMargin, layoutParams.bottomMargin);
+		MarginLayoutParams layoutParams = (MarginLayoutParams) mGallery.getLayoutParams();
+		layoutParams.setMargins(-(w - itemWidth), layoutParams.topMargin, layoutParams.rightMargin, layoutParams.bottomMargin);
 	}
 
 	public void measureView(View child, ViewGroup.LayoutParams params) {
@@ -469,8 +394,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 			width = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 		}
 
-		child.measure(width,
-				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		child.measure(width, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 	}
 
 	@Override
@@ -482,28 +406,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 			}
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	private void getFriends() {
-		FriendsProxy.getMyFriendlist(SelectFriendsActivity.this,
-				new RCPlatformResponseHandler() {
-
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						try {
-							jsonToFriends(content);
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-					}
-
-					@Override
-					public void onFailure(int errorCode, String content) {
-						sendStringMessage(MSG_WHAT_ERROR,
-								getString(R.string.net_error));
-					}
-				});
-
 	}
 
 	@Override

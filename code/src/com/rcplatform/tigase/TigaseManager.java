@@ -28,7 +28,7 @@ public class TigaseManager {
 
 	private ChatManager chatManager = null;
 
-	private TigaseDb4oDatabase db = null;
+//	private TigaseDb4oDatabase db = null;
 
 	private String user = null;
 
@@ -104,20 +104,20 @@ public class TigaseManager {
 			chatManager.addChatListener(chatListener);
 			isConnected = true;
 			// 发送备份消息
-			List<TigaseMassage> list = db.getTigaseMassages();
-			for (int i = 0; i < list.size(); i++) {
-				TigaseMassage msg = list.get(i);
-				boolean sendStatus = sendMessage(msg.getToUser(), msg.getMassage());
-				if (true == sendStatus) {
-					db.deleteTigaseMassage(msg);
-				}
-			}
+//			List<TigaseMassage> list = db.getTigaseMassages();
+//			for (int i = 0; i < list.size(); i++) {
+//				TigaseMassage msg = list.get(i);
+//				boolean sendStatus = sendMessage(msg.getToUser(), msg.getMassage());
+//				if (true == sendStatus) {
+//					db.deleteTigaseMassage(msg);
+//				}
+//			}
 		}
 
 	}
 
 	private TigaseManager() {
-		db = new TigaseDb4oDatabase();
+//		db = new TigaseDb4oDatabase();
 	}
 
 	static public TigaseManager getInstance() {
@@ -232,7 +232,7 @@ public class TigaseManager {
 			massage.setToUser(toUser);
 			List<TigaseMassage> list = new ArrayList<TigaseMassage>();
 			list.add(massage);
-			db.saveTigaseMassages(list);
+//			db.saveTigaseMassages(list);
 		}
 	}
 

@@ -27,7 +27,6 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 
 public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
@@ -242,25 +241,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
 		TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 		final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
-
-//		View sourceView = convertView.findViewById(R.id.add_friend_list_item_source);
-		FriendSourse source = friend.getSource();
-		TextView tvFrom = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_from);
-		if (source == null) {
-			tvFrom.setVisibility(View.GONE);
-		} else {
-			tvFrom.setVisibility(View.VISIBLE);
-//			TextView tvName = (TextView) convertView.findViewById(R.id.add_friend_list_item_source_name);
-			switch (source.getAttrType()) {
-			case FriendType.CONTACT:
-				tvFrom.setText(R.string.contact_friend);
-				break;
-			case FriendType.FACEBOOK:
-				tvFrom.setText(R.string.facebook_friend);
-				break;
-			}
-//			tvName.setText(source.getName());
-		}
+		setFriendSourceInfo(convertView, friend);
 		mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 		portraitImage.setOnClickListener(new View.OnClickListener() {
 
@@ -295,10 +276,10 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		} else {
 			letterView.setVisibility(View.GONE);
 		}
+		setFriendSourceInfo(convertView, friend);
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
-		LogUtil.e(friend.getHeadUrl()+"");
-		mImageLoader.displayImage( friend.getHeadUrl(), ivHead);
+		mImageLoader.displayImage(friend.getHeadUrl(), ivHead);
 		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
 		return convertView;
 	}
@@ -393,5 +374,27 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public void setListData(Map<Integer, List<Friend>> friends) {
 		initData(friends);
 		notifyDataSetChanged();
+	}
+
+	private void setFriendSourceInfo(View convertView, Friend friend) {
+		View sourceView = convertView.findViewById(R.id.linear_friend_source);
+		FriendSourse source = friend.getSource();
+
+		if (source == null) {
+			sourceView.setVisibility(View.GONE);
+		} else {
+			sourceView.setVisibility(View.VISIBLE);
+			TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
+			TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
+			switch (source.getAttrType()) {
+			case FriendType.CONTACT:
+				tvFrom.setText(R.string.contact_friend);
+				break;
+			case FriendType.FACEBOOK:
+				tvFrom.setText(R.string.facebook_friend);
+				break;
+			}
+			tvName.setText(source.getName());
+		}
 	}
 }
