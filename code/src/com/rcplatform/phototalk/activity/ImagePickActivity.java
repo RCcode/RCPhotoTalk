@@ -241,4 +241,23 @@ public class ImagePickActivity extends BaseActivity {
 		intent.setData(uri);
 		startActivityForResult(intent, CROP_PICTURE);
 	}
+
+	private static final String INSTANCE_KEY_CROP_MODE = "CROPMODE";
+	private static final String INSTANCE_KEY_IMAGE_URI = "imageuri";
+
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(INSTANCE_KEY_CROP_MODE, cropMode);
+		if (mImageUri != null)
+			outState.putString(INSTANCE_KEY_IMAGE_URI, mImageUri.toString());
+	};
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		cropMode = savedInstanceState.getInt(INSTANCE_KEY_CROP_MODE);
+		String uri = savedInstanceState.getString(INSTANCE_KEY_IMAGE_URI);
+		if (uri != null)
+			mImageUri = Uri.parse(uri);
+	}
 }

@@ -353,13 +353,32 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				fLocal.setSource(fService.getSource());
 				fLocal.setHeadUrl(fService.getHeadUrl());
 				fLocal.setLetter(fService.getLetter());
-				fLocal.setFriend(fService.isFriend());
 				fLocal.setHiden(false);
 				db.store(fLocal);
 			} else {
 				db.store(fService);
 			}
 		}
+	}
+
+	private Friend cloneFriend(Friend friend,Friend friendNew) {
+		friendNew.setFriend(friend.isFriend());
+		friendNew.setAppId(friend.getAppId());
+		friendNew.setAppList(friend.getAppList());
+		friendNew.setBackground(friend.getBackground());
+		friendNew.setBirthday(friend.getBirthday());
+		friendNew.setCellPhone(friend.getCellPhone());
+		friendNew.setCountry(friend.getCountry());
+		friendNew.setGender(friend.getGender());
+		friendNew.setHeadUrl(friend.getHeadUrl());
+		friendNew.setHiden(friend.isHiden());
+		friendNew.setLetter(friend.getLetter());
+		friendNew.setNickName(friend.getNickName());
+		friendNew.setRcId(friend.getRcId());
+		friendNew.setSource(friend.getSource());
+		friendNew.setTigaseId(friend.getTigaseId());
+		return friendNew;
+
 	}
 
 	@Override

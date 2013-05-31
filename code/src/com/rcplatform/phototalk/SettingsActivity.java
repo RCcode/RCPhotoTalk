@@ -305,5 +305,16 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		}
 
 	}
-
+	private static final String INSTANCE_KEY_SETTING_CROP_MODE="setting_crop_mode";
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(INSTANCE_KEY_SETTING_CROP_MODE, CAMERA_CODE);
+	}
+	
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		CAMERA_CODE=savedInstanceState.getInt(INSTANCE_KEY_SETTING_CROP_MODE);
+	}
 }
