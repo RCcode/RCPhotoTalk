@@ -31,6 +31,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.activity.MenueBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
 import com.rcplatform.phototalk.bean.Friend;
@@ -43,7 +44,7 @@ import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Utils;
 
-public class MyFriendsActivity extends BaseActivity implements OnClickListener {
+public class MyFriendsActivity extends MenueBaseActivity implements OnClickListener {
 	private static final int MSG_WHAT_FRIEND_LOADED = 912;
 
 	private static final int REQUEST_KEY_DETAIL = 110;

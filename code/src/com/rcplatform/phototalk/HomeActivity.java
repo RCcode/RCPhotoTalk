@@ -35,6 +35,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.activity.MenueBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
@@ -75,7 +76,7 @@ import com.rcplatform.phototalk.views.SnapShowListener;
  * 
  * @version 1.0.0
  */
-public class HomeActivity extends BaseActivity implements SnapShowListener {
+public class HomeActivity extends MenueBaseActivity implements SnapShowListener {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
@@ -553,12 +554,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener {
 		super.onDestroy();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
-	}
-
-	// LogicUtils.showInformationClearDialog(this);
 
 	private List<Information> getAdapterData() {
 		if (adapter == null)

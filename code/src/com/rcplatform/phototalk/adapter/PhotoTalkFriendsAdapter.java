@@ -34,6 +34,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public static final int TYPE_RECOMMENDS = 0;
 	public static final int TYPE_CONTACTS = 1;
 	public static final int TYPE_FACEBOOK = 2;
+	public static final int TYPE_USE_PHOTOTALK= 6;
 	public static final int TYPE_VK = 5;
 	public static final int TYPE_FRIEND_ADDED = 3;
 	public static final int TYPE_FRIEND_NEW = 4;
@@ -139,16 +140,25 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			convertView = mInflater.inflate(R.layout.my_friend_list_item_header, null);
 		}
 		TextView tvTitle = (TextView) convertView.findViewById(R.id.content_title);
+		ImageView mgroupimage=(ImageView)convertView.findViewById(R.id.ground_item_view);
+		mgroupimage.setVisibility(View.GONE);
 		int titleType = mTitles.get(groupPosition);
-		if (titleType == TYPE_RECOMMENDS) {
+		if (titleType == TYPE_USE_PHOTOTALK) {
 			tvTitle.setText(R.string.firend_list_used_photochat_friend_title);
 		} else if (titleType == TYPE_FRIEND_ADDED) {
 			tvTitle.setText(R.string.my_friends_added);
 		} else if (titleType == TYPE_FRIEND_NEW) {
 			tvTitle.setText(R.string.my_friends_new);
-		} else {
+		} else if(titleType == TYPE_RECOMMENDS){
+			tvTitle.setText(R.string.my_firend_suggested_title);
+			mgroupimage.setVisibility(View.VISIBLE);
+		}else {
 			tvTitle.setText(R.string.firend_list_invite_friend_title);
 		}
+        mgroupimage.setBackgroundResource(R.drawable.group_item_down);
+        if(!isExpanded){
+        	mgroupimage.setBackgroundResource(R.drawable.group_item_up);
+         }
 		return convertView;
 	}
 
@@ -291,7 +301,11 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		if (isNeedToShowLetter(position)) {
 			letterView.setVisibility(View.VISIBLE);
 			TextView tvLetter = (TextView) letterView.findViewById(R.id.tv_letter);
-			tvLetter.setText(friend.getLetter());
+			String letter = "";
+			if(friend.getLetter()!=null){
+				letter = friend.getLetter().toUpperCase();
+				}
+			tvLetter.setText(letter);
 		} else {
 			letterView.setVisibility(View.GONE);
 		}

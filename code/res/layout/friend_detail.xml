@@ -5,30 +5,6 @@
     android:background="@drawable/user_info_detail"
     android:orientation="vertical" >
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-
-        <TextView
-            style="@style/text_base"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/friend_info_app_left"
-            android:text="RC ID:"
-            android:textColor="#74554a"
-            android:textSize="@dimen/friend_info_rcid_text_size" />
-
-        <TextView
-            android:id="@+id/tv_rcid"
-            style="@style/text_base"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/friend_info_app_left"
-            android:textColor="#74554a"
-            android:textSize="@dimen/friend_info_rcid_text_size" />
-    </LinearLayout>
-
     <RelativeLayout
         android:id="@+id/infos"
         android:layout_width="match_parent"
@@ -45,8 +21,8 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_alignBottom="@id/iv_bg"
-            android:layout_marginTop="30dp"
             android:layout_alignTop="@+id/rela_userinfo"
+            android:layout_marginTop="30dp"
             android:background="#50000000" />
 
         <LinearLayout
@@ -81,7 +57,7 @@
                 android:orientation="vertical" >
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="fill_parent"
                     android:layout_height="@dimen/user_detail_head_width_half"
                     android:gravity="bottom"
                     android:orientation="vertical"
@@ -105,8 +81,8 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:visibility="gone"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
 
                         <ImageView
                             android:id="@+id/tv_sex"
@@ -125,39 +101,63 @@
                             android:textColor="#E5E5E5"
                             android:textSize="@dimen/friend_info_age_text_size" />
                     </LinearLayout>
-                   <!--  android:layout_height="@dimen/user_detail_head_width_half"
-                      android:gravity="center_vertical" -->
+                    <!--
+                      android:layout_height="@dimen/user_detail_head_width_half"
+                      android:gravity="center_vertical"
+                    -->
+
                     <LinearLayout
-                    android:id="@+id/linear_source"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal" >
 
-                    <ImageView
+                        <TextView
+                            style="@style/text_base"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="RC ID:"
+                            android:textColor="#FFFFFF"
+                            android:textSize="@dimen/friend_info_rcid_text_size" />
+
+                        <TextView
+                            android:id="@+id/tv_rcid"
+                            style="@style/text_base"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/friend_info_app_left"
+                            android:textColor="#FFFFFF"
+                            android:textSize="@dimen/friend_info_rcid_text_size" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/linear_source"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/directory_icon" />
+                        android:orientation="horizontal"
+                        android:visibility="gone" >
 
-                    <TextView
-                        android:id="@+id/tv_source_name"
-                        style="@style/text_base"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/friend_info_name_left"
-                        android:textColor="#FFFFFF" />
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/directory_icon" />
 
-                    <TextView
-                        android:id="@+id/tv_source_value"
-                        style="@style/text_base"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/friend_info_phone_left"
-                        android:textColor="#FFFFFF" />
+                        <TextView
+                            android:id="@+id/tv_source_name"
+                            style="@style/text_base"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/friend_info_name_left"
+                            android:textColor="#FFFFFF" />
+
+                        <TextView
+                            android:id="@+id/tv_source_value"
+                            style="@style/text_base"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/friend_info_phone_left"
+                            android:textColor="#FFFFFF" />
+                    </LinearLayout>
                 </LinearLayout>
-                    
-                </LinearLayout>
-
-                
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
@@ -180,7 +180,7 @@
         android:layout_marginBottom="@dimen/friend_info_send_top"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
-        android:layout_marginTop="@dimen/friend_info_send_top"
+        android:layout_marginTop="@dimen/friend_info_app_right"
         android:background="@drawable/friend_info_send_btn"
         android:textColor="#FFFFFF" />
 

@@ -32,7 +32,9 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Gallery;
+import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -53,13 +55,14 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
+import com.rcplatform.phototalk.views.HorizontalListViewOne;
 
 public class SelectFriendsActivity extends BaseActivity implements
 		OnClickListener {
 
 	private ListView mFriendListView;
 
-	private Gallery mGallery;
+	private HorizontalListViewOne mGallery;
 
 	private Button mButtonSend;
 
@@ -69,13 +72,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 	// density 为1.5的手机上的px
 	private int gallerySpacePx = 25;
 
-	private int mDisplayableCount;
-
 	private final int MSG_WHAT_ERROR = 100;
 
 	private final int MSG_CACHE_FINISH = 200;
 
-	private final int MSG_SEND_SUCCESS = 300;
+	private final int MSG_CHANGE = 300;
 
 	private final int MSG_GALLERY = 400;
 
@@ -88,7 +89,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 	private ProgressBar progressBar;
 
 	private TextView mTvContentTitle;
-
+	
 	private ImageButton mBtBack;
 
 	private TextView mBtAddFriend;
@@ -120,13 +121,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 				List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase()
 						.getFriends();
 				if (friends.size() > 1) {
-					// List<SelectFriend> seleFriends = new
-					// ArrayList<SelectFriend>();
-					// for (Friend friend : friends) {
-					// SelectFriend seleFriend =
-					// SelectFriend.parseSelectFriend(friend);
-					// seleFriends.add(seleFriend);
-					// }
 					mHandler.obtainMessage(MSG_CACHE_FINISH, friends)
 							.sendToTarget();
 				}
@@ -136,63 +130,13 @@ public class SelectFriendsActivity extends BaseActivity implements
 		th.start();
 	}
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		progressBar.setVisibility(View.VISIBLE);
-	}
-
 	@SuppressWarnings("deprecation")
 	private void initViewOrListener() {
 		mFriendListView = (ListView) findViewById(R.id.lv_sfl_friends);
 		send_layout = (RelativeLayout) findViewById(R.id.send_layout);
-		mGallery = (Gallery) findViewById(R.id.g_sfl_added_friends);
+		mGallery = (HorizontalListViewOne) findViewById(R.id.g_sfl_added_friends);
 		mButtonSend = (Button) findViewById(R.id.btn_sfl_send);
-		progressBar = (ProgressBar) findViewById(R.id.pb_select_friend);
-		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
-
-		mBtBack = (ImageButton) findViewById(R.id.back);
-		mGallery.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					final int position, long id) {
-				// Friend friend = sendData.get(position);
-				sendData.remove(position);
-				if (sendData.size() == 0) {
-					send_layout.setVisibility(View.GONE);
-				} else {
-
-					setAdapterDataSetChanged();
-
-					// 将gallery显示最左面的内容 现在修改失败
-					// mHandler.obtainMessage(MSG_GALLERY).sendToTarget();
-					// mGallery.setFocusable(false);
-					// mGallery.setSelection(0);
-				}
-			}
-		});
-		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(
-				this, sendData);
-		mGallery.setAdapter(adapter);
-		alignGalleryToLeft(mGallery);
-		send_layout.setVisibility(View.GONE);
-		mButtonSend.setOnClickListener(this);
-		mTvContentTitle.setVisibility(View.VISIBLE);
-		mTvContentTitle.setText(R.string.select_friend_title);
-
-		mBtBack.setVisibility(View.VISIBLE);
-		mBtBack.setOnClickListener(this);
-
-		mBtAddFriend = (TextView) findViewById(R.id.choosebutton);
-		mBtAddFriend.setVisibility(View.GONE);
-		mBtAddFriend.setBackgroundResource(R.drawable.select_add);
-		mBtAddFriend.setOnClickListener(this);
-
 		etSearch = (EditText) findViewById(R.id.et_search);
-//		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE); 
-//        imm.hideSoftInputFromWindow(etSearch.getWindowToken(),0); 
-
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
 		seach_delete_btn.setVisibility(View.GONE);
 		seach_delete_btn.setOnClickListener(new OnClickListener() {
@@ -228,9 +172,48 @@ public class SelectFriendsActivity extends BaseActivity implements
 					search(keyWords);
 					seach_delete_btn.setVisibility(View.VISIBLE);
 				}
-				setAdapterDataSetChanged();
+				mHandler.obtainMessage(MSG_CHANGE).sendToTarget();
 			}
 		});
+		progressBar = (ProgressBar) findViewById(R.id.pb_select_friend);
+		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
+		mTvContentTitle.setFocusable(true);
+		mTvContentTitle.setFocusableInTouchMode(true);
+		mBtBack = (ImageButton) findViewById(R.id.back);
+		mGallery.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					final int position, long id) {
+				// Friend friend = sendData.get(position);
+				sendData.remove(position);
+				if (sendData.size() == 0) {
+					send_layout.setVisibility(View.GONE);
+				} else {
+					mHandler.obtainMessage(MSG_CHANGE).sendToTarget();
+					// 将gallery显示最左面的内容 现在修改失败
+					// mHandler.obtainMessage(MSG_GALLERY).sendToTarget();
+					// mGallery.setFocusable(false);
+					// mGallery.setSelection(0);
+				}
+			}
+		});
+		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(
+				this, sendData);
+		mGallery.setAdapter(adapter);
+//		alignGalleryToLeft(mGallery);
+		send_layout.setVisibility(View.GONE);
+		mButtonSend.setOnClickListener(this);
+		mTvContentTitle.setVisibility(View.VISIBLE);
+		mTvContentTitle.setText(R.string.select_friend_title);
+
+		mBtBack.setVisibility(View.VISIBLE);
+		mBtBack.setOnClickListener(this);
+
+		mBtAddFriend = (TextView) findViewById(R.id.choosebutton);
+		mBtAddFriend.setVisibility(View.GONE);
+		mBtAddFriend.setBackgroundResource(R.drawable.select_add);
+		mBtAddFriend.setOnClickListener(this);
 
 	}
 
@@ -276,6 +259,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 	}
 
 	private void setAdapterDataSetChanged() {
+//		mGallery.setSelection(0);
+		int n = sendData.size();
+//		gridview_layout.setLayoutParams(new LayoutParams(n*130, 130));
 		((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
 				.notifyDataSetChanged();
 		((SelectedFriendsListAdapter) mFriendListView.getAdapter())
@@ -304,17 +290,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 						send_layout.setVisibility(View.GONE);
 					}
 				}
-				setAdapterDataSetChanged();
-				// if (sendData.size() > 0) {
-				//
-				// ((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
-				// .notifyDataSetChanged();
-				// if (sendData.size() > mDisplayableCount)
-				// mGallery.setSelection(sendData.size()
-				// - mDisplayableCount);
-				// else {
-				// mGallery.setSelection(0);
-				// }
+				mHandler.obtainMessage(MSG_CHANGE).sendToTarget();
 			}
 		});
 	}
@@ -337,13 +313,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 					if (mFriendListView.getAdapter() == null) {
 						List<Friend> localFriends = PhotoTalkDatabaseFactory
 								.getDatabase().getFriends();
-						// List<SelectFriend> seleFriends = new
-						// ArrayList<SelectFriend>();
-						// for (Friend friend : localFriends) {
-						// SelectFriend seleFriend =
-						// SelectFriend.parseSelectFriend(friend);
-						// seleFriends.add(seleFriend);
-						// }
 						mHandler.obtainMessage(MSG_CACHE_FINISH, localFriends)
 								.sendToTarget();
 					}
@@ -380,8 +349,8 @@ public class SelectFriendsActivity extends BaseActivity implements
 				initFriendListAdapter(listData);
 				progressBar.setVisibility(View.GONE);
 				break;
-			case MSG_SEND_SUCCESS:
-
+			case MSG_CHANGE:
+				setAdapterDataSetChanged();
 				break;
 			case MSG_GALLERY:
 				mGallery.setFocusable(false);
@@ -447,8 +416,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 				TypedValue.COMPLEX_UNIT_DIP, gallerLeftPaddingDip, metrics);
 		gallerySpacePx = (int) TypedValue.applyDimension(
 				TypedValue.COMPLEX_UNIT_DIP, gallerySpaceDip, metrics);
-
-		mGallery.setSpacing(gallerySpacePx);
+//		mGallery.setSpacing(0);
 		int w = getResources().getDisplayMetrics().widthPixels
 				- mButtonSend.getMeasuredWidth() - rightMargin - leftMargin
 				- galleryLeftPaddingPx;
@@ -458,8 +426,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 		measureView(itemView, params);
 
 		int itemWidth = itemView.getMeasuredWidth();
-
-		mDisplayableCount = (w) / (itemWidth + gallerySpacePx);
 
 		MarginLayoutParams layoutParams = (MarginLayoutParams) mGallery
 				.getLayoutParams();
@@ -495,6 +461,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 	}
 
 	private void getFriends() {
+		// progressBar.setVisibility(View.VISIBLE);
 		FriendsProxy.getMyFriendlist(SelectFriendsActivity.this,
 				new RCPlatformResponseHandler() {
 

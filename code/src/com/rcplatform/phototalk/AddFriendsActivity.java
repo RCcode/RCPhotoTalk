@@ -14,9 +14,11 @@ import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
@@ -32,7 +34,9 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private static final String TAB_SEARCH = "search";
 
 	private static TreeSet<Friend> friendsAdded;
-
+private LinearLayout add_friend_layout;
+private TextView find_friend_text;
+private Button add_back_btn;
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
 
 	@Override
@@ -53,13 +57,26 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	}
 
 	private void initView() {
-
+		add_friend_layout = (LinearLayout)findViewById(R.id.add_friend_layout);
+		find_friend_text = (TextView)findViewById(R.id.find_friend_text);
+		add_back_btn = (Button)findViewById(R.id.add_back_btn);
+		add_back_btn.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+			AddFriendsActivity.this.finish();	
+			}
+		});
 		Button btnContinue = (Button) findViewById(R.id.btn_continue);
 		ImageView btn_continue_line = (ImageView) findViewById(R.id.btn_continue_line);
 		btnContinue.setOnClickListener(this);
 		if (getIntent().getData() != null || (getIntent().getStringExtra("from") != null && getIntent().getStringExtra("from").equals("base"))) {
 			btnContinue.setVisibility(View.GONE);
 			btn_continue_line.setVisibility(View.GONE);
+			add_friend_layout.setVisibility(View.VISIBLE);
+		}else{
+			find_friend_text.setVisibility(View.VISIBLE);
 		}
 		RadioGroup rgTabs = (RadioGroup) findViewById(R.id.rg_add_friends);
 		rgTabs.setOnCheckedChangeListener(new OnCheckedChangeListener() {

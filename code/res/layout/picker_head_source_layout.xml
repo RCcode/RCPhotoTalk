@@ -9,48 +9,43 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/default_gap_3x"
+        android:layout_marginRight="@dimen/default_gap_3x"
         android:background="@drawable/popup_bg"
+        android:padding="@dimen/default_gap_2x"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/picker_head_source_camera"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="@dimen/default_gap"
-            android:layout_marginRight="@dimen/default_gap"
-            android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/popup_btn"
-            android:text="@string/camera"
-            android:textSize="20sp"
-            android:padding="@dimen/default_gap"
-            android:textColor="#534d48" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
 
-        <Button
-            android:id="@+id/picker_head_source_gallary"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_marginLeft="@dimen/default_gap"
-            android:layout_marginRight="@dimen/default_gap"
-            android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/popup_btn"
-            android:padding="@dimen/default_gap"
-            android:text="@string/photo"
-            android:textSize="20sp"
-            android:textColor="#534d48"  />
+            <Button
+                android:id="@+id/picker_head_source_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/pop_camera_btn" />
+
+            <Button
+                android:id="@+id/picker_head_source_gallary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 android:layout_weight="1"
+                android:layout_marginLeft="@dimen/default_gap_2x"
+                android:background="@drawable/pop_photo_btn" />
+        </LinearLayout>
 
         <Button
             android:id="@+id/picker_head_cancel"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:layout_marginBottom="@dimen/default_gap_2x"
-            android:layout_marginLeft="@dimen/default_gap"
-            android:layout_marginRight="@dimen/default_gap"
             android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/popup_btn"
-            android:text="@string/cancel"
-            android:textSize="20sp"
+            android:background="@drawable/friend_info_send_btn"
             android:padding="@dimen/default_gap"
-            android:textColor="#534d48" />
+            android:text="@string/cancel"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
     </LinearLayout>
 
 </RelativeLayout>

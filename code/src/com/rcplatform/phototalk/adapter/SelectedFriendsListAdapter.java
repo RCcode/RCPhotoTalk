@@ -110,6 +110,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 			holder.tvLetter.setVisibility(View.GONE);
 		} else {
 			holder.tvLetter.setVisibility(View.VISIBLE);
+			letter = letter.toUpperCase();
 			holder.tvLetter.setText(letter);
 		}
 

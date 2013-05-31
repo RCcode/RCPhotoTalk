@@ -17,6 +17,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.KeyEvent;
+import android.view.Menu;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
@@ -341,5 +342,11 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					.setNegativeButton(R.string.retry, listener).setCancelable(false).create();
 		}
 		updateFailDialog.show();
+	}
+	
+	@Override
+	public boolean onMenuOpened(int featureId, Menu menu) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
