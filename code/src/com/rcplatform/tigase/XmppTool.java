@@ -9,6 +9,7 @@ import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManager;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Presence;
@@ -35,6 +36,39 @@ public class XmppTool {
 		USER_OFFLINE, SEND_OK, SEND_ERROR
 	};
 	
+	static class TigaseLenster implements ConnectionListener{
+
+		@Override
+        public void connectionClosed() {
+	        // TODO Auto-generated method stub
+	        
+        }
+
+		@Override
+        public void connectionClosedOnError(Exception e) {
+	        // TODO Auto-generated method stub
+	        
+        }
+
+		@Override
+        public void reconnectingIn(int seconds) {
+	        // TODO Auto-generated method stub
+	        
+        }
+
+		@Override
+        public void reconnectionSuccessful() {
+	        // TODO Auto-generated method stub
+	        
+        }
+
+		@Override
+        public void reconnectionFailed(Exception e) {
+	        // TODO Auto-generated method stub
+	        
+        }
+		
+	}
 	
 
 	private static Timer connectCheckTimer = new Timer();
@@ -45,24 +79,26 @@ public class XmppTool {
 			//检测连接状态
 			if (null != con) {
 				if (!con.isConnected()) {
-					try {
-						con.connect();
-					}
-					catch (XMPPException e) {
+//					try {
+				//		con.connect();
+//					}
+//					catch (XMPPException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//						e.printStackTrace();
+//					}
+					if(!con.isAuthenticated()){
+//						
+//							try {
+//			                   con.login(user, password, XMPP_RESOURCES);
+//		                    }
+//		                    catch (XMPPException e) {
+//			                    // TODO Auto-generated catch block
+//			                    e.printStackTrace();
+//		                    }
+						}
 				}
 				
-				if(!con.isAuthenticated()){
-					try {
-	                    con.login(user, password, XMPP_RESOURCES);
-                    }
-                    catch (XMPPException e) {
-	                    // TODO Auto-generated catch block
-	                    e.printStackTrace();
-                    }
-				}
+
 			} else {
 				openConnection(XmppTool.node.getIp(), XmppTool.node.getPort(), XmppTool.node.getDomain());
 			}
@@ -91,6 +127,9 @@ public class XmppTool {
 			ConnectionConfiguration connConfig = new ConnectionConfiguration(service, port, domain);
 			con = new XMPPConnection(connConfig);
 			con.connect();
+			TigaseLenster len = new TigaseLenster();
+			con.addConnectionListener(len);
+			
 
 		}
 		catch (Exception xe) {
