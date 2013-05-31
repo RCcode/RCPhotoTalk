@@ -6,7 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 
 
-public class MessageBinderService extends Service {
+public class TigaseMessageBinderService extends Service {
 
     // Binder given to clients
     private final IBinder mBinder = new LocalBinder();
@@ -16,9 +16,9 @@ public class MessageBinderService extends Service {
      * runs in the same process as its clients, we don't need to deal with IPC.
      */
     public class LocalBinder extends Binder {
-    	MessageBinderService getService() {
+    	TigaseMessageBinderService getService() {
             // Return this instance of LocalService so clients can call public methods
-            return MessageBinderService.this;
+            return TigaseMessageBinderService.this;
         }
     }
     
