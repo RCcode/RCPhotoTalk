@@ -29,8 +29,6 @@ import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.tigase.TigaseNode;
 import com.rcplatform.tigase.TigaseNodeUtil;
-import com.rcplatform.tigase.XmppTool;
-import com.rcplatform.tigase.XmppTool.MessageStatus;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
