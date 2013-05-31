@@ -495,7 +495,7 @@ public class PTBackgroundService extends Service {
 			if (mCurrentUser != null) {
 				Thread thread = new Thread() {
 					public void run() {
-						List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(UserMessageService.MESSAGE_CONTENT_KEY));
+						List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY));
 						Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(gcms, mCurrentUser);
 						Message msg = newInformationHandler.obtainMessage();
 						msg.what = MSG_WHAT_NEWINFOS;

@@ -37,12 +37,12 @@ public class MessageSender {
 		String message = JSONConver.informationToJSON(informations);
 		String action=null;
 		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-			action=UserMessageService.MESSAGE_ACTION_FRIEND;
+			action=TigaseMessageBinderService.MESSAGE_ACTION_FRIEND;
 		} else if (informations[0].getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 			if (informations[0].getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD)
-				action=UserMessageService.MESSAGE_ACTION_SEND_MESSAGE;
+				action=TigaseMessageBinderService.MESSAGE_ACTION_SEND_MESSAGE;
 			else
-				action= UserMessageService.MESSAGE_ACTION_MSG;
+				action= TigaseMessageBinderService.MESSAGE_ACTION_MSG;
 		}
 		if(mService!=null)
 			mService.sendMessage(message, tigaseId, rcId, action);

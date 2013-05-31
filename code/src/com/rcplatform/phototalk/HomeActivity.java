@@ -133,7 +133,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		registeInformationReceiver();
+//		registeInformationReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
@@ -595,7 +595,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 			mLongPressDialog.dismiss();
 		ImageLoader.getInstance().clearMemoryCache();
 		ImageLoader.getInstance().stop();
-		unregisteInformationReceiver();
+//		unregisteInformationReceiver();
 		super.onDestroy();
 	}
 
@@ -729,18 +729,18 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 			}
 		}
 	}
-
-	private BroadcastReceiver mInformationReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			LogUtil.e("tigase receive informations...");
-			Bundle extras = intent.getExtras();
-			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
-			List<Information> informations = JSONConver.jsonToInformations(msg);
-			filteInformations(informations);
-		}
-	};
+//
+//	private BroadcastReceiver mInformationReceiver = new BroadcastReceiver() {
+//
+//		@Override
+//		public void onReceive(Context context, Intent intent) {
+//			LogUtil.e("tigase receive informations...");
+//			Bundle extras = intent.getExtras();
+//			String msg = extras.getString(UserMessageService.MESSAGE_CONTENT_KEY);
+//			List<Information> informations = JSONConver.jsonToInformations(msg);
+//			filteInformations(informations);
+//		}
+//	};
 
 	private void filteInformations(final List<Information> infos) {
 		Thread th = new Thread() {
@@ -755,34 +755,34 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 		th.start();
 	}
 
-	private void registeInformationReceiver() {
-		IntentFilter filter = new IntentFilter(UserMessageService.MESSAGE_RECIVE_BROADCAST);
-		registerReceiver(mInformationReceiver, filter);
-		isInformationReceiverRegiste = true;
-		startTigaseService();
-	}
+//	private void registeInformationReceiver() {
+//		IntentFilter filter = new IntentFilter(UserMessageService.MESSAGE_RECIVE_BROADCAST);
+//		registerReceiver(mInformationReceiver, filter);
+//		isInformationReceiverRegiste = true;
+//		startTigaseService();
+//	}
 
-	private void startTigaseService() {
-		UserInfo currentUser = getCurrentUser();
-		Intent intent = new Intent(this, UserMessageService.class);
-		Bundle bundle = new Bundle();
-		bundle.putString(UserMessageService.TIGASE_USER_NAME_KEY, currentUser.getTigaseId());
-		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePwd());
-		intent.putExtras(bundle);
-		startService(intent);
-	}
+//	private void startTigaseService() {
+//		UserInfo currentUser = getCurrentUser();
+//		Intent intent = new Intent(this, UserMessageService.class);
+//		Bundle bundle = new Bundle();
+//		bundle.putString(TigaseMessageBinderService.TIGASE_USER_NAME_KEY, currentUser.getTigaseId());
+//		bundle.putString(UserMessageService.TIGASE_USER_PASSWORD_KEY, currentUser.getTigasePwd());
+//		intent.putExtras(bundle);
+//		startService(intent);
+//	}
 
-	private void unregisteInformationReceiver() {
-		if (isInformationReceiverRegiste)
-			unregisterReceiver(mInformationReceiver);
-		isInformationReceiverRegiste = false;
-		stopTigaseService();
-	}
-
-	private void stopTigaseService() {
-		Intent intent = new Intent(this, UserMessageService.class);
-		stopService(intent);
-	}
+//	private void unregisteInformationReceiver() {
+//		if (isInformationReceiverRegiste)
+//			unregisterReceiver(mInformationReceiver);
+//		isInformationReceiverRegiste = false;
+//		stopTigaseService();
+//	}
+//
+//	private void stopTigaseService() {
+//		Intent intent = new Intent(this, UserMessageService.class);
+//		stopService(intent);
+//	}
 
 	public void onNewInformation(List<Information> infosNeedUpdate, List<Information> infosNew) {
 		List<Information> localInformation = getAdapterData();
