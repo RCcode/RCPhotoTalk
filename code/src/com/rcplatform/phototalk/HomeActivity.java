@@ -143,7 +143,8 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 		checkUpdate();
 		checkTrends();
 		tvTigaseState = (TextView) findViewById(R.id.tv_test);
-		registeTigaseStateReceiver();
+//		registeTigaseStateReceiver();
+		bindTigaseService();
 		checkBindPhone();
 	}
 
@@ -582,8 +583,9 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 
 	@Override
 	protected void onDestroy() {
+		unBindTigaseService();
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
-		unregisterReceiver(mTigaseStateChangeReceiver);
+//		unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
@@ -895,6 +897,7 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			LocalBinder binder = (LocalBinder) service;
 			binder.getService().setOnMessageReciver(HomeActivity.this);
+			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(), getCurrentUser().getTigasePwd());
 			MessageSender.getInstance().setTigaseService(binder.getService());
 		}
 	};

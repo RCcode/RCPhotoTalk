@@ -210,8 +210,70 @@ public class FriendsProxy {
 		request.excuteAsync();
 	}
 
-	public static void getFriends(BaseActivity context, LoadFriendsListener listener) {
+	public static void getFriends(final BaseActivity context, final LoadFriendsListener listener) {
+		Thread thread = new Thread() {
+			public void run() {
+				if (PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
+					final List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+					context.runOnUiThread(new Runnable() {
 
+						@Override
+						public void run() {
+							listener.onFriendsLoaded(friends, null);
+						}
+					});
+				}
+				getMyFriendlist(context, new RCPlatformResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, final String content) {
+						Thread thread = new Thread() {
+							public void run() {
+								try {
+									JSONObject jsonObject = new JSONObject(content);
+									JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
+									List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
+									for (Friend friend : friends) {
+										friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
+										friend.setFriend(true);
+									}
+									PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
+									if (!PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
+										PrefsUtils.User.setLoadedFriends(context, context.getCurrentUser().getRcId());
+										final List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
+										context.runOnUiThread(new Runnable() {
+
+											@Override
+											public void run() {
+												listener.onFriendsLoaded(localFriends, null);
+											}
+										});
+
+									}
+								} catch (Exception e) {
+									e.printStackTrace();
+									context.runOnUiThread(new Runnable() {
+
+										@Override
+										public void run() {
+											listener.onLoadedFail(context.getString(R.string.net_error));
+										}
+									});
+
+								}
+							};
+						};
+						thread.start();
+					}
+
+					@Override
+					public void onFailure(int errorCode, String content) {
+						listener.onLoadedFail(content);
+					}
+				});
+			};
+		};
+		thread.start();
 	}
 
 	public static void getFriendsAndRecommends(final BaseActivity context, final LoadFriendsListener listener) {

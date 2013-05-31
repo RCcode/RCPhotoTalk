@@ -83,9 +83,6 @@ public class UserMessageService extends Service {
 	private static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
 
 	private Context ctx;
-
-	// private TigaseDb4oDatabase db = new TigaseDb4oDatabase();
-
 	private HashMap<String, Timer> gcmTimers;
 
 	private boolean hasRegisteSendReceiver = false;
@@ -279,17 +276,8 @@ public class UserMessageService extends Service {
 				json.put("rcId", app.getCurrentUser().getRcId());
 				json.put("language", "");
 				json.put("extra", extra);
-				/*
-				 * json.put("packageName", MetaHelper.getAppName(context));
-				 * json.put("status", STATUS_CREATE_USERINFO);
-				 * json.put("deviceID", MetaHelper.getImsi(context));
-				 * json.put("clientMac", MetaHelper.getMACAddress(context));
-				 * json.put("osVersion", MetaHelper.getOsVersion(context));
-				 * json.put("language", MetaHelper.getLanguage(context));
-				 * json.put("timeZone", MetaHelper.getTimeZone(context));
-				 * json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
-				 */
-			} catch (JSONException e1) {
+			}
+			catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}

@@ -4,10 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,15 +38,12 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.request.JSONConver;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
 
 public class SelectFriendsActivity extends BaseActivity implements OnClickListener {
@@ -107,22 +100,25 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
 		initViewOrListener();
-		getLocalFriends();
+		getFriends();
 
 	}
 
-	private void getLocalFriends() {
-		Thread th = new Thread() {
-			public void run() {
+	private void getFriends() {
+		FriendsProxy.getFriends(this, new LoadFriendsListener() {
 
-				if (PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
-					List<Friend> friends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-					mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
+			@Override
+			public void onLoadedFail(String reason) {
+				if (!PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
+					showErrorConfirmDialog(reason);
 				}
-				getFriends();
-			};
-		};
-		th.start();
+			}
+
+			@Override
+			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
+			}
+		});
 	}
 
 	@Override
@@ -289,32 +285,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		});
 	}
 
-	private void jsonToFriends(final String json) throws JSONException {
-		Thread thread = new Thread() {
-			public void run() {
-				try {
-					JSONObject jsonObject = new JSONObject(json);
-					JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
-					List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
-					for (Friend friend : friends) {
-						friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
-						friend.setFriend(true);
-					}
-					PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
-					if (!PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
-						PrefsUtils.User.setLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId());
-						List<Friend> localFriends = PhotoTalkDatabaseFactory.getDatabase().getFriends();
-						mHandler.obtainMessage(MSG_CACHE_FINISH, localFriends).sendToTarget();
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			};
-		};
-		thread.start();
-
-	}
-
 	private void sendStringMessage(int what, String content) {
 		Message msg = mHandler.obtainMessage();
 		msg.what = what;
@@ -436,26 +406,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			}
 		}
 		return super.onKeyDown(keyCode, event);
-	}
-
-	private void getFriends() {
-		FriendsProxy.getMyFriendlist(SelectFriendsActivity.this, new RCPlatformResponseHandler() {
-
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					jsonToFriends(content);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
-
-			@Override
-			public void onFailure(int errorCode, String content) {
-				sendStringMessage(MSG_WHAT_ERROR, getString(R.string.net_error));
-			}
-		});
-
 	}
 
 	@Override
