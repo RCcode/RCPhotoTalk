@@ -140,6 +140,7 @@ public class EditPictureActivity extends BaseActivity {
 	private Friend friend = null;
 
 	private RelativeLayout select_layout;
+	private boolean isShowSelectLayout;
 
 	private MediaPlayer player;
 
@@ -204,6 +205,7 @@ public class EditPictureActivity extends BaseActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.edit_picture_view2);
+		isShowSelectLayout = false;
 		tooShortLayout = (RelativeLayout) findViewById(R.id.layout_voice_record_too_short);
 		recordDisplayLayout = (RelativeLayout) findViewById(R.id.layout_voice_record);
 		voice_volume_bg = (ImageView) findViewById(R.id.voice_volume_bg);
@@ -221,7 +223,8 @@ public class EditPictureActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				int height = voice_volume_bg.getHeight();
 				if (height > 0) {
-					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
+					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume
+							.getLayoutParams();
 					if (amplitude > 22000) {
 						iv_voice_volume
 								.setBackgroundResource(R.drawable.voice_volume_full);
@@ -250,7 +253,7 @@ public class EditPictureActivity extends BaseActivity {
 				voicePath = savePath;
 				audioBtn.setVisibility(4);
 				make_voice.setVisibility(0);
-//				mButtonTimeLimit.setClickable(false);
+				// mButtonTimeLimit.setClickable(false);
 				mButtonTimeLimit.setVisibility(View.GONE);
 				voice_size.setText(n + "s");
 
@@ -342,6 +345,7 @@ public class EditPictureActivity extends BaseActivity {
 					}
 				});
 	}
+
 	private final OnClickListener clickListener = new OnClickListener() {
 
 		@Override
@@ -395,7 +399,7 @@ public class EditPictureActivity extends BaseActivity {
 				if (file.exists()) {
 					file.delete();
 				}
-//				mButtonTimeLimit.setClickable(true);
+				// mButtonTimeLimit.setClickable(true);
 				mButtonTimeLimit.setVisibility(View.VISIBLE);
 				audioBtn.setVisibility(0);
 				make_voice.setVisibility(4);
@@ -417,7 +421,12 @@ public class EditPictureActivity extends BaseActivity {
 
 				break;
 			case TIMELIMIT_ON_CLICK:
-				showTimeLimitView();
+				if (!isShowSelectLayout) {
+					showTimeLimitView();
+				} else {
+					select_layout.setVisibility(View.GONE);
+					isShowSelectLayout = false;
+				}
 				break;
 
 			case SAVE_PICTURE_ON_CLICK:
@@ -598,8 +607,15 @@ public class EditPictureActivity extends BaseActivity {
 		}
 		mWheel.setVisibleItems(3);
 		mWheel.setViewAdapter(adapter);
-		mWheel.setCurrentItem(timers.length - 1);
+		int n = 10;
+		try {
+			n = Integer.valueOf(mButtonTimeLimit.getText().toString());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		mWheel.setCurrentItem(n - 1);
 		select_layout.setVisibility(View.VISIBLE);
+		isShowSelectLayout = true;
 
 	}
 
@@ -671,8 +687,15 @@ public class EditPictureActivity extends BaseActivity {
 						send();
 					}
 				} else {
-					//保存成功后 刷新本地相册
-					EditPictureActivity.this.getBaseContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"+ Environment.getExternalStorageDirectory())));
+					// 保存成功后 刷新本地相册
+					EditPictureActivity.this
+							.getBaseContext()
+							.sendBroadcast(
+									new Intent(
+											Intent.ACTION_MEDIA_MOUNTED,
+											Uri.parse("file://"
+													+ Environment
+															.getExternalStorageDirectory())));
 					Toast.makeText(EditPictureActivity.this,
 							R.string.save_success, Toast.LENGTH_SHORT).show();
 				}
@@ -695,6 +718,7 @@ public class EditPictureActivity extends BaseActivity {
 				mEditePicView.setTimeLimit(n);
 				audioBtn.setMaxRecoedSize(n);
 				select_layout.setVisibility(View.GONE);
+				isShowSelectLayout = false;
 				break;
 			}
 

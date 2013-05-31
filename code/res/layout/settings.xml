@@ -73,6 +73,7 @@
                             android:layout_height="@dimen/user_head_image_width_bg"
                             android:layout_gravity="center_vertical"
                             android:padding="3dp"
+                                android:layout_marginRight="@dimen/user_detail_source_margin_left"
                             android:background="@drawable/send_friend_head_bg" >
 
                             <com.rcplatform.phototalk.views.RoundImageView
@@ -82,7 +83,6 @@
                                 android:layout_centerInParent="true"
                                 android:src="@drawable/default_head"
                                 android:scaleType="centerInside"
-                                android:layout_marginRight="@dimen/user_detail_source_margin_left"
                                 android:gravity="center" />
                         </RelativeLayout>
 
@@ -187,29 +187,29 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="1dp"
                     android:background="@drawable/app_list_back"
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="5dp"
                         android:background="@drawable/one" />
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="5dp"
                         android:background="@drawable/two" />
 
                     <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginLeft="5dp"
                         android:background="@drawable/three" />
                 </LinearLayout>
 
@@ -233,6 +233,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
+                            android:textSize="18sp"
                             android:text="@string/friend_dynamic"
                             android:textColor="#313131" >
                         </TextView>
@@ -288,6 +289,7 @@
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
                             android:text="@string/my_account"
+                              android:textSize="18sp"
                             android:textColor="#313131" >
                         </TextView>
 
@@ -317,6 +319,7 @@
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
                             android:text="@string/setting"
+                              android:textSize="18sp"
                             android:textColor="#313131" >
                         </TextView>
 
@@ -346,6 +349,7 @@
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
                             android:text="@string/about"
+                              android:textSize="18sp"
                             android:textColor="#313131" >
                         </TextView>
 

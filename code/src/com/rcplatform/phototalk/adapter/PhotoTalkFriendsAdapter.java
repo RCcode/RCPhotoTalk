@@ -57,7 +57,9 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	private Set<Friend> mWillInvateFriends;
 	private String[] mLetters;
 
-	public PhotoTalkFriendsAdapter(Context context, Map<Integer, List<Friend>> friends, Set<Friend> willInvateFriends, ImageLoader imageLoader) {
+	public PhotoTalkFriendsAdapter(Context context,
+			Map<Integer, List<Friend>> friends, Set<Friend> willInvateFriends,
+			ImageLoader imageLoader) {
 		mInflater = LayoutInflater.from(context);
 		this.mImageLoader = imageLoader;
 		this.mContext = context;
@@ -85,7 +87,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			mFriends.put(cate, list);
 		}
 		if (mTitles.contains(Integer.valueOf(TYPE_FRIEND_ADDED))) {
-			List<Friend> addedFriends = mFriends.get(Integer.valueOf(TYPE_FRIEND_ADDED));
+			List<Friend> addedFriends = mFriends.get(Integer
+					.valueOf(TYPE_FRIEND_ADDED));
 			mLetters = new String[addedFriends.size()];
 			for (int i = 0; i < mLetters.length; i++) {
 				mLetters[i] = addedFriends.get(i).getLetter();
@@ -94,7 +97,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	}
 
 	private boolean isNeedToShowLetter(int position) {
-		return position > 0 ? (!mLetters[position].equals(mLetters[position - 1])) : true;
+		return position > 0 ? (!mLetters[position]
+				.equals(mLetters[position - 1])) : true;
 	}
 
 	@Override
@@ -133,11 +137,21 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public View getGroupView(int groupPosition, boolean isExpanded,
+			View convertView, ViewGroup parent) {
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.my_friend_list_item_header, null);
+			convertView = mInflater.inflate(
+					R.layout.my_friend_list_item_header, null);
 		}
-		TextView tvTitle = (TextView) convertView.findViewById(R.id.content_title);
+		TextView tvTitle = (TextView) convertView
+				.findViewById(R.id.content_title);
+		ImageView ground_item_view = (ImageView) convertView
+				.findViewById(R.id.ground_item_view);
+		if (!isExpanded) {
+			ground_item_view.setBackgroundResource(R.drawable.group_item_up);
+		} else {
+			ground_item_view.setBackgroundResource(R.drawable.group_item_down);
+		}
 		int titleType = mTitles.get(groupPosition);
 		if (titleType == TYPE_RECOMMENDS) {
 			tvTitle.setText(R.string.firend_list_used_photochat_friend_title);
@@ -152,8 +166,10 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
-		Friend friend = mFriends.get(mTitles.get(groupPosition)).get(childPosition);
+	public View getChildView(int groupPosition, int childPosition,
+			boolean isLastChild, View convertView, ViewGroup parent) {
+		Friend friend = mFriends.get(mTitles.get(groupPosition)).get(
+				childPosition);
 		if (getChildType(groupPosition, childPosition) == TYPE_CHILD_RECOMMENT) {
 			convertView = getRecommentFriendView(convertView, parent, friend);
 		} else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_CONTACT)
@@ -161,21 +177,28 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_FACEBOOK)
 			convertView = getFacebookView(convertView, parent, friend);
 		else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_FRIEND_ADDED)
-			convertView = getFriendView(convertView, parent, friend, childPosition);
+			convertView = getFriendView(convertView, parent, friend,
+					childPosition);
 		else if (getChildType(groupPosition, childPosition) == TYPE_CHILD_VK)
 			convertView = getVKFriendsView(convertView, parent, friend);
 		return convertView;
 	}
 
-	private View getContactFriendView(View convertView, ViewGroup parent, final Friend friend) {
+	private View getContactFriendView(View convertView, ViewGroup parent,
+			final Friend friend) {
 		ViewHolder holder = null;
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.invite_friend_list_item, null);
+			convertView = mInflater.inflate(R.layout.invite_friend_list_item,
+					null);
 			holder = new ViewHolder();
-			holder.name = (TextView) convertView.findViewById(R.id.diaplay_chat_name);
-			holder.number = (TextView) convertView.findViewById(R.id.display_number);
-			holder.checkBox = (CheckBox) convertView.findViewById(R.id.add_friend_invite_checkbox);
-			holder.sendMessageBtn = (Button) convertView.findViewById(R.id.add_friend_invite_single_btn);
+			holder.name = (TextView) convertView
+					.findViewById(R.id.diaplay_chat_name);
+			holder.number = (TextView) convertView
+					.findViewById(R.id.display_number);
+			holder.checkBox = (CheckBox) convertView
+					.findViewById(R.id.add_friend_invite_checkbox);
+			holder.sendMessageBtn = (Button) convertView
+					.findViewById(R.id.add_friend_invite_single_btn);
 			convertView.setTag(holder);
 
 		} else {
@@ -192,19 +215,22 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		} else {
 			holder.checkBox.setChecked(false);
 		}
-		holder.checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+		holder.checkBox
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				if (mCheckBoxChangedListener != null) {
-					mCheckBoxChangedListener.onChange(friend, isChecked);
-				}
-				if (isChecked)
-					mWillInvateFriends.add(friend);
-				else
-					mWillInvateFriends.remove(friend);
-			}
-		});
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if (mCheckBoxChangedListener != null) {
+							mCheckBoxChangedListener
+									.onChange(friend, isChecked);
+						}
+						if (isChecked)
+							mWillInvateFriends.add(friend);
+						else
+							mWillInvateFriends.remove(friend);
+					}
+				});
 
 		return convertView;
 	}
@@ -220,11 +246,14 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		CheckBox checkBox;
 	}
 
-	private View getFacebookView(View convertView, ViewGroup praent, final Friend friend) {
+	private View getFacebookView(View convertView, ViewGroup praent,
+			final Friend friend) {
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.facebook_friend_item, null);
+			convertView = mInflater
+					.inflate(R.layout.facebook_friend_item, null);
 		}
-		ProfilePictureView head = (ProfilePictureView) convertView.findViewById(R.id.facebook_ppv);
+		ProfilePictureView head = (ProfilePictureView) convertView
+				.findViewById(R.id.facebook_ppv);
 		head.setProfileId(friend.getRcId());
 		TextView tvName = (TextView) convertView.findViewById(R.id.tv_nick);
 		tvName.setText(friend.getNickName());
@@ -234,13 +263,18 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 
 	private OnClickListener mRightClickListener;
 
-	private View getRecommentFriendView(View convertView, ViewGroup parent, final Friend friend) {
+	private View getRecommentFriendView(View convertView, ViewGroup parent,
+			final Friend friend) {
 		if (convertView == null) {
-			convertView = mInflater.inflate(R.layout.add_friend_list_item, null);
+			convertView = mInflater
+					.inflate(R.layout.add_friend_list_item, null);
 		}
-		ImageView portraitImage = (ImageView) convertView.findViewById(R.id.add_friend_list_item_portrait);
-		TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
-		final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
+		ImageView portraitImage = (ImageView) convertView
+				.findViewById(R.id.add_friend_list_item_portrait);
+		TextView nickTextView = (TextView) convertView
+				.findViewById(R.id.add_friend_list_item_name);
+		final Button addFriendBtn = (Button) convertView
+				.findViewById(R.id.add_friend_button);
 		setFriendSourceInfo(convertView, friend);
 		mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
 		portraitImage.setOnClickListener(new View.OnClickListener() {
@@ -264,15 +298,21 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		return convertView;
 	}
 
-	private View getFriendView(View convertView, ViewGroup parent, final Friend friend, int position) {
+	private View getFriendView(View convertView, ViewGroup parent,
+			final Friend friend, int position) {
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.friend_item, null);
 		}
 		View letterView = convertView.findViewById(R.id.linear_letter);
 		if (isNeedToShowLetter(position)) {
 			letterView.setVisibility(View.VISIBLE);
-			TextView tvLetter = (TextView) letterView.findViewById(R.id.tv_letter);
-			tvLetter.setText(friend.getLetter());
+			TextView tvLetter = (TextView) letterView
+					.findViewById(R.id.tv_letter);
+			String letters = "";
+			if (friend.getLetter() != null) {
+				letters = friend.getLetter().toUpperCase();
+			}
+			tvLetter.setText(letters);
 		} else {
 			letterView.setVisibility(View.GONE);
 		}
@@ -280,11 +320,13 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
 		mImageLoader.displayImage(friend.getHeadUrl(), ivHead);
-		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
+		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend
+				.getNickName() : friend.getLocalName());
 		return convertView;
 	}
 
-	private View getVKFriendsView(View convertView, ViewGroup parent, final Friend friend) {
+	private View getVKFriendsView(View convertView, ViewGroup parent,
+			final Friend friend) {
 		if (convertView == null) {
 			convertView = mInflater.inflate(R.layout.vk_friend_item, null);
 		}
@@ -301,7 +343,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		cbInvite.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
 				if (mCheckBoxChangedListener != null) {
 					mCheckBoxChangedListener.onChange(friend, isChecked);
 				}
@@ -346,7 +389,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	}
 
 	/**
-	 * 显示好友详情
+	 * 鏄剧ず濂藉弸璇︽儏
 	 * 
 	 * @param view
 	 * @param friend
@@ -359,7 +402,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		void onChange(Friend friend, boolean isChecked);
 	}
 
-	public void setOnFriendPortraitListener(OnFriendPortraitListener onFriendPortraitListener) {
+	public void setOnFriendPortraitListener(
+			OnFriendPortraitListener onFriendPortraitListener) {
 		this.mOnFriendPortraitListener = onFriendPortraitListener;
 	}
 
@@ -367,7 +411,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		this.mOnFriendAddListener = onFriendAddListener;
 	}
 
-	public void setOnCheckBoxChangedListener(OnCheckBoxChangedListener mCheckBoxChangedListener) {
+	public void setOnCheckBoxChangedListener(
+			OnCheckBoxChangedListener mCheckBoxChangedListener) {
 		this.mCheckBoxChangedListener = mCheckBoxChangedListener;
 	}
 
@@ -384,8 +429,10 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			sourceView.setVisibility(View.GONE);
 		} else {
 			sourceView.setVisibility(View.VISIBLE);
-			TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
-			TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
+			TextView tvName = (TextView) convertView
+					.findViewById(R.id.tv_source_name);
+			TextView tvFrom = (TextView) convertView
+					.findViewById(R.id.tv_source_from);
 			switch (source.getAttrType()) {
 			case FriendType.CONTACT:
 				tvFrom.setText(R.string.contact_friend);

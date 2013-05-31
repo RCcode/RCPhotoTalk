@@ -52,6 +52,7 @@
             android:layout_below="@+id/reg_bubble_desc_text"
             android:layout_marginTop="@dimen/default_gap"
             android:background="@drawable/login_edit_bg"
+            android:paddingBottom="@dimen/default_gap"
             android:orientation="vertical" >
 
             <EditText

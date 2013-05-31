@@ -21,8 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.gcm.MetaHelper;
+import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.Constants.Action;
 
 import android.app.Service;
 import android.content.Context;
@@ -128,6 +130,25 @@ public class TigaseMessageBinderService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		ctx = this;
+		
+		Timer timer = new Timer();
+
+		TimerTask task = new TimerTask() {
+
+			public void run() {
+				Intent intent=new Intent(Constants.Action.ACTION_TIGASE_STATE_CHANGE);
+				String status = "";
+				if(TigaseManager.getInstance().getIsConnected()){
+					status = "online";
+				}else{
+					status = "offline";
+				}
+				intent.putExtra(HomeActivity.INTENT_KEY_STATE, status);
+				sendBroadcast(intent);
+			}
+
+		};
+		timer.schedule(task, 10000, 10000);
 	}
 
 	@Override
@@ -137,7 +158,7 @@ public class TigaseMessageBinderService extends Service {
 
 	public void tigaseLogin( String name, String password) {
 		TigaseManager.getInstance().setLoginInfo(name, password);
-		TigaseManager.getInstance().asyncConnect();
+		TigaseManager.getInstance().initConnect();
 		TigaseManager.getInstance().setChatManagerListener(chatListener);
 	}
 

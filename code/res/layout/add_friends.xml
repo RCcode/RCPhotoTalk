@@ -14,15 +14,40 @@
             android:layout_height="wrap_content"
             android:background="@drawable/base_top_navigate_background" >
 
+            <LinearLayout
+                android:id="@+id/add_friend_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <Button
+                    android:id="@+id/add_back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/base_back_btn" />
+
+                <TextView
+                    style="@style/titleTextStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:text="@string/add_friend_title" />
+            </LinearLayout>
+
             <TextView
+                android:id="@+id/find_friend_text"
+                style="@style/titleTextStyle"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/friend_info_phone_left"
-                android:text="@string/friends_already_use_app"
-                android:textColor="#f1f1f1" />
+                android:text="@string/find_friend_title"
+                android:visibility="gone" />
 
-           <Button
+            <Button
                 android:id="@+id/btn_continue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

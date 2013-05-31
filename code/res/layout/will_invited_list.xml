@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:scrollbars="@null"
         android:layout_toLeftOf="@+id/btn_invate" >
 
         <LinearLayout

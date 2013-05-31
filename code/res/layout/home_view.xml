@@ -33,6 +33,7 @@
             android:id="@+id/btn_home_take_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
             android:background="@drawable/take_photo_button_selector" />
     </LinearLayout>
 

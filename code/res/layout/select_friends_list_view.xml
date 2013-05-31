@@ -35,8 +35,8 @@
 
             <Button
                 android:id="@+id/seach_delete_btn"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_alignRight="@+id/et_search"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="10dp"
@@ -56,35 +56,45 @@
     <RelativeLayout
         android:id="@+id/send_layout"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/select_send_bottom_bg"
-        >
+        android:background="@drawable/select_send_bottom_bg" >
 
-        <Gallery
+        <com.rcplatform.phototalk.views.HorizontalListViewOne
             android:id="@+id/g_sfl_added_friends"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="16dp"
-            android:layout_toLeftOf="@+id/line_view"
-            android:clickable="false"
-            android:focusable="false"
-            android:isScrollContainer="false" />
+            android:layout_height="60dp"
+            android:scrollbars="none"
+            android:layout_marginLeft="@dimen/default_gap"
+            android:layout_toLeftOf="@+id/btn_sfl_send" />
 
-        <ImageView
-            android:id="@+id/line_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/btn_sfl_send"
-            android:background="@drawable/select_send_line" />
+           <!--  <FrameLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" >
+
+                <LinearLayout
+                    android:id="@+id/gridview_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <GridView
+                        android:id="@+id/g_sfl_added_friends"
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp"
+                        android:columnWidth="60dp"
+                        android:horizontalSpacing="0dp"
+                        android:numColumns="auto_fit"
+                        android:scrollbars="none"
+                        android:stretchMode="none" />
+                </LinearLayout>
+            </FrameLayout>
+        </HorizontalScrollView> -->
 
         <Button
             android:id="@+id/btn_sfl_send"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"

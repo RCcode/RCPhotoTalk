@@ -40,6 +40,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.activity.MenueBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
@@ -83,7 +84,7 @@ import com.rcplatform.tigase.TigaseMessageReceiver;
  * 
  * @version 1.0.0
  */
-public class HomeActivity extends BaseActivity implements SnapShowListener, TigaseMessageReceiver {
+public class HomeActivity extends MenueBaseActivity implements SnapShowListener, TigaseMessageReceiver {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
@@ -593,12 +594,6 @@ public class HomeActivity extends BaseActivity implements SnapShowListener, Tiga
 		super.onDestroy();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		return true;
-	}
-
-	// LogicUtils.showInformationClearDialog(this);
 
 	private List<Information> getAdapterData() {
 		if (adapter == null)

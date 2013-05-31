@@ -261,6 +261,7 @@ private Button seach_delete_btn;
 			willInvateFriends.add(friend);
 			TextView tvName = buildInvateTextView(friend);
 			tvName.setTextColor(Color.WHITE);
+			tvName.setTextSize(16);
 			willInvateViews.put(friend.getRcId(), tvName);
 			mLinearInvate.addView(tvName);
 			refreshList();
@@ -288,7 +289,7 @@ private Button seach_delete_btn;
 		int marginLeft = getResources().getDimensionPixelSize(R.dimen.invate_friend_space);
 		params.setMargins(marginLeft, 0, 0, 0);
 		tvName.setLayoutParams(params);
-		tvName.setText(friend.getNickName());
+		tvName.setText(friend.getNickName()+",");
 		tvName.setOnClickListener(new OnClickListener() {
 
 			@Override

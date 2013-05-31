@@ -2,13 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
-    android:padding="@dimen/friends_adapter_item_padding" >
+    android:descendantFocusability="blocksDescendants"
+    android:background="@color/white" >
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/facebook_ppv"
-        android:layout_width="@dimen/head_image_width"
-        android:layout_height="@dimen/head_image_width" />
+        android:layout_width="@dimen/friend_head_side"
+        android:layout_height="@dimen/friend_head_side"
+        android:layout_marginLeft="10dp"
+        android:scaleType="fitCenter" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/friend_item_bg" />
 
     <TextView
         android:id="@+id/tv_nick"
@@ -17,6 +24,19 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
-        android:layout_toRightOf="@+id/facebook_ppv" />
+        android:layout_toRightOf="@+id/facebook_ppv"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/facebook_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/facebook_add_btn"
+        android:layout_marginRight="@dimen/default_gap" >
+    </Button>
 
 </RelativeLayout>

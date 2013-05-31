@@ -28,7 +28,7 @@ public class TigaseManager {
 
 	private ChatManager chatManager = null;
 
-	// private TigaseDb4oDatabase db = null;
+	private TigaseDb4oDatabase db = null;
 
 	private String user = null;
 
@@ -41,6 +41,17 @@ public class TigaseManager {
 	private TigaseConnectionCreationListener createListener = null;
 
 	private ChatManagerListener chatListener = null;
+	
+	private final int INIT_CONNECT_MAX_COUNT = 4;
+	
+	private final int CONNECT_INTERVAL = 60000;
+	
+	private Timer initConnectTimer = null;
+
+	private TimerTask initConnectTask = null;
+	
+	private int retryConnectCount = 0;
+	
 
 	class TigaseListenter implements ConnectionListener {
 
@@ -53,16 +64,7 @@ public class TigaseManager {
 		public void connectionClosedOnError(Exception e) {
 			// TODO Auto-generated method stub
 			disConnect();
-			Timer connectTimer = new Timer();
-
-			TimerTask reConnectTask = new TimerTask() {
-
-				public void run() {
-					connect();
-				}
-
-			};
-			connectTimer.schedule(reConnectTask, 10000);
+			initConnect();
 		}
 
 		@Override
@@ -88,7 +90,7 @@ public class TigaseManager {
 		@Override
 		public void connectionCreated(Connection connection) {
 			// TODO Auto-generated method stub
-
+			initConnectTimer.cancel();
 			// login
 			if (null != user && null != password) {
 				try {
@@ -104,21 +106,20 @@ public class TigaseManager {
 			chatManager.addChatListener(chatListener);
 			isConnected = true;
 			// 发送备份消息
-			// List<TigaseMassage> list = db.getTigaseMassages();
-			// for (int i = 0; i < list.size(); i++) {
-			// TigaseMassage msg = list.get(i);
-			// boolean sendStatus = sendMessage(msg.getToUser(),
-			// msg.getMassage());
-			// if (true == sendStatus) {
-			// db.deleteTigaseMassage(msg);
-			// }
-			// }
+			List<TigaseMassage> list = db.getTigaseMassages();
+			for (int i = 0; i < list.size(); i++) {
+				TigaseMassage msg = list.get(i);
+				boolean sendStatus = sendMessage(msg.getToUser(), msg.getMassage());
+				if (true == sendStatus) {
+					db.deleteTigaseMassage(msg);
+				}
+			}
 		}
 
 	}
 
 	private TigaseManager() {
-		// db = new TigaseDb4oDatabase();
+		db = new TigaseDb4oDatabase();
 	}
 
 	static public TigaseManager getInstance() {
@@ -148,16 +149,25 @@ public class TigaseManager {
 		}
 	}
 
-	public void asyncConnect() {
-		// 链接tigase
-		new Thread(new Runnable() {
+	public void initConnect() {
+		retryConnectCount = 0;
+		initConnectTimer = new Timer();
 
-			@Override
+		initConnectTask = new TimerTask() {
+
 			public void run() {
-				// TODO Auto-generated method stub
-				instance.connect();
+				if(retryConnectCount >INIT_CONNECT_MAX_COUNT ){
+					initConnectTimer.cancel();
+					return;
+				}
+				retryConnectCount++;
+				connect();
 			}
-		}).start();
+
+		};
+		
+		initConnectTimer.scheduleAtFixedRate(initConnectTask, 0, CONNECT_INTERVAL);
+		
 	}
 
 	public void disConnect() {
@@ -194,15 +204,7 @@ public class TigaseManager {
 
 	public boolean sendMessage(String to, String msg) {
 		if (null == connection) {
-			new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					connect();
-				}
-			}).start();
-			return false;
+			initConnect();
 		}
 
 		if (false == isConnected) {
@@ -224,10 +226,10 @@ public class TigaseManager {
 		return flag;
 	}
 
-	public  String getFullUser(String userName) {
+	public String getFullUser(String userName) {
 		return userName + "@" + node.getDomain();
 	}
-	
+
 	public void sendMessageBackup(String toUser, String msgStr) {
 		boolean flag = sendMessage(toUser, msgStr);
 		if (true != flag) {
@@ -237,7 +239,7 @@ public class TigaseManager {
 			massage.setToUser(toUser);
 			List<TigaseMassage> list = new ArrayList<TigaseMassage>();
 			list.add(massage);
-			// db.saveTigaseMassages(list);
+			db.saveTigaseMassages(list);
 		}
 	}
 
