@@ -109,6 +109,12 @@ public class Constants {
 	public static class Message {
 
 		public static final String MESSAGE_CONTENT_KEY = "message_content";
+		
+		public static final String MESSAGE_ACTION_MSG = "1";
+
+		public static final String MESSAGE_ACTION_FRIEND = "2";
+
+		public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
 	}
 
 	public static class GCM {

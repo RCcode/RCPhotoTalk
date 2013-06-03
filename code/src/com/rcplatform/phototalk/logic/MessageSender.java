@@ -15,6 +15,7 @@ import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.GCM;
+import com.rcplatform.phototalk.utils.Constants.Message;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 
 public class MessageSender {
@@ -40,13 +41,13 @@ public class MessageSender {
 		String message = JSONConver.informationToJSON(informations);
 		String action = null;
 		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-			action = TigaseMessageBinderService.MESSAGE_ACTION_FRIEND;
+			action = Message.MESSAGE_ACTION_FRIEND;
 		} else if (informations[0].getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 			if (LogicUtils.isSender(context, informations[0])
 					&& informations[0].getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
-				action = TigaseMessageBinderService.MESSAGE_ACTION_SEND_MESSAGE;
+				action = Message.MESSAGE_ACTION_SEND_MESSAGE;
 			} else {
-				action = TigaseMessageBinderService.MESSAGE_ACTION_MSG;
+				action = Message.MESSAGE_ACTION_MSG;
 			}
 		}
 		if (mService != null)
