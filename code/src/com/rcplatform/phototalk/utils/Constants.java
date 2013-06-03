@@ -104,6 +104,11 @@ public class Constants {
 	public static class Message{
 		public static final String MESSAGE_CONTENT_KEY = "message_content";
 	}
+	
+	
+	public static class GCM{
+		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
+	}
 
 	public static class Action {
 
@@ -244,4 +249,5 @@ public class Constants {
 	public static final String KEY_TIGASE_ID = "tigaseid";
 
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
+
 }
