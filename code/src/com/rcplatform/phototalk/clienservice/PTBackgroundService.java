@@ -135,7 +135,7 @@ public class PTBackgroundService extends Service {
 	}
 
 	private boolean isUserNeedToBindPhone(UserInfo userInfo) {
-		return userInfo != null && userInfo.getCellPhone() == null && android.os.Build.SERIAL.equals(userInfo.getDeviceId());
+		return userInfo != null && userInfo.getCellPhone() == null && PhotoTalkParams.PARAM_VALUE_DEVICE_ID.equals(userInfo.getDeviceId());
 	}
 
 	@Override

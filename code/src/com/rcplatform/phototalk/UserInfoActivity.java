@@ -176,7 +176,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.rela_phone:
 			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
-				startActivity(RequestSMSActivity.class);
+				startActivityForResult(new Intent(this, RequestSMSActivity.class),REQUEST_CODE_BINDPHONE);
 			}
 			break;
 		}
