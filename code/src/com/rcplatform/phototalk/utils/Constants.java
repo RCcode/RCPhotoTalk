@@ -29,10 +29,6 @@ public class Constants {
 
 	public static final String AUDIO_FORMAT = ".amr";
 
-	public final static String GCM_TYPE_MSG = "1";
-
-	public final static String GCM_TYPE_FRIEND = "2";
-
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
 	public static Map<AppInfo, UserInfo> userApps;
@@ -40,11 +36,12 @@ public class Constants {
 	public static String VK_API_ID = "2904017";
 
 	private static final String DB_DIR = "db";
+
 	private static final String USER_DIR_NAME = "user";
 
 	public static File USER_IMAGE_DIR;
-	
-	public static final int INFORMATION_PAGE_SIZE=20;
+
+	public static final int INFORMATION_PAGE_SIZE = 20;
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -87,27 +84,38 @@ public class Constants {
 				}
 				fos.close();
 				is.close();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
 
 	public static class Database {
+
 		public static File DB_DIR;
+
 		public static String BASE_DATABASE_PATH;
+
 		public static String USERS_DATABASE_PATH;
+
 		public static String REQUEST_DATABASE_PATH;
+
 		public static String GLOBAL_DATABASE_PATH;
 	}
-	
-	public static class Message{
+
+	public static class Message {
+
 		public static final String MESSAGE_CONTENT_KEY = "message_content";
 	}
-	
-	
-	public static class GCM{
+
+	public static class GCM {
+
 		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
+
+		public final static String GCM_TYPE_MSG = "1";
+
+		public final static String GCM_TYPE_FRIEND = "2";
 	}
 
 	public static class Action {
@@ -158,12 +166,13 @@ public class Constants {
 		public static final String ACTION_RELOGIN = "com.rcplatform.phototalk.action.RELOGIN";
 
 		public static final String ACTION_OTHER_DEVICE_LOGIN = "com.rcplatform.phototalk.action.OTHER_DEVICE_LOGIN";
+
 		/**
 		 * gcm消息action
 		 */
 		public static final String ACTION_GCM_MESSAGE = "com.rcplatform.phototalk.action.GCM_MESSAGE";
-		
-		public static final String ACTION_TIGASE_STATE_CHANGE="com.rcplatform.phototalk.action.TIGASE_STATE_CHANGE";
+
+		public static final String ACTION_TIGASE_STATE_CHANGE = "com.rcplatform.phototalk.action.TIGASE_STATE_CHANGE";
 
 	}
 
@@ -197,6 +206,7 @@ public class Constants {
 	public static final String BIND_PHONE_NUMBER = "+18146193618";
 
 	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
+
 	// public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
 
 	// 头像图片本地缓存地址

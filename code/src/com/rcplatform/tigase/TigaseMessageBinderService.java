@@ -159,9 +159,9 @@ public class TigaseMessageBinderService extends Service {
 			String type = "";
 
 			if (action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
-				type = Constants.GCM_TYPE_MSG;
+				type = Constants.GCM.GCM_TYPE_MSG;
 			} else if (action.equals(MESSAGE_ACTION_FRIEND)) {
-				type = Constants.GCM_TYPE_FRIEND;
+				type = Constants.GCM.GCM_TYPE_FRIEND;
 			}
 
 			GcmTask gcmTask = new GcmTask(ctx, type, toRcID, msg);
