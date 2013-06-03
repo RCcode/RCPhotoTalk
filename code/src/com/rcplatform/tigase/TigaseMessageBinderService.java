@@ -58,12 +58,13 @@ public class TigaseMessageBinderService extends Service {
 						messageRecevier.onMessageHandle(msgContent, message.getFrom());
 						try {
 							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
-						} catch (XMPPException e) {
+						}
+						catch (XMPPException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
-								|| action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
+						        || action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
 							Vibrator vib = (Vibrator) ctx.getSystemService(Service.VIBRATOR_SERVICE);
 							vib.vibrate(200);
 						}
@@ -103,6 +104,12 @@ public class TigaseMessageBinderService extends Service {
 	public IBinder onBind(Intent intent) {
 		// TODO Auto-generated method stub
 		return mBinder;
+	}
+	@Override
+	public boolean onUnbind (Intent intent){
+		super.onUnbind(intent);
+		TigaseManager.getInstance(ctx).disConnect();
+		return true;
 	}
 
 	@Override
@@ -148,18 +155,11 @@ public class TigaseMessageBinderService extends Service {
 		TigaseManager.getInstance(ctx).sendMessageBackup(toUser, msgStr);
 		// 需要 gcm 推送的消息
 		if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
-				|| action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
+		        || action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
 			String timerKey = TigaseManager.getInstance(ctx).getFullUser(toUser) + action;
 			Timer timer = new Timer();
-			String type = "";
 
-			if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
-				type = Constants.GCM.GCM_TYPE_MSG;
-			} else if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)) {
-				type = Constants.GCM.GCM_TYPE_FRIEND;
-			}
-
-			GcmTask gcmTask = new GcmTask(ctx, type, toRcID, msg);
+			GcmTask gcmTask = new GcmTask(ctx, action, toRcID, msg);
 			timer.schedule(gcmTask, TigaseNodeManager.getInstance(ctx).getNodeTimeout());
 			gcmTimers.put(timerKey, timer);
 		}

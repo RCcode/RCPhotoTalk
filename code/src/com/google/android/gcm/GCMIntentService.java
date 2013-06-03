@@ -36,6 +36,7 @@ import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.Utils;
 
 /**
  * IntentService responsible for handling GCM messages.
@@ -165,44 +166,49 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Log.i(TAG, "Received message. Extras: " + intent.getExtras());
 
 		int count = 0;
-		
-		
+
 		String typeStr = intent.getStringExtra("type");
 		String msg = intent.getStringExtra("extra");
 		int type = Integer.parseInt(typeStr);
-		if(1== type || 2 == type){
+		if (Constants.Message.MESSAGE_ACTION_FRIEND_INT == type || Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT == type
+		        || Constants.Message.MESSAGE_ACTION_MSG_INT == type) {
+
 			Intent it = new Intent();
-			it.setAction( Constants.Action.ACTION_GCM_MESSAGE);
+			it.setAction(Constants.Action.ACTION_GCM_MESSAGE);
 			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, msg);
 			context.sendBroadcast(it);
+
 		}
-		switch (type) {
-			case 1:
-				count = ServerUtilities.getGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE)+1;
+
+		boolean isRunning = Utils.isRunningForeground(context);
+		if (type == Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT) {
+			if (!isRunning) {
+				count = ServerUtilities.getGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE) + 1;
 				ServerUtilities.setGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE, count);
-				generateMessageNotification(context,context.getString(R.string.gcm_message,count).toString());
+				generateMessageNotification(context, context.getString(R.string.gcm_message, count).toString());
+			}
+		} else if (type == Constants.Message.MESSAGE_ACTION_FRIEND_INT) {
+			if (!isRunning) {
+				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString());
+			}
 
-				break;
-			case 2:
-				generateMessageNotification(context,context.getText(R.string.gcm_friend).toString());
-				break;
-			case 3:
-				String iconUrl = intent.getStringExtra("icon");
-				String titleStr = intent.getStringExtra("title");
-				String descStr = intent.getStringExtra("desc");
-				String downloadUrl = intent.getStringExtra("url");
-				String packageName = intent.getStringExtra("package");
-				String pushIdStr = intent.getStringExtra("pushID");
-				String pushResult = "";
+		} else {
 
-				if (!checkApkExist(context, packageName)) {
-					pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
-					generateNotification(context, iconUrl, titleStr, descStr, downloadUrl);
-				} else {
-					pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
-				}
-				ServerUtilities.logPushResult(context, pushIdStr, pushResult);
-				break;
+			String iconUrl = intent.getStringExtra("icon");
+			String titleStr = intent.getStringExtra("title");
+			String descStr = intent.getStringExtra("desc");
+			String downloadUrl = intent.getStringExtra("url");
+			String packageName = intent.getStringExtra("package");
+			String pushIdStr = intent.getStringExtra("pushID");
+			String pushResult = "";
+
+			if (!checkApkExist(context, packageName)) {
+				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
+				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl);
+			} else {
+				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
+			}
+			ServerUtilities.logPushResult(context, pushIdStr, pushResult);
 		}
 
 	}
@@ -276,7 +282,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.when = System.currentTimeMillis();
 			notification.defaults |= Notification.DEFAULT_SOUND;
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);;
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			;
 			Intent notificationIntent = new Intent(context, WelcomeActivity.class);
 			// set intent so it does not start a new activity
 			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);

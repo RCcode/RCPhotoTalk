@@ -40,10 +40,10 @@ public class Constants {
 	private static final String USER_DIR_NAME = "user";
 
 	public static File USER_IMAGE_DIR;
-	
-	public static final int INFORMATION_PAGE_SIZE=20;
-	
-	public static final int MAX_SELF_BINDPHONE_TIME=5;
+
+	public static final int INFORMATION_PAGE_SIZE = 20;
+
+	public static final int MAX_SELF_BINDPHONE_TIME = 5;
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -109,12 +109,18 @@ public class Constants {
 	public static class Message {
 
 		public static final String MESSAGE_CONTENT_KEY = "message_content";
-		
+
 		public static final String MESSAGE_ACTION_MSG = "1";
+
+		public static final int MESSAGE_ACTION_MSG_INT = 1;
 
 		public static final String MESSAGE_ACTION_FRIEND = "2";
 
+		public static final int MESSAGE_ACTION_FRIEND_INT = 2;
+
 		public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
+
+		public static final int MESSAGE_ACTION_SEND_MESSAGE_INT = 3;
 	}
 
 	public static class GCM {
@@ -240,8 +246,6 @@ public class Constants {
 
 	public static final String META_DATA = "jpg";
 
-	
-	
 	public static final String KEY_NICK = "nick";
 
 	public static final String KEY_HEADURL = "headUrl";
@@ -269,6 +273,6 @@ public class Constants {
 	public static final String KEY_TIGASE_ID = "tigaseid";
 
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
-	
-	public static final String KEY_APP_ID="appId";
+
+	public static final String KEY_APP_ID = "appId";
 }
