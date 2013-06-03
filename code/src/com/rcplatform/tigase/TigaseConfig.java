@@ -19,5 +19,7 @@ public class TigaseConfig {
 	static final String TIGASE_NODE_STATUS = "t_status";
 	
 	static final String TIGASE_NODE_REMARK = "t_remark";
+	
+	static final String TIGASE_NODE_TIMEOUT = "t_interval";
 
 }

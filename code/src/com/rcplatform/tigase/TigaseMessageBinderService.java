@@ -57,7 +57,7 @@ public class TigaseMessageBinderService extends Service {
 
 	private TigaseMessageReceiver messageRecevier = null;
 
-	private HashMap<String, Timer> gcmTimers=new HashMap<String, Timer>();
+	private HashMap<String, Timer> gcmTimers = new HashMap<String, Timer>();
 
 	ChatManagerListener chatListener = new ChatManagerListener() {
 
@@ -130,17 +130,17 @@ public class TigaseMessageBinderService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		ctx = this;
-		
+
 		Timer timer = new Timer();
 
 		TimerTask task = new TimerTask() {
 
 			public void run() {
-				Intent intent=new Intent(Constants.Action.ACTION_TIGASE_STATE_CHANGE);
+				Intent intent = new Intent(Constants.Action.ACTION_TIGASE_STATE_CHANGE);
 				String status = "";
-				if(TigaseManager.getInstance().getIsConnected()){
+				if (TigaseManager.getInstance(ctx).getIsConnected()) {
 					status = "online";
-				}else{
+				} else {
 					status = "offline";
 				}
 				intent.putExtra(HomeActivity.INTENT_KEY_STATE, status);
@@ -156,20 +156,20 @@ public class TigaseMessageBinderService extends Service {
 		super.onDestroy();
 	}
 
-	public void tigaseLogin( String name, String password) {
-		TigaseManager.getInstance().setLoginInfo(name, password);
-		TigaseManager.getInstance().initConnect();
-		TigaseManager.getInstance().setChatManagerListener(chatListener);
+	public void tigaseLogin(String name, String password) {
+		TigaseManager.getInstance(ctx).setLoginInfo(name, password);
+		TigaseManager.getInstance(ctx).initConnect();
+		TigaseManager.getInstance(ctx).setChatManagerListener(chatListener);
 	}
 
 	// 发送消息至tagise
 	public void sendMessage(String msg, String toUser, String toRcID, String action) {
 		String msgStr = MESSAGE_TYPE_MESSAGE + MESSAGE_SPLIT + action + MESSAGE_SPLIT + msg;
 
-		TigaseManager.getInstance().sendMessageBackup(toUser, msgStr);
+		TigaseManager.getInstance(ctx).sendMessageBackup(toUser, msgStr);
 		// 需要 gcm 推送的消息
 		if (action.equals(MESSAGE_ACTION_FRIEND) || action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
-			String timerKey =TigaseManager.getInstance().getFullUser(toUser) + action;
+			String timerKey = TigaseManager.getInstance(ctx).getFullUser(toUser) + action;
 			Timer timer = new Timer();
 			String type = "";
 
@@ -180,12 +180,11 @@ public class TigaseMessageBinderService extends Service {
 			}
 
 			GcmTask gcmTask = new GcmTask(ctx, type, toRcID, msg);
-			timer.schedule(gcmTask, 10000);
+			timer.schedule(gcmTask, TigaseNodeManager.getInstance(ctx).getNodeTimeout());
 			gcmTimers.put(timerKey, timer);
 		}
 
 	}
-
 
 	// 注册接收消息监听器
 	public void setOnMessageReciver(TigaseMessageReceiver messageReceiver) {
