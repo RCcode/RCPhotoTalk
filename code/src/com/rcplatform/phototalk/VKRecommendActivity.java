@@ -24,6 +24,7 @@ import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class VKRecommendActivity extends AddFriendBaseActivity {
@@ -82,6 +83,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 
 			@Override
 			public void onGetInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends) {
+				PrefsUtils.User.ThirdPart.setVKName(VKRecommendActivity.this, getCurrentUser().getRcId(), user.getNick());
 				uploadVKInfos(user, friends);
 			}
 
@@ -123,29 +125,6 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 				onRecommendsLoaded(recommends, friends);
 			}
 		});
-//		Request.executeGetRecommends(this, FriendType.VK, new OnFriendsLoadedListener() {
-//
-//			@Override
-//			public void onServiceFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-//				if (mList.getExpandableListAdapter() != null && mList.getExpandableListAdapter().getGroupCount() > 0)
-//					return;
-//				dismissLoadingDialog();
-//				onRecommendsLoaded(recommends, friends);
-//			}
-//
-//			@Override
-//			public void onLocalFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
-//				if (friends.size() > 0 || recommends.size() > 0) {
-//					dismissLoadingDialog();
-//					onRecommendsLoaded(recommends, friends);
-//				}
-//			}
-//
-//			@Override
-//			public void onError(int errorCode, String content) {
-//				dismissLoadingDialog();
-//			}
-//		});
 	}
 
 	private void onRecommendsLoaded(List<Friend> recommends, List<Friend> inviteFriends) {

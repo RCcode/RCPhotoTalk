@@ -149,6 +149,7 @@
     <!-- <string name="phone">电话号码</string>-->
      
     <string name="next">下一步</string>
+    <string name="next_number">下一步(%1$d)</string>
     <string name="use_new_info">在PhotoTalk中使用新的个人资料</string>
     <string name="use_info_below">使用以下个人资料</string>
     <string name="user_info">个人资料</string>
@@ -231,6 +232,7 @@
     <string name="country_code">(+%1$s)%2$s</string>
     <string name="change_phone_number">修改手机号</string>
     <string name="resend_sms">重新发送短信</string>
+    <string name="resend_sms_number">重新发送短信(%1$d)</string>
     <string name="resend_sms_second">重新发送短信(%1$d秒)</string>
     <string name="bind_phone">绑定手机号</string>
     <string name="input_validate">请输入发送到+86 186-0126-1111的4位验证码</string>

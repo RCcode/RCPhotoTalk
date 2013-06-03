@@ -31,9 +31,9 @@ public class UserInfoProvider extends ContentProvider {
 			final UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getContext());
 			if (userInfo != null) {
 				Cursor cursor = new AbstractCursor() {
-					private String[] columnNames = new String[] { Constants.KEY_RCID, Constants.KEY_EMAIL, Constants.KEY_USER_TOKEN,
-							Constants.KEY_NICK, Constants.KEY_HEADURL, Constants.KEY_SEX, Constants.KEY_RECEIVESET, Constants.KEY_BIRTHDAY, Constants.KEY_DEVICE_ID,
-							Constants.KEY_PHONE };
+					private String[] columnNames = new String[] { Constants.KEY_RCID, Constants.KEY_EMAIL, Constants.KEY_USER_TOKEN, Constants.KEY_NICK,
+							Constants.KEY_HEADURL, Constants.KEY_SEX, Constants.KEY_RECEIVESET, Constants.KEY_BIRTHDAY, Constants.KEY_DEVICE_ID,
+							Constants.KEY_PHONE, Constants.KEY_APP_ID };
 
 					@Override
 					public boolean isNull(int column) {
@@ -140,6 +140,9 @@ public class UserInfoProvider extends ContentProvider {
 			break;
 		case 9:
 			result = userInfo.getCellPhone();
+			break;
+		case 10:
+			result = Constants.APP_ID;
 			break;
 		}
 		return result;

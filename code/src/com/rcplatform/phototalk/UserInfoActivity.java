@@ -126,7 +126,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 	private void setVKAuthText() {
 		if (mVKClient.isAuthorize()) {
-			tvVKAuth.setText(R.string.authorized);
+			tvVKAuth.setText(PrefsUtils.User.ThirdPart.getVkName(this, getCurrentUser().getRcId()));
 		} else {
 			tvVKAuth.setText(R.string.unauthorized);
 		}
@@ -134,7 +134,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 	private void setFacebookAuthText() {
 		if (mFacebookClient.isAuthorize()) {
-			tvFacebookAuth.setText(R.string.authorized);
+			tvFacebookAuth.setText(PrefsUtils.User.ThirdPart.getFacebookUserName(this, getCurrentUser().getRcId()));
 		} else {
 			tvFacebookAuth.setText(R.string.unauthorized);
 		}
@@ -175,7 +175,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			this.finish();
 			break;
 		case R.id.rela_phone:
-			if (TextUtils.isEmpty(getCurrentUser().getCellPhone())) {
+			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
 				startActivity(RequestSMSActivity.class);
 			}
 			break;
@@ -210,6 +210,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onGetInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends) {
 				saveThirdInfo(FriendType.VK, friends, user);
+				PrefsUtils.User.ThirdPart.setVKName(UserInfoActivity.this, getCurrentUser().getRcId(), user.getNick());
+				tvVKAuth.setText(user.getNick());
 			}
 
 			@Override
@@ -228,6 +230,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			@Override
 			public void onGetInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends) {
 				saveThirdInfo(FriendType.FACEBOOK, friends, user);
+				PrefsUtils.User.ThirdPart.setFacebookUserName(UserInfoActivity.this, getCurrentUser().getRcId(), user.getNick());
+				tvFacebookAuth.setText(user.getNick());
 			}
 		});
 	}

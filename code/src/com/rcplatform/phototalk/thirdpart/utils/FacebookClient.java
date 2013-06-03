@@ -280,7 +280,6 @@ public class FacebookClient {
 			switch (msg.what) {
 			case MSG_DEAUTHORIZE_SUCCESS:
 				mDeAuthorizeListener.onDeAuthorizeSuccess();
-				mContext.showErrorConfirmDialog(R.string.deauthorize_complete);
 				break;
 			case MSG_DEAUTHORIZE_ERROR:
 				mDeAuthorizeListener.onDeAuthorizeFail();

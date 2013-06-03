@@ -227,7 +227,8 @@ public class Request implements Serializable {
 							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
 									Integer.parseInt(timeLimit));
-//							MessageSender.sendInformation(context, informations, userIds);
+							// MessageSender.sendInformation(context,
+							// informations, userIds);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag);
 						} catch (JSONException e) {
@@ -259,7 +260,7 @@ public class Request implements Serializable {
 					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
 		}
 	}
-	
+
 	public String getFilePath() {
 		return filePath;
 	}
@@ -302,6 +303,10 @@ public class Request implements Serializable {
 					String lastBindPhone = jsonObject.getString("phone");
 					String cellPhone = jsonObject.getString("cellPhone");
 					String email = jsonObject.getString("email");
+					if (RCPlatformTextUtil.isEmpty(cellPhone))
+						cellPhone = null;
+					if (RCPlatformTextUtil.isEmpty(lastBindPhone))
+						lastBindPhone = null;
 					PrefsUtils.User.MobilePhoneBind.setLastBindNumber(context, rcId, lastBindPhone);
 					PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(context, time, rcId);
 					JSONObject jsonUser = jsonObject.getJSONObject("userInfo");
@@ -423,7 +428,7 @@ public class Request implements Serializable {
 		return responseHandler;
 	}
 
-	public static void executeGetFriendDetailAsync(Context context, Friend friend, final FriendDetailListener listener, boolean isUpdate) {
+	public static void executeGetFriendDetailAsync(final Context context, Friend friend, final FriendDetailListener listener, boolean isUpdate) {
 		Friend friendCache = PhotoTalkDatabaseFactory.getDatabase().getFriendById(friend.getRcId());
 		if (!isUpdate && friendCache != null && friendCache.getAppList() != null) {
 			listener.onSuccess(friendCache);
@@ -442,7 +447,7 @@ public class Request implements Serializable {
 						listener.onSuccess(friend);
 				} catch (JSONException e) {
 					e.printStackTrace();
-					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, content);
+					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 				}
 
 			}

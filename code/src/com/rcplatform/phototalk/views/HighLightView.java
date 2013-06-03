@@ -420,7 +420,8 @@ public class HighLightView extends View {
 
 	}
 
-	public void clearBitmap() {
+	public void recyle() {
+		mBlackBitmap.recycle();
 		if (mCanvasBitmap != null && !mCanvasBitmap.isRecycled())
 			mCanvasBitmap.recycle();
 		if (mBitmap != null && !mBitmap.getBitmap().isRecycled())
@@ -431,10 +432,6 @@ public class HighLightView extends View {
 		bitmapRect = null;
 		mMinBitmapRect = null;
 		System.gc();
-	}
-
-	public void recyle() {
-		mBlackBitmap.recycle();
 	}
 
 	private void moveBitmap(float moveX, float moveY) {

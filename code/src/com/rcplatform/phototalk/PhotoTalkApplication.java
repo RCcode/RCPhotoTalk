@@ -10,13 +10,10 @@ import android.graphics.Bitmap;
 import android.os.Environment;
 import android.view.WindowManager;
 
-import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
-import com.nostra13.universalimageloader.cache.memory.impl.WeakMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
-import com.nostra13.universalimageloader.core.download.BaseImageDownloader;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
@@ -45,13 +42,9 @@ public class PhotoTalkApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 		PhotoInformationCountDownService.getInstance().setApplication(this);
-		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).memoryCache(new WeakMemoryCache())
-				.threadPriority(THREAD_COUNT).memoryCacheSize(MEMORY_CACHE_SIZE).denyCacheImageMultipleSizesInMemory()
-				.imageDownloader(new BaseImageDownloader(this)).defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions())
-				.tasksProcessingOrder(QueueProcessingType.LIFO);
-		if (createImageCacheDir()) {
-			builder.discCache(new UnlimitedDiscCache(cacheDir, new Md5FileNameGenerator()));
-		}
+		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).threadPriority(Thread.NORM_PRIORITY - 2)
+				.defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions()).tasksProcessingOrder(QueueProcessingType.LIFO)
+				.discCacheFileNameGenerator(new Md5FileNameGenerator());
 		ImageLoaderConfiguration config = builder.build();
 		ImageLoader.getInstance().init(config);
 		wmParams = new WindowManager.LayoutParams();
@@ -239,7 +232,7 @@ public class PhotoTalkApplication extends Application {
 
 	public void setCurrentUser(UserInfo userInfo) {
 		UserInfo currentUser = getCurrentUser();
-		if (currentUser == null || !currentUser.getRcId().equals(userInfo.getRcId()))
+		if (currentUser == null || (!userInfo.getRcId().equals(currentUser.getRcId())))
 			PhotoTalkDatabaseFactory.open(userInfo);
 		mService.setCurrentUser(userInfo);
 	}

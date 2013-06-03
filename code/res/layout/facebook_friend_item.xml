@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:descendantFocusability="blocksDescendants"
-    android:background="@color/white" >
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants" >
 
     <com.facebook.widget.ProfilePictureView
         android:id="@+id/facebook_ppv"
@@ -29,14 +29,13 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
-    <Button
+    <ImageView
         android:id="@+id/facebook_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:background="@drawable/facebook_add_btn"
-        android:layout_marginRight="@dimen/default_gap" >
-    </Button>
+        android:layout_marginRight="@dimen/default_gap"
+        android:background="@drawable/facebook_add_up" />
 
 </RelativeLayout>

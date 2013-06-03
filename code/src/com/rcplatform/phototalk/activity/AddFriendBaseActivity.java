@@ -346,7 +346,6 @@ private Button seach_delete_btn;
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_RECOMMENDS_DETAIL) {
 				Friend friendNew = (Friend) data.getSerializableExtra(FriendDetailActivity.RESULT_PARAM_FRIEND);
-				mFriendShowDetail.setLocalName(friendNew.getLocalName());
 				mFriendShowDetail.setFriend(friendNew.isFriend());
 				AddFriendsActivity.addFriend(friendNew);
 				refreshList();

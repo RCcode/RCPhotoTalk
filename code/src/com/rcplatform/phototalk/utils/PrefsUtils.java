@@ -115,6 +115,10 @@ public class PrefsUtils {
 		private static final String PREF_KEY_ATTENTION_BIND_PHONE = "hasattentiontobindphone";
 		private static final String PREF_KEY_LOADED_FRIENDS = "loadedfriends";
 
+		private static final String PREF_KEY_SELF_BINDPHONE_TIME = "selfbindphonetime";
+
+		private static final String PREF_KEY_VK_NAME = "vkname";
+
 		public static class ThirdPart {
 
 			public static void setFacebookUserName(Context context, String pref, String userName) {
@@ -169,7 +173,15 @@ public class PrefsUtils {
 
 			public static void clearVKAccount(Context context, String pref) {
 				SharedPreferences prefs = getPreference(context, pref);
-				prefs.edit().remove(PREF_KEY_VK_SYNC_TIME).remove(PREF_KEY_VK_USERID).remove(PREF_KEY_VK_SYNC_TIME).commit();
+				prefs.edit().remove(PREF_KEY_VK_SYNC_TIME).remove(PREF_KEY_VK_USERID).remove(PREF_KEY_VK_SYNC_TIME).remove(PREF_KEY_VK_NAME).commit();
+			}
+
+			public static void setVKName(Context context, String pref, String vkName) {
+				getPreference(context, pref).edit().putString(PREF_KEY_VK_NAME, vkName).commit();
+			}
+
+			public static String getVkName(Context context, String pref) {
+				return getPreference(context, pref).getString(PREF_KEY_VK_NAME, null);
 			}
 
 			public static void refreshVKSyncTime(Context context, String pref) {
@@ -341,6 +353,16 @@ public class PrefsUtils {
 
 		public static boolean hasLoadedFriends(Context context, String pref) {
 			return getPreference(context, pref).getBoolean(PREF_KEY_LOADED_FRIENDS, false);
+		}
+
+		public static void addSelfBindPhoneTime(Context context, String pref) {
+			SharedPreferences sh = getPreference(context, pref);
+			int currentTime = sh.getInt(PREF_KEY_SELF_BINDPHONE_TIME, 0);
+			sh.edit().putInt(PREF_KEY_SELF_BINDPHONE_TIME, (currentTime + 1)).commit();
+		}
+
+		public static int getSelfBindPhoneTimeLeave(Context context, String pref) {
+			return Constants.MAX_SELF_BINDPHONE_TIME - getPreference(context, pref).getInt(PREF_KEY_SELF_BINDPHONE_TIME, 0);
 		}
 	}
 }

@@ -15,14 +15,14 @@ public class ImageOptionsFactory {
 
 	public static DisplayImageOptions getHeadImageOptions() {
 		if (mHeadImageOptions == null)
-			mHeadImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.default_head).showStubImage(R.drawable.default_head).build();
+			mHeadImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.default_head).showImageOnFail(DEFAULT_HEAD_DRAWABLE).build();
 		return mHeadImageOptions;
 	}
 
 	public static DisplayImageOptions getUserBackImageOptions() {
 		if (mBackImageOptions == null)
 			mBackImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.user_detail_bg).showStubImage(R.drawable.user_detail_bg)
-					.showImageOnFail(R.drawable.user_detail_bg).build();
+					.showImageOnFail(R.drawable.user_detail_bg).cacheInMemory().cacheOnDisc().build();
 		return mBackImageOptions;
 	}
 

@@ -6,6 +6,8 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -15,6 +17,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,20 +34,21 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
+import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class SearchFriendsActivity extends BaseActivity implements View.OnClickListener {
 
 	private EditText mEditText;
-
-	// private ImageView mSearchButton;
-
 	private ListView mListView;
 	private TextView search_hint_text;
 	private ImageLoader mImageLoader;
 	private Button seach_delete_btn;
-
+	private Friend friendShowDetail;
 	private SearchFriendsAdapter mAdapter;
+	private static final int REQUEST_CODE_DETAIL = 100;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,7 +67,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				mEditText.setText("");
 				mEditText.setFocusable(true);
 				seach_delete_btn.setVisibility(View.GONE);
@@ -86,19 +90,16 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				if (mEditText.getText() != null && mEditText.getText().length() > 0) {
 					seach_delete_btn.setVisibility(View.VISIBLE);
 				} else {
@@ -112,7 +113,33 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		mListView = (ListView) findViewById(R.id.search_result_list);
 		mAdapter = new SearchFriendsAdapter();
 		mListView.setAdapter(mAdapter);
+		mListView.setOnItemClickListener(new OnItemClickListener() {
 
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				Friend friend = (Friend) mAdapter.getItem(arg2);
+				showFriendDetail(friend);
+			}
+		});
+
+	}
+
+	private void showFriendDetail(Friend friend) {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
+
+			@Override
+			public void onSuccess(Friend friend) {
+				dismissLoadingDialog();
+				startFriendDetailActivity(friend);
+			}
+
+			@Override
+			public void onError(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		}, false);
 	}
 
 	@Override
@@ -183,6 +210,20 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		}, friend).execute();
 	}
 
+	private void startFriendDetailActivity(Friend friend) {
+		String action = null;
+		if (friend.isFriend()) {
+			action = Action.ACTION_FRIEND_DETAIL;
+		} else {
+			action = Action.ACTION_RECOMMEND_DETAIL;
+		}
+		Intent intent = new Intent(this, FriendDetailActivity.class);
+		intent.setAction(action);
+		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
+		startActivityForResult(intent, REQUEST_CODE_DETAIL);
+		friendShowDetail = friend;
+	}
+
 	class SearchFriendsAdapter extends BaseAdapter {
 		private List<Friend> mFriends = new ArrayList<Friend>();
 
@@ -245,7 +286,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 		@Override
 		public Object getItem(int position) {
-			return null;
+			return mFriends.get(position);
 		}
 
 		@Override
@@ -266,6 +307,18 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		public void onClick(View v) {
 			Friend friend = (Friend) v.getTag();
 			doFriendAdd(friend);
+		}
+	};
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			if (REQUEST_CODE_DETAIL == requestCode) {
+				Friend friendNew = (Friend) data.getSerializableExtra(FriendDetailActivity.RESULT_PARAM_FRIEND);
+				friendShowDetail.setFriend(friendNew.isFriend());
+				AddFriendsActivity.addFriend(friendNew);
+				mAdapter.notifyDataSetChanged();
+			}
 		}
 	};
 }

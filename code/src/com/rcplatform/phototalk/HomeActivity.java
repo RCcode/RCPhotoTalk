@@ -17,14 +17,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Rect;
-import android.os.AsyncTask;
-import android.os.AsyncTask.Status;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.text.TextUtils;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,7 +36,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.activity.BaseActivity;
+import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.rcplatform.phototalk.activity.MenueBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
@@ -115,7 +112,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 	private ImageView iconTrendNew;
 	private ImageLoader mImageLoader;
 
-	private AsyncTask<Void, Void, List<Information>> loadInformationTask;
 
 	private boolean hasNextPage = true;
 
@@ -124,6 +120,8 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 	public static final String INTENT_KEY_STATE = "state";
 
 	private TextView tvTigaseState;
+
+	private boolean isLoading = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -525,6 +523,7 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 
 	private final Handler myHandler = new Handler() {
 
+		@SuppressWarnings("unchecked")
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
@@ -552,6 +551,11 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 			adapter.addDataAtLast(localInformations);
 			adapter.notifyDataSetChanged();
 		}
+		if (localInformations.size() < Constants.INFORMATION_PAGE_SIZE) {
+			hasNextPage = false;
+			mInformationList.removeFooterView(loadingFooter);
+		}
+		isLoading = false;
 	};
 
 	private void initOrRefreshListView(List<Information> data) {
@@ -562,18 +566,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 			adapter.addData(data);
 			adapter.notifyDataSetChanged();
 		}
-
-	}
-
-	/**
-	 * Method description 过滤从服务器取回的数据，删除不需要的，更新更新的，插入需要插入数据库的
-	 * 
-	 * @param listinfo
-	 *            ： 服务器取回的数据
-	 */
-	protected void filterList(List<Information> listinfo) {
-		List<Information> newNotices = LogicUtils.informationFilter(this, listinfo, getAdapterData());
-		sendDataLoadedMessage(newNotices, MSG_WHAT_INFORMATION_LOADED);
 	}
 
 	@Override
@@ -588,12 +580,9 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 			mShowDialog.dismiss();
 		if (mLongPressDialog != null && mLongPressDialog.isShowing())
 			mLongPressDialog.dismiss();
-		ImageLoader.getInstance().clearMemoryCache();
 		ImageLoader.getInstance().stop();
-//		unregisteInformationReceiver();
 		super.onDestroy();
 	}
-
 
 	private List<Information> getAdapterData() {
 		if (adapter == null)
@@ -755,15 +744,10 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 		}
 	}
 
-	private OnScrollListener mScrollListener = new OnScrollListener() {
+	private OnScrollListener mScrollListener = new PauseOnScrollListener(mImageLoader, false, true) {
 
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
-			switch (scrollState) {
-			case SCROLL_STATE_FLING:
-			case SCROLL_STATE_TOUCH_SCROLL:
-				break;
-			}
 		}
 
 		@Override
@@ -775,37 +759,33 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 	};
 
 	private void loadLocalInformation() {
-		if (hasNextPage && (loadInformationTask == null || loadInformationTask.getStatus() == Status.FINISHED)) {
-			loadInformationTask = new LoadLocalInformationsTask().execute();
+		if (hasNextPage && !isLoading) {
+			isLoading = true;
+			loadLocalInformations();
 		}
 	}
 
-	class LoadLocalInformationsTask extends AsyncTask<Void, Void, List<Information>> {
-
-		@Override
-		protected List<Information> doInBackground(Void... params) {
-			int start = 0;
-			if (mInformationList.getAdapter() != null)
-				start = mInformationList.getAdapter().getCount();
-			return PhotoTalkDatabaseFactory.getDatabase().getInformationByPage(start, Constants.INFORMATION_PAGE_SIZE);
-		}
-
-		@Override
-		protected void onPostExecute(List<Information> result) {
-			super.onPostExecute(result);
-			if (result.size() > 0)
-				addListData(result);
-			if (result.size() < Constants.INFORMATION_PAGE_SIZE) {
-				hasNextPage = false;
-				mInformationList.removeFooterView(loadingFooter);
-			}
-		}
+	private void loadLocalInformations() {
+		Thread thread = new Thread() {
+			public void run() {
+				int start = 0;
+				if (mInformationList.getAdapter() != null)
+					start = mInformationList.getAdapter().getCount();
+				List<Information> informations = PhotoTalkDatabaseFactory.getDatabase().getInformationByPage(start, Constants.INFORMATION_PAGE_SIZE);
+				Message msg = myHandler.obtainMessage();
+				msg.what = MSG_WHAT_LOCAL_INFORMATION_LOADED;
+				msg.obj = informations;
+				myHandler.sendMessage(msg);
+			};
+		};
+		thread.start();
 	}
-	private void registeTigaseStateChangeReceiver(){
-		IntentFilter filter=new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
+
+	private void registeTigaseStateChangeReceiver() {
+		IntentFilter filter = new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
 		registerReceiver(mTigaseStateChangeReceiver, filter);
 	}
-	
+
 	private BroadcastReceiver mTigaseStateChangeReceiver = new BroadcastReceiver() {
 
 		@Override

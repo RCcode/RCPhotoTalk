@@ -82,8 +82,10 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 		@Override
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
-			btnResend.setText(R.string.resend_sms);
-			btnResend.setEnabled(true);
+			int leaveTime = PrefsUtils.User.getSelfBindPhoneTimeLeave(BindPhoneActivity.this, getCurrentUser().getRcId());
+			btnResend.setText(getString(R.string.resend_sms_number, leaveTime));
+			if (leaveTime > 0)
+				btnResend.setEnabled(true);
 		}
 	}
 
@@ -154,6 +156,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 			public void onSuccess(int statusCode, String content) {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(R.string.sms_sended);
+				PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
 				mCountDownTask = new CountDownTask().execute();
 			}
 

@@ -142,7 +142,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		mImageLoader.stop();
 	}
 
 	private OnClickListener mOnClickListener = new RCPlatformOnClickListener(this) {

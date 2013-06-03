@@ -130,11 +130,17 @@ public class RCPlatformTextUtil {
 
 	public static int getAgeByBirthday(String birthday) {
 		try {
-			long age = (System.currentTimeMillis()-mDateFormat.parse(birthday).getTime());
-			return (int) (age/ (1000L * 60 * 60 * 24 * 365));
+			long age = (System.currentTimeMillis() - mDateFormat.parse(birthday).getTime());
+			return (int) (age / (1000L * 60 * 60 * 24 * 365));
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	public static boolean isEmpty(String text) {
+		if (TextUtils.isEmpty(text) || text.equals("null"))
+			return true;
+		return false;
 	}
 }

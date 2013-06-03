@@ -4,12 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +21,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
@@ -45,12 +48,14 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 	private Information mPressedInformation;
 	private int mPressedPosition = -1;
 	private ListView mList;
+	private LayoutInflater mInflater;
 
 	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list, ImageLoader imageLoader) {
 		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = imageLoader;
 		this.mList = list;
+		mInflater = LayoutInflater.from(context);
 	}
 
 	@Override
@@ -74,7 +79,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		final Information record = data.get(position);
 		ViewHolder holder = null;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.home_user_record_list_item, null);
+			convertView = mInflater.inflate(R.layout.home_user_record_list_item, null);
 			holder = new ViewHolder();
 			holder.head = (ImageView) convertView.findViewById(R.id.iv_record_item_head);
 			holder.item_new = (ImageView) convertView.findViewById(R.id.item_new);
@@ -137,7 +142,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
-
 		if (LogicUtils.isSender(context, record)) {
 			mImageLoader.displayImage(record.getReceiver().getHeadUrl(), holder.head);
 		} else {

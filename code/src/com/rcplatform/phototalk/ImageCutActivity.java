@@ -46,6 +46,7 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 		btnCancel.setOnClickListener(this);
 		mHighLight = (HighLightView) findViewById(R.id.hlv);
 		mHighLight.setCropRect(width, height);
+		new LoadImageTask().execute();
 	}
 
 	private File shot() throws Exception {
@@ -98,19 +99,11 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		new LoadImageTask().execute();
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		mHighLight.clearBitmap();
 	}
 
 	@Override
 	protected void onDestroy() {
 		mHighLight.recyle();
-		System.gc();
 		super.onDestroy();
 	}
 
@@ -119,7 +112,7 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, true);
 		}
 
 		@Override

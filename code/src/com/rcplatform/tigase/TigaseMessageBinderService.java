@@ -288,5 +288,4 @@ public class TigaseMessageBinderService extends Service {
 
 		}
 	}
-
 }

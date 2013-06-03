@@ -95,6 +95,7 @@ public class Utils {
 			userInfo.setAllowsend(cursor.getInt(cursor.getColumnIndex(Constants.KEY_RECEIVESET)));
 			userInfo.setRcId(cursor.getString(cursor.getColumnIndex(Constants.KEY_RCID)));
 			userInfo.setToken(cursor.getString(cursor.getColumnIndex(Constants.KEY_USER_TOKEN)));
+			userInfo.setAppId(cursor.getString(cursor.getColumnIndex(Constants.KEY_APP_ID)));
 		}
 		cursor.close();
 		return userInfo;

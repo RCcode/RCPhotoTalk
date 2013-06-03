@@ -45,6 +45,9 @@ public class Constants {
 	public static File USER_IMAGE_DIR;
 	
 	public static final int INFORMATION_PAGE_SIZE=20;
+	
+	public static final int MAX_SELF_BINDPHONE_TIME=5;
+	
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -217,6 +220,8 @@ public class Constants {
 
 	public static final String META_DATA = "jpg";
 
+	
+	
 	public static final String KEY_NICK = "nick";
 
 	public static final String KEY_HEADURL = "headUrl";
@@ -244,4 +249,6 @@ public class Constants {
 	public static final String KEY_TIGASE_ID = "tigaseid";
 
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
+	
+	public static final String KEY_APP_ID="appId";
 }

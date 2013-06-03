@@ -20,6 +20,7 @@ import com.rcplatform.phototalk.db.CountryCodeDatabase;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class RequestSMSActivity extends BaseActivity implements OnClickListener {
 
@@ -31,6 +32,8 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private CountryCode mCountryCode;
 	private List<CountryCode> allCountryCodes;
 	private CountryCodeDatabase mCountryCodeDatabase;
+
+	private Button btnCommit;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,13 +62,22 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	}
 
 	private void initView() {
-		Button btnCommit = (Button) findViewById(R.id.btn_commit);
+		btnCommit = (Button) findViewById(R.id.btn_commit);
 		btnCountryCode = (Button) findViewById(R.id.btn_country_code);
 		etNumber = (EditText) findViewById(R.id.et_number);
 		btnCommit.setOnClickListener(this);
 		btnCountryCode.setOnClickListener(this);
 		if (mCountryCode != null)
 			btnCountryCode.setText(getString(R.string.country_code, mCountryCode.getCountryCode(), mCountryCode.getCountryName()));
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		int leaveTime = PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId());
+		btnCommit.setText(getString(R.string.next_number, leaveTime));
+		if (leaveTime == 0)
+			btnCommit.setEnabled(false);
 	}
 
 	@Override
@@ -94,6 +106,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 				@Override
 				public void onSuccess(int statusCode, String content) {
 					dismissLoadingDialog();
+					PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
 					startBindPhoneActivity(phoneNumber);
 				}
 
@@ -144,10 +157,10 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if(resultCode==Activity.RESULT_OK&&requestCode==REQUEST_CODE_BIND){
+		if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_BIND) {
 			setResult(Activity.RESULT_OK);
 			finish();
 		}
-			
+
 	}
 }
