@@ -15,6 +15,8 @@ import org.jivesoftware.smack.ConnectionListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
 
+import android.content.Context;
+
 import com.rcplatform.phototalk.bean.TigaseMassage;
 import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
 
@@ -41,17 +43,16 @@ public class TigaseManager {
 	private TigaseConnectionCreationListener createListener = null;
 
 	private ChatManagerListener chatListener = null;
-	
+
 	private final int INIT_CONNECT_MAX_COUNT = 4;
-	
+
 	private final int CONNECT_INTERVAL = 60000;
-	
+
 	private Timer initConnectTimer = null;
 
-	private TimerTask initConnectTask = null;
-	
 	private int retryConnectCount = 0;
-	
+
+	private Context ctx = null;
 
 	class TigaseListenter implements ConnectionListener {
 
@@ -94,7 +95,9 @@ public class TigaseManager {
 			// login
 			if (null != user && null != password) {
 				try {
-					connection.login(user, password);
+					if (!connection.isAuthenticated()) {
+						connection.login(user, password);
+					}
 				}
 				catch (XMPPException e) {
 					// TODO Auto-generated catch block
@@ -118,24 +121,38 @@ public class TigaseManager {
 
 	}
 
-	private TigaseManager() {
+	class ConnectTimerTask extends TimerTask {
+
+		public void run() {
+			initConnectTimer = new Timer();
+			ConnectTimerTask task = new ConnectTimerTask();
+			if (retryConnectCount < INIT_CONNECT_MAX_COUNT) {
+				int delay = (int) Math.pow(2, retryConnectCount) * CONNECT_INTERVAL;
+				initConnectTimer.schedule(task, delay);
+			}
+			retryConnectCount++;
+			connect();
+		}
+
+	}
+
+	private TigaseManager(Context ctx) {
+		this.ctx = ctx;
 		db = new TigaseDb4oDatabase();
 	}
 
-	static public TigaseManager getInstance() {
+	static public TigaseManager getInstance(Context ctx) {
 		if (null == instance) {
-			instance = new TigaseManager();
+			instance = new TigaseManager(ctx);
 		}
 		return instance;
 	}
 
-	@SuppressWarnings("static-access")
 	synchronized private void connect() {
-		node = TigaseNodeUtil.getTigaseNode();
+		node = TigaseNodeManager.getInstance(ctx).getNode();
 		try {
 			ConnectionConfiguration connConfig = new ConnectionConfiguration(node.getIp(), node.getPort(), node.getDomain());
 			connection = new XMPPConnection(connConfig);
-
 			createListener = new TigaseConnectionCreationListener();
 			connection.addConnectionCreationListener(createListener);
 			connection.connect();
@@ -145,34 +162,26 @@ public class TigaseManager {
 		}
 		catch (Exception xe) {
 			xe.printStackTrace();
-			connection = null;
+			if (null != connection) {
+				if (!connection.isConnected()) {
+					disConnect();
+				}
+			}
 		}
 	}
 
 	public void initConnect() {
 		retryConnectCount = 0;
 		initConnectTimer = new Timer();
-
-		initConnectTask = new TimerTask() {
-
-			public void run() {
-				if(retryConnectCount >INIT_CONNECT_MAX_COUNT ){
-					initConnectTimer.cancel();
-					return;
-				}
-				retryConnectCount++;
-				connect();
-			}
-
-		};
-		
-		initConnectTimer.scheduleAtFixedRate(initConnectTask, 0, CONNECT_INTERVAL);
-		
+		ConnectTimerTask task = new ConnectTimerTask();
+		initConnectTimer.schedule(task, 0);
 	}
 
 	public void disConnect() {
 		if (null != connection) {
 			try {
+				connection.removeConnectionCreationListener(createListener);
+				connection.removeConnectionListener(connectListenter);
 				connection.disconnect();
 			}
 			catch (Exception e) {

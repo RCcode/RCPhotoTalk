@@ -334,9 +334,6 @@ public class MyFriendsActivity extends MenueBaseActivity implements OnClickListe
 			intent.setData(Uri.parse("data"));
 			startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
 			break;
-		case R.id.title_linear_back:
-			finish();
-			break;
 		}
 	}
 

@@ -1,30 +1,18 @@
 package com.rcplatform.tigase;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.ConnectException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import org.apache.http.protocol.HTTP;
 import org.jivesoftware.smack.Chat;
 import org.jivesoftware.smack.ChatManagerListener;
 import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import com.google.android.gcm.MetaHelper;
+import com.google.android.gcm.RCGcmUtil;
 import com.rcplatform.phototalk.HomeActivity;
-import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.utils.Constants;
-import com.rcplatform.phototalk.utils.Constants.Action;
 
 import android.app.Service;
 import android.content.Context;
@@ -32,7 +20,6 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.util.Log;
 
 public class TigaseMessageBinderService extends Service {
 
@@ -48,8 +35,6 @@ public class TigaseMessageBinderService extends Service {
 
 	public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
 
-	private static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
-
 	// Binder given to clients
 	private final IBinder mBinder = new LocalBinder();
 
@@ -57,7 +42,7 @@ public class TigaseMessageBinderService extends Service {
 
 	private TigaseMessageReceiver messageRecevier = null;
 
-	private HashMap<String, Timer> gcmTimers=new HashMap<String, Timer>();
+	private HashMap<String, Timer> gcmTimers = new HashMap<String, Timer>();
 
 	ChatManagerListener chatListener = new ChatManagerListener() {
 
@@ -130,17 +115,17 @@ public class TigaseMessageBinderService extends Service {
 	public void onCreate() {
 		super.onCreate();
 		ctx = this;
-		
+
 		Timer timer = new Timer();
 
 		TimerTask task = new TimerTask() {
 
 			public void run() {
-				Intent intent=new Intent(Constants.Action.ACTION_TIGASE_STATE_CHANGE);
+				Intent intent = new Intent(Constants.Action.ACTION_TIGASE_STATE_CHANGE);
 				String status = "";
-				if(TigaseManager.getInstance().getIsConnected()){
+				if (TigaseManager.getInstance(ctx).getIsConnected()) {
 					status = "online";
-				}else{
+				} else {
 					status = "offline";
 				}
 				intent.putExtra(HomeActivity.INTENT_KEY_STATE, status);
@@ -156,36 +141,35 @@ public class TigaseMessageBinderService extends Service {
 		super.onDestroy();
 	}
 
-	public void tigaseLogin( String name, String password) {
-		TigaseManager.getInstance().setLoginInfo(name, password);
-		TigaseManager.getInstance().initConnect();
-		TigaseManager.getInstance().setChatManagerListener(chatListener);
+	public void tigaseLogin(String name, String password) {
+		TigaseManager.getInstance(ctx).setLoginInfo(name, password);
+		TigaseManager.getInstance(ctx).initConnect();
+		TigaseManager.getInstance(ctx).setChatManagerListener(chatListener);
 	}
 
 	// 发送消息至tagise
 	public void sendMessage(String msg, String toUser, String toRcID, String action) {
 		String msgStr = MESSAGE_TYPE_MESSAGE + MESSAGE_SPLIT + action + MESSAGE_SPLIT + msg;
 
-		TigaseManager.getInstance().sendMessageBackup(toUser, msgStr);
+		TigaseManager.getInstance(ctx).sendMessageBackup(toUser, msgStr);
 		// 需要 gcm 推送的消息
 		if (action.equals(MESSAGE_ACTION_FRIEND) || action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
-			String timerKey =TigaseManager.getInstance().getFullUser(toUser) + action;
+			String timerKey = TigaseManager.getInstance(ctx).getFullUser(toUser) + action;
 			Timer timer = new Timer();
 			String type = "";
 
 			if (action.equals(MESSAGE_ACTION_SEND_MESSAGE)) {
-				type = Constants.GCM_TYPE_MSG;
+				type = Constants.GCM.GCM_TYPE_MSG;
 			} else if (action.equals(MESSAGE_ACTION_FRIEND)) {
-				type = Constants.GCM_TYPE_FRIEND;
+				type = Constants.GCM.GCM_TYPE_FRIEND;
 			}
 
 			GcmTask gcmTask = new GcmTask(ctx, type, toRcID, msg);
-			timer.schedule(gcmTask, 10000);
+			timer.schedule(gcmTask, TigaseNodeManager.getInstance(ctx).getNodeTimeout());
 			gcmTimers.put(timerKey, timer);
 		}
 
 	}
-
 
 	// 注册接收消息监听器
 	public void setOnMessageReciver(TigaseMessageReceiver messageReceiver) {
@@ -213,79 +197,7 @@ public class TigaseMessageBinderService extends Service {
 		@Override
 		public void run() {
 			// TODO Auto-generated method stub
-			Log.d("GcmTask", "push to service");
-
-			JSONObject json = new JSONObject();
-			try {
-				// TODO
-				json.put("appId", Constants.APP_ID);
-				json.put("type", type);
-				// TODO 设置真是token
-				PhotoTalkApplication app = (PhotoTalkApplication) ctx.getApplicationContext();
-
-				json.put("token", app.getCurrentUser().getToken());
-				json.put("fRcId", toRcId);
-				json.put("deviceId", MetaHelper.getMACAddress(ctx));
-				json.put("rcId", app.getCurrentUser().getRcId());
-				json.put("language", "");
-				json.put("extra", extra);
-			}
-			catch (JSONException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			OutputStream output = null;
-			InputStream is = null;
-			HttpURLConnection conn = null;
-			String content = null;
-			try {
-				conn = (HttpURLConnection) new URL(GCM_URL).openConnection();
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				conn.setDoOutput(true);
-				conn.setRequestMethod("POST");
-				conn.setRequestProperty("Content-Type", "application/json");
-				byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
-				output = conn.getOutputStream();
-				output.write(bodyBytes);
-				is = conn.getInputStream();
-				InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-				StringBuilder builder = new StringBuilder();
-				char[] readChars = new char[1024];
-				String temp = null;
-				int result = -1;
-				while ((result = reader.read(readChars, 0, 1024)) != -1) {
-					temp = new String(readChars, 0, result);
-					builder.append(temp);
-				}
-				reader.close();
-				content = builder.toString();
-			}
-			catch (ConnectException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			finally {
-				try {
-					output.close();
-				}
-				catch (Exception e) {
-				}
-				try {
-					is.close();
-				}
-				catch (Exception e) {
-				}
-				if (conn != null)
-					conn.disconnect();
-
-			}
-
+			RCGcmUtil.pushGcmMsg(ctx, type, toRcId, extra);
 		}
 	}
 }
