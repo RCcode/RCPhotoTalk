@@ -43,7 +43,7 @@ public class CheckUpdateTask {
 						}
 						UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
 						AlertDialog.Builder builder = new AlertDialog.Builder(mContext).setMessage(updateContent)
-								.setTitle(mContext.getString(R.string.update_dialog_title, mContext.getString(R.string.app_name), newVersion))
+								.setTitle(mContext.getString(R.string.update_dialog_title))
 								.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
 						AlertDialog mUpdateDialog = builder.create();
 						mUpdateDialog.setCancelable(false);

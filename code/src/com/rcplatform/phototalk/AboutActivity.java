@@ -106,8 +106,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 			AlertDialog.Builder builder = new AlertDialog.Builder(this)
 					.setMessage(updateContent)
 					.setTitle(
-							getString(R.string.update_dialog_title,
-									getString(R.string.app_name), versionCode))
+							getString(R.string.update_dialog_title))
 					.setNegativeButton(R.string.update_now, this)
 					.setPositiveButton(R.string.attention_later, this);
 			mUpdateDialog = builder.create();

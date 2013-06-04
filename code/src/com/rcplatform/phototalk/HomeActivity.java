@@ -872,6 +872,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 			}
 
 		}
-		return true;
+		return false;
 	}
 }
