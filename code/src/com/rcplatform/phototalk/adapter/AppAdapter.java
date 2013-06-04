@@ -53,7 +53,7 @@ public class AppAdapter extends BaseAdapter {
 		}
 		AppInfo appInfo = mApps.get(position);
 		ImageView iv = (ImageView) convertView;
-		mImageLoader.displayImage(appInfo.getPicUrl(), iv);
+		mImageLoader.displayImage(appInfo.getColorPicUrl(), iv);
 		return convertView;
 	}
 

@@ -25,7 +25,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class BaseActivity extends Activity {
-	
+
 	public static final int LOADING_NO_MSG = -1;
 	ProgressDialog mProgressDialog;
 	private AlertDialog logoutDialog;
@@ -35,7 +35,6 @@ public class BaseActivity extends Activity {
 	protected void cancelRelogin() {
 		needRelogin = false;
 	}
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -161,10 +160,11 @@ public class BaseActivity extends Activity {
 	}
 
 	protected void initForwordButton(int resId, OnClickListener onClickListener) {
-		TextView tvForward = (TextView) findViewById(R.id.choosebutton);
-		tvForward.setText(resId);
-		tvForward.setOnClickListener(onClickListener);
-		tvForward.setVisibility(View.VISIBLE);
+		TextView tvForward = (TextView) findViewById(R.id.tv_choosebutton_text);
+		tvForward.setBackgroundResource(resId);
+		View view = findViewById(R.id.choosebutton);
+		view.setOnClickListener(onClickListener);
+		view.setVisibility(View.VISIBLE);
 	}
 
 	@Override

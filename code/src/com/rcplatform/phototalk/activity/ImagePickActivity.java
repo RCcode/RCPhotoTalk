@@ -25,7 +25,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
-public class ImagePickActivity extends MenueBaseActivity {
+public class ImagePickActivity extends BaseActivity {
 
 	protected static final int REQUEST_CODE_GALLARY = 1012;
 

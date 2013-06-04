@@ -303,5 +303,6 @@
     <string name="bind_phone_attention">注册手机号码后你的朋友可以更容易找到你</string>
     <string name="bind_now">马上注册</string>
     <string name="bind_later">以后再说</string>
+    <string name="or">或者</string>
 
 </resources>

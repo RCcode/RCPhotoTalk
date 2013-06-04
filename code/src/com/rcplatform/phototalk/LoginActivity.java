@@ -92,7 +92,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private Button mForgetPswButton;
 	private View mLinearAccounts;
 	// private ImageView mIvHead;
-	private TextView btnChange;
 	public static final int LOGIN_TYPE_EMAIL = 0;
 	public static final int LOGIN_TYPE_RCID = 2;
 	// 正则，必须由数字字母组成
@@ -151,8 +150,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		init_regist_agreement_text = (TextView) findViewById(R.id.init_regist_agreement_text);
 		// mIvHead = (ImageView) findViewById(R.id.iv_registe_head);
 		// mIvHead.setOnClickListener(this);
-		btnChange = (TextView) findViewById(R.id.choosebutton);
-		btnChange.setOnClickListener(this);
 		// btnChange.setVisibility(View.VISIBLE);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
 		mTitleTextView.setVisibility(View.VISIBLE);
@@ -190,7 +187,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private void showSignupView() {
 		clearInputInfo();
-		btnChange.setText(R.string.landing_page_login);
 		mLinearAccounts.setVisibility(View.GONE);
 		mLoginIdEditText.setText(mGoogleAccount);
 		mDescTextView.setText(R.string.reg_bubble_desc_text);
@@ -220,7 +216,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		clearInputInfo();
 		mDescTextView.setText(R.string.user_other_account);
 		mDescTextView.setVisibility(View.GONE);
-		btnChange.setText(R.string.landing_page_signup);
 		if (Constants.userApps.size() > 0) {
 			mLinearAccounts.setVisibility(View.VISIBLE);
 		} else {
@@ -443,7 +438,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Iterator<UserInfo> itUsers = userApps.values().iterator();
 		UserInfo userInfo = itUsers.next();
-		Request request = new Request(this, PhotoTalkApiUrl.CHECK_USER_URL, new RCPlatformResponseHandler() {
+		Request request = new Request(this, PhotoTalkApiUrl.RCPLATFORM_ACCOUNT_LOGIN_URL, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
@@ -452,7 +447,24 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					JSONObject obj = new JSONObject(content);
 					int showRecommends = obj.getInt("showRecommends");
 					if (showRecommends == UserInfo.FIRST_TIME) {
-						startPlatformUserEditActivity(userApps);
+						Map<AppInfo, UserInfo> appUsers = new HashMap<AppInfo, UserInfo>();
+						String token = obj.getString("token");
+						JSONArray arrayApps = obj.getJSONArray("otherInfos");
+						for (int i = 0; i < arrayApps.length(); i++) {
+							JSONObject jsonAppUser = arrayApps.getJSONObject(i);
+							UserInfo userInfo = new UserInfo();
+							userInfo.setRcId(jsonAppUser.getString("rcId"));
+							userInfo.setNickName(jsonAppUser.getString("nickName"));
+							String headUrl = jsonAppUser.getString("headUrl");
+							if (!RCPlatformTextUtil.isEmpty(headUrl))
+								userInfo.setHeadUrl(headUrl);
+							userInfo.setToken(token);
+							AppInfo appInfo = new AppInfo();
+							appInfo.setAppId(jsonAppUser.getInt("appId"));
+							appInfo.setAppName("appName");
+							appUsers.put(appInfo, userInfo);
+						}
+						startPlatformUserEditActivity(appUsers);
 					} else {
 						UserInfo userInfo = JSONConver.jsonToUserInfo(obj.getJSONObject("userInfoAll").toString());
 						userInfo.setShowRecommends(showRecommends);
@@ -477,6 +489,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		PhotoTalkParams.buildBasicParams(this, request);
 		request.putParam(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
 		request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
+		request.putParam(PhotoTalkParams.Login.PARAM_KEY_ACCOUNT, userInfo.getEmail());
+		request.putParam(PhotoTalkParams.PlatformAccountLogin.APP_ID, userInfo.getAppId());
 		request.excuteAsync();
 	}
 

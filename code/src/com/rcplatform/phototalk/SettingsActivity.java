@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk;
 
 import java.io.File;
+import java.util.List;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,11 +13,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
+import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
@@ -54,6 +57,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private View newTrend;
 	private ImageView ivTrend;
 	private ImageLoader mImageLoader;
+	private LinearLayout linearApps;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +90,16 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		viewAbout.setOnClickListener(this);
 		InformationPageController.getInstance().onNewTread();
 		setUserInfo(getCurrentUser());
+		initAppList();
 	}
+
+	private void initAppList() {
+		linearApps = (LinearLayout) findViewById(R.id.my_friend_details_apps_listview);
+		
+		List<AppInfo> allApps = PhotoTalkDatabaseFactory.getGlobalDatabase().getPlatformAppInfos();
+		PhotoTalkUtils.buildAppList(this, linearApps, allApps, mImageLoader);
+	}
+
 
 	private void setUserInfo(UserInfo userInfo) {
 		setUserImage();
@@ -125,8 +138,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			String urlLocal = "file:///" + fileBackground.getPath();
 			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
 		} else {
-			mImageLoader.displayImage(getCurrentUser().getBackground(),
-					user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
+			mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
 		}
 	}
 
@@ -305,16 +317,18 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		}
 
 	}
-	private static final String INSTANCE_KEY_SETTING_CROP_MODE="setting_crop_mode";
+
+	private static final String INSTANCE_KEY_SETTING_CROP_MODE = "setting_crop_mode";
+
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putInt(INSTANCE_KEY_SETTING_CROP_MODE, CAMERA_CODE);
 	}
-	
+
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		CAMERA_CODE=savedInstanceState.getInt(INSTANCE_KEY_SETTING_CROP_MODE);
+		CAMERA_CODE = savedInstanceState.getInt(INSTANCE_KEY_SETTING_CROP_MODE);
 	}
 }

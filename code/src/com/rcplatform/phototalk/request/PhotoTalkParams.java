@@ -18,7 +18,7 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_USER_ID = "rcId";
 	public static String PARAM_KEY_APP_ID = "appId";
 
-	public static String PARAM_VALUE_TOKEN_DEFAULT =UserInfo.DEFAULT_TOKEN;
+	public static String PARAM_VALUE_TOKEN_DEFAULT = UserInfo.DEFAULT_TOKEN;
 	public static String PARAM_VALUE_LANGUAGE;
 	public static String PARAM_VALUE_DEVICE_ID;
 	public static String PARAM_VALUE_APP_ID = "1";
@@ -28,11 +28,13 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
 		public static final String PARAM_KEY_OLD_PASSWORD = "pwd";
 	}
-public static class ChangeUserInfo{
-	public static final String PARAM_KEY_NICK = "nick";
-	public static final String PARAM_KEY_BIRTHDAY = "birthday";
-	public static final String PARAM_KEY_GENDER = "gender";
-}
+
+	public static class ChangeUserInfo {
+		public static final String PARAM_KEY_NICK = "nick";
+		public static final String PARAM_KEY_BIRTHDAY = "birthday";
+		public static final String PARAM_KEY_GENDER = "gender";
+	}
+
 	public static class SendPhoto {
 		public static final String PARAM_KEY_FLAG = "time";
 		public static final String PARAM_KEY_TIME_LIMIT = "timeLimit";
@@ -72,12 +74,14 @@ public static class ChangeUserInfo{
 		public static final String PARAM_KEY_TIMEZONE = "timeZone";
 	}
 
-	public static class PLATFORM_ACCOUNT_LOGIN {
+	public static class CreateUserInfo {
 		public static final String PARAM_KEY_HEAD_URL = "headUrl";
 		public static final String PARAM_KEY_NICK = "nick";
 		public static final String PARAM_KEY_IMAGE = "file";
+		public static final String PARAM_KEY_TIMEZONE="timeZone";
+		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_TOKEN = "token";
 	}
-
 
 	public static void buildBasicParams(Context context, Request request) {
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
@@ -161,11 +165,17 @@ public static class ChangeUserInfo{
 	public static class CheckTrends {
 		public static final String PARAM_KEY_TRENDID = "trendId";
 	}
-	public static class RequestSMS{
-		public static final String PARAM_KEY_NUMBER="phone";
+
+	public static class RequestSMS {
+		public static final String PARAM_KEY_NUMBER = "phone";
 	}
-	public static class BindPhone{
-		public static final String PARAM_KEY_NUMBER="phone";
-		public static final String PARAM_KEY_CODE="code";
+
+	public static class BindPhone {
+		public static final String PARAM_KEY_NUMBER = "phone";
+		public static final String PARAM_KEY_CODE = "code";
+	}
+
+	public static class PlatformAccountLogin {
+		public static final String APP_ID = "fromApp";
 	}
 }

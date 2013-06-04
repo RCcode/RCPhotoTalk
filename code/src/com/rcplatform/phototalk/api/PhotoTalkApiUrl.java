@@ -3,8 +3,9 @@ package com.rcplatform.phototalk.api;
 public class PhotoTalkApiUrl {
 
 	 private static final String BASE_URL = "http://192.168.0.86:8083/";
+//	 private static final String BASE_URL = "http://192.168.0.111/";
 //	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
-	// private static final String BASE_URL = "http://103.247.169.150:8083/";
+//	 private static final String BASE_URL = "http://103.247.169.150:8083/";
 //	 private static final String BASE_URL = "http://192.168.0.106/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "phototalk/";
@@ -84,6 +85,8 @@ public class PhotoTalkApiUrl {
 	public static final String GET_USER_INFO = USER_URL + "getUserSelfInfo.do";
 
 	public static final String CHECK_TRENDS_URL = SETTING_URL + "checkHasTrend.do";
+	
+	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO=FILE_URL+"createUserInfo.do";
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
@@ -94,6 +97,8 @@ public class PhotoTalkApiUrl {
 	private static final String RCBOSS_USER_URL = BASE_URL_FOR_RCBOSS + "user/";
 
 	private static final String RCBOSS_COMM_URL = BASE_URL_FOR_RCBOSS + "comm/";
+	
+	
 
 	// private static final String RCBOSS_LONIN_URL = BASE_URL_FOR_RCBOSS +
 	// "login/";
@@ -102,11 +107,11 @@ public class PhotoTalkApiUrl {
 
 	public static final String SYNC_CONTACT_URL = RCBOSS_COMM_URL + "synchroContacts.do";
 
-	public static final String RCPLATFORM_ACCOUNT_LOGIN_URL = RCBOSS_USER_URL + "createUserInfo.do";
+	public static final String RCPLATFORM_ACCOUNT_LOGIN_URL = RCBOSS_USER_URL + "userLoginByOther.do";
+	
 	public static final String UPDATE_PHONE_BIND_STATE_URL = RCBOSS_COMM_URL + "phoneLog.do";
 	public static final String LOGIN_URL = RCBOSS_USER_URL + "userLogin.do";
 	public static final String SIGNUP_URL = RCBOSS_USER_URL + "regist.do";
-	public static final String CHECK_USER_URL = RCBOSS_USER_URL + "hasUserInfo.do";
 	public static final String FORGET_PASSWORD_URL = RCBOSS_USER_URL + "getUserPass.do";
 
 	public static final String CHECK_LOGIN_PASSWORD_URL = RCBOSS_USER_URL + "checkPwdForUpdate.do";

@@ -13,24 +13,21 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.adapter.AppAdapter;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
-import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
-import com.rcplatform.phototalk.utils.AppSelfInfo;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
-import com.rcplatform.phototalk.views.HorizontalListView;
 import com.rcplatform.phototalk.views.RoundImageView;
 
 public class FriendDetailActivity extends BaseActivity {
@@ -38,18 +35,17 @@ public class FriendDetailActivity extends BaseActivity {
 	private ImageLoader mImageLoader;
 	public static final String PARAM_FRIEND = "friend";
 	public static final String RESULT_PARAM_FRIEND = "friend";
-
 	private String mAction;
 	private RoundImageView ivHead;
 	private ImageView ivBackground;
 	private TextView tvSexAge;
-	private HorizontalListView hlvApps;
 	private TextView tvSource;
 	private Button btnPerform;
 	private PopupWindow mRemarkEditWindow;
 	private View linearSource;
 	private TextView tv_rcid;
 	private String mLastRemark;
+	private LinearLayout linearApps;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +62,9 @@ public class FriendDetailActivity extends BaseActivity {
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
+		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0)
+			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(), mImageLoader);
 		setFriendName();
-		if (mFriend.getAppList() != null)
-			hlvApps.setAdapter(new AppAdapter(this, mFriend.getAppList(), mImageLoader));
-
 		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getGender()), mFriend.getAge()));
 	}
 
@@ -83,7 +78,7 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void coverToRecommendView() {
-		hlvApps.setVisibility(View.GONE);
+		linearApps.setVisibility(View.GONE);
 		btnPerform.setText(R.string.add_to_friend);
 		btnPerform.setOnClickListener(new OnClickListener() {
 
@@ -110,6 +105,12 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void coverToFriendView() {
+		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0)
+			linearApps.setVisibility(View.VISIBLE);
+		else if (mFriend.getRcId().equals(getCurrentUser().getRcId()))
+			linearApps.setVisibility(View.GONE);
+		else
+			linearApps.setVisibility(View.GONE);
 		btnPerform.setText(R.string.friend_detail_send_photo_hint_text);
 		btnPerform.setOnClickListener(new OnClickListener() {
 
@@ -128,20 +129,20 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void initView() {
 		linearSource = findViewById(R.id.linear_source);
+		linearApps = (LinearLayout) findViewById(R.id.linear_apps);
 		ivHead = (RoundImageView) findViewById(R.id.iv_head);
 		ivBackground = (ImageView) findViewById(R.id.iv_bg);
 		tvSexAge = (TextView) findViewById(R.id.tv_sex_age);
 		tv_rcid = (TextView) findViewById(R.id.tv_rcid);
-		hlvApps = (HorizontalListView) findViewById(R.id.hlv_apps);
 		tvSource = (TextView) findViewById(R.id.tv_source_name);
 		tvName = (TextView) findViewById(R.id.tv_name);
 		btnPerform = (Button) findViewById(R.id.btn_perform);
+		setFriendInfo();
 		if (mAction.equals(Constants.Action.ACTION_FRIEND_DETAIL)) {
 			coverToFriendView();
 		} else if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL)) {
 			coverToRecommendView();
 		}
-		setFriendInfo();
 		if (mFriend.getRcId().equals(getCurrentUser().getRcId())) {
 			linearSource.setVisibility(View.GONE);
 		}

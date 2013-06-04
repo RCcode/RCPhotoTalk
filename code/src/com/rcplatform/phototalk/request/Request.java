@@ -37,6 +37,7 @@ import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 
 public class Request implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -203,7 +204,7 @@ public class Request implements Serializable {
 		request.excuteAsync();
 	}
 
-	public static void sendPhoto(final Context context, final long flag, File file, final String timeLimit, final PhotoSendListener listener,
+	public static void sendPhoto(final Context context, final long flag, final File file, final String timeLimit, final PhotoSendListener listener,
 			final List<String> friendIds) {
 		final UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		try {
@@ -231,6 +232,16 @@ public class Request implements Serializable {
 							// informations, userIds);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag);
+							RCThreadPool.getInstance().addTask(new Runnable() {
+
+								@Override
+								public void run() {
+									int count = PhotoTalkDatabaseFactory.getDatabase().getUnSendInformationCountByUrl(file.getAbsolutePath());
+									if (count == 0) {
+										file.delete();
+									}
+								}
+							});
 						} catch (JSONException e) {
 							e.printStackTrace();
 							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, content);

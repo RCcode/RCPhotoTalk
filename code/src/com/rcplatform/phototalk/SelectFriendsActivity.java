@@ -11,24 +11,16 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Gallery;
-import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -44,24 +36,17 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.DisplayUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
-import com.rcplatform.phototalk.views.HorizontalListViewOne;
+import com.rcplatform.phototalk.views.HorizontalListView;
 
-public class SelectFriendsActivity extends BaseActivity implements
-		OnClickListener {
+public class SelectFriendsActivity extends BaseActivity implements OnClickListener {
 
 	private ListView mFriendListView;
 
-	private HorizontalListViewOne mGallery;
+	private HorizontalListView mGallery;
 
 	private Button mButtonSend;
-
-	// density 为1.5的手机上的px
-	private int galleryLeftPaddingPx = 20;
-	// density 为1.5的手机上的px
-	private int gallerySpacePx = 25;
 
 	private final int MSG_WHAT_ERROR = 100;
 
@@ -83,7 +68,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private ImageButton mBtBack;
 
-	private TextView mBtAddFriend;
 	private RelativeLayout send_layout;
 	private List<Friend> listData;
 	private List<Friend> resultData = new ArrayList<Friend>();
@@ -111,26 +95,22 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 			@Override
 			public void onLoadedFail(String reason) {
-				if (!PrefsUtils.User.hasLoadedFriends(
-						SelectFriendsActivity.this, getCurrentUser().getRcId())) {
+				if (!PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
 					showErrorConfirmDialog(reason);
 				}
 			}
 
 			@Override
-			public void onFriendsLoaded(List<Friend> friends,
-					List<Friend> recommends) {
-				mHandler.obtainMessage(MSG_CACHE_FINISH, friends)
-						.sendToTarget();
+			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
 			}
 		});
 	}
 
-	@SuppressWarnings("deprecation")
 	private void initViewOrListener() {
 		mFriendListView = (ListView) findViewById(R.id.lv_sfl_friends);
 		send_layout = (RelativeLayout) findViewById(R.id.send_layout);
-		mGallery = (HorizontalListViewOne) findViewById(R.id.g_sfl_added_friends);
+		mGallery = (HorizontalListView) findViewById(R.id.g_sfl_added_friends);
 		mButtonSend = (Button) findViewById(R.id.btn_sfl_send);
 		progressBar = (ProgressBar) findViewById(R.id.pb_select_friend);
 		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
@@ -139,8 +119,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		mGallery.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					final int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 				// Friend friend = sendData.get(position);
 				sendData.remove(position);
 				if (sendData.size() == 0) {
@@ -150,10 +129,9 @@ public class SelectFriendsActivity extends BaseActivity implements
 				}
 			}
 		});
-		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(
-				this, sendData);
+		SelectedFriendsGalleryAdapter adapter = new SelectedFriendsGalleryAdapter(this, sendData);
 		mGallery.setAdapter(adapter);
-		
+
 		send_layout.setVisibility(View.GONE);
 		mButtonSend.setOnClickListener(this);
 		mTvContentTitle.setVisibility(View.VISIBLE);
@@ -163,11 +141,10 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 		mBtBack.setVisibility(View.VISIBLE);
 		mBtBack.setOnClickListener(this);
-		mBtAddFriend = (TextView) findViewById(R.id.choosebutton);
-		mBtAddFriend.setVisibility(View.GONE);
-		mBtAddFriend.setBackgroundResource(R.drawable.select_add);
-		mBtAddFriend.setOnClickListener(this);
-
+		// View view=findViewById(R.id.choosebutton);
+		// view.setBackgroundResource(R.drawable.select_add);
+		// view.setOnClickListener(this);
+		// view.setVisibility(View.VISIBLE);
 		etSearch = (EditText) findViewById(R.id.et_search);
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
 		seach_delete_btn.setVisibility(View.GONE);
@@ -175,7 +152,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				etSearch.setText("");
 				etSearch.setFocusable(true);
 				seach_delete_btn.setVisibility(View.GONE);
@@ -184,13 +160,11 @@ public class SelectFriendsActivity extends BaseActivity implements
 		etSearch.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
 			@Override
@@ -216,8 +190,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 		}
 		List<Friend> resultRecommends = new ArrayList<Friend>();
 		for (Friend friend : resultData) {
-			if (friend.getNickName() != null
-					&& friend.getNickName().toLowerCase().contains(keyWords)) {
+			if (friend.getNickName() != null && friend.getNickName().toLowerCase().contains(keyWords)) {
 				resultRecommends.add(friend);
 			}
 		}
@@ -233,8 +206,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			tempFilePath = app.getSendZipFileCachePath() + "/"
-					+ System.currentTimeMillis() + ".zip";
+			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -245,22 +217,18 @@ public class SelectFriendsActivity extends BaseActivity implements
 			deleteTemp();
 			sendPicture(tempFilePath, timeLimit, sendData);
 		} else {
-			sendStringMessage(MSG_WHAT_ERROR,
-					getString(R.string.receive_data_error));
+			sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
 		}
 
 	}
 
 	private void setAdapterDataSetChanged() {
-		((SelectedFriendsGalleryAdapter) mGallery.getAdapter())
-				.notifyDataSetChanged();
-		((SelectedFriendsListAdapter) mFriendListView.getAdapter())
-				.notifyDataSetChanged();
+		((SelectedFriendsGalleryAdapter) mGallery.getAdapter()).notifyDataSetChanged();
+		((SelectedFriendsListAdapter) mFriendListView.getAdapter()).notifyDataSetChanged();
 	}
 
 	private void initFriendListAdapter(List<Friend> list) {
-		SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(
-				SelectFriendsActivity.this, listData, sendData);
+		SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(SelectFriendsActivity.this, listData, sendData);
 		mFriendListView.setAdapter(adapter);
 		adapter.setOnCheckBoxChangedListener(new OnCheckBoxChangedListener() {
 
@@ -285,23 +253,6 @@ public class SelectFriendsActivity extends BaseActivity implements
 		});
 	}
 
-	/*
-	 * private void jsonToFriends(final String json) throws JSONException {
-	 * Thread thread = new Thread() { public void run() { try { JSONObject
-	 * jsonObject = new JSONObject(json); JSONArray myFriendsArray = jsonObject
-	 * .getJSONArray("myUsers"); List<Friend> friends = JSONConver
-	 * .jsonToFriends(myFriendsArray.toString()); for (Friend friend : friends)
-	 * { friend.setLetter(RCPlatformTextUtil.getLetter(friend .getNickName()));
-	 * friend.setFriend(true); }
-	 * PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends); if
-	 * (mFriendListView.getAdapter() == null) { List<Friend> localFriends =
-	 * PhotoTalkDatabaseFactory .getDatabase().getFriends();
-	 * mHandler.obtainMessage(MSG_CACHE_FINISH, localFriends) .sendToTarget(); }
-	 * } catch (Exception e) { e.printStackTrace(); } }; }; thread.start();
-	 * 
-	 * }
-	 */
-
 	private void sendStringMessage(int what, String content) {
 		Message msg = mHandler.obtainMessage();
 		msg.what = what;
@@ -316,8 +267,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 			switch (msg.what) {
 			case MSG_WHAT_ERROR:
 				progressBar.setVisibility(View.GONE);
-				DialogUtil.showToast(getApplicationContext(), (String) msg.obj,
-						Toast.LENGTH_SHORT);
+				DialogUtil.showToast(getApplicationContext(), (String) msg.obj, Toast.LENGTH_SHORT);
 				break;
 
 			case MSG_CACHE_FINISH:
@@ -339,8 +289,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	private long timeSnap;
 
-	private void sendPicture(String imagePath, final String timeLimit,
-			final List<Friend> friends) {
+	private void sendPicture(String imagePath, final String timeLimit, final List<Friend> friends) {
 		timeSnap = System.currentTimeMillis();
 		final File file = new File(imagePath);
 		LogicUtils.sendPhoto(this, timeLimit, friends, file);
@@ -348,17 +297,14 @@ public class SelectFriendsActivity extends BaseActivity implements
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.btn_sfl_send:
 			if (sendData == null || sendData.size() <= 0) {
-				Toast.makeText(SelectFriendsActivity.this,
-						R.string.please_select_contact, 1).show();
+				Toast.makeText(SelectFriendsActivity.this, R.string.please_select_contact, Toast.LENGTH_SHORT).show();
 				return;
 			} else {
 				catchBitampOnSDC();
-				Intent intent = new Intent(SelectFriendsActivity.this,
-						HomeActivity.class);
+				Intent intent = new Intent(SelectFriendsActivity.this, HomeActivity.class);
 				intent.putExtra("from", this.getClass().getName());
 				intent.putExtra("time", timeSnap);
 				startActivity(intent);
@@ -370,8 +316,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 			break;
 
 		case R.id.choosebutton:
-			startActivity(new Intent(SelectFriendsActivity.this,
-					AddFriendsActivity.class));
+			startActivity(new Intent(SelectFriendsActivity.this, AddFriendsActivity.class));
 			break;
 		}
 	}
@@ -388,8 +333,7 @@ public class SelectFriendsActivity extends BaseActivity implements
 			width = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 		}
 
-		child.measure(width,
-				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		child.measure(width, MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
 	}
 
 	@Override

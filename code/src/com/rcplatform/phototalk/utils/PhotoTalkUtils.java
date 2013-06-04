@@ -2,9 +2,15 @@ package com.rcplatform.phototalk.utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
@@ -65,5 +71,39 @@ public class PhotoTalkUtils {
 
 	public static File getUserBackground(UserInfo userInfo) {
 		return new File(Constants.USER_IMAGE_DIR, userInfo.getRcId() + "/" + "background");
+	}
+
+	public static void buildAppList(Context context, LinearLayout linearApps, List<AppInfo> apps, ImageLoader loader) {
+		for (AppInfo info : apps) {
+			linearApps.addView(getAppImage(context, info, loader));
+		}
+	}
+
+	private static ImageView getAppImage(final Context context, final AppInfo appInfo, ImageLoader loader) {
+		ImageView iv = new ImageView(context);
+		int width = context.getResources().getDimensionPixelSize(R.dimen.app_icon_width);
+		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
+		params.setMargins(0, 0, context.getResources().getDimensionPixelSize(R.dimen.app_icon_margin), 0);
+		iv.setLayoutParams(params);
+		if (Constants.installedApps.contains(appInfo)) {
+			loader.displayImage(appInfo.getColorPicUrl(), iv);
+			iv.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Utils.startApplicationByPackage(context, appInfo.getAppPackage());
+				}
+			});
+		} else {
+			loader.displayImage(appInfo.getGrayPicUrl(), iv);
+			iv.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Utils.searchAppInGooglePlay(context, appInfo.getAppPackage());
+				}
+			});
+		}
+		return iv;
 	}
 }

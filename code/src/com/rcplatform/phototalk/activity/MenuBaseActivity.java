@@ -9,7 +9,7 @@ import com.rcplatform.phototalk.AddFriendsActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
 
-public class MenueBaseActivity extends BaseActivity{
+public class MenuBaseActivity extends BaseActivity{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		menu.add(0, 1, 0, R.string.add_friend_title).setIcon(
@@ -23,10 +23,9 @@ public class MenueBaseActivity extends BaseActivity{
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
-		// TODO Auto-generated method stub
 		switch (item.getItemId()) {
 		case 1:
-			Intent intent = new Intent(MenueBaseActivity.this,
+			Intent intent = new Intent(MenuBaseActivity.this,
 					AddFriendsActivity.class);
 			intent.putExtra("from", "base");
 			startActivity(intent);

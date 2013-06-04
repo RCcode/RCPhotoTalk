@@ -31,7 +31,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.activity.MenueBaseActivity;
+import com.rcplatform.phototalk.activity.MenuBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
 import com.rcplatform.phototalk.bean.Friend;
@@ -45,7 +45,7 @@ import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
-public class MyFriendsActivity extends MenueBaseActivity implements OnClickListener {
+public class MyFriendsActivity extends MenuBaseActivity implements OnClickListener {
 	private static final int MSG_WHAT_FRIEND_LOADED = 912;
 
 	private static final int REQUEST_KEY_DETAIL = 110;
@@ -97,17 +97,9 @@ public class MyFriendsActivity extends MenueBaseActivity implements OnClickListe
 
 	private static final int ITEM_ID = 101;
 
-	@Override
-	protected void initForwordButton(int resId, OnClickListener onClickListener) {
-		TextView tvForward = (TextView) findViewById(R.id.choosebutton);
-		tvForward.setBackgroundResource(R.drawable.title_add_friend_btn);
-		tvForward.setOnClickListener(onClickListener);
-		tvForward.setVisibility(View.VISIBLE);
-	}
-
 	private void initView() {
 		initBackButton(R.string.my_firend_title, this);
-		initForwordButton(R.string.add_friend_title, this);
+		initForwordButton(R.drawable.title_add_friend_btn, this);
 		mList = (ExpandableListView) findViewById(R.id.elv_friends);
 		mSearchList = (ExpandableListView) findViewById(R.id.elv_search);
 		mList.setOnGroupClickListener(mGroupClickListener);

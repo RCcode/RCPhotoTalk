@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@id/title"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/action_bar_height"
     android:background="@drawable/base_top_navigate_background" >
 
     <LinearLayout
@@ -41,22 +41,28 @@
         android:layout_centerVertical="true"
         android:paddingLeft="0dp" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/choosebutton"
-        style="@style/titleBtnStlye"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:gravity="center"
-        android:visibility="gone" />
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:id="@+id/tv_choosebutton_text"
+            style="@style/titleBtnStlye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/title_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/choosebutton"
+        android:layout_toLeftOf="@+id/choosebutton"
         android:background="@drawable/top_line"
         android:visibility="gone" />
 

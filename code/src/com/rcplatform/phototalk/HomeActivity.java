@@ -37,7 +37,7 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
-import com.rcplatform.phototalk.activity.MenueBaseActivity;
+import com.rcplatform.phototalk.activity.MenuBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
@@ -64,6 +64,7 @@ import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
@@ -81,7 +82,7 @@ import com.rcplatform.tigase.TigaseMessageReceiver;
  * 
  * @version 1.0.0
  */
-public class HomeActivity extends MenueBaseActivity implements SnapShowListener, TigaseMessageReceiver {
+public class HomeActivity extends MenuBaseActivity implements SnapShowListener, TigaseMessageReceiver {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
@@ -101,8 +102,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 
 	private TextView mBtFriendList;
 
-	private TextView mBtMore;
-
 	private LongPressDialog mLongPressDialog;
 
 	private PhotoTalkMessageAdapter adapter;
@@ -111,7 +110,6 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 	private Request checkTrendRequest;
 	private ImageView iconTrendNew;
 	private ImageLoader mImageLoader;
-
 
 	private boolean hasNextPage = true;
 
@@ -170,13 +168,21 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 		UserSettingProxy.getAllAppInfo(this, new RCPlatformResponseHandler() {
 
 			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					List<AppInfo> apps = JSONConver.jsonToAppInfos(new JSONObject(content).getJSONArray("allApps").toString());
-					PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+			public void onSuccess(int statusCode, final String content) {
+
+				RCThreadPool.getInstance().addTask(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							List<AppInfo> apps = JSONConver.jsonToAppInfos(new JSONObject(content).getJSONArray("allApps").toString());
+							PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+
 			}
 
 			@Override
@@ -290,11 +296,7 @@ public class HomeActivity extends MenueBaseActivity implements SnapShowListener,
 				startActivity(new Intent(HomeActivity.this, MyFriendsActivity.class));
 			}
 		});
-
-		mBtMore = (TextView) findViewById(R.id.choosebutton);
-		mBtMore.setVisibility(View.VISIBLE);
-		mBtMore.setBackgroundResource(R.drawable.more_btn);
-		mBtMore.setOnClickListener(new OnClickListener() {
+		initForwordButton(R.drawable.more_btn, new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {

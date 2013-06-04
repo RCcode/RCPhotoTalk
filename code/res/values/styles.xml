@@ -54,7 +54,6 @@
         <item name="android:textSize">12sp</item>
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
-        <item name="android:background">@drawable/button_bg_</item>
         <item name="android:gravity">center</item>
     </style>
     <!--
@@ -216,6 +215,8 @@
         <item name="android:paddingLeft">@dimen/default_gap</item>
         <item name="android:paddingRight">@dimen/default_gap</item>
         <item name="android:paddingTop">@dimen/default_gap</item>
+        <item name="android:drawableBottom">@drawable/edit_button_selector</item>
+        <item name="android:layout_height">@dimen/ui_element_unit</item>
     </style>
 
     <style name="listview_base">

@@ -54,6 +54,7 @@
     <dimen name="invate_friend_space">5dp</dimen>
     <dimen name="registe_image_width">100dp</dimen>
     <dimen name="head_image_width">90dp</dimen>
+    <dimen name="head_image_boarder_width">96dp</dimen>
     <dimen name="user_app_item_width">100dp</dimen>
     <dimen name="user_detail_padding">5dp</dimen>
     <dimen name="user_detail_top_margin">20dp</dimen>

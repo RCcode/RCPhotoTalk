@@ -64,4 +64,6 @@ public interface PhotoTalkDatabase {
 
 	public List<Information> getInformationByPage(int page, int pageSize);
 	
+	public int getUnSendInformationCountByUrl(String url);
+	
 }

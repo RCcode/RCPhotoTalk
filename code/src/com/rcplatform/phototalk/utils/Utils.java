@@ -17,6 +17,7 @@ import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -58,13 +59,15 @@ public class Utils {
 		List<PackageInfo> packages = manager.getInstalledPackages(PackageManager.GET_UNINSTALLED_PACKAGES);
 		for (PackageInfo info : packages) {
 			if (info.packageName.startsWith("com.rcplatform")) {
-				if (info.packageName.equals("com.rcplatform.phototalk"))
+				AppInfo appInfo = new AppInfo();
+				appInfo.setAppPackage(info.packageName);
+				appInfo.setAppName(info.applicationInfo.loadLabel(manager).toString());
+				if (info.packageName.equals("com.rcplatform.phototalk")) {
+					Constants.installedApps.add(appInfo);
 					continue;
+				}
 				UserInfo userInfo = getAppLoginUser(context, info.packageName);
 				if (userInfo != null) {
-					AppInfo appInfo = new AppInfo();
-					appInfo.setRcPackage(info.packageName);
-					appInfo.setAppName(info.applicationInfo.loadLabel(manager).toString());
 					appUsers.put(appInfo, userInfo);
 				}
 			}
@@ -637,5 +640,33 @@ public class Utils {
 			return true;
 		}
 		return false;
+	}
+
+	public static void searchAppInGooglePlay(Context context, String pk) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("market://details?id=").append(pk);
+		Uri u = Uri.parse(sb.toString());
+		try {
+			context.startActivity(new Intent(Intent.ACTION_VIEW, u));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void searchDeveloperInGooglePlay(Context context, String developer) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("market://search?q=pub:\"").append(developer).append("\"");
+		Uri uri = Uri.parse(sb.toString());
+		Intent it = new Intent(Intent.ACTION_VIEW, uri);
+		try {
+			context.startActivity(it);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void startApplicationByPackage(Context context, String pk) {
+		Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pk);
+		context.startActivity(LaunchIntent);
 	}
 }
