@@ -139,7 +139,35 @@
     <string name="resend_sms_second">確認コードを再度取得する(%1$d)</string>
     <string name="phone_number_validate">電話番号確認</string>
 
+    <!-- profile -->
+    <string name="settings_update_person_info_title">Profile</string>
+    <string name="nick">愛称</string>
+    <string name="sex">性別</string>
+    <string name="birthday">生年月日</string>
+    <string name="settings_update_name_title">愛称</string>
+    <string name="settings_select_sex">性别</string>
+    <string name="male">男性</string>
+    <string name="famale">女性</string>
+    <string name="select_birthday">生年月日</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">写真を送信できる人物</string>
+    <string name="receive_all">誰でも</string>
+    <string name="receive_friend">友人のみ</string>
+    <string name="dynamic_setting">更新を友人と共有</string>
+    <string name="trends_share">共有する</string>
+    <string name="trends_hide">共有しない</string>
+
+    <!-- 关于 -->
+    <string name="check_update">更新の確認 </string>
+    <string name="contact_us">お問い合わせ</string>
+    <string name="term_service">サービス規約 </string>
+    <string name="compact">プライバシー・ポリシー</string>
+    <string name="no_new_version">Phototalkは最新版です </string>
+
     <!-- todo -->
+
     <string name="register_nick_hint">愛称(20文字以内)</string>
     <string name="app_name">PhotoTalk</string>
     <string name="action_settings">Settings</string>
@@ -160,10 +188,7 @@
     <string name="add_friend_from_facebook_hint_text">从Facebook好友查找</string>
     <string name="friend_detail_send_photo_hint_text">发送图片</string>
     <!-- 设置个人信息页面  更新昵称 包括暂时取消的更新个性签名 -->
-    <string name="settings_select_sex">选择性别</string>
-    <string name="settings_select_sex_private">保密</string>
-    <string name="settings_update_person_info_title">修改个人资料</string>
-    <string name="settings_update_name_title">编辑姓名</string>
+
     <string name="settings_update_name_limited_hint">1-20个字符</string>
     <string name="settings_update_signature_title">编辑个性签名</string>
     <string name="settings_update_signature_limited_hint">1-60个字符</string>
@@ -242,16 +267,10 @@
     <string name="invate_friend">邀请好友</string>
 
     <!-- edit account info 修改个人信息 -->
-    <string name="nick">姓名</string>
-    <string name="sex">性别</string>
-    <string name="birthday">生日</string>
+
     <string name="signture">签名</string>
-    <string name="male">男</string>
-    <string name="famale">女</string>
     <string name="image_unsupport">不支持的图片类型</string>
     <string name="get_image_fail">获取相片失败</string>
-    <string name="select_birthday">选择出生日期</string>
-    <string name="sex_secret">保密</string>
     <string name="text_format_error">输入格式不正确</string>
     <string name="text_too_long">输入的内容过长</string>
     <string name="rcid">RC ID</string>
@@ -273,12 +292,6 @@
     <string name="delete_friend">删除好友</string>
     <string name="set_friend_remark">设置好友备注名称</string>
     <string name="remark_hint">输入备注名</string>
-    <string name="receive_setting">谁可以给我发图片</string>
-    <string name="dynamic_setting">在好友中共享我的动态</string>
-    <string name="trends_share">是</string>
-    <string name="trends_hide">否</string>
-    <string name="receive_all">所有人</string>
-    <string name="receive_friend">我的好友</string>
     <string name="authorized">已绑定</string>
     <string name="never_attention">不再提醒</string>
     <string name="other_device_login">您的账号已在其他设备登陆,请重新登陆</string>
@@ -337,11 +350,6 @@
 
     <!-- app_about 页面 -->
 
-    <string name="check_update">检查更新</string>
-    <string name="contact_us">联系我们</string>
-    <string name="term_service">服务条款</string>
-    <string name="compact">隐私政策</string>
-    <string name="no_new_version">Phototalk已是最新版本</string>
     <string name="retry">重试</string>
     <string name="update_fail">更新失败</string>
     <string name="loading">正在载入。。。</string>
