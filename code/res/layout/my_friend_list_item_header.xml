@@ -16,13 +16,5 @@
         android:textColor="#EEEEEE"
         android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/ground_item_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/default_gap_2x"
-        android:background="@drawable/group_item_down" />
 
 </RelativeLayout>

@@ -145,13 +145,6 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		TextView tvTitle = (TextView) convertView
 				.findViewById(R.id.content_title);
-		ImageView ground_item_view = (ImageView) convertView
-				.findViewById(R.id.ground_item_view);
-		if (!isExpanded) {
-			ground_item_view.setBackgroundResource(R.drawable.group_item_up);
-		} else {
-			ground_item_view.setBackgroundResource(R.drawable.group_item_down);
-		}
 		int titleType = mTitles.get(groupPosition);
 		if (titleType == TYPE_RECOMMENDS) {
 			tvTitle.setText(R.string.firend_list_used_photochat_friend_title);

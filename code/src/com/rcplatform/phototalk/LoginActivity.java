@@ -21,15 +21,18 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputType;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -70,7 +73,9 @@ import com.rcplatform.phototalk.utils.Utils;
 public class LoginActivity extends ImagePickActivity implements View.OnClickListener {
 
 	public static final String RESULT_KEY_USERINFO = "userinfo";
+
 	private String mGoogleAccount;
+
 	private boolean mIsLoginPage;
 
 	private TextView mTitleTextView;
@@ -84,21 +89,29 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private EditText mPswEditText;
 
 	private ListView mLvAcccounts;
+
 	private TextView init_regist_agreement_text;
+
 	private Button mLoginButton;
 
 	private Button mSignupButton;
 
 	private Button mForgetPswButton;
+
 	private View mLinearAccounts;
+
 	// private ImageView mIvHead;
 	private TextView btnChange;
+
 	public static final int LOGIN_TYPE_EMAIL = 0;
+
 	public static final int LOGIN_TYPE_RCID = 2;
+
 	// 正则，必须由数字字母组成
 	// private final String RCID_REGEX =
 	// "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,})$";
 	private final String RCID_REGEX = "\\d{7,}";
+
 	private final String EMAIL_REGEX = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
 
 	// 密码正则表达式
@@ -202,7 +215,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLoginButton.setVisibility(View.GONE);
 		mSignupButton.setVisibility(View.VISIBLE);
 		init_regist_agreement_text.setVisibility(View.VISIBLE);
-
+		// TODO 修改为正式地址
 		SpannableString msp = new SpannableString(getString(R.string.init_regist_agreement));
 		msp.setSpan(new ForegroundColorSpan(Color.BLUE), 8, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 设置前景色为洋红色
 		msp.setSpan(new ForegroundColorSpan(Color.BLUE), 13, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 设置前景色为洋红色
@@ -214,6 +227,73 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLoginIdEditText.setHint(getString(R.string.registe_email_hint));
 		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT);
 		// mIvHead.setVisibility(View.GONE);
+
+		mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+		mNickEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+		mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+		mLoginIdEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
+
+		mNickEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				mNickEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
+
+		mPswEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
+
 	}
 
 	private void showLoginView() {
@@ -236,6 +316,50 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLoginIdEditText.setHint(getString(R.string.login_username_hint));
 		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		// mIvHead.setVisibility(View.GONE);
+		
+		mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+		mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+		mLoginIdEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
+
+		mPswEditText.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
 	}
 
 	private void clearInputInfo() {
@@ -248,62 +372,103 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	public void onClick(View v) {
 
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
+			case R.id.back:
+				finish();
+				break;
 
-		// case R.id.iv_registe_head:
-		// showImagePickMenu(v, CROP_HEAD_IMAGE);
-		// break;
-		case R.id.login_page_signup_button:
-			final String email = mLoginIdEditText.getText().toString();
-			final String nick = mNickEditText.getText().toString();
-			final String psw = mPswEditText.getText().toString();
-			if (invalidate(this, email, nick, psw)) {
-				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
-				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
-						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+			// case R.id.iv_registe_head:
+			// showImagePickMenu(v, CROP_HEAD_IMAGE);
+			// break;
+			case R.id.login_page_signup_button:
+				final String email = mLoginIdEditText.getText().toString();
+				final String nick = mNickEditText.getText().toString();
+				final String psw = mPswEditText.getText().toString();
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-							}
-						}).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+				if (email.equals("")) {
+					mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+					mLoginIdEditText.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(mLoginIdEditText, 0);
+					return;
+				}
 
-							@Override
-							public void onClick(DialogInterface dialog, int which) {
-								dialog.cancel();
-								tigaseRegiste(LoginActivity.this, email, psw, nick);
-								// register(LoginActivity.this, email,
-								// psw,
-								// nick);
-							}
-						});
-				dialogBuilder.create().show();
-			}
-			break;
-		case R.id.login_page_login_button:
-			String email2 = mLoginIdEditText.getText().toString().trim();
-			String psw2 = mPswEditText.getText().toString().trim();
-			int loginType = invalidate(email2, psw2);
-			if (loginType != -1) {
-				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-				// login(this, mHandler, email2, psw2, loginType);
-				tigaseLogin(this, email2, psw2);
-			}
-			break;
-		case R.id.login_page_forget_password_button:
-			startActivity(new Intent(this, ForgetPasswordActivity.class));
-			break;
-		case R.id.choosebutton:
-			if (mIsLoginPage) {
-				showSignupView();
-			} else {
-				showLoginView();
-			}
-			mIsLoginPage = !mIsLoginPage;
-			break;
-		default:
-			break;
+				if (nick.equals("")) {
+					mNickEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+					mNickEditText.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(mNickEditText, 0);
+					return;
+				}
+
+				if (psw.equals("")) {
+					mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+					mPswEditText.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(mPswEditText, 0);
+					return;
+				}
+
+				if (invalidate(this, email, nick, psw)) {
+					AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+					dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
+					        .setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+
+						        @Override
+						        public void onClick(DialogInterface dialog, int which) {
+						        }
+					        }).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+						        @Override
+						        public void onClick(DialogInterface dialog, int which) {
+							        dialog.cancel();
+							        tigaseRegiste(LoginActivity.this, email, psw, nick);
+							        // register(LoginActivity.this, email,
+							        // psw,
+							        // nick);
+						        }
+					        });
+					dialogBuilder.create().show();
+				}
+				break;
+			case R.id.login_page_login_button:
+				String email2 = mLoginIdEditText.getText().toString().trim();
+				String psw2 = mPswEditText.getText().toString().trim();
+				if (email2.equals("")) {
+					mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+					mLoginIdEditText.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(mLoginIdEditText, 0);
+					return;
+				}
+
+				if (psw2.equals("")) {
+					mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+					mPswEditText.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(mPswEditText, 0);
+					return;
+				}
+				
+				int loginType = invalidate(email2, psw2);
+				if (loginType != -1) {
+					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+					// login(this, mHandler, email2, psw2, loginType);
+					tigaseLogin(this, email2, psw2);
+				}
+				break;
+			case R.id.login_page_forget_password_button:
+				startActivity(new Intent(this, ForgetPasswordActivity.class));
+				break;
+			case R.id.choosebutton:
+				if (mIsLoginPage) {
+					showSignupView();
+				} else {
+					showLoginView();
+				}
+				mIsLoginPage = !mIsLoginPage;
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -333,12 +498,14 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkEmail(String emailId) {
 		// 邮箱正则表达式
 		if (TextUtils.isEmpty(emailId)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_empty), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_empty), getResources().getString(android.R.string.ok))
+			        .show();
 			return false;
 		}
 		Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
 		if (!emailPattern.matcher(emailId).matches()) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(android.R.string.ok))
+			        .show();
 			return false;
 		}
 		return true;
@@ -349,7 +516,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			return LOGIN_TYPE_EMAIL;
 		else if (account.matches(RCID_REGEX))
 			return LOGIN_TYPE_RCID;
-		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok)).show();
+		DialogUtil
+		        .createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok))
+		        .show();
 		return -1;
 	}
 
@@ -359,7 +528,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkNickName(String nickeName) {
 		// 昵称正则表达式
 		if (!RCPlatformTextUtil.isNickMatches(nickeName)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_nick_empty), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_nick_empty), getResources().getString(android.R.string.ok))
+			        .show();
 			return false;
 		}
 		return true;
@@ -372,11 +542,14 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkPassword(String psw) {
 
 		if (TextUtils.isEmpty(psw)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_password_empty), getResources().getString(android.R.string.ok)).show();
+			DialogUtil
+			        .createMsgDialog(this, getResources().getString(R.string.registe_password_empty), getResources().getString(android.R.string.ok))
+			        .show();
 			return false;
 		}
 		if (!RCPlatformTextUtil.isPasswordMatches(psw)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_password_error), getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_password_error),
+			                           getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -389,7 +562,9 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	}
 
 	class OtherAppsAdapter extends BaseAdapter {
+
 		private List<UserInfo> users;
+
 		private Map<AppInfo, UserInfo> installedApps;
 
 		public OtherAppsAdapter(Map<AppInfo, UserInfo> platformUsers) {
@@ -462,7 +637,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 						PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
 						loginSuccess(userInfo);
 					}
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 					showErrorConfirmDialog(R.string.net_error);
 				}
@@ -525,7 +701,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
 					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends, FriendType.CONTACT);
 					loginSuccess(userInfo);
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 				}
