@@ -55,23 +55,7 @@
             android:orientation="horizontal" >
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/take"
-                android:textColor="#B1B1B1"
-                android:textSize="18sp" />
-
-            <TextView
                 android:id="@+id/friend_message"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:singleLine="true"
-                android:textColor="#003399"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_friend"
@@ -87,21 +71,12 @@
             android:orientation="horizontal" >
 
             <TextView
+                android:id="@+id/app_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_app"
                 android:textColor="#B1B1B1"
                 android:textSize="18sp" />
-
-            <TextView
-                android:id="@+id/app_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="marquee"
-                android:singleLine="true"
-                android:textColor="#003399"
-                android:textSize="18sp"
-                android:textStyle="bold" />
         </LinearLayout>
     </LinearLayout>
 

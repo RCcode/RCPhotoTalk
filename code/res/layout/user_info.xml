@@ -41,9 +41,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:textSize="20sp"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:textColor="#919191" />
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -68,18 +68,18 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:textSize="20sp"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:textColor="#919191" />
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rela_phone"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginLeft="@dimen/default_gap"
                 android:layout_marginRight="@dimen/default_gap"
                 android:layout_marginTop="14dp"
-                android:id="@+id/rela_phone"
                 android:background="@drawable/user_info_item_bg" >
 
                 <ImageView
@@ -91,14 +91,14 @@
                 </ImageView>
 
                 <TextView
-                    android:id="@+id/user_phone"
+                    android:id="@+id/tv_phone_authstate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:textSize="20sp"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:textColor="#919191" />
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -122,20 +122,11 @@
                     android:id="@+id/tv_facebook_authstate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/iv_to_right"
-                    android:textSize="20sp"
-                    android:textColor="#919191" />
-
-                <ImageView
-                    android:id="@+id/iv_to_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:src="@drawable/app_arrow" />
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -159,20 +150,11 @@
                     android:id="@+id/tv_vk_authstate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_toLeftOf="@+id/vk_iv_right"
-                    android:textSize="20sp"
-                    android:textColor="#919191" />
-
-                <ImageView
-                    android:id="@+id/vk_iv_right"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/default_gap"
-                    android:src="@drawable/app_arrow" />
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>
@@ -180,10 +162,10 @@
     <Button
         android:id="@+id/reset_pw_btn"
         style="@style/LandingPageButton"
+        android:layout_above="@+id/login_out_btn"
         android:layout_marginLeft="@dimen/default_gap"
         android:layout_marginRight="@dimen/default_gap"
         android:background="@drawable/modify_btn"
-        android:layout_above="@+id/login_out_btn"
         android:text="@string/setting_update_login_password"
         android:textColor="#313131" >
     </Button>
@@ -197,8 +179,7 @@
         android:layout_marginRight="@dimen/default_gap"
         android:layout_marginTop="@dimen/default_gap_2x"
         android:background="@drawable/friend_info_send_btn"
-        android:textColor="@android:color/white"
         android:text="@string/login_out_account"
-         />
+        android:textColor="@android:color/white" />
 
 </RelativeLayout>

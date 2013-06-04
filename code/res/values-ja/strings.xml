@@ -93,7 +93,52 @@
     <string name="my_friends_added">マイ フレンド</string>
     <string name="my_firend_suggested_title">友人の紹介</string>
     <string name="add_friend_title">友人追加</string>
-    
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">友人として追加</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">詳細</string>
+    <string name="friend_dynamic">友人更新</string>
+    <string name="my_account">マイRCアカウント</string>
+    <string name="setting">設定</string>
+    <string name="about">バージョン情報</string>
+    <string name="setting_page_clean_history">履歴消去</string>
+    <string name="clear_infos_message">すべての履歴を消去しますか？</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">%1$sを友人として追加する </string>
+    <string name="add_app">%1$sに参加する</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">接続されていません</string>
+    <string name="phone_unbind">登録されていません</string>
+    <string name="setting_update_login_password">ログインパスワードの変更</string>
+    <string name="login_out_account">ログアウト</string>
+    <string name="dialog_confirm_deauth">接続を解除しますか？</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">ログインパスワードの変更</string>
+    <string name="input_current_password">現在のパスワードを入力してください</string>
+    <string name="forget_password_title">パスワードを忘れた場合</string>
+    <string name="change_password_edit_title">新しいパスワードの設定</string>
+    <string name="change_password_new_password_hint">新しいパスワード</string>
+    <string name="change_password_confirm_password_hint">再入力してください</string>
+    <string name="two_password_not_same">入力したパスワードが異なります</string>
+    <string name="password_change_complete">パスワードを変更しました</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">電話番号登録</string>
+    <string name="bind_phone_input_phone_hint">電話番号を入力してください</string>
+    <string name="next_number">確認コードの取得(%1$d)</string>
+    <string name="sms_reciver_info">確認コードを含むSMSが送られます</string>
+    <string name="input_validate">確認コードを入力してください</string>
+    <string name="commit">送信</string>
+    <string name="resend_sms_number">確認コードを再度取得する(%1$d)</string>
+    <string name="resend_sms_second">確認コードを再度取得する(%1$d)</string>
+    <string name="phone_number_validate">電話番号確認</string>
+
     <!-- todo -->
     <string name="register_nick_hint">愛称(20文字以内)</string>
     <string name="app_name">PhotoTalk</string>
@@ -105,7 +150,7 @@
     <string name="my_friends_new">新的好友</string>
 
     <!-- 添加好友页面 -->
-    <string name="my_firend_setting_more_title">更多</string>
+
     <string name="user_message">RC帐号信息</string>
     <string name="my_firend_invite_send_short_msg"> 邀请你加入，和好友分享私密有趣图片，绝对安全！</string>
     <string name="my_firend_no_friend_hint">\t\t  No friends here!\nFind some friends now.</string>
@@ -124,9 +169,7 @@
     <string name="settings_update_signature_limited_hint">1-60个字符</string>
     <string name="settings_update_editor_hint">enter text...</string>
     <string name="settings_tacoty_account_info_title">RC账号信息</string>
-    <string name="setting_update_login_password">修改登录密码</string>
     <string name="login_out">注销</string>
-    <string name="login_out_account">注销账户</string>
     <string name="deauthorize_complete">解除绑定成功</string>
     <string name="deauthorize_fail">解除绑定失败</string>
 
@@ -134,16 +177,7 @@
     <string name="setting_update_set_rcid_title">设置ID</string>
     <string name="setting_update_facebook_unbind_title">Facebook账号</string>
     <string name="setting_update_facebook_unbind_btn">解除绑定</string>
-    <string name="setting_update_facebook_unbind">未绑定</string>
-    <string name="input_current_password">请输入现密码</string>
-    <string name="two_password_not_same">两次密码输入不一致，请重新输入</string>
-    <string name="password_change_complete">修改密码成功</string>
-    <string name="change_password">修改登录密码</string>
     <string name="setting_update_name_invalid">请输入1-20字符</string>
-    <string name="take">将</string>
-    <string name="add_friend">加为好友</string>
-    <string name="add_app">加入了</string>
-    <string name="friend_dynamic">好友动态</string>
 
     <!-- added jelly.xiong end -->
     <!-- 录音界面 -->
@@ -201,7 +235,6 @@
 
     <!-- home 页面 -->
 
-    <string name="add_to_friend">加为好友</string>
     <string name="contact">通讯录</string>
     <string name="facebook">Facebook</string>
     <string name="vkontakte">VKontakte</string>
@@ -229,7 +262,6 @@
     <!-- <string name="phone">电话号码</string> -->
 
     <string name="next">下一步</string>
-    <string name="next_number">下一步(%1$d)</string>
     <string name="use_new_info">在PhotoTalk中使用新的个人资料</string>
     <string name="use_info_below">使用以下个人资料</string>
     <string name="user_info">个人资料</string>
@@ -237,7 +269,6 @@
     <string name="operation_fail">操作失败</string>
     <string name="edit">编辑</string>
     <string name="friend_sex_age">%1$s,%2$d</string>
-
     <string name="take_score">评分</string>
     <string name="delete_friend">删除好友</string>
     <string name="set_friend_remark">设置好友备注名称</string>
@@ -248,13 +279,8 @@
     <string name="trends_hide">否</string>
     <string name="receive_all">所有人</string>
     <string name="receive_friend">我的好友</string>
-    <string name="setting">设置</string>
-    <string name="my_account">我的帐户</string>
     <string name="authorized">已绑定</string>
-    <string name="unauthorized">未绑定</string>
-    <string name="dialog_confirm_deauth">确定解除此账号的绑定？</string>
     <string name="never_attention">不再提醒</string>
-    <string name="clear_infos_message">确定删除所有消息？</string>
     <string name="other_device_login">您的账号已在其他设备登陆,请重新登陆</string>
     <string name="relogin">重新登陆</string>
     <string name="registe_fail">注册失败</string>
@@ -277,24 +303,16 @@
     <!-- bind phone number -->
     <string name="input_mobile_phone">输入要绑定的手机号</string>
     <string name="input_your_number">输入您的电话号码</string>
-    <string name="commit">提交</string>
     <string name="country_code">(+%1$s)%2$s</string>
     <string name="change_phone_number">修改手机号</string>
-    <string name="resend_sms">重新发送短信</string>
-    <string name="resend_sms_number">重新发送短信(%1$d)</string>
-    <string name="resend_sms_second">重新发送短信(%1$d秒)</string>
-    <string name="bind_phone">绑定手机号</string>
-    <string name="input_validate">请输入发送到+86 186-0126-1111的4位验证码</string>
     <string name="input_correct_validate">请输入正确验证码</string>
     <string name="input_correct_phonenumber">请输入正确手机号</string>
     <string name="sms_sended">验证短信已发送</string>
-    <string name="phone_number_validate">电话号码验证</string>
     <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:，注册后加我ID:%1$s</string>
     <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:</string>
     <string name="invite_msg_match">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！</string>
     <!-- login regist_page -->
 
-    <string name="setting_page_clean_history">清空记录</string>
     <string name="login_already_account_hint">已有RC账号？点此</string>
     <string name="no_rc_account">没有RC账号？点此</string>
     <string name="login_error">登录错误</string>
@@ -314,13 +332,11 @@
     <string name="register_nick_empty">你的 姓名  还没有输入</string>
     <string name="register_nick_error">输入的姓名含有特殊字符，请重新输入</string>
     <string name="login_input_password">请输入密码</string>
-    <string name="forget_password_title">忘记密码</string>
     <string name="forget_password_email_address_text">输入注册的邮箱地址</string>
     <string name="account_name">账号名称</string>
 
     <!-- app_about 页面 -->
 
-    <string name="about">关于</string>
     <string name="check_update">检查更新</string>
     <string name="contact_us">联系我们</string>
     <string name="term_service">服务条款</string>

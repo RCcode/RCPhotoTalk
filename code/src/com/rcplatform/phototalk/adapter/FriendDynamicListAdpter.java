@@ -34,9 +34,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class FriendDynamicListAdpter extends BaseAdapter {
+
 	private Context context;
+
 	private ViewHolder viewHolder;
+
 	private List<FriendDynamic> list;
+
 	ProgressDialog mProgressDialog;
 
 	public FriendDynamicListAdpter(Context context, List<FriendDynamic> list) {
@@ -66,30 +70,21 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		// TODO Auto-generated method stub
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.friend_dynamic_list_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.friend_dynamic_list_item, null);
 			viewHolder = new ViewHolder();
-			viewHolder.headView = (ImageView) convertView
-					.findViewById(R.id.friend_head);
-			viewHolder.add_app_layout = (LinearLayout) convertView
-					.findViewById(R.id.add_app_layout);
-			viewHolder.add_friend_layout = (LinearLayout) convertView
-					.findViewById(R.id.add_friend_layout);
-			viewHolder.friendNick = (TextView) convertView
-					.findViewById(R.id.friend_nick);
-			viewHolder.friendMessage = (TextView) convertView
-					.findViewById(R.id.friend_message);
-			viewHolder.sendTime = (TextView) convertView
-					.findViewById(R.id.send_time);
-			viewHolder.appMessage = (TextView) convertView
-					.findViewById(R.id.app_name);
+			viewHolder.headView = (ImageView) convertView.findViewById(R.id.friend_head);
+			viewHolder.add_app_layout = (LinearLayout) convertView.findViewById(R.id.add_app_layout);
+			viewHolder.add_friend_layout = (LinearLayout) convertView.findViewById(R.id.add_friend_layout);
+			viewHolder.friendNick = (TextView) convertView.findViewById(R.id.friend_nick);
+			viewHolder.friendMessage = (TextView) convertView.findViewById(R.id.friend_message);
+			viewHolder.sendTime = (TextView) convertView.findViewById(R.id.send_time);
+			viewHolder.appMessage = (TextView) convertView.findViewById(R.id.app_message);
 			convertView.setTag(viewHolder);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		// 设置头像 昵称
-		ImageLoader.getInstance().displayImage( list.get(position)
-				.getfRcHead(), viewHolder.headView);
+		ImageLoader.getInstance().displayImage(list.get(position).getfRcHead(), viewHolder.headView);
 		// viewHolder.headView
 		// 为加为好友 根据状态进行设置不同的信息内容
 		viewHolder.headView.setOnClickListener(new OnClickListener() {
@@ -114,11 +109,11 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 
 			viewHolder.add_friend_layout.setVisibility(View.GONE);
 			viewHolder.add_app_layout.setVisibility(View.VISIBLE);
-			viewHolder.appMessage.setText(list.get(position).getOtherName());
+			viewHolder.appMessage.setText(context.getResources().getString(R.string.add_app, list.get(position).getOtherName()));
 		} else {
 			viewHolder.add_friend_layout.setVisibility(View.VISIBLE);
 			viewHolder.add_app_layout.setVisibility(View.GONE);
-			viewHolder.friendMessage.setText(list.get(position).getOtherName());
+			viewHolder.friendMessage.setText(context.getResources().getString(R.string.add_friend, list.get(position).getOtherName()));
 		}
 		viewHolder.friendMessage.setOnClickListener(new OnClickListener() {
 
@@ -130,14 +125,16 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 		});
 
 		Long time = Long.decode(list.get(position).getCreateTime());
-		viewHolder.sendTime.setText(RCPlatformTextUtil.getTextFromTimeToNow(
-				context, time));
+		viewHolder.sendTime.setText(RCPlatformTextUtil.getTextFromTimeToNow(context, time));
 		return convertView;
 	}
 
 	public class ViewHolder {
+
 		private ImageView headView;
+
 		private TextView friendNick, friendMessage, sendTime, appMessage;
+
 		private LinearLayout add_friend_layout, add_app_layout;
 
 		public TextView getAppMessage() {
@@ -217,21 +214,20 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 
 	private void getFriendInfo(Friend friend) {
 		showLoadingDialog(false);
-		Request.executeGetFriendDetailAsync(context, friend,
-				new FriendDetailListener() {
+		Request.executeGetFriendDetailAsync(context, friend, new FriendDetailListener() {
 
-					@Override
-					public void onSuccess(Friend friend) {
-						dismissLoadingDialog();
-						startFriendDetailActivity(friend);
-					}
+			@Override
+			public void onSuccess(Friend friend) {
+				dismissLoadingDialog();
+				startFriendDetailActivity(friend);
+			}
 
-					@Override
-					public void onError(int errorCode, String content) {
-						dismissLoadingDialog();
-						showErrorConfirmDialog(content);
-					}
-				}, false);
+			@Override
+			public void onError(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		}, false);
 	}
 
 	public void showErrorConfirmDialog(String msg) {

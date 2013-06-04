@@ -31,22 +31,37 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 	private FacebookClient mFacebookClient;
+
 	private VKClient mVKClient;
+
 	private TextView user_Email;
+
 	private TextView user_Phone;
+
 	private TextView user_rcId;
+
 	private TextView mTitleTextView;
+
 	private RelativeLayout faceBook_layout;
+
 	private TextView tvFacebookAuth;
 
 	private RelativeLayout vK_layout;
+
 	private Button reset_pw_btn;
+
 	private Button login_out_btn;
+
 	private View mBack;
+
 	private AlertDialog mDeAuthDialog;
+
 	private DeAuthorizeDialogListener mDeAuthorizeDialogListener;
+
 	private TextView tvVKAuth;
+
 	private View phoneLayout;
+
 	private static final int REQUEST_CODE_BINDPHONE = 731;
 
 	@Override
@@ -108,7 +123,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		phoneLayout = findViewById(R.id.rela_phone);
 		phoneLayout.setOnClickListener(this);
 		user_Email = (TextView) findViewById(R.id.user_email);
-		user_Phone = (TextView) findViewById(R.id.user_phone);
+
 		user_rcId = (TextView) findViewById(R.id.user_rcid);
 		faceBook_layout = (RelativeLayout) findViewById(R.id.user_facebook_layout);
 		faceBook_layout.setOnClickListener(this);
@@ -120,8 +135,10 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		login_out_btn.setOnClickListener(this);
 		tvFacebookAuth = (TextView) findViewById(R.id.tv_facebook_authstate);
 		tvVKAuth = (TextView) findViewById(R.id.tv_vk_authstate);
+		user_Phone = (TextView) findViewById(R.id.tv_phone_authstate);
 		setFacebookAuthText();
 		setVKAuthText();
+
 	}
 
 	private void setVKAuthText() {
@@ -143,42 +160,50 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	public void setTextView() {
 		UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
 		user_Email.setText(userInfo.getEmail());
-		user_Phone.setText(userInfo.getCellPhone());
+		String phoneNum = userInfo.getCellPhone();
+		if(null == phoneNum){
+			user_Phone.setText(R.string.phone_unbind);
+		}else if(phoneNum.equals("")){
+			user_Phone.setText(R.string.phone_unbind);
+		}else{
+			user_Phone.setText(phoneNum);
+		}
 		user_rcId.setText(userInfo.getRcId());
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.user_facebook_layout:
-			if (mFacebookClient.isAuthorize()) {
-				showDeAuthorizeDialog(FriendType.FACEBOOK);
-			} else {
-				authorizeFacebook();
-			}
-			break;
-		case R.id.user_vk_layout:
-			if (mVKClient.isAuthorize()) {
-				showDeAuthorizeDialog(FriendType.VK);
-			} else {
-				authorizeVK();
-			}
-			break;
-		case R.id.reset_pw_btn:
-			startActivity(ChangePasswordActivity.class);
-			break;
-		case R.id.login_out_btn:
-			LogicUtils.logout(this);
-			break;
-		case R.id.back:
-			startActivity(new Intent(this, SettingsActivity.class));
-			this.finish();
-			break;
-		case R.id.rela_phone:
-			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
-				startActivity(RequestSMSActivity.class);
-			}
-			break;
+			case R.id.user_facebook_layout:
+				if (mFacebookClient.isAuthorize()) {
+					showDeAuthorizeDialog(FriendType.FACEBOOK);
+				} else {
+					authorizeFacebook();
+				}
+				break;
+			case R.id.user_vk_layout:
+				if (mVKClient.isAuthorize()) {
+					showDeAuthorizeDialog(FriendType.VK);
+				} else {
+					authorizeVK();
+				}
+				break;
+			case R.id.reset_pw_btn:
+				startActivity(ChangePasswordActivity.class);
+				break;
+			case R.id.login_out_btn:
+				LogicUtils.logout(this);
+				break;
+			case R.id.back:
+				startActivity(new Intent(this, SettingsActivity.class));
+				this.finish();
+				break;
+			case R.id.rela_phone:
+				if (TextUtils.isEmpty(getCurrentUser().getCellPhone())
+				        && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
+					startActivity(RequestSMSActivity.class);
+				}
+				break;
 		}
 	}
 
@@ -250,13 +275,15 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
 			mDeAuthDialog = new AlertDialog.Builder(this).setMessage(R.string.dialog_confirm_deauth)
-					.setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener).create();
+			        .setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener)
+			        .create();
 		}
 		mDeAuthorizeDialogListener.setType(type);
 		mDeAuthDialog.show();
 	}
 
 	class DeAuthorizeDialogListener implements DialogInterface.OnClickListener {
+
 		private int mType;
 
 		public void setType(int type) {
@@ -283,16 +310,16 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
-			case DialogInterface.BUTTON_NEGATIVE:
-				if (mType == FriendType.FACEBOOK) {
-					mFacebookClient.deAuthorize(mDeAuthorizeListener);
-				} else if (mType == FriendType.VK) {
-					mVKClient.deAuthorize(mDeAuthorizeListener);
-				}
-				break;
-			case DialogInterface.BUTTON_POSITIVE:
-				dialog.dismiss();
-				break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					if (mType == FriendType.FACEBOOK) {
+						mFacebookClient.deAuthorize(mDeAuthorizeListener);
+					} else if (mType == FriendType.VK) {
+						mVKClient.deAuthorize(mDeAuthorizeListener);
+					}
+					break;
+				case DialogInterface.BUTTON_POSITIVE:
+					dialog.dismiss();
+					break;
 			}
 		}
 	};

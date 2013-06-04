@@ -8,9 +8,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -27,10 +30,15 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private static final int REQUEST_CODE_BIND = 100;
 
 	private EditText etNumber;
+
 	private Button btnCountryCode;
+
 	private AlertDialog mCountryChooseDialog;
+
 	private CountryCode mCountryCode;
+
 	private List<CountryCode> allCountryCodes;
+
 	private CountryCodeDatabase mCountryCodeDatabase;
 
 	private Button btnCommit;
@@ -65,6 +73,30 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 		btnCommit = (Button) findViewById(R.id.btn_commit);
 		btnCountryCode = (Button) findViewById(R.id.btn_country_code);
 		etNumber = (EditText) findViewById(R.id.et_number);
+		etNumber.setHint(this.getResources().getString(R.string.bind_phone_input_phone_hint));
+
+		etNumber.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+		etNumber.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				etNumber.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
+
 		btnCommit.setOnClickListener(this);
 		btnCountryCode.setOnClickListener(this);
 		if (mCountryCode != null)
@@ -83,39 +115,64 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_country_code:
-			showCountryChooseDialog();
-			break;
+			case R.id.btn_country_code:
+				showCountryChooseDialog();
+				break;
 
-		case R.id.btn_commit:
-			requestSms();
-			break;
-		case R.id.title_linear_back:
-			finish();
-			break;
+			case R.id.btn_commit:
+				requestSms();
+				break;
+			case R.id.title_linear_back:
+				finish();
+				break;
 		}
 	}
 
 	private void requestSms() {
 		String number = etNumber.getText().toString();
+
+		if (number.equals("")) {
+			etNumber.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+			etNumber.requestFocus();
+			InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+			imm.showSoftInput(etNumber, 0);
+			return;
+		}
+
 		if (isNumberEnable(number)) {
 			final String phoneNumber = "+" + mCountryCode.getCountryCode() + number;
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-			UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
+			AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(RequestSMSActivity.this);
+			dialogBuilder.setTitle(phoneNumber).setMessage(getResources().getString(R.string.sms_reciver_info)).setCancelable(false)
+			        .setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onSuccess(int statusCode, String content) {
-					dismissLoadingDialog();
-					PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
-					startBindPhoneActivity(phoneNumber);
-				}
+				        @Override
+				        public void onClick(DialogInterface dialog, int which) {
+				        }
+			        }).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onFailure(int errorCode, String content) {
-					dismissLoadingDialog();
-					showErrorConfirmDialog(content);
-				}
-			}, phoneNumber);
+				        @Override
+				        public void onClick(DialogInterface dialog, int which) {
+					        showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+					        UserSettingProxy.requestSMS(RequestSMSActivity.this, new RCPlatformResponseHandler() {
+
+						        @Override
+						        public void onSuccess(int statusCode, String content) {
+							        dismissLoadingDialog();
+							        PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
+							        startBindPhoneActivity(phoneNumber);
+						        }
+
+						        @Override
+						        public void onFailure(int errorCode, String content) {
+							        dismissLoadingDialog();
+							        showErrorConfirmDialog(content);
+						        }
+					        }, phoneNumber);
+
+				        }
+			        });
+			dialogBuilder.create().show();
+
 		}
 	}
 
