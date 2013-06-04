@@ -420,7 +420,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			public void onFail(long flag, int errorCode, String content) {
 				InformationPageController.getInstance().onPhotoResendFail(information);
 			}
-		}, friendIds);
+		}, friendIds, information.isHasVoice());
 	}
 
 	private void deleteInformation(Information information) {

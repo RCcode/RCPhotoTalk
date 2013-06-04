@@ -165,10 +165,7 @@ public class EditPictureActivity extends BaseActivity {
 			switch (msg.what) {
 			case AudioRecordButton.AUDIO_RECORD_TOO_SHORT:
 				tooShortLayout.setVisibility(View.VISIBLE);
-				voiceRecordHandler
-						.sendEmptyMessageDelayed(
-								AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END,
-								1000);
+				voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END, 1000);
 				break;
 			case AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END:
 				tooShortLayout.setVisibility(View.GONE);
@@ -177,15 +174,13 @@ public class EditPictureActivity extends BaseActivity {
 				recordDisplayLayout.setVisibility(View.VISIBLE);
 				isRecording = true;
 				recordLast = (Integer) msg.obj;
-				voiceRecordHandler
-						.sendEmptyMessage(AudioRecordButton.AUDIO_RECORDING);
+				voiceRecordHandler.sendEmptyMessage(AudioRecordButton.AUDIO_RECORDING);
 				break;
 
 			case AudioRecordButton.AUDIO_RECORDING:
 				if (isRecording) {
 					tvVoiceRecordSecond.setText(recordLast.toString() + "s");
-					voiceRecordHandler.sendEmptyMessageDelayed(
-							AudioRecordButton.AUDIO_RECORDING, 1000);
+					voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORDING, 1000);
 				}
 				recordLast -= 1;
 				break;
@@ -202,8 +197,7 @@ public class EditPictureActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		super.onCreate(savedInstanceState);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.edit_picture_view2);
 		isShowSelectLayout = false;
 		tooShortLayout = (RelativeLayout) findViewById(R.id.layout_voice_record_too_short);
@@ -223,16 +217,13 @@ public class EditPictureActivity extends BaseActivity {
 				// TODO Auto-generated method stub
 				int height = voice_volume_bg.getHeight();
 				if (height > 0) {
-					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume
-							.getLayoutParams();
+					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
 					if (amplitude > 22000) {
-						iv_voice_volume
-								.setBackgroundResource(R.drawable.voice_volume_full);
+						iv_voice_volume.setBackgroundResource(R.drawable.voice_volume_full);
 						layoutParams.height = LayoutParams.WRAP_CONTENT;
 						voice_volume_gride.setVisibility(View.INVISIBLE);
 					} else {
-						iv_voice_volume
-								.setBackgroundResource(R.drawable.voice_volume);
+						iv_voice_volume.setBackgroundResource(R.drawable.voice_volume);
 						voice_volume_gride.setVisibility(View.VISIBLE);
 						if (amplitude > 17000) {
 							layoutParams.height = 55;
@@ -266,8 +257,7 @@ public class EditPictureActivity extends BaseActivity {
 		audioBtn.setSavePath(app.getSendFileCachePath());
 		// mEditePicView = (EditPictureView) findViewById(R.id.sf_edite_pic);
 		mEditePicView = new EditPictureView(this);
-		mEditableViewGroup.addView(mEditePicView, LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT);
+		mEditableViewGroup.addView(mEditePicView, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
 
 		make_voice = (LinearLayout) findViewById(R.id.make_voice);
 		voice_size = (TextView) findViewById(R.id.voice_size);
@@ -294,8 +284,7 @@ public class EditPictureActivity extends BaseActivity {
 			public void onItemClicked(WheelView wheel, int itemIndex) {
 				// TODO Auto-generated method stub
 				if (itemIndex == getCurrentItem()) {
-					handler.obtainMessage(SET_LIMIT, itemIndex + 1)
-							.sendToTarget();
+					handler.obtainMessage(SET_LIMIT, itemIndex + 1).sendToTarget();
 				} else {
 					mWheel.setCurrentItem(itemIndex);
 				}
@@ -314,36 +303,30 @@ public class EditPictureActivity extends BaseActivity {
 		mButtonSave.setOnClickListener(clickListener);
 		mButtonSend.setOnClickListener(clickListener);
 		mButtonClose.setOnClickListener(clickListener);
-		mEditableViewGroup.getViewTreeObserver().addOnGlobalLayoutListener(
-				new ViewTreeObserver.OnGlobalLayoutListener() {
+		mEditableViewGroup.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
 
-					@Override
-					public void onGlobalLayout() {
-						// TODO Auto-generated method stub
-						Rect r = new Rect();
-						mEditableViewGroup.getWindowVisibleDisplayFrame(r);
+			@Override
+			public void onGlobalLayout() {
+				// TODO Auto-generated method stub
+				Rect r = new Rect();
+				mEditableViewGroup.getWindowVisibleDisplayFrame(r);
 
-						int screenHeight = mEditableViewGroup.getRootView()
-								.getHeight();
-						softInputHight = screenHeight - (r.bottom - r.top);
-						if (softInputHight != 0) {
+				int screenHeight = mEditableViewGroup.getRootView().getHeight();
+				softInputHight = screenHeight - (r.bottom - r.top);
+				if (softInputHight != 0) {
 
-							mEditableViewGroup.setPopupSoftInput(true);
-							mEditableViewGroup
-									.updateTextViewLoation(screenHeight
-											- softInputHight);
-						} else {
-							mEditableViewGroup.setPopupSoftInput(false);
-							if (mEditText != null
-									&& (mEditText.getVisibility() == View.VISIBLE)) {
-								mEditText.getChildAt(0)
-										.setFocusableInTouchMode(false);
-								mEditText.getChildAt(0).setFocusable(false);
-								mEditText.getChildAt(0).clearFocus();
-							}
-						}
+					mEditableViewGroup.setPopupSoftInput(true);
+					mEditableViewGroup.updateTextViewLoation(screenHeight - softInputHight);
+				} else {
+					mEditableViewGroup.setPopupSoftInput(false);
+					if (mEditText != null && (mEditText.getVisibility() == View.VISIBLE)) {
+						mEditText.getChildAt(0).setFocusableInTouchMode(false);
+						mEditText.getChildAt(0).setFocusable(false);
+						mEditText.getChildAt(0).clearFocus();
 					}
-				});
+				}
+			}
+		});
 	}
 
 	private final OnClickListener clickListener = new OnClickListener() {
@@ -433,8 +416,7 @@ public class EditPictureActivity extends BaseActivity {
 				if (enableSave) {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
-					saveEditedPictrue(mEditableViewGroup.getDrawingCache(),
-							app.getCameraPath());
+					saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getCameraPath());
 
 				}
 				break;
@@ -442,14 +424,12 @@ public class EditPictureActivity extends BaseActivity {
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
 				isSave = true;
-				saveEditedPictrue(mEditableViewGroup.getDrawingCache(),
-						app.getSendFileCachePath() + "/Photochat.jpg");
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getSendFileCachePath() + "/Photochat.jpg");
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
 
-					Intent intent = new Intent(EditPictureActivity.this,
-							HomeActivity.class);
+					Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
 				}
@@ -466,13 +446,9 @@ public class EditPictureActivity extends BaseActivity {
 		MediaPlayer endplayer = new MediaPlayer();
 		try {
 
-			AssetFileDescriptor fileDescriptor = this.getAssets().openFd(
-					"end.mp3");
+			AssetFileDescriptor fileDescriptor = this.getAssets().openFd("end.mp3");
 			endplayer.setAudioStreamType(AudioManager.STREAM_RING);
-			endplayer
-					.setDataSource(fileDescriptor.getFileDescriptor(),
-							fileDescriptor.getStartOffset(),
-							fileDescriptor.getLength());
+			endplayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
 			endplayer.prepare();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
@@ -503,6 +479,7 @@ public class EditPictureActivity extends BaseActivity {
 	private void startSelectFriendActivity() {
 		Intent intent = new Intent(this, SelectFriendsActivity.class);
 		intent.putExtra("timeLimit", mButtonTimeLimit.getText().toString());
+		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASVOICE, hasVoice());
 		startActivity(intent);
 	}
 
@@ -513,11 +490,8 @@ public class EditPictureActivity extends BaseActivity {
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
 			if (mEditText == null) {
-				mEditText = (LinearLayout) LayoutInflater.from(
-						EditPictureActivity.this).inflate(
-						R.layout.edittext_view, null);
-				editText = (EditText) mEditText
-						.findViewById(R.id.et_editText_view);
+				mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
+				editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
 				final Paint paint = editText.getPaint();
 				editText.setFocusable(true);
 				editText.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -527,8 +501,7 @@ public class EditPictureActivity extends BaseActivity {
 						// TODO Auto-generated method stub
 						// editText.setFocusable(true);
 						if (!hasFocus) {
-							if (editText.getText() == null
-									|| editText.getText().length() == 0) {
+							if (editText.getText() == null || editText.getText().length() == 0) {
 								mEditText.setVisibility(View.GONE);
 								mEditText = null;
 							}
@@ -538,14 +511,12 @@ public class EditPictureActivity extends BaseActivity {
 				editText.addTextChangedListener(new TextWatcher() {
 
 					@Override
-					public void onTextChanged(CharSequence s, int start,
-							int before, int count) {
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
 						setSaveable(true);
 					}
 
 					@Override
-					public void beforeTextChanged(CharSequence s, int start,
-							int count, int after) {
+					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
 					}
 
@@ -576,14 +547,13 @@ public class EditPictureActivity extends BaseActivity {
 	protected void showColorPickerDialog() {
 		if (colorPickerDialog == null) {
 			colorPickerDialog = new ColorPickerDialog(this);
-			colorPickerDialog
-					.setOnColorChangeListener(new OnColorChangeListener() {
+			colorPickerDialog.setOnColorChangeListener(new OnColorChangeListener() {
 
-						@Override
-						public void onColorChange(int color) {
-							mEditePicView.setColor(color);
-						}
-					});
+				@Override
+				public void onColorChange(int color) {
+					mEditePicView.setColor(color);
+				}
+			});
 		}
 		colorPickerDialog.showDialog(mButtonTuya);
 	}
@@ -592,8 +562,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private void showTimeLimitView() {
 		// if (timeChooseDialog == null) {
-		final String timers[] = new String[] { "1", "2", "3", "4", "5", "6",
-				"7", "8", "9", "10" };
+		final String timers[] = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" };
 		TimeChooseAdapter adapter = new TimeChooseAdapter(this, timers);
 		adapter.setTextColor(Color.WHITE);
 		DisplayMetrics dm = new DisplayMetrics();
@@ -660,8 +629,7 @@ public class EditPictureActivity extends BaseActivity {
 					}
 					if (!file.exists())
 						file.createNewFile();
-					BufferedOutputStream os = new BufferedOutputStream(
-							new FileOutputStream(file)); //
+					BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file)); //
 					// b.compress(Bitmap.CompressFormat.JPEG, 100, os);
 					bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
 					os.flush();
@@ -688,29 +656,20 @@ public class EditPictureActivity extends BaseActivity {
 					}
 				} else {
 					// 保存成功后 刷新本地相册
-					EditPictureActivity.this
-							.getBaseContext()
-							.sendBroadcast(
-									new Intent(
-											Intent.ACTION_MEDIA_MOUNTED,
-											Uri.parse("file://"
-													+ Environment
-															.getExternalStorageDirectory())));
-					Toast.makeText(EditPictureActivity.this,
-							R.string.save_success, Toast.LENGTH_SHORT).show();
+					EditPictureActivity.this.getBaseContext().sendBroadcast(
+							new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+					Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
 				}
 				break;
 			case SAVE_FAIL:
 				// if (waitDialog != null && waitDialog.isShowing())
 				// waitDialog.hide();
-				Toast.makeText(EditPictureActivity.this, R.string.save_fail,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditPictureActivity.this, R.string.save_fail, Toast.LENGTH_SHORT).show();
 				break;
 			case NO_SDC:
 				// if (waitDialog != null && waitDialog.isShowing())
 				// waitDialog.hide();
-				Toast.makeText(EditPictureActivity.this, R.string.no_sdc,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
 				break;
 			case SET_LIMIT:
 				int n = (Integer) msg.obj;
@@ -748,8 +707,7 @@ public class EditPictureActivity extends BaseActivity {
 		String tempPath = null;
 
 		try {
-			tempPath = app.getSendZipFileCachePath() + "/"
-					+ System.currentTimeMillis() + ".zip";
+			tempPath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempPath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -763,11 +721,16 @@ public class EditPictureActivity extends BaseActivity {
 		}
 	}
 
-	private void sendPicture(final String desc, String imagePath,
-			final String timeLimit, Friend friend) {
+	private void sendPicture(final String desc, String imagePath, final String timeLimit, Friend friend) {
 		File file = new File(imagePath);
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.add(friend);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice());
+	}
+
+	private boolean hasVoice() {
+		if (voicePath == null)
+			return false;
+		return new File(voicePath).exists();
 	}
 }
