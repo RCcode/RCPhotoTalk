@@ -16,6 +16,7 @@ import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.GCM;
 import com.rcplatform.phototalk.utils.Constants.Message;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 
 public class MessageSender {
@@ -37,8 +38,8 @@ public class MessageSender {
 		mService = null;
 	}
 
-	public void sendInformation(Context context, String tigaseId, String rcId, Information... informations) {
-		String message = JSONConver.informationToJSON(informations);
+	public void sendInformation(final Context context, String tigaseId, final String rcId, Information... informations) {
+		final String message = JSONConver.informationToJSON(informations);
 		String action = null;
 		if (informations[0].getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			action = Message.MESSAGE_ACTION_FRIEND;
@@ -52,8 +53,17 @@ public class MessageSender {
 		}
 		if (mService != null)
 			mService.sendMessage(message, tigaseId, rcId, action);
-		else
-			RCGcmUtil.pushGcmMsg(context, action, rcId, message);
+		else {
+			final String gcmAction=action;
+			RCThreadPool.getInstance().addTask(new Runnable() {
+
+				@Override
+				public void run() {
+					RCGcmUtil.pushGcmMsg(context, gcmAction, rcId, message);
+				}
+			});
+		}
+
 	}
 
 	public void sendInformation(Context context, Map<String, Information> informations, List<String> userIds) {
