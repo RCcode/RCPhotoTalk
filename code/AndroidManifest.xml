@@ -326,7 +326,7 @@
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="447751798632401" />
+            android:value="@string/facebook_app_id" />
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="519b2c2356240bbc300a6e8b" >

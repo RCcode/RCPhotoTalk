@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.task;
 
 import org.json.JSONObject;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 
@@ -25,6 +26,7 @@ public class CheckUpdateTask {
 		mClient = new RCPlatformAsyncHttpClient();
 		mRequest = new Request(context, PhotoTalkApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
 
+			@SuppressLint("NewApi")
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
@@ -42,9 +44,17 @@ public class CheckUpdateTask {
 							return;
 						}
 						UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
-						AlertDialog.Builder builder = new AlertDialog.Builder(mContext).setMessage(updateContent)
-								.setTitle(mContext.getString(R.string.update_dialog_title))
-								.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
+						AlertDialog.Builder builder =null;
+						if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
+							builder = new AlertDialog.Builder(mContext,R.style.Theme_Dialog_Update).setMessage(updateContent)
+									.setTitle(mContext.getString(R.string.update_dialog_title))
+									.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
+						}else{
+							builder = new AlertDialog.Builder(mContext).setMessage(updateContent)
+									.setTitle(mContext.getString(R.string.update_dialog_title))
+									.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
+						}
+						
 						AlertDialog mUpdateDialog = builder.create();
 						mUpdateDialog.setCancelable(false);
 						mUpdateDialog.show();
