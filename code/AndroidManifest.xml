@@ -46,7 +46,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -294,9 +294,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-  <activity
-            android:name="com.google.ads.AdActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+
         <service android:name="com.rcplatform.phototalk.clienservice.PTBackgroundService" />
         <service android:name="com.rcplatform.phototalk.clienservice.InviteFriendUploadService" />
         <service android:name="com.rcplatform.phototalk.clienservice.CensusService" />
@@ -310,7 +308,7 @@
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -344,254 +342,6 @@
         <activity
             android:name="com.rcplatform.phototalk.thirdpart.BindFacebookActivity"
             android:screenOrientation="portrait" />
-        
-        
-        <!-- test~~~~~~ -->
-         <activity
-            android:name="com.androidlordsh.puzzle.cross.CrossPromoteActivity"
-            android:screenOrientation="portrait" />
-
-        <meta-data
-            android:name="UMENG_APPKEY"
-            android:value="515bac9d56240b1eb1018490" />
-
-        <!-- AdLayout can integrate other 3rd-party ad network and support house ad. http://www.adlayout.net -->
-        <!--
-           AD_LAYOUT_SDK_KEY must be include. You can get this key from http://www.adlayout.net by yourself. 
-		   When testing, you can use the temporary SDK Key of 2E3938E0E4
-
-        -->
-        <meta-data
-            android:name="AD_LAYOUT_SDK_KEY"
-            android:value="" />
-        <!-- Admob(US Ad Network. Support Global) http://www.admob.com -->
-        <!-- https://developers.google.com/mobile-ads-sdk/docs/android/fundamentals -->
-        <!-- If you decide integrate Admob. You need add GoogleAdMobAdsSdk-6.0.1.jar to your project. -->
-        <meta-data
-            android:name="ADMOB_PUBLISHER_ID"
-            android:value="" />
-
-
-        <!-- Mobclix(US Ad Network) http://www.mobclix.com/ -->
-        <!-- If you decide integrate Mobclix. You need add mobclix.jar to your project. -->
-        <meta-data
-            android:name="com.mobclix.APPLICATION_ID"
-            android:value="" />
-
-        <activity
-            android:name="com.mobclix.android.sdk.MobclixBrowserActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
-        <!-- Millennial Media(US Ad Network) https://developer.millennialmedia.com/ -->
-        <!-- If you decide integrate Millennial Media. You need add MMAdView.jar to your project. -->
-        <meta-data
-            android:name="MILLENNIAL_APP_ID"
-            android:value="" />
-        <!-- 原来的83885 -->
-        <!-- New version declare -->
-        <activity
-            android:name="com.millennialmedia.android.MMActivity"
-            android:configChanges="keyboardHidden|orientation|keyboard"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
-        </activity>
-        <activity
-            android:name="com.millennialmedia.android.VideoPlayer"
-            android:configChanges="keyboardHidden|orientation|keyboard" >
-        </activity>
-
-        <!-- IMobile(Japanese local Ad Network. Support Japanese) http://imobile.co.jp/ -->
-        <!-- If you decide integrate IMobile. You need add i-mobileSDK.jar to your project. -->
-        <meta-data
-            android:name="i-mobile_Publisher_ID"
-            android:value="" />
-        <meta-data
-            android:name="i-mobile_mid"
-            android:value="" />
-        <meta-data
-            android:name="i-mobile_asid"
-            android:value="" />
-
-        <!-- Adlantis(Japanese local Ad Network. Support Japanese) http://www.adlantis.jp/ -->
-        <!-- If you decide integrate Adlantis. You need add adlantis.jar to your project. -->
-        <activity android:name="jp.adlantis.android.AdlantisAdActivity" >
-        </activity>
-
-        <meta-data
-            android:name="Adlantis_Publisher_ID"
-            android:value="" />
-
-        <!-- Madvertise(Germany Ad Network) http://madvertise.com/ -->
-        <!-- https://redmine.madvertise.me/projects/madapi/wiki/Android_SDK -->
-        <!-- If you decide integrate Madvertise. You need add madvertiseSDK_AdLayout.jar to your project. -->
-
-
-        <!-- Inmobi(India Ad Network. Support Global) http://www.inmobi.com -->
-        <!-- When testing, you can use the temporary App ID of 4028cba631d63df10131e1d3818b00cc -->
-        <!-- If you decide integrate Inmobi. You need add InMobiAndroidSDK.jar to your project. -->
-        <meta-data
-            android:name="Inmobi_App_ID"
-            android:value="" />
-        <!-- new version declaration -->
-        <activity
-            android:name="com.inmobi.androidsdk.IMBrowserActivity"
-            android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize" />
-
-        <!-- Nexage(US Ad Network) http://www.nexage.com/ -->
-        <!-- These are our sample test values for the URL and DCN. You should replace them with your own values. -->
-        <!-- If you decide integrate Nexage. You need add NexageSDK4.0.13.jar to your project. -->
-        <meta-data
-            android:name="NEXAGE_MEDIATION_URL"
-            android:value="" />
-        <meta-data
-            android:name="NEXAGE_DCN"
-            android:value="" />
-
-        <!-- SamrTap(Japanese local Ad Network. Support Japanese) -->
-        <!-- http://support.adjust-sp.jp/wiki/index.php/Jumptap_Android_SDK_Integration -->
-        <meta-data
-            android:name="SmarTap_HostURL"
-            android:value="" />
-        <meta-data
-            android:name="SmarTap_PublisherId"
-            android:value="" />
-        <meta-data
-            android:name="SmarTap_SpotId"
-            android:value="" />
-        <meta-data
-            android:name="SmarTap_SiteId"
-            android:value="" />
-        <meta-data
-            android:name="SmarTap_AppId"
-            android:value="" />
-        <meta-data
-            android:name="SmarTap_AppVersion"
-            android:value="2.2" />
-
-        <!-- Ad Stir (Japanese local Ad Network. Support Japanese) -->
-        <meta-data
-            android:name="ADSTIR_APP_ID"
-            android:value="" />
-        <meta-data
-            android:name="AppFloodAppKey"
-            android:value="" />
-        <meta-data
-            android:name="AppFloodSecretKey"
-            android:value="" />
-
-        <activity
-            android:name="com.appflood.AFPanelActivity"
-            android:configChanges="keyboardHidden" >
-        </activity>
-        <activity
-            android:name="com.appflood.AFFullScreenActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Translucent" >
-        </activity>
-        <activity
-            android:name="com.appflood.AFListActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:launchMode="singleTask"
-            android:theme="@android:style/Theme.Translucent" >
-        </activity>
-
-        <meta-data
-            android:name="ADLAYOUTBI_KEY"
-            android:value="" />
-        <meta-data
-            android:name="Medibaad_SID"
-            android:value="" />
-
-        <activity android:name="mediba.ad.sdk.android.openx.MasAdClickWebview" />
-
-        <meta-data
-            android:name="Smaato_Publisher_Id"
-            android:value="" />
-        <meta-data
-            android:name="Smaato_space_Id"
-            android:value="" />
-        <meta-data
-            android:name="MobFox_SID"
-            android:value="" />
-
-        <activity
-            android:name="com.adsdk.sdk.banner.InAppWebView"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-            android:name="com.adsdk.sdk.video.RichMediaActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
-            android:hardwareAccelerated="false" />
-        <activity
-            android:name="com.adsdk.sdk.mraid.MraidActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
-        <activity
-            android:name="buzzcity.android.sdk.mAdsLandingPage"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
-        <activity
-            android:name="buzzcity.android.sdk.SplashAds"
-            android:configChanges="keyboardHidden|orientation" >
-        </activity>
-
-        <meta-data
-            android:name="BUZZCITY_APP_KEY"
-            android:value="" />
-
-        <activity android:name="ru.wapstart.plus1.sdk.MraidBrowser" />
-
-        <meta-data
-            android:name="WAPSTART_APP_KEY"
-            android:value="" />
-        <meta-data
-            android:name="madvertise_site_token"
-            android:value="" />
-
-        <activity android:name="de.madvertise.android.sdk.MadvertiseActivity" />
-
-        <meta-data
-            android:name="i-mobile_Publisher_ID"
-            android:value="" />
-        <meta-data
-            android:name="i-mobile_mid"
-            android:value="" />
-        <meta-data
-            android:name="i-mobile_asid"
-            android:value="" />
     </application>
- <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 关闭程序权限(2.2以上) -->
-    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" >
-    </uses-permission>
-    <!-- 关闭程序权限 (2.1以下) -->
-    <uses-permission android:name="android.permission.RESTART_PACKAGES" >
-    </uses-permission>
-    <!-- 获取包的大小 -->
-    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE" />
-    <!-- 一键清缓存 -->
-    <uses-permission android:name="android.permission.CLEAR_APP_CACHE" />
-    <uses-permission android:name="com.android.browser.permission.WRITE_HISTORY_BOOKMARKS" />
-    <!-- 接收启动广播 -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <!-- Bi权限 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
+
 </manifest>

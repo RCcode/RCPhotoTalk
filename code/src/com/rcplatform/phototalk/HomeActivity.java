@@ -77,12 +77,9 @@ import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListen
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
-import com.rcplatform.rcad.RcAd;
-import com.rcplatform.rcad.constants.AdType;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
-import com.umeng.analytics.MobclickAgent;
 
 /**
  * 主界面. <br>
@@ -135,8 +132,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private boolean willQuit = false;
 
-	private RcAd popupAd;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -153,7 +148,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		tvTigaseState = (TextView) findViewById(R.id.tv_test);
 		bindTigaseService();
 		checkBindPhone();
-		popupAd = new RcAd(this, AdType.POPUP, "1002601", true);
 	}
 
 	@Override
