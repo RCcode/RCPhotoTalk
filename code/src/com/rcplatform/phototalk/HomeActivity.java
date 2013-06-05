@@ -180,9 +180,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
 						case DialogInterface.BUTTON_NEGATIVE:
+							EventUtil.Main_Photo.rcpt_phonepop_register(baseContext);
 							startActivity(RequestSMSActivity.class);
 							break;
 						case DialogInterface.BUTTON_POSITIVE:
+							EventUtil.Main_Photo.rcpt_phonepop_later(baseContext);
 							dialog.dismiss();
 							break;
 					}
