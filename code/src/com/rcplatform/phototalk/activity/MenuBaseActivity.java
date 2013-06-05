@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.rcplatform.phototalk.AddFriendsActivity;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
 
@@ -24,11 +25,13 @@ public class MenuBaseActivity extends BaseActivity {
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 			case 1:
+				EventUtil.Main_Photo.rcpt_menu_feedback(baseContext);
 				Intent intent = new Intent(MenuBaseActivity.this, AddFriendsActivity.class);
 				intent.putExtra("from", "base");
 				startActivity(intent);
 				break;
 			case 2:
+				EventUtil.Main_Photo.rcpt_menu_feedback(baseContext);
 				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
 				String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
 				        + SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext)
@@ -37,6 +40,7 @@ public class MenuBaseActivity extends BaseActivity {
 				startActivity(email);
 				break;
 			case 3:
+				EventUtil.Main_Photo.rcpt_menu_rate(baseContext);
 				SystemMessageUtil.enterPage("market://details?id=com.rcplatform.phototalk", baseContext);
 				break;
 		}

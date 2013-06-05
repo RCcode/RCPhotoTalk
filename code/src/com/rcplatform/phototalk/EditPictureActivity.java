@@ -45,6 +45,7 @@ import android.widget.Toast;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
@@ -201,6 +202,7 @@ public class EditPictureActivity extends BaseActivity {
 
 			@Override
 			public void onRecording(int recordedSecord, int amplitude) {
+				EventUtil.Main_Photo.rcpt_record(baseContext);
 				int height = voice_volume_bg.getHeight();
 				if (height > 0) {
 					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
@@ -316,7 +318,7 @@ public class EditPictureActivity extends BaseActivity {
 
 		@Override
 		public void onClick(View v) {
-			int tag = (Integer) v.getTag();
+			int tag = (Integer) v.getTag();			
 			switch (tag) {
 			case UNDO_ON_CLICK:
 				setSaveable(true);
@@ -359,6 +361,7 @@ public class EditPictureActivity extends BaseActivity {
 
 				break;
 			case DELETE_VOICE:
+				EventUtil.Main_Photo.rcpt_recorddelete(baseContext);
 				File file = new File(voicePath);
 				if (file.exists()) {
 					file.delete();
@@ -369,6 +372,7 @@ public class EditPictureActivity extends BaseActivity {
 				make_voice.setVisibility(4);
 				break;
 			case TUYA_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_graffiti(baseContext);
 				if (mEditePicView.openOrCloseTuya()) {
 					mButtonTuya.setBackgroundResource(R.drawable.scrawl_press);
 					showColorPickerDialog();
@@ -386,6 +390,7 @@ public class EditPictureActivity extends BaseActivity {
 				break;
 			case TIMELIMIT_ON_CLICK:
 				if (!isShowSelectLayout) {
+					EventUtil.Main_Photo.rcpt_timer(baseContext);
 					showTimeLimitView();
 				} else {
 					select_layout.setVisibility(View.GONE);
@@ -394,6 +399,7 @@ public class EditPictureActivity extends BaseActivity {
 				break;
 
 			case SAVE_PICTURE_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_photosave(baseContext);
 				if (enableSave) {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
@@ -402,6 +408,7 @@ public class EditPictureActivity extends BaseActivity {
 				}
 				break;
 			case SEND_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_sendbutton(baseContext);
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
 				isSave = true;
@@ -467,6 +474,7 @@ public class EditPictureActivity extends BaseActivity {
 		switch (action) {
 		case MotionEvent.ACTION_DOWN:
 			if (mEditText == null) {
+				EventUtil.Main_Photo.rcpt_text(baseContext);
 				mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
 				editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
 				final Paint paint = editText.getPaint();
@@ -645,6 +653,7 @@ public class EditPictureActivity extends BaseActivity {
 				break;
 			case SET_LIMIT:
 				int n = (Integer) msg.obj;
+				EventUtil.Main_Photo.rcpt_timer(baseContext, n);
 				mButtonTimeLimit.setText(n + "");
 				mEditePicView.setTimeLimit(n);
 				audioBtn.setMaxRecoedSize(n);

@@ -64,4 +64,115 @@ public class EventUtil {
 			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_resetpassword");
 		}
 	}
+
+	public static class Main_Photo {
+
+		private static final String EVENT_NAME = "Main_Photo";
+
+		private static void onEvent(Context ctx, String label) {
+			MobclickAgent.onEvent(ctx, EVENT_NAME, label);
+		}
+
+		static public void rcpt_photoview(Context ctx) {
+			onEvent(ctx, "rcpt_photoview");
+		}
+
+		static public void rcpt_main_profileview(Context ctx) {
+			onEvent(ctx, "rcpt_main_profileview");
+		}
+
+		static public void rcpt_main_longpress(Context ctx) {
+			onEvent(ctx, "rcpt_main_longpress");
+		}
+
+		static public void rcpt_takephotobutton(Context ctx) {
+			onEvent(ctx, "rcpt_takephotobutton");
+		}
+
+		static public void rcpt_takephoto(Context ctx) {
+			onEvent(ctx, "rcpt_takephoto");
+		}
+
+		static public void rcpt_graffiti(Context ctx) {
+			onEvent(ctx, "rcpt_graffiti");
+		}
+
+		static public void rcpt_photosave(Context ctx) {
+			onEvent(ctx, "rcpt_photosave");
+		}
+
+		static public void rcpt_text(Context ctx) {
+			onEvent(ctx, "rcpt_text");
+		}
+
+		static public void rcpt_timer(Context ctx) {
+			onEvent(ctx, "rcpt_timer");
+		}
+
+		static public void rcpt_timer(Context ctx, int second) {
+			String label = String.format("rcpt_timer%d", second);
+			onEvent(ctx, label);
+		}
+
+		static public void rcpt_record(Context ctx) {
+			onEvent(ctx, "rcpt_record");
+		}
+
+		static public void rcpt_recorddelete(Context ctx) {
+			onEvent(ctx, "rcpt_recorddelete");
+		}
+
+		static public void rcpt_sendbutton(Context ctx) {
+			onEvent(ctx, "rcpt_sendbutton");
+		}
+
+		static public void rcpt_choosefriends(Context ctx) {
+			onEvent(ctx, "rcpt_choosefriends");
+		}
+
+		static public void rcpt_success_send(Context ctx) {
+			onEvent(ctx, "rcpt_success_send");
+		}
+
+		static public void rcpt_menu(Context ctx) {
+			onEvent(ctx, "rcpt_menu");
+		}
+
+		static public void rcpt_menu_addfriends(Context ctx) {
+			onEvent(ctx, "rcpt_menu_addfriends");
+		}
+
+		static public void rcpt_menu_feedback(Context ctx) {
+			onEvent(ctx, "rcpt_menu_feedback");
+		}
+
+		static public void rcpt_menu_rate(Context ctx) {
+			onEvent(ctx, "rcpt_menu_rate");
+		}
+
+		static public void rcpt_friends(Context ctx) {
+			onEvent(ctx, "rcpt_friends");
+		}
+
+		static public void rcpt_more(Context ctx) {
+			onEvent(ctx, "rcpt_more");
+		}
+
+		static public void rcpt_updatepop_update(Context ctx) {
+			onEvent(ctx, "rcpt_updatepop_update");
+		}
+
+		static public void rcpt_updatepop_later(Context ctx) {
+			onEvent(ctx, "rcpt_updatepop_later");
+		}
+
+		static public void rcpt_phonepop_register(Context ctx) {
+			onEvent(ctx, "rcpt_phonepop_register");
+		}
+
+		static public void rcpt_phonepop_later(Context ctx) {
+			onEvent(ctx, "rcpt_phonepop_later");
+		}
+
+	}
 }
