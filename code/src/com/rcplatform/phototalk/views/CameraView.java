@@ -173,8 +173,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
+	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		initCamera();
 
 	}
@@ -192,38 +191,31 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		public void onPictureTaken(byte[] data, Camera camera) {
 			// TODO Auto-generated method stub
 			if (camera != null) {
-//				BitmapFactory.Options options = new BitmapFactory.Options();
-//				options.inSampleSize = 2;
-				Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0,
-						data.length, null);
+				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inSampleSize = 2;
+				Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 				Bitmap tempBitmap = null;
 				Matrix matrix = new Matrix();
 				if (mCurrentCameraNum == 1) {
 					matrix.postRotate(270);
-					matrix.preScale(1, -1); 
+					matrix.preScale(1, -1);
 				} else {
 					matrix.setRotate(round);
 				}
-				tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0,
-						mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+				tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 				mBitmap.recycle();
-				((PhotoTalkApplication) mContext.getApplicationContext())
-						.setEditeBitmap(tempBitmap);
+				((PhotoTalkApplication) mContext.getApplicationContext()).setEditeBitmap(tempBitmap);
 				mBitmap = null;
 				tempBitmap = null;
 			}
 			((TakePhotoActivity) mContext).startOtherActivity();
-			// }
-			// }
 		}
 	};
 
-	public static int setCameraDisplayOrientation(Activity activity,
-			int cameraId, android.hardware.Camera camera) {
+	public static int setCameraDisplayOrientation(Activity activity, int cameraId, android.hardware.Camera camera) {
 		android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();
 		android.hardware.Camera.getCameraInfo(cameraId, info);
-		int rotation = activity.getWindowManager().getDefaultDisplay()
-				.getRotation();
+		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
 		int degrees = 0;
 		switch (rotation) {
 		case Surface.ROTATION_0:
@@ -291,23 +283,16 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		 * String muteMode =
 		 * mPreferences.getString(CameraSettings.KEY_MUTE_MODE, "unmute") "";
 		 */
-		final AudioManager manager = (AudioManager) mContext
-				.getSystemService(Context.AUDIO_SERVICE);
+		final AudioManager manager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
 		int mode = manager.getRingerMode();
-		final int maxMusicVolumn = manager
-				.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-		final int maxSystemVolumn = manager
-				.getStreamMaxVolume(AudioManager.STREAM_SYSTEM);
-		final int musicVolumnBeforeTaken = manager
-				.getStreamVolume(AudioManager.STREAM_MUSIC);
-		final int systemVolumnBeforeTaken = manager
-				.getStreamVolume(AudioManager.STREAM_SYSTEM);
+		final int maxMusicVolumn = manager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		final int maxSystemVolumn = manager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM);
+		final int musicVolumnBeforeTaken = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
+		final int systemVolumnBeforeTaken = manager.getStreamVolume(AudioManager.STREAM_SYSTEM);
 
 		if (AudioManager.RINGER_MODE_SILENT == mode) {
-			manager.setStreamVolume(AudioManager.STREAM_MUSIC, 0,
-					AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-			manager.setStreamVolume(AudioManager.STREAM_SYSTEM, 0,
-					AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+			manager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+			manager.setStreamVolume(AudioManager.STREAM_SYSTEM, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 
 			new Thread(new Runnable() {
 
@@ -315,26 +300,18 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				public void run() {
 					try {
 						Thread.sleep(3000);
-						manager.setStreamVolume(AudioManager.STREAM_MUSIC,
-								musicVolumnBeforeTaken,
-								AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-						manager.setStreamVolume(AudioManager.STREAM_SYSTEM,
-								systemVolumnBeforeTaken,
-								AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						manager.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolumnBeforeTaken, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						manager.setStreamVolume(AudioManager.STREAM_SYSTEM, systemVolumnBeforeTaken, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 					} catch (Exception e) {
 						// Log.e(TAG, "静音计时线程被中断。", e);
 					}
 
 				}
 			}).start();
-		} else if (AudioManager.RINGER_MODE_SILENT != mode
-				&& musicVolumnBeforeTaken == 0) {
-			manager.setStreamVolume(AudioManager.STREAM_MUSIC, maxMusicVolumn,
-					AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-		} else if (AudioManager.RINGER_MODE_SILENT != mode
-				&& systemVolumnBeforeTaken == 0) {
-			manager.setStreamVolume(AudioManager.STREAM_SYSTEM,
-					maxSystemVolumn, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+		} else if (AudioManager.RINGER_MODE_SILENT != mode && musicVolumnBeforeTaken == 0) {
+			manager.setStreamVolume(AudioManager.STREAM_MUSIC, maxMusicVolumn, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+		} else if (AudioManager.RINGER_MODE_SILENT != mode && systemVolumnBeforeTaken == 0) {
+			manager.setStreamVolume(AudioManager.STREAM_SYSTEM, maxSystemVolumn, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 		}
 	}
 
@@ -365,14 +342,13 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				int h = 0;
 
 				if (Build.VERSION.SDK_INT >= 8)
-					setCameraDisplayOrientation((Activity) mContext,
-							mCurrentCameraNum, mCamera);
+					setCameraDisplayOrientation((Activity) mContext, mCurrentCameraNum, mCamera);
 
 				if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 					parameters.set("orientation", "portrait");
 					w = app.getScreenWidth();
 					h = app.getScreentHeight();
-					if(w<480){
+					if (w < 480) {
 						w = 480;
 						h = 800;
 					}
@@ -381,31 +357,27 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					parameters.set("orientation", "landscape");
 					w = app.getScreentHeight();
 					h = app.getScreenWidth();
-					if(h<480){
+					if (h < 480) {
 						h = 480;
 						w = 800;
 					}
 				}
-				
+
 				if (mCurrentCameraNum == mFrontCameraNum) {
 					parameters.setRotation(270);
 				} else {
 					parameters.setRotation(90);
 				}
 
-				Size previewSize = getOptimalPreviewSize(
-						parameters.getSupportedPreviewSizes(), h, w);
+				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
 				if (previewSize != null) {
-					parameters.setPreviewSize(previewSize.width,
-							previewSize.height);
+					parameters.setPreviewSize(previewSize.width, previewSize.height);
 
 				}
 
-				Size pictureSize = getOptimalPictureSize(
-						parameters.getSupportedPictureSizes(), h, w);
+				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
 				if (pictureSize != null)
-					parameters.setPictureSize(pictureSize.width,
-							pictureSize.height);
+					parameters.setPictureSize(pictureSize.width, pictureSize.height);
 				List<String> focusModes = parameters.getSupportedFocusModes();
 				if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
 					parameters.setFocusMode(Parameters.FOCUS_MODE_AUTO);

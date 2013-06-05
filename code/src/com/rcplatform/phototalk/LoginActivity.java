@@ -311,7 +311,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLoginIdEditText.setHint(getString(R.string.login_username_hint));
 		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		// mIvHead.setVisibility(View.GONE);
-		
+
 		mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 
 		mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
@@ -367,103 +367,103 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	public void onClick(View v) {
 
 		switch (v.getId()) {
-			case R.id.back:
-				finish();
-				break;
+		case R.id.back:
+			finish();
+			break;
 
-			// case R.id.iv_registe_head:
-			// showImagePickMenu(v, CROP_HEAD_IMAGE);
-			// break;
-			case R.id.login_page_signup_button:
-				final String email = mLoginIdEditText.getText().toString();
-				final String nick = mNickEditText.getText().toString();
-				final String psw = mPswEditText.getText().toString();
+		// case R.id.iv_registe_head:
+		// showImagePickMenu(v, CROP_HEAD_IMAGE);
+		// break;
+		case R.id.login_page_signup_button:
+			final String email = mLoginIdEditText.getText().toString();
+			final String nick = mNickEditText.getText().toString();
+			final String psw = mPswEditText.getText().toString();
 
-				if (email.equals("")) {
-					mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-					mLoginIdEditText.requestFocus();
-					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-					imm.showSoftInput(mLoginIdEditText, 0);
-					return;
-				}
+			if (email.equals("")) {
+				mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+				mLoginIdEditText.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(mLoginIdEditText, 0);
+				return;
+			}
 
-				if (nick.equals("")) {
-					mNickEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-					mNickEditText.requestFocus();
-					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-					imm.showSoftInput(mNickEditText, 0);
-					return;
-				}
+			if (nick.equals("")) {
+				mNickEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+				mNickEditText.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(mNickEditText, 0);
+				return;
+			}
 
-				if (psw.equals("")) {
-					mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-					mPswEditText.requestFocus();
-					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-					imm.showSoftInput(mPswEditText, 0);
-					return;
-				}
+			if (psw.equals("")) {
+				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+				mPswEditText.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(mPswEditText, 0);
+				return;
+			}
 
-				if (invalidate(this, email, nick, psw)) {
-					AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
-					dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
-					        .setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+			if (invalidate(this, email, nick, psw)) {
+				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
+						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
-						        @Override
-						        public void onClick(DialogInterface dialog, int which) {
-						        }
-					        }).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+							}
+						}).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-						        @Override
-						        public void onClick(DialogInterface dialog, int which) {
-							        dialog.cancel();
-							        tigaseRegiste(LoginActivity.this, email, psw, nick);
-							        // register(LoginActivity.this, email,
-							        // psw,
-							        // nick);
-						        }
-					        });
-					dialogBuilder.create().show();
-				}
-				break;
-			case R.id.login_page_login_button:
-				String email2 = mLoginIdEditText.getText().toString().trim();
-				String psw2 = mPswEditText.getText().toString().trim();
-				if (email2.equals("")) {
-					mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-					mLoginIdEditText.requestFocus();
-					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-					imm.showSoftInput(mLoginIdEditText, 0);
-					return;
-				}
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.cancel();
+								tigaseRegiste(LoginActivity.this, email, psw, nick);
+								// register(LoginActivity.this, email,
+								// psw,
+								// nick);
+							}
+						});
+				dialogBuilder.create().show();
+			}
+			break;
+		case R.id.login_page_login_button:
+			String email2 = mLoginIdEditText.getText().toString().trim();
+			String psw2 = mPswEditText.getText().toString().trim();
+			if (email2.equals("")) {
+				mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+				mLoginIdEditText.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(mLoginIdEditText, 0);
+				return;
+			}
 
-				if (psw2.equals("")) {
-					mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-					mPswEditText.requestFocus();
-					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-					imm.showSoftInput(mPswEditText, 0);
-					return;
-				}
-				
-				int loginType = invalidate(email2, psw2);
-				if (loginType != -1) {
-					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-					// login(this, mHandler, email2, psw2, loginType);
-					tigaseLogin(this, email2, psw2);
-				}
-				break;
-			case R.id.login_page_forget_password_button:
-				startActivity(new Intent(this, ForgetPasswordActivity.class));
-				break;
-			case R.id.choosebutton:
-				if (mIsLoginPage) {
-					showSignupView();
-				} else {
-					showLoginView();
-				}
-				mIsLoginPage = !mIsLoginPage;
-				break;
-			default:
-				break;
+			if (psw2.equals("")) {
+				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+				mPswEditText.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(mPswEditText, 0);
+				return;
+			}
+
+			int loginType = invalidate(email2, psw2);
+			if (loginType != -1) {
+				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+				// login(this, mHandler, email2, psw2, loginType);
+				tigaseLogin(this, email2, psw2);
+			}
+			break;
+		case R.id.login_page_forget_password_button:
+			startActivity(new Intent(this, ForgetPasswordActivity.class));
+			break;
+		case R.id.choosebutton:
+			if (mIsLoginPage) {
+				showSignupView();
+			} else {
+				showLoginView();
+			}
+			mIsLoginPage = !mIsLoginPage;
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -493,14 +493,12 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkEmail(String emailId) {
 		// 邮箱正则表达式
 		if (TextUtils.isEmpty(emailId)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_empty), getResources().getString(android.R.string.ok))
-			        .show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_empty), getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
 		if (!emailPattern.matcher(emailId).matches()) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(android.R.string.ok))
-			        .show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -511,9 +509,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			return LOGIN_TYPE_EMAIL;
 		else if (account.matches(RCID_REGEX))
 			return LOGIN_TYPE_RCID;
-		DialogUtil
-		        .createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok))
-		        .show();
+		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_email_phone_tacotyid_is_null), getResources().getString(R.string.ok)).show();
 		return -1;
 	}
 
@@ -523,8 +519,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkNickName(String nickeName) {
 		// 昵称正则表达式
 		if (!RCPlatformTextUtil.isNickMatches(nickeName)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_nick_empty), getResources().getString(android.R.string.ok))
-			        .show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_nick_empty), getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -537,14 +532,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private boolean checkPassword(String psw) {
 
 		if (TextUtils.isEmpty(psw)) {
-			DialogUtil
-			        .createMsgDialog(this, getResources().getString(R.string.registe_password_empty), getResources().getString(android.R.string.ok))
-			        .show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_password_empty), getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		if (!RCPlatformTextUtil.isPasswordMatches(psw)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_password_error),
-			                           getResources().getString(android.R.string.ok)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.register_password_error), getResources().getString(android.R.string.ok)).show();
 			return false;
 		}
 		return true;
@@ -641,16 +633,30 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 						}
 						startPlatformUserEditActivity(appUsers);
 					} else {
-						UserInfo userInfo = JSONConver.jsonToUserInfo(obj.getJSONObject("userInfoAll").toString());
-						userInfo.setShowRecommends(showRecommends);
-						long lastBindTime = obj.optLong(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_TIME);
-						String lastBindNumber = obj.getString(RCPlatformResponse.Login.RESPONSE_KEY_LAST_BIND_NUMBER);
-						PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), userInfo.getRcId(), lastBindNumber);
-						PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), lastBindTime, userInfo.getRcId());
-						loginSuccess(userInfo);
+						String token = obj.getString("token");
+						String rcId = obj.getString("rcId");
+						Request.executeGetMyInfo(LoginActivity.this, new OnUserInfoLoadedListener() {
+
+							@Override
+							public void onSuccess(UserInfo userInfo) {
+								getPhotoTalkApplication().setCurrentUser(userInfo);
+								loginSuccess(userInfo);
+								dismissLoadingDialog();
+							}
+
+							@Override
+							public void onOthreAppUserInfoLoaded(Map<AppInfo, UserInfo> userInfos) {
+
+							}
+
+							@Override
+							public void onError(int errorCode, String content) {
+								showErrorConfirmDialog(content);
+								dismissLoadingDialog();
+							}
+						}, rcId, token);
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					showErrorConfirmDialog(R.string.net_error);
 				}
@@ -715,8 +721,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
 					PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends, FriendType.CONTACT);
 					loginSuccess(userInfo);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 				}
@@ -732,7 +737,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_EMAIL, email);
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_PASSWORD, MD5.encodeMD5String(password));
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_NICK, nick);
-		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Locale.getDefault().getCountry());
+		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_COUNTRY, Constants.COUNTRY);
 		request.putParam(PhotoTalkParams.Registe.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
 		request.excuteAsync();
 	}

@@ -39,7 +39,7 @@
                 android:background="@drawable/send_friend_head_bg"
                 android:padding="3dp" >
 
-                <com.rcplatform.phototalk.views.RoundImageView
+                <ImageView
                     android:id="@+id/iv_head"
                     android:layout_width="@dimen/user_detail_head_image_width"
                     android:layout_height="@dimen/user_detail_head_image_width"
@@ -101,7 +101,6 @@
                             android:textColor="#E5E5E5"
                             android:textSize="@dimen/friend_info_age_text_size" />
                     </LinearLayout>
-
 
                     <LinearLayout
                         android:layout_width="fill_parent"

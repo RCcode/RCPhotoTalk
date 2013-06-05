@@ -19,9 +19,9 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
-import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
+import com.rcplatform.phototalk.bean.ServiceCensus;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.clienservice.InformationStateChangeService;
+import com.rcplatform.phototalk.clienservice.CensusService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
@@ -34,17 +34,16 @@ import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class LogicUtils {
-	public static void updateInformationState(Context context, String action, Information... infos) {
-		Intent intent = new Intent(context, InformationStateChangeService.class);
+	public static void serviceCensus(Context context, Information... infos) {
+		Intent intent = new Intent(context, CensusService.class);
 		if (infos.length > 0) {
-			ServiceSimpleNotice[] ssns = new ServiceSimpleNotice[infos.length];
+			ServiceCensus[] census = new ServiceCensus[infos.length];
 			for (int i = 0; i < infos.length; i++) {
 				Information info = infos[i];
-				ssns[i] = new ServiceSimpleNotice(info.getStatu() + "", "", info.getType() + "", info.getLastUpdateTime());
+				census[i] = new ServiceCensus(info.getSender().getRcId(), info.getUrl());
 			}
-			intent.putExtra(InformationStateChangeService.PARAM_KEY_INFORMATION, ssns);
+			intent.putExtra(CensusService.PARAM_KEY_INFORMATION, census);
 		}
-		intent.setAction(action);
 		context.startService(intent);
 	}
 
@@ -184,7 +183,6 @@ public class LogicUtils {
 
 	public static void deleteInformation(Context context, Information information) {
 		PhotoTalkDatabaseFactory.getDatabase().deleteInformation(information);
-		updateInformationState(context, Action.ACTION_INFORMATION_DELETE, information);
 	}
 
 	public static void logout(Context context) {
@@ -209,11 +207,11 @@ public class LogicUtils {
 		context.startActivity(intent);
 	}
 
-	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file, boolean hasVoice) {
+	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file, boolean hasVoice, boolean hasGraf) {
 		long flag = System.currentTimeMillis();
 		try {
 			UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice);
+			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
@@ -226,15 +224,15 @@ public class LogicUtils {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
 				}
 
-			}, friendIds,hasVoice);
+			}, friendIds, hasVoice, hasGraf);
 		} catch (Exception e) {
 			e.printStackTrace();
 			InformationPageController.getInstance().onPhotoSendFail(flag);
 		}
 	}
 
-	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file, boolean hasVoice)
-			throws JSONException {
+	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file,
+			boolean hasVoice, boolean hasGraf) throws JSONException {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
@@ -265,6 +263,7 @@ public class LogicUtils {
 			record.setLimitTime(timeLimit);
 			record.setUrl(file.getPath());
 			record.setHasVoice(hasVoice);
+			record.setHasGraf(hasGraf);
 			infoRecords.add(record);
 		}
 		PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infoRecords);

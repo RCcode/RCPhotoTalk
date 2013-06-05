@@ -12,7 +12,6 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.MessageSender;
-import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -21,12 +20,11 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	private final ListView listView;
 
-
 	private final Context context;
 
 	private final Information record;
 
-	public HomeRecordLoadPicListener(ListView listView,Context context, Information record) {
+	public HomeRecordLoadPicListener(ListView listView, Context context, Information record) {
 		this.listView = listView;
 		this.context = context;
 		this.record = record;
@@ -61,9 +59,8 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 	private static void notifyServer(Context context, Information record) {
 		if (!record.getReceiver().getRcId().equals(record.getSender().getRcId())) {
 			MessageSender.getInstance().sendInformation(context, record.getSender().getTigaseId(), record.getSender().getRcId(), record);
-//			MessageSender.sendInformation(context, record.getSender().getTigaseId(), record.getSender().getRcId(), record);
-			LogicUtils.updateInformationState(context, Action.ACTION_INFORMATION_STATE_CHANGE, record);
 		}
+		LogicUtils.serviceCensus(context, record);
 	}
 
 	private void updateView(int visibitity, String text) {
@@ -77,20 +74,5 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 				statu.setText(text);
 
 		}
-		//
-		// if (statu == null) {
-		// if (listView != null) {
-		// statu = (TextView) listView.findViewWithTag(baseTag +
-		// TextView.class.getName());
-		// if()
-		// }
-		// }
-		//
-		// if (statu != null) {
-		// String statuTag = (String) statu.getTag();
-		// if (statuTag.equals(baseTag + TextView.class.getName())) {
-		//
-		// }
-		// }
 	}
 }

@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,8 +36,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.Utils;
-import com.rcplatform.phototalk.views.RoundImageView;
 
 public class AccountInfoEditActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -52,7 +51,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private View mBackView;
 	private DatePicker mBirthDayPicker;
 	private TextView mTitleView;
-	private RoundImageView mMyHeadView;
+	private ImageView mMyHeadView;
 	private AlertDialog mBirthChooseDialog;
 	private Calendar mBirthDayCalender;
 	private UserInfo userDetailInfo;
@@ -76,7 +75,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void initView() {
 		initTitle();
-		mMyHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
+		mMyHeadView = (ImageView) findViewById(R.id.settings_account_head_portrait);
 		mNameView = (TextView) findViewById(R.id.settings_modify_name);
 		mSexView = (TextView) findViewById(R.id.settings_modify_sex);
 		mBirthday = (TextView) findViewById(R.id.settings_modify_age);
@@ -103,14 +102,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	}
 
 	private void loadHeadPicture() {
-		File fileHead = PhotoTalkUtils.getUserHead(getCurrentUser());
-		if (fileHead.exists()) {
-			String urlLocal = "file:///" + fileHead.getPath();
-			mImageLoader.displayImage(urlLocal, mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-		} else {
-			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mMyHeadView, ImageOptionsFactory.getHeadImageOptions());
-		}
-
+		mImageLoader.displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getFriendHeadImageOptions());
 	}
 
 	private void setNick() {
@@ -258,7 +250,9 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		isChance = true;
 		isHeadChange = true;
 		newHeadPath = imagePath;
-		new LoadImageTask(mMyHeadView).execute(imageBaseUri, Uri.parse(imagePath));
+		String path = "file:///" + imagePath;
+		userDetailInfo.setHeadUrl(path);
+		loadHeadPicture();
 	}
 
 	@Override
@@ -299,9 +293,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					String url = jsonObject.getString("headUrl");
 					if (!TextUtils.isEmpty(url)) {
 						userDetailInfo.setHeadUrl(url);
-						Utils.copyFile(new File(newHeadPath), PhotoTalkUtils.getUserHead(getCurrentUser()));
 					}
-					PrefsUtils.User.saveUserInfo(getApplicationContext() , userDetailInfo.getRcId(), userDetailInfo);
+					PrefsUtils.User.saveUserInfo(getApplicationContext(), userDetailInfo.getRcId(), userDetailInfo);
 					getPhotoTalkApplication().setCurrentUser(userDetailInfo);
 					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
 					setResult(Activity.RESULT_OK);
@@ -343,7 +336,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		}
 		updateFailDialog.show();
 	}
-	
+
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
 		// TODO Auto-generated method stub

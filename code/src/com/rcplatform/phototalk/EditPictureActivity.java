@@ -8,10 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -29,8 +25,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -44,24 +38,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.Information;
-import com.rcplatform.phototalk.bean.InformationState;
-import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
-import com.rcplatform.phototalk.views.AudioShowView;
 import com.rcplatform.phototalk.views.ColorPicker.OnColorChangeListener;
-import com.rcplatform.phototalk.views.LongClickShowView.Builder;
 import com.rcplatform.phototalk.views.ColorPickerDialog;
 import com.rcplatform.phototalk.views.EditPictureView;
 import com.rcplatform.phototalk.views.EditableViewGroup;
@@ -214,7 +201,6 @@ public class EditPictureActivity extends BaseActivity {
 
 			@Override
 			public void onRecording(int recordedSecord, int amplitude) {
-				// TODO Auto-generated method stub
 				int height = voice_volume_bg.getHeight();
 				if (height > 0) {
 					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
@@ -240,7 +226,6 @@ public class EditPictureActivity extends BaseActivity {
 
 			@Override
 			public void endRecord(String savePath, int n) {
-				// TODO Auto-generated method stub
 				voicePath = savePath;
 				audioBtn.setVisibility(4);
 				make_voice.setVisibility(0);
@@ -257,7 +242,7 @@ public class EditPictureActivity extends BaseActivity {
 		audioBtn.setSavePath(app.getSendFileCachePath());
 		// mEditePicView = (EditPictureView) findViewById(R.id.sf_edite_pic);
 		mEditePicView = new EditPictureView(this);
-		mEditableViewGroup.addView(mEditePicView, LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT);
+		mEditableViewGroup.addView(mEditePicView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
 		make_voice = (LinearLayout) findViewById(R.id.make_voice);
 		voice_size = (TextView) findViewById(R.id.voice_size);
@@ -282,7 +267,6 @@ public class EditPictureActivity extends BaseActivity {
 
 			@Override
 			public void onItemClicked(WheelView wheel, int itemIndex) {
-				// TODO Auto-generated method stub
 				if (itemIndex == getCurrentItem()) {
 					handler.obtainMessage(SET_LIMIT, itemIndex + 1).sendToTarget();
 				} else {
@@ -307,7 +291,6 @@ public class EditPictureActivity extends BaseActivity {
 
 			@Override
 			public void onGlobalLayout() {
-				// TODO Auto-generated method stub
 				Rect r = new Rect();
 				mEditableViewGroup.getWindowVisibleDisplayFrame(r);
 
@@ -354,7 +337,6 @@ public class EditPictureActivity extends BaseActivity {
 
 							@Override
 							public void onCompletion(MediaPlayer mp) {
-								// TODO Auto-generated method stub
 								player.release();
 								player = null;
 								isPlayer = false;
@@ -362,7 +344,6 @@ public class EditPictureActivity extends BaseActivity {
 							}
 						});
 					} catch (Exception e) {
-						// TODO: handle exception
 					}
 				}
 
@@ -451,25 +432,20 @@ public class EditPictureActivity extends BaseActivity {
 			endplayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
 			endplayer.prepare();
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		endplayer.setOnCompletionListener(new OnCompletionListener() {
 
 			@Override
 			public void onCompletion(MediaPlayer mp) {
-				// TODO Auto-generated method stub
 				try {
 					mp.release();
 					play_voice.setBackgroundResource(R.drawable.play_voice);
 				} catch (Exception e) {
-					// TODO: handle exception
 				}
 			}
 		});
@@ -479,6 +455,7 @@ public class EditPictureActivity extends BaseActivity {
 	private void startSelectFriendActivity() {
 		Intent intent = new Intent(this, SelectFriendsActivity.class);
 		intent.putExtra("timeLimit", mButtonTimeLimit.getText().toString());
+		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASGRAF, mEditePicView.hasDrawed());
 		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASVOICE, hasVoice());
 		startActivity(intent);
 	}
@@ -498,7 +475,6 @@ public class EditPictureActivity extends BaseActivity {
 
 					@Override
 					public void onFocusChange(View v, boolean hasFocus) {
-						// TODO Auto-generated method stub
 						// editText.setFocusable(true);
 						if (!hasFocus) {
 							if (editText.getText() == null || editText.getText().length() == 0) {
@@ -580,7 +556,6 @@ public class EditPictureActivity extends BaseActivity {
 		try {
 			n = Integer.valueOf(mButtonTimeLimit.getText().toString());
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 		mWheel.setCurrentItem(n - 1);
 		select_layout.setVisibility(View.VISIBLE);
@@ -594,19 +569,16 @@ public class EditPictureActivity extends BaseActivity {
 
 		protected TimeChooseAdapter(Context context, String[] timeArray) {
 			super(context);
-			// TODO Auto-generated constructor stub
 			this.mTimes = timeArray;
 		}
 
 		@Override
 		public int getItemsCount() {
-			// TODO Auto-generated method stub
 			return mTimes.length;
 		}
 
 		@Override
 		protected CharSequence getItemText(int index) {
-			// TODO Auto-generated method stub
 			return mTimes[index];
 		}
 
@@ -725,7 +697,7 @@ public class EditPictureActivity extends BaseActivity {
 		File file = new File(imagePath);
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.add(friend);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice());
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice(), mEditePicView.hasDrawed());
 	}
 
 	private boolean hasVoice() {

@@ -291,7 +291,7 @@
 
         <service android:name="com.rcplatform.phototalk.clienservice.PTBackgroundService" />
         <service android:name="com.rcplatform.phototalk.clienservice.InviteFriendUploadService" />
-        <service android:name="com.rcplatform.phototalk.clienservice.InformationStateChangeService" />
+        <service android:name="com.rcplatform.phototalk.clienservice.CensusService" />
         <service android:name="com.rcplatform.phototalk.clienservice.PhotoTalkWebService" />
         <service android:name="com.rcplatform.message.UserMessageService" />
         <service android:name="com.rcplatform.tigase.TigaseRegisterSerivce" />

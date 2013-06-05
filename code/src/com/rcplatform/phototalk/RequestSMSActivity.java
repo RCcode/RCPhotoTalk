@@ -23,6 +23,7 @@ import com.rcplatform.phototalk.db.CountryCodeDatabase;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class RequestSMSActivity extends BaseActivity implements OnClickListener {
@@ -57,7 +58,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 		allCountryCodes = mCountryCodeDatabase.getAllCountry();
 		mCountryCodeDatabase.close();
 		CountryCode temp = new CountryCode();
-		temp.setCountryShort(Locale.getDefault().getCountry());
+		temp.setCountryShort(Constants.COUNTRY);
 		int index = allCountryCodes.indexOf(temp);
 		if (index != -1) {
 			mCountryCode = allCountryCodes.get(index);

@@ -33,6 +33,7 @@ import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -238,7 +239,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 				request.setFile(new File(mHeadImagePath));
 			}
 			request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(this) + "");
-			request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_COUNTRY, Locale.getDefault().getCountry());
+			request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_COUNTRY, Constants.COUNTRY);
 			request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_TOKEN, mUserInfo.getToken());
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			request.executePostNameValuePairAsync();

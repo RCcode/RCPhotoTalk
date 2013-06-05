@@ -28,7 +28,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
-import com.rcplatform.phototalk.views.RoundImageView;
 
 public class FriendDetailActivity extends BaseActivity {
 	private Friend mFriend;
@@ -36,7 +35,7 @@ public class FriendDetailActivity extends BaseActivity {
 	public static final String PARAM_FRIEND = "friend";
 	public static final String RESULT_PARAM_FRIEND = "friend";
 	private String mAction;
-	private RoundImageView ivHead;
+	private ImageView ivHead;
 	private ImageView ivBackground;
 	private TextView tvSexAge;
 	private TextView tvSource;
@@ -57,8 +56,8 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendInfo() {
-		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead, ImageOptionsFactory.getHeadImageOptions());
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getUserBackImageOptions());
+		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead, ImageOptionsFactory.getFriendHeadImageOptions());
+		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getFriendBackImageOptions());
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
@@ -130,7 +129,7 @@ public class FriendDetailActivity extends BaseActivity {
 	private void initView() {
 		linearSource = findViewById(R.id.linear_source);
 		linearApps = (LinearLayout) findViewById(R.id.linear_apps);
-		ivHead = (RoundImageView) findViewById(R.id.iv_head);
+		ivHead = (ImageView) findViewById(R.id.iv_head);
 		ivBackground = (ImageView) findViewById(R.id.iv_bg);
 		tvSexAge = (TextView) findViewById(R.id.tv_sex_age);
 		tv_rcid = (TextView) findViewById(R.id.tv_rcid);
