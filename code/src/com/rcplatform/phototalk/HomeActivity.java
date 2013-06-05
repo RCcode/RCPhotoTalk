@@ -39,6 +39,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.rcplatform.phototalk.activity.MenuBaseActivity;
@@ -78,6 +79,7 @@ import com.rcplatform.phototalk.views.SnapShowListener;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 主界面. <br>
@@ -113,7 +115,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private CheckUpdateTask mCheckUpdateTask;
 
 	private Request checkTrendRequest;
+
 	private ImageView iconTrendNew;
+
 	private ImageLoader mImageLoader;
 
 	private boolean hasNextPage = true;
@@ -144,6 +148,18 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		tvTigaseState = (TextView) findViewById(R.id.tv_test);
 		bindTigaseService();
 		checkBindPhone();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		FlurryAgent.onStartSession(this, Constants.FLURRY_KEY);
+	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		FlurryAgent.onEndSession(this);
 	}
 
 	@Override
@@ -190,7 +206,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 						try {
 							List<AppInfo> apps = JSONConver.jsonToAppInfos(new JSONObject(content).getJSONArray("allApps").toString());
 							PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
-						} catch (JSONException e) {
+						}
+						catch (JSONException e) {
 							e.printStackTrace();
 						}
 					}
@@ -428,6 +445,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			public void onSendSuccess(long flag) {
 				InformationPageController.getInstance().onPhotoResendSuccess(information);
 			}
+
 
 			@Override
 			public void onFail(long flag, int errorCode, String content) {

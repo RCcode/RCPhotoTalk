@@ -23,6 +23,7 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
+import com.umeng.analytics.MobclickAgent;
 
 public class BaseActivity extends Activity {
 
@@ -81,6 +82,7 @@ public class BaseActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		registeOtherDeviceLoginReceiver();
+		MobclickAgent.onResume(this);
 	}
 
 	private void registeOtherDeviceLoginReceiver() {
@@ -89,10 +91,11 @@ public class BaseActivity extends Activity {
 			registerReceiver(mOtherDeviceLoginReceiver, filter);
 		}
 	}
-
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
+		MobclickAgent.onPause(this);
 		if (needRelogin) {
 			unregisterReceiver(mOtherDeviceLoginReceiver);
 		}

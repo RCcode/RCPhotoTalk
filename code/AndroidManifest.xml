@@ -46,7 +46,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -308,7 +308,7 @@
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -326,7 +326,15 @@
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/app_id" />
+            android:value="447751798632401" />
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="519b2c2356240bbc300a6e8b" >
+        </meta-data>
+        <meta-data
+            android:name="UMENG_CHANNEL"
+            android:value="GooglePlay" >
+        </meta-data>
 
         <activity
             android:name="com.facebook.LoginActivity"

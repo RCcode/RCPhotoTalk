@@ -249,5 +249,5 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorForeground">#AA000000</item>
     </style>
-
+	
 </resources>
