@@ -12,8 +12,10 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
+import com.rcplatform.phototalk.umeng.EventUtil;
 
 public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
+
 	@Override
 	protected void onInviteButtonClick(Set<Friend> willInvateFriends) {
 		super.onInviteButtonClick(willInvateFriends);
@@ -22,8 +24,10 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 
 	private void invateFriendsBySms(Set<Friend> willInvateFriends) {
 		if (willInvateFriends != null && willInvateFriends.size() > 0) {
+			EventUtil.Register_Login_Invite.rcpt_success_smsinvite(baseContext);
 			StringBuilder mobiles = new StringBuilder();
 			for (Friend f : willInvateFriends) {
+				EventUtil.Register_Login_Invite.rcpt_smsinvite(baseContext);
 				mobiles.append(f.getCellPhone()).append(";");
 			}
 			System.out.println(mobiles.toString());

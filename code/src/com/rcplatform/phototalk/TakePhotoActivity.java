@@ -3,6 +3,7 @@ package com.rcplatform.phototalk;
 import java.io.File;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -14,8 +15,10 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
 
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
+
 public class TakePhotoActivity extends Activity {
 
 	private static final int TAKE_ON_CLICK = 0;
@@ -42,14 +45,16 @@ public class TakePhotoActivity extends Activity {
 
 	private Intent intent;
 
+	private Context ctx;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ctx = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.take_photo_view);
-//		deleteTemp();
+		// deleteTemp();
 		intent = getIntent();
 		mButtonTake = (Button) findViewById(R.id.btn_take_photo_take);
 		mButtonOpenFlashLight = (Button) findViewById(R.id.btn_take_photo_flashlight);
@@ -76,38 +81,36 @@ public class TakePhotoActivity extends Activity {
 		public void onClick(View v) {
 			int tag = (Integer) v.getTag();
 			switch (tag) {
-			case TAKE_ON_CLICK:
-				mCameraView.takePhoto();
-				break;
-			case CHANGE_CAMERA_ON_CLICK:
-				mCameraView.changeCamera();
-				if (mFromDegrees == 0) {
-					mFromDegrees = 180;
-					mToDegrees = 0;
-					mButtonOpenFlashLight.setVisibility(View.GONE);
-				} else {
-					mFromDegrees = 0;
-					mToDegrees = 180;
-					mButtonOpenFlashLight.setVisibility(View.VISIBLE);
-				}
-				Animation animation = new Rotate3dAnimation(mFromDegrees,
-						mToDegrees, mButtonChangeCamera.getWidth() / 2,
-						mButtonChangeCamera.getHeight() / 2, 200.0f, true);
-				animation.setDuration(500);
-				animation.setInterpolator(new AccelerateInterpolator());
-				mButtonChangeCamera.startAnimation(animation);
-				break;
-			case OPEN_FLASHLIGHT_ON_CLICK:
-				if (mCameraView.setLightStatu()) {
-					mButtonOpenFlashLight
-							.setBackgroundResource(R.drawable.flashlight_press);
-				} else
-					mButtonOpenFlashLight
-							.setBackgroundResource(R.drawable.flashlight_normal);
-				break;
-			case CLOSE_ON_CLICK:
-				finish();
-				break;
+				case TAKE_ON_CLICK:
+					EventUtil.Main_Photo.rcpt_takephoto(ctx);
+					mCameraView.takePhoto();
+					break;
+				case CHANGE_CAMERA_ON_CLICK:
+					mCameraView.changeCamera();
+					if (mFromDegrees == 0) {
+						mFromDegrees = 180;
+						mToDegrees = 0;
+						mButtonOpenFlashLight.setVisibility(View.GONE);
+					} else {
+						mFromDegrees = 0;
+						mToDegrees = 180;
+						mButtonOpenFlashLight.setVisibility(View.VISIBLE);
+					}
+					Animation animation = new Rotate3dAnimation(mFromDegrees, mToDegrees, mButtonChangeCamera.getWidth() / 2,
+					        mButtonChangeCamera.getHeight() / 2, 200.0f, true);
+					animation.setDuration(500);
+					animation.setInterpolator(new AccelerateInterpolator());
+					mButtonChangeCamera.startAnimation(animation);
+					break;
+				case OPEN_FLASHLIGHT_ON_CLICK:
+					if (mCameraView.setLightStatu()) {
+						mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_press);
+					} else
+						mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_normal);
+					break;
+				case CLOSE_ON_CLICK:
+					finish();
+					break;
 
 			}
 
@@ -136,7 +139,7 @@ public class TakePhotoActivity extends Activity {
 			} else {
 				file.delete();
 			}
-		}else{
+		} else {
 		}
 	}
 }

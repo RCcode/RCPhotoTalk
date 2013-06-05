@@ -35,6 +35,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -243,6 +244,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			public void onChange(Friend friend, boolean isChecked) {
 
 				if (isChecked) {
+					EventUtil.Main_Photo.rcpt_choosefriends(baseContext);
 					if (!sendData.contains(friend)) {
 						sendData.add(friend);
 					}
@@ -310,6 +312,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				Toast.makeText(SelectFriendsActivity.this, R.string.please_select_contact, Toast.LENGTH_SHORT).show();
 				return;
 			} else {
+				EventUtil.Main_Photo.rcpt_success_send(baseContext);
 				catchBitampOnSDC();
 				Intent intent = new Intent(SelectFriendsActivity.this, HomeActivity.class);
 				intent.putExtra("from", this.getClass().getName());

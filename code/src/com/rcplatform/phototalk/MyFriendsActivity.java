@@ -41,6 +41,7 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
@@ -117,11 +118,14 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 					final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList.getExpandableListAdapter()).getChild(group, child);
 					if (getCurrentUser().getRcId().equals(friend.getRcId()))
 						return;
+					
+					EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
 					menu.setHeaderTitle(R.string.delete_friend);
 					menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 						@Override
 						public boolean onMenuItemClick(MenuItem item) {
+							EventUtil.Friends_Addfriends.rcpt_friendsdelete(baseContext);
 							deleteFriend(friend);
 							return false;
 						}
@@ -203,6 +207,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+			EventUtil.Friends_Addfriends.rcpt_friends_profileview(baseContext);
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 			Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
 			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(MyFriendsActivity.this, friend, new FriendDetailListener() {
@@ -322,6 +327,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			finish();
 			break;
 		case R.id.choosebutton:
+			EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
 			Intent intent = new Intent(MyFriendsActivity.this, AddFriendsActivity.class);
 			intent.setData(Uri.parse("data"));
 			startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);

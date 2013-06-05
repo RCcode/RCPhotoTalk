@@ -23,6 +23,7 @@ import com.rcplatform.phototalk.thirdpart.utils.FacebookClient.OnInviteSuccessLi
 import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -72,6 +73,7 @@ public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	}
 
 	private void authorize() {
+		EventUtil.Register_Login_Invite.rcpt_facebooklink(baseContext);
 		mFacebookClient.authorize(new OnAuthorizeSuccessListener() {
 
 			@Override
@@ -172,6 +174,7 @@ public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	}
 
 	protected void onFacebookFriendItemClick(Friend f) {
+		EventUtil.Register_Login_Invite.rcpt_facebookinvite(baseContext);
 		super.onFacebookFriendItemClick(f);
 		mFacebookClient.sendInviteMessageToUser(f.getRcId(), new OnInviteSuccessListener() {
 

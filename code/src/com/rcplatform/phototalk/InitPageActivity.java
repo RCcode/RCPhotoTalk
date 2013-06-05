@@ -26,6 +26,7 @@ import android.widget.ViewFlipper;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.views.PageIndicator;
 
@@ -34,15 +35,25 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 	public static final String REQUEST_PARAM_RELOGIN = "relogin";
 
 	private PageIndicator mPageIndicator;
+
 	public static final int REQUEST_CODE_LOGIN = 100;
+
 	private final int GUIDE_PAGE_COUNT = 10;
+
 	private AlphaAnimation inAnimation_Alpha;
+
 	private AlphaAnimation outAnimation_Alpha;
+
 	private GestureDetector mGestureDetector;
+
 	private static final int FLING_MIN_DISTANCE = 100;
+
 	private static final int FLING_MIN_VELOCITY = 200;
+
 	private int numView = 0;
+
 	private ViewFlipper pager;
+
 	private TextView init_message_title, init_message_text;
 
 	@Override
@@ -74,6 +85,7 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 			@Override
 			public void onClick(View v) {
 				startLoginActivity();
+				EventUtil.Register_Login_Invite.rcpt_loginbutton(baseContext);
 			}
 		});
 		Button mSignupButton = (Button) findViewById(R.id.init_page_signup_button);
@@ -84,6 +96,7 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 				Intent loginIntent = new Intent(InitPageActivity.this, LoginActivity.class);
 				loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, false);
 				startActivityForResult(loginIntent, REQUEST_CODE_LOGIN);
+				EventUtil.Register_Login_Invite.rcpt_registerbutton(baseContext);
 			}
 		});
 		pager = (ViewFlipper) findViewById(R.id.intro_pager);
@@ -208,18 +221,18 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 
 	public void onCheckMain(int n) {
 		switch (n) {
-		case 0:
-			init_message_title.setText(R.string.init_message_title_one);
-			init_message_text.setText(R.string.init_message_text_one);
-			break;
-		case 1:
-			init_message_title.setText(R.string.init_message_title_two);
-			init_message_text.setText(R.string.init_message_text_two);
-			break;
-		case 2:
-			init_message_title.setText(R.string.init_message_title_three);
-			init_message_text.setText(R.string.init_message_text_three);
-			break;
+			case 0:
+				init_message_title.setText(R.string.init_message_title_one);
+				init_message_text.setText(R.string.init_message_text_one);
+				break;
+			case 1:
+				init_message_title.setText(R.string.init_message_title_two);
+				init_message_text.setText(R.string.init_message_text_two);
+				break;
+			case 2:
+				init_message_title.setText(R.string.init_message_title_three);
+				init_message_text.setText(R.string.init_message_text_three);
+				break;
 		}
 		pager.setDisplayedChild(n);
 		mPageIndicator.setActiveDot(n);
