@@ -224,8 +224,10 @@ public class Constants {
 	public static final String BIND_PHONE_NUMBER = "+61427293943";
 
 	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
-	
+
 	public static final String FEEDBACK_EMAIL = "rctalk.service@gmail.com";
+
+	public static final String FLURRY_KEY = "93576P6KMW7VYQDQCR3J";
 
 	// 头像图片本地缓存地址
 
