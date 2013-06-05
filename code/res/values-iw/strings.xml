@@ -1,44 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    Copyright 2012 Facebook
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
--->
-
 <resources>
-    <string name="com_facebook_loginview_log_out_button">התנתק</string>
-    <string name="com_facebook_loginview_log_in_button">התחבר</string>
-    <string name="com_facebook_loginview_logged_in_as">מחובר בשם: %1$s</string>
-    <string name="com_facebook_loginview_logged_in_using_facebook">מחובר באמצעות פייסבוק</string>
-    <string name="com_facebook_loginview_log_out_action">התנתק</string>
-    <string name="com_facebook_loginview_cancel_action">בטל</string>
-    <string name="com_facebook_logo_content_description">פייסבוק לוגו</string>
-    <string name="com_facebook_usersettingsfragment_log_in_button">התחבר&#8230;</string>
-    <string name="com_facebook_usersettingsfragment_logged_in">מחובר</string>
-    <string name="com_facebook_usersettingsfragment_not_logged_in">לא מחובר</string>
-    <string name="com_facebook_placepicker_subtitle_format">%1$s • %2$,d היו פה</string>
-    <string name="com_facebook_placepicker_subtitle_catetory_only_format">%1$s</string>
-    <string name="com_facebook_placepicker_subtitle_were_here_only_format">%1$,d היו פה</string>
-    <string name="com_facebook_picker_done_button_text">בצע</string>
-    <string name="com_facebook_choose_friends">בחר חברים</string>
-    <string name="com_facebook_nearby">קרוב אליי</string>
-    <string name="com_facebook_loading">..מעלה</string>
-    <string name="com_facebook_internet_permission_error_title">AndroidManifest שגיאת</string>
-    <string name="com_facebook_internet_permission_error_message">ההתחברות לתצוגת אתר דורשת אישור אינטרנט</string>
-    <string name="com_facebook_requesterror_web_login">.כדי לאפשר מחדש לאפליקציה להתחבר עם פייסבוק https://www.facebook.com או https://m.facebook.com אנא היכנס דרך</string>
-    <string name="com_facebook_requesterror_relogin">.האפליקציה אינה מחוברת לפייסבוק, אנא היכנס וחבר מחדש את האפליקציה</string>
-    <string name="com_facebook_requesterror_password_changed">.הסיסמה שלך בפייסבוק השתנתה, אנא חבר מחדש את האפליקציה עם פייסבוק</string>
-    <string name="com_facebook_requesterror_reconnect">.ארעה שגיאה בעת החיבור עם פייסבוק, חבר בבקשה מחדש את האפליקציה עם פייסבוק</string>
-    <string name="com_facebook_requesterror_permissions">.חיבור האפליקציה עם פייסבוק נכשל בשל הרשאות לא מספקות, אנא הענק הרשאות לאפליקציה בכדי שהפעולה תוכל להתבצע</string>
-    <string name="com_facebook_dialogloginactivity_ok_button">אישור</string>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">RC כניסת משתמש</string>
+    <string name="init_page_signup">משתמש RC חדש</string>
+    <string name="init_message_title_one">שתף את הרגע</string>
+    <string name="init_message_text_one">שתף רגעים מיוחדים מאוד בחייך</string>
+    <string name="init_message_title_two">עריכת תמונה</string>
+    <string name="init_message_text_two">הוסף עניין לתמונות עם שמע וגרפיקה</string>
+    <string name="init_message_title_three">מחיקה מתוזמנת</string>
+    <string name="init_message_text_three">התמונות יימחקו אוטומטית מייד לאחר הצפיה בהן, אין בעית פרטיות.</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">לאחר הרישום תוכל להשתמש בו לכניסה לכל יישום RC.</string>
+    <string name="registe_email_hint">דוא"ל</string>
+    <string name="login_password_hint">(סיסמה (6-20 תווים</string>
+    <string name="init_regist_agreement">הרישום משמעותו הסכמה לתנאי השירות ולמדיניות השמירה על הפרטיות שלנו.</string>
+    <string name="landing_page_signup">הירשם</string>
+    <string name="login_title_bubble_text">משתמש RC חדש</string>
+    <string name="login_nick_hint">(כינוי (עד 20 תווים</string>
+    <string name="register_confirm_email_address">%s:כתובת הדוא"ל שלך היא</string>
+    <string name="modify">ערוך</string>
+    <string name="ok">אישור</string>
+    <string name="registe_email_error">תבנית דוא"ל שגויה</string>
+    <string name="register_password_error">הזן סיסמה באורך 6-20 תווים</string>
+    <string name="net_error">אין חיבור לרשת</string>
+    <string name="login_title_login_bubble_text">RC כניסת משתמש</string>
+    <string name="login_username_hint">דוא"ל,RCID</string>
+    <string name="login_forget_psw_hint">שכחת סיסמה</string>
+    <string name="landing_page_login">התחבר</string>
+    <string name="login_use_account_below">בחר חשבונות RC למטה</string>
+    <string name="user_other_account">השתמש בחשבון RC אחר לכניסה</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">הזן כתובת דוא"ל</string>
+    <string name="forget_password_reset_text">%s איפוס סיסמה - מכתב דוא"ל נשלח אל</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">חפש חברים</string>
+    <string name="firend_list_invite_friend_title">הזמן חברים</string>
+    <string name="firend_list_used_photochat_friend_title">PhotoTalk‏-‎חברים ב</string>
+    <string name="search_hint">חיפוש ללא תוצאות</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">לפני ‎%1$d‏ דקות</string>
+    <string name="second">לפני ‎%1$d‏ שניות</string>
+    <string name="hour">לפני ‎%1$d‏ שעו</string>
+    <string name="day">לפני ‎%1$d‏‏ ימים</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">שולח</string>
+    <string name="send_sended">%1$s-נשלח</string>
+    <string name="send_received"> %1$s-נמסר</string>
+    <string name="send_looked">%1$s-נקרא</string>
+    <string name="send_fail">השליחה נכשלה, גע כדי לנסות שנית</string>
+    <string name="receive_downloading">טוען</string>
+    <string name="receive_loaded">לחץ לקריאה</string>
+    <string name="receive_looked">%1$s-נקרא</string>
+    <string name="receive_fail">הטעינה נכשלה, גע כדי לנסות שנית</string>
+    <string name="added_by_friend">%1$s הוסיף אותי כחבר</string>
+    <string name="added_friend_back">הוספתי את %1$s כחבר</string>
+    <string name="added_friend">%1$s הוסיף אותי כחבר</string>
+    <string name="added_friend_confirm">הוספתי את %1$s כחבר</string>
+    <string name="operation">פעולה</string>
+    <string name="resend">שלח שנית</string>
+    <string name="delete">מחק</string>
+    <string name="reload">טען שנית</string>
+    <string name="will_quit">הקלק שוב על "חזרה" כדי לצאת מהיישום</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">אולי מאוחר יותר</string>
+    <string name="update_now">עדכן עכשיו</string>
+    <string name="update_dialog_title">עדכונים זמינים!</string>
+    <string name="bind_phone_attention">רשום את מספר הטלפון שלך כדי לאפשר לחבריך למצוא אותך בקלות</string>
+    <string name="bind_now">רשום עכשיו</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">ההקלטה קצרה מדי</string>
+    <string name="voice_record">לחץ להקלטה</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">שלח אל:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">חברים</string>
+    <string name="my_friends_added">החברים שלי</string>
+    <string name="my_firend_suggested_title">המלצות חבר</string>
+    <string name="add_friend_title">הוסף חברים</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">הוסף כחבר</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">עוד</string>
+    <string name="friend_dynamic">עדכוני חבר</string>
+    <string name="my_account">חשבון ‎RC‏ שלי</string>
+    <string name="setting">הגדרות</string>
+    <string name="about">אודות</string>
+    <string name="setting_page_clean_history">נקה היסטוריה</string>
+    <string name="clear_infos_message">לנקות היסטוריה, בטוח?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">חשבון %1$s נוסף כחברים</string>
+    <string name="add_app">חשבון %1$s צורף</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">לא מחובר</string>
+    <string name="phone_unbind">לא רשום</string>
+    <string name="setting_update_login_password">שנה את סיסמת הכניסה</string>
+    <string name="login_out_account">יציאה</string>
+    <string name="dialog_confirm_deauth">האם להתנתק, בטוח?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">שנה את סיסמת הכניסה</string>
+    <string name="input_current_password">הזן את סיסמתך הנוכחית</string>
+    <string name="forget_password_title">שכחת סיסמה</string>
+    <string name="change_password_edit_title">הגדר סיסמה חדשה</string>
+    <string name="change_password_new_password_hint">סיסמה חדשה</string>
+    <string name="change_password_confirm_password_hint">הזן שנית</string>
+    <string name="two_password_not_same">הוזנו סיסמאות שונות</string>
+    <string name="password_change_complete">הסיסמה שונתה</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">מספר הטלפון נרשם</string>
+    <string name="bind_phone_input_phone_hint">הזן את מספר הטלפון שלך</string>
+    <string name="next_number">קבל קוד אימות(%1$d)</string>
+    <string name="sms_reciver_info">אתה תקבל את קוד האימות במסרון</string>
+    <string name="input_validate">הזן קוד אימות</string>
+    <string name="commit">הגש</string>
+    <string name="resend_sms_number">קבל שנית את קוד האימות(%1$d)</string>
+    <string name="resend_sms_second">קבל שנית את קוד האימות(%1$d)</string>
+    <string name="phone_number_validate">אימות מספר טלפון</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">פרופיל</string>
+    <string name="nick">כינוי</string>
+    <string name="sex">מגדר</string>
+    <string name="birthday">יום הולדת</string>
+    <string name="settings_update_name_title">כינוי</string>
+    <string name="settings_select_sex">מגדר</string>
+    <string name="male">זכר</string>
+    <string name="famale">נקבה</string>
+    <string name="select_birthday">יום הולדת</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">מי יכול לשלוח אלי תמונות</string>
+    <string name="receive_all">כל אחד</string>
+    <string name="receive_friend">החברים שלי</string>
+    <string name="dynamic_setting">שתף את העדכונים שלי עם חברים</string>
+    <string name="trends_share">שתף</string>
+    <string name="trends_hide">אל תשתף</string>
+
+    <!-- 关于 -->
+    <string name="check_update">בדוק עדכונים</string>
+    <string name="contact_us">צור קשר</string>
+    <string name="term_service">תנאי שירות</string>
+    <string name="compact">מדיניות פרטיות</string>
+    <string name="no_new_version">Phototalkהיא הגרסה האחרונה</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">בחר פרופיל</string>
+    <string name="or">או</string>
+    <string name="use_new_info">השתמש בפרופיל חדש</string>
+	<string name="other_device_login">חשבונך נמצא כבר בשימוש בהתקן אחר.</string>
+	<string name="relogin">אישור</string>
+    <string name="join_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
+    <string name="invite_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
+	<string name="contact_friend">אנשי קשר:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">מחכות לך %1$d הודעות חדשות</string>
+    <string name="gcm_friend">מישהו הוסיף אותך כחבר</string>
+    <string name="friend_detail_send_photo_hint_text">שלח תמונה</string>
+
+
 </resources>

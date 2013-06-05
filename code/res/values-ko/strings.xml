@@ -1,0 +1,187 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">RC 사용자 로그인</string>
+    <string name="init_page_signup">새 RC 사용자</string>
+    <string name="init_message_title_one">소중한 순간 공유하기</string>
+    <string name="init_message_text_one">인생의 특별한 순간순간을 공유해 보세요</string>
+    <string name="init_message_title_two">사진 편집</string>
+    <string name="init_message_text_two">오디오와 그래피티로 사진을 보다 재미있게 꾸며 보세요</string>
+    <string name="init_message_title_three">제한 시간 적용 삭제</string>
+    <string name="init_message_text_three">사진을 본 후에 자동으로 삭제되기 때문에 개인정보 보호 염려가 없습니다</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">가입 후에 이 정보를 이용해서 다른 모든 RC 앱에 로그인할 수 있습니다.</string>
+    <string name="registe_email_hint">이메일</string>
+    <string name="login_password_hint">암호(6-20 자) </string>
+    <string name="init_regist_agreement">가입 하시면 저희 서비스 이용약관과 개인정보보호 정책에 동의하시는 것으로 간주됩니다.</string>
+    <string name="landing_page_signup">가입</string>
+    <string name="login_title_bubble_text">새 RC 사용자</string>
+    <string name="login_nick_hint">별칭 (20 자 미만) </string>
+    <string name="register_confirm_email_address">이메일 주소:%s</string>
+    <string name="modify">편집</string>
+    <string name="ok">확인</string>
+    <string name="registe_email_error">이메일 형식 에러</string>
+    <string name="register_password_error">6-20 자 길이로 암호를 입력해 주십시오</string>
+    <string name="net_error">네트워크 연결 없음</string>
+    <string name="login_title_login_bubble_text">RC 사용자 로그인</string>
+    <string name="login_username_hint">이메일,RCID</string>
+    <string name="login_forget_psw_hint">암호 분실</string>
+    <string name="landing_page_login">로그인</string>
+    <string name="login_use_account_below">아래에서 RC 계정 선택</string>
+    <string name="user_other_account">다른 RC 계정으로 로그인</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">이메일 주소 입력</string>
+    <string name="forget_password_reset_text">으로 암호 재설정 이메일이 발송되었습니다</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">친구 찾기</string>
+    <string name="firend_list_invite_friend_title">친구 초대</string>
+    <string name="firend_list_used_photochat_friend_title">PhotoTalk 친구</string>
+    <string name="search_hint">검색 결과 없음</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">%1$d 분 전</string>
+    <string name="second">%1$d 초 전</string>
+    <string name="hour">%1$d 시간 전</string>
+    <string name="day">%1$d 일 전</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">보내는 중</string>
+    <string name="send_sended">%1$s-보내기 완료</string>
+    <string name="send_received"> %1$s-전달함</string>
+    <string name="send_looked">%1$s-읽음</string>
+    <string name="send_fail">보내기 실패. 눌러서 다시 시도하십시오</string>
+    <string name="receive_downloading">로드 중</string>
+    <string name="receive_loaded">%1$s-눌러서 읽기</string>
+    <string name="receive_looked">%1$s-읽음</string>
+    <string name="receive_fail">로드 실패. 눌러서 다시 시도하십시오</string>
+    <string name="added_by_friend">%1$s 님이 친구로 추가하셨습니다</string>
+    <string name="added_friend_back">%1$s 님을 친구로 추가합니다</string>
+    <string name="added_friend">%1$s 님이 친구로 추가하셨습니다</string>
+    <string name="added_friend_confirm">%1$s 님을 친구로 추가합니다</string>
+    <string name="operation">작업</string>
+    <string name="resend">다시 보내기</string>
+    <string name="delete">삭제</string>
+    <string name="reload">다시 로드</string>
+    <string name="will_quit">\'뒤로\'를 한 번 더 클릭하면 앱을 종료합니다</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">나중에</string>
+    <string name="update_now">지금 업데이트</string>
+    <string name="update_dialog_title">업데이트 이용 가능!</string>
+    <string name="bind_phone_attention">친구들이 여러분을 보다 쉽게 찾을 수 있도록 전화 번호를 등록해 주세요</string>
+    <string name="bind_now">지금 등록</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">기록 내용이 너무 짧습니다</string>
+    <string name="voice_record">눌러서 기록</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">다음으로 보내기:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">친구</string>
+    <string name="my_friends_added">내 친구</string>
+    <string name="my_firend_suggested_title">친구 추천</string>
+    <string name="add_friend_title">친구 추가</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">친구로 추가</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">기타</string>
+    <string name="friend_dynamic">친구 업데이트</string>
+    <string name="my_account">내 RC 계정</string>
+    <string name="setting">설정</string>
+    <string name="about">관련 정보</string>
+    <string name="setting_page_clean_history">과거 기록 정리</string>
+    <string name="clear_infos_message">모든 기록을 정리하시겠습니까?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">%1$s님을 친구로 추가했습니다</string>
+    <string name="add_app">%1$s님이 가입하셨습니다</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">연결되지 않음</string>
+    <string name="phone_unbind">등록되지 않음</string>
+    <string name="setting_update_login_password">로그인 암호 변경</string>
+    <string name="login_out_account">로그아웃</string>
+    <string name="dialog_confirm_deauth">연결을 해제하시겠습니까?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">로그인 암호 변경</string>
+    <string name="input_current_password">현재 암호를 입력해 주세요</string>
+    <string name="forget_password_title">암호 분실</string>
+    <string name="change_password_edit_title">새 암호 설정</string>
+    <string name="change_password_new_password_hint">새 암호</string>
+    <string name="change_password_confirm_password_hint">다시 입력해 주세요</string>
+    <string name="two_password_not_same">입력된 암호가 다릅니다</string>
+    <string name="password_change_complete">암호 변경됨</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">전화 번호 등록</string>
+    <string name="bind_phone_input_phone_hint">전화 번호 입력</string>
+    <string name="next_number">인증 코드 얻기(%1$d)</string>
+    <string name="sms_reciver_info">인증 코드를 포함한 SMS가 발송됩니다</string>
+    <string name="input_validate">인증 코드를 입력해 주십시오</string>
+    <string name="commit">보내기</string>
+    <string name="resend_sms_number">인증 코드 다시 얻기(%1$d)</string>
+    <string name="resend_sms_second">인증 코드 다시 얻기(%1$d)</string>
+    <string name="phone_number_validate">전화 번호 검증</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">프로필</string>
+    <string name="nick">별칭</string>
+    <string name="sex">성별</string>
+    <string name="birthday">생일</string>
+    <string name="settings_update_name_title">별칭</string>
+    <string name="settings_select_sex">성별</string>
+    <string name="male">남성</string>
+    <string name="famale">여성</string>
+    <string name="select_birthday">생일</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">나에게 사진을 보낼 수 있는 사람</string>
+    <string name="receive_all">모든 사람</string>
+    <string name="receive_friend">내 친구</string>
+    <string name="dynamic_setting">친구와 내 업데이트 내용 공유</string>
+    <string name="trends_share">공유</string>
+    <string name="trends_hide">공유하지 않음</string>
+
+    <!-- 关于 -->
+    <string name="check_update">업데이트 확인</string>
+    <string name="contact_us">저희에게 연락하십시오</string>
+    <string name="term_service">서비스 약관</string>
+    <string name="compact">개인정보보호 정책</string>
+    <string name="no_new_version">Phototalk이 최신 버전입니다</string>
+
+    <!-- 登录个人信息页 -->
+    <string name="use_info_below">프로필 선택</string>
+    <string name="or">또는</string>
+    <string name="use_new_info">새 프로필 사용</string>
+    <string name="other_device_login">해당 계정이 이미 다른 장치에서 사용 중입니다.</string>
+    <string name="relogin">확인</string>
+    <string name="join_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크:http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
+    <string name="invite_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크:http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
+    <string name="contact_friend">연락처:</string>
+    <string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">새 메시지%1$d개가 있습니다</string>
+    <string name="gcm_friend">다른 사람이 사용자를 친구로 추가했습니다</string>
+    <string name="friend_detail_send_photo_hint_text">사진 보내기</string>
+
+
+</resources>
