@@ -165,14 +165,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		MobclickAgent.onResume(this);
 		willQuit = false;
-	}
-	
-	@Override
-	protected void onPause(){
-		super.onPause();
-		MobclickAgent.onPause(this);
 	}
 
 	private void checkBindPhone() {
