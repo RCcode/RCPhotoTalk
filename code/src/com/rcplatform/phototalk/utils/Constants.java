@@ -37,7 +37,7 @@ public class Constants {
 
 	public static List<AppInfo> installedApps = new ArrayList<AppInfo>();
 
-	public static String VK_API_ID = "2904017";
+	public static String VK_API_ID = "3567525";
 
 	private static final String DB_DIR = "db";
 
@@ -90,7 +90,8 @@ public class Constants {
 				}
 				fos.close();
 				is.close();
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
@@ -220,11 +221,11 @@ public class Constants {
 
 	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
 
-	public static final String BIND_PHONE_NUMBER = "+18146193618";
+	public static final String BIND_PHONE_NUMBER = "+61427293943";
 
 	public static final String BIND_PHONE_NUMBER_BACKUP = "+18587369880";
-
-	// public static final String BIND_PHONE_NUMBER_BACKUP = "+8613718034941";
+	
+	public static final String FEEDBACK_EMAIL = "rctalk.service@gmail.com";
 
 	// 头像图片本地缓存地址
 

@@ -38,7 +38,7 @@ import org.json.JSONObject;
  */
 public final class ServerUtilities {
 
-	public static final String SENDER_ID = "867870064836";
+	public static final String SENDER_ID = "302738588217";
 
 	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
 

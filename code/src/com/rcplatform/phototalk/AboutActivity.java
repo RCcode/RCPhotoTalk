@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
 
 public class AboutActivity extends BaseActivity implements OnClickListener,
@@ -51,7 +52,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 			finish();
 			break;
 		case R.id.contact_us_btn:
-			Intent email = new Intent(android.content.Intent.ACTION_SENDTO,Uri.fromParts("mailto", "rctalk.service@gmail.com", null));
+			Intent email = new Intent(android.content.Intent.ACTION_SENDTO,Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
 			String emailSubject = SystemMessageUtil.getLanguage(baseContext)
 					+ SystemMessageUtil.getAppName(baseContext)
 					+ SystemMessageUtil.getPhoneNumber(baseContext)
