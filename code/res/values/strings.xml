@@ -155,8 +155,9 @@
     <string name="rcid">RC ID</string>
 
     <!-- add friends -->
-    <string name="contact_friend">通讯录好友</string>
-    <string name="facebook_friend">facebook好友</string>
+    <string name="contact_friend">通讯录:</string>
+    <string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VK:</string>
     <!-- <string name="phone">电话号码</string> -->
 
     <string name="next">下一步</string>
@@ -305,5 +306,6 @@
     <string name="bind_now">马上注册</string>
     <string name="bind_later">以后再说</string>
     <string name="or">或者</string>
+    <string name="facebook_app_id">447751798632401</string>
 
 </resources>

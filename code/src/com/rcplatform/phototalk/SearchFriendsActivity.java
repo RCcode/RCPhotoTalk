@@ -280,12 +280,18 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
 				TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
 				switch (source.getAttrType()) {
-					case FriendType.CONTACT:
-						tvFrom.setText(R.string.contact_friend);
-						break;
-					case FriendType.FACEBOOK:
-						tvFrom.setText(R.string.facebook_friend);
-						break;
+				case FriendType.CONTACT:
+					tvFrom.setText(R.string.contact_friend);
+					break;
+				case FriendType.FACEBOOK:
+					tvFrom.setText(R.string.facebook_friend);
+					break;
+				case FriendType.VK:
+					tvFrom.setText(R.string.vk_friend);
+					break;
+				default:
+					tvFrom.setText(null);
+					break;
 				}
 				tvName.setText(source.getName());
 			}
