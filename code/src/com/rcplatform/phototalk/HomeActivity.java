@@ -79,6 +79,7 @@ import com.rcplatform.phototalk.views.SnapShowListener;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
+import com.umeng.analytics.MobclickAgent;
 
 /**
  * 主界面. <br>
@@ -164,7 +165,14 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	@Override
 	protected void onResume() {
 		super.onResume();
+		MobclickAgent.onResume(this);
 		willQuit = false;
+	}
+	
+	@Override
+	protected void onPause(){
+		super.onPause();
+		MobclickAgent.onPause(this);
 	}
 
 	private void checkBindPhone() {
