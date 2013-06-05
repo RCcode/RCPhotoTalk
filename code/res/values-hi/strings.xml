@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">RC उपयोगकर्ता लॉगइन</string>
+    <string name="init_page_signup">नया RC उपयोगकर्ता</string>
+    <string name="init_message_title_one">अपने पल साझा करें</string>
+    <string name="init_message_text_one">अपने जीवन का हर ख़ास पल साझा करें</string>
+    <string name="init_message_title_two">फ़ोटो संपादन</string>
+    <string name="init_message_text_two">ऑडियो और भित्ति-चित्रण के साथ फ़ोटो और अधिक रोचक बनाएँ</string>
+    <string name="init_message_title_three">समयबद्ध हटाना</string>
+    <string name="init_message_text_three">देखे जाने के बाद फ़ोटो स्वतः हटा दी जाएँगी, कोई गोपनीयता की चिंता नहीं</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">साइन अप करने के बाद, आप इसका इस्तेमाल किसी भी RC ऐप में लॉग इन करने के लिए कर सकते हैं।</string>
+    <string name="registe_email_hint">ई-मेल</string>
+    <string name="login_password_hint">पासवर्ड (6-20 वर्ण) </string>
+    <string name="init_regist_agreement">साइन अप का तात्पर्य है कि आप हमारी सेवा की शर्तों और गोपनीयता नीति को स्वीकार करते हैं।</string>
+    <string name="landing_page_signup">साइन अप करें</string>
+    <string name="login_title_bubble_text">नया RC उपयोगकर्ता</string>
+    <string name="login_nick_hint">उपनाम (20 वर्ण से कम) </string>
+    <string name="register_confirm_email_address">आपका ईमेल पता है:%s</string>
+    <string name="modify">संपादित करें</string>
+    <string name="ok">ठीक</string>
+    <string name="registe_email_error">ईमेल फ़ॉरमेट त्रुटि</string>
+    <string name="register_password_error">कृपया 6-20 वर्ण का पासवर्ड दर्ज करें</string>
+    <string name="net_error">कोई नेटवर्क कनेक्शन नहीं है</string>
+    <string name="login_title_login_bubble_text">RC उपयोगकर्ता लॉगइन</string>
+    <string name="login_username_hint">ई-मेल,RCID</string>
+    <string name="login_forget_psw_hint">पासवर्ड भूल गए</string>
+    <string name="landing_page_login">लॉगिन</string>
+    <string name="login_use_account_below">नीचे RC खाता चुनें</string>
+    <string name="user_other_account">लॉगइन करने के लिए अन्य RC खाते का उपयोग करें</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">कृपया अपना ईमेल पता दर्ज करें</string>
+    <string name="forget_password_reset_text">पासवर्ड रीसेट ई-मेल यहाँ भेजी गई है %s</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">मित्र खोजें</string>
+    <string name="firend_list_invite_friend_title">मित्रों को आमंत्रित करें</string>
+    <string name="firend_list_used_photochat_friend_title">PhotoTalk में मित्र</string>
+    <string name="search_hint">इस खोज के कोई परिणाम नहीं हैं</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">%1$d मिनट पहले</string>
+    <string name="second">%1$d सेकंड पहले</string>
+    <string name="hour">%1$d घंटे पहले</string>
+    <string name="day">%1$d दिन पहले</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">भेजा जा रहा है</string>
+    <string name="send_sended">%1$s-प्रेषित</string>
+    <string name="send_received"> %1$s-वितरित</string>
+    <string name="send_looked">%1$s-पठित</string>
+    <string name="send_fail">प्रेषण विफल, पुनः प्रयास करने के लिए टैप करें</string>
+    <string name="receive_downloading">लोड हो रहा है</string>
+    <string name="receive_loaded">%1$s-पढ़ने के लिए दबाएँ</string>
+    <string name="receive_looked">%1$s-पठित</string>
+    <string name="receive_fail">लोड करना विफल, पुनः प्रयास करने के लिए टैप करें</string>
+    <string name="added_by_friend">%1$s मुझे मित्र के रूप में जोड़ा है</string>
+    <string name="added_friend_back">मैं %1$s को मित्र के रूप में जोड़ता हूँ</string>
+    <string name="added_friend">%1$s मुझे मित्र के रूप में जोड़ा है</string>
+    <string name="added_friend_confirm">मैं %1$s को मित्र के रूप में जोड़ता हूँ</string>
+    <string name="operation">संचालन</string>
+    <string name="resend">पुनः भेजें</string>
+    <string name="delete">हटाएँ</string>
+    <string name="reload">पुनः लोड करें</string>
+    <string name="will_quit">ऐप से बाहर निकलने के लिए फिर से "वापस" क्लिक करें</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">शायद बाद में</string>
+    <string name="update_now">अभी अद्यतन करें</string>
+    <string name="update_dialog_title">अद्यतन उपलब्ध!</string>
+    <string name="bind_phone_attention">अपना फ़ोन नंबर पंजीकृत करें ताकि आपके मित्र आपको और आसानी से ढूँढ़ सकें</string>
+    <string name="bind_now">अभी पंजीकरण करें</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">रिकॉर्डिंग बहुत छोटी है</string>
+    <string name="voice_record">रिकॉर्ड करने के लिए दबाएँ</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">इन्हें भेजें:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">मित्र</string>
+    <string name="my_friends_added">मेरे मित्र</string>
+    <string name="my_firend_suggested_title">मित्र की सिफ़ारिशें</string>
+    <string name="add_friend_title">मित्र जोड़ें</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">मित्र के रूप में जोड़ें</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">और</string>
+    <string name="friend_dynamic">मित्र अद्यतन</string>
+    <string name="my_account">मेरा RC खाता</string>
+    <string name="setting">सेटिंग्स</string>
+    <string name="about">परिचय</string>
+    <string name="setting_page_clean_history">इतिहास साफ़ करें</string>
+    <string name="clear_infos_message">क्या आप वाकई पूरा इतिहास साफ़ करना चाहते हैं?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">जोड़ा गया %1$s मित्र के रूप में</string>
+    <string name="add_app">शामिल हुए %1$s</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">कनेक्टेड नहीं</string>
+    <string name="phone_unbind">पंजीकृत नहीं</string>
+    <string name="setting_update_login_password">लॉगइन पासवर्ड बदलें</string>
+    <string name="login_out_account">लॉग आउट करें</string>
+    <string name="dialog_confirm_deauth">क्या आप वाकई डिस्कनेक्ट करना चाहते हैं?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">लॉगइन पासवर्ड बदलें</string>
+    <string name="input_current_password">कृपया अपना मौजूदा पासवर्ड दर्ज करें</string>
+    <string name="forget_password_title">पासवर्ड भूल गए</string>
+    <string name="change_password_edit_title">नया पासवर्ड सेट करें</string>
+    <string name="change_password_new_password_hint">नया पासवर्ड</string>
+    <string name="change_password_confirm_password_hint">कृपया पुनः दर्ज करें</string>
+    <string name="two_password_not_same">दर्ज किए गए पासवर्ड भिन्न हैं</string>
+    <string name="password_change_complete">पासवर्ड बदला गया</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">फ़ोन नंबर पंजीकरण</string>
+    <string name="bind_phone_input_phone_hint">अपना फ़ोन नंबर दर्ज करें</string>
+    <string name="next_number">सत्यापन कोड प्राप्त करें(%1$d)</string>
+    <string name="sms_reciver_info">आपको सत्यापन कोड के साथ SMS मिलेगा</string>
+    <string name="input_validate">कृपया सत्यापन कोड दर्ज करें</string>
+    <string name="commit">सबमिट करें</string>
+    <string name="resend_sms_number">सत्यापन कोड पुनः प्राप्त करें(%1$d)</string>
+    <string name="resend_sms_second">सत्यापन कोड पुनः प्राप्त करें(%1$d)</string>
+    <string name="phone_number_validate">फ़ोन नंबर सत्यापन</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">प्रोफ़ाइल</string>
+    <string name="nick">उपनाम</string>
+    <string name="sex">लिंग</string>
+    <string name="birthday">जन्मदिन</string>
+    <string name="settings_update_name_title">उपनाम</string>
+    <string name="settings_select_sex">लिंग</string>
+    <string name="male">नर</string>
+    <string name="famale">महिला</string>
+    <string name="select_birthday">जन्मदिन</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">मुझे फ़ोटो कौन भेज सकता है</string>
+    <string name="receive_all">कोई भी</string>
+    <string name="receive_friend">मेरे मित्र</string>
+    <string name="dynamic_setting">मित्रों के साथ मेरे अद्यतन साझा करें</string>
+    <string name="trends_share">साझा करें</string>
+    <string name="trends_hide">साझा न करें</string>
+
+    <!-- 关于 -->
+    <string name="check_update">अद्यतन के लिए जाँच करें</string>
+    <string name="contact_us">हमसे संपर्क करें</string>
+    <string name="term_service">सेवा की शर्तें</string>
+    <string name="compact">गोपनीयता नीतियाँ</string>
+    <string name="no_new_version">Phototalkनवीनतम संस्करण है</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">प्रोफ़ाइल चुनें</string>
+    <string name="or">या</string>
+    <string name="use_new_info">इसमें नई प्रोफ़ाइल का इस्तेमाल</string>
+	<string name="other_device_login">आपका खाते का पहले ही अन्य डिवाइस पर इस्तेमाल हो रहा है।</string>
+	<string name="relogin">ठीक</string>
+    <string name="join_message">ऑडियो फ़ोटो, नियत हटाना! RC PhotoTalk में शामिल हों और आनंद साझा करें! लिंक डाउनलोड करें: http://rctalk.me खाता बनाने के बाद मेरी ID %1$s जोड़ें!</string>
+    <string name="invite_message">ऑडियो फ़ोटो, नियत हटाना! RC PhotoTalk में शामिल हों और आनंद साझा करें! लिंक डाउनलोड करें: http://rctalk.me खाता बनाने के बाद मेरी ID %1$s जोड़ें!</string>
+	<string name="contact_friend">संपर्क:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">आपका %1$d नया संदेश है(हैं)</string>
+    <string name="gcm_friend">किसी ने आपको मित्र के रूप में जोड़ा है</string>
+    <string name="friend_detail_send_photo_hint_text">फ़ोटो भेजें</string>
+
+
+</resources>

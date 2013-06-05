@@ -33,6 +33,7 @@ import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -145,15 +146,18 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			showImagePickMenu(v, CROP_HEAD_IMAGE);
 			break;
 		case R.id.rela_edit_nick:
+			EventUtil.More_Setting.rcpt_nameedit(baseContext);
 			Intent intentName = new Intent(this, UpdateNameActivity.class);
 			intentName.setAction("setting_update_name");
 			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getNickName());
 			startActivityForResult(intentName, REQUESTCODE_NAME);
 			break;
 		case R.id.rela_edit_sex:
+			EventUtil.More_Setting.rcpt_genderedit(baseContext);
 			showSexChooseDialog();
 			break;
 		case R.id.rela_edit_birthday:
+			EventUtil.More_Setting.rcpt_ageedit(baseContext);
 			showDateDialog();
 			break;
 		}

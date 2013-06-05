@@ -175,7 +175,7 @@ public class EventUtil {
 		}
 
 	}
-	
+
 	public static class Friends_Addfriends {
 
 		private static final String EVENT_NAME = "Friends_Addfriends";
@@ -187,35 +187,147 @@ public class EventUtil {
 		static public void rcpt_friends_profileview(Context ctx) {
 			onEvent(ctx, "rcpt_friends_profileview");
 		}
-		
+
 		static public void rcpt_friends_longpress(Context ctx) {
 			onEvent(ctx, "rcpt_friends_longpress");
 		}
-		
+
 		static public void rcpt_friendsdelete(Context ctx) {
 			onEvent(ctx, "rcpt_friendsdelete");
 		}
-		
+
 		static public void rcpt_addfriends(Context ctx) {
 			onEvent(ctx, "rcpt_addfriends");
 		}
-		
-		
+
 		static public void rcpt_facebok(Context ctx) {
 			onEvent(ctx, "rcpt_facebok");
 		}
-		
+
 		static public void rcpt_vk(Context ctx) {
 			onEvent(ctx, "rcpt_vk");
 		}
+
 		static public void rcpt_search(Context ctx) {
 			onEvent(ctx, "rcpt_search");
 		}
+
 		static public void rcpt_profile_takephotobutton(Context ctx) {
 			onEvent(ctx, "rcpt_friends_profileview");
 		}
+
 		static public void rcpt_profile_rcapp(Context ctx) {
 			onEvent(ctx, "rcpt_friends_profileview");
+		}
+
+	}
+
+	public static class More_Setting {
+
+		private static final String EVENT_NAME = "More_Setting";
+
+		private static void onEvent(Context ctx, String label) {
+			MobclickAgent.onEvent(ctx, EVENT_NAME, label);
+		}
+
+		static public void rcpt_clear(Context ctx) {
+			onEvent(ctx, "rcpt_clear");
+		}
+
+		static public void rcpt_avataredit(Context ctx) {
+			onEvent(ctx, "rcpt_avataredit");
+		}
+
+		static public void rcpt_backgroundedit(Context ctx) {
+			onEvent(ctx, "rcpt_backgroundedit");
+		}
+
+		static public void rcpt_nameedit(Context ctx) {
+			onEvent(ctx, "rcpt_nameedit");
+		}
+
+		static public void rcpt_genderedit(Context ctx) {
+			onEvent(ctx, "rcpt_genderedit");
+		}
+
+		static public void rcpt_ageedit(Context ctx) {
+			onEvent(ctx, "rcpt_ageedit");
+		}
+
+		static public void rcpt_friendsupdate(Context ctx) {
+			onEvent(ctx, "rcpt_friendsupdate");
+		}
+
+		static public void rcpt_friendsupdate_profileview(Context ctx) {
+			onEvent(ctx, "rcpt_friendsupdate_profileview");
+		}
+
+		static public void rcpt_myaccount(Context ctx) {
+			onEvent(ctx, "rcpt_myaccount");
+		}
+
+		static public void rcpt_success_changepassword(Context ctx) {
+			onEvent(ctx, "rcpt_success_changepassword");
+		}
+		
+		static public void rcpt_changepasswordsbutton(Context ctx) {
+			onEvent(ctx, "rcpt_changepasswordsbutton");
+		}
+
+		static public void rcpt_facebookunlink(Context ctx) {
+			onEvent(ctx, "rcpt_facebookunlink");
+		}
+
+		static public void rcpt_vkunlink(Context ctx) {
+			onEvent(ctx, "rcpt_vkunlink");
+		}
+
+		static public void rcpt_phonenumber(Context ctx) {
+			onEvent(ctx, "rcpt_phonenumber");
+		}
+
+		static public void rcpt_getcode(Context ctx) {
+			onEvent(ctx, "rcpt_getcode");
+		}
+
+		static public void rcpt_success_phonenumber(Context ctx) {
+			onEvent(ctx, "rcpt_success_phonenumber");
+		}
+
+		static public void rcpt_logout(Context ctx) {
+			onEvent(ctx, "rcpt_logout");
+		}
+
+		static public void rcpt_setting(Context ctx) {
+			onEvent(ctx, "rcpt_setting");
+		}
+
+		static public void rcpt_onlyfirends(Context ctx) {
+			onEvent(ctx, "rcpt_onlyfirends");
+		}
+
+		static public void rcpt_anyone(Context ctx) {
+			onEvent(ctx, "rcpt_anyone");
+		}
+
+		static public void rcpt_share(Context ctx) {
+			onEvent(ctx, "rcpt_share");
+		}
+
+		static public void rcpt_notshare(Context ctx) {
+			onEvent(ctx, "rcpt_notshare");
+		}
+
+		static public void rcpt_about(Context ctx) {
+			onEvent(ctx, "rcpt_about");
+		}
+
+		static public void rcpt_checkupdate(Context ctx) {
+			onEvent(ctx, "rcpt_checkupdate");
+		}
+
+		static public void rcpt_feedback(Context ctx) {
+			onEvent(ctx, "rcpt_feedback");
 		}
 
 	}

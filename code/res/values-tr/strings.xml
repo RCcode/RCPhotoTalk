@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">RC Kul Ot Açma -</string>
+    <string name="init_page_signup">Yeni RC Kul.</string>
+    <string name="init_message_title_one">Anı paylaşın</string>
+    <string name="init_message_text_one">Yaşamınızdaki her özel anı paylaşın</string>
+    <string name="init_message_title_two">Fotoğraf düzenleme</string>
+    <string name="init_message_text_two">Ses ve grafiti ile fotoğrafları daha ilginç hale getirin</string>
+    <string name="init_message_title_three">Zaman sınırlı silme</string>
+    <string name="init_message_text_three">Fotoğraflar, gizlilik endişesi olmadan, görüntülendikten sonra otomatik olarak silinecektir</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">Kaydolduktan sonra herhangi bir RC uygulamasına oturum açmak için bunu kullanabilirsiniz.</string>
+    <string name="registe_email_hint">E-posta</string>
+    <string name="login_password_hint">Parola (6-20 karak.)</string>
+    <string name="init_regist_agreement">Kaydolma, servis ve gizlilik politikaları koşullarımızın kabulünü kapsamaktadır.</string>
+    <string name="landing_page_signup">Kaydol</string>
+    <string name="login_title_bubble_text">Yeni RC Kul.</string>
+    <string name="login_nick_hint">Takma Ad (20 kar. daha az)</string>
+    <string name="register_confirm_email_address">E-posta Adresiniz:%s</string>
+    <string name="modify">Düzenle</string>
+    <string name="ok">Tamam</string>
+    <string name="registe_email_error">E-posta biçimi hatası</string>
+    <string name="register_password_error">Lütfen 6-20 karakter içeren bir parola girin</string>
+    <string name="net_error">Ağ bağlantısı yok</string>
+    <string name="login_title_login_bubble_text">RC Kul Ot Açma -</string>
+    <string name="login_username_hint">E-posta,RCID</string>
+    <string name="login_forget_psw_hint">Parolamı unuttum</string>
+    <string name="landing_page_login">oturum Aç</string>
+    <string name="login_use_account_below">Aşağıdaki RC Hesaplarını Seçin</string>
+    <string name="user_other_account">Otrm açmk içn bşk RC hsb kulln</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">Lütfen E-posta Adresinizi Girin</string>
+    <string name="forget_password_reset_text">Parola sıfırlama e-postası %s adresine gönderildi</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">Arkadaşları ara</string>
+    <string name="firend_list_invite_friend_title">Arkadaşları davet et</string>
+    <string name="firend_list_used_photochat_friend_title">PhotoTalk’daki Arkadaşlar</string>
+    <string name="search_hint">Bu arama için sonuç yok</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">%1$d dakika önce</string>
+    <string name="second">%1$d saniye önce</string>
+    <string name="hour">%1$d saat önce</string>
+    <string name="day">%1$d gün önce</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">Gönderiliyor</string>
+    <string name="send_sended">%1$s-Gönderildi</string>
+    <string name="send_received"> %1$s-Teslim edildi</string>
+    <string name="send_looked">%1$s-Okundu</string>
+    <string name="send_fail">Gönderme başarısız, tekrar denemek için dokunun</string>
+    <string name="receive_downloading">Yükleniyor</string>
+    <string name="receive_loaded">%1$s-Okumak için basın</string>
+    <string name="receive_looked">%1$s-Okundu</string>
+    <string name="receive_fail">Yük. başarısız, tekrar den. için dokunun</string>
+    <string name="added_by_friend">%1$sbeni arkadaş olarak ekledi</string>
+    <string name="added_friend_back">Ben %1$s’i arkadaş olarak ekliyorum</string>
+    <string name="added_friend">%1$sbeni arkadaş olarak ekledi</string>
+    <string name="added_friend_confirm">Ben %1$s’i arkadaş olarak ekliyorum</string>
+    <string name="operation">Operasyon</string>
+    <string name="resend">Yeniden Gönder</string>
+    <string name="delete">Sil</string>
+    <string name="reload">Yeniden Yükle</string>
+    <string name="will_quit">Uygulamadan çıkmak için tekrar “Geri” üzerine tıklatın</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">Belki Daha Sonra</string>
+    <string name="update_now">Şimdi güncelle</string>
+    <string name="update_dialog_title">Güncellemeler mevcut!</string>
+    <string name="bind_phone_attention">Arkadaşlarınızın sizi daha kolay bulmalarını sağlamak için telefon numaranızı kaydedin</string>
+    <string name="bind_now">Şimdi kaydet</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">Kayıt çok kısa</string>
+    <string name="voice_record">Kay. için basın</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">Gönderme yeri:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">Arkadaşlar</string>
+    <string name="my_friends_added">Arkadaşlarım</string>
+    <string name="my_firend_suggested_title">Arkadaş önerileri</string>
+    <string name="add_friend_title">Arkadaşlar ekle</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">Arkadaş olarak ekle</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">Daha Fazla</string>
+    <string name="friend_dynamic">Arkadaş güncellemeleri</string>
+    <string name="my_account">RC hesabım</string>
+    <string name="setting">Ayarlar</string>
+    <string name="about">Hakkında</string>
+    <string name="setting_page_clean_history">Geçmişi temizle</string>
+    <string name="clear_infos_message">Tüm geçmişi temizlemek istediğinizden emin misiniz?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">%1$s arkadaş olarak eklendi</string>
+    <string name="add_app">%1$s’a katıldı</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">Bağlanmadı</string>
+    <string name="phone_unbind">Kaydedilmedi</string>
+    <string name="setting_update_login_password">Oturum açma parolasını değiştir</string>
+    <string name="login_out_account">Oturumu kapat</string>
+    <string name="dialog_confirm_deauth">Bağlantıyı kesmek istediğinizden emin misiniz?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">Oturum açma parolasını değiştir</string>
+    <string name="input_current_password">Lütfen geçerli parolanızı girin</string>
+    <string name="forget_password_title">Parolamı unuttum</string>
+    <string name="change_password_edit_title">Yeni parola ayarlayın</string>
+    <string name="change_password_new_password_hint">Yeni parola</string>
+    <string name="change_password_confirm_password_hint">Lütfen tekrar girin</string>
+    <string name="two_password_not_same">Girilen parolalar farklı</string>
+    <string name="password_change_complete">Parola değiştirildi</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">Telefon Numarası Kaydı</string>
+    <string name="bind_phone_input_phone_hint">Telefon numaranızı girin</string>
+    <string name="next_number">Doğrulama kodu alın(%1$d)</string>
+    <string name="sms_reciver_info">Doğrulama kodunu içeren bir SMS alacaksınız</string>
+    <string name="input_validate">Lütfen doğrulama kodunu girin</string>
+    <string name="commit">Gönder</string>
+    <string name="resend_sms_number">Doğrulama kodunu tekrar alın(%1$d)</string>
+    <string name="resend_sms_second">Doğrulama kodunu tekrar alın(%1$d)</string>
+    <string name="phone_number_validate">Telefon numarası doğrulaması</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">Profil</string>
+    <string name="nick">Takma Ad</string>
+    <string name="sex">Cinsiyet</string>
+    <string name="birthday">Doğum Günü</string>
+    <string name="settings_update_name_title">Takma Ad</string>
+    <string name="settings_select_sex">Cinsiyet</string>
+    <string name="male">erkek</string>
+    <string name="famale">kadın</string>
+    <string name="select_birthday">Doğum Günü</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">Bana fotoğraf gönderecekler</string>
+    <string name="receive_all">Herhangi biri</string>
+    <string name="receive_friend">Arkadaşlarım</string>
+    <string name="dynamic_setting">Güncellemelerimi arkadaşlarla paylaş</string>
+    <string name="trends_share">Paylaş</string>
+    <string name="trends_hide">Paylaşma</string>
+
+    <!-- 关于 -->
+    <string name="check_update">Gün. kontrol et</string>
+    <string name="contact_us">İletişim</string>
+    <string name="term_service">Servis Koşulları</string>
+    <string name="compact">Giz. politikaları</string>
+    <string name="no_new_version">Phototalk en son sürümdür</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">Profil Seçin</string>
+    <string name="or">veya</string>
+    <string name="use_new_info">yeni bir profil kullanın</string>
+	<string name="other_device_login">Bu hesap bir başka cihazda zaten kullanılıyor.</string>
+	<string name="relogin">Tamam</string>
+    <string name="join_message">Sesli fotoğraf, zaman sınırlı silme! RC PhotoTalk\'a katılın ve eğlenceyi paylaşın! Karşıdan indirme bağlantısı: http://rctalk.me Bir hesap oluşturduktan sonra kimliğim %1$s\'yı ekleyin!</string>
+    <string name="invite_message">Sesli fotoğraf, zaman sınırlı silme! RC PhotoTalk\'a katılın ve eğlenceyi paylaşın! Karşıdan indirme bağlantısı: http://rctalk.me Bir hesap oluşturduktan sonra kimliğim %1$s\'yı ekleyin!</string>
+	<string name="contact_friend">İletişim:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">%1$d yeni mesajınız var</string>
+    <string name="gcm_friend">Birisi sizi arkadaş olarak ekledi</string>
+    <string name="friend_detail_send_photo_hint_text">Fotoğraf gönder</string>
+
+
+</resources>

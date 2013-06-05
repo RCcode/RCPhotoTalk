@@ -17,6 +17,7 @@ import android.widget.EditText;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class BindPhoneActivity extends BaseActivity implements OnClickListener {
@@ -129,6 +130,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 				requestReSendSMS();
 				break;
 			case R.id.btn_commit:
+				EventUtil.More_Setting.rcpt_success_phonenumber(baseContext);
 				sendValidate();
 				break;
 			case R.id.btn_change_number:

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">Identifiant</string>
+    <string name="init_page_signup">Nouvel util.</string>
+    <string name="init_message_title_one">Partagez l’instant</string>
+    <string name="init_message_text_one">Partagez tous les moments forts de votre vie</string>
+    <string name="init_message_title_two">Édition photo</string>
+    <string name="init_message_text_two">Rendez vos photos plus attractives grâce au son et aux graffitis</string>
+    <string name="init_message_title_three">Suppression minutée</string>
+    <string name="init_message_text_three">Les photos seront supprimées une fois visionnées. Aucune inquiétude pour votre vie privée</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">Une fois inscrit, vous pouvez utiliser votre identifiant avec n’importe quelle application RC</string>
+    <string name="registe_email_hint">E-mail</string>
+    <string name="login_password_hint">Mot de passe (6 à 20 caractères)</string>
+    <string name="init_regist_agreement">Votre inscription signifie que vous acceptez nos termes de service et notre politique de confidentialité.</string>
+    <string name="landing_page_signup">Inscription</string>
+    <string name="login_title_bubble_text">Nouvel util.</string>
+    <string name="login_nick_hint">Pseudo (moins de 20 caractères)</string>
+    <string name="register_confirm_email_address">Votre adresse e-mail est:%s</string>
+    <string name="modify">Modifier</string>
+    <string name="ok">OK</string>
+    <string name="registe_email_error">Erreur de format d’e-mail</string>
+    <string name="register_password_error">Saisissez un mot de passe comprenant 6 à 20 caractères</string>
+    <string name="net_error">Aucune connexion réseau</string>
+    <string name="login_title_login_bubble_text">Identifiant</string>
+    <string name="login_username_hint">E-mail,RCID</string>
+    <string name="login_forget_psw_hint">Mot de passe oublié</string>
+    <string name="landing_page_login">Connexion</string>
+    <string name="login_use_account_below">Choisissez un compte RC ci-dessous</string>
+    <string name="user_other_account">Utiliser un autre compte </string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">Entre votre adresse e-mail</string>
+    <string name="forget_password_reset_text">L’e-mail de réinitialisation de mot de passe a été envoyé à %s</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">Rechercher des amis</string>
+    <string name="firend_list_invite_friend_title">Inviter des amis</string>
+    <string name="firend_list_used_photochat_friend_title">Amis dans PhotoTalk</string>
+    <string name="search_hint">Aucun résultat pour cette recherche</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">Il y a %1$d minutes</string>
+    <string name="second">Il y a %1$d secondes</string>
+    <string name="hour">Il y a %1$d heures</string>
+    <string name="day">Il y a %1$d jours</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">Envoi</string>
+    <string name="send_sended">%1$s-Envoyé</string>
+    <string name="send_received"> %1$s-Délivré</string>
+    <string name="send_looked">%1$s-Lu</string>
+    <string name="send_fail">Échec d’envoi, touchez pour réessayer</string>
+    <string name="receive_downloading">Chargement</string>
+    <string name="receive_loaded">%1$s-Appuyez pour lire</string>
+    <string name="receive_looked">%1$s-Lu</string>
+    <string name="receive_fail">Échec de chargement, touchez pour réessayer</string>
+    <string name="added_by_friend">%1$s m’a ajouté comme ami</string>
+    <string name="added_friend_back">J’ajoute %1$s comme ami</string>
+    <string name="added_friend">%1$s m’a ajouté comme ami</string>
+    <string name="added_friend_confirm">J’ajoute %1$s comme ami</string>
+    <string name="operation">Opération</string>
+    <string name="resend">Renvoyer</string>
+    <string name="delete">Supprimer</string>
+    <string name="reload">Recharger</string>
+    <string name="will_quit">Cliquez sur « Retour » pour quitter l’application</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">Peut-être plus tard</string>
+    <string name="update_now">Mettre à jour maintenant</string>
+    <string name="update_dialog_title">Mises à jour disponibles !</string>
+    <string name="bind_phone_attention">Enregistrez votre numéro de téléphone pour que vos amis vous retrouvent plus facilement</string>
+    <string name="bind_now">S’enregistrer maintenant</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">L’enregistrement est trop court</string>
+    <string name="voice_record">Appuyez pour enregistrer</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">Envoyer à :</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">Amis</string>
+    <string name="my_friends_added">Mes amis</string>
+    <string name="my_firend_suggested_title">Recommandations d’ami</string>
+    <string name="add_friend_title">Ajouter des amis</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">Ajouter comme ami</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">Plus</string>
+    <string name="friend_dynamic">Actualités d’amis</string>
+    <string name="my_account">Mon compte RC</string>
+    <string name="setting">Paramètres</string>
+    <string name="about">À propos</string>
+    <string name="setting_page_clean_history">Effacer l’historique</string>
+    <string name="clear_infos_message">Voulez-vous vraiment effacer tout l’historique ?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">a ajouté %1$s comme ami</string>
+    <string name="add_app">a rejoint %1$s</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">Non connecté</string>
+    <string name="phone_unbind">Non enregistré</string>
+    <string name="setting_update_login_password">Modifier le mot de passe</string>
+    <string name="login_out_account">Se déconnecter</string>
+    <string name="dialog_confirm_deauth">Voulez-vous vraiment vous déconnecter ?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">Modifier le mot de passe</string>
+    <string name="input_current_password">Entrez votre mot de passe actuel</string>
+    <string name="forget_password_title">Mot de passe oublié</string>
+    <string name="change_password_edit_title">Définir un nouveau mot de passe</string>
+    <string name="change_password_new_password_hint">Nouveau mot de passe</string>
+    <string name="change_password_confirm_password_hint">Entrez-le à nouveau</string>
+    <string name="two_password_not_same">Les mots de passe saisis sont différents</string>
+    <string name="password_change_complete">Le mot de passe a été modifié</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">Enregistrer un numéro de téléphone</string>
+    <string name="bind_phone_input_phone_hint">Entrez votre numéro de téléphone</string>
+    <string name="next_number">Obtenir un code de vérification(%1$d)</string>
+    <string name="sms_reciver_info">Vous recevrez un SMS comprenant un code de vérification</string>
+    <string name="input_validate">Entrez le code de vérification</string>
+    <string name="commit">Soumettre</string>
+    <string name="resend_sms_number">Redemander le code de vérification(%1$d)</string>
+    <string name="resend_sms_second">Redemander le code de vérification(%1$d)</string>
+    <string name="phone_number_validate">Vérification du numéro de téléphone</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">Profil</string>
+    <string name="nick">Pseudo</string>
+    <string name="sex">Sexe</string>
+    <string name="birthday">Anniversaire</string>
+    <string name="settings_update_name_title">Pseudo</string>
+    <string name="settings_select_sex">Sexe</string>
+    <string name="male">masculin</string>
+    <string name="famale">féminin</string>
+    <string name="select_birthday">Anniversaire</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">Qui peut m’envoyer des photos</string>
+    <string name="receive_all">Tout le monde</string>
+    <string name="receive_friend">Mes amis</string>
+    <string name="dynamic_setting">Partager mes actualités avec mes amis</string>
+    <string name="trends_share">Partager</string>
+    <string name="trends_hide">Ne pas partager</string>
+
+    <!-- 关于 -->
+    <string name="check_update">Rechercher une maj</string>
+    <string name="contact_us">Contactez-nous</string>
+    <string name="term_service">Termes de service</string>
+    <string name="compact">Confidentialité</string>
+    <string name="no_new_version">Phototalkest la dernière version</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">Choisir un profil</string>
+    <string name="or">ou</string>
+    <string name="use_new_info">Utiliser un nouveau profil</string>
+	<string name="other_device_login">Votre compte est déjà utilisé sur un autre périphérique.</string>
+	<string name="relogin">OK</string>
+    <string name="join_message">Aphotos audio, suppression minutée ! Rejoignez RC PhotoTalk et partagez vos moments funs ! Lien de téléchargement: http://rctalk.me Ajoutez l\'ID %1$s une fois le compte créé !</string>
+    <string name="invite_message">Aphotos audio, suppression minutée ! Rejoignez RC PhotoTalk et partagez vos moments funs ! Lien de téléchargement: http://rctalk.me Ajoutez l\'ID %1$s une fois le compte créé !</string>
+	<string name="contact_friend">Contacts:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">Vous avez %1$d nouveau(x) message(s)</string>
+    <string name="gcm_friend">Quelqu’un vous a ajouté comme ami</string>
+    <string name="friend_detail_send_photo_hint_text">Envoyer une Photo</string>
+
+
+   
+</resources>

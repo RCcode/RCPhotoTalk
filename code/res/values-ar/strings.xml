@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">تسجيل دخول مستخدم RC</string>
+    <string name="init_page_signup">مستخدم RC جديد</string>
+    <string name="init_message_title_one">مشاركة اللحظة</string>
+    <string name="init_message_text_one">شارك جميع اللحظات المميزة في حياتك</string>
+    <string name="init_message_title_two">تحرير الصور</string>
+    <string name="init_message_text_two">اجعل الصور أكثر روعة باستخدام الصوت والجرافيتي</string>
+    <string name="init_message_title_three">حذف بعد انتهاء الوقت المحدد</string>
+    <string name="init_message_text_three">يتم حذف الصور تلقائيًا بعد مشاهدتها، ولذلك لا توجد مخاوف بشأن الخصوصية</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">بعد التسجيل بالبرنامج، يمكنك الدخول إلى أي من تطبيقات RC.</string>
+    <string name="registe_email_hint">البريد الإلكتروني</string>
+    <string name="login_password_hint">(كلمة المرور (6-20 حرف</string>
+    <string name="init_regist_agreement">يعني التسجيل بالبرنامج قبولك لبنود الخدمة وسياسات الخصوصية.</string>
+    <string name="landing_page_signup">التسجيل</string>
+    <string name="login_title_bubble_text">مستخدم RC جديد</string>
+    <string name="login_nick_hint">(الاسم المستعار (أقل من 20 حر)</string>
+    <string name="register_confirm_email_address">%s:عنوان بريدك الإلكتروني هو</string>
+    <string name="modify">تحرير</string>
+    <string name="ok">موافق</string>
+    <string name="registe_email_error">خطأ في تنسيق البريد الإلكتروني</string>
+    <string name="register_password_error">الرجاء إدخال كلمة مرور تتراوح من 6 إلى 20 حرف</string>
+    <string name="net_error">لا يوجد اتصال بالشبكة</string>
+    <string name="login_title_login_bubble_text">تسجيل دخول مستخدم RC</string>
+    <string name="login_username_hint">البريد الإلكتروني,RCID</string>
+    <string name="login_forget_psw_hint">نسيت كلمة المرور</string>
+    <string name="landing_page_login">تسجيل الدخول</string>
+    <string name="login_use_account_below">اختر حسابات RC الموجودة بالأسفل</string>
+    <string name="user_other_account">استخدم حساب RC آخر لتسجيل الدخول</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">أدخل عنوان البريد الإلكتروني الجديد</string>
+    <string name="forget_password_reset_text">%s تم إرسال رسالة إعادة تعيين كلمة المرور إلى</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">بحث عن الأصدقاء</string>
+    <string name="firend_list_invite_friend_title">دعوة أصدقاء</string>
+    <string name="firend_list_used_photochat_friend_title">PhotoTalk أصدقاء يستخدمون برنامج</string>
+    <string name="search_hint">لا توجد نتائج لهذا البحث</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">منذ %1$d دقيقة</string>
+    <string name="second">منذ %1$d ثانية</string>
+    <string name="hour">منذ %1$d ساعة</string>
+    <string name="day">منذ %1$d يوم</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">جارٍ الإرسا </string>
+    <string name="send_sended">%1$s-تم الإرسال</string>
+    <string name="send_received"> %1$s-تم الاستلام</string>
+    <string name="send_looked">%1$s-تم القراءة</string>
+    <string name="send_fail">فشل في الإرسال، انقر للمحاولة مرة أخرى</string>
+    <string name="receive_downloading">جارٍ التحميل</string>
+    <string name="receive_loaded">%1$s-اضغط للقراءة</string>
+    <string name="receive_looked">%1$s-تم القراءة</string>
+    <string name="receive_fail">فشل في التحميل، انقر للمحاولة مرة أخرى</string>
+    <string name="added_by_friend">بإضافتي كصديق %1$s قام</string>
+    <string name="added_friend_back">كصديق %1$s قمت بإضافة</string>
+    <string name="added_friend">بإضافتي كصديق %1$s قام</string>
+    <string name="added_friend_confirm">كصديق %1$s قمت بإضافة</string>
+    <string name="operation">العملية</string>
+    <string name="resend">إعادة الإرسال</string>
+    <string name="delete">حذف</string>
+    <string name="reload">إعادة التحميل</string>
+    <string name="will_quit">انقر فوق "رجوع" مرة أخرى للخروج من التطبيق</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">ربما لاحقاً</string>
+    <string name="update_now">التحديث الآن</string>
+    <string name="update_dialog_title">توجد تحديثات!</string>
+    <string name="bind_phone_attention">قم بتسجيل رقم الهاتف للسماح لأصدقائك بالعثور عليك بسهولة</string>
+    <string name="bind_now">التسجيل الآن</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">التسجيل قصير جدًا</string>
+    <string name="voice_record">اضغط للتسجيل</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">إرسال إلى:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">الأصدقاء</string>
+    <string name="my_friends_added">أصدقائي</string>
+    <string name="my_firend_suggested_title">توصيات الأصدقاء</string>
+    <string name="add_friend_title">إضافة أصدقاء</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">أضف كصديق</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">المزيد</string>
+    <string name="friend_dynamic">تحديثات الأصدقاء</string>
+    <string name="my_account">حسابي في RC</string>
+    <string name="setting">إعدادات</string>
+    <string name="about">حول</string>
+    <string name="setting_page_clean_history">محو السجل</string>
+    <string name="clear_infos_message">هل ترغب بالتأكيد في محو جميع السجلات؟</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">تم إضا%1$s كصديق</string>
+    <string name="add_app">%1$s انضم إلى</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">غير متصل</string>
+    <string name="phone_unbind">غير موجود</string>
+    <string name="setting_update_login_password">تغيير كلمة مرور تسجيل الدخول</string>
+    <string name="login_out_account">هل ترغب بالتأكيد في قطع الاتصال</string>
+    <string name="dialog_confirm_deauth">هل أنت متأكد من فصل؟</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">تغيير كلمة مرور تسجيل الدخول</string>
+    <string name="input_current_password">الرجاء إدخال كلمة المرور الحالية</string>
+    <string name="forget_password_title">نسيت كلمة المرور</string>
+    <string name="change_password_edit_title">تعيين كلمة مرور جديدة</string>
+    <string name="change_password_new_password_hint">كلمة المرور الجديدة</string>
+    <string name="change_password_confirm_password_hint">الرجاء الإدخال مرة أخرى</string>
+    <string name="two_password_not_same">كلمات المرور التي تم إدخالها مختلفة</string>
+    <string name="password_change_complete">تم تغيير كلمة المرور</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">تسجيل رقم الهاتف</string>
+    <string name="bind_phone_input_phone_hint">أدخل رقم هاتفك</string>
+    <string name="next_number">احصل على رمز التحقق (%1$d)</string>
+    <string name="sms_reciver_info">سوف تستلم رسالة قصيرة تحتوي على رمز التحقق</string>
+    <string name="input_validate">الرجاء إدخال رمز التحقق</string>
+    <string name="commit">إرسال</string>
+    <string name="resend_sms_number">احصل على رمز التحقق مرة أخرى(%1$d)</string>
+    <string name="resend_sms_second">احصل على رمز التحقق مرة أخرى(%1$d)</string>
+    <string name="phone_number_validate">التحقق من رقم الهاتف</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">الملف التعريفي</string>
+    <string name="nick">الاسم المستعار</string>
+    <string name="sex">النوع</string>
+    <string name="birthday">تاريخ الميلاد</string>
+    <string name="settings_update_name_title">الاسم المستعار</string>
+    <string name="settings_select_sex">النوع</string>
+    <string name="male">ذكر</string>
+    <string name="famale">أنثى</string>
+    <string name="select_birthday">تاريخ الميلاد</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">من بإمكانه إرسال صور إليّ</string>
+    <string name="receive_all">أي شخص</string>
+    <string name="receive_friend">أصدقائي</string>
+    <string name="dynamic_setting">مشاركة التحديثات مع أصدقائي</string>
+    <string name="trends_share">مشاركة</string>
+    <string name="trends_hide">عدم المشاركة</string>
+
+    <!-- 关于 -->
+    <string name="check_update">التحقق من وجود تحديثات</string>
+    <string name="contact_us">اتصل بنا</string>
+    <string name="term_service">بنود الخدمة</string>
+    <string name="compact">سياسات الخصوصية</string>
+    <string name="no_new_version">Phototalk هو الإصدار الأخير</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">اختر الملف التعريفي</string>
+    <string name="or">أو</string>
+    <string name="use_new_info">استخدم ملف تعريفي جديد في</string>
+	<string name="other_device_login">حسابك قيد الاستخدام بالفعل على جهاز آخر.</string>
+	<string name="relogin">موافق</string>
+    <string name="join_message">إضافة صوت على الصور وحذفها بعد انتهاء الوقت المحدد! انضم إلى برنامج RC PhotoTalk وشارك المرح! رابط التنزيل http://rctalk.me. إضافة رقمي التعري%1$s456 بعد قيامك بإنشاء حساب!</string>
+    <string name="invite_message">إضافة صوت على الصور وحذفها بعد انتهاء الوقت المحدد! انضم إلى برنامج RC PhotoTalk وشارك المرح! رابط التنزيل http://rctalk.me. إضافة رقمي التعري%1$s456 بعد قيامك بإنشاء حساب!</string>
+	<string name="contact_friend">اتصالات:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">لديك %1$d رسالة/رسائل جديدة</string>
+    <string name="gcm_friend">قام أحد الأشخاص بإضافتك كصديق</string>
+    <string name="friend_detail_send_photo_hint_text">إرسال صورة</string>
+
+
+
+</resources>

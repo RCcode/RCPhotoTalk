@@ -12,6 +12,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class SystemSettingActivity extends BaseActivity implements OnClickListener {
@@ -128,6 +129,12 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					if(0==which){
+						EventUtil.More_Setting.rcpt_share(baseContext);
+					}else if(1==which){
+						EventUtil.More_Setting.rcpt_notshare(baseContext);
+						
+					}
 					mCurrentUser.setShareNews(which);
 					setSetText();
 					dialog.dismiss();
@@ -143,6 +150,12 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
+					if(0==which){
+						EventUtil.More_Setting.rcpt_anyone(baseContext);
+					}else if(1==which){
+						EventUtil.More_Setting.rcpt_onlyfirends(baseContext);
+						
+					}
 					mCurrentUser.setAllowsend(which);
 					setSetText();
 					dialog.dismiss();

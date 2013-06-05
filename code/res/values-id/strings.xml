@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">Login p’guna RC</string>
+    <string name="init_page_signup">P’guna RC baru</string>
+    <string name="init_message_title_one">Berbagi momen</string>
+    <string name="init_message_text_one">Berbagi momen spesial dalam hidup Anda</string>
+    <string name="init_message_title_two">Pengeditan foto</string>
+    <string name="init_message_text_two">Jadikan foto lebih menarik dengan audio dan grafiti</string>
+    <string name="init_message_title_three">Penghapusan berdasarkan waktu</string>
+    <string name="init_message_text_three">Foto akan secara otomatis dihapus setelah dilihat, privasi Anda terjaga</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">Setelah mendaftar, Anda dapat menggunakannya untuk login ke semua apl RC</string>
+    <string name="registe_email_hint">Email</string>
+    <string name="login_password_hint">Sandi (6-20 karakter)</string>
+    <string name="init_regist_agreement">Dengan mendaftar berarti Anda menyetujui persyaratan layanan dan kebijakan privasi kami.</string>
+    <string name="landing_page_signup">Daftar</string>
+    <string name="login_title_bubble_text">P’guna RC baru</string>
+    <string name="login_nick_hint">Panggilan (kurang dr 20 karakter)</string>
+    <string name="register_confirm_email_address">Alamat email Anda:%s</string>
+    <string name="modify">Edit</string>
+    <string name="ok">OK</string>
+    <string name="registe_email_error">Kesalahan format email</string>
+    <string name="register_password_error">Masukkan sandi yang mengandung 6-20 karakter</string>
+    <string name="net_error">Jaringan tidak tersedia</string>
+    <string name="login_title_login_bubble_text">Login p’guna RC</string>
+    <string name="login_username_hint">Email,RCID</string>
+    <string name="login_forget_psw_hint">Lupa sandi</string>
+    <string name="landing_page_login">Masuk</string>
+    <string name="login_use_account_below">Pilih Akun RC Berikut</string>
+    <string name="user_other_account">Gunakan akun RC lain untuk login</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">Masukkan Alamat Email Anda</string>
+    <string name="forget_password_reset_text">Email atur ulang sandi telah dikirim ke %s</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">Cari teman</string>
+    <string name="firend_list_invite_friend_title">Undang teman</string>
+    <string name="firend_list_used_photochat_friend_title">Teman dalam PhotoTalk</string>
+    <string name="search_hint">Pencarian ini tanpa hasil</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">%1$d menit lalu</string>
+    <string name="second">%1$d detik lalu</string>
+    <string name="hour">%1$d jam lalu</string>
+    <string name="day">%1$d hari lalu</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">Mengirim</string>
+    <string name="send_sended">%1$s-Dikirim</string>
+    <string name="send_received"> %1$s-Diterima</string>
+    <string name="send_looked">%1$s-Dibaca</string>
+    <string name="send_fail">Gagal dikirim, tepuk untuk mencoba lagi</string>
+    <string name="receive_downloading">Memuat</string>
+    <string name="receive_loaded">%1$s-Tekan untuk membaca</string>
+    <string name="receive_looked">%1$s-Dibaca</string>
+    <string name="receive_fail">Gagal dimuat, tepuk untuk mencoba lagi</string>
+    <string name="added_by_friend">%1$s menambahku sebagai teman</string>
+    <string name="added_friend_back">Saya menambah %1$s sbg teman</string>
+    <string name="added_friend">%1$s menambahku sebagai teman</string>
+    <string name="added_friend_confirm">Saya menambah %1$s sbg teman</string>
+    <string name="operation">Operasi</string>
+    <string name="resend">Kirim ulang</string>
+    <string name="delete">Hapus</string>
+    <string name="reload">Muat ulang</string>
+    <string name="will_quit">Klik lagi "Kembali" untuk menutup apl</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">Mungkin Nanti</string>
+    <string name="update_now">Perbarui sekarang</string>
+    <string name="update_dialog_title">Pembaruan tersedia!</string>
+    <string name="bind_phone_attention">Daftarkan ponsel Anda agar mudah ditemukan oleh teman Anda</string>
+    <string name="bind_now">Daftar sekarang</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">Rekaman terlalu pendek</string>
+    <string name="voice_record">Rekam</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">Kirim ke:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">Teman</string>
+    <string name="my_friends_added">Temanku</string>
+    <string name="my_firend_suggested_title">Rekomendasi teman</string>
+    <string name="add_friend_title">Tambah teman</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">Tambah sbg teman</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">Lainnya</string>
+    <string name="friend_dynamic">Pembaruan teman</string>
+    <string name="my_account">Akun RC saya</string>
+    <string name="setting">Pengaturan</string>
+    <string name="about">Tentang</string>
+    <string name="setting_page_clean_history">Hapus riwayat</string>
+    <string name="clear_infos_message">Anda yakin ingin menghapus semua riwayat?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">menambah %1$s sbg teman</string>
+    <string name="add_app">bergabung %1$s</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">Blm tersambung</string>
+    <string name="phone_unbind">Belum terdaftar</string>
+    <string name="setting_update_login_password">Ubah sandi login</string>
+    <string name="login_out_account">Logout</string>
+    <string name="dialog_confirm_deauth">Yakin ingin memutuskan?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">Ubah sandi login</string>
+    <string name="input_current_password">Masukkan sandi saat ini</string>
+    <string name="forget_password_title">Lupa sandi</string>
+    <string name="change_password_edit_title">Buat sandi baru</string>
+    <string name="change_password_new_password_hint">Sandi baru</string>
+    <string name="change_password_confirm_password_hint">Masukkan kembali</string>
+    <string name="two_password_not_same">Sandi yang dimasukkan berbeda</string>
+    <string name="password_change_complete">Sandi diubah</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">Mendaftar No. Telepon</string>
+    <string name="bind_phone_input_phone_hint">Masukkan no. telp. Anda</string>
+    <string name="next_number">Ambil kode verifikasi(%1$d)</string>
+    <string name="sms_reciver_info">Anda akan menerima SMS berisi kode verifikasi</string>
+    <string name="input_validate">Masukkan kode verifikasi</string>
+    <string name="commit">Kirim</string>
+    <string name="resend_sms_number">Ambil lagi kode verifikasi(%1$d)</string>
+    <string name="resend_sms_second">Ambil lagi kode verifikasi(%1$d)</string>
+    <string name="phone_number_validate">Verifikasi nomor telepon</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">Profil</string>
+    <string name="nick">Panggilan</string>
+    <string name="sex">Jenis Kelamin</string>
+    <string name="birthday">Tanggal Lahir</string>
+    <string name="settings_update_name_title">Panggilan</string>
+    <string name="settings_select_sex">Jenis Kelamin</string>
+    <string name="male">laki-laki</string>
+    <string name="famale">perempuan</string>
+    <string name="select_birthday">Tanggal Lahir</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">Yang dapat mengirim foto</string>
+    <string name="receive_all">Semua</string>
+    <string name="receive_friend">Temanku</string>
+    <string name="dynamic_setting">Bagi pembaruan saya dg teman</string>
+    <string name="trends_share">Bagi</string>
+    <string name="trends_hide">Jangan bagi</string>
+
+    <!-- 关于 -->
+    <string name="check_update">Periksa pembaruan</string>
+    <string name="contact_us">Hubungi Kami</string>
+    <string name="term_service">Persyaratan layanan</string>
+    <string name="compact">Kebijakan privasi</string>
+    <string name="no_new_version">Phototalk versi terbaru</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">Pilih Profil </string>
+    <string name="or">atau</string>
+    <string name="use_new_info">Gunakan profil baru</string>
+	<string name="other_device_login">Akun Anda sudah dipergunakan di perangkat lain.</string>
+	<string name="relogin">OK</string>
+    <string name="join_message">Foto audio, penghapusan berdasarkan waktu! Bergabung dengan RC PhotoTalk dan berbagi kegembiraan! Tautan unduhan: http://rctalk.me Tambahkan ID saya %1$s setelah Anda membuat akun!</string>
+    <string name="invite_message">Foto audio, penghapusan berdasarkan waktu! Bergabung dengan RC PhotoTalk dan berbagi kegembiraan! Tautan unduhan: http://rctalk.me Tambahkan ID saya %1$s setelah Anda membuat akun!</string>
+	<string name="contact_friend">Kontak:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">Anda mempunyai %1$d pesan baru</string>
+    <string name="gcm_friend">Seseorang menambah Anda sbg teman</string>
+    <string name="friend_detail_send_photo_hint_text">Kirim foto</string>
+
+
+
+</resources>

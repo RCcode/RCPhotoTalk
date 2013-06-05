@@ -13,6 +13,7 @@ import android.widget.Button;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
 import com.rcplatform.phototalk.utils.Utils;
@@ -46,12 +47,14 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.check_update_btn:
+			EventUtil.More_Setting.rcpt_checkupdate(baseContext);
 			checkUpdate();
 			break;
 		case R.id.back:
 			finish();
 			break;
 		case R.id.contact_us_btn:
+			EventUtil.More_Setting.rcpt_feedback(baseContext);
 			Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
 			String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
 					+ SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext) + SystemMessageUtil.getImsi(baseContext);

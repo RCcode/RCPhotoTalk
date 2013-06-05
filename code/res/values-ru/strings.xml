@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引导页面 -->
+    <string name="init_page_login">Вход в RC</string>
+    <string name="init_page_signup">Регистрация</string>
+    <string name="init_message_title_one">Поделитесь мгновением</string>
+    <string name="init_message_text_one">Запечатлейте каждый важный момент вашей жизни</string>
+    <string name="init_message_title_two">Редактирование фото</string>
+    <string name="init_message_text_two">Сделайте фотографии более яркими благодаря различным звукам и рисункам</string>
+    <string name="init_message_title_three">Удаление по времени</string>
+    <string name="init_message_text_three">Фотографии будут автоматически удалены после просмотра, ваша конфиденциальность будет полностью сохранена</string>
+
+    <!-- 注册登录页面 -->
+    <string name="reg_bubble_desc_text">После регистрации вы сможете использовать учетную запись для входа в любое приложение RC.</string>
+    <string name="registe_email_hint">Эл. почта</string>
+    <string name="login_password_hint">Пароль(6-20 символов)</string>
+    <string name="init_regist_agreement">Регистрируясь, вы принимаете наши условия обслуживания и политику конфиденциальности.</string>
+    <string name="landing_page_signup">Зарегистрироваться</string>
+    <string name="login_title_bubble_text">Регистрация</string>
+    <string name="login_nick_hint">Ник (менее 20 символов)</string>
+    <string name="register_confirm_email_address">Ваш адрес эл. почты:%s</string>
+    <string name="modify">Изменить</string>
+    <string name="ok">OK</string>
+    <string name="registe_email_error">Ошибка формата адреса эл. почты</string>
+    <string name="register_password_error">Введите пароль, содержащий 6-20 символов</string>
+    <string name="net_error">Сетевое подключение отсутствует</string>
+    <string name="login_title_login_bubble_text">Вход в RC</string>
+    <string name="login_username_hint">Эл. почта,RCID</string>
+    <string name="login_forget_psw_hint">Забыли пароль?</string>
+    <string name="landing_page_login">войти</string>
+    <string name="login_use_account_below">Выберите учетные записи RC</string>
+    <string name="user_other_account">Использовать другую учетную запись</string>
+
+    <!-- 忘记密码 -->
+    <string name="forget_password_text_hint">Введите адрес эл. почты</string>
+    <string name="forget_password_reset_text">Письмо для сброса пароля было отправлено на %s</string>
+
+    <!-- 查找好友页面 -->
+    <string name="find_friend_title">Поиск друзей</string>
+    <string name="firend_list_invite_friend_title">Пригласить друзей</string>
+    <string name="firend_list_used_photochat_friend_title">Друзья в PhotoTalk</string>
+    <string name="search_hint">По данному запросу ничего не найдено</string>
+
+    <!-- 消息页面 -->
+    <string name="minute">%1$d минут назад</string>
+    <string name="second">%1$d секунд назад</string>
+    <string name="hour">%1$d часов назад</string>
+    <string name="day">%1$d дней назад</string>
+    <string name="ago">%1$s前</string>
+    <string name="send_sending">Отправляется</string>
+    <string name="send_sended">%1$s-Отправлено</string>
+    <string name="send_received"> %1$s-Доставлено</string>
+    <string name="send_looked">%1$s-Прочитано</string>
+    <string name="send_fail">Не удалось отправить, нажмите, чтобы повторить попытку</string>
+    <string name="receive_downloading">Загружается</string>
+    <string name="receive_loaded">%1$s-Нажмите, чтобы прочитать</string>
+    <string name="receive_looked">%1$s-Прочитано</string>
+    <string name="receive_fail">Не удалось загрузить, нажмите, чтобы повторить попытку</string>
+    <string name="added_by_friend">%1$s добавил(-а) меня в друзья</string>
+    <string name="added_friend_back">%1$s добавлен(-а) в друзья</string>
+    <string name="added_friend">%1$s добавил(-а) меня в друзья</string>
+    <string name="added_friend_confirm">%1$s добавлен(-а) в друзья</string>
+    <string name="operation">Операция</string>
+    <string name="resend">Отправить снова</string>
+    <string name="delete">Удалить</string>
+    <string name="reload">Перезагрузить</string>
+    <string name="will_quit">Нажмите "Назад" еще раз для выхода из приложения</string>
+
+
+    <!-- menu TODO  待确认 -->
+
+
+    <!-- 提示 -->
+    <string name="attention_later">Позже</string>
+    <string name="update_now">Обновить сейчас</string>
+    <string name="update_dialog_title">Доступны обновления!</string>
+    <string name="bind_phone_attention">Зарегистрируйте свой номер телефона, чтобы ваши друзья могли легко вас найти</string>
+    <string name="bind_now">Зарегистрировать сейчас</string>
+
+    <!-- 图像编辑 -->
+    <string name="voice_too_short">Слишком короткая запись</string>
+    <string name="voice_record">Нажмите, чтобы начать запись</string>
+
+    <!-- 发送消息 -->
+    <string name="select_friend_title">Отправить:</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">Друзья</string>
+    <string name="my_friends_added">Мои друзья</string>
+    <string name="my_firend_suggested_title">Возможные друзья</string>
+    <string name="add_friend_title">Добавить друзей</string>
+
+    <!-- 加为好友 -->
+    <string name="add_to_friend">Добавить в друзья</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">Дополнительно</string>
+    <string name="friend_dynamic">Обновления друзей</string>
+    <string name="my_account">Моя учетная запись RC</string>
+    <string name="setting">Параметры</string>
+    <string name="about">О программе</string>
+    <string name="setting_page_clean_history">Очистить журнал</string>
+    <string name="clear_infos_message">Вы действительно хотите удалить весь журнал?</string>
+
+    <!-- 好友动态 -->
+    <string name="add_friend">добавил(-а) %1$s в друзья</string>
+    <string name="add_app">уже в %1$s</string>
+
+    <!-- RC账户设置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">Не подключено</string>
+    <string name="phone_unbind">Не зарегистрирован</string>
+    <string name="setting_update_login_password">Изменение пароля для входа</string>
+    <string name="login_out_account">Выход</string>
+    <string name="dialog_confirm_deauth">Вы действительно хотите отключить?</string>
+
+    <!-- 修改密码 -->
+    <string name="change_password">Изменение пароля для входа</string>
+    <string name="input_current_password">Введите текущий пароль</string>
+    <string name="forget_password_title">Забыли пароль?</string>
+    <string name="change_password_edit_title">Установка нового пароля</string>
+    <string name="change_password_new_password_hint">Новый пароль</string>
+    <string name="change_password_confirm_password_hint">Введите еще раз</string>
+    <string name="two_password_not_same">Введенные пароли не совпадают</string>
+    <string name="password_change_complete">Пароль изменен</string>
+
+    <!-- 手动绑定手机号 -->
+    <string name="bind_phone">Регистрация номера телефона</string>
+    <string name="bind_phone_input_phone_hint">Введите номер телефона</string>
+    <string name="next_number">Получить код подтверждения(%1$d)</string>
+    <string name="sms_reciver_info">Вы получите SMS-сообщение с кодом подтверждения</string>
+    <string name="input_validate">Введите код подтверждения</string>
+    <string name="commit">Отправить</string>
+    <string name="resend_sms_number">Получить код подтверждения повторно(%1$d)</string>
+    <string name="resend_sms_second">Получить код подтверждения повторно(%1$d)</string>
+    <string name="phone_number_validate">Проверка номера телефона</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">Профиль</string>
+    <string name="nick">Ник</string>
+    <string name="sex">Пол</string>
+    <string name="birthday">День рождения</string>
+    <string name="settings_update_name_title">Ник</string>
+    <string name="settings_select_sex">Пол</string>
+    <string name="male">мужской</string>
+    <string name="famale">женский</string>
+    <string name="select_birthday">День рождения</string>
+    <string name="sex_secret"></string>
+
+    <!-- 设定 -->
+    <string name="receive_setting">Кто может отправлять мне фотографии</string>
+    <string name="receive_all">Все</string>
+    <string name="receive_friend">Только друзья</string>
+    <string name="dynamic_setting">Поделиться обновлениями друзьям</string>
+    <string name="trends_share">Поделиться</string>
+    <string name="trends_hide">Не делиться</string>
+
+    <!-- 关于 -->
+    <string name="check_update">Проверка обновлений</string>
+    <string name="contact_us">Связаться с Нами</string>
+    <string name="term_service">Условия обслуживания</string>
+    <string name="compact">Политика конфиденциальности</string>
+    <string name="no_new_version">Phototalkはявляется последней версией</string>
+
+	<!-- 登录个人信息页 -->
+    <string name="use_info_below">Выберите профиль</string>
+    <string name="or">или</string>
+    <string name="use_new_info">Используйте новый профиль</string>
+	<string name="other_device_login">Ваша учетная запись уже используется на другом устройстве.</string>
+	<string name="relogin">OK</string>
+    <string name="join_message">Звуковые фото, удаление по времени. Присоединяйтесь к RC PhotoTalk и получайте удовольствие от общения. Ссылка для загрузки: http://rctalk.me Добавьте мой идентификатор %1$s после создания учетной записи.</string>
+    <string name="invite_message">Звуковые фото, удаление по времени. Присоединяйтесь к RC PhotoTalk и получайте удовольствие от общения. Ссылка для загрузки: http://rctalk.me Добавьте мой идентификатор %1$s после создания учетной записи.</string>
+	<string name="contact_friend">связи:</string>
+	<string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">У вас %1$d новых сообщений</string>
+    <string name="gcm_friend">Вас добавили в друзья</string>
+    <string name="friend_detail_send_photo_hint_text">Отправить фото</string>
+
+
+</resources>
