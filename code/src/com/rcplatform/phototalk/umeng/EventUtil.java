@@ -175,4 +175,48 @@ public class EventUtil {
 		}
 
 	}
+	
+	public static class Friends_Addfriends {
+
+		private static final String EVENT_NAME = "Friends_Addfriends";
+
+		private static void onEvent(Context ctx, String label) {
+			MobclickAgent.onEvent(ctx, EVENT_NAME, label);
+		}
+
+		static public void rcpt_friends_profileview(Context ctx) {
+			onEvent(ctx, "rcpt_friends_profileview");
+		}
+		
+		static public void rcpt_friends_longpress(Context ctx) {
+			onEvent(ctx, "rcpt_friends_longpress");
+		}
+		
+		static public void rcpt_friendsdelete(Context ctx) {
+			onEvent(ctx, "rcpt_friendsdelete");
+		}
+		
+		static public void rcpt_addfriends(Context ctx) {
+			onEvent(ctx, "rcpt_addfriends");
+		}
+		
+		
+		static public void rcpt_facebok(Context ctx) {
+			onEvent(ctx, "rcpt_facebok");
+		}
+		
+		static public void rcpt_vk(Context ctx) {
+			onEvent(ctx, "rcpt_vk");
+		}
+		static public void rcpt_search(Context ctx) {
+			onEvent(ctx, "rcpt_search");
+		}
+		static public void rcpt_profile_takephotobutton(Context ctx) {
+			onEvent(ctx, "rcpt_friends_profileview");
+		}
+		static public void rcpt_profile_rcapp(Context ctx) {
+			onEvent(ctx, "rcpt_friends_profileview");
+		}
+
+	}
 }

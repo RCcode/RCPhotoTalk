@@ -26,6 +26,7 @@ import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 
@@ -115,6 +116,7 @@ public class FriendDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
+				EventUtil.Friends_Addfriends.rcpt_profile_takephotobutton(baseContext);
 				startTakePhotoActivity();
 			}
 		});

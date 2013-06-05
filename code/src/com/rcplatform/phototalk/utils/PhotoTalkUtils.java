@@ -17,6 +17,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
+import com.rcplatform.phototalk.umeng.EventUtil;
 
 public class PhotoTalkUtils {
 
@@ -91,6 +92,7 @@ public class PhotoTalkUtils {
 
 				@Override
 				public void onClick(View v) {
+					EventUtil.Friends_Addfriends.rcpt_profile_rcapp(context);
 					Utils.startApplicationByPackage(context, appInfo.getAppPackage());
 				}
 			});
