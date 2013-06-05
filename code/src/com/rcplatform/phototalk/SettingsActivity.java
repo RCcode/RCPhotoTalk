@@ -32,8 +32,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.Utils;
-import com.rcplatform.phototalk.views.RoundImageView;
 
 public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -46,7 +44,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private RelativeLayout edit_rcId, use_account_message, my_friend_dynamic;
 	private View mBack;
 	private TextView mTitleTextView;
-	private RoundImageView mHeadView;
+	private ImageView mHeadView;
 	private TextView mNickView;
 	private TextView userRcId;
 	private TextView userAge;
@@ -69,7 +67,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		newTrend = findViewById(R.id.rela_new_trend);
 		tv_sex = (ImageView) findViewById(R.id.tv_sex);
 		ivTrend = (ImageView) findViewById(R.id.iv_trend_head);
-		mHeadView = (RoundImageView) findViewById(R.id.settings_account_head_portrait);
+		mHeadView = (ImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
 		mNickView = (TextView) findViewById(R.id.settings_user_nick);
 		userRcId = (TextView) findViewById(R.id.user_rc_id);
@@ -95,11 +93,10 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 
 	private void initAppList() {
 		linearApps = (LinearLayout) findViewById(R.id.my_friend_details_apps_listview);
-		
+
 		List<AppInfo> allApps = PhotoTalkDatabaseFactory.getGlobalDatabase().getPlatformAppInfos();
 		PhotoTalkUtils.buildAppList(this, linearApps, allApps, mImageLoader);
 	}
-
 
 	private void setUserInfo(UserInfo userInfo) {
 		setUserImage();
@@ -125,21 +122,16 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	}
 
 	private void setUserImage() {
-		File fileHead = PhotoTalkUtils.getUserHead(getCurrentUser());
-		if (fileHead.exists()) {
-			String urlLocal = "file:///" + fileHead.getPath();
-			mImageLoader.displayImage(urlLocal, mHeadView, ImageOptionsFactory.getHeadImageOptions());
-		} else {
-			mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getHeadImageOptions());
-		}
+		setUserHead();
+		setUserBackground();
+	}
 
-		File fileBackground = PhotoTalkUtils.getUserBackground(getCurrentUser());
-		if (fileBackground.exists()) {
-			String urlLocal = "file:///" + fileBackground.getPath();
-			mImageLoader.displayImage(urlLocal, user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
-		} else {
-			mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getUserBackImageOptions());
-		}
+	private void setUserHead() {
+		mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getFriendHeadImageOptions());
+	}
+
+	private void setUserBackground() {
+		mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getFriendBackImageOptions());
 	}
 
 	private void initTitle() {
@@ -231,19 +223,19 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
+
 				try {
 					JSONObject jsonObject = new JSONObject(content);
 					String url = jsonObject.getString("background");
 					getCurrentUser().setBackground(url);
 					PrefsUtils.User.setBackground(SettingsActivity.this, getCurrentUser().getRcId(), url);
-					Utils.copyFile(new File(imageUrl), PhotoTalkUtils.getUserBackground(getCurrentUser()));
 					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
-					new LoadImageTask(user_bg_View).execute(imageUri, Uri.parse(imageUrl));
+					setUserBackground();
 				} catch (JSONException e) {
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 					e.printStackTrace();
 				}
-
+				dismissLoadingDialog();
 			}
 
 			@Override
@@ -290,14 +282,13 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 					String url = jsonObject.getString("headUrl");
 					getCurrentUser().setHeadUrl(url);
 					PrefsUtils.User.saveUserInfo(SettingsActivity.this, getCurrentUser().getRcId(), getCurrentUser());
-					Utils.copyFile(new File(path), PhotoTalkUtils.getUserHead(getCurrentUser()));
 					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
-					new LoadImageTask(mHeadView).execute(imageUri, Uri.parse(path));
+					setUserHead();
 				} catch (JSONException e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 				}
-
+				dismissLoadingDialog();
 			}
 
 			@Override

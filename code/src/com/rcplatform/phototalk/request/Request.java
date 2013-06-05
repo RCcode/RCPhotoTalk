@@ -34,10 +34,12 @@ import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.RCThreadPool;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class Request implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -45,13 +47,21 @@ public class Request implements Serializable {
 	private long createTime;
 	private String url;
 	private RCPlatformResponseHandler responseHandler;
-	private Map<String, String> params;;
+	private Map<String, String> params;
 	private File file;
 	private String filePath;
 	private boolean cache = false;
 
+	private void census() {
+		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_COUNTRY, Constants.COUNTRY);
+		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_OS, Constants.OS_NAME);
+		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_OS_VERSION, Constants.OS_VERSION);
+		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(mContext) + "");
+	}
+
 	public Request() {
 		createTime = System.currentTimeMillis();
+		params = new HashMap<String, String>();
 	}
 
 	public Request(Context context, String url, RCPlatformResponseHandler responseHandler) {
@@ -59,7 +69,6 @@ public class Request implements Serializable {
 		this.url = url;
 		this.responseHandler = responseHandler;
 		this.mContext = context;
-		params = new HashMap<String, String>();
 		PhotoTalkParams.buildBasicParams(mContext, this);
 	}
 
@@ -205,7 +214,7 @@ public class Request implements Serializable {
 	}
 
 	public static void sendPhoto(final Context context, final long flag, final File file, final String timeLimit, final PhotoSendListener listener,
-			final List<String> friendIds,final boolean hasVoice) {
+			final List<String> friendIds, final boolean hasVoice, final boolean hasDraw) {
 		final UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		try {
 			JSONArray jsonArray = new JSONArray();
@@ -227,9 +236,7 @@ public class Request implements Serializable {
 							long flag = jsonObject.getLong("time");
 							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
-									Integer.parseInt(timeLimit),hasVoice);
-							// MessageSender.sendInformation(context,
-							// informations, userIds);
+									Integer.parseInt(timeLimit), hasVoice);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag);
 							RCThreadPool.getInstance().addTask(new Runnable() {
@@ -253,7 +260,7 @@ public class Request implements Serializable {
 						listener.onFail(flag, errorCode, content);
 						UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit),hasVoice);
+								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice);
 					}
 				};
 			}
@@ -263,12 +270,21 @@ public class Request implements Serializable {
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, jsonArray.toString());
+			if (hasVoice)
+				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_VOICE, PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
+			else
+				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_VOICE, PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_VOICE);
+			if (hasDraw)
+				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_GRAF, PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);
+			else
+				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_GRAF, PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_GRAF);
+			request.census();
 			request.excuteAsync();
 		} catch (Exception e) {
 			e.printStackTrace();
 			listener.onFail(flag, RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit),hasVoice);
+					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice);
 		}
 	}
 

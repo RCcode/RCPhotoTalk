@@ -16,7 +16,6 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
-import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 
 public class PhotoInformationCountDownService {
@@ -65,7 +64,6 @@ public class PhotoInformationCountDownService {
 //				MessageSender.sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
 				MessageSender.getInstance().sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
 			}
-			LogicUtils.updateInformationState(mApplication, Action.ACTION_INFORMATION_STATE_CHANGE, info);
 			InformationPageController.getInstance().photoInformationShowEnd(info);
 			mPool.execute(new ClearPhotoInformationCacheTask(info));
 		};

@@ -39,15 +39,21 @@ public class Constants {
 
 	public static String VK_API_ID = "3567525";
 
-	private static final String DB_DIR = "db";
-
-	private static final String USER_DIR_NAME = "user";
-
 	public static File USER_IMAGE_DIR;
 
 	public static final int INFORMATION_PAGE_SIZE = 20;
 
 	public static final int MAX_SELF_BINDPHONE_TIME = 5;
+
+	public static final String COUNTRY = Locale.getDefault().getCountry();
+
+	public static final String OS_NAME = "android";
+
+	public static final String OS_VERSION = android.os.Build.MODEL + "," + android.os.Build.VERSION.SDK_INT + "," + android.os.Build.VERSION.RELEASE;
+
+	private static final String DB_DIR = "db";
+
+	private static final String USER_DIR_NAME = "user";
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -59,7 +65,7 @@ public class Constants {
 		userApps = Utils.getRCPlatformAppUsers(context);
 		String language = Locale.getDefault().getLanguage();
 		if (language.equals(Locale.CHINESE.toString())) {
-			language = language + "_" + Locale.getDefault().getCountry();
+			language = language + "_" + COUNTRY;
 		}
 		PhotoTalkParams.PARAM_VALUE_LANGUAGE = language;
 		PhotoTalkParams.PARAM_VALUE_DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();

@@ -33,7 +33,7 @@
                 android:background="@drawable/send_friend_head_bg"
                 android:padding="3dp" >
 
-                <com.rcplatform.phototalk.views.RoundImageView
+                <ImageView
                     android:id="@id/settings_account_head_portrait"
                     android:layout_width="@dimen/user_detail_head_image_width"
                     android:layout_height="@dimen/user_detail_head_image_width"
@@ -69,10 +69,10 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:textColor="#919191"
                     android:layout_marginRight="@dimen/default_gap"
                     android:drawableRight="@drawable/app_arrow"
                     android:gravity="center_vertical"
+                    android:textColor="#919191"
                     android:textSize="20sp" />
             </RelativeLayout>
 

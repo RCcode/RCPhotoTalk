@@ -21,38 +21,29 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
-import com.rcplatform.phototalk.bean.ServiceSimpleNotice;
+import com.rcplatform.phototalk.bean.ServiceCensus;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
-public class InformationStateChangeService extends IntentService {
+public class CensusService extends IntentService {
 
 	public static final String PARAM_KEY_INFORMATION = "information";
 	private static final String SERVICE_NAME = "information_state_change";
 
-	public InformationStateChangeService() {
+	public CensusService() {
 		super(SERVICE_NAME);
 	}
 
 	@Override
 	protected void onHandleIntent(Intent intent) {
-		ServiceSimpleNotice[] infos = getNotices(intent);
-		String action = intent.getAction();
+		ServiceCensus[] infos = getNotices(intent);
 		try {
-			if (action.equals(Constants.Action.ACTION_INFORMATION_STATE_CHANGE)) {
-				sendRequest(PhotoTalkApiUrl.NOTICE_STATE_CHANGE_URL, getEntity(infos));
-			} else if (action.equals(Constants.Action.ACTION_INFORMATION_DELETE)) {
-				if (infos != null)
-					sendRequest(PhotoTalkApiUrl.NOTICE_DELETE_URL, getEntity(infos));
-				else
-					sendRequest(PhotoTalkApiUrl.NOTICE_CLEAR_URL, getClearInformationEntity());
-			} else if (action.equals(Constants.Action.ACTION_INFORMATION_OVER)) {
-				sendRequest(PhotoTalkApiUrl.NOTICE_OVER_URL, getEntity(infos));
-			}
+			sendRequest(PhotoTalkApiUrl.INFORMATION_CENSUS_URL, getEntity(infos));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,7 +71,7 @@ public class InformationStateChangeService extends IntentService {
 			String content = readContent(in);
 			JSONObject jsonObject = new JSONObject(content);
 			int status = jsonObject.getInt(RCPlatformResponse.ResponseStatus.RESPONSE_KEY_STATUS);
-			if (status == 0)
+			if (status == RCPlatformResponse.ResponseStatus.RESPONSE_VALUE_SUCCESS)
 				return true;
 		}
 		return false;
@@ -97,12 +88,12 @@ public class InformationStateChangeService extends IntentService {
 		return sb.toString();
 	}
 
-	private ServiceSimpleNotice[] getNotices(Intent intent) {
+	private ServiceCensus[] getNotices(Intent intent) {
 		if (intent.hasExtra(PARAM_KEY_INFORMATION)) {
 			Object[] infos = (Object[]) intent.getSerializableExtra(PARAM_KEY_INFORMATION);
-			ServiceSimpleNotice[] simpleInfo = new ServiceSimpleNotice[infos.length];
+			ServiceCensus[] simpleInfo = new ServiceCensus[infos.length];
 			for (int i = 0; i < infos.length; i++) {
-				ServiceSimpleNotice info = (ServiceSimpleNotice) infos[i];
+				ServiceCensus info = (ServiceCensus) infos[i];
 				simpleInfo[i] = info;
 			}
 			return simpleInfo;
@@ -110,7 +101,7 @@ public class InformationStateChangeService extends IntentService {
 		return null;
 	}
 
-	public StringEntity getEntity(ServiceSimpleNotice... simpleInfo) throws JSONException, UnsupportedEncodingException {
+	public StringEntity getEntity(ServiceCensus... simpleInfo) throws JSONException, UnsupportedEncodingException {
 		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
 		JSONObject jsonParams = new JSONObject();
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
@@ -118,22 +109,14 @@ public class InformationStateChangeService extends IntentService {
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
+		jsonParams.put(PhotoTalkParams.ServiceCensus.PARAM_KEY_COUNTRY, Constants.COUNTRY);
+		jsonParams.put(PhotoTalkParams.ServiceCensus.PARAM_KEY_OS, Constants.OS_NAME);
+		jsonParams.put(PhotoTalkParams.ServiceCensus.PARAM_KEY_OS_VERSION, Constants.OS_VERSION);
+		jsonParams.put(PhotoTalkParams.ServiceCensus.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(this));
 		Gson gson = new Gson();
-		JSONArray arrayInfos = new JSONArray(gson.toJson(simpleInfo, new TypeToken<ServiceSimpleNotice[]>() {
+		JSONArray arrayInfos = new JSONArray(gson.toJson(simpleInfo, new TypeToken<ServiceCensus[]>() {
 		}.getType()));
-		jsonParams.put(PhotoTalkParams.InformationStateChange.PARAM_KEY_INFOS, arrayInfos);
-		return new StringEntity(jsonParams.toString(), "UTF-8");
-	}
-
-	public StringEntity getClearInformationEntity() throws Exception {
-		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
-		JSONObject jsonParams = new JSONObject();
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
-		jsonParams.put(PhotoTalkParams.ClearInformation.PARAM_KEY_NOTICE_ID, PrefsUtils.User.getUserMaxRecordInfoId(getApplicationContext(), userInfo.getRcId()));
+		jsonParams.put(PhotoTalkParams.ServiceCensus.PARAM_KEY_INFOS, arrayInfos);
 		return new StringEntity(jsonParams.toString(), "UTF-8");
 	}
 }

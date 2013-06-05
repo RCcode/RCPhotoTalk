@@ -13,19 +13,36 @@ public class ImageOptionsFactory {
 	private static DisplayImageOptions defaultImageOption = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc()
 			.showStubImage(DEFAULT_HEAD_DRAWABLE).showImageOnFail(DEFAULT_HEAD_DRAWABLE).showImageForEmptyUri(DEFAULT_HEAD_DRAWABLE).build();
 	private static DisplayImageOptions mHeadImageOptions;
+	private static DisplayImageOptions mFriendHeadImageOptions;
 	private static DisplayImageOptions mBackImageOptions;
+	private static DisplayImageOptions mFriendBackImageOptions;
 
 	public static DisplayImageOptions getHeadImageOptions() {
 		if (mHeadImageOptions == null)
-			mHeadImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.default_head).showImageOnFail(DEFAULT_HEAD_DRAWABLE).build();
+			mHeadImageOptions = new DisplayImageOptions.Builder().displayer(new RoundedBitmapDisplayer(90)).showImageForEmptyUri(R.drawable.default_head)
+					.showImageOnFail(DEFAULT_HEAD_DRAWABLE).build();
 		return mHeadImageOptions;
+	}
+
+	public static DisplayImageOptions getFriendHeadImageOptions() {
+		if (mFriendHeadImageOptions == null)
+			mFriendHeadImageOptions = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc().displayer(new RoundedBitmapDisplayer(90))
+					.showImageForEmptyUri(R.drawable.default_head).showImageOnFail(DEFAULT_HEAD_DRAWABLE).build();
+		return mFriendHeadImageOptions;
 	}
 
 	public static DisplayImageOptions getUserBackImageOptions() {
 		if (mBackImageOptions == null)
 			mBackImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.user_detail_bg).showStubImage(R.drawable.user_detail_bg)
-					.showImageOnFail(R.drawable.user_detail_bg).cacheInMemory().cacheOnDisc().build();
+					.showImageOnFail(R.drawable.user_detail_bg).build();
 		return mBackImageOptions;
+	}
+
+	public static DisplayImageOptions getFriendBackImageOptions() {
+		if (mFriendBackImageOptions == null)
+			mFriendBackImageOptions = new DisplayImageOptions.Builder().showImageForEmptyUri(R.drawable.user_detail_bg)
+					.showStubImage(R.drawable.user_detail_bg).showImageOnFail(R.drawable.user_detail_bg).cacheInMemory().cacheOnDisc().build();
+		return mFriendBackImageOptions;
 	}
 
 	public static DisplayImageOptions getDefaultImageOptions() {

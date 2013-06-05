@@ -40,6 +40,12 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_TIME_LIMIT = "timeLimit";
 		public static final String PARAM_KEY_USERS = "userArray";
 		public static final String PARAM_KEY_RECEIVER_ID = "rcId";
+		public static final String PARAM_KEY_HAS_VOICE = "record";
+		public static final String PARAM_KEY_HAS_GRAF = "graf";
+		public static final String PARAM_VALUE_HAS_VOICE = "1";
+		public static final String PARAM_VALUE_NO_VOICE = "0";
+		public static final String PARAM_VALUE_HAS_GRAF = "1";
+		public static final String PARAM_VALUE_NO_GRAF = "0";
 	}
 
 	public static class UserSetting {
@@ -55,9 +61,12 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NOTICE_ID = "noticeId";
 	}
 
-	public static class InformationStateChange {
-		public static final String PARAM_KEY_INFOS = "notices";
-		public static final String PARAM_KEY_TIME = "time";
+	public static class ServiceCensus {
+		public static final String PARAM_KEY_INFOS = "sends";
+		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_OS = "osName";
+		public static final String PARAM_KEY_OS_VERSION = "osVersion";
+		public static final String PARAM_KEY_TIMEZONE = "timeZone";
 	}
 
 	public static class UploadContacts {
@@ -78,7 +87,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_HEAD_URL = "headUrl";
 		public static final String PARAM_KEY_NICK = "nick";
 		public static final String PARAM_KEY_IMAGE = "file";
-		public static final String PARAM_KEY_TIMEZONE="timeZone";
+		public static final String PARAM_KEY_TIMEZONE = "timeZone";
 		public static final String PARAM_KEY_COUNTRY = "country";
 		public static final String PARAM_KEY_TOKEN = "token";
 	}

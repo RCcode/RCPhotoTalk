@@ -25,10 +25,18 @@ public class Information {
 	protected RecordUser receiver;
 
 	private int totleLength;
-	
+
 	private boolean hasVoice;
-	
-	
+
+	private boolean hasGraf;
+
+	public boolean isHasGraf() {
+		return hasGraf;
+	}
+
+	public void setHasGraf(boolean hasGraf) {
+		this.hasGraf = hasGraf;
+	}
 
 	public boolean isHasVoice() {
 		return hasVoice;

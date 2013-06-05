@@ -43,6 +43,7 @@ import com.rcplatform.phototalk.views.HorizontalListView;
 public class SelectFriendsActivity extends BaseActivity implements OnClickListener {
 
 	public static final String PARAM_KEY_HASVOICE = "hasvoice";
+	public static final String PARAM_KEY_HASGRAF = "hasgraf";
 
 	private ListView mFriendListView;
 
@@ -77,6 +78,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private Button seach_delete_btn;
 	private EditText etSearch;
 	private boolean hasVoice = false;
+	private boolean hasGraf = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			timeLimit = "10";
 		}
 		hasVoice = getIntent().getBooleanExtra(PARAM_KEY_HASVOICE, false);
+		hasGraf = getIntent().getBooleanExtra(PARAM_KEY_HASGRAF, false);
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
 		initViewOrListener();
@@ -219,7 +222,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		if (file.exists()) {
 			// 删除 录音和照片 zip 压缩包不删除
 			deleteTemp();
-			sendPicture(tempFilePath, timeLimit, sendData,hasVoice);
+			sendPicture(tempFilePath, timeLimit, sendData, hasVoice);
 		} else {
 			sendStringMessage(MSG_WHAT_ERROR, getString(R.string.receive_data_error));
 		}
@@ -293,10 +296,10 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	private long timeSnap;
 
-	private void sendPicture(String imagePath, final String timeLimit, final List<Friend> friends,boolean hasVoice) {
+	private void sendPicture(String imagePath, final String timeLimit, final List<Friend> friends, boolean hasVoice) {
 		timeSnap = System.currentTimeMillis();
 		final File file = new File(imagePath);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file,hasVoice);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf);
 	}
 
 	@Override
