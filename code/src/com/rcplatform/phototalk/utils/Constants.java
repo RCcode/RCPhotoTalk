@@ -55,6 +55,8 @@ public class Constants {
 
 	private static final String USER_DIR_NAME = "user";
 
+	public static final String INVITE_URL = "http://rctalk.me";
+
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -65,7 +67,10 @@ public class Constants {
 		userApps = Utils.getRCPlatformAppUsers(context);
 		String language = Locale.getDefault().getLanguage();
 		if (language.equals(Locale.CHINESE.toString())) {
-			language = language + "_" + COUNTRY;
+			if (COUNTRY.equals("HK"))
+				language = Locale.TAIWAN.toString();
+			else
+				language = language + "_" + COUNTRY;
 		}
 		PhotoTalkParams.PARAM_VALUE_LANGUAGE = language;
 		PhotoTalkParams.PARAM_VALUE_DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();

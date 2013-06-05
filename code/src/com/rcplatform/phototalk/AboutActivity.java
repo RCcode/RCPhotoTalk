@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -8,16 +9,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
+import com.rcplatform.phototalk.utils.Utils;
 
-public class AboutActivity extends BaseActivity implements OnClickListener,
-		DialogInterface.OnClickListener {
+public class AboutActivity extends BaseActivity implements OnClickListener, DialogInterface.OnClickListener {
 	private Button checkUpdate;
 	private String updateUrl;
 	private AlertDialog mUpdateDialog;
@@ -52,12 +52,9 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 			finish();
 			break;
 		case R.id.contact_us_btn:
-			Intent email = new Intent(android.content.Intent.ACTION_SENDTO,Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-			String emailSubject = SystemMessageUtil.getLanguage(baseContext)
-					+ SystemMessageUtil.getAppName(baseContext)
-					+ SystemMessageUtil.getPhoneNumber(baseContext)
-					+ SystemMessageUtil.getNetworkName(baseContext)
-					+ SystemMessageUtil.getImsi(baseContext);
+			Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
+			String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
+					+ SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext) + SystemMessageUtil.getImsi(baseContext);
 			// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
 			// emailSubject);
 			// 设置要默认发送的内容
@@ -81,8 +78,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 		task.setOnUpdateCheckListener(new OnUpdateCheckListener() {
 
 			@Override
-			public void onHasUpdate(String versionCode, String updateContent,
-					String updateUrl) {
+			public void onHasUpdate(String versionCode, String updateContent, String updateUrl) {
 				dismissLoadingDialog();
 				showUpdateDialog(versionCode, updateContent, updateUrl);
 			}
@@ -102,17 +98,20 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 		task.start();
 	}
 
-	private void showUpdateDialog(String versionCode, String updateContent,
-			String updateUrl) {
+	@SuppressLint("NewApi")
+	private void showUpdateDialog(String versionCode, String updateContent, String updateUrl) {
 		this.updateUrl = updateUrl;
 		if (mUpdateDialog == null) {
-			AlertDialog.Builder builder = new AlertDialog.Builder(this)
-					.setMessage(updateContent)
-					.setTitle(
-							getString(R.string.update_dialog_title))
-					.setNegativeButton(R.string.update_now, this)
-					.setPositiveButton(R.string.attention_later, this);
-			mUpdateDialog = builder.create();
+			if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_Dialog_Update).setMessage(updateContent)
+						.setTitle(getString(R.string.update_dialog_title)).setNegativeButton(R.string.update_now, this)
+						.setPositiveButton(R.string.attention_later, this);
+				mUpdateDialog = builder.create();
+			} else {
+				AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage(updateContent).setTitle(getString(R.string.update_dialog_title))
+						.setNegativeButton(R.string.update_now, this).setPositiveButton(R.string.attention_later, this);
+				mUpdateDialog = builder.create();
+			}
 		}
 		mUpdateDialog.show();
 	}
@@ -121,7 +120,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener,
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 		case DialogInterface.BUTTON_NEGATIVE:
-
+			Utils.download(this, updateUrl);
 			break;
 		}
 	}

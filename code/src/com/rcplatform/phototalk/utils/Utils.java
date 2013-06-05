@@ -669,4 +669,10 @@ public class Utils {
 		Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(pk);
 		context.startActivity(LaunchIntent);
 	}
+
+	public static void download(Context context, String url) {
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse(url));
+		context.startActivity(intent);
+	}
 }
