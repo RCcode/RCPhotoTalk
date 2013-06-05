@@ -80,7 +80,9 @@ public class VKClient {
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-					mApi.createWallPost(mUid,mContext.getString(R.string.join_message), null, null, false, false, false, null, null, null, null);
+					List<String> attachments = new ArrayList<String>();
+					attachments.add(Constants.INVITE_URL);
+					mApi.createWallPost(mUid, mContext.getString(R.string.join_message), attachments, null, false, false, false, null, null, null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -154,7 +156,7 @@ public class VKClient {
 				for (String id : friendIds) {
 					try {
 						List<String> attachments = new ArrayList<String>();
-						attachments.add("http://www.google.co.jp");
+						attachments.add(Constants.INVITE_URL);
 						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()), attachments,
 								null, false, false, false, null, null, null, null);
 					} catch (Exception e) {

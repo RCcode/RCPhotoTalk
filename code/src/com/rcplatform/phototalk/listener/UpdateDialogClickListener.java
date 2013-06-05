@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.listener;
 
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,7 +22,7 @@ public class UpdateDialogClickListener implements OnClickListener {
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 		case DialogInterface.BUTTON_NEGATIVE:
-			// TODO 现在更新
+			Utils.download(mContext, mUpdateUrl);
 			break;
 		case DialogInterface.BUTTON_POSITIVE:
 			PrefsUtils.AppInfo.setLastCheckUpdateTime(mContext, System.currentTimeMillis());

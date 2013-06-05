@@ -243,8 +243,8 @@
     <string name="input_correct_phonenumber">请输入正确手机号</string>
     <string name="sms_sended">验证短信已发送</string>
     <string name="phone_number_validate">电话号码验证</string>
-    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:，注册后加我ID:%1$s</string>
-    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:</string>
+    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:http://rctalk.me，注册后加我ID:%1$s</string>
+    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:http://rctalk.me</string>
     <string name="invite_msg_match">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！</string>
     <!-- login regist_page -->
     <string name="login_use_account_below">使用以下RC账号登录</string>

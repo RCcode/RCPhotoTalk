@@ -25,6 +25,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -92,7 +93,7 @@ public class FacebookClient {
 
 	public void sendInviteMessageToUser(final String uid, final OnInviteSuccessListener listener) {
 		Bundle bundler = new Bundle();
-		bundler.putString("link", "http://www.google.co.jp");
+		bundler.putString("link", Constants.INVITE_URL);
 		bundler.putString("caption", mContext.getString(R.string.app_name));
 		bundler.putString("description", mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()));
 		bundler.putString("name", mContext.getString(R.string.app_name));
@@ -121,7 +122,7 @@ public class FacebookClient {
 
 	public void sendJoinMessage() {
 		Bundle bundler = new Bundle();
-		bundler.putString("link", "http://www.google.co.jp");
+		bundler.putString("link", Constants.INVITE_URL);
 		bundler.putString("caption", mContext.getString(R.string.app_name));
 		bundler.putString("description", mContext.getString(R.string.join_message));
 		bundler.putString("name", mContext.getString(R.string.app_name));
