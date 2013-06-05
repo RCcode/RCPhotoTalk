@@ -21,24 +21,24 @@ sdk_list:[
 			description:"这是admob平台，需要publisher_id，但是banner和interstitial的publisher_id申请了不同的id,所以提供了两个。注意顺序：先banner后interstitial.还有即使两者id相同，如果集成了两种类型的广告也都必须写上",
 			sdk_name:"admob",
 			sdk_key_names:["banner_publisher_id","interstitial_publisher_id"],
-			banner_publisher_id:"a151932ee614803",
-			interstitial_publisher_id:"a151932ee614803"
+			banner_publisher_id:"a1515bd3c09c9c8",
+			interstitial_publisher_id:"a1515bd4516e7b5"
 		},
 		{
 			sdk_code:2,
 			description:"这是inmobi平台，需要app_id，但是banner和fullpage的app_id申请了不同的id,所以提供了两个。注意顺序：先banner后fullpage.还有即使两者id相同，如果集成了两种类型的广告也都必须写上",
 			sdk_name:"inmobi",
 			sdk_key_names:["banner_app_id","fullpage_app_id"],
-			banner_app_id:"509b0aa5a3e34f0faad9a7929e0c271f",
-			fullpage_app_id:"394ed7f9206a41cc849c043e1fde1a68"
+			banner_app_id:"f3d8961241a04bcbb91f6866b777cbd8",
+			fullpage_app_id:"aed3f3b9788344cbbd43bfca3c51648e"
 		},
 		{
 		 	sdk_code:3,
 			description:"这是millennial平台，需要app_id，但是banner和interstitial的app_id申请了不同的id,所以提供了两个。注意顺序：先banner后fullpage.还有即使两者id相同，如果集成了两种类型的广告也都必须写上",
 			sdk_name:"mmedia",
 			sdk_key_names:["banner_app_id","interstitial_app_id"],
-			banner_app_id:"118111",
-			interstitial_app_id:"118146"
+			banner_app_id:"118662",
+			interstitial_app_id:"118663"
 		},
 		{
 			sdk_code:4,
@@ -94,6 +94,6 @@ sdk_list:[
 			sdk_key_names:["id"],
 			id:""
 		}
-		
+
 		]
 }
