@@ -122,7 +122,8 @@ public class LogicUtils {
 	public static void informationFriendAdded(Context context, Information information, Friend friend) {
 		if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
-//			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
+			// MessageSender.sendInformation(context, friend.getTigaseId(),
+			// friend.getRcId(), information);
 			MessageSender.getInstance().sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
 		}
 	}
@@ -149,7 +150,8 @@ public class LogicUtils {
 		}
 		if (information != null) {
 			MessageSender.getInstance().sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
-//			MessageSender.sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
+			// MessageSender.sendInformation(context, friend.getTigaseId(),
+			// friend.getRcId(), information);
 			InformationPageController.getInstance().friendAdded(information, addType);
 		}
 	}
@@ -207,11 +209,11 @@ public class LogicUtils {
 		context.startActivity(intent);
 	}
 
-	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file) {
+	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file, boolean hasVoice) {
 		long flag = System.currentTimeMillis();
 		try {
 			UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file);
+			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
@@ -224,14 +226,14 @@ public class LogicUtils {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
 				}
 
-			}, friendIds);
+			}, friendIds,hasVoice);
 		} catch (Exception e) {
 			e.printStackTrace();
 			InformationPageController.getInstance().onPhotoSendFail(flag);
 		}
 	}
 
-	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file)
+	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file, boolean hasVoice)
 			throws JSONException {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
@@ -262,6 +264,7 @@ public class LogicUtils {
 			record.setTotleLength(timeLimit);
 			record.setLimitTime(timeLimit);
 			record.setUrl(file.getPath());
+			record.setHasVoice(hasVoice);
 			infoRecords.add(record);
 		}
 		PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infoRecords);

@@ -44,8 +44,8 @@
                         android:layout_width="fill_parent"
                         android:layout_height="fill_parent"
                         android:layout_alignBottom="@id/user_bg"
-                        android:layout_marginTop="30dp"
                         android:layout_alignTop="@+id/rela_userinfo"
+                        android:layout_marginTop="30dp"
                         android:background="#50000000"
                         android:orientation="horizontal" />
 
@@ -53,10 +53,10 @@
                         android:id="@+id/settings_user_info_edit_action"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_alignBottom="@id/user_bg"
-                        android:layout_marginRight="15dp"
+                        android:layout_alignParentRight="true"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginRight="15dp"
                         android:background="@drawable/user_info_edit_btn" />
 
                     <LinearLayout
@@ -72,18 +72,18 @@
                             android:layout_width="@dimen/user_head_image_width_bg"
                             android:layout_height="@dimen/user_head_image_width_bg"
                             android:layout_gravity="center_vertical"
-                            android:padding="3dp"
-                                android:layout_marginRight="@dimen/user_detail_source_margin_left"
-                            android:background="@drawable/send_friend_head_bg" >
+                            android:layout_marginRight="@dimen/user_detail_source_margin_left"
+                            android:background="@drawable/send_friend_head_bg"
+                            android:padding="3dp" >
 
                             <com.rcplatform.phototalk.views.RoundImageView
                                 android:id="@+id/settings_account_head_portrait"
                                 android:layout_width="@dimen/user_detail_head_image_width"
                                 android:layout_height="@dimen/user_detail_head_image_width"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/default_head"
+                                android:gravity="center"
                                 android:scaleType="centerInside"
-                                android:gravity="center" />
+                                android:src="@drawable/default_head" />
                         </RelativeLayout>
 
                         <LinearLayout
@@ -117,8 +117,8 @@
                                 <LinearLayout
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:visibility="gone"
-                                    android:orientation="horizontal" >
+                                    android:orientation="horizontal"
+                                    android:visibility="gone" >
 
                                     <ImageView
                                         android:id="@+id/tv_sex"
@@ -137,33 +137,32 @@
                                         android:gravity="top"
                                         android:textColor="#E5E5E5" />
                                 </LinearLayout>
-                                
-                                 <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal" >
+
+                                <LinearLayout
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal" >
+
                                     <!-- android:layout_height="@dimen/user_detail_head_width_half" -->
 
-                                <TextView
-                                    style="@style/text_base"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="RC ID:"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="@dimen/user_detail_rcid_size" />
+                                    <TextView
+                                        style="@style/text_base"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="RC ID:"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="@dimen/user_detail_rcid_size" />
 
-                                <TextView
-                                    android:id="@+id/user_rc_id"
-                                    style="@style/text_base"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textColor="#FFFFFF"
-                                    android:textSize="@dimen/user_detail_rcid_size" />
+                                    <TextView
+                                        android:id="@+id/user_rc_id"
+                                        style="@style/text_base"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:textColor="#FFFFFF"
+                                        android:textSize="@dimen/user_detail_rcid_size" />
+                                </LinearLayout>
                             </LinearLayout>
-                            </LinearLayout>
-
-                           
                         </LinearLayout>
                     </LinearLayout>
                 </RelativeLayout>
@@ -177,8 +176,9 @@
                     android:layout_marginLeft="@dimen/friend_info_app_left"
                     android:layout_marginRight="@dimen/friend_info_app_right"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/app_list_back"/>
-                -->
+                    android:background="@drawable/app_list_back"/>  -->
+
+              
 
                 <LinearLayout
                     android:id="@+id/my_friend_details_apps_listview"
@@ -187,10 +187,11 @@
                     android:layout_marginBottom="10dp"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="2dp"
-                    android:layout_marginTop="1dp"
                     android:background="@drawable/app_list_back"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal" >
 
+                    <!--
                     <ImageView
                         android:layout_width="50dp"
                         android:layout_height="50dp"
@@ -210,7 +211,8 @@
                         android:layout_height="50dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="5dp"
-                        android:background="@drawable/three" />
+                        android:background="@drawable/three" /> -->
+                   
                 </LinearLayout>
 
                 <LinearLayout
@@ -233,9 +235,9 @@
                             android:layout_centerVertical="true"
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
-                            android:textSize="18sp"
                             android:text="@string/friend_dynamic"
-                            android:textColor="#313131" >
+                            android:textColor="#313131"
+                            android:textSize="18sp" >
                         </TextView>
 
                         <RelativeLayout
@@ -289,8 +291,8 @@
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
                             android:text="@string/my_account"
-                              android:textSize="18sp"
-                            android:textColor="#313131" >
+                            android:textColor="#313131"
+                            android:textSize="18sp" >
                         </TextView>
 
                         <ImageView
@@ -319,8 +321,8 @@
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
                             android:text="@string/setting"
-                              android:textSize="18sp"
-                            android:textColor="#313131" >
+                            android:textColor="#313131"
+                            android:textSize="18sp" >
                         </TextView>
 
                         <ImageView
@@ -349,8 +351,8 @@
                             android:layout_marginLeft="7dp"
                             android:gravity="center_vertical"
                             android:text="@string/about"
-                              android:textSize="18sp"
-                            android:textColor="#313131" >
+                            android:textColor="#313131"
+                            android:textSize="18sp" >
                         </TextView>
 
                         <ImageView

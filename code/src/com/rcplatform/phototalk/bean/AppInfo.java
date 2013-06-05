@@ -8,33 +8,19 @@ public class AppInfo implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String rcPackage;
+	private String appPackage;
 	private String appName;
 	private int appId;
-	private String picUrl;
+	private String grayPicUrl;
+	private String colorPicUrl;
 	private String appUrl;
-	public int getAppId() {
-		return appId;
+
+	public String getAppPackage() {
+		return appPackage;
 	}
 
-	public void setAppId(int appId) {
-		this.appId = appId;
-	}
-
-	public String getPicUrl() {
-		return picUrl;
-	}
-
-	public void setPicUrl(String picUrl) {
-		this.picUrl = picUrl;
-	}
-
-	public String getAppUrl() {
-		return appUrl;
-	}
-
-	public void setAppUrl(String appUrl) {
-		this.appUrl = appUrl;
+	public void setAppPackage(String appPackage) {
+		this.appPackage = appPackage;
 	}
 
 	public String getAppName() {
@@ -45,12 +31,42 @@ public class AppInfo implements Serializable {
 		this.appName = appName;
 	}
 
-	public String getRcPackage() {
-		return rcPackage;
+	public int getAppId() {
+		return appId;
 	}
 
-	public void setRcPackage(String rcPackage) {
-		this.rcPackage = rcPackage;
+	public void setAppId(int appId) {
+		this.appId = appId;
 	}
 
+	public String getGrayPicUrl() {
+		return grayPicUrl;
+	}
+
+	public void setGrayPicUrl(String grayPicUrl) {
+		this.grayPicUrl = grayPicUrl;
+	}
+
+	public String getColorPicUrl() {
+		return colorPicUrl;
+	}
+
+	public void setColorPicUrl(String colorPicUrl) {
+		this.colorPicUrl = colorPicUrl;
+	}
+
+	public String getAppUrl() {
+		return appUrl;
+	}
+
+	public void setAppUrl(String appUrl) {
+		this.appUrl = appUrl;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (!(o instanceof AppInfo))
+			return false;
+		return appPackage.equals(((AppInfo) o).getAppPackage());
+	}
 }

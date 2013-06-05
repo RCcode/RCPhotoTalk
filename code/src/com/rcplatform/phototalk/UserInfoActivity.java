@@ -174,36 +174,36 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.user_facebook_layout:
-				if (mFacebookClient.isAuthorize()) {
-					showDeAuthorizeDialog(FriendType.FACEBOOK);
-				} else {
-					authorizeFacebook();
-				}
-				break;
-			case R.id.user_vk_layout:
-				if (mVKClient.isAuthorize()) {
-					showDeAuthorizeDialog(FriendType.VK);
-				} else {
-					authorizeVK();
-				}
-				break;
-			case R.id.reset_pw_btn:
-				startActivity(ChangePasswordActivity.class);
-				break;
-			case R.id.login_out_btn:
-				LogicUtils.logout(this);
-				break;
-			case R.id.back:
-				startActivity(new Intent(this, SettingsActivity.class));
-				this.finish();
-				break;
-			case R.id.rela_phone:
-				if (TextUtils.isEmpty(getCurrentUser().getCellPhone())
-				        && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
-					startActivity(RequestSMSActivity.class);
-				}
-				break;
+
+		case R.id.user_facebook_layout:
+			if (mFacebookClient.isAuthorize()) {
+				showDeAuthorizeDialog(FriendType.FACEBOOK);
+			} else {
+				authorizeFacebook();
+			}
+			break;
+		case R.id.user_vk_layout:
+			if (mVKClient.isAuthorize()) {
+				showDeAuthorizeDialog(FriendType.VK);
+			} else {
+				authorizeVK();
+			}
+			break;
+		case R.id.reset_pw_btn:
+			startActivity(ChangePasswordActivity.class);
+			break;
+		case R.id.login_out_btn:
+			LogicUtils.logout(this);
+			break;
+		case R.id.back:
+			startActivity(new Intent(this, SettingsActivity.class));
+			this.finish();
+			break;
+		case R.id.rela_phone:
+			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
+				startActivityForResult(new Intent(this, RequestSMSActivity.class),REQUEST_CODE_BINDPHONE);
+			}
+			break;
 		}
 	}
 

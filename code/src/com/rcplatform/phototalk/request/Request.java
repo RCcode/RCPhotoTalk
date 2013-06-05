@@ -37,6 +37,7 @@ import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 
 public class Request implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -203,8 +204,8 @@ public class Request implements Serializable {
 		request.excuteAsync();
 	}
 
-	public static void sendPhoto(final Context context, final long flag, File file, final String timeLimit, final PhotoSendListener listener,
-			final List<String> friendIds) {
+	public static void sendPhoto(final Context context, final long flag, final File file, final String timeLimit, final PhotoSendListener listener,
+			final List<String> friendIds,final boolean hasVoice) {
 		final UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		try {
 			JSONArray jsonArray = new JSONArray();
@@ -226,11 +227,21 @@ public class Request implements Serializable {
 							long flag = jsonObject.getLong("time");
 							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
-									Integer.parseInt(timeLimit));
+									Integer.parseInt(timeLimit),hasVoice);
 							// MessageSender.sendInformation(context,
 							// informations, userIds);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag);
+							RCThreadPool.getInstance().addTask(new Runnable() {
+
+								@Override
+								public void run() {
+									int count = PhotoTalkDatabaseFactory.getDatabase().getUnSendInformationCountByUrl(file.getAbsolutePath());
+									if (count == 0) {
+										file.delete();
+									}
+								}
+							});
 						} catch (JSONException e) {
 							e.printStackTrace();
 							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, content);
@@ -242,7 +253,7 @@ public class Request implements Serializable {
 						listener.onFail(flag, errorCode, content);
 						UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
+								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit),hasVoice);
 					}
 				};
 			}
@@ -257,7 +268,7 @@ public class Request implements Serializable {
 			e.printStackTrace();
 			listener.onFail(flag, RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit));
+					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit),hasVoice);
 		}
 	}
 

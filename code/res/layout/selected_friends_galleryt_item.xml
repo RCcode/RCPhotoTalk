@@ -6,8 +6,8 @@
     >
    <com.rcplatform.phototalk.views.HeadImageView
        android:id="@+id/iv_sfgi_head"
-		android:layout_width="60dp"
-        android:layout_height="60dp"
+		android:layout_width="@dimen/send_image_head_width"
+        android:layout_height="@dimen/send_image_head_width"
         android:layout_gravity="center"
         android:scaleType="centerInside"
        />

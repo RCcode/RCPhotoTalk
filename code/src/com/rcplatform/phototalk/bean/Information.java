@@ -25,6 +25,18 @@ public class Information {
 	protected RecordUser receiver;
 
 	private int totleLength;
+	
+	private boolean hasVoice;
+	
+	
+
+	public boolean isHasVoice() {
+		return hasVoice;
+	}
+
+	public void setHasVoice(boolean hasVoice) {
+		this.hasVoice = hasVoice;
+	}
 
 	public Information() {
 	}

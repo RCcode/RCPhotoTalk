@@ -3,6 +3,8 @@ package com.rcplatform.phototalk.utils;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -32,6 +34,8 @@ public class Constants {
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
 	public static Map<AppInfo, UserInfo> userApps;
+
+	public static List<AppInfo> installedApps = new ArrayList<AppInfo>();
 
 	public static String VK_API_ID = "2904017";
 
@@ -86,8 +90,7 @@ public class Constants {
 				}
 				fos.close();
 				is.close();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

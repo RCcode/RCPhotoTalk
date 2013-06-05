@@ -54,6 +54,9 @@ public class PhotoTalkDb4oGlobalDatabase implements GlobalDatabase {
 
 	@Override
 	public void savePlatformAppInfos(List<AppInfo> appInfos) {
+		ObjectSet<AppInfo> localApps = db.query(AppInfo.class);
+		for (AppInfo info : localApps)
+			db.delete(info);
 		db.store(appInfos);
 		db.commit();
 	}

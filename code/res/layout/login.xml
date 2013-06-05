@@ -59,8 +59,6 @@
                 android:id="@+id/login_id"
                 style="@style/login_edittext"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/ui_element_unit"
-                android:drawableBottom="@drawable/edit_button_selector"
                 android:hint="@string/login_username_hint"
                 android:inputType="textEmailAddress" />
 
@@ -68,8 +66,6 @@
                 android:id="@+id/login_nick"
                 style="@style/login_edittext"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/ui_element_unit"
-                android:drawableBottom="@drawable/edit_button_selector"
                 android:hint="@string/login_nick_hint"
                 android:inputType="textEmailAddress"
                 android:maxLength="20" />
@@ -78,8 +74,6 @@
                 android:id="@+id/login_password"
                 style="@style/login_edittext"
                 android:layout_width="fill_parent"
-                android:layout_height="@dimen/ui_element_unit"
-                android:drawableBottom="@drawable/edit_button_selector"
                 android:hint="@string/login_password_hint"
                 android:maxLength="20" />
         </LinearLayout>

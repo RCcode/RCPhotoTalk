@@ -101,10 +101,7 @@
                             android:textColor="#E5E5E5"
                             android:textSize="@dimen/friend_info_age_text_size" />
                     </LinearLayout>
-                    <!--
-                      android:layout_height="@dimen/user_detail_head_width_half"
-                      android:gravity="center_vertical"
-                    -->
+
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -162,27 +159,24 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <com.rcplatform.phototalk.views.HorizontalListView
-        android:id="@+id/hlv_apps"
+    <LinearLayout
+        android:id="@+id/linear_apps"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_list_height"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
-        android:background="@drawable/app_list_bg"
-        android:padding="10dp"
-        android:visibility="gone" />
-    <!-- </RelativeLayout> -->
+        android:background="@drawable/app_list_bg" />
 
     <Button
         android:id="@+id/btn_perform"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18sp"
         android:layout_marginBottom="@dimen/friend_info_send_top"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
         android:layout_marginTop="@dimen/friend_info_app_right"
         android:background="@drawable/friend_info_send_btn"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
 
 </LinearLayout>

@@ -171,7 +171,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime,
-			List<String> receivableUserIds, final List<String> allReceiverIds, int state, int totleLength) {
+			List<String> receivableUserIds, final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice) {
 		ObjectSet<Information> infoLocals = db.query(new Predicate<Information>() {
 
 			private static final long serialVersionUID = 1L;
@@ -200,6 +200,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			information.setTotleLength(totleLength);
 			information.setLimitTime(totleLength);
 			information.setUrl(picUrl);
+			information.setHasVoice(hasVoice);
 			result.put(user.getRcId(), information);
 		}
 		db.commit();
@@ -361,7 +362,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		}
 	}
 
-	private Friend cloneFriend(Friend friend,Friend friendNew) {
+	private Friend cloneFriend(Friend friend, Friend friendNew) {
 		friendNew.setFriend(friend.isFriend());
 		friendNew.setAppId(friend.getAppId());
 		friendNew.setAppList(friend.getAppList());
@@ -500,5 +501,21 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public synchronized int getUnSendInformationCountByUrl(final String url) {
+		ObjectSet<Information> result = db.query(new Predicate<Information>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Information arg0) {
+				return url.equals(arg0.getUrl())
+						&& arg0.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+						&& (arg0.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING || arg0.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+			}
+		});
+		return result.size();
 	}
 }
