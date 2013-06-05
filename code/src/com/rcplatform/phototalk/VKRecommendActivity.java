@@ -24,6 +24,7 @@ import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
@@ -64,6 +65,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 	protected void onResume() {
 		super.onResume();
 		if (!hasTryLogin && !mVkClient.isAuthorize()) {
+			EventUtil.Register_Login_Invite.rcpt_vklinklink(baseContext);
 			authorize();
 		}
 	}
@@ -135,8 +137,10 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 
 	protected void onInviteButtonClick(final java.util.Set<Friend> willInvateFriends) {
 		if (willInvateFriends != null && willInvateFriends.size() > 0) {
+			EventUtil.Register_Login_Invite.rcpt_success_vkinvite(baseContext);
 			List<String> vkIds = new ArrayList<String>();
 			for (Friend f : willInvateFriends) {
+				EventUtil.Register_Login_Invite.rcpt_vkinvite(baseContext);
 				vkIds.add(f.getRcId());
 			}
 			mVkClient.sendInviteMessage(vkIds);

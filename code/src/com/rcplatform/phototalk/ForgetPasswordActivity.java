@@ -11,6 +11,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
@@ -56,6 +57,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 		case R.id.forget_password_confirm_button:
 			String email = mEmailEditTextView.getText().toString();
 			if (checkEmail(email)) {
+				EventUtil.Register_Login_Invite.rcpt_resetpassword(baseContext);
 				doGetPassword(email);
 			}
 			break;

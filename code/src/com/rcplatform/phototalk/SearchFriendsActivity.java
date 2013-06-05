@@ -37,17 +37,25 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class SearchFriendsActivity extends BaseActivity implements View.OnClickListener {
 
 	private EditText mEditText;
+
 	private ListView mListView;
+
 	private TextView search_hint_text;
+
 	private ImageLoader mImageLoader;
+
 	private Button seach_delete_btn;
+
 	private Friend friendShowDetail;
+
 	private SearchFriendsAdapter mAdapter;
+
 	private static final int REQUEST_CODE_DETAIL = 100;
 
 	@Override
@@ -73,6 +81,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			}
 		});
 		mEditText.setOnKeyListener(new OnKeyListener() {
+
 			private long lastPressTime = 0l;
 
 			@Override
@@ -145,9 +154,9 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
+			case R.id.back:
+				finish();
+				break;
 		// case R.id.search_btn:
 		// search();
 		// break;
@@ -162,6 +171,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	}
 
 	private void searchFriends(String keyword) {
+		EventUtil.Register_Login_Invite.rcpt_success_search(baseContext);
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		FriendsProxy.searchFriendsAsync(this, new RCPlatformResponseHandler() {
 
@@ -176,7 +186,8 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					} else {
 						search_hint_text.setVisibility(View.GONE);
 					}
-				} catch (JSONException e) {
+				}
+				catch (JSONException e) {
 					e.printStackTrace();
 				}
 				dismissLoadingDialog();
@@ -225,6 +236,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	}
 
 	class SearchFriendsAdapter extends BaseAdapter {
+
 		private List<Friend> mFriends = new ArrayList<Friend>();
 
 		@Override
@@ -268,12 +280,12 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
 				TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
 				switch (source.getAttrType()) {
-				case FriendType.CONTACT:
-					tvFrom.setText(R.string.contact_friend);
-					break;
-				case FriendType.FACEBOOK:
-					tvFrom.setText(R.string.facebook_friend);
-					break;
+					case FriendType.CONTACT:
+						tvFrom.setText(R.string.contact_friend);
+						break;
+					case FriendType.FACEBOOK:
+						tvFrom.setText(R.string.facebook_friend);
+						break;
 				}
 				tvName.setText(source.getName());
 			}

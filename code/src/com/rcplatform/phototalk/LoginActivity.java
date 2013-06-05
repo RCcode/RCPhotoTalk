@@ -60,6 +60,7 @@ import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.task.ContactUploadTask;
 import com.rcplatform.phototalk.task.ContactUploadTask.OnUploadOverListener;
 import com.rcplatform.phototalk.task.ContactUploadTask.Status;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.ListViewUtils;
@@ -461,6 +462,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				break;
 			case R.id.login_page_forget_password_button:
 				startActivity(new Intent(this, ForgetPasswordActivity.class));
+				EventUtil.Register_Login_Invite.rcpt_forgetpasswordbutton(baseContext);
 				break;
 			case R.id.choosebutton:
 				if (mIsLoginPage) {
@@ -711,6 +713,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
+				EventUtil.Register_Login_Invite.rcpt_register(baseContext);
 				LogUtil.e(content);
 				try {
 					JSONObject jsonObject = new JSONObject(content);
@@ -756,6 +759,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void onSuccess(UserInfo userInfo) {
+				EventUtil.Register_Login_Invite.rcpt_login(baseContext);
 				dismissLoadingDialog();
 				getPhotoTalkApplication().setCurrentUser(userInfo);
 				loginSuccess(userInfo);
