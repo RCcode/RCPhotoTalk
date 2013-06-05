@@ -99,10 +99,12 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	}
 
 	private void getFriends() {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		FriendsProxy.getFriends(this, new LoadFriendsListener() {
 
 			@Override
 			public void onLoadedFail(String reason) {
+				dismissLoadingDialog();
 				if (!PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
 					showErrorConfirmDialog(reason);
 				}
@@ -111,6 +113,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			@Override
 			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
+				dismissLoadingDialog();
 			}
 		});
 	}
