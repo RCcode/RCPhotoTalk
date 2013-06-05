@@ -18,7 +18,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,10 +26,9 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -100,6 +98,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 	private View mLinearAccounts;
 
+	private Context ctx;
+
 	// private ImageView mIvHead;
 
 	public static final int LOGIN_TYPE_EMAIL = 0;
@@ -135,6 +135,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		ctx = this;
 		setContentView(R.layout.login);
 		cancelRelogin();
 		Intent intent = getIntent();
@@ -212,13 +213,20 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mSignupButton.setVisibility(View.VISIBLE);
 		init_regist_agreement_text.setVisibility(View.VISIBLE);
 		// TODO 修改为正式地址
-		SpannableString msp = new SpannableString(getString(R.string.init_regist_agreement));
-		msp.setSpan(new ForegroundColorSpan(Color.BLUE), 8, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 设置前景色为洋红色
-		msp.setSpan(new ForegroundColorSpan(Color.BLUE), 13, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE); // 设置前景色为洋红色
-		msp.setSpan(new URLSpan("http://www.baidu.com"), 8, 12, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-		msp.setSpan(new URLSpan("http://www.baidu.com"), 13, 17, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+		String agreement = getString(R.string.init_regist_agreement);
+		SpannableString msp = new SpannableString(agreement);
+		msp.setSpan(new URLSpan(""), 0, agreement.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
 		init_regist_agreement_text.setText(msp);
-		init_regist_agreement_text.setMovementMethod(LinkMovementMethod.getInstance());
+		init_regist_agreement_text.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				RCWebview.startWebview(ctx, "http://192.168.0.13:8080/RcHome/priser.html");
+			}
+		});
+		// init_regist_agreement_text.setMovementMethod(LinkMovementMethod.getInstance());
 
 		mLoginIdEditText.setHint(getString(R.string.registe_email_hint));
 		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -311,7 +319,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLoginIdEditText.setHint(getString(R.string.login_username_hint));
 		mPswEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
 		// mIvHead.setVisibility(View.GONE);
-		
+
 		mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 
 		mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
@@ -443,7 +451,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					imm.showSoftInput(mPswEditText, 0);
 					return;
 				}
-				
+
 				int loginType = invalidate(email2, psw2);
 				if (loginType != -1) {
 					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
