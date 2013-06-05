@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -154,34 +155,41 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			finish();
 			break;
 		case R.id.my_friend_dynamic:
+			EventUtil.More_Setting.rcpt_friendsupdate(baseContext);
 			startActivity(new Intent(this, FriendDynamicActivity.class));
 			break;
 		case R.id.settings_user_info_edit_action:
 			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
 		case R.id.use_account_message:
+			EventUtil.More_Setting.rcpt_myaccount(baseContext);
 			startActivity(new Intent(this, UserInfoActivity.class));
 			break;
 		case R.id.choosebutton:
 			startActivity(new Intent(this, AddFriendsActivity.class));
 			break;
 		case R.id.settings_clean_history_record_btn:
+			EventUtil.More_Setting.rcpt_clear(baseContext);
 			doCleanDistory();
 			break;
 		case R.id.user_bg:
 			// 点击更改背景图片
+			EventUtil.More_Setting.rcpt_backgroundedit(baseContext);
 			CAMERA_CODE = CROP_BACKGROUND_IMAGE;
 			showImagePickMenu(user_bg_View, CROP_BACKGROUND_IMAGE);
 			break;
 		case R.id.settings_user_edit_rc_id_action:
+			EventUtil.More_Setting.rcpt_setting(baseContext);
 			startActivity(SystemSettingActivity.class);
 			break;
 		case R.id.settings_account_head_portrait:
 			// 更改个人头像设置
+			EventUtil.More_Setting.rcpt_avataredit(baseContext);
 			CAMERA_CODE = CROP_HEAD_IMAGE;
 			showImagePickMenu(mHeadView, CROP_HEAD_IMAGE);
 			break;
 		case R.id.rela_about:
+			EventUtil.More_Setting.rcpt_about(baseContext);
 			startActivity(AboutActivity.class);
 			break;
 		}
