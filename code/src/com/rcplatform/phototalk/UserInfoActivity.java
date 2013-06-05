@@ -26,6 +26,7 @@ import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnDeAuthorizeListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener {
@@ -177,6 +178,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 		case R.id.user_facebook_layout:
 			if (mFacebookClient.isAuthorize()) {
+				EventUtil.More_Setting.rcpt_facebookunlink(baseContext);
 				showDeAuthorizeDialog(FriendType.FACEBOOK);
 			} else {
 				authorizeFacebook();
@@ -184,15 +186,18 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.user_vk_layout:
 			if (mVKClient.isAuthorize()) {
+				EventUtil.More_Setting.rcpt_vkunlink(baseContext);
 				showDeAuthorizeDialog(FriendType.VK);
 			} else {
 				authorizeVK();
 			}
 			break;
 		case R.id.reset_pw_btn:
+			EventUtil.More_Setting.rcpt_changepasswordsbutton(baseContext);
 			startActivity(ChangePasswordActivity.class);
 			break;
 		case R.id.login_out_btn:
+			EventUtil.More_Setting.rcpt_logout(baseContext);
 			LogicUtils.logout(this);
 			break;
 		case R.id.back:
@@ -202,6 +207,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		case R.id.rela_phone:
 			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
 				startActivityForResult(new Intent(this, RequestSMSActivity.class),REQUEST_CODE_BINDPHONE);
+				EventUtil.More_Setting.rcpt_phonenumber(baseContext);
 			}
 			break;
 		}

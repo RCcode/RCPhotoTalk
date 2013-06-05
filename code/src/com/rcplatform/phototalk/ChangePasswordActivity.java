@@ -22,6 +22,7 @@ import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -125,6 +126,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 				startActivity(ForgetPasswordActivity.class);
 				break;
 			case R.id.btn_confirm_password:
+				EventUtil.More_Setting.rcpt_success_changepassword(baseContext);
 				commitNewPassword(etNewPassword.getText().toString().trim(), etConfirmPassword.getText().toString().trim());
 				break;
 			case R.id.back:

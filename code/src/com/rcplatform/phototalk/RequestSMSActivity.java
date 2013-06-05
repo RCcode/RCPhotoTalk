@@ -23,6 +23,7 @@ import com.rcplatform.phototalk.db.CountryCodeDatabase;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -121,6 +122,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 				break;
 
 			case R.id.btn_commit:
+				EventUtil.More_Setting.rcpt_getcode(baseContext);
 				requestSms();
 				break;
 			case R.id.title_linear_back:

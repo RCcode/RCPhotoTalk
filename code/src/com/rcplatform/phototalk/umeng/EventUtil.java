@@ -266,6 +266,10 @@ public class EventUtil {
 			onEvent(ctx, "rcpt_myaccount");
 		}
 
+		static public void rcpt_success_changepassword(Context ctx) {
+			onEvent(ctx, "rcpt_success_changepassword");
+		}
+		
 		static public void rcpt_changepasswordsbutton(Context ctx) {
 			onEvent(ctx, "rcpt_changepasswordsbutton");
 		}
