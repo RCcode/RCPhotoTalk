@@ -71,7 +71,11 @@
     <string name="will_quit">[戻る] をクリックしてアプリを終了</string>
 
 
-    <!-- menu TODO  待确认 -->
+    <!-- menu -->
+    <string name="take_score">評価する</string>
+
+    <!-- 我 -->
+    <string name="me">私に</string>
 
 
     <!-- 提示 -->

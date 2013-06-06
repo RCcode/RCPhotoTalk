@@ -70,9 +70,11 @@
     <string name="reload">重新接收</string>
     <string name="will_quit">再次點擊"返回"退出應用</string>
 
+    <!-- menu -->
+    <string name="take_score">評價</string>
 
-    <!-- menu TODO  待確認 -->
-
+    <!-- 我 -->
+    <string name="me">我</string>
 
     <!-- 提示 -->
     <string name="attention_later">以後再說</string>
@@ -166,23 +168,21 @@
     <string name="compact">隱私政策</string>
     <string name="no_new_version">Phototalk是最新版本</string>
 
-	<!-- 登錄個人資訊頁 -->
+    <!-- 登錄個人資訊頁 -->
     <string name="use_info_below">選擇個人資料</string>
     <string name="or">或者</string>
     <string name="use_new_info">使用新的個人資料</string>
-	<string name="other_device_login">你的帳號已在其它設備登錄</string>
-	<string name="relogin">確定</string>
+    <string name="other_device_login">你的帳號已在其它設備登錄</string>
+    <string name="relogin">確定</string>
     <string name="join_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址http://rctalk.me，註冊後加我ID:%1$s</string>
     <string name="invite_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址http://rctalk.me，註冊後加我ID:%1$</string>
-	<string name="contact_friend">通訊錄:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">通訊錄:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
     <string name="gcm_message">你有%1$d條信息</string>
     <string name="gcm_friend">有人加你為好友</string>
     <string name="friend_detail_send_photo_hint_text">發照片</string>
-
-
 
 </resources>

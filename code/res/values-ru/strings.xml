@@ -71,7 +71,11 @@
     <string name="will_quit">Нажмите "Назад" еще раз для выхода из приложения</string>
 
 
-    <!-- menu TODO  待确认 -->
+    <!-- menu -->
+    <string name="take_score">Oценивать</string>
+
+    <!-- 我 -->
+    <string name="me">мне</string>
 
 
     <!-- 提示 -->

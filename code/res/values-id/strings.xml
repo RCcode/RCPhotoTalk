@@ -71,7 +71,11 @@
     <string name="will_quit">Klik lagi "Kembali" untuk menutup apl</string>
 
 
-    <!-- menu TODO  待确认 -->
+    <!-- menu -->
+    <string name="take_score">Mengevaluasi</string>
+
+    <!-- 我 -->
+    <string name="me">saya</string>
 
 
     <!-- 提示 -->

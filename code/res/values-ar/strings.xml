@@ -71,7 +71,11 @@
     <string name="will_quit">انقر فوق "رجوع" مرة أخرى للخروج من التطبيق</string>
 
 
-    <!-- menu TODO  待确认 -->
+    <!-- menu -->
+    <string name="take_score">تقييم</string>
+
+    <!-- 我 -->
+    <string name="me">أنا</string>
 
 
     <!-- 提示 -->

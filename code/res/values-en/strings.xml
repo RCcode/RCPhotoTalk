@@ -70,9 +70,11 @@
     <string name="reload">Reload</string>
     <string name="will_quit">Click "Back" again to exit app</string>
 
+    <!-- menu -->
+    <string name="take_score">Rate Us</string>
 
-    <!-- menu TODO  待确认 -->
-
+    <!-- 我 -->
+    <string name="me">me</string>
 
     <!-- 提示 -->
     <string name="attention_later">Maybe Later</string>
@@ -166,22 +168,21 @@
     <string name="compact">Privacy Policy</string>
     <string name="no_new_version">Phototalk is the latest version</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Choose Profile</string>
     <string name="or">or</string>
     <string name="use_new_info">Use a new profile</string>
-	<string name="other_device_login">Your account is already being used on another device.</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Your account is already being used on another device.</string>
+    <string name="relogin">OK</string>
     <string name="join_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me,and add my ID %1$s</string>
     <string name="invite_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me,and add my ID %1$s</string>
-	<string name="contact_friend">Contacts:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Contacts:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
     <string name="gcm_message">You have %1$d new message(s)</string>
     <string name="gcm_friend">Someone added you as a friend</string>
     <string name="friend_detail_send_photo_hint_text">Send Photo</string>
-
 
 </resources>

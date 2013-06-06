@@ -70,9 +70,11 @@
     <string name="reload">Yeniden Yükle</string>
     <string name="will_quit">Uygulamadan çıkmak için tekrar “Geri” üzerine tıklatın</string>
 
+    <!-- menu -->
+    <string name="take_score">Değerlendirmek</string>
 
-    <!-- menu TODO  待确认 -->
-
+    <!-- 我 -->
+    <string name="me">bana</string>
 
     <!-- 提示 -->
     <string name="attention_later">Belki Daha Sonra</string>
@@ -166,22 +168,21 @@
     <string name="compact">Giz. politikaları</string>
     <string name="no_new_version">Phototalk en son sürümdür</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Profil Seçin</string>
     <string name="or">veya</string>
     <string name="use_new_info">yeni bir profil kullanın</string>
-	<string name="other_device_login">Bu hesap bir başka cihazda zaten kullanılıyor.</string>
-	<string name="relogin">Tamam</string>
+    <string name="other_device_login">Bu hesap bir başka cihazda zaten kullanılıyor.</string>
+    <string name="relogin">Tamam</string>
     <string name="join_message">Sesli fotoğraf, zaman sınırlı silme! RC PhotoTalk\'a katılın ve eğlenceyi paylaşın! Karşıdan indirme bağlantısı: http://rctalk.me Bir hesap oluşturduktan sonra kimliğim %1$s\'yı ekleyin!</string>
     <string name="invite_message">Sesli fotoğraf, zaman sınırlı silme! RC PhotoTalk\'a katılın ve eğlenceyi paylaşın! Karşıdan indirme bağlantısı: http://rctalk.me Bir hesap oluşturduktan sonra kimliğim %1$s\'yı ekleyin!</string>
-	<string name="contact_friend">İletişim:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">İletişim:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
     <string name="gcm_message">%1$d yeni mesajınız var</string>
     <string name="gcm_friend">Birisi sizi arkadaş olarak ekledi</string>
     <string name="friend_detail_send_photo_hint_text">Fotoğraf gönder</string>
-
 
 </resources>

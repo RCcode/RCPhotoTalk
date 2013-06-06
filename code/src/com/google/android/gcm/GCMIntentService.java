@@ -192,7 +192,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString());
 			}
 
-		} else {
+		} else if (type == Constants.Message.MESSAGE_NEW_USER_MESSAGE_INT) {
+			String userStr = intent.getStringExtra("new_user_info");
+			if (!isRunning) {
+				generateMessageNotification(context, userStr);
+			}
+		}else if (type == Constants.Message.MESSAGE_APP_PUSH_MESSAGE_INT) {
 
 			String iconUrl = intent.getStringExtra("icon");
 			String titleStr = intent.getStringExtra("title");
@@ -238,26 +243,25 @@ public class GCMIntentService extends GCMBaseIntentService {
 		try {
 			downloadUrl.trim();
 			Bitmap bp = loadImageFromUrl(context, iconUrl);
-			/*
-			 * // Notification notification = new Notification(); Notification
-			 * notification = new Notification(); notification.icon =
-			 * R.drawable.ic_stat_gcm; notification.contentView = new
-			 * RemoteViews(context.getPackageName(), R.layout.gcm_notification);
-			 * notification.contentView.setImageViewBitmap(R.id.gcm_image, bp);
-			 * notification.contentView.setTextViewText(R.id.gcm_title,
-			 * titleStr);
-			 * notification.contentView.setTextViewText(R.id.gcm_decs, descStr);
-			 * notification.when = System.currentTimeMillis();
-			 * notification.defaults |= Notification.DEFAULT_SOUND;
-			 * NotificationManager notificationManager = (NotificationManager)
-			 * context.getSystemService(Context.NOTIFICATION_SERVICE); Uri uri =
-			 * Uri.parse(downloadUrl); Intent notificationIntent = new
-			 * Intent(Intent.ACTION_VIEW, uri); // set intent so it does not
-			 * start a new activity PendingIntent intent =
-			 * PendingIntent.getActivity(context, 0, notificationIntent, 0);
-			 * notification.contentIntent = intent;
-			 * notificationManager.notify(0, notification);
-			 */
+
+			// Notification notification = new Notification();
+			Notification notification = new Notification();
+			notification.icon = R.drawable.ic_launcher;
+
+			notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
+
+			notification.contentView.setImageViewBitmap(R.id.gcm_image, bp);
+			notification.contentView.setTextViewText(R.id.gcm_title, titleStr);
+			notification.contentView.setTextViewText(R.id.gcm_decs, descStr);
+			notification.when = System.currentTimeMillis();
+			notification.defaults |= Notification.DEFAULT_SOUND;
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			Uri uri = Uri.parse(downloadUrl);
+			Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
+			// set intent so it does not start a new activity
+			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+			notification.contentIntent = intent;
+			notificationManager.notify(0, notification);
 		}
 		catch (Exception e) {
 
