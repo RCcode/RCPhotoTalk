@@ -50,7 +50,7 @@
     <string name="second">%1$d saniye önce</string>
     <string name="hour">%1$d saat önce</string>
     <string name="day">%1$d gün önce</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">Gönderiliyor</string>
     <string name="send_sended">%1$s-Gönderildi</string>
     <string name="send_received"> %1$s-Teslim edildi</string>

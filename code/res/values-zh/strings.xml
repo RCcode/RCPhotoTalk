@@ -50,7 +50,7 @@
     <string name="second">%1$d秒前</string>
     <string name="hour">%1$d小时前</string>
     <string name="day">%1$d天前</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">发送中</string>
     <string name="send_sended">%1$s-已发送</string>
     <string name="send_received"> %1$s-已接收</string>

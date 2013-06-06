@@ -50,7 +50,7 @@
     <string name="second">%1$d секунд назад</string>
     <string name="hour">%1$d часов назад</string>
     <string name="day">%1$d дней назад</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">Отправляется</string>
     <string name="send_sended">%1$s-Отправлено</string>
     <string name="send_received"> %1$s-Доставлено</string>

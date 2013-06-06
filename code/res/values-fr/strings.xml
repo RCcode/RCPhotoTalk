@@ -50,7 +50,7 @@
     <string name="second">Il y a %1$d secondes</string>
     <string name="hour">Il y a %1$d heures</string>
     <string name="day">Il y a %1$d jours</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">Envoi</string>
     <string name="send_sended">%1$s-Envoyé</string>
     <string name="send_received"> %1$s-Délivré</string>

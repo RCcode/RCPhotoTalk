@@ -50,7 +50,7 @@
     <string name="second">%1$d วินาทีที่แล้ว</string>
     <string name="hour">%1$d ชั่วโมงที่แล้ว</string>
     <string name="day">%1$d วันที่แล้ว</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">กำลังส่ง</string>
     <string name="send_sended">%1$s-ส่งแล้ว</string>
     <string name="send_received"> %1$s-ส่งถึงผู้รับแล้ว</string>

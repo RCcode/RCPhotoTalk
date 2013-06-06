@@ -50,7 +50,7 @@
     <string name="second">לפני ‎%1$d‏ שניות</string>
     <string name="hour">לפני ‎%1$d‏ שעו</string>
     <string name="day">לפני ‎%1$d‏‏ ימים</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">שולח</string>
     <string name="send_sended">%1$s-נשלח</string>
     <string name="send_received"> %1$s-נמסר</string>

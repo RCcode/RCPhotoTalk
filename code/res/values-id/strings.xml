@@ -50,7 +50,7 @@
     <string name="second">%1$d detik lalu</string>
     <string name="hour">%1$d jam lalu</string>
     <string name="day">%1$d hari lalu</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">Mengirim</string>
     <string name="send_sended">%1$s-Dikirim</string>
     <string name="send_received"> %1$s-Diterima</string>
