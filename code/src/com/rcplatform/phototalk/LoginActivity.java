@@ -452,13 +452,16 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					imm.showSoftInput(mPswEditText, 0);
 					return;
 				}
+				
+				tigaseLogin(this, email2, psw2);
 
-				int loginType = invalidate(email2, psw2);
-				if (loginType != -1) {
-					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-					// login(this, mHandler, email2, psw2, loginType);
-					tigaseLogin(this, email2, psw2);
-				}
+//				不校验输入格式
+//				int loginType = invalidate(email2, psw2);
+//				if (loginType != -1) {
+//					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+//					// login(this, mHandler, email2, psw2, loginType);
+//					tigaseLogin(this, email2, psw2);
+//				}
 				break;
 			case R.id.login_page_forget_password_button:
 				startActivity(new Intent(this, ForgetPasswordActivity.class));
