@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Sign up</string>
     <string name="login_title_bubble_text">New RC User</string>
     <string name="login_nick_hint">Nickname (less than 20 characters)</string>
-    <string name="register_confirm_email_address">Your Email Address is:%s</string>
+    <string name="register_confirm_email_address">Your Email Address is:</string>
     <string name="modify">Edit</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Email format error</string>

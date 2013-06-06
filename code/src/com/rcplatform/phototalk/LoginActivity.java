@@ -414,7 +414,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			if (invalidate(this, email, nick, psw)) {
 				AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
-				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
+				dialogBuilder.setTitle(R.string.register_confirm_email_address).setMessage(email).setCancelable(false)
 						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
 							@Override
@@ -445,35 +445,35 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				return;
 			}
 
-				if (psw2.equals("")) {
-					mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-					mPswEditText.requestFocus();
-					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-					imm.showSoftInput(mPswEditText, 0);
-					return;
-				}
+			if (psw2.equals("")) {
+				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+				mPswEditText.requestFocus();
+				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+				imm.showSoftInput(mPswEditText, 0);
+				return;
+			}
 
-				int loginType = invalidate(email2, psw2);
-				if (loginType != -1) {
-					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-					// login(this, mHandler, email2, psw2, loginType);
-					tigaseLogin(this, email2, psw2);
-				}
-				break;
-			case R.id.login_page_forget_password_button:
-				startActivity(new Intent(this, ForgetPasswordActivity.class));
-				EventUtil.Register_Login_Invite.rcpt_forgetpasswordbutton(baseContext);
-				break;
-			case R.id.choosebutton:
-				if (mIsLoginPage) {
-					showSignupView();
-				} else {
-					showLoginView();
-				}
-				mIsLoginPage = !mIsLoginPage;
-				break;
-			default:
-				break;
+			int loginType = invalidate(email2, psw2);
+			if (loginType != -1) {
+				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+				// login(this, mHandler, email2, psw2, loginType);
+				tigaseLogin(this, email2, psw2);
+			}
+			break;
+		case R.id.login_page_forget_password_button:
+			startActivity(new Intent(this, ForgetPasswordActivity.class));
+			EventUtil.Register_Login_Invite.rcpt_forgetpasswordbutton(baseContext);
+			break;
+		case R.id.choosebutton:
+			if (mIsLoginPage) {
+				showSignupView();
+			} else {
+				showLoginView();
+			}
+			mIsLoginPage = !mIsLoginPage;
+			break;
+		default:
+			break;
 		}
 	}
 
