@@ -39,7 +39,6 @@ public class WelcomeActivity extends BaseActivity {
 			super.handleMessage(msg);
 			executeAutoLogin();
 		}
-
 	};
 
 	public void printHashKey() {
@@ -49,7 +48,8 @@ public class WelcomeActivity extends BaseActivity {
 			for (Signature signature : info.signatures) {
 				MessageDigest md = MessageDigest.getInstance("SHA");
 				md.update(signature.toByteArray());
-				Log.d("TEMPTAGHASH KEY:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+				LogUtil.d("TEMPTAGHASH KEY:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//				LogUtil.d(Base64.encodeToString(md.digest(), Base64.DEFAULT));
 			}
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();

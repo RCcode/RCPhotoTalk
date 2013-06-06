@@ -64,12 +64,12 @@ public class RCPlatformAsyncHttpClient {
 		putAllRequestParams(request.getParams());
 		final Context context = request.getContext();
 		final RCPlatformResponseHandler responseHandler = request.getResponseHandler();
-
+		LogUtil.e("request url is " + request.getUrl());
 		mClient.post(context, request.getUrl(), getEntityFromParams(), CONTENT_TYPE_JSON, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				super.onSuccess(statusCode, content);
-				LogUtil.e("response is " + content);
+				LogUtil.e("response is " + content + "------ from url " + request.getUrl());
 				if (responseHandler != null && !isCancel) {
 					try {
 						JSONObject jsonObject = new JSONObject(content);
