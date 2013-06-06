@@ -8,6 +8,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -17,6 +18,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.umeng.EventUtil;
 
 public class PhotoTalkUtils {
@@ -86,6 +88,8 @@ public class PhotoTalkUtils {
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, width);
 		params.setMargins(0, 0, context.getResources().getDimensionPixelSize(R.dimen.app_icon_margin), 0);
 		iv.setLayoutParams(params);
+		iv.setScaleType(ScaleType.FIT_CENTER);
+		
 		if (Constants.installedApps.contains(appInfo)) {
 			loader.displayImage(appInfo.getColorPicUrl(), iv);
 			iv.setOnClickListener(new OnClickListener() {
@@ -107,5 +111,10 @@ public class PhotoTalkUtils {
 			});
 		}
 		return iv;
+	}
+
+	public static boolean isUserNeedToBindPhone(Context context, UserInfo userInfo) {
+		return userInfo != null && RCPlatformTextUtil.isEmpty(userInfo.getCellPhone()) && Constants.DEVICE_ID.equals(userInfo.getDeviceId())
+				&& !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
 	}
 }

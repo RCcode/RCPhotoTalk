@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.thirdpart.utils.OnDeAuthorizeListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class UserInfoActivity extends BaseActivity implements OnClickListener {
@@ -280,7 +281,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	private void showDeAuthorizeDialog(int type) {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
-			mDeAuthDialog = new AlertDialog.Builder(this).setMessage(R.string.dialog_confirm_deauth)
+			mDeAuthDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.dialog_confirm_deauth)
 			        .setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener)
 			        .create();
 		}

@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.utils;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -25,6 +26,16 @@ public class DialogUtil {
 		public ImageView bigImageView;
 
 		public ImageView smallImageView;
+	}
+
+	@SuppressLint("NewApi")
+	public static AlertDialog.Builder getAlertDialogBuilder(Context context) {
+		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
+			return new AlertDialog.Builder(context, R.style.Theme_Dialog_Update);
+		} else {
+			return new AlertDialog.Builder(context);
+		}
+
 	}
 
 	public static void showToast(Context context, String text, int duration) {
@@ -87,7 +98,7 @@ public class DialogUtil {
 
 	public static Dialog createMsgDialog(Context context, String message, String positive) {
 
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
 		dialogBuilder.setMessage(message).setCancelable(false).setPositiveButton(positive, new DialogInterface.OnClickListener() {
 
 			@Override
@@ -100,7 +111,7 @@ public class DialogUtil {
 
 	public static Dialog createMsgDialog(Context context, int message, int positive) {
 
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
 		dialogBuilder.setMessage(message).setCancelable(false).setPositiveButton(positive, new DialogInterface.OnClickListener() {
 
 			@Override
@@ -113,7 +124,7 @@ public class DialogUtil {
 
 	public static Dialog createErrorInfoDialog(Context context, int resId) {
 
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
 		dialogBuilder.setMessage(resId).setCancelable(false).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 
 			@Override
@@ -125,7 +136,7 @@ public class DialogUtil {
 
 	public static Dialog createErrorInfoDialog(Context context, String msg) {
 
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
 		dialogBuilder.setMessage(msg).setCancelable(false).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
 
 			@Override
@@ -136,7 +147,7 @@ public class DialogUtil {
 	}
 
 	public static Dialog createMsgDialog(Context context, String msg, String positive, String negative) {
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
+		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
 		dialogBuilder.setMessage(msg).setCancelable(false).setPositiveButton(positive, new DialogInterface.OnClickListener() {
 
 			@Override
@@ -154,13 +165,13 @@ public class DialogUtil {
 	}
 
 	public static AlertDialog.Builder showConfirmDialog(Context context, String message) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		AlertDialog.Builder builder = getAlertDialogBuilder(context);
 		// builder.setTitle(context.getResources().getString(R.string.prompt));
 		builder.setMessage(message);
 		return builder;
 	}
 
 	public static void showInformationClearConfirmDialog(Context context, int msgId, int posResId, int negResId, DialogInterface.OnClickListener listener) {
-		new AlertDialog.Builder(context).setMessage(msgId).setPositiveButton(posResId, listener).setNegativeButton(negResId, listener).create().show();
+		getAlertDialogBuilder(context).setMessage(msgId).setPositiveButton(posResId, listener).setNegativeButton(negResId, listener).create().show();
 	}
 }

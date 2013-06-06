@@ -67,6 +67,7 @@ import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -170,8 +171,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void checkBindPhone() {
 		String rcId = getCurrentUser().getRcId();
-		if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && !PrefsUtils.User.MobilePhoneBind.willTryToBindPhone(this, rcId)
-				&& !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
+		if (PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, rcId) && RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone())
+				&& getCurrentUser().getDeviceId().equals(Constants.DEVICE_ID) && !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
 			PrefsUtils.User.MobilePhoneBind.setAttentionToBindPhone(this, rcId);
 			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
@@ -189,8 +190,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 					}
 				}
 			};
-			AlertDialog dialog = new AlertDialog.Builder(this).setMessage(R.string.bind_phone_attention).setNegativeButton(R.string.bind_now, listener)
-					.setPositiveButton(R.string.bind_later, listener).create();
+			AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.bind_phone_attention)
+					.setNegativeButton(R.string.bind_now, listener).setPositiveButton(R.string.bind_later, listener).create();
 			dialog.show();
 		}
 	}

@@ -13,6 +13,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class SystemSettingActivity extends BaseActivity implements OnClickListener {
@@ -125,7 +126,7 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 	private void showTrendSetDialog() {
 		if (mTrendSetDialog == null) {
-			mTrendSetDialog = new AlertDialog.Builder(this).setSingleChoiceItems(trendSets, mCurrentUser.getShareNews(), new DialogInterface.OnClickListener() {
+			mTrendSetDialog = DialogUtil.getAlertDialogBuilder(this).setSingleChoiceItems(trendSets, mCurrentUser.getShareNews(), new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
@@ -146,7 +147,7 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 	private void showReceiveSetDialog() {
 		if (mReceiveSetDialog == null) {
-			mReceiveSetDialog = new AlertDialog.Builder(this).setSingleChoiceItems(receiveSets, mCurrentUser.getAllowsend(), new DialogInterface.OnClickListener() {
+			mReceiveSetDialog = DialogUtil.getAlertDialogBuilder(this).setSingleChoiceItems(receiveSets, mCurrentUser.getAllowsend(), new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {

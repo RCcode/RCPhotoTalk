@@ -17,7 +17,6 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.DatabaseUtils;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
 
 public class Constants {
 
@@ -57,6 +56,12 @@ public class Constants {
 
 	public static final String INVITE_URL = "http://rctalk.me";
 
+	public static final long BIND_PHONE_TIME_OUT = 5 * 1000 * 60;
+
+	public static String DEVICE_ID;
+
+	public static String LANGUAGE;
+
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -72,8 +77,8 @@ public class Constants {
 			else
 				language = language + "_" + COUNTRY;
 		}
-		PhotoTalkParams.PARAM_VALUE_LANGUAGE = language;
-		PhotoTalkParams.PARAM_VALUE_DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();
+		LANGUAGE = language;
+		DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();
 		USER_IMAGE_DIR = context.getDir(USER_DIR_NAME, Context.MODE_PRIVATE);
 	}
 
@@ -101,8 +106,7 @@ public class Constants {
 				}
 				fos.close();
 				is.close();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}

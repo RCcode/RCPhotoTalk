@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -31,17 +28,14 @@ import com.facebook.Session;
 import com.facebook.model.GraphUser;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.User;
-import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
-import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
-import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -54,9 +48,9 @@ import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
-import com.rcplatform.phototalk.utils.Utils;
 
 public class PTBackgroundService extends Service {
 
@@ -135,7 +129,7 @@ public class PTBackgroundService extends Service {
 	}
 
 	private boolean isUserNeedToBindPhone(UserInfo userInfo) {
-		return userInfo != null && userInfo.getCellPhone() == null && PhotoTalkParams.PARAM_VALUE_DEVICE_ID.equals(userInfo.getDeviceId());
+		return PhotoTalkUtils.isUserNeedToBindPhone(getApplicationContext(), userInfo);
 	}
 
 	@Override
@@ -143,7 +137,6 @@ public class PTBackgroundService extends Service {
 		uploadContact();
 		return super.onStartCommand(intent, flags, startId);
 	}
-
 
 	private void registeNetConnectionReceiver() {
 		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -203,12 +196,15 @@ public class PTBackgroundService extends Service {
 	 * @param number
 	 */
 	private void sendSMS(String number) {
-		LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
-		PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
-		SmsManager smsManager = SmsManager.getDefault();
-		smsManager.sendTextMessage(number, null, RCPlatformTextUtil.getSMSMessage(mCurrentUser.getRcId(), Constants.APP_ID), sendPI, null);
-		PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), mCurrentUser.getRcId(), number);
+		if (mCurrentUser != null) {
+			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
+			PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
+			SmsManager smsManager = SmsManager.getDefault();
+			smsManager.sendTextMessage(number, null, RCPlatformTextUtil.getSMSMessage(mCurrentUser.getRcId(), Constants.APP_ID), sendPI, null);
+			PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), mCurrentUser.getRcId(), number);
+			PrefsUtils.User.MobilePhoneBind.setFirstBindPhoneTime(getApplicationContext(), mCurrentUser.getRcId(), System.currentTimeMillis());
+		}
 	}
 
 	/**
@@ -248,22 +244,23 @@ public class PTBackgroundService extends Service {
 			if (isUserNeedToBindPhone(mCurrentUser) && actionName.equals(ACTION_SMS_SEND)) {
 				switch (resultCode) {
 				case Activity.RESULT_OK:
-					LogUtil.i("sms send success");
-					long time = System.currentTimeMillis();
-					PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), time, mCurrentUser.getRcId());
-					getBindPhoneNumberFromService(BIND_STATE_CHECK_DELAY_TIME, mCurrentUser);
-					unregisterReceiver(this);
-					sendSMSStateToService(PrefsUtils.User.MobilePhoneBind.getLastBindNumber(getApplicationContext(), mCurrentUser.getRcId()), time);
+					if (mCurrentUser != null) {
+						LogUtil.i("sms send success");
+						long time = System.currentTimeMillis();
+						PrefsUtils.User.MobilePhoneBind.setLastBindPhoneTime(getApplicationContext(), time, mCurrentUser.getRcId());
+						getBindPhoneNumberFromService(BIND_STATE_CHECK_DELAY_TIME, mCurrentUser);
+						unregisterReceiver(this);
+						sendSMSStateToService(PrefsUtils.User.MobilePhoneBind.getLastBindNumber(getApplicationContext(), mCurrentUser.getRcId()), time);
+					}
 					break;
 				case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+				case SmsManager.RESULT_ERROR_NO_SERVICE:
+				case SmsManager.RESULT_ERROR_NULL_PDU:
+				case SmsManager.RESULT_ERROR_RADIO_OFF:
 					LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~send sms error ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 					if (isUserNeedToBindPhone(mCurrentUser)) {
 						sendSMS(PrefsUtils.User.MobilePhoneBind.getLastBindNumber(getApplicationContext(), mCurrentUser.getRcId()));
 					}
-					break;
-				case SmsManager.RESULT_ERROR_NO_SERVICE:
-				case SmsManager.RESULT_ERROR_NULL_PDU:
-				case SmsManager.RESULT_ERROR_RADIO_OFF:
 					break;
 				}
 

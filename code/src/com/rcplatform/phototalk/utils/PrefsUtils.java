@@ -115,6 +115,8 @@ public class PrefsUtils {
 		private static final String PREF_KEY_ATTENTION_BIND_PHONE = "hasattentiontobindphone";
 		private static final String PREF_KEY_LOADED_FRIENDS = "loadedfriends";
 
+		private static final String PREF_KEY_START_BIND_TIME = "startbindphonetime";
+
 		private static final String PREF_KEY_SELF_BINDPHONE_TIME = "selfbindphonetime";
 
 		private static final String PREF_KEY_VK_NAME = "vkname";
@@ -235,6 +237,19 @@ public class PrefsUtils {
 				sh.edit().putLong(PREF_KEY_LAST_SMS_SEND_TIME, sendTime).commit();
 			}
 
+			public static void setFirstBindPhoneTime(Context context, String pref, long time) {
+				SharedPreferences sh = getPreference(context, pref);
+				if (sh.getLong(PREF_KEY_START_BIND_TIME, 0) > 0) {
+					return;
+				} else {
+					sh.edit().putLong(PREF_KEY_START_BIND_TIME, time).commit();
+				}
+			}
+
+			public static boolean isUserBindPhoneTimeOut(Context context, String pref) {
+				long startBindTime = getPreference(context, pref).getLong(PREF_KEY_START_BIND_TIME, 0);
+				return startBindTime > 0 && (System.currentTimeMillis() - startBindTime) > Constants.BIND_PHONE_TIME_OUT;
+			}
 		}
 
 		public static void setUserTrendSet(Context context, String pref, int set) {
@@ -364,5 +379,6 @@ public class PrefsUtils {
 		public static int getSelfBindPhoneTimeLeave(Context context, String pref) {
 			return Constants.MAX_SELF_BINDPHONE_TIME - getPreference(context, pref).getInt(PREF_KEY_SELF_BINDPHONE_TIME, 0);
 		}
+
 	}
 }
