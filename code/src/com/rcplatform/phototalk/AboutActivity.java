@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
+import com.google.android.gcm.MetaHelper;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
@@ -20,9 +22,13 @@ import com.rcplatform.phototalk.utils.SystemMessageUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class AboutActivity extends BaseActivity implements OnClickListener, DialogInterface.OnClickListener {
+
 	private Button checkUpdate;
+
 	private String updateUrl;
+
 	private AlertDialog mUpdateDialog;
+
 	private Button contact_us_btn, term_service_btn, compact_btn;
 
 	@Override
@@ -42,37 +48,42 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 		term_service_btn.setOnClickListener(this);
 		compact_btn = (Button) findViewById(R.id.compact_btn);
 		compact_btn.setOnClickListener(this);
+
+		TextView tvVersion = (TextView) findViewById(R.id.tv_app_version_name);
+		tvVersion.setText(MetaHelper.getAppVersionName(baseContext));
+
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.check_update_btn:
-			EventUtil.More_Setting.rcpt_checkupdate(baseContext);
-			checkUpdate();
-			break;
-		case R.id.back:
-			finish();
-			break;
-		case R.id.contact_us_btn:
-			EventUtil.More_Setting.rcpt_feedback(baseContext);
-			Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-			String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
-					+ SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext) + SystemMessageUtil.getImsi(baseContext);
-			// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
-			// emailSubject);
-			// 设置要默认发送的内容
-			email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
-			// 调用系统的邮件系统
-			startActivity(email);
+			case R.id.check_update_btn:
+				EventUtil.More_Setting.rcpt_checkupdate(baseContext);
+				checkUpdate();
+				break;
+			case R.id.back:
+				finish();
+				break;
+			case R.id.contact_us_btn:
+				EventUtil.More_Setting.rcpt_feedback(baseContext);
+				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
+				String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
+				        + SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext)
+				        + SystemMessageUtil.getImsi(baseContext);
+				// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
+				// emailSubject);
+				// 设置要默认发送的内容
+				email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
+				// 调用系统的邮件系统
+				startActivity(email);
 
-			break;
-		case R.id.term_service_btn:
-			RCWebview.startWebview(this, "http://192.168.0.13:8080/RcHome/service.html");
-			break;
-		case R.id.compact_btn:
-			RCWebview.startWebview(this, "http://192.168.0.13:8080/RcHome/privacy.html");
-			break;
+				break;
+			case R.id.term_service_btn:
+				RCWebview.startWebview(this, "http://192.168.0.13:8080/RcHome/service.html");
+				break;
+			case R.id.compact_btn:
+				RCWebview.startWebview(this, "http://192.168.0.13:8080/RcHome/privacy.html");
+				break;
 		}
 	}
 
@@ -107,7 +118,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 		this.updateUrl = updateUrl;
 		if (mUpdateDialog == null) {
 			mUpdateDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(updateContent).setTitle(getString(R.string.update_dialog_title))
-					.setNegativeButton(R.string.update_now, this).setPositiveButton(R.string.attention_later, this).create();
+			        .setNegativeButton(R.string.update_now, this).setPositiveButton(R.string.attention_later, this).create();
 		}
 		mUpdateDialog.show();
 	}
@@ -115,9 +126,9 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
-		case DialogInterface.BUTTON_NEGATIVE:
-			Utils.download(this, updateUrl);
-			break;
+			case DialogInterface.BUTTON_NEGATIVE:
+				Utils.download(this, updateUrl);
+				break;
 		}
 	}
 }

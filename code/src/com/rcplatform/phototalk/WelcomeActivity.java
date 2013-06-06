@@ -49,11 +49,14 @@ public class WelcomeActivity extends BaseActivity {
 				MessageDigest md = MessageDigest.getInstance("SHA");
 				md.update(signature.toByteArray());
 				LogUtil.d("TEMPTAGHASH KEY:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-//				LogUtil.d(Base64.encodeToString(md.digest(), Base64.DEFAULT));
+				// LogUtil.d(Base64.encodeToString(md.digest(),
+				// Base64.DEFAULT));
 			}
-		} catch (NameNotFoundException e) {
+		}
+		catch (NameNotFoundException e) {
 			e.printStackTrace();
-		} catch (NoSuchAlgorithmException e) {
+		}
+		catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 
@@ -101,7 +104,8 @@ public class WelcomeActivity extends BaseActivity {
 		super.onDestroy();
 		try {
 			ServerUtilities.onDestroy(this);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 
 		}
 	}
@@ -110,11 +114,6 @@ public class WelcomeActivity extends BaseActivity {
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getApplicationContext());
 		// 用户已登录过，自动登录主页。
 		if (userInfo != null) {
-			try {
-				ServerUtilities.register(this, userInfo.getRcId(), userInfo.getToken());
-			} catch (Exception e) {
-
-			}
 			getPhotoTalkApplication().setCurrentUser(userInfo);
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
 			startActivity(intent);

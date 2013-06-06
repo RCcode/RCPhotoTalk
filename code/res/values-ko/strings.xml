@@ -71,7 +71,11 @@
     <string name="will_quit">\'뒤로\'를 한 번 더 클릭하면 앱을 종료합니다</string>
 
 
-    <!-- menu TODO  待确认 -->
+    <!-- menu -->
+    <string name="take_score">평가</string>
+
+    <!-- 我 -->
+    <string name="me">나를</string>
 
 
     <!-- 提示 -->

@@ -71,7 +71,11 @@
     <string name="will_quit">คลิก "ย้อนกลับ" อีกครั้ง เพื่อออกจากแอป</string>
 
 
-    <!-- menu TODO  待确认 -->
+    <!-- menu -->
+    <string name="take_score">ประเมินค่า</string>
+
+    <!-- 我 -->
+    <string name="me">ฉัน</string>
 
 
     <!-- 提示 -->

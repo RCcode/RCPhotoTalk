@@ -68,11 +68,11 @@
     <string name="resend">Rinvia</string>
     <string name="delete">Elimina</string>
     <string name="reload">Ricarica</string>
-    <string name="will_quit">Fai di nuovo clic su “Indietro” per uscire dall’app</string>
+    <string name="will_quit">Fai di nuovo clic su “Indietro” per uscire dall’app</string><!-- menu -->
+    <string name="take_score">Valutare</string>
 
-
-    <!-- menu TODO  待确认 -->
-
+    <!-- 我 -->
+    <string name="me">me</string>
 
     <!-- 提示 -->
     <string name="attention_later">Più tardi</string>

@@ -203,8 +203,6 @@ public class MetaHelper {
 		return language;
 	}
 
-
-
 	public static String getAppName(Context ctx) {
 		PackageInfo packageInfo = null;
 		try {
@@ -217,6 +215,17 @@ public class MetaHelper {
 		return packageInfo.packageName;
 	}
 
+	public static String getAppVersionName(Context ctx) {
+		PackageInfo packageInfo = null;
+		try {
+			packageInfo = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
+		}
+		catch (NameNotFoundException e) {
+			e.printStackTrace();
+		}
+
+		return packageInfo.versionName;
+	}
 
 	/*
 	 * public static String getLabel(Context ctx) { return

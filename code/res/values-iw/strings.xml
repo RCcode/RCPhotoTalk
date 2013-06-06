@@ -70,9 +70,11 @@
     <string name="reload">טען שנית</string>
     <string name="will_quit">הקלק שוב על "חזרה" כדי לצאת מהיישום</string>
 
+    <!-- menu -->
+    <string name="take_score">להעריך</string>
 
-    <!-- menu TODO  待确认 -->
-
+    <!-- 我 -->
+    <string name="me">לי</string>
 
     <!-- 提示 -->
     <string name="attention_later">אולי מאוחר יותר</string>
@@ -166,22 +168,21 @@
     <string name="compact">מדיניות פרטיות</string>
     <string name="no_new_version">Phototalkהיא הגרסה האחרונה</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">בחר פרופיל</string>
     <string name="or">או</string>
     <string name="use_new_info">השתמש בפרופיל חדש</string>
-	<string name="other_device_login">חשבונך נמצא כבר בשימוש בהתקן אחר.</string>
-	<string name="relogin">אישור</string>
+    <string name="other_device_login">חשבונך נמצא כבר בשימוש בהתקן אחר.</string>
+    <string name="relogin">אישור</string>
     <string name="join_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
     <string name="invite_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
-	<string name="contact_friend">אנשי קשר:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">אנשי קשר:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
     <string name="gcm_message">מחכות לך %1$d הודעות חדשות</string>
     <string name="gcm_friend">מישהו הוסיף אותך כחבר</string>
     <string name="friend_detail_send_photo_hint_text">שלח תמונה</string>
-
 
 </resources>

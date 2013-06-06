@@ -140,6 +140,14 @@ public class Constants {
 		public static final String MESSAGE_ACTION_SEND_MESSAGE = "3";
 
 		public static final int MESSAGE_ACTION_SEND_MESSAGE_INT = 3;
+
+		public static final String MESSAGE_NEW_USER_MESSAGE = "10";
+
+		public static final int MESSAGE_NEW_USER_MESSAGE_INT = 10;
+
+		public static final String MESSAGE_APP_PUSH_MESSAGE = "11";
+
+		public static final int MESSAGE_APP_PUSH_MESSAGE_INT = 11;
 	}
 
 	public static class GCM {

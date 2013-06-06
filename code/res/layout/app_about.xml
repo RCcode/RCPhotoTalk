@@ -37,13 +37,13 @@
 
             <TextView
                 style="@style/text_base"
+                android:id="@+id/tv_app_version_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
                 android:textSize="20sp"
-                android:textColor="#908983"
-                android:text="@string/version_str" />
+                android:textColor="#908983"/>
         </LinearLayout>
 
         <Button
