@@ -23,11 +23,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.gcm.MetaHelper;
-import com.rcplatform.phototalk.PhotoTalkApplication;
-import com.rcplatform.phototalk.bean.TigaseMassage;
-import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
-import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.tigase.TigaseNode;
+import com.rcplatform.videotalk.PhotoTalkApplication;
+import com.rcplatform.videotalk.bean.TigaseMassage;
+import com.rcplatform.videotalk.db.impl.TigaseDb4oDatabase;
+import com.rcplatform.videotalk.utils.Constants;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;

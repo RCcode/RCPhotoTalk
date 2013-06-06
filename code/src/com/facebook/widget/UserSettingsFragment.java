@@ -30,7 +30,7 @@ import com.facebook.SessionDefaultAudience;
 import com.facebook.SessionLoginBehavior;
 import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 /**
  * A Fragment that displays a Login/Logout button as well as the user's profile picture and name when logged in.

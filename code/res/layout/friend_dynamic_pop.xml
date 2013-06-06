@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal" >
 
-            <com.rcplatform.phototalk.views.HeadImageView
+            <com.rcplatform.videotalk.views.HeadImageView
                 android:id="@+id/friend_head"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

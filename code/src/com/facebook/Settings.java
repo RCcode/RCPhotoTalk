@@ -34,7 +34,7 @@ import android.os.Bundle;
 import com.facebook.internal.Utility;
 import com.facebook.internal.Validate;
 import com.facebook.model.GraphObject;
-import com.rcplatform.phototalk.BuildConfig;
+import com.rcplatform.videotalk.BuildConfig;
 
 /**
  * Allows some customization of sdk behavior.

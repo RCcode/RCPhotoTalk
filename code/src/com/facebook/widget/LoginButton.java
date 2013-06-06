@@ -37,7 +37,7 @@ import com.facebook.internal.SessionAuthorizationType;
 import com.facebook.internal.SessionTracker;
 import com.facebook.internal.Utility;
 import com.facebook.model.GraphUser;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 /**
  * A Log In/Log Out button that maintains session state and logs in/out for the app.

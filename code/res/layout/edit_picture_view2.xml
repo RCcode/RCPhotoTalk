@@ -4,11 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <com.rcplatform.phototalk.views.EditableViewGroup
+    <com.rcplatform.videotalk.views.EditableViewGroup
         android:id="@+id/edit_group"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
-    </com.rcplatform.phototalk.views.EditableViewGroup>
+    </com.rcplatform.videotalk.views.EditableViewGroup>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -61,7 +61,7 @@
             android:layout_centerInParent="true"
             android:background="@drawable/wheelview_select" />
 
-        <com.rcplatform.phototalk.views.wheel.WheelView
+        <com.rcplatform.videotalk.views.wheel.WheelView
             android:id="@+id/wv_hours"
             android:layout_width="40dp"
             android:layout_height="100dp"
@@ -123,7 +123,7 @@
                 android:background="@drawable/delete_voice" />
         </LinearLayout>
 
-        <com.rcplatform.phototalk.views.AudioRecordButton
+        <com.rcplatform.videotalk.views.AudioRecordButton
             android:id="@+id/audioBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

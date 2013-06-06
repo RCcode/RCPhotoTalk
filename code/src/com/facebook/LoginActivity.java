@@ -14,7 +14,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 /**
  * This Activity is a necessary part of the overall Facebook login process but is not meant to be used directly. Add

@@ -44,7 +44,7 @@ import android.webkit.CookieSyncManager;
 
 import com.facebook.FacebookException;
 import com.facebook.Session;
-import com.rcplatform.phototalk.BuildConfig;
+import com.rcplatform.videotalk.BuildConfig;
 
 /**
  * com.facebook.internal is solely for the use of other packages within the Facebook SDK for Android. Use of any of the

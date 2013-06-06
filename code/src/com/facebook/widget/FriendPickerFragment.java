@@ -25,7 +25,7 @@ import com.facebook.FacebookException;
 import com.facebook.Request;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 /**
  * Provides a Fragment that displays a list of a user's friends and allows one or more of the friends to be selected.

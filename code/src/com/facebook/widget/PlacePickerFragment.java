@@ -41,7 +41,7 @@ import com.facebook.Session;
 import com.facebook.internal.Logger;
 import com.facebook.internal.Utility;
 import com.facebook.model.GraphPlace;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 public class PlacePickerFragment extends PickerFragment<GraphPlace> {
 

@@ -27,7 +27,7 @@ import com.facebook.FacebookException;
 import com.facebook.LoggingBehavior;
 import com.facebook.internal.Logger;
 import com.facebook.internal.Utility;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 /**
  * View that displays the profile photo of a supplied profile ID, while conforming to user specified dimensions.

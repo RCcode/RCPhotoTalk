@@ -15,8 +15,8 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.util.Log;
 
-import com.rcplatform.phototalk.PhotoTalkApplication;
-import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.videotalk.PhotoTalkApplication;
+import com.rcplatform.videotalk.utils.Constants;
 
 public class RCGcmUtil {
 

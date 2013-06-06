@@ -45,8 +45,8 @@
         android:textColor="#FFFFFF"
         android:textSize="24sp"
         android:textStyle="bold" />
-        <!-- android:textColor="#FF4000" -->
-    
+    <!-- android:textColor="#FF4000" -->
+
     <TextView
         android:id="@+id/init_message_text"
         android:layout_width="wrap_content"
@@ -59,15 +59,15 @@
         android:textColor="#FFFFFF"
         android:textSize="18sp" />
 
-    <com.rcplatform.phototalk.views.PageIndicator
+    <com.rcplatform.videotalk.views.PageIndicator
         android:id="@+id/page_indicator_other"
         style="@style/pageIndicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/btns"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/init_indicator_bottom"
-        app:dotSpacing="5dp" />
+        android:layout_marginBottom="@dimen/init_indicator_bottom" >
+    </com.rcplatform.videotalk.views.PageIndicator>
 
     <LinearLayout
         android:id="@+id/btns"
@@ -77,16 +77,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/init_btn_bottom"
         android:orientation="horizontal" >
-
-        <!--
-             <ImageView
-            android:id="@id/init_page_ghost"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/ic_launcher"
-            android:visibility="gone" />
-        -->
 
         <Button
             android:id="@+id/init_page_login_button"

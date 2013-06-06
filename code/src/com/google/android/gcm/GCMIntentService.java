@@ -33,10 +33,10 @@ import android.widget.RemoteViews;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.rcplatform.message.UserMessageService;
-import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.WelcomeActivity;
-import com.rcplatform.phototalk.utils.Constants;
-import com.rcplatform.phototalk.utils.Utils;
+import com.rcplatform.videotalk.R;
+import com.rcplatform.videotalk.WelcomeActivity;
+import com.rcplatform.videotalk.utils.Constants;
+import com.rcplatform.videotalk.utils.Utils;
 
 /**
  * IntentService responsible for handling GCM messages.

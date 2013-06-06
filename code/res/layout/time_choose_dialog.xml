@@ -6,7 +6,7 @@
     android:layout_marginRight="10dp"
     android:orientation="vertical" android:background="#ffffffff">
 
-    <com.rcplatform.phototalk.views.wheel.WheelView
+    <com.rcplatform.videotalk.views.wheel.WheelView
         android:id="@+id/wv_hours"
         android:layout_width="20dp"
         android:layout_height="50dp"

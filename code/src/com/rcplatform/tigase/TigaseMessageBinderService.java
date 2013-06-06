@@ -11,8 +11,8 @@ import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 
 import com.google.android.gcm.RCGcmUtil;
-import com.rcplatform.phototalk.HomeActivity;
-import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.videotalk.HomeActivity;
+import com.rcplatform.videotalk.utils.Constants;
 
 import android.app.Service;
 import android.content.Context;
@@ -63,8 +63,8 @@ public class TigaseMessageBinderService extends Service {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
-						        || action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
+						if (action.equals(com.rcplatform.videotalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
+						        || action.equals(com.rcplatform.videotalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
 							Vibrator vib = (Vibrator) ctx.getSystemService(Service.VIBRATOR_SERVICE);
 							vib.vibrate(200);
 						}
@@ -154,8 +154,8 @@ public class TigaseMessageBinderService extends Service {
 
 		TigaseManager.getInstance(ctx).sendMessageBackup(toUser, msgStr);
 		// 需要 gcm 推送的消息
-		if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
-		        || action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
+		if (action.equals(com.rcplatform.videotalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
+		        || action.equals(com.rcplatform.videotalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
 			String timerKey = TigaseManager.getInstance(ctx).getFullUser(toUser) + action;
 			Timer timer = new Timer();
 

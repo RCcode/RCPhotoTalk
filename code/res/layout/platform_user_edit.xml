@@ -22,7 +22,7 @@
             android:textColor="@color/attention_text_gray"
             android:textSize="@dimen/platform_attention" />
 
-        <com.rcplatform.phototalk.views.HorizontalListView
+        <com.rcplatform.videotalk.views.HorizontalListView
             android:id="@+id/vp_accounts"
             android:layout_width="match_parent"
             android:layout_height="@dimen/platform_users_height"

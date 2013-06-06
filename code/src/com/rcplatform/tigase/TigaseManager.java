@@ -17,8 +17,8 @@ import org.jivesoftware.smack.XMPPException;
 
 import android.content.Context;
 
-import com.rcplatform.phototalk.bean.TigaseMassage;
-import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
+import com.rcplatform.videotalk.bean.TigaseMassage;
+import com.rcplatform.videotalk.db.impl.TigaseDb4oDatabase;
 
 public class TigaseManager {
 

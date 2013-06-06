@@ -46,7 +46,7 @@ import com.facebook.Session;
 import com.facebook.SessionState;
 import com.facebook.internal.SessionTracker;
 import com.facebook.model.GraphObject;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 /**
  * Provides functionality common to SDK UI elements that allow the user to pick one or more graph objects (e.g., places,

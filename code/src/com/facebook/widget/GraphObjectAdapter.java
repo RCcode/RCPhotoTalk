@@ -39,7 +39,7 @@ import android.widget.TextView;
 
 import com.facebook.FacebookException;
 import com.facebook.model.GraphObject;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 class GraphObjectAdapter<T extends GraphObject> extends BaseAdapter implements SectionIndexer {
 

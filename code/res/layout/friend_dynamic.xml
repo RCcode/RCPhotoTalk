@@ -2,12 +2,11 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:pull="http://schemas.android.com/apk/res/com.rcplatform.phototalk"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:background="@drawable/app_backgroud">
+    android:layout_height="match_parent"
+    android:background="@drawable/app_backgroud" >
 
     <include layout="@layout/base_top_navigate" />
-
-<com.rcplatform.phototalk.pulltorefresh.library.PullToRefreshListView
+<!--      <com.rcplatform.videotalk.pulltorefresh.library.PullToRefreshListView
         android:id="@+id/friend_dynamic_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
@@ -18,7 +17,8 @@
         android:fastScrollEnabled="false"
         android:footerDividersEnabled="false"
         android:headerDividersEnabled="false"
-        pull:ptrMode="both"
+        android:smoothScrollbar="true"
         pull:ptrAnimationStyle="flip"
-        android:smoothScrollbar="true" />
+        pull:ptrMode="both" />
+-->
 </RelativeLayout>

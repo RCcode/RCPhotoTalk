@@ -11,7 +11,7 @@
 package com.google.android.gcm;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.videotalk.utils.Constants;
 
 import android.content.Context;
 import android.content.Intent;

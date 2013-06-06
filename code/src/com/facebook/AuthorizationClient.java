@@ -30,7 +30,7 @@ import com.facebook.model.GraphObject;
 import com.facebook.model.GraphObjectList;
 import com.facebook.model.GraphUser;
 import com.facebook.widget.WebDialog;
-import com.rcplatform.phototalk.R;
+import com.rcplatform.videotalk.R;
 
 class AuthorizationClient implements Serializable {
 

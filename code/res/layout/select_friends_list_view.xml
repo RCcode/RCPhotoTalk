@@ -60,7 +60,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/select_send_bottom_bg" >
 
-        <com.rcplatform.phototalk.views.HorizontalListView
+        <com.rcplatform.videotalk.views.HorizontalListView
             android:id="@+id/g_sfl_added_friends"
             android:layout_width="fill_parent"
             android:layout_height="60dp"

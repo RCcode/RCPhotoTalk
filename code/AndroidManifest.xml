@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.rcplatform.phototalk"
+    package="com.rcplatform.videotalk"
     android:versionCode="1"
     android:versionName="@string/version" >
 
@@ -71,12 +71,12 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name="com.rcplatform.phototalk.PhotoTalkApplication"
+        android:name="com.rcplatform.videotalk.PhotoTalkApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name" >
         <activity
-            android:name="com.rcplatform.phototalk.WelcomeActivity"
+            android:name="com.rcplatform.videotalk.WelcomeActivity"
             android:configChanges="orientation"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -89,220 +89,215 @@
         </activity>
 
         <provider
-            android:name="com.rcplatform.phototalk.provider.UserInfoProvider"
-            android:authorities="com.rcplatform.phototalk.provider" />
+            android:name="com.rcplatform.videotalk.provider.UserInfoProvider"
+            android:authorities="com.rcplatform.videotalk.provider" />
 
         <activity
-            android:name="com.rcplatform.phototalk.InitPageActivity"
+            android:name="com.rcplatform.videotalk.InitPageActivity"
             android:configChanges="orientation"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.BindPhoneActivity"
+            android:name="com.rcplatform.videotalk.BindPhoneActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.AboutActivity"
+            android:name="com.rcplatform.videotalk.AboutActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.RequestSMSActivity"
+            android:name="com.rcplatform.videotalk.RequestSMSActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.PlatformEditActivity"
+            android:name="com.rcplatform.videotalk.PlatformEditActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.rcplatform.phototalk.ChangePasswordActivity"
+            android:name="com.rcplatform.videotalk.ChangePasswordActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.rcplatform.phototalk.FacebookFriendRecommendActivity"
+            android:name="com.rcplatform.videotalk.FacebookFriendRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name=".FriendDetailActivity"
+            android:name="com.rcplatform.videotalk.FriendDetailActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Friend_Detail"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".FriendDynamicActivity"
+            android:name="com.rcplatform.videotalk.FriendDynamicActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Friend_Detail"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.rcplatform.phototalk.LoginActivity"
+            android:name="com.rcplatform.videotalk.LoginActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.rcplatform.phototalk.RCWebview"
+            android:name="com.rcplatform.videotalk.RCWebview"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name="com.rcplatform.phototalk.AddFriendsActivity"
+            android:name="com.rcplatform.videotalk.AddFriendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.rcplatform.phototalk.ForgetPasswordActivity"
+            android:name="com.rcplatform.videotalk.ForgetPasswordActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.VKAuthorizeActivity"
+            android:name="com.rcplatform.videotalk.VKAuthorizeActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.InviteActivity"
+            android:name="com.rcplatform.videotalk.InviteActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.PickFriendActivity"
+            android:name="com.rcplatform.videotalk.PickFriendActivity"
             android:configChanges="orientation"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.MyFriendsActivity"
+            android:name="com.rcplatform.videotalk.MyFriendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
-            android:name="com.rcplatform.phototalk.MyFriendFindActivity"
+            android:name="com.rcplatform.videotalk.MyFriendFindActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.ImageCutActivity"
+            android:name="com.rcplatform.videotalk.ImageCutActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.SearchFriendsActivity"
+            android:name="com.rcplatform.videotalk.SearchFriendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.InviteFriendActivity"
+            android:name="com.rcplatform.videotalk.InviteFriendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.AddFriendActivity"
+            android:name="com.rcplatform.videotalk.AddFriendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.ContactFriendRecommendActivity"
+            android:name="com.rcplatform.videotalk.ContactFriendRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.MoreActivity"
+            android:name="com.rcplatform.videotalk.MoreActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.SettingsActivity"
+            android:name="com.rcplatform.videotalk.SettingsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.AccountInfoEditActivity"
+            android:name="com.rcplatform.videotalk.AccountInfoEditActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.UpdateNameActivity"
+            android:name="com.rcplatform.videotalk.UpdateNameActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.SystemSettingActivity"
+            android:name="com.rcplatform.videotalk.SystemSettingActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.UpdateLoginPasswordActivity"
+            android:name="com.rcplatform.videotalk.UpdateLoginPasswordActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.TacotyIdSetActivity"
+            android:name="com.rcplatform.videotalk.TacotyIdSetActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.TakePhotoActivity"
+            android:name="com.rcplatform.videotalk.TakePhotoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity" >
         </activity>
         <activity
-            android:name="com.rcplatform.phototalk.EditPictureActivity"
+            android:name="com.rcplatform.videotalk.EditPictureActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity"
             android:windowSoftInputMode="adjustResize" >
         </activity>
         <activity
-            android:name="com.rcplatform.phototalk.EditVideoActivity"
+            android:name="com.rcplatform.videotalk.EditVideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity" >
         </activity>
         <activity
-            android:name="com.rcplatform.phototalk.VideoRecordActivity"
+            android:name="com.rcplatform.videotalk.VideoRecordActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity" />
         <activity
-            android:name="com.rcplatform.phototalk.SelectFriendsActivity"
+            android:name="com.rcplatform.videotalk.SelectFriendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
-            android:name="com.rcplatform.phototalk.UserInfoActivity"
+            android:name="com.rcplatform.videotalk.UserInfoActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/ThemeActivity" />
         <activity
-            android:name="com.rcplatform.phototalk.HomeActivity"
+            android:name="com.rcplatform.videotalk.HomeActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="com.rcplatform.phototalk.VKRecommendActivity"
+            android:name="com.rcplatform.videotalk.VKRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
-
-        <service android:name="com.rcplatform.phototalk.clienservice.PTBackgroundService" />
-        <service android:name="com.rcplatform.phototalk.clienservice.InviteFriendUploadService" />
-        <service android:name="com.rcplatform.phototalk.clienservice.CensusService" />
-        <service android:name="com.rcplatform.phototalk.clienservice.PhotoTalkWebService" />
+            android:theme="@android:style/Theme.NoTitleBar" />
         <service android:name="com.rcplatform.message.UserMessageService" />
         <service android:name="com.rcplatform.tigase.TigaseRegisterSerivce" />
         <service android:name="com.google.android.gcm.GCMIntentService" />
         <service android:name="com.rcplatform.tigase.TigaseMessageBinderService" />
+        <service android:name="com.rcplatform.videotalk.clienservice.PhotoTalkWebService" />
         <!--
           BroadcastReceiver that will receive intents from GCM
           services and handle them to the custom IntentService.
