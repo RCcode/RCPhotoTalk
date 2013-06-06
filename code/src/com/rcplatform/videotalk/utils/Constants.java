@@ -215,7 +215,7 @@ public class Constants {
 
 	public static class Provider {
 
-		public static final String PROVIDER_AUTHORITY = "com.rcplatform.phototalk.provider";
+		public static final String PROVIDER_AUTHORITY = "com.rcplatform.videotalk.provider";
 
 		public static final String PROVIDER_USERS_PATH = "user";
 
