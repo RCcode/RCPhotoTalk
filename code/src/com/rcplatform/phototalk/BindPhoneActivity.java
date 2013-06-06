@@ -25,6 +25,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	private static final int SMS_SEND_SPACE = 60;
 
 	public static final String REQUEST_PAMAM_NUMBER = "cellphone_number";
+	public static final String REQUEST_PARAM_COUNTRY_CODE = "country_code";
 
 	private Button btnResend;
 
@@ -36,7 +37,11 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 
 	private String mNumberTemp;
 
+	private String mCountryCode;
+
 	private AsyncTask<Void, Void, Void> mCountDownTask;
+
+	private String fullTempNumber;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +54,8 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 
 	private void initData() {
 		mNumberTemp = getIntent().getStringExtra(REQUEST_PAMAM_NUMBER);
+		mCountryCode = getIntent().getStringExtra(REQUEST_PARAM_COUNTRY_CODE);
+		fullTempNumber = "+" + mCountryCode + mNumberTemp;
 	}
 
 	private void initView() {
@@ -99,8 +106,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 				try {
 					Thread.sleep(1000);
 					publishProgress();
-				}
-				catch (InterruptedException e) {
+				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -126,17 +132,17 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.btn_resend:
-				requestReSendSMS();
-				break;
-			case R.id.btn_commit:
-				EventUtil.More_Setting.rcpt_success_phonenumber(baseContext);
-				sendValidate();
-				break;
-			case R.id.btn_change_number:
-			case R.id.title_linear_back:
-				finish();
-				break;
+		case R.id.btn_resend:
+			requestReSendSMS();
+			break;
+		case R.id.btn_commit:
+			EventUtil.More_Setting.rcpt_success_phonenumber(baseContext);
+			sendValidate();
+			break;
+		case R.id.btn_change_number:
+		case R.id.title_linear_back:
+			finish();
+			break;
 		}
 	}
 
@@ -166,7 +172,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, validate, mNumberTemp);
+			}, validate,fullTempNumber);
 		}
 	}
 
@@ -207,6 +213,6 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
-		}, mNumberTemp);
+		},fullTempNumber);
 	}
 }
