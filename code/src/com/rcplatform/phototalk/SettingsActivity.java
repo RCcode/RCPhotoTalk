@@ -312,7 +312,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			newTrend.setVisibility(View.GONE);
 		else {
 			newTrend.setVisibility(View.VISIBLE);
-			mImageLoader.displayImage(url, ivTrend);
+			mImageLoader.displayImage(url, ivTrend,ImageOptionsFactory.getCircleImageOption());
 		}
 
 	}
