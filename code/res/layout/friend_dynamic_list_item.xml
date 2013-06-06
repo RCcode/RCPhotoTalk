@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
+        android:layout_marginRight="25dp"
         android:text="6H ago"
         android:textColor="#B1B1B1" />
 
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_friend"
-                android:textColor="#B1B1B1"
+                android:textColor="#1B1B1B"
                 android:textSize="18sp" />
         </LinearLayout>
 
@@ -75,9 +75,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_app"
-                android:textColor="#B1B1B1"
+                android:textColor="#1B1B1B"
                 android:textSize="18sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/app_arrow" />
 
 </RelativeLayout>

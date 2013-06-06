@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.android.gcm.MetaHelper;
 import com.rcplatform.phototalk.AddFriendsActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.umeng.EventUtil;
@@ -33,10 +34,12 @@ public class MenuBaseActivity extends BaseActivity {
 			case 2:
 				EventUtil.Main_Photo.rcpt_menu_feedback(baseContext);
 				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-				String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
-				        + SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext)
-				        + SystemMessageUtil.getImsi(baseContext);
+				String emailSubject = SystemMessageUtil.getAppName(baseContext) + "\n" + MetaHelper.getAppVersionName(baseContext) + "\n"
+				        + SystemMessageUtil.getPhoneBrand() + "\n" + SystemMessageUtil.getPhoneModel() + "\n"
+				        + SystemMessageUtil.getOsVersion(baseContext) + "\n\n";
 				email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
+				
+				email.putExtra(Intent.EXTRA_SUBJECT,  "["+ SystemMessageUtil.getAppName(baseContext) +"-"+ MetaHelper.getAppVersionName(baseContext)+"]");// 邮件标题  
 				startActivity(email);
 				break;
 			case 3:

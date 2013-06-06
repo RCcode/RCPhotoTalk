@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -53,7 +52,6 @@ import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
@@ -445,35 +443,39 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				return;
 			}
 
-			if (psw2.equals("")) {
-				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
-				mPswEditText.requestFocus();
-				InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
-				imm.showSoftInput(mPswEditText, 0);
-				return;
-			}
-
-			int loginType = invalidate(email2, psw2);
-			if (loginType != -1) {
-				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-				// login(this, mHandler, email2, psw2, loginType);
+				if (psw2.equals("")) {
+					mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+					mPswEditText.requestFocus();
+					InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+					imm.showSoftInput(mPswEditText, 0);
+					return;
+				}
+				
 				tigaseLogin(this, email2, psw2);
-			}
-			break;
-		case R.id.login_page_forget_password_button:
-			startActivity(new Intent(this, ForgetPasswordActivity.class));
-			EventUtil.Register_Login_Invite.rcpt_forgetpasswordbutton(baseContext);
-			break;
-		case R.id.choosebutton:
-			if (mIsLoginPage) {
-				showSignupView();
-			} else {
-				showLoginView();
-			}
-			mIsLoginPage = !mIsLoginPage;
-			break;
-		default:
-			break;
+
+
+//				不校验输入格式
+//				int loginType = invalidate(email2, psw2);
+//				if (loginType != -1) {
+//					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+//					// login(this, mHandler, email2, psw2, loginType);
+//					tigaseLogin(this, email2, psw2);
+//				}
+				break;
+			case R.id.login_page_forget_password_button:
+				startActivity(new Intent(this, ForgetPasswordActivity.class));
+				EventUtil.Register_Login_Invite.rcpt_forgetpasswordbutton(baseContext);
+				break;
+			case R.id.choosebutton:
+				if (mIsLoginPage) {
+					showSignupView();
+				} else {
+					showLoginView();
+				}
+				mIsLoginPage = !mIsLoginPage;
+				break;
+			default:
+				break;
 		}
 	}
 
