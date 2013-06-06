@@ -61,6 +61,8 @@ public class Constants {
 	public static String DEVICE_ID;
 
 	public static String LANGUAGE;
+	
+	public static final String OFFICIAL_RCID="100000";
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();

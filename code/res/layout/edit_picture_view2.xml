@@ -125,12 +125,12 @@
 
         <com.rcplatform.phototalk.views.AudioRecordButton
             android:id="@+id/audioBtn"
+            style="@style/text_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:background="@drawable/btn_download_n"
-            android:gravity="center"
-            android:paddingLeft="30dp"
+            android:background="@drawable/btn_record"
+            android:maxWidth="200dp"
             android:text="@string/voice_record"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/edit_photo_voice_text_size" />

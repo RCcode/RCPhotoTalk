@@ -116,9 +116,9 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
 				if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
 					final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList.getExpandableListAdapter()).getChild(group, child);
-					if (getCurrentUser().getRcId().equals(friend.getRcId()))
+					if (getCurrentUser().getRcId().equals(friend.getRcId()) || Constants.OFFICIAL_RCID.equals(friend.getRcId()))
 						return;
-					
+
 					EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
 					menu.setHeaderTitle(R.string.delete_friend);
 					menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {

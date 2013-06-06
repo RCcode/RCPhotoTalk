@@ -144,6 +144,8 @@ public class EditPictureActivity extends BaseActivity {
 	private ImageView iv_voice_volume;
 	private ImageView voice_volume_gride;
 
+	private int timeLimit = 10;
+
 	private Handler voiceRecordHandler = new Handler() {
 		private boolean isRecording = false;
 		private Integer recordLast;
@@ -233,7 +235,7 @@ public class EditPictureActivity extends BaseActivity {
 				make_voice.setVisibility(0);
 				// mButtonTimeLimit.setClickable(false);
 				mButtonTimeLimit.setVisibility(View.GONE);
-				voice_size.setText(n + "s");
+				voice_size.setText(((n < timeLimit) ? n : timeLimit) + "s");
 
 			}
 		});
@@ -405,7 +407,6 @@ public class EditPictureActivity extends BaseActivity {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
 					saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getCameraPath());
-
 				}
 				break;
 			case SEND_ON_CLICK:
@@ -417,7 +418,6 @@ public class EditPictureActivity extends BaseActivity {
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
-
 					Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
@@ -462,7 +462,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private void startSelectFriendActivity() {
 		Intent intent = new Intent(this, SelectFriendsActivity.class);
-		intent.putExtra("timeLimit", mButtonTimeLimit.getText().toString());
+		intent.putExtra("timeLimit", timeLimit + "");
 		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASGRAF, mEditePicView.hasDrawed());
 		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASVOICE, hasVoice());
 		startActivity(intent);
@@ -561,12 +561,7 @@ public class EditPictureActivity extends BaseActivity {
 		}
 		mWheel.setVisibleItems(3);
 		mWheel.setViewAdapter(adapter);
-		int n = 10;
-		try {
-			n = Integer.valueOf(mButtonTimeLimit.getText().toString());
-		} catch (Exception e) {
-		}
-		mWheel.setCurrentItem(n - 1);
+		mWheel.setCurrentItem(timeLimit - 1);
 		select_layout.setVisibility(View.VISIBLE);
 		isShowSelectLayout = true;
 
@@ -599,6 +594,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	public void saveEditedPictrue(final Bitmap bitmap, final String path) {
 		// showDialog();
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		new Thread(new Runnable() {
 
 			@Override
@@ -628,6 +624,7 @@ public class EditPictureActivity extends BaseActivity {
 
 		@Override
 		public void handleMessage(android.os.Message msg) {
+			dismissLoadingDialog();
 			switch (msg.what) {
 			case SAVE_SUCCESS:
 				// setSaveable(false);
@@ -653,11 +650,12 @@ public class EditPictureActivity extends BaseActivity {
 				Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
 				break;
 			case SET_LIMIT:
-				int n = (Integer) msg.obj;
-				EventUtil.Main_Photo.rcpt_timer(baseContext, n);
-				mButtonTimeLimit.setText(n + "");
-				mEditePicView.setTimeLimit(n);
-				audioBtn.setMaxRecoedSize(n);
+
+				timeLimit = (Integer) msg.obj;
+				EventUtil.Main_Photo.rcpt_timer(baseContext, timeLimit);
+				mButtonTimeLimit.setText(timeLimit + "");
+				mEditePicView.setTimeLimit(timeLimit);
+				audioBtn.setMaxRecoedSize(timeLimit);
 				select_layout.setVisibility(View.GONE);
 				isShowSelectLayout = false;
 				break;
@@ -694,12 +692,11 @@ public class EditPictureActivity extends BaseActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String timelimit = (String) mButtonTimeLimit.getText();
 		File file = new File(tempPath);
 		if (file.exists()) {
 			// 压缩成功后删除录音和照片文件
 			deleteTemp();
-			sendPicture("", tempPath, timelimit, friend);
+			sendPicture("", tempPath, timeLimit + "", friend);
 		}
 	}
 
