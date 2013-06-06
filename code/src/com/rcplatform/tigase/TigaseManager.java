@@ -222,8 +222,9 @@ public class TigaseManager {
 
 		boolean flag = false;
 		String toUser = to + "@" + node.getDomain().trim();
-		Chat newchat = chatManager.createChat(toUser, null);
+
 		try {
+			Chat newchat = chatManager.createChat(toUser, null);
 			newchat.sendMessage(msg);
 			flag = true;
 		}

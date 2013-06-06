@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Inscription</string>
     <string name="login_title_bubble_text">Nouvel util.</string>
     <string name="login_nick_hint">Pseudo (moins de 20 caractères)</string>
-    <string name="register_confirm_email_address">Votre adresse e-mail est:%s</string>
+    <string name="register_confirm_email_address">Votre adresse e-mail est:</string>
     <string name="modify">Modifier</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Erreur de format d’e-mail</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">Échec de chargement, touchez pour réessayer</string>
     <string name="added_by_friend">%1$s m’a ajouté comme ami</string>
     <string name="added_friend_back">J’ajoute %1$s comme ami</string>
-    <string name="added_friend">%1$s m’a ajouté comme ami</string>
-    <string name="added_friend_confirm">J’ajoute %1$s comme ami</string>
+    <string name="added_friend">J’ajoute %1$s comme ami</string>
+    <string name="added_friend_confirm">%1$s m’a ajouté comme ami</string>
     <string name="operation">Opération</string>
     <string name="resend">Renvoyer</string>
     <string name="delete">Supprimer</string>

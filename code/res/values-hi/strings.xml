@@ -22,7 +22,7 @@
     <string name="landing_page_signup">साइन अप करें</string>
     <string name="login_title_bubble_text">नया RC उपयोगकर्ता</string>
     <string name="login_nick_hint">उपनाम (20 वर्ण से कम) </string>
-    <string name="register_confirm_email_address">आपका ईमेल पता है:%s</string>
+    <string name="register_confirm_email_address">आपका ईमेल पता है:</string>
     <string name="modify">संपादित करें</string>
     <string name="ok">ठीक</string>
     <string name="registe_email_error">ईमेल फ़ॉरमेट त्रुटि</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">लोड करना विफल, पुनः प्रयास करने के लिए टैप करें</string>
     <string name="added_by_friend">%1$s मुझे मित्र के रूप में जोड़ा है</string>
     <string name="added_friend_back">मैं %1$s को मित्र के रूप में जोड़ता हूँ</string>
-    <string name="added_friend">%1$s मुझे मित्र के रूप में जोड़ा है</string>
-    <string name="added_friend_confirm">मैं %1$s को मित्र के रूप में जोड़ता हूँ</string>
+    <string name="added_friend_confirm">%1$s मुझे मित्र के रूप में जोड़ा है</string>
+    <string name="added_friend">मैं %1$s को मित्र के रूप में जोड़ता हूँ</string>
     <string name="operation">संचालन</string>
     <string name="resend">पुनः भेजें</string>
     <string name="delete">हटाएँ</string>

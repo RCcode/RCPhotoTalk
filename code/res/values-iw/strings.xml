@@ -22,7 +22,7 @@
     <string name="landing_page_signup">הירשם</string>
     <string name="login_title_bubble_text">משתמש RC חדש</string>
     <string name="login_nick_hint">(כינוי (עד 20 תווים</string>
-    <string name="register_confirm_email_address">%s:כתובת הדוא"ל שלך היא</string>
+    <string name="register_confirm_email_address">כתובת הדוא"ל שלך היא</string>
     <string name="modify">ערוך</string>
     <string name="ok">אישור</string>
     <string name="registe_email_error">תבנית דוא"ל שגויה</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">הטעינה נכשלה, גע כדי לנסות שנית</string>
     <string name="added_by_friend">%1$s הוסיף אותי כחבר</string>
     <string name="added_friend_back">הוספתי את %1$s כחבר</string>
-    <string name="added_friend">%1$s הוסיף אותי כחבר</string>
-    <string name="added_friend_confirm">הוספתי את %1$s כחבר</string>
+    <string name="added_friend_confirm">%1$s הוסיף אותי כחבר</string>
+    <string name="added_friend">הוספתי את %1$s כחבר</string>
     <string name="operation">פעולה</string>
     <string name="resend">שלח שנית</string>
     <string name="delete">מחק</string>

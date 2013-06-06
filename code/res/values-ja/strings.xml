@@ -22,7 +22,7 @@
     <string name="landing_page_signup">登録する</string>
     <string name="login_title_bubble_text">新規RCユーザー</string>
     <string name="login_nick_hint">愛称(20文字以内)</string>
-    <string name="register_confirm_email_address">あなたのEメールアドレス:%s</string>
+    <string name="register_confirm_email_address">あなたのEメールアドレス:</string>
     <string name="modify">編集</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Eメール形式エラー</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">ロード失敗、タップしてやり直す</string>
     <string name="added_by_friend">%1$sが友人に追加されました</string>
     <string name="added_friend_back">%1$sを友人に追加しました</string>
-    <string name="added_friend">%1$sが友人に追加されました</string>
-    <string name="added_friend_confirm">%1$sを友人に追加しました</string>
+    <string name="added_friend_confirm">%1$sが友人に追加されました</string>
+    <string name="added_friend">%1$sを友人に追加しました</string>
     <string name="operation">操作</string>
     <string name="resend">再送</string>
     <string name="delete">削除</string>

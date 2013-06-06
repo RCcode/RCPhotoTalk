@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Зарегистрироваться</string>
     <string name="login_title_bubble_text">Регистрация</string>
     <string name="login_nick_hint">Ник (менее 20 символов)</string>
-    <string name="register_confirm_email_address">Ваш адрес эл. почты:%s</string>
+    <string name="register_confirm_email_address">Ваш адрес эл. почты:</string>
     <string name="modify">Изменить</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Ошибка формата адреса эл. почты</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">Не удалось загрузить, нажмите, чтобы повторить попытку</string>
     <string name="added_by_friend">%1$s добавил(-а) меня в друзья</string>
     <string name="added_friend_back">%1$s добавлен(-а) в друзья</string>
-    <string name="added_friend">%1$s добавил(-а) меня в друзья</string>
-    <string name="added_friend_confirm">%1$s добавлен(-а) в друзья</string>
+    <string name="added_friend_confirm">%1$s добавил(-а) меня в друзья</string>
+    <string name="added_friend">%1$s добавлен(-а) в друзья</string>
     <string name="operation">Операция</string>
     <string name="resend">Отправить снова</string>
     <string name="delete">Удалить</string>

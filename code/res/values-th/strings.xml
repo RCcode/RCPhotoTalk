@@ -22,7 +22,7 @@
     <string name="landing_page_signup">ลงทะเบียน</string>
     <string name="login_title_bubble_text">ผู้ใช้ RC ใหม่</string>
     <string name="login_nick_hint">ชื่อเล่น (ไม่เกิน 20 อักขระ)</string>
-    <string name="register_confirm_email_address">ที่อยู่อีเมลของคุณคือ:%s</string>
+    <string name="register_confirm_email_address">ที่อยู่อีเมลของคุณคือ:</string>
     <string name="modify">แก้ไข</string>
     <string name="ok">ตกลง</string>
     <string name="registe_email_error">รูปแบบอีเมลไม่ถูกต้อง</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">โหลดไม่สำเร็จ กรุณาแตะเพื่อลองอีกครั้ง</string>
     <string name="added_by_friend">%1$sได้เพิ่มฉันเป็นเพื่อน</string>
     <string name="added_friend_back">ฉันได้เพิ่ม %1$sเป็นเพื่อน</string>
-    <string name="added_friend">%1$sได้เพิ่มฉันเป็นเพื่อน</string>
-    <string name="added_friend_confirm">ฉันได้เพิ่ม %1$sเป็นเพื่อน</string>
+    <string name="added_friend_confirm">%1$sได้เพิ่มฉันเป็นเพื่อน</string>
+    <string name="added_friend">ฉันได้เพิ่ม %1$sเป็นเพื่อน</string>
     <string name="operation">การดำเนินการ</string>
     <string name="resend">ส่งใหม่</string>
     <string name="delete">ลบ</string>
