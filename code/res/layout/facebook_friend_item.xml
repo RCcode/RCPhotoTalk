@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/facebook_add"
         android:layout_toRightOf="@+id/facebook_ppv"
         android:textColor="@color/black"
         android:textSize="20sp"

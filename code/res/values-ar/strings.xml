@@ -50,7 +50,7 @@
     <string name="second">منذ %1$d ثانية</string>
     <string name="hour">منذ %1$d ساعة</string>
     <string name="day">منذ %1$d يوم</string>
-    <string name="ago">%1$s前</string>
+    <string name="ago">%1$s</string>
     <string name="send_sending">جارٍ الإرسا </string>
     <string name="send_sended">%1$s-تم الإرسال</string>
     <string name="send_received"> %1$s-تم الاستلام</string>

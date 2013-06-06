@@ -10,31 +10,35 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_gap_2x"
-        android:textSize="20sp"
-        android:textColor="#919191"
         android:layout_marginLeft="@dimen/default_gap"
-        android:text="@string/receive_setting" />
+        android:layout_marginTop="@dimen/default_gap_2x"
+        android:gravity="left"
+        android:text="@string/receive_setting"
+        android:textColor="#919191"
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/rela_resetting"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="@dimen/default_gap_2x"
         android:layout_marginLeft="@dimen/default_gap"
         android:layout_marginRight="@dimen/default_gap"
+        android:layout_marginTop="@dimen/default_gap_2x"
         android:background="@drawable/edit_fields_background" >
 
         <TextView
             android:id="@+id/tv_resetting_current"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="#313131"
-            android:textSize="20sp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/default_gap"
-            android:layout_centerVertical="true" />
+            android:layout_toLeftOf="@+id/re_to_right"
+            android:gravity="left"
+            android:textColor="#313131"
+            android:textSize="20sp" />
 
         <ImageView
+            android:id="@+id/re_to_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
@@ -46,32 +50,35 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/default_gap_2x"
-        android:textSize="20sp"
-        android:textColor="#919191"
         android:layout_marginLeft="@dimen/default_gap"
-        android:text="@string/dynamic_setting" />
+        android:layout_marginTop="@dimen/default_gap_2x"
+        android:gravity="left"
+        android:text="@string/dynamic_setting"
+        android:textColor="#919191"
+        android:textSize="20sp" />
 
     <RelativeLayout
         android:id="@+id/rela_dysetting"
         android:layout_width="fill_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="@dimen/default_gap_2x"
         android:layout_marginLeft="@dimen/default_gap"
         android:layout_marginRight="@dimen/default_gap"
-        android:background="@drawable/edit_fields_background"
-         >
+        android:layout_marginTop="@dimen/default_gap_2x"
+        android:background="@drawable/edit_fields_background" >
 
         <TextView
             android:id="@+id/tv_dysetting_current"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:textColor="#313131"
-            android:textSize="20sp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/default_gap"
-            android:layout_centerVertical="true" />
+            android:layout_toLeftOf="@+id/dy_to_right"
+            android:gravity="left"
+            android:textColor="#313131"
+            android:textSize="20sp" />
 
         <ImageView
+            android:id="@+id/dy_to_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
