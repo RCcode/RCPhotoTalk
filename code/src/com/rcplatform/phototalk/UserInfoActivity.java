@@ -163,11 +163,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
 		user_Email.setText(userInfo.getEmail());
 		String phoneNum = userInfo.getCellPhone();
-		if(null == phoneNum){
+		if (null == phoneNum) {
 			user_Phone.setText(R.string.phone_unbind);
-		}else if(phoneNum.equals("")){
+		} else if (phoneNum.equals("")) {
 			user_Phone.setText(R.string.phone_unbind);
-		}else{
+		} else {
 			user_Phone.setText(phoneNum);
 		}
 		user_rcId.setText(userInfo.getRcId());
@@ -206,8 +206,9 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 			this.finish();
 			break;
 		case R.id.rela_phone:
-			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0) {
-				startActivityForResult(new Intent(this, RequestSMSActivity.class),REQUEST_CODE_BINDPHONE);
+			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0
+					&& PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, getCurrentUser().getRcId())) {
+				startActivityForResult(new Intent(this, RequestSMSActivity.class), REQUEST_CODE_BINDPHONE);
 				EventUtil.More_Setting.rcpt_phonenumber(baseContext);
 			}
 			break;
@@ -282,8 +283,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
 			mDeAuthDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.dialog_confirm_deauth)
-			        .setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener)
-			        .create();
+					.setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener).create();
 		}
 		mDeAuthorizeDialogListener.setType(type);
 		mDeAuthDialog.show();
@@ -317,16 +317,16 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
-				case DialogInterface.BUTTON_NEGATIVE:
-					if (mType == FriendType.FACEBOOK) {
-						mFacebookClient.deAuthorize(mDeAuthorizeListener);
-					} else if (mType == FriendType.VK) {
-						mVKClient.deAuthorize(mDeAuthorizeListener);
-					}
-					break;
-				case DialogInterface.BUTTON_POSITIVE:
-					dialog.dismiss();
-					break;
+			case DialogInterface.BUTTON_NEGATIVE:
+				if (mType == FriendType.FACEBOOK) {
+					mFacebookClient.deAuthorize(mDeAuthorizeListener);
+				} else if (mType == FriendType.VK) {
+					mVKClient.deAuthorize(mDeAuthorizeListener);
+				}
+				break;
+			case DialogInterface.BUTTON_POSITIVE:
+				dialog.dismiss();
+				break;
 			}
 		}
 	};

@@ -82,7 +82,7 @@ public class VKClient {
 				try {
 					List<String> attachments = new ArrayList<String>();
 					attachments.add(Constants.INVITE_URL);
-					mApi.createWallPost(mUid, mContext.getString(R.string.join_message), attachments, null, false, false, false, null, null, null, null);
+					mApi.createWallPost(mUid, mContext.getString(R.string.join_message,mContext.getCurrentUser().getRcId()), attachments, null, false, false, false, null, null, null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

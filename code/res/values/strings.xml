@@ -10,9 +10,6 @@
     <string name="init_message_text_two">Make photos more interesting with audio and graffiti</string>
     <string name="init_message_title_three">Timed deletion</string>
     <string name="init_message_text_three">Photos will be automatically deleted after viewed, no privacy concerns</string>
-    
-    
-    
     <string name="app_name">PhotoTalk</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
@@ -222,7 +219,6 @@
     <string name="invite_success">邀请好友成功</string>
     <string name="invite_cancel">取消好友邀请</string>
     <string name="invite_fail">好友邀请失败</string>
-
     <string name="init_regist_agreement">注册即表示您接受服务条款和隐私政策</string>
 
     <!-- gcm -->
@@ -245,7 +241,7 @@
     <string name="sms_sended">验证短信已发送</string>
     <string name="phone_number_validate">电话号码验证</string>
     <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:http://rctalk.me，注册后加我ID:%1$s</string>
-    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:http://rctalk.me</string>
+    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址:http://rctalk.me.注册后加我ID:%1$s</string>
     <string name="invite_msg_match">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！</string>
     <!-- login regist_page -->
     <string name="login_use_account_below">使用以下RC账号登录</string>

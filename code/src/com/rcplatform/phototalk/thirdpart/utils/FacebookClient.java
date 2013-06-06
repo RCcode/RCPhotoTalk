@@ -124,7 +124,7 @@ public class FacebookClient {
 		Bundle bundler = new Bundle();
 		bundler.putString("link", Constants.INVITE_URL);
 		bundler.putString("caption", mContext.getString(R.string.app_name));
-		bundler.putString("description", mContext.getString(R.string.join_message));
+		bundler.putString("description", mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()));
 		bundler.putString("name", mContext.getString(R.string.app_name));
 		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
 		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {

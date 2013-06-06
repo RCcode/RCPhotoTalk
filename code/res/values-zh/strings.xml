@@ -173,7 +173,7 @@
 	<string name="other_device_login">你的账号已在其它设备登录</string>
 	<string name="relogin">确定</string>
     <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址http://rctalk.me，注册后加我ID:%1$s</string>
-    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址http://rctalk.me，注册后加我ID:%1$</string>
+    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址http://rctalk.me，注册后加我ID:%1$s</string>
 	<string name="contact_friend">通讯录:</string>
 	<string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
