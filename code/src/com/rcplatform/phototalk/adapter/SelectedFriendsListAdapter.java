@@ -71,7 +71,6 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Friend friend = listData.get(position);
 		// friend.setPostion(position);
-		final int index = position;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(context).inflate(R.layout.selected_friends_list_item, null);
 			holder = new ViewHolder();

@@ -126,42 +126,44 @@ public class SystemSettingActivity extends BaseActivity implements OnClickListen
 
 	private void showTrendSetDialog() {
 		if (mTrendSetDialog == null) {
-			mTrendSetDialog = DialogUtil.getAlertDialogBuilder(this).setSingleChoiceItems(trendSets, mCurrentUser.getShareNews(), new DialogInterface.OnClickListener() {
+			mTrendSetDialog = DialogUtil.getAlertDialogBuilder(this)
+					.setSingleChoiceItems(trendSets, mCurrentUser.getShareNews(), new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if(0==which){
-						EventUtil.More_Setting.rcpt_share(baseContext);
-					}else if(1==which){
-						EventUtil.More_Setting.rcpt_notshare(baseContext);
-						
-					}
-					mCurrentUser.setShareNews(which);
-					setSetText();
-					dialog.dismiss();
-				}
-			}).create();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (0 == which) {
+								EventUtil.More_Setting.rcpt_share(baseContext);
+							} else if (1 == which) {
+								EventUtil.More_Setting.rcpt_notshare(baseContext);
+
+							}
+							mCurrentUser.setShareNews(which);
+							setSetText();
+							dialog.dismiss();
+						}
+					}).create();
 		}
 		mTrendSetDialog.show();
 	}
 
 	private void showReceiveSetDialog() {
 		if (mReceiveSetDialog == null) {
-			mReceiveSetDialog = DialogUtil.getAlertDialogBuilder(this).setSingleChoiceItems(receiveSets, mCurrentUser.getAllowsend(), new DialogInterface.OnClickListener() {
+			mReceiveSetDialog = DialogUtil.getAlertDialogBuilder(this)
+					.setSingleChoiceItems(receiveSets, mCurrentUser.getAllowsend(), new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					if(0==which){
-						EventUtil.More_Setting.rcpt_anyone(baseContext);
-					}else if(1==which){
-						EventUtil.More_Setting.rcpt_onlyfirends(baseContext);
-						
-					}
-					mCurrentUser.setAllowsend(which);
-					setSetText();
-					dialog.dismiss();
-				}
-			}).create();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (0 == which) {
+								EventUtil.More_Setting.rcpt_anyone(baseContext);
+							} else if (1 == which) {
+								EventUtil.More_Setting.rcpt_onlyfirends(baseContext);
+
+							}
+							mCurrentUser.setAllowsend(which);
+							setSetText();
+							dialog.dismiss();
+						}
+					}).create();
 		}
 		mReceiveSetDialog.show();
 	}

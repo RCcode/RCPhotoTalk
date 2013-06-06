@@ -31,7 +31,7 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 				mobiles.append(f.getCellPhone()).append(";");
 			}
 			System.out.println(mobiles.toString());
-			String msg = String.format(getResources().getString(R.string.invite_message), getCurrentUser().getRcId());
+			String msg = getResources().getString(R.string.invite_message, getCurrentUser().getRcId());
 			Intent intent = new Intent(Intent.ACTION_VIEW);
 			intent.putExtra("address", mobiles.toString().substring(0, mobiles.length() - 1));
 			intent.putExtra("sms_body", msg);

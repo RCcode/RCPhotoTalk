@@ -175,7 +175,6 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 			holder.name = (TextView) convertView.findViewById(R.id.diaplay_chat_name);
 			holder.number = (TextView) convertView.findViewById(R.id.display_number);
 			holder.checkBox = (CheckBox) convertView.findViewById(R.id.add_friend_invite_checkbox);
-			holder.sendMessageBtn = (Button) convertView.findViewById(R.id.add_friend_invite_single_btn);
 			convertView.setTag(holder);
 
 		} else {
@@ -183,7 +182,6 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		holder.name.setText(friend.getNickName());
 		holder.number.setVisibility(View.VISIBLE);
-		holder.sendMessageBtn.setVisibility(View.GONE);
 		holder.checkBox.setVisibility(View.VISIBLE);
 		holder.checkBox.setOnCheckedChangeListener(null);
 		holder.number.setText(friend.getCellPhone());
@@ -210,8 +208,6 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	}
 
 	class ViewHolder {
-
-		Button sendMessageBtn;
 
 		TextView number;
 

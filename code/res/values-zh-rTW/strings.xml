@@ -175,9 +175,9 @@
     <string name="other_device_login">你的帳號已在其它設備登錄</string>
     <string name="relogin">確定</string>
     <string name="join_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址http://rctalk.me，註冊後加我ID:%1$s</string>
-    <string name="invite_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址http://rctalk.me，註冊後加我ID:%1$</string>
-    <string name="contact_friend">通訊錄:</string>
-    <string name="facebook_friend">Facebook:</string>
+    <string name="invite_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址http://rctalk.me，註冊後加我ID:%1$s</string>
+	<string name="contact_friend">通訊錄:</string>
+	<string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->

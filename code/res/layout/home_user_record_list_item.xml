@@ -1,17 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:background="@color/white"
-    android:layout_height="wrap_content" >
-
-    <!--
-         <RelativeLayout
-        android:id="@+id/head_layou"
-        android:layout_width="@dimen/friend_head_side"
-        android:layout_height="@dimen/friend_head_side"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/friend_head_left" >
-    -->
+    android:layout_height="wrap_content"
+    android:background="@color/white" >
 
     <ImageView
         android:id="@+id/iv_record_item_head"
@@ -19,8 +10,8 @@
         android:layout_height="@dimen/friend_head_side"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:scaleType="fitCenter"
-        android:layout_marginLeft="@dimen/friend_head_left" />
+        android:layout_marginLeft="@dimen/friend_head_left"
+        android:scaleType="fitCenter" />
 
     <ImageView
         android:layout_width="fill_parent"
@@ -38,7 +29,7 @@
 
     <LinearLayout
         android:id="@+id/ll"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/friend_head_left"
@@ -48,20 +39,18 @@
 
         <TextView
             android:id="@+id/tv_record_item_name"
+            style="@style/text_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
             android:textColor="#4f3e36"
             android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_record_item_statu"
+            style="@style/text_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/friend_text_padding"
-            android:ellipsize="end"
-            android:singleLine="true"
             android:textColor="#a19a94"
             android:textSize="16sp" />
     </LinearLayout>
