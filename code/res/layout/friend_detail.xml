@@ -161,7 +161,7 @@
     <LinearLayout
         android:id="@+id/linear_apps"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_list_height"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/friend_info_app_left"
         android:layout_marginRight="@dimen/friend_info_app_right"
         android:background="@drawable/app_list_bg" />
