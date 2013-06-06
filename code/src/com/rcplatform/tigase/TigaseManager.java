@@ -12,8 +12,10 @@ import org.jivesoftware.smack.Connection;
 import org.jivesoftware.smack.ConnectionConfiguration;
 import org.jivesoftware.smack.ConnectionCreationListener;
 import org.jivesoftware.smack.ConnectionListener;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.XMPPConnection;
 import org.jivesoftware.smack.XMPPException;
+import org.jivesoftware.smack.packet.Message;
 
 import android.content.Context;
 
@@ -201,7 +203,7 @@ public class TigaseManager {
 
 	public void setChatManagerListener(ChatManagerListener listener) {
 		if (null != chatManager) {
-			chatManager.addChatListener(listener);
+		//	chatManager.addChatListener(listener);
 		}
 		this.chatListener = listener;
 	}
@@ -224,7 +226,14 @@ public class TigaseManager {
 		String toUser = to + "@" + node.getDomain().trim();
 
 		try {
-			Chat newchat = chatManager.createChat(toUser, null);
+			Chat newchat = chatManager.createChat(toUser, new MessageListener() {
+
+				@Override
+				public void processMessage(Chat chat, Message message) {
+					// TODO Auto-generated method stub
+
+				}
+			});
 			newchat.sendMessage(msg);
 			flag = true;
 		}
