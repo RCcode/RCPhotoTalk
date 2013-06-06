@@ -308,6 +308,7 @@ public class PTBackgroundService extends Service {
 
 					if (isUserNeedToBindPhone(mCurrentUser)) {
 						PrefsUtils.User.MobilePhoneBind.saveBindedPhoneNumber(getApplicationContext(), phoneNumber, mCurrentUser.getRcId());
+						mCurrentUser.setCellPhone(phoneNumber);
 					}
 					cancelCurrentBindCheckTask();
 				}

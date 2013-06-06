@@ -133,7 +133,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	}
 
 	private void requestSms() {
-		String number = etNumber.getText().toString();
+		final String number = etNumber.getText().toString();
 
 		if (number.equals("")) {
 			etNumber.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
@@ -163,7 +163,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 								public void onSuccess(int statusCode, String content) {
 									dismissLoadingDialog();
 									PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
-									startBindPhoneActivity(phoneNumber);
+									startBindPhoneActivity(number);
 								}
 
 								@Override
@@ -183,6 +183,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private void startBindPhoneActivity(String number) {
 		Intent intent = new Intent(this, BindPhoneActivity.class);
 		intent.putExtra(BindPhoneActivity.REQUEST_PAMAM_NUMBER, number);
+		intent.putExtra(BindPhoneActivity.REQUEST_PARAM_COUNTRY_CODE, mCountryCode.getCountryCode());
 		startActivityForResult(intent, REQUEST_CODE_BIND);
 	}
 

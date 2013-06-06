@@ -296,23 +296,25 @@ public class FriendsProxy {
 								JSONObject jObj = new JSONObject(content);
 								final List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("userList").toString());
 								PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, FriendType.CONTACT);
-								context.runOnUiThread(new Runnable() {
+								if (needServiceData)
+									context.runOnUiThread(new Runnable() {
 
-									@Override
-									public void run() {
-										listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsService), recommendsService);
-									}
-								});
+										@Override
+										public void run() {
+											listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsService), recommendsService);
+										}
+									});
 
 							} catch (Exception e) {
 								e.printStackTrace();
-								context.runOnUiThread(new Runnable() {
+								if (needServiceData)
+									context.runOnUiThread(new Runnable() {
 
-									@Override
-									public void run() {
-										onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-									}
-								});
+										@Override
+										public void run() {
+											onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+										}
+									});
 							}
 						}
 					};
@@ -321,7 +323,8 @@ public class FriendsProxy {
 
 				@Override
 				public void onFailure(int errorCode, String content) {
-					listener.onLoadedFail(content);
+					if (needServiceData)
+						listener.onLoadedFail(content);
 				}
 			};
 			if (listener != null && !context.isFinishing() && !needServiceData) {
@@ -345,31 +348,37 @@ public class FriendsProxy {
 								JSONObject jObj = new JSONObject(content);
 								final List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
 								PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, friendType);
-								context.runOnUiThread(new Runnable() {
+								if (needServiceData) {
+									context.runOnUiThread(new Runnable() {
 
-									@Override
-									public void run() {
-										listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService), recommendsService);
-									}
-								});
+										@Override
+										public void run() {
+											listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService),
+													recommendsService);
+										}
+									});
+								}
 							} catch (Exception e) {
 								e.printStackTrace();
-								context.runOnUiThread(new Runnable() {
+								if (needServiceData) {
+									context.runOnUiThread(new Runnable() {
 
-									@Override
-									public void run() {
-										onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-									}
-								});
+										@Override
+										public void run() {
+											onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
+										}
+									});
+								}
 							}
 						};
 					};
-
+					thread.start();
 				}
 
 				@Override
 				public void onFailure(int errorCode, String content) {
-					listener.onLoadedFail(content);
+					if (needServiceData)
+						listener.onLoadedFail(content);
 				}
 			};
 			if (listener != null && !context.isFinishing() && !needServiceData) {

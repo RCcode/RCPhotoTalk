@@ -109,13 +109,13 @@ public class AudioRecordButton extends Button {
 		// TODO Auto-generated method stub
 		switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
-				this.setBackgroundResource(R.drawable.btn_download_p);
+				setBackgroundResource(R.drawable.btn_download_p);
 				state = 0;
 				// 开始录音
 				play(mFilePath);
 				break;
 			case MotionEvent.ACTION_UP:
-				this.setBackgroundResource(R.drawable.btn_download_n);
+				setBackgroundResource(R.drawable.btn_download_n);
 				if (state == STATE_RECORDING) {
 					stopRecord();
 				} else {

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -53,7 +52,6 @@ import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
-import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
@@ -414,7 +412,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			if (invalidate(this, email, nick, psw)) {
 				AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
-				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
+				dialogBuilder.setTitle(R.string.register_confirm_email_address).setMessage(email).setCancelable(false)
 						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
 							@Override
@@ -454,6 +452,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				}
 				
 				tigaseLogin(this, email2, psw2);
+
 
 //				不校验输入格式
 //				int loginType = invalidate(email2, psw2);
