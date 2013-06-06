@@ -7,6 +7,7 @@ import android.content.Context;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class PhotoTalkParams {
 
@@ -19,8 +20,8 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = UserInfo.DEFAULT_TOKEN;
-	public static String PARAM_VALUE_LANGUAGE;
-	public static String PARAM_VALUE_DEVICE_ID;
+	public static String PARAM_VALUE_LANGUAGE=Constants.LANGUAGE;
+	public static String PARAM_VALUE_DEVICE_ID=Constants.DEVICE_ID;
 	public static String PARAM_VALUE_APP_ID = "1";
 
 	public static class ChangePassword {

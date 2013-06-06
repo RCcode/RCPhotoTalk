@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendSourse;
+import com.rcplatform.phototalk.bean.FriendType;
 
 public class SelectedFriendsListAdapter extends BaseAdapter {
 
@@ -36,10 +38,10 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 
 	public interface OnCheckBoxChangedListener {
 
-		void onChange(Friend friend,boolean isChecked);
+		void onChange(Friend friend, boolean isChecked);
 	}
 
-	public SelectedFriendsListAdapter(Context context, List<Friend> listData,List<Friend> galleryData) {
+	public SelectedFriendsListAdapter(Context context, List<Friend> listData, List<Friend> galleryData) {
 		this.listData = listData;
 		this.context = context;
 		this.galleryData = galleryData;
@@ -57,8 +59,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 
 	@Override
 	public Object getItem(int position) {
-		return (listData != null && listData.size() > 0) ? listData
-				.get(position) : null;
+		return (listData != null && listData.size() > 0) ? listData.get(position) : null;
 	}
 
 	@Override
@@ -72,13 +73,10 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 		// friend.setPostion(position);
 		final int index = position;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.selected_friends_list_item, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.selected_friends_list_item, null);
 			holder = new ViewHolder();
-			holder.head = (ImageView) convertView
-					.findViewById(R.id.iv_sfli_head);
-			holder.name = (TextView) convertView
-					.findViewById(R.id.tv_sfli_name);
+			holder.head = (ImageView) convertView.findViewById(R.id.iv_sfli_head);
+			holder.name = (TextView) convertView.findViewById(R.id.tv_sfli_name);
 			holder.checkBox = (CheckBox) convertView.findViewById(R.id.cb_sfli);
 			holder.tvLetter = (TextView) convertView.findViewById(R.id.alpha);
 			convertView.setTag(holder);
@@ -92,15 +90,15 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				if (((CheckBox) v).isChecked()) {
-						mCheckBoxChangedListener.onChange(friend,true);
+					mCheckBoxChangedListener.onChange(friend, true);
 				} else {
-						mCheckBoxChangedListener.onChange(friend,false);
+					mCheckBoxChangedListener.onChange(friend, false);
 				}
 			}
 		});
-		if(galleryData.contains(friend)){
+		if (galleryData.contains(friend)) {
 			holder.checkBox.setChecked(true);
-		}else{
+		} else {
 			holder.checkBox.setChecked(false);
 		}
 		mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
@@ -113,14 +111,13 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 			letter = letter.toUpperCase();
 			holder.tvLetter.setText(letter);
 		}
-
+		setFriendSourceInfo(convertView, friend);
 		return convertView;
 
 	}
 
 	private boolean isNeedToShowLetter(int position) {
-		return position > 0 ? (!mLetters[position]
-				.equals(mLetters[position - 1])) : true;
+		return position > 0 ? (!mLetters[position].equals(mLetters[position - 1])) : true;
 	}
 
 	class ViewHolder {
@@ -134,12 +131,39 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 		public TextView tvLetter;
 	}
 
-	public void setOnCheckBoxChangedListener(
-			OnCheckBoxChangedListener mCheckBoxChangedListener) {
+	public void setOnCheckBoxChangedListener(OnCheckBoxChangedListener mCheckBoxChangedListener) {
 		this.mCheckBoxChangedListener = mCheckBoxChangedListener;
 	}
 
 	public List<Friend> getData() {
 		return listData;
+	}
+
+	private void setFriendSourceInfo(View convertView, Friend friend) {
+		View sourceView = convertView.findViewById(R.id.linear_friend_source);
+		FriendSourse source = friend.getSource();
+
+		if (source == null) {
+			sourceView.setVisibility(View.GONE);
+		} else {
+			sourceView.setVisibility(View.VISIBLE);
+			TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
+			TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
+			switch (source.getAttrType()) {
+			case FriendType.CONTACT:
+				tvFrom.setText(R.string.contact_friend);
+				break;
+			case FriendType.FACEBOOK:
+				tvFrom.setText(R.string.facebook_friend);
+				break;
+			case FriendType.VK:
+				tvFrom.setText(R.string.vk_friend);
+				break;
+			default:
+				tvFrom.setText(null);
+				break;
+			}
+			tvName.setText(source.getName());
+		}
 	}
 }

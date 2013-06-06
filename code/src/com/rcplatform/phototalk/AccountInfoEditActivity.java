@@ -165,7 +165,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private void showSexChooseDialog() {
 		int selectedSex = userDetailInfo.getGender();
-		new AlertDialog.Builder(this).setTitle(getResources().getString(R.string.settings_select_sex))
+		DialogUtil.getAlertDialogBuilder(this).setTitle(getResources().getString(R.string.settings_select_sex))
 				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
@@ -210,7 +210,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 						saveBirthDay(mBirthDayPicker.getYear(), mBirthDayPicker.getMonth(), mBirthDayPicker.getDayOfMonth());
 				}
 			};
-			mBirthChooseDialog = new AlertDialog.Builder(this).setTitle(R.string.select_birthday).setView(view)
+			mBirthChooseDialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.select_birthday).setView(view)
 					.setNegativeButton(R.string.confirm, birthListener).setPositiveButton(R.string.cancel, birthListener).create();
 		}
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
@@ -335,7 +335,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					dialog.dismiss();
 				}
 			};
-			updateFailDialog = new AlertDialog.Builder(this).setMessage(R.string.update_fail).setPositiveButton(R.string.cancel, listener)
+			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.update_fail).setPositiveButton(R.string.cancel, listener)
 					.setNegativeButton(R.string.retry, listener).setCancelable(false).create();
 		}
 		updateFailDialog.show();

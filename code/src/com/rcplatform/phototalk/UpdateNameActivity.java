@@ -108,21 +108,6 @@ public class UpdateNameActivity extends BaseActivity implements View.OnClickList
 		mProgressbar = (ProgressBar) findViewById(R.id.login_progressbar);
 	}
 
-	private void showDialog(final Context context, String msg) {
-		AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(context);
-		dialogBuilder.setMessage(msg).setCancelable(false)
-		        .setPositiveButton(context.getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-
-			        public void onClick(DialogInterface dialog, int which) {
-
-				        Intent loginIntent = new Intent(context, LoginActivity.class);
-				        loginIntent.putExtra(Constants.KEY_LOGIN_PAGE, true);
-				        startActivity(loginIntent);
-				        finish();
-			        }
-		        });
-		dialogBuilder.create().show();
-	}
 
 	@Override
 	public void onClick(View v) {

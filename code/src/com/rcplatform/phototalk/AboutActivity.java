@@ -17,6 +17,7 @@ import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -116,17 +117,8 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	private void showUpdateDialog(String versionCode, String updateContent, String updateUrl) {
 		this.updateUrl = updateUrl;
 		if (mUpdateDialog == null) {
-			if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.Theme_Dialog_Update).setMessage(updateContent)
-				        .setTitle(getString(R.string.update_dialog_title)).setNegativeButton(R.string.update_now, this)
-				        .setPositiveButton(R.string.attention_later, this);
-				mUpdateDialog = builder.create();
-			} else {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this).setMessage(updateContent)
-				        .setTitle(getString(R.string.update_dialog_title)).setNegativeButton(R.string.update_now, this)
-				        .setPositiveButton(R.string.attention_later, this);
-				mUpdateDialog = builder.create();
-			}
+			mUpdateDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(updateContent).setTitle(getString(R.string.update_dialog_title))
+			        .setNegativeButton(R.string.update_now, this).setPositiveButton(R.string.attention_later, this).create();
 		}
 		mUpdateDialog.show();
 	}

@@ -413,7 +413,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			}
 
 			if (invalidate(this, email, nick, psw)) {
-				AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(LoginActivity.this);
+				AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
 				dialogBuilder.setMessage(getResources().getString(R.string.register_confirm_email_address, email)).setCancelable(false)
 						.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 

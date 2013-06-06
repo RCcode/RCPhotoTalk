@@ -318,7 +318,7 @@ public class EditPictureActivity extends BaseActivity {
 
 		@Override
 		public void onClick(View v) {
-			int tag = (Integer) v.getTag();			
+			int tag = (Integer) v.getTag();
 			switch (tag) {
 			case UNDO_ON_CLICK:
 				setSaveable(true);
@@ -366,6 +366,7 @@ public class EditPictureActivity extends BaseActivity {
 				if (file.exists()) {
 					file.delete();
 				}
+				voicePath = null;
 				// mButtonTimeLimit.setClickable(true);
 				mButtonTimeLimit.setVisibility(View.VISIBLE);
 				audioBtn.setVisibility(0);
@@ -706,7 +707,7 @@ public class EditPictureActivity extends BaseActivity {
 		File file = new File(imagePath);
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.add(friend);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice(), mEditePicView.hasDrawed());
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed());
 	}
 
 	private boolean hasVoice() {

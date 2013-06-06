@@ -13,6 +13,7 @@ import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class CheckUpdateTask {
@@ -44,18 +45,9 @@ public class CheckUpdateTask {
 							return;
 						}
 						UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
-						AlertDialog.Builder builder =null;
-						if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1) {
-							builder = new AlertDialog.Builder(mContext,R.style.Theme_Dialog_Update).setMessage(updateContent)
-									.setTitle(mContext.getString(R.string.update_dialog_title))
-									.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
-						}else{
-							builder = new AlertDialog.Builder(mContext).setMessage(updateContent)
-									.setTitle(mContext.getString(R.string.update_dialog_title))
-									.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener);
-						}
-						
-						AlertDialog mUpdateDialog = builder.create();
+						AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(mContext).setMessage(updateContent)
+								.setTitle(mContext.getString(R.string.update_dialog_title))
+								.setNegativeButton(R.string.update_now, mUpdateListener).setPositiveButton(R.string.attention_later, mUpdateListener).create();
 						mUpdateDialog.setCancelable(false);
 						mUpdateDialog.show();
 					} else {

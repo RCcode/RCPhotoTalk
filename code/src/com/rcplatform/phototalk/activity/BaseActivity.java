@@ -72,7 +72,7 @@ public class BaseActivity extends Activity {
 					}
 				}
 			};
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			AlertDialog.Builder builder = DialogUtil.getAlertDialogBuilder(this);
 			logoutDialog = builder.setMessage(R.string.other_device_login).setNegativeButton(R.string.relogin, listener).setCancelable(false).create();
 		}
 		logoutDialog.show();
@@ -91,7 +91,7 @@ public class BaseActivity extends Activity {
 			registerReceiver(mOtherDeviceLoginReceiver, filter);
 		}
 	}
-	
+
 	@Override
 	protected void onPause() {
 		super.onPause();
