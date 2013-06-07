@@ -178,8 +178,8 @@
     <string name="use_new_info">새 프로필 사용</string>
     <string name="other_device_login">해당 계정이 이미 다른 장치에서 사용 중입니다.</string>
     <string name="relogin">확인</string>
-    <string name="join_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크:http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
-    <string name="invite_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크:http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
+    <string name="join_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크: http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
+    <string name="invite_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크: http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
     <string name="contact_friend">연락처:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -189,5 +189,6 @@
     <string name="gcm_friend">다른 사람이 사용자를 친구로 추가했습니다</string>
     <string name="friend_detail_send_photo_hint_text">사진 보내기</string>
 
-
+    <string name="cancel">취소</string>
+    <string name="login_account_error">잘못된 계정 또는 암호</string>
 </resources>

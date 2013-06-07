@@ -177,8 +177,8 @@
     <string name="use_new_info">השתמש בפרופיל חדש</string>
     <string name="other_device_login">חשבונך נמצא כבר בשימוש בהתקן אחר.</string>
     <string name="relogin">אישור</string>
-    <string name="join_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
-    <string name="invite_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
+    <string name="join_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me  הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
+    <string name="invite_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me  הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
     <string name="contact_friend">אנשי קשר:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -187,5 +187,7 @@
     <string name="gcm_message">מחכות לך %1$d הודעות חדשות</string>
     <string name="gcm_friend">מישהו הוסיף אותך כחבר</string>
     <string name="friend_detail_send_photo_hint_text">שלח תמונה</string>
-
+    <!-- 对话框&提示 -->
+    <string name="cancel">לבטל</string>
+    <string name="login_account_error">חשבון או סיסמה שגויים</string>
 </resources>

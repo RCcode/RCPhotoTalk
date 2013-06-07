@@ -187,4 +187,7 @@
     <string name="gcm_friend">Alguien le ha añadido como amigo</string>
     <string name="friend_detail_send_photo_hint_text">Enviar foto</string>
 
+    <!-- 对话框&提示 -->
+    <string name="cancel">cancelar</string>
+    <string name="login_account_error">Cuenta o contraseña no válida</string>
 </resources>

@@ -84,8 +84,7 @@
     <string name="bind_now">Şimdi kaydet</string>
     <string name="share_complete">BAŞARI!</string>
     <string name="save_success">BAŞARI!</string>
-    
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">Kayıt çok kısa</string>
     <string name="voice_record">Kay. için basın</string>
@@ -187,5 +186,9 @@
     <string name="gcm_message">%1$d yeni mesajınız var</string>
     <string name="gcm_friend">Birisi sizi arkadaş olarak ekledi</string>
     <string name="friend_detail_send_photo_hint_text">Fotoğraf gönder</string>
+
+    <!-- 对话框&提示 -->
+    <string name="cancel">iptal</string>
+    <string name="login_account_error">Geçersiz hesap veya parola</string>
 
 </resources>
