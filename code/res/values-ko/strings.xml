@@ -22,7 +22,7 @@
     <string name="landing_page_signup">가입</string>
     <string name="login_title_bubble_text">새 RC 사용자</string>
     <string name="login_nick_hint">별칭 (20 자 미만) </string>
-    <string name="register_confirm_email_address">이메일 주소:%s</string>
+    <string name="register_confirm_email_address">이메일 주소:</string>
     <string name="modify">편집</string>
     <string name="ok">확인</string>
     <string name="registe_email_error">이메일 형식 에러</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">로드 실패. 눌러서 다시 시도하십시오</string>
     <string name="added_by_friend">%1$s 님이 친구로 추가하셨습니다</string>
     <string name="added_friend_back">%1$s 님을 친구로 추가합니다</string>
-    <string name="added_friend">%1$s 님이 친구로 추가하셨습니다</string>
-    <string name="added_friend_confirm">%1$s 님을 친구로 추가합니다</string>
+    <string name="added_friend_confirm">%1$s 님이 친구로 추가하셨습니다</string>
+    <string name="added_friend">%1$s 님을 친구로 추가합니다</string>
     <string name="operation">작업</string>
     <string name="resend">다시 보내기</string>
     <string name="delete">삭제</string>

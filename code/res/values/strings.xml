@@ -62,8 +62,8 @@
     <string name="receive_fail">Failed to load, tap to try again</string>
     <string name="added_by_friend">%1$s added me as a friend</string>
     <string name="added_friend_back">I add %1$s as a friend</string>
-    <string name="added_friend">%1$s added me as a friend</string>
-    <string name="added_friend_confirm">I add %1$s as a friend</string>
+    <string name="added_friend">I add %1$s as a friend</string>
+    <string name="added_friend_confirm">%1$s added me as a friend</string>
     <string name="operation">Operation</string>
     <string name="resend">Resend</string>
     <string name="delete">Delete</string>

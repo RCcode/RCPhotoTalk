@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Registrieren</string>
     <string name="login_title_bubble_text">Neuer RC-Nutzer</string>
     <string name="login_nick_hint">Nickname (unter 20 Zeichen)</string>
-    <string name="register_confirm_email_address">Ihre E-Mail-Adresse lautet:%s</string>
+    <string name="register_confirm_email_address">Ihre E-Mail-Adresse lautet:</string>
     <string name="modify">Bearbeiten</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Falsches E-Mail-Format</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">Laden fehlgeschlagen, tippen Sie, um es erneut zu versuchen</string>
     <string name="added_by_friend">%1$s hat mich als Freund hinzugefügt</string>
     <string name="added_friend_back">Ich füge %1$s als Freund hinzu</string>
-    <string name="added_friend">%1$s hat mich als Freund hinzugefügt</string>
-    <string name="added_friend_confirm">Ich füge %1$s als Freund hinzu</string>
+    <string name="added_friend">Ich füge %1$s als Freund hinzu</string>
+    <string name="added_friend_confirm">%1$s hat mich als Freund hinzugefügt</string>
     <string name="operation">Betrieb</string>
     <string name="resend">Neu senden</string>
     <string name="delete">Löschen</string>

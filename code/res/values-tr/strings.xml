@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Kaydol</string>
     <string name="login_title_bubble_text">Yeni RC Kul.</string>
     <string name="login_nick_hint">Takma Ad (20 kar. daha az)</string>
-    <string name="register_confirm_email_address">E-posta Adresiniz:%s</string>
+    <string name="register_confirm_email_address">E-posta Adresiniz:</string>
     <string name="modify">Düzenle</string>
     <string name="ok">Tamam</string>
     <string name="registe_email_error">E-posta biçimi hatası</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">Yük. başarısız, tekrar den. için dokunun</string>
     <string name="added_by_friend">%1$sbeni arkadaş olarak ekledi</string>
     <string name="added_friend_back">Ben %1$s’i arkadaş olarak ekliyorum</string>
-    <string name="added_friend">%1$sbeni arkadaş olarak ekledi</string>
-    <string name="added_friend_confirm">Ben %1$s’i arkadaş olarak ekliyorum</string>
+    <string name="added_friend_confirm">%1$sbeni arkadaş olarak ekledi</string>
+    <string name="added_friend">Ben %1$s’i arkadaş olarak ekliyorum</string>
     <string name="operation">Operasyon</string>
     <string name="resend">Yeniden Gönder</string>
     <string name="delete">Sil</string>

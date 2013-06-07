@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Registrati</string>
     <string name="login_title_bubble_text">Nuovo User RC</string>
     <string name="login_nick_hint">Nickname (meno di 20 caratteri)</string>
-    <string name="register_confirm_email_address">Il tuo indirizzo e-mail è:%s</string>
+    <string name="register_confirm_email_address">Il tuo indirizzo e-mail è:</string>
     <string name="modify">Modifica</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Formato e-mail errato</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">Impossibile caricare, tocca per riprovare</string>
     <string name="added_by_friend">%1$s mi ha aggiunto come amico</string>
     <string name="added_friend_back">Ho aggiunto%1$s come amico</string>
-    <string name="added_friend">%1$s mi ha aggiunto come amico</string>
-    <string name="added_friend_confirm">Ho aggiunto%1$s come amico</string>
+    <string name="added_friend_confirm">%1$s mi ha aggiunto come amico</string>
+    <string name="added_friend">Ho aggiunto%1$s come amico</string>
     <string name="operation">Operazione</string>
     <string name="resend">Rinvia</string>
     <string name="delete">Elimina</string>

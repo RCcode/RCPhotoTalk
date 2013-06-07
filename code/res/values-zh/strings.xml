@@ -22,7 +22,7 @@
     <string name="landing_page_signup">注册</string>
     <string name="login_title_bubble_text">注册新账号</string>
     <string name="login_nick_hint">昵称（20个字符以内）</string>
-    <string name="register_confirm_email_address">你的邮箱是:%s</string>
+    <string name="register_confirm_email_address">你的邮箱是:</string>
     <string name="modify">修改</string>
     <string name="ok">确定</string>
     <string name="registe_email_error">邮箱格式错误</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">接收失败，点击重试</string>
     <string name="added_by_friend">%1$s将我加为好友</string>
     <string name="added_friend_back">我添加%1$s为好友</string>
-    <string name="added_friend">%1$s将我加为好友</string>
-    <string name="added_friend_confirm">我添加%1$s为好友</string>
+    <string name="added_friend_confirm">%1$s将我加为好友</string>
+    <string name="added_friend">我添加%1$s为好友</string>
     <string name="operation">操作</string>
     <string name="resend">重发</string>
     <string name="delete">删除</string>

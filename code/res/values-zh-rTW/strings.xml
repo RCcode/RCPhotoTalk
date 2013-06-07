@@ -22,7 +22,7 @@
     <string name="landing_page_signup">註冊</string>
     <string name="login_title_bubble_text">註冊新帳號</string>
     <string name="login_nick_hint">昵稱（20個字元以內）</string>
-    <string name="register_confirm_email_address">你的郵箱是:%s</string>
+    <string name="register_confirm_email_address">你的郵箱是:</string>
     <string name="modify">修改</string>
     <string name="ok">確定</string>
     <string name="registe_email_error">郵箱格式錯誤</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">接收失敗，點擊重試</string>
     <string name="added_by_friend">%1$s將我加為好友</string>
     <string name="added_friend_back">我添加%1$s為好友</string>
-    <string name="added_friend">%1$s將我加為好友</string>
-    <string name="added_friend_confirm">我添加%1$s為好友</string>
+    <string name="added_friend_confirm">%1$s將我加為好友</string>
+    <string name="added_friend">我添加%1$s為好友</string>
     <string name="operation">操作</string>
     <string name="resend">重發</string>
     <string name="delete">刪除</string>

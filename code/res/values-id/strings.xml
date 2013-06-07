@@ -22,7 +22,7 @@
     <string name="landing_page_signup">Daftar</string>
     <string name="login_title_bubble_text">P’guna RC baru</string>
     <string name="login_nick_hint">Panggilan (kurang dr 20 karakter)</string>
-    <string name="register_confirm_email_address">Alamat email Anda:%s</string>
+    <string name="register_confirm_email_address">Alamat email Anda:</string>
     <string name="modify">Edit</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Kesalahan format email</string>
@@ -62,8 +62,8 @@
     <string name="receive_fail">Gagal dimuat, tepuk untuk mencoba lagi</string>
     <string name="added_by_friend">%1$s menambahku sebagai teman</string>
     <string name="added_friend_back">Saya menambah %1$s sbg teman</string>
-    <string name="added_friend">%1$s menambahku sebagai teman</string>
-    <string name="added_friend_confirm">Saya menambah %1$s sbg teman</string>
+    <string name="added_friend_confirm">%1$s menambahku sebagai teman</string>
+    <string name="added_friend">Saya menambah %1$s sbg teman</string>
     <string name="operation">Operasi</string>
     <string name="resend">Kirim ulang</string>
     <string name="delete">Hapus</string>

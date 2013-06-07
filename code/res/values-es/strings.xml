@@ -21,9 +21,8 @@
     <string name="init_regist_agreement">Al registrarse, acepta nuestros términos de servicio y nuestra política de seguridad.</string>
     <string name="landing_page_signup">Registrarse</string>
     <string name="login_title_bubble_text">Nuevo usuar RC</string>
-    <string name="login_nick_hint">Sobrenombre (
-        20 car)</string>
-    <string name="register_confirm_email_address">Su dirección de Email es:%s</string>
+    <string name="login_nick_hint">Sobrenombre (20 car)</string>
+    <string name="register_confirm_email_address">Su dirección de Email es:</string>
     <string name="modify">Editar</string>
     <string name="ok">OK</string>
     <string name="registe_email_error">Error en el formato del Email</string>
@@ -63,21 +62,19 @@
     <string name="receive_fail">No cargado, toque para reinten</string>
     <string name="added_by_friend">%1$s me ha añadido como amigo</string>
     <string name="added_friend_back">Añado a %1$s como amigo</string>
-    <string name="added_friend">%1$s me ha añadido como amigo</string>
-    <string name="added_friend_confirm">Añado a %1$s como amigo</string>
+    <string name="added_friend">Añado a %1$s como amigo</string>
+    <string name="added_friend_confirm">%1$s me ha añadido como amigo</string>
     <string name="operation">Operación</string>
     <string name="resend">Reenviar</string>
     <string name="delete">Eliminar</string>
     <string name="reload">Volver a cargar</string>
     <string name="will_quit">Haga clic en "Atrás" de nuevo para salir de la aplicación</string>
 
-
     <!-- menu -->
     <string name="take_score">Evaluar</string>
 
     <!-- 我 -->
     <string name="me">me</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">Quizás más tarde</string>
@@ -171,22 +168,21 @@
     <string name="compact">Polít privacidad</string>
     <string name="no_new_version">Phototalk es la última versión</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Elegir perfil</string>
     <string name="or">o</string>
     <string name="use_new_info">Usar un nuevo perfil</string>
-	<string name="other_device_login">Su cuenta ya está siendo utilizada en otro dispositivo</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Su cuenta ya está siendo utilizada en otro dispositivo</string>
+    <string name="relogin">OK</string>
     <string name="join_message">¡Fotos con audio, eliminación por tiempo! ¡Únase a RC PhotoTalk y comparta la diversión! Vínculo de descarga: http://rctalk.me ¡Añada mi Id. %1$s después de crear una cuenta!</string>
     <string name="invite_message">¡Fotos con audio, eliminación por tiempo! ¡Únase a RC PhotoTalk y comparta la diversión! Vínculo de descarga: http://rctalk.me ¡Añada mi Id. %1$s después de crear una cuenta!</string>
-	<string name="contact_friend">Contactos:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Contactos:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
     <string name="gcm_message">Tiene %1$d mensaje(s) nuevo(s)</string>
     <string name="gcm_friend">Alguien le ha añadido como amigo</string>
     <string name="friend_detail_send_photo_hint_text">Enviar foto</string>
-
 
 </resources>
