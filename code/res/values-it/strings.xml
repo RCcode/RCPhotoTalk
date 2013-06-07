@@ -80,7 +80,9 @@
     <string name="update_dialog_title">Aggiornamenti disponibili!</string>
     <string name="bind_phone_attention">Inserisci il tuo numero di telefono per permettere ai tuoi amici di trovarti più facilmente</string>
     <string name="bind_now">Iscriviti adesso</string>
-
+    <string name="share_complete">SUCCESSO!</string>
+    <string name="save_success">SUCCESSO!</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">Registrazione troppo breve</string>
     <string name="voice_record">Premi per registrare</string>

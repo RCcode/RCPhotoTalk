@@ -82,7 +82,10 @@
     <string name="update_dialog_title">עדכונים זמינים!</string>
     <string name="bind_phone_attention">רשום את מספר הטלפון שלך כדי לאפשר לחבריך למצוא אותך בקלות</string>
     <string name="bind_now">רשום עכשיו</string>
-
+    <string name="share_complete">הצלחה!</string>
+    <string name="save_success">הצלחה!</string>
+    
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">ההקלטה קצרה מדי</string>
     <string name="voice_record">לחץ להקלטה</string>

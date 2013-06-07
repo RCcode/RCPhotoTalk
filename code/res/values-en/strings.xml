@@ -82,7 +82,9 @@
     <string name="update_dialog_title">Updates available!</string>
     <string name="bind_phone_attention">Register your phone number to let your friends find you more easily</string>
     <string name="bind_now">Register now</string>
-
+    <string name="share_complete">SUCCESS！</string>
+    <string name="save_success">SUCCESS！</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">Recording is too short</string>
     <string name="voice_record">Press to record</string>
@@ -174,7 +176,7 @@
     <string name="use_new_info">Use a new profile</string>
     <string name="other_device_login">Your account is already being used on another device.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me,and add my ID %1$s</string>
+    <string name="join_message">Audio photos, timed deletion! Join RC PhotoTalk and share the fun! Download link: http://rctalk.me  Add my ID %1$s after you create an account!</string>
     <string name="invite_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me,and add my ID %1$s</string>
     <string name="contact_friend">Contacts:</string>
     <string name="facebook_friend">Facebook:</string>

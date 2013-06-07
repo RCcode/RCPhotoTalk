@@ -110,7 +110,7 @@ public class FacebookClient {
 						if (listener != null)
 							listener.onInviteSuccess(uid);
 					} else {
-						mContext.showErrorConfirmDialog(R.string.invite_cancel);
+//						mContext.showErrorConfirmDialog(R.string.invite_cancel);
 					}
 				} else {
 					mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? mContext.getString(R.string.invite_fail) : error.getMessage());
@@ -136,10 +136,10 @@ public class FacebookClient {
 					if (postId != null) {
 						mContext.showErrorConfirmDialog(R.string.share_complete);
 					} else {
-						mContext.showErrorConfirmDialog(R.string.share_cancel);
+//						mContext.showErrorConfirmDialog(R.string.share_cancel);
 					}
 				} else {
-					mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? mContext.getString(R.string.share_cancel) : error.getMessage());
+//					mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? mContext.getString(R.string.share_cancel) : error.getMessage());
 				}
 			}
 		}).build();

@@ -70,13 +70,11 @@
     <string name="reload">Recarregar</string>
     <string name="will_quit">Clique "Voltar" novamente para sair do aplicativo</string>
 
-
     <!-- menu -->
     <string name="take_score">Avaliar</string>
 
     <!-- 我 -->
     <string name="me">me</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">Talvez mais tarde</string>
@@ -84,6 +82,8 @@
     <string name="update_dialog_title">Atualizações disponíveis!</string>
     <string name="bind_phone_attention">Registrar o número de seu telefone para que seus amigos te encontrem mais facilmente</string>
     <string name="bind_now">Registrar agora</string>
+    <string name="share_complete">SUCESSO!</string>
+    <string name="save_success">SUCESSO!</string>
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Gravação é muito curta</string>
@@ -170,16 +170,16 @@
     <string name="compact">Políticas de privacidade</string>
     <string name="no_new_version">Phototalk é a versão mais recente </string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Escolha Perfil</string>
     <string name="or">ou</string>
     <string name="use_new_info">Usar um novo perfil</string>
-	<string name="other_device_login">Sua conta já está sendo usada em outro dispositivo.</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Sua conta já está sendo usada em outro dispositivo.</string>
+    <string name="relogin">OK</string>
     <string name="join_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me. Adicionar minha ID %1$s depois de criar uma conta!</string>
     <string name="invite_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me. Adicionar minha ID %1$s depois de criar uma conta!</string>
-	<string name="contact_friend">Contactos:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Contactos:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->

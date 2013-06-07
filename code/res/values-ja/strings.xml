@@ -84,7 +84,9 @@
     <string name="update_dialog_title">更新が利用可能です！</string>
     <string name="bind_phone_attention">電話番号を登録して友人が見つけやすくする後で行う</string>
     <string name="bind_now">今すぐ登録する</string>
-
+    <string name="share_complete">SUCCESS！</string>
+    <string name="save_success">SUCCESS！</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">録音が短すぎます</string>
     <string name="voice_record">録音開始</string>

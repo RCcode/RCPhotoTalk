@@ -82,7 +82,9 @@
     <string name="update_dialog_title">¡Hay actualizaciones disponibles!</string>
     <string name="bind_phone_attention">Registres su número de teléfono para que sus amigos le encuentren con más facilidad</string>
     <string name="bind_now">Registrar ahora</string>
-
+    <string name="share_complete">ÉXITO!</string>
+    <string name="save_success">ÉXITO!</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">La grabación es demasiado corta</string>
     <string name="voice_record">Puls par grab</string>

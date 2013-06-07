@@ -82,6 +82,8 @@
     <string name="update_dialog_title">توجد تحديثات!</string>
     <string name="bind_phone_attention">قم بتسجيل رقم الهاتف للسماح لأصدقائك بالعثور عليك بسهولة</string>
     <string name="bind_now">التسجيل الآن</string>
+    <string name="share_complete">النجاح!</string>
+    <string name="save_success">النجاح!</string>
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">التسجيل قصير جدًا</string>

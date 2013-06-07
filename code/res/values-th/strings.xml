@@ -84,7 +84,9 @@
     <string name="update_dialog_title">มีการอัปเดตที่พร้อมใช้งานแล้ว!</string>
     <string name="bind_phone_attention">ลงทะเบียนหมายเลขโทรศัพท์ของคุณ เพื่อให้เพื่อน ๆ ของคุณค้นหาคุณได้ง่ายขึ้น</string>
     <string name="bind_now">ลงทะเบียนเดี๋ยวนี้</string>
-
+    <string name="share_complete">ความสำเร็จ!</string>
+    <string name="save_success">ความสำเร็จ!</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">การบันทึกสั้นเกินไป</string>
     <string name="voice_record">กดเพื่อบันทึก</string>

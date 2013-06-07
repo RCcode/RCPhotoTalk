@@ -79,10 +79,10 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 
 				break;
 			case R.id.term_service_btn:
-				RCWebview.startWebview(this, "http://192.168.0.13:8080/RcHome/service.html");
+				RCWebview.startWebview(this, " http://192.168.0.86:8082/rchome/service.html");
 				break;
 			case R.id.compact_btn:
-				RCWebview.startWebview(this, "http://192.168.0.13:8080/RcHome/privacy.html");
+				RCWebview.startWebview(this, "http://192.168.0.86:8082/rchome/privacy.html");
 				break;
 		}
 	}

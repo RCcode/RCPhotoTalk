@@ -70,13 +70,11 @@
     <string name="reload">Neu laden</string>
     <string name="will_quit">Klicken Sie erneut auf „Zurück“, um die App zu verlassen</string>
 
-
     <!-- menu -->
     <string name="take_score">Bewerten</string>
 
     <!-- 我 -->
     <string name="me">me</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">Vielleicht später</string>
@@ -84,6 +82,8 @@
     <string name="update_dialog_title">Updates verfügbar!</string>
     <string name="bind_phone_attention">Registrieren Sie Ihre Telefonnummer, damit Ihre Freunde Sie leichter finden</string>
     <string name="bind_now">Jetzt registrieren</string>
+    <string name="share_complete">ERFOLG!</string>
+    <string name="save_success">ERFOLG!</string>
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Die Aufnahme ist zu kurz</string>
@@ -170,23 +170,21 @@
     <string name="compact">Datenschutzrichtlinien</string>
     <string name="no_new_version">Phototalk ist die aktuelle Version</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Wählen Sie Ihr Profil</string>
     <string name="or">oder</string>
     <string name="use_new_info">Neues Profil verwenden</string>
-	<string name="other_device_login">Ihr Konto wird bereits auf einem anderen Gerät verwendet.</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Ihr Konto wird bereits auf einem anderen Gerät verwendet.</string>
+    <string name="relogin">OK</string>
     <string name="join_message">Audio Fotos, geplantes Löschen! Werden Sie Mitglied bei RC PhotoTalk und genießen Sie den Spaß! Download-Link: http://rctalk.me. Fügen Sie meine ID %1$s hinzu, wenn Sie ein Konto erstellt haben!</string>
     <string name="invite_message">Audio Fotos, geplantes Löschen! Werden Sie Mitglied bei RC PhotoTalk und genießen Sie den Spaß! Download-Link: http://rctalk.me. Fügen Sie meine ID %1$s hinzu, wenn Sie ein Konto erstellt haben!</string>
-	<string name="contact_friend">Kontakte:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Kontakte:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
     <string name="gcm_message">Sie haben %1$d neue Nachricht(en)</string>
     <string name="gcm_friend">Jemand hat Sie als Freund hinzugefügt</string>
     <string name="friend_detail_send_photo_hint_text">Foto senden</string>
-
-
 
 </resources>

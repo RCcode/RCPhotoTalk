@@ -82,7 +82,9 @@
     <string name="update_dialog_title">有更新了！</string>
     <string name="bind_phone_attention">註冊手機號碼後你的朋友可以更容易找到你</string>
     <string name="bind_now">馬上註冊</string>
-
+    <string name="share_complete">成功！</string>
+    <string name="save_success">成功！</string>
+    
     <!-- 圖像編輯 -->
     <string name="voice_too_short">錄音時間太短</string>
     <string name="voice_record">按住錄音</string>

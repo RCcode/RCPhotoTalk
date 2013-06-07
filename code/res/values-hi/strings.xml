@@ -84,7 +84,9 @@
     <string name="update_dialog_title">अद्यतन उपलब्ध!</string>
     <string name="bind_phone_attention">अपना फ़ोन नंबर पंजीकृत करें ताकि आपके मित्र आपको और आसानी से ढूँढ़ सकें</string>
     <string name="bind_now">अभी पंजीकरण करें</string>
-
+    <string name="share_complete">सफलता!</string>
+    <string name="save_success">सफलता!</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">रिकॉर्डिंग बहुत छोटी है</string>
     <string name="voice_record">रिकॉर्ड करने के लिए दबाएँ</string>

@@ -84,7 +84,10 @@
     <string name="update_dialog_title">Mises à jour disponibles !</string>
     <string name="bind_phone_attention">Enregistrez votre numéro de téléphone pour que vos amis vous retrouvent plus facilement</string>
     <string name="bind_now">S’enregistrer maintenant</string>
-
+    <string name="share_complete">SUCCÈS!</string>
+    <string name="save_success">SUCCÈS!</string>
+    
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">L’enregistrement est trop court</string>
     <string name="voice_record">Appuyez pour enregistrer</string>

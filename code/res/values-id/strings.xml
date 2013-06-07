@@ -84,7 +84,9 @@
     <string name="update_dialog_title">Pembaruan tersedia!</string>
     <string name="bind_phone_attention">Daftarkan ponsel Anda agar mudah ditemukan oleh teman Anda</string>
     <string name="bind_now">Daftar sekarang</string>
-
+    <string name="share_complete">SUKSES!</string>
+    <string name="save_success">SUKSES!</string>
+    
     <!-- 图像编辑 -->
     <string name="voice_too_short">Rekaman terlalu pendek</string>
     <string name="voice_record">Rekam</string>
