@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_backgroud"
+    android:orientation="vertical" >
+
+    <include layout="@layout/base_top_navigate" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_margin="@dimen/platform_useredit_margin"
+        android:orientation="vertical" >
+
+        <TextView
+            style="@style/text_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="@string/use_info_below"
+            android:textColor="@color/attention_text_gray"
+            android:textSize="@dimen/platform_attention" />
+
+        <com.rcplatform.phototalk.views.HorizontalListView
+            android:id="@+id/vp_accounts"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/platform_users_height"
+            android:layout_marginTop="@dimen/platform_div_margin"
+            android:background="@drawable/app_list_back" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/platform_div_margin"
+            android:layout_marginTop="@dimen/platform_div_margin" >
+
+            <TextView
+                android:id="@+id/tv_or"
+                style="@style/text_base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/or"
+                android:textColor="#ffabadaa"
+                android:textSize="@dimen/platform_attention" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/tv_or"
+                android:background="@drawable/platform_divier_line" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_toRightOf="@+id/tv_or"
+                android:background="@drawable/platform_divier_line" />
+        </RelativeLayout>
+
+        <TextView
+            style="@style/text_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/use_new_info"
+            android:textColor="@color/attention_text_gray"
+            android:textSize="@dimen/platform_attention" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="@dimen/head_image_width"
+                android:layout_height="@dimen/head_image_width"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="@dimen/platform_head_margin"
+                android:background="@drawable/send_friend_head_bg"
+                android:padding="6dp" >
+
+                <ImageView
+                    android:id="@+id/iv_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/platfrom_name_height"
+                android:background="@android:color/white"
+                android:orientation="horizontal" >
+
+                <EditText
+                    android:id="@+id/et_nick"
+                    style="@style/login_edittext"
+                    android:paddingLeft="@dimen/platform_et_padding"
+                    android:paddingRight="@dimen/platform_et_padding"
+                    android:layout_width="fill_parent"
+                    android:hint="@string/register_nick_hint"
+                    android:maxLength="20" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

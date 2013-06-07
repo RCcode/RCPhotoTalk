@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants" >
+
+    <com.facebook.widget.ProfilePictureView
+        android:id="@+id/facebook_ppv"
+        android:layout_width="@dimen/friend_head_side"
+        android:layout_height="@dimen/friend_head_side"
+        android:layout_marginLeft="10dp"
+        android:scaleType="fitCenter" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/friend_item_bg" />
+
+    <TextView
+        android:id="@+id/tv_nick"
+        style="@style/text_base"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        android:layout_toLeftOf="@+id/facebook_add"
+        android:layout_toRightOf="@+id/facebook_ppv"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/facebook_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/default_gap"
+        android:background="@drawable/facebook_add_up" />
+
+</RelativeLayout>

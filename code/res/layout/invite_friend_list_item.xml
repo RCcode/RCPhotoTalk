@@ -1,51 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="#ffffff"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    android:padding="@dimen/default_gap" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
-
-        <LinearLayout
-            android:id="@+id/showText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/default_gap"
-            android:layout_toLeftOf="@+id/add_friend_invite_checkbox"
-            android:layout_toRightOf="@id/add_friend_list_item_portrait"
-            android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/diaplay_chat_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/display_number"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
-        <CheckBox
-            android:id="@+id/add_friend_invite_checkbox"
-            style="@style/contentTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:button="@drawable/btn_check"
-            android:checked="false"
-            android:textColor="@color/black" />
-    </RelativeLayout>
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="#ffffff" android:gravity="center_vertical" android:orientation="horizontal" android:padding="@dimen/default_gap">  
+  <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content"> 
+    <LinearLayout android:id="@+id/showText" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginLeft="@dimen/default_gap" android:layout_toLeftOf="@+id/add_friend_invite_checkbox" android:layout_toRightOf="@id/add_friend_list_item_portrait" android:orientation="vertical"> 
+      <TextView android:id="@+id/diaplay_chat_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:ellipsize="end" android:textColor="@color/black" android:textSize="18sp" android:textStyle="bold"/>  
+      <TextView android:id="@+id/display_number" android:layout_width="wrap_content" android:layout_height="wrap_content"/> 
+    </LinearLayout>  
+    <CheckBox android:id="@+id/add_friend_invite_checkbox" style="@style/contentTextStyle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:button="@drawable/btn_check" android:checked="false" android:textColor="@color/black"/> 
+  </RelativeLayout> 
 </LinearLayout>

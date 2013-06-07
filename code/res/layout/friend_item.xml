@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="8dp"
             android:textColor="#4F3E36" />
     </RelativeLayout>
 
@@ -66,7 +66,7 @@
                 android:id="@+id/linear_friend_source"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="4dp"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -78,8 +78,9 @@
                     android:id="@+id/tv_source_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp" />
+                    android:layout_marginLeft="4dp" />
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>
-</LinearLayout>
+
+</LinearLayout>

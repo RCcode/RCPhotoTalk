@@ -1,364 +1,65 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/add_friend_activity_layout"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@drawable/app_backgroud" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <include layout="@layout/base_top_navigate" />
-
-    <ScrollView
-        android:id="@+id/settings_general_scrollview"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_below="@+id/title"
-        android:fadingEdge="none"
-        android:visibility="visible" >
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_below="@id/title"
-            android:orientation="vertical" >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/user_info_detail"
-                android:orientation="vertical" >
-
-                <RelativeLayout
-                    android:id="@+id/rela_infos"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <ImageView
-                        android:id="@+id/user_bg"
-                        android:layout_width="fill_parent"
-                        android:layout_height="@dimen/user_detail_bg_height"
-                        android:layout_marginTop="8dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/user_detail_bg" />
-
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_alignBottom="@id/user_bg"
-                        android:layout_alignTop="@+id/rela_userinfo"
-                        android:layout_marginTop="30dp"
-                        android:background="#50000000"
-                        android:orientation="horizontal" />
-
-                    <Button
-                        android:id="@+id/settings_user_info_edit_action"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@id/user_bg"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="15dp"
-                        android:background="@drawable/user_info_edit_btn" />
-
-                    <LinearLayout
-                        android:id="@+id/rela_userinfo"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/user_detail_user_infos_height"
-                        android:layout_alignBottom="@+id/user_bg"
-                        android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin"
-                        android:background="@color/TRANSPARENT"
-                        android:padding="@dimen/user_detail_info_padding" >
-
-                        <RelativeLayout
-                            android:layout_width="@dimen/user_head_image_width_bg"
-                            android:layout_height="@dimen/user_head_image_width_bg"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginRight="@dimen/user_detail_source_margin_left"
-                            android:background="@drawable/send_friend_head_bg"
-                            android:padding="3dp" >
-
-                            <ImageView
-                                android:id="@+id/settings_account_head_portrait"
-                                android:layout_width="@dimen/user_detail_head_image_width"
-                                android:layout_height="@dimen/user_detail_head_image_width"
-                                android:layout_centerInParent="true"
-                                android:gravity="center"
-                                android:scaleType="centerInside"
-                                android:src="@drawable/default_head" />
-                        </RelativeLayout>
-
-                        <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical"
-                            android:orientation="vertical" >
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="@dimen/user_detail_head_width_half"
-                                android:gravity="bottom"
-                                android:orientation="vertical"
-                                android:paddingBottom="5dp" >
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal" >
-
-                                    <TextView
-                                        android:id="@+id/settings_user_nick"
-                                        style="@style/text_base"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="@dimen/user_detail_nick_size"
-                                        android:textStyle="bold" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal"
-                                    android:visibility="gone" >
-
-                                    <ImageView
-                                        android:id="@+id/tv_sex"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="2dp"
-                                        android:background="@drawable/boy_icon" />
-
-                                    <TextView
-                                        android:id="@+id/tv_age"
-                                        style="@style/text_base"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="top"
-                                        android:layout_marginLeft="@dimen/friend_info_age_left"
-                                        android:gravity="top"
-                                        android:textColor="#E5E5E5" />
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal" >
-
-                                    <!-- android:layout_height="@dimen/user_detail_head_width_half" -->
-
-                                    <TextView
-                                        style="@style/text_base"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="RC ID:"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="@dimen/user_detail_rcid_size" />
-
-                                    <TextView
-                                        android:id="@+id/user_rc_id"
-                                        style="@style/text_base"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="@dimen/user_detail_rcid_size" />
-                                </LinearLayout>
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-                </RelativeLayout>
-
-
-                <LinearLayout
-                    android:id="@+id/my_friend_details_apps_listview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="2dp"
-                    android:background="@drawable/app_list_back"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal" >
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/default_gap"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/user_info_item_bg"
-                    android:orientation="vertical" >
-
-                    <RelativeLayout
-                        android:id="@+id/my_friend_dynamic"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp" >
-
-                        <TextView
-                            android:id="@+id/tv_friend_trends"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="7dp"
-                            android:gravity="center_vertical"
-                            android:text="@string/friend_dynamic"
-                            android:textColor="#313131"
-                            android:textSize="18sp" >
-                        </TextView>
-
-                        <RelativeLayout
-                            android:id="@+id/rela_new_trend"
-                            android:layout_width="@dimen/trend_new_icon_width"
-                            android:layout_height="@dimen/trend_new_icon_width"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_toRightOf="@+id/tv_friend_trends"
-                            android:visibility="gone" >
-
-                            <ImageView
-                                android:id="@+id/iv_trend_head"
-                                android:layout_width="fill_parent"
-                                android:layout_height="fill_parent"
-                                android:layout_marginRight="@dimen/new_point_margin"
-                                android:layout_marginTop="@dimen/new_point_margin"
-                                android:src="@drawable/ic_launcher" />
-
-                            <ImageView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_alignParentRight="true"
-                                android:layout_alignParentTop="true"
-                                android:src="@drawable/item_new_bg" />
-                        </RelativeLayout>
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/app_arrow" />
-                    </RelativeLayout>
-
-                    <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/line_back" />
-
-                    <RelativeLayout
-                        android:id="@+id/use_account_message"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp" >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="7dp"
-                            android:layout_toLeftOf="@+id/account_to_right"
-                            android:gravity="left"
-                            android:text="@string/my_account"
-                            android:textColor="#313131"
-                            android:textSize="18sp" >
-                        </TextView>
-
-                        <ImageView
-                            android:id="@+id/account_to_right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/app_arrow" />
-                    </RelativeLayout>
-
-                    <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/line_back" />
-
-                    <RelativeLayout
-                        android:id="@+id/settings_user_edit_rc_id_action"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp" >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="7dp"
-                            android:layout_toLeftOf="@+id/setting_to_right"
-                            android:gravity="left"
-                            android:text="@string/setting"
-                            android:textColor="#313131"
-                            android:textSize="18sp" >
-                        </TextView>
-
-                        <ImageView
-                            android:id="@+id/setting_to_right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/app_arrow" />
-                    </RelativeLayout>
-
-                    <ImageView
-                        android:layout_width="fill_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/line_back" />
-
-                    <RelativeLayout
-                        android:id="@+id/rela_about"
-                        android:layout_width="match_parent"
-                        android:layout_height="44dp" >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginLeft="7dp"
-                            android:layout_toLeftOf="@+id/about_to_right"
-                            android:gravity="left"
-                            android:text="@string/about"
-                            android:textColor="#313131"
-                            android:textSize="18sp" >
-                        </TextView>
-
-                        <ImageView
-                            android:id="@+id/about_to_right"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/app_arrow" />
-                    </RelativeLayout>
-                </LinearLayout>
-            </LinearLayout>
-
-            <Button
-                android:id="@+id/settings_clean_history_record_btn"
-                style="@style/LandingPageButton"
-                android:layout_marginBottom="@dimen/default_gap_3x"
-                android:layout_marginLeft="@dimen/default_gap"
-                android:layout_marginRight="@dimen/default_gap"
-                android:layout_marginTop="@dimen/default_gap_2x"
-                android:background="@drawable/friend_info_send_btn"
-                android:text="@string/setting_page_clean_history"
-                android:textColor="@android:color/white" />
-        </LinearLayout>
-    </ScrollView>
-
-    <ProgressBar
-        android:id="@id/login_progressbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/login_fields"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/default_gap_2x"
-        android:visibility="gone" />
-
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/add_friend_activity_layout" android:layout_width="fill_parent" android:layout_height="fill_parent" android:background="@drawable/app_backgroud">  
+  <include layout="@layout/base_top_navigate"/>  
+  <ScrollView android:id="@+id/settings_general_scrollview" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@+id/title" android:fadingEdge="none" android:visibility="visible"> 
+    <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_below="@id/title" android:orientation="vertical"> 
+      <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:background="@drawable/user_info_detail" android:orientation="vertical"> 
+        <RelativeLayout android:id="@+id/rela_infos" android:layout_width="match_parent" android:layout_height="wrap_content"> 
+          <ImageView android:id="@+id/user_bg" android:layout_width="fill_parent" android:layout_height="@dimen/user_detail_bg_height" android:layout_marginTop="7dp" android:scaleType="centerCrop" android:src="@drawable/user_detail_bg"/>  
+          <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_alignBottom="@id/user_bg" android:layout_alignTop="@+id/rela_userinfo" android:layout_marginTop="26dp" android:background="#50000000" android:orientation="horizontal"/>  
+          <Button android:id="@+id/settings_user_info_edit_action" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignBottom="@id/user_bg" android:layout_alignParentRight="true" android:layout_marginBottom="7dp" android:layout_marginRight="13dp" android:background="@drawable/user_info_edit_btn"/>  
+          <LinearLayout android:id="@+id/rela_userinfo" android:layout_width="match_parent" android:layout_height="@dimen/user_detail_user_infos_height" android:layout_alignBottom="@+id/user_bg" android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin" android:background="@color/TRANSPARENT" android:padding="@dimen/user_detail_info_padding"> 
+            <RelativeLayout android:layout_width="@dimen/user_head_image_width_bg" android:layout_height="@dimen/user_head_image_width_bg" android:layout_gravity="center_vertical" android:layout_marginRight="@dimen/user_detail_source_margin_left" android:background="@drawable/send_friend_head_bg" android:padding="2dp"> 
+              <ImageView android:id="@+id/settings_account_head_portrait" android:layout_width="@dimen/user_detail_head_image_width" android:layout_height="@dimen/user_detail_head_image_width" android:layout_centerInParent="true" android:gravity="center" android:scaleType="centerInside" android:src="@drawable/default_head"/> 
+            </RelativeLayout>  
+            <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:orientation="vertical"> 
+              <LinearLayout android:layout_width="wrap_content" android:layout_height="@dimen/user_detail_head_width_half" android:gravity="bottom" android:orientation="vertical" android:paddingBottom="4dp"> 
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"> 
+                  <TextView android:id="@+id/settings_user_nick" style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#FFFFFF" android:textSize="@dimen/user_detail_nick_size" android:textStyle="bold"/> 
+                </LinearLayout>  
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal" android:visibility="gone"> 
+                  <ImageView android:id="@+id/tv_sex" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="1dp" android:background="@drawable/boy_icon"/>  
+                  <TextView android:id="@+id/tv_age" style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="top" android:layout_marginLeft="@dimen/friend_info_age_left" android:gravity="top" android:textColor="#E5E5E5"/> 
+                </LinearLayout>  
+                <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="center_vertical" android:orientation="horizontal"> 
+                  <!-- android:layout_height="@dimen/user_detail_head_width_half" -->  
+                  <TextView style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="RC ID:" android:textColor="#FFFFFF" android:textSize="@dimen/user_detail_rcid_size"/>  
+                  <TextView android:id="@+id/user_rc_id" style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textColor="#FFFFFF" android:textSize="@dimen/user_detail_rcid_size"/> 
+                </LinearLayout> 
+              </LinearLayout> 
+            </LinearLayout> 
+          </LinearLayout> 
+        </RelativeLayout>  
+        <LinearLayout android:id="@+id/my_friend_details_apps_listview" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp" android:layout_marginLeft="1dp" android:layout_marginRight="1dp" android:background="@drawable/app_list_back" android:gravity="center_vertical" android:orientation="horizontal"></LinearLayout>  
+        <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginBottom="@dimen/default_gap" android:layout_marginTop="3dp" android:background="@drawable/user_info_item_bg" android:orientation="vertical"> 
+          <RelativeLayout android:id="@+id/my_friend_dynamic" android:layout_width="match_parent" android:layout_height="39dp"> 
+            <TextView android:id="@+id/tv_friend_trends" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginLeft="6dp" android:gravity="center_vertical" android:text="@string/friend_dynamic" android:textColor="#313131" android:textSize="18sp"></TextView>  
+            <RelativeLayout android:id="@+id/rela_new_trend" android:layout_width="@dimen/trend_new_icon_width" android:layout_height="@dimen/trend_new_icon_width" android:layout_centerVertical="true" android:layout_marginLeft="4dp" android:layout_toRightOf="@+id/tv_friend_trends" android:visibility="gone"> 
+              <ImageView android:id="@+id/iv_trend_head" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginRight="@dimen/new_point_margin" android:layout_marginTop="@dimen/new_point_margin" android:src="@drawable/ic_launcher"/>  
+              <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_alignParentTop="true" android:src="@drawable/item_new_bg"/> 
+            </RelativeLayout>  
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="4dp" android:src="@drawable/app_arrow"/> 
+          </RelativeLayout>  
+          <ImageView android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="@drawable/line_back"/>  
+          <RelativeLayout android:id="@+id/use_account_message" android:layout_width="match_parent" android:layout_height="39dp"> 
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginLeft="6dp" android:layout_toLeftOf="@+id/account_to_right" android:gravity="left" android:text="@string/my_account" android:textColor="#313131" android:textSize="18sp"></TextView>  
+            <ImageView android:id="@+id/account_to_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="4dp" android:src="@drawable/app_arrow"/> 
+          </RelativeLayout>  
+          <ImageView android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="@drawable/line_back"/>  
+          <RelativeLayout android:id="@+id/settings_user_edit_rc_id_action" android:layout_width="match_parent" android:layout_height="39dp"> 
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginLeft="6dp" android:layout_toLeftOf="@+id/setting_to_right" android:gravity="left" android:text="@string/setting" android:textColor="#313131" android:textSize="18sp"></TextView>  
+            <ImageView android:id="@+id/setting_to_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="4dp" android:src="@drawable/app_arrow"/> 
+          </RelativeLayout>  
+          <ImageView android:layout_width="fill_parent" android:layout_height="wrap_content" android:background="@drawable/line_back"/>  
+          <RelativeLayout android:id="@+id/rela_about" android:layout_width="match_parent" android:layout_height="39dp"> 
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_centerVertical="true" android:layout_marginLeft="6dp" android:layout_toLeftOf="@+id/about_to_right" android:gravity="left" android:text="@string/about" android:textColor="#313131" android:textSize="18sp"></TextView>  
+            <ImageView android:id="@+id/about_to_right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="4dp" android:src="@drawable/app_arrow"/> 
+          </RelativeLayout> 
+        </LinearLayout> 
+      </LinearLayout>  
+      <Button android:id="@+id/settings_clean_history_record_btn" style="@style/LandingPageButton" android:layout_marginBottom="@dimen/default_gap_3x" android:layout_marginLeft="@dimen/default_gap" android:layout_marginRight="@dimen/default_gap" android:layout_marginTop="@dimen/default_gap_2x" android:background="@drawable/friend_info_send_btn" android:text="@string/setting_page_clean_history" android:textColor="@android:color/white"/> 
+    </LinearLayout> 
+  </ScrollView>  
+  <ProgressBar android:id="@id/login_progressbar" style="?android:attr/progressBarStyle" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@id/login_fields" android:layout_centerInParent="true" android:layout_marginTop="@dimen/default_gap_2x" android:visibility="gone"/> 
 </RelativeLayout>

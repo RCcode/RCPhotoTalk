@@ -1,57 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:orientation="vertical" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <include layout="@layout/base_top_navigate" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="5dp"
-        android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/et_validate"
-            android:layout_width="fill_parent"
-            android:layout_height="@dimen/ui_element_unit"
-            android:background="@drawable/edit_fields_background"
-            android:drawableBottom="@drawable/edit_button_selector"
-            android:inputType="number"
-            android:maxLength="20"
-            android:paddingBottom="@dimen/default_gap"
-            android:paddingLeft="@dimen/default_gap_2x"
-            android:paddingRight="@dimen/default_gap_2x"
-            android:paddingTop="@dimen/default_gap"
-            android:textColor="@android:color/black" />
-
-        <Button
-            android:id="@+id/btn_commit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_gap_2x"
-            android:background="@drawable/friend_info_send_btn"
-            android:text="@string/commit"
-            android:textColor="@android:color/white"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btn_resend"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@string/resend_sms"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btn_change_number"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="@string/change_phone_number"
-            android:visibility="gone" />
-    </LinearLayout>
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@android:color/white" android:orientation="vertical">  
+  <include layout="@layout/base_top_navigate"/>  
+  <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:layout_margin="4dp" android:orientation="vertical"> 
+    <EditText android:id="@+id/et_validate" android:layout_width="fill_parent" android:layout_height="@dimen/ui_element_unit" android:background="@drawable/edit_fields_background" android:drawableBottom="@drawable/edit_button_selector" android:inputType="number" android:maxLength="20" android:paddingBottom="@dimen/default_gap" android:paddingLeft="@dimen/default_gap_2x" android:paddingRight="@dimen/default_gap_2x" android:paddingTop="@dimen/default_gap" android:textColor="@android:color/black"/>  
+    <Button android:id="@+id/btn_commit" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="@dimen/default_gap_2x" android:background="@drawable/friend_info_send_btn" android:text="@string/commit" android:textColor="@android:color/white" android:textSize="18sp"/>  
+    <Button android:id="@+id/btn_resend" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:text="@string/resend_sms" android:textSize="18sp"/>  
+    <Button android:id="@+id/btn_change_number" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="4dp" android:text="@string/change_phone_number" android:visibility="gone"/> 
+  </LinearLayout> 
 </LinearLayout>
