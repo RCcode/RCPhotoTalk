@@ -309,7 +309,7 @@ public final class ServerUtilities {
 	 * Unregister this account/device pair within the server.
 	 */
 	static void unregister(final Context context, final String regId) {
-
+		
 	}
 	
 	
