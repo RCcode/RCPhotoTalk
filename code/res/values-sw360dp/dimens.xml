@@ -9,7 +9,7 @@
   <dimen name="indicator_internal_padding">3dp</dimen>  
   <dimen name="header_footer_left_right_padding">23dp</dimen>  
   <dimen name="header_footer_top_bottom_padding">11dp</dimen>  
-  <dimen name="add_friend_tab_hight">37dp</dimen>  
+  <dimen name="add_friend_tab_hight">45dp</dimen>  
   <dimen name="friend_tiem_hight">65dp</dimen>  
   <dimen name="friend_head_left">11dp</dimen>  
   <dimen name="friend_head_side">65dp</dimen>  
@@ -59,7 +59,7 @@
   <dimen name="user_detail_user_infos_height">99dp</dimen>  
   <dimen name="user_detail_head_image_width">90dp</dimen>  
   <dimen name="app_list_height">59dp</dimen>  
-  <dimen name="user_detail_user_infos_bottom_margin">-49dp</dimen>  
+  <dimen name="user_detail_user_infos_bottom_margin">-29dp</dimen>  
   <dimen name="user_detail_head_width_half">49dp</dimen>  
   <dimen name="user_detail_nick_size">18sp</dimen>  
   <dimen name="user_detail_rcid_size">14sp</dimen>  
@@ -73,7 +73,8 @@
   <dimen name="first_word_padding">4dp</dimen>  
   <dimen name="friend_head_width">63dp</dimen>  
   <dimen name="friend_name_marginleft">9dp</dimen>  
-  <dimen name="user_detail_bg_height">199dp</dimen>  
+  <dimen name="user_detail_bg_height">175dp</dimen>  
+  <dimen name="user_detail_name_background_height">100dp</dimen>  
   <dimen name="about_icon_width">99dp</dimen>  
   <dimen name="friends_adapter_item_padding">4dp</dimen>  
   <dimen name="trend_new_icon_width">39dp</dimen>  

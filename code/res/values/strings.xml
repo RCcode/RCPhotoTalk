@@ -203,7 +203,7 @@
     <string name="user_message">RC帐号信息</string>
     <string name="my_firend_invite_send_short_msg"> 邀请你加入，和好友分享私密有趣图片，绝对安全！</string>
     <string name="my_firend_no_friend_hint">\t\t  No friends here!\nFind some friends now.</string>
-    <string name="add_friend_search_key_hint_text">"Email,ID"</string>
+    <string name="add_friend_search_key_hint_text">"Email,RCID"</string>
     <string name="add_friend_from_phonebook_hint_text">从手机通讯录查找</string>
     <string name="friends_already_use_app">使用PhotoTalk的好友</string>
     <string name="add_friend_from_facebook_hint_text">从Facebook好友查找</string>

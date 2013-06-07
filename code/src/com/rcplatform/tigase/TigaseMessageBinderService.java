@@ -38,6 +38,55 @@ public class TigaseMessageBinderService extends Service {
 
 	private HashMap<String, Timer> gcmTimers = new HashMap<String, Timer>();
 
+	private ChatManagerListener chatListener = new ChatManagerListener() {
+
+		@Override
+		public void chatCreated(Chat chat, boolean able) {
+			chat.addMessageListener(new MessageListener() {
+
+				@Override
+				public void processMessage(Chat chat, Message message) {
+
+					String str = message.getBody();
+					int typeEnd = str.indexOf(MESSAGE_SPLIT);
+					String msgType = str.substring(0, typeEnd);
+					str = str.substring(typeEnd + 1);
+					int actionEnd = str.indexOf(MESSAGE_SPLIT);
+					String action = str.substring(0, actionEnd);
+					if (msgType.equals(MESSAGE_TYPE_MESSAGE)) {
+						String msgContent = str.substring(actionEnd + 1);
+						messageRecevier.onMessageHandle(msgContent, message.getFrom());
+						try {
+							chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
+						}
+						catch (XMPPException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
+						        || action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
+							Vibrator vib = (Vibrator) ctx.getSystemService(Service.VIBRATOR_SERVICE);
+							vib.vibrate(200);
+						}
+
+					} else if (msgType.equals(MESSAGE_TYPE_RECEIPT)) {
+						// TODO 取消gcm 发送
+
+						String formUser = message.getFrom();
+						int end = formUser.indexOf("/");
+						formUser = formUser.substring(0, end);
+						String cancelKey = formUser + action;
+						Timer cancelTimer = gcmTimers.get(cancelKey);
+						if (null != cancelTimer) {
+							cancelTimer.cancel();
+							gcmTimers.remove(cancelKey);
+						}
+					}
+				}
+			});
+		}
+	};
+
 	/**
 	 * Class used for the client Binder. Because we know this service always
 	 * runs in the same process as its clients, we don't need to deal with IPC.
@@ -97,55 +146,6 @@ public class TigaseMessageBinderService extends Service {
 	public void tigaseLogin(String name, String password) {
 		TigaseManager.getInstance(ctx).setLoginInfo(name, password);
 		TigaseManager.getInstance(ctx).initConnect();
-		ChatManagerListener chatListener = new ChatManagerListener() {
-
-			@Override
-			public void chatCreated(Chat chat, boolean able) {
-				chat.addMessageListener(new MessageListener() {
-
-					@Override
-					public void processMessage(Chat chat, Message message) {
-
-						String str = message.getBody();
-						int typeEnd = str.indexOf(MESSAGE_SPLIT);
-						String msgType = str.substring(0, typeEnd);
-						str = str.substring(typeEnd + 1);
-						int actionEnd = str.indexOf(MESSAGE_SPLIT);
-						String action = str.substring(0, actionEnd);
-						if (msgType.equals(MESSAGE_TYPE_MESSAGE)) {
-							String msgContent = str.substring(actionEnd + 1);
-							messageRecevier.onMessageHandle(msgContent, message.getFrom());
-							try {
-								chat.sendMessage(MESSAGE_TYPE_RECEIPT + MESSAGE_SPLIT + action + MESSAGE_SPLIT);
-							}
-							catch (XMPPException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							if (action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_FRIEND)
-							        || action.equals(com.rcplatform.phototalk.utils.Constants.Message.MESSAGE_ACTION_SEND_MESSAGE)) {
-								Vibrator vib = (Vibrator) ctx.getSystemService(Service.VIBRATOR_SERVICE);
-								vib.vibrate(200);
-							}
-
-						} else if (msgType.equals(MESSAGE_TYPE_RECEIPT)) {
-							// TODO 取消gcm 发送
-
-							String formUser = message.getFrom();
-							int end = formUser.indexOf("/");
-							formUser = formUser.substring(0, end);
-							String cancelKey = formUser + action;
-							Timer cancelTimer = gcmTimers.get(cancelKey);
-							if (null != cancelTimer) {
-								cancelTimer.cancel();
-								gcmTimers.remove(cancelKey);
-							}
-						}
-					}
-				});
-			}
-		};
-
 		TigaseManager.getInstance(ctx).setChatManagerListener(chatListener);
 	}
 

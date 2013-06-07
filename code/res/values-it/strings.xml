@@ -145,7 +145,7 @@
     <string name="settings_update_person_info_title">Profilo</string>
     <string name="nick">Nickname</string>
     <string name="sex">Sesso</string>
-    <string name="birthday">生年月日</string>
+    <string name="birthday">Data di nascita</string>
     <string name="settings_update_name_title">Nickname</string>
     <string name="settings_select_sex">Sesso</string>
     <string name="male">maschio</string>
