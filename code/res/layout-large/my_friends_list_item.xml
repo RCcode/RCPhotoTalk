@@ -1,0 +1,75 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/my_friend_list_item"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/line1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+		
+        <include layout="@layout/add_friend_list_item" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/line2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+     <!--    <RelativeLayout android:id="@+id/letter_layout"
+            android:layout_width="fill_parent"
+            android:layout_height="41dip"
+            android:gravity="center_vertical"
+            android:orientation="vertical" > -->
+
+            <TextView
+                android:id="@+id/letter"
+                android:layout_width="wrap_content"
+                android:layout_height="41dip"
+                android:layout_marginLeft="20dip"
+                android:gravity="center_vertical"
+                android:ellipsize="end"
+                android:text="A"
+                android:textColor="@color/black"
+                android:textSize="22sp"
+                 />
+
+       <!--  </RelativeLayout> -->
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1px"
+            android:background="@color/gray_1" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="78dip"
+            android:layout_below="@id/letter"
+            android:orientation="horizontal" >
+
+            <ImageView
+                android:id="@+id/my_friend_list_item_portrait"
+                android:layout_width="53dip"
+                android:layout_height="53dip"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_gap_2x"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_head" />
+
+            <TextView
+                android:id="@+id/my_friend_item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/default_gap_2x"
+                android:text="Andy"
+                android:textSize="19sp"
+                android:textColor="@color/gray" />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

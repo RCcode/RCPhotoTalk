@@ -56,11 +56,11 @@ public class PTBackgroundService extends Service {
 
 	private static final int MSG_WHAT_NEWINFOS = 20000;
 
-	private static final long BIND_STATE_CHECK_DELAY_TIME = 30 * 1000;
-	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 30;
-	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 2;
+	private static final long BIND_STATE_CHECK_DELAY_TIME = 1000 * 60;
+	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 60 * 30;
+	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 60 * 24;
 
-	private static final long MAX_THIRD_PART_SYNC_SPACING_TIME = 1000 * 60 * 5;
+	private static final long MAX_THIRD_PART_SYNC_SPACING_TIME = 1000 * 60 * 60 * 24 * 7;
 
 	private static final String INTENT_PARAM_KEY_THIRD_PART = "thirdparttype";
 
@@ -216,22 +216,6 @@ public class PTBackgroundService extends Service {
 		}
 		IntentFilter filter = new IntentFilter(ACTION_SMS_SEND);
 		registerReceiver(mSMSSendReceiver, filter);
-	}
-
-	class ThirdPartAsyncReceiver extends BroadcastReceiver {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			int type = intent.getIntExtra(INTENT_PARAM_KEY_THIRD_PART, -1);
-			switch (type) {
-			case FriendType.FACEBOOK:
-				uploadFacebookInfo();
-				break;
-			default:
-				break;
-			}
-		}
-
 	}
 
 	class SMSStateReceiver extends BroadcastReceiver {

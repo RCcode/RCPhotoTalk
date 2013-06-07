@@ -1,58 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="registerPage"
-        android:text="register" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="loginPage"
-        android:text="Login" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="findFriendsPage"
-        android:text="Find friends" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="myFriendsPage"
-        android:text="My Friends" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="sendToPage"
-        android:text="Send to" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="searchPage"
-        android:text="Search to" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="pickFriend"
-        android:text="pick Friend" />
-      <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="morePage"
-        android:text="more" />
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="addFriendPage"
-        android:text="addFriendPage" />
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="registerPage" android:text="register"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="loginPage" android:text="Login"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="findFriendsPage" android:text="Find friends"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="myFriendsPage" android:text="My Friends"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="sendToPage" android:text="Send to"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="searchPage" android:text="Search to"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="pickFriend" android:text="pick Friend"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="morePage" android:text="more"/>  
+  <Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:onClick="addFriendPage" android:text="addFriendPage"/> 
 </LinearLayout>

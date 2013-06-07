@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <!--
     Copyright 2012 Facebook
 
@@ -14,12 +15,4 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
-
-<CheckBox
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/com_facebook_picker_checkbox"
-    android:layout_width="23dip"
-    android:layout_height="23dip"
-    android:focusable="false"
-    android:clickable="false"
-    android:button="@drawable/com_facebook_button_check" />
+<CheckBox xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/com_facebook_picker_checkbox" android:layout_width="23dip" android:layout_height="23dip" android:focusable="false" android:clickable="false" android:button="@drawable/com_facebook_button_check"></CheckBox>

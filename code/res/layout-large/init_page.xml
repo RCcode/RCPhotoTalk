@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.rcplatform.phototalk"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <!-- android:background="@drawable/login_background_login" -->
+
+    <ViewFlipper
+        android:id="@+id/intro_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/init_page_one" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/init_page_two" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/init_page_three" />
+    </ViewFlipper>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:background="@drawable/logo" />
+
+    <TextView
+        android:id="@+id/init_message_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/init_message_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="@string/init_message_title_one"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+        <!-- android:textColor="#FF4000" -->
+    
+    <TextView
+        android:id="@+id/init_message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/page_indicator_other"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="12dp"
+        android:gravity="center_horizontal"
+        android:text="@string/init_message_text_one"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp" />
+
+    <com.rcplatform.phototalk.views.PageIndicator
+        android:id="@+id/page_indicator_other"
+        style="@style/pageIndicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btns"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/init_indicator_bottom"
+        app:dotSpacing="5dp" />
+
+    <LinearLayout
+        android:id="@+id/btns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/init_btn_bottom"
+        android:orientation="horizontal" >
+
+        <!--
+             <ImageView
+            android:id="@id/init_page_ghost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_launcher"
+            android:visibility="gone" />
+        -->
+
+        <Button
+            android:id="@+id/init_page_login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/init_page_login_button_selector"
+            android:text="@string/init_page_login"
+            android:textColor="#2a2928" />
+
+        <Button
+            android:id="@+id/init_page_signup_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/init_btn_padding"
+            android:background="@drawable/init_page_login_button_selector"
+            android:text="@string/init_page_signup"
+            android:textColor="#E2582a" />
+    </LinearLayout>
+
+</RelativeLayout>

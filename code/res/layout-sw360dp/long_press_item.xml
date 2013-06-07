@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/long_press_dialog_text_padding"
+    android:textSize="@dimen/long_press_dialog_text_size"
+    android:background="@drawable/long_press_item"
+    android:textColor="@drawable/long_press_text_color" />

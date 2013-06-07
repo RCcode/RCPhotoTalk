@@ -1,52 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:background="#000000"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
-    tools:context=".MainActivity" >
+<?xml version="1.0" encoding="UTF-8"?>
 
-    <Button
-        android:id="@+id/menu_add_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@null"
-        android:drawableTop="@drawable/menu_add_friend"
-        android:text="@string/add_friend_title"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:background="@drawable/menu_line" />
-
-    <Button
-        android:id="@+id/menu_connect_our_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@null"
-        android:drawableTop="@drawable/menu_connect_our"
-        android:text="@string/contact_us"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="80dp"
-        android:background="@drawable/menu_line" />
-
-    <Button
-        android:id="@+id/menu_take_score_btn"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:background="@null"
-        android:drawableTop="@drawable/menu_take_score"
-        android:text="@string/take_score"
-        android:textColor="#FFFFFF"
-        android:textSize="16sp" />
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="71dp" android:background="#000000" android:gravity="center_vertical" android:orientation="horizontal" tools:context=".MainActivity">  
+  <Button android:id="@+id/menu_add_btn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:background="@null" android:drawableTop="@drawable/menu_add_friend" android:text="@string/add_friend_title" android:textColor="#FFFFFF" android:textSize="16sp"/>  
+  <TextView android:layout_width="wrap_content" android:layout_height="71dp" android:background="@drawable/menu_line"/>  
+  <Button android:id="@+id/menu_connect_our_btn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:background="@null" android:drawableTop="@drawable/menu_connect_our" android:text="@string/contact_us" android:textColor="#FFFFFF" android:textSize="16sp"/>  
+  <TextView android:layout_width="wrap_content" android:layout_height="71dp" android:background="@drawable/menu_line"/>  
+  <Button android:id="@+id/menu_take_score_btn" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_weight="1" android:background="@null" android:drawableTop="@drawable/menu_take_score" android:text="@string/take_score" android:textColor="#FFFFFF" android:textSize="16sp"/> 
 </LinearLayout>

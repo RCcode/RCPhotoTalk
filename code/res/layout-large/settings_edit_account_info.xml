@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@id/add_friend_activity_layout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/app_backgroud" >
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/base_top_navigate" />
+
+    <ScrollView
+        android:id="@+id/settings_general_scrollview"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/title"
+        android:fadingEdge="none"
+        android:visibility="visible" >
+
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <!-- line1 -->
+
+            <RelativeLayout
+                android:layout_width="@dimen/user_head_image_width_bg"
+                android:layout_height="@dimen/user_head_image_width_bg"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/send_friend_head_bg"
+                android:padding="3dp" >
+
+                <ImageView
+                    android:id="@id/settings_account_head_portrait"
+                    android:layout_width="@dimen/user_detail_head_image_width"
+                    android:layout_height="@dimen/user_detail_head_image_width"
+                    android:layout_centerInParent="true"
+                    android:gravity="center"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/default_head" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rela_edit_nick"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="@dimen/default_gap_2x"
+                android:background="@drawable/edit_fields_background" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_gap_2x"
+                    android:gravity="center_vertical"
+                    android:text="@string/nick"
+                    android:textColor="#313131"
+                    android:textSize="20sp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/settings_modify_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:drawableRight="@drawable/app_arrow"
+                    android:gravity="center_vertical"
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rela_edit_sex"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="@dimen/default_gap_2x"
+                android:background="@drawable/edit_fields_background" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_gap_2x"
+                    android:gravity="center_vertical"
+                    android:text="@string/sex"
+                    android:textColor="#313131"
+                    android:textSize="20sp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/settings_modify_sex"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:drawableRight="@drawable/app_arrow"
+                    android:gravity="center_vertical"
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rela_edit_birthday"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="@dimen/default_gap_2x"
+                android:background="@drawable/edit_fields_background" >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_gap_2x"
+                    android:gravity="center_vertical"
+                    android:text="@string/birthday"
+                    android:textColor="#313131"
+                    android:textSize="20sp" >
+                </TextView>
+
+                <TextView
+                    android:id="@+id/settings_modify_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:drawableRight="@drawable/app_arrow"
+                    android:gravity="center_vertical"
+                    android:textColor="#919191"
+                    android:textSize="20sp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

@@ -56,13 +56,15 @@ public class Constants {
 
 	public static final String INVITE_URL = "http://rctalk.me";
 
-	public static final long BIND_PHONE_TIME_OUT = 5 * 1000 * 60;
+	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 24 * 2;
 
 	public static String DEVICE_ID;
 
 	public static String LANGUAGE;
-	
-	public static final String OFFICIAL_RCID="100000";
+
+	public static final String INVITE_JOIN_IMAGE_URL = "https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-prn1/943638_133864436812838_2050964251_n.jpg";
+
+	public static final String OFFICIAL_RCID = "100000";
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
@@ -244,7 +246,7 @@ public class Constants {
 
 	public static final String PREFS_FILE_USER_INFO = "com.phototalk.login.info.prefs";
 
-	public static final long UPDATE_CHECK_WAITING_TIME = 60 * 1000;
+	public static final long UPDATE_CHECK_WAITING_TIME = 1000 * 60 * 60 * 24 * 3;
 
 	public static final String BIND_PHONE_NUMBER = "+61427293943";
 

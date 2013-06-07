@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/base_top_navigate_background" >
+
+            <LinearLayout
+                android:id="@+id/add_friend_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <Button
+                    android:id="@+id/add_back_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/base_back_btn" />
+
+                <TextView
+                    style="@style/titleTextStyle"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="2dp"
+                    android:text="@string/add_friend_title" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/find_friend_text"
+                style="@style/titleTextStyle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/friend_info_phone_left"
+                android:text="@string/find_friend_title"
+                android:visibility="gone" />
+
+            <Button
+                android:id="@+id/btn_continue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@drawable/ok_done_btn" />
+
+            <ImageView
+                android:id="@+id/btn_continue_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/btn_continue"
+                android:background="@drawable/top_line" />
+        </RelativeLayout>
+
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="fill_parent"
+            android:layout_height="0dp" >
+        </TabWidget>
+
+        <RadioGroup
+            android:id="@+id/rg_add_friends"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/add_friend_tab_hight"
+            android:orientation="horizontal" >
+
+            <RadioButton
+                android:id="@+id/tab_contact"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/radio_contact_btn"
+                android:button="@null"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/tab_facebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/radio_facebok_btn"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/tab_vkontakte"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/radio_vk_btn"
+                android:button="@null" />
+
+            <RadioButton
+                android:id="@+id/tab_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/radio_seach_btn"
+                android:button="@null" >
+            </RadioButton>
+        </RadioGroup>
+
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent" >
+        </FrameLayout>
+    </LinearLayout>
+
+</TabHost>

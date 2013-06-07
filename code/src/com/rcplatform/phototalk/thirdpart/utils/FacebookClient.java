@@ -97,7 +97,7 @@ public class FacebookClient {
 		bundler.putString("caption", mContext.getString(R.string.app_name));
 		bundler.putString("description", mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()));
 		bundler.putString("name", mContext.getString(R.string.app_name));
-		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
+		bundler.putString("picture", Constants.INVITE_JOIN_IMAGE_URL);
 		bundler.putString("to", uid);
 		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
 
@@ -126,7 +126,7 @@ public class FacebookClient {
 		bundler.putString("caption", mContext.getString(R.string.app_name));
 		bundler.putString("description", mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()));
 		bundler.putString("name", mContext.getString(R.string.app_name));
-		bundler.putString("picture", "http://a3.att.hudong.com/16/10/19300001361107132082103527825.jpg");
+		bundler.putString("picture", Constants.INVITE_JOIN_IMAGE_URL);
 		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
 
 			@Override
