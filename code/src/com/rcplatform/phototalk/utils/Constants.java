@@ -55,6 +55,8 @@ public class Constants {
 	private static final String USER_DIR_NAME = "user";
 
 	public static final String INVITE_URL = "http://rctalk.me";
+	
+	public static final String VK_INVITE_IMAGE="photo208095303_304829648";
 
 	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 24 * 2;
 
@@ -64,7 +66,7 @@ public class Constants {
 
 	public static final String INVITE_JOIN_IMAGE_URL = "https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-prn1/943638_133864436812838_2050964251_n.jpg";
 
-	public static final String OFFICIAL_RCID = "100000";
+	public static final String OFFICIAL_RCID = "1000000";
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
