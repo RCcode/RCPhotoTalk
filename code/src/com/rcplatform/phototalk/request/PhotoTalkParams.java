@@ -20,9 +20,6 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = UserInfo.DEFAULT_TOKEN;
-	public static String PARAM_VALUE_LANGUAGE=Constants.LANGUAGE;
-	public static String PARAM_VALUE_DEVICE_ID=Constants.DEVICE_ID;
-	public static String PARAM_VALUE_APP_ID = "1";
 
 	public static class ChangePassword {
 		public static final String PARAM_KEY_CHECK_PASSWORD = "pwd";
@@ -102,9 +99,9 @@ public class PhotoTalkParams {
 			request.putParam(PARAM_KEY_USER_ID, UserInfo.DEFAULT_USER_ID);
 			request.putParam(PARAM_KEY_TOKEN, UserInfo.DEFAULT_TOKEN);
 		}
-		request.putParam(PARAM_KEY_LANGUAGE, PARAM_VALUE_LANGUAGE);
-		request.putParam(PARAM_KEY_DEVICE_ID, PARAM_VALUE_DEVICE_ID);
-		request.putParam(PARAM_KEY_APP_ID, PARAM_VALUE_APP_ID);
+		request.putParam(PARAM_KEY_LANGUAGE, Constants.LANGUAGE);
+		request.putParam(PARAM_KEY_DEVICE_ID, Constants.DEVICE_ID);
+		request.putParam(PARAM_KEY_APP_ID, Constants.APP_ID);
 	}
 
 	public static class UpdateBindState {

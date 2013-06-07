@@ -21,6 +21,7 @@ import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
@@ -134,9 +135,9 @@ public class ContactUploadTask {
 		try {
 			JSONObject entity = new JSONObject();
 			entity.put(PhotoTalkParams.PARAM_KEY_TOKEN, PhotoTalkParams.PARAM_VALUE_TOKEN_DEFAULT);
-			entity.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
-			entity.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-			entity.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
+			entity.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, Constants.LANGUAGE);
+			entity.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, Constants.DEVICE_ID);
+			entity.put(PhotoTalkParams.PARAM_KEY_APP_ID, Constants.APP_ID);
 			JSONArray arrayContacts = new JSONArray();
 			for (Contacts contact : contacts) {
 				JSONObject jsonContact = new JSONObject();

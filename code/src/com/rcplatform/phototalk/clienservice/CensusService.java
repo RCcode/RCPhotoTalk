@@ -104,9 +104,9 @@ public class CensusService extends IntentService {
 	public StringEntity getEntity(ServiceCensus... simpleInfo) throws JSONException, UnsupportedEncodingException {
 		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
 		JSONObject jsonParams = new JSONObject();
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-		jsonParams.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
+		jsonParams.put(PhotoTalkParams.PARAM_KEY_APP_ID, Constants.APP_ID);
+		jsonParams.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, Constants.DEVICE_ID);
+		jsonParams.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, Constants.LANGUAGE);
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
 		jsonParams.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
 		jsonParams.put(PhotoTalkParams.ServiceCensus.PARAM_KEY_COUNTRY, Constants.COUNTRY);

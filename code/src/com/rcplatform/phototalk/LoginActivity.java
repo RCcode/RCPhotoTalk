@@ -453,7 +453,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				imm.showSoftInput(mPswEditText, 0);
 				return;
 			}
-			if(!checkPassword(psw2)){
+			if (!checkPassword(psw2)) {
 				return;
 			}
 			tigaseLogin(this, email2, psw2);
@@ -474,7 +474,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			break;
 		}
 	}
-
 
 	/**
 	 * 验证注册信息。 Method description
@@ -716,8 +715,8 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					userInfo.setTigaseId(jsonObject.getString("tgId"));
 					userInfo.setTigasePwd(jsonObject.getString("tgpwd"));
 					userInfo.setRcId(jsonObject.getString("rcId"));
-					userInfo.setDeviceId(PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
-					userInfo.setAppId(PhotoTalkParams.PARAM_VALUE_APP_ID);
+					userInfo.setDeviceId(Constants.DEVICE_ID);
+					userInfo.setAppId(Constants.APP_ID);
 					getPhotoTalkApplication().setCurrentUser(userInfo);
 					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
