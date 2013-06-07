@@ -95,6 +95,7 @@ public class TigaseManager {
 			// TODO Auto-generated method stub
 			initConnectTimer.cancel();
 			// login
+			
 			if (null != user && null != password) {
 				try {
 					if (!connection.isAuthenticated()) {
@@ -103,12 +104,17 @@ public class TigaseManager {
 				}
 				catch (XMPPException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					if(e.getMessage().equals("SASL authentication failed")){
+						
+						
+					}
 				}
 			}
 
 			chatManager = connection.getChatManager();
 			chatManager.addChatListener(chatListener);
+			
+
 			isConnected = true;
 			// 发送备份消息
 			List<TigaseMassage> list = db.getTigaseMassages();
@@ -158,7 +164,7 @@ public class TigaseManager {
 			createListener = new TigaseConnectionCreationListener();
 			connection.addConnectionCreationListener(createListener);
 			connection.connect();
-
+			
 			connectListenter = new TigaseListenter();
 			connection.addConnectionListener(connectListenter);
 		}
@@ -226,14 +232,7 @@ public class TigaseManager {
 		String toUser = to + "@" + node.getDomain().trim();
 
 		try {
-			Chat newchat = chatManager.createChat(toUser, new MessageListener() {
-
-				@Override
-				public void processMessage(Chat chat, Message message) {
-					// TODO Auto-generated method stub
-
-				}
-			});
+			Chat newchat = chatManager.createChat(toUser,null);
 			newchat.sendMessage(msg);
 			flag = true;
 		}
