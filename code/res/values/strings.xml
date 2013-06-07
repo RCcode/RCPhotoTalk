@@ -327,6 +327,7 @@
     <string name="no_rc_account">没有RC账号？点此</string>
     <string name="login_error">登录错误</string>
     <string name="login_email_phone_tacotyid_is_null">请输入邮箱或RCID</string>
+    <string name="login_account_error">無效賬號或密碼</string>
     <string name="reg_server_error">后台异常错误</string>
     <string name="reg_email_is_register">邮箱已被注册</string>
     <string name="reg_nick_is_register">昵称已被注册</string>
