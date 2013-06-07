@@ -64,11 +64,13 @@ public class PrefsUtils {
 		private static final String PREF_NAME = "loginstate";
 		private static final String PREF_KEY_LOGIN_USER = "loginuser";
 		private static final String PREF_KEY_HAS_USED = "hasused";
+		private static final String PREF_KEY_LAST_RCID = "lastrcid";
 
 		public static void setLoginUser(Context context, UserInfo userInfo) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
 			sh.edit().putString(PREF_KEY_LOGIN_USER, userInfo.getRcId()).commit();
 			User.saveUserInfo(context, userInfo.getRcId(), userInfo);
+			setLastRcId(context, userInfo.getRcId());
 		}
 
 		public static UserInfo getLoginUser(Context context) {
@@ -82,7 +84,7 @@ public class PrefsUtils {
 
 		public static void clearLoginInfo(Context context) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
-			sh.edit().clear().commit();
+			sh.edit().remove(PREF_KEY_LOGIN_USER).commit();
 		}
 
 		public static void setAppUsed(Context context) {
@@ -93,6 +95,16 @@ public class PrefsUtils {
 		public static boolean hasAppUsed(Context context) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
 			return sh.getBoolean(PREF_KEY_HAS_USED, false);
+		}
+
+		public static void setLastRcId(Context context, String rcId) {
+			SharedPreferences sh = getPreference(context, PREF_NAME);
+			sh.edit().putString(PREF_KEY_LAST_RCID, rcId).commit();
+		}
+
+		public static String getLastRcId(Context context) {
+			SharedPreferences sh = getPreference(context, PREF_NAME);
+			return sh.getString(PREF_KEY_LAST_RCID, null);
 		}
 	}
 

@@ -21,6 +21,8 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.FacebookUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class PhotoTalkApplication extends Application {
 
@@ -187,6 +189,8 @@ public class PhotoTalkApplication extends Application {
 	}
 
 	public void setCurrentUser(UserInfo userInfo) {
+		if (!userInfo.getRcId().equals(PrefsUtils.LoginState.getLastRcId(this)))
+			FacebookUtil.clearFacebookVlidated(this);
 		UserInfo currentUser = getCurrentUser();
 		if (currentUser == null || (!userInfo.getRcId().equals(currentUser.getRcId())))
 			PhotoTalkDatabaseFactory.open(userInfo);

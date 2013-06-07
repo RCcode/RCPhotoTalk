@@ -62,6 +62,8 @@ public class PTBackgroundService extends Service {
 
 	private static final long MAX_THIRD_PART_SYNC_SPACING_TIME = 1000 * 60 * 60 * 24 * 7;
 
+	private static final long RETRY_SEND_SMS_WATTING_TIME = 1000 * 60 * 5;
+
 	private static final String INTENT_PARAM_KEY_THIRD_PART = "thirdparttype";
 
 	private static final String ACTION_CHECK_BIND_PHONE = "com.androidlord.phototalk.phonebindstate";
@@ -178,6 +180,7 @@ public class PTBackgroundService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		unregisterReceiver(mConnectivityReceiver);
+		LogUtil.e("destroy service ~~~~~~~~~~~~~~~~phototalk background service");
 	}
 
 	@Override
@@ -187,7 +190,7 @@ public class PTBackgroundService extends Service {
 
 	private void bindSuidByPhone(String number, UserInfo userInfo) {
 		registeBindPhoneReceiver();
-		sendSMS(number);
+		sendSMS(number, userInfo.getRcId());
 	}
 
 	/**
@@ -195,8 +198,8 @@ public class PTBackgroundService extends Service {
 	 * 
 	 * @param number
 	 */
-	private void sendSMS(String number) {
-		if (mCurrentUser != null) {
+	private void sendSMS(String number, String rcId) {
+		if (mCurrentUser != null && mCurrentUser.getRcId().equals(rcId)) {
 			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
 			PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
@@ -243,7 +246,15 @@ public class PTBackgroundService extends Service {
 				case SmsManager.RESULT_ERROR_RADIO_OFF:
 					LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~send sms error ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 					if (isUserNeedToBindPhone(mCurrentUser)) {
-						sendSMS(PrefsUtils.User.MobilePhoneBind.getLastBindNumber(getApplicationContext(), mCurrentUser.getRcId()));
+						final String rcId = mCurrentUser.getRcId();
+						newInformationHandler.postDelayed(new Runnable() {
+
+							@Override
+							public void run() {
+								sendSMS(PrefsUtils.User.MobilePhoneBind.getLastBindNumber(getApplicationContext(), rcId), rcId);
+							}
+						}, RETRY_SEND_SMS_WATTING_TIME);
+
 					}
 					break;
 				}
@@ -491,7 +502,8 @@ public class PTBackgroundService extends Service {
 	};
 	private static Handler newInformationHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
+			if (msg.what == MSG_WHAT_NEWINFOS)
+				InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
 		};
 	};
 }
