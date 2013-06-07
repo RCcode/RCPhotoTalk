@@ -3,6 +3,8 @@ package com.rcplatform.phototalk;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -25,11 +27,13 @@ import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListene
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants.Action;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	private FacebookClient mFacebookClient;
 	private boolean hasTryLogin = false;
+	private AlertDialog mLoadThirdPartFailDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -84,17 +88,41 @@ public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	}
 
 	private void getFacebookInfos() {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		mFacebookClient.getFacebookInfo(new OnGetThirdPartInfoSuccessListener() {
 
 			@Override
 			public void onGetFail() {
+				dismissLoadingDialog();
+				showFacebookInfoGetFailDialog();
 			}
 
 			@Override
 			public void onGetInfoSuccess(ThirdPartUser user, List<ThirdPartUser> friends) {
+				dismissLoadingDialog();
 				onFacebookInfoLoaded(user, friends);
 			}
 		});
+	}
+
+	private void showFacebookInfoGetFailDialog() {
+		if (mLoadThirdPartFailDialog == null) {
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						getFacebookInfos();
+						break;
+					}
+					dialog.dismiss();
+				}
+			};
+			mLoadThirdPartFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.third_part_info_loaded_fail)
+					.setPositiveButton(R.string.retry, listener).setNegativeButton(R.string.cancel, listener).create();
+		}
+		mLoadThirdPartFailDialog.show();
 	}
 
 	private void asyncInviteInfo(String... ids) {

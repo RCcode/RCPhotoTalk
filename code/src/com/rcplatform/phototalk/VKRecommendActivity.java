@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -25,6 +27,7 @@ import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListene
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
@@ -32,6 +35,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 
 	private VKClient mVkClient;
 	private boolean hasTryLogin = false;
+	private AlertDialog mLoadThirdPartFailDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +95,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 
 			@Override
 			public void onGetFail() {
-
+				showVKInfoGetFailDialog();
 			}
 		});
 	}
@@ -159,5 +163,24 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 			i++;
 		}
 		LogicUtils.uploadFriendInvite(this, Action.ACTION_UPLOAD_INTITE_THIRDPART, FriendType.VK, ids);
+	}
+	private void showVKInfoGetFailDialog() {
+		if (mLoadThirdPartFailDialog == null) {
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						getVkInfos();
+						break;
+					}
+					dialog.dismiss();
+				}
+			};
+			mLoadThirdPartFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.third_part_info_loaded_fail)
+					.setPositiveButton(R.string.retry, listener).setNegativeButton(R.string.cancel, listener).create();
+		}
+		mLoadThirdPartFailDialog.show();
 	}
 }

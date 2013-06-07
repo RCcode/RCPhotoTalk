@@ -63,6 +63,8 @@ public class Constants {
 	public static String DEVICE_ID;
 
 	public static String LANGUAGE;
+	
+	public static final String PAGEAGE="com.rcplatform.phototalk";
 
 	public static final String INVITE_JOIN_IMAGE_URL = "https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-prn1/943638_133864436812838_2050964251_n.jpg";
 

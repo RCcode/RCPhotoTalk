@@ -119,19 +119,19 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.btn_current_confirm:
-				commitCurrentPassword(etPassword.getText().toString().trim());
-				break;
-			case R.id.tv_forget_password:
-				startActivity(ForgetPasswordActivity.class);
-				break;
-			case R.id.btn_confirm_password:
-				EventUtil.More_Setting.rcpt_success_changepassword(baseContext);
-				commitNewPassword(etNewPassword.getText().toString().trim(), etConfirmPassword.getText().toString().trim());
-				break;
-			case R.id.back:
-				finish();
-				break;
+		case R.id.btn_current_confirm:
+			commitCurrentPassword(etPassword.getText().toString().trim());
+			break;
+		case R.id.tv_forget_password:
+			startActivity(ForgetPasswordActivity.class);
+			break;
+		case R.id.btn_confirm_password:
+			EventUtil.More_Setting.rcpt_success_changepassword(baseContext);
+			commitNewPassword(etNewPassword.getText().toString().trim(), etConfirmPassword.getText().toString().trim());
+			break;
+		case R.id.back:
+			finish();
+			break;
 		}
 	}
 
@@ -201,13 +201,15 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 			public void onSuccess(int statusCode, String content) {
 				try {
 					DialogUtil.showToast(getApplicationContext(), R.string.password_change_complete, Toast.LENGTH_SHORT);
-					String token = new JSONObject(content).getString("token");
+					JSONObject jsonObject = new JSONObject(content);
+					String token = jsonObject.getString("token");
+					String tgpwd = jsonObject.getString("tgpwd");
 					UserInfo userInfo = getCurrentUser();
 					userInfo.setToken(token);
+					userInfo.setTigasePwd(tgpwd);
 					PrefsUtils.LoginState.setLoginUser(ChangePasswordActivity.this, userInfo);
 					finish();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 				}

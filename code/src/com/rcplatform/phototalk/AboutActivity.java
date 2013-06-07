@@ -57,33 +57,32 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.check_update_btn:
-				EventUtil.More_Setting.rcpt_checkupdate(baseContext);
-				checkUpdate();
-				break;
-			case R.id.back:
-				finish();
-				break;
-			case R.id.contact_us_btn:
-				EventUtil.More_Setting.rcpt_feedback(baseContext);
-				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-				String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
-				        + SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext)
-				        + SystemMessageUtil.getImsi(baseContext);
-				// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
-				// emailSubject);
-				// 设置要默认发送的内容
-				email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
-				// 调用系统的邮件系统
-				startActivity(email);
+		case R.id.check_update_btn:
+			EventUtil.More_Setting.rcpt_checkupdate(baseContext);
+			checkUpdate();
+			break;
+		case R.id.back:
+			finish();
+			break;
+		case R.id.contact_us_btn:
+			EventUtil.More_Setting.rcpt_feedback(baseContext);
+			Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
+			String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
+					+ SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext) + SystemMessageUtil.getImsi(baseContext);
+			// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
+			// emailSubject);
+			// 设置要默认发送的内容
+			email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
+			// 调用系统的邮件系统
+			startActivity(email);
 
-				break;
-			case R.id.term_service_btn:
-				RCWebview.startWebview(this, " http://192.168.0.86:8082/rchome/service.html");
-				break;
-			case R.id.compact_btn:
-				RCWebview.startWebview(this, "http://192.168.0.86:8082/rchome/privacy.html");
-				break;
+			break;
+		case R.id.term_service_btn:
+			RCWebview.startWebview(this, " http://192.168.0.86:8082/rchome/service.html");
+			break;
+		case R.id.compact_btn:
+			RCWebview.startWebview(this, "http://192.168.0.86:8082/rchome/privacy.html");
+			break;
 		}
 	}
 
@@ -118,7 +117,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 		this.updateUrl = updateUrl;
 		if (mUpdateDialog == null) {
 			mUpdateDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(updateContent).setTitle(getString(R.string.update_dialog_title))
-			        .setNegativeButton(R.string.update_now, this).setPositiveButton(R.string.attention_later, this).create();
+					.setNegativeButton(R.string.update_now, this).setPositiveButton(R.string.attention_later, this).create();
 		}
 		mUpdateDialog.show();
 	}
@@ -126,9 +125,9 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
-			case DialogInterface.BUTTON_NEGATIVE:
-				Utils.download(this, updateUrl);
-				break;
+		case DialogInterface.BUTTON_NEGATIVE:
+			Utils.searchAppInGooglePlay(this, Constants.PAGEAGE);
+			break;
 		}
 	}
 }
