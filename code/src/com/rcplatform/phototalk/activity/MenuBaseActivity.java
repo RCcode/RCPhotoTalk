@@ -34,7 +34,7 @@ public class MenuBaseActivity extends BaseActivity {
 			case 2:
 				EventUtil.Main_Photo.rcpt_menu_feedback(baseContext);
 				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-				String emailSubject = SystemMessageUtil.getAppName(baseContext) + "\n" + MetaHelper.getAppVersionName(baseContext) + "\n"
+				String emailSubject = "\n\n\n\n\n\n"+SystemMessageUtil.getAppName(baseContext) + "\n" + MetaHelper.getAppVersionName(baseContext) + "\n"
 				        + SystemMessageUtil.getPhoneBrand() + "\n" + SystemMessageUtil.getPhoneModel() + "\n"
 				        + SystemMessageUtil.getOsVersion(baseContext) + "\n\n";
 				email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
