@@ -52,11 +52,9 @@ public class WelcomeActivity extends BaseActivity {
 				// LogUtil.d(Base64.encodeToString(md.digest(),
 				// Base64.DEFAULT));
 			}
-		}
-		catch (NameNotFoundException e) {
+		} catch (NameNotFoundException e) {
 			e.printStackTrace();
-		}
-		catch (NoSuchAlgorithmException e) {
+		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		}
 
@@ -72,8 +70,8 @@ public class WelcomeActivity extends BaseActivity {
 		super.onCreate(savedInstanceState);
 		printHashKey();
 		setContentView(R.layout.loading);
-		cancelRelogin();
 		startBackgroundService();
+		cancelRelogin();
 		checkNetwork();
 		Thread th = new Thread() {
 
@@ -104,8 +102,7 @@ public class WelcomeActivity extends BaseActivity {
 		super.onDestroy();
 		try {
 			ServerUtilities.onDestroy(this);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 
 		}
 	}

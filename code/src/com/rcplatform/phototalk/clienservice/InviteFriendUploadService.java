@@ -50,6 +50,7 @@ public class InviteFriendUploadService extends IntentService {
 			asyncInviteInfoThirdPart(ids);
 		}
 	}
+
 	private void asyncInviteInfoContact() {
 		List<String> numbers = new ArrayList<String>();
 		Uri uri = Uri.parse("content://sms/sent");
@@ -77,9 +78,9 @@ public class InviteFriendUploadService extends IntentService {
 		UserInfo userInfo = ((PhotoTalkApplication) getApplication()).getCurrentUser();
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_TOKEN, userInfo.getToken());
-		jsonObject.put(PhotoTalkParams.PARAM_KEY_APP_ID, PhotoTalkParams.PARAM_VALUE_APP_ID);
-		jsonObject.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, PhotoTalkParams.PARAM_VALUE_LANGUAGE);
-		jsonObject.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, PhotoTalkParams.PARAM_VALUE_DEVICE_ID);
+		jsonObject.put(PhotoTalkParams.PARAM_KEY_APP_ID, Constants.APP_ID);
+		jsonObject.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, Constants.LANGUAGE);
+		jsonObject.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, Constants.DEVICE_ID);
 		jsonObject.put(PhotoTalkParams.PARAM_KEY_USER_ID, userInfo.getRcId());
 		jsonObject.put(PhotoTalkParams.SyncInviteInfo.PARAM_KEY_TYPE, type + "");
 		JSONArray array = new JSONArray();

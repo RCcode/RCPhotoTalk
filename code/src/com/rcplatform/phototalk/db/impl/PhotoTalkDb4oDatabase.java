@@ -408,7 +408,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			}
 		});
 		LogUtil.e(result.size() + " is result size");
-		boolean isHiden = false;
+		boolean isHiden = true;
 		for (Friend f : result) {
 			isHiden = f.isHiden();
 			db.delete(f);

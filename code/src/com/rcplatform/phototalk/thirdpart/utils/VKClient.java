@@ -82,7 +82,9 @@ public class VKClient {
 				try {
 					List<String> attachments = new ArrayList<String>();
 					attachments.add(Constants.INVITE_URL);
-					mApi.createWallPost(mUid, mContext.getString(R.string.join_message,mContext.getCurrentUser().getRcId()), attachments, null, false, false, false, null, null, null, null);
+					attachments.add(Constants.VK_INVITE_IMAGE);
+					mApi.createWallPost(mUid, mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()), attachments, null, false, false,
+							false, null, null, null, null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -157,6 +159,7 @@ public class VKClient {
 					try {
 						List<String> attachments = new ArrayList<String>();
 						attachments.add(Constants.INVITE_URL);
+						attachments.add(Constants.VK_INVITE_IMAGE);
 						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()), attachments,
 								null, false, false, false, null, null, null, null);
 					} catch (Exception e) {

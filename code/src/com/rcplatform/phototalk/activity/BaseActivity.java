@@ -117,7 +117,10 @@ public class BaseActivity extends Activity {
 
 	public void showLoadingDialog(int titleResId, int msgResId, boolean cancelAble) {
 		if (mProgressDialog == null) {
-			mProgressDialog = new ProgressDialog(this);
+			if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1)
+				mProgressDialog = new ProgressDialog(this, R.style.Theme_Dialog_Update);
+			else
+				mProgressDialog = new ProgressDialog(this);
 		}
 		mProgressDialog.setCancelable(cancelAble);
 		if (titleResId != LOADING_NO_MSG)
@@ -128,8 +131,11 @@ public class BaseActivity extends Activity {
 			mProgressDialog.setMessage(getString(msgResId));
 		else
 			mProgressDialog.setMessage(null);
-		if (!mProgressDialog.isShowing() && !isFinishing())
+
+		if (!mProgressDialog.isShowing() && !isFinishing()) {
 			mProgressDialog.show();
+			mProgressDialog.setContentView(R.layout.operation_loading);
+		}
 	}
 
 	public void dismissLoadingDialog() {
