@@ -177,7 +177,7 @@
     <string name="other_device_login">Your account is already being used on another device.</string>
     <string name="relogin">OK</string>
     <string name="join_message">Audio photos, timed deletion! Join RC PhotoTalk and share the fun! Download link: http://rctalk.me  Add my ID %1$s after you create an account!</string>
-    <string name="invite_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me,and add my ID %1$s</string>
+    <string name="invite_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me and add my ID %1$s</string>
     <string name="contact_friend">Contacts:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -187,20 +187,23 @@
     <string name="gcm_friend">Someone added you as a friend</string>
     <string name="friend_detail_send_photo_hint_text">Send Photo</string>
 
+    <!-- 对话框&提示 -->
+    <string name="cancel">cancel</string>
+    <string name="login_account_error">Invalid account or password</string>
+
     <!-- 没有翻译的字符 -->
 
     <string name="app_name">PhotoTalk</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="version">Demo v1.0</string>
-    <string name="cancel">cancel</string>
     <string name="my_friends_new">新的好友</string>
 
     <!-- 添加好友页面 -->
     <string name="user_message">RC帐号信息</string>
     <string name="my_firend_invite_send_short_msg"> 邀请你加入，和好友分享私密有趣图片，绝对安全！</string>
     <string name="my_firend_no_friend_hint">\t\t  No friends here!\nFind some friends now.</string>
-    <string name="add_friend_search_key_hint_text">"Email、手机号、ID"</string>
+    <string name="add_friend_search_key_hint_text">"Email,RCID"</string>
     <string name="add_friend_from_phonebook_hint_text">从手机通讯录查找</string>
     <string name="friends_already_use_app">使用PhotoTalk的好友</string>
     <string name="add_friend_from_facebook_hint_text">从Facebook好友查找</string>
@@ -327,7 +330,6 @@
     <string name="no_rc_account">没有RC账号？点此</string>
     <string name="login_error">登录错误</string>
     <string name="login_email_phone_tacotyid_is_null">请输入邮箱或RCID</string>
-    <string name="login_account_error">無效賬號或密碼</string>
     <string name="reg_server_error">后台异常错误</string>
     <string name="reg_email_is_register">邮箱已被注册</string>
     <string name="reg_nick_is_register">昵称已被注册</string>

@@ -188,7 +188,9 @@
     <string name="gcm_message">Anda mempunyai %1$d pesan baru</string>
     <string name="gcm_friend">Seseorang menambah Anda sbg teman</string>
     <string name="friend_detail_send_photo_hint_text">Kirim foto</string>
-
+    <!-- 对话框&提示 -->
+    <string name="cancel">membatalkanें</string>
+    <string name="login_account_error">Akun atau sandi tidak valid</string>
 
 
 </resources>

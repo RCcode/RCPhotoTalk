@@ -9,7 +9,7 @@
         android:layout_width="@dimen/friend_head_side"
         android:layout_height="@dimen/friend_head_side"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="@dimen/friend_head_left"
         android:background="@drawable/default_head" />
 
     <ImageView
@@ -43,7 +43,8 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textColor="#1B1B1B"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:textStyle="bold" />
         <!-- 中间部分字体颜色设置 在代码中进行设置 -->
 
         <LinearLayout
@@ -58,8 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_friend"
-                android:textColor="#1B1B1B"
-                android:textSize="18sp" />
+                android:textColor="#a19a94"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_app"
-                android:textColor="#1B1B1B"
-                android:textSize="18sp" />
+                android:textColor="#a19a94"
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 

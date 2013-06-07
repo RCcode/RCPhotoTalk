@@ -188,6 +188,8 @@
     <string name="gcm_message">%1$d通の新着規メッセージ</string>
     <string name="gcm_friend">あなたをお友人に追加した人がいます</string>
     <string name="friend_detail_send_photo_hint_text">写真送信</string>
-
+    <!-- 对话框&提示 -->
+    <string name="cancel">キャンセル</string>
+    <string name="login_account_error">アカウントまたはパスワードが正しくありません</string>
 
 </resources>

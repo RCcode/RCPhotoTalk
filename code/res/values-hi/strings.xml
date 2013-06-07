@@ -188,6 +188,8 @@
     <string name="gcm_message">आपका %1$d नया संदेश है(हैं)</string>
     <string name="gcm_friend">किसी ने आपको मित्र के रूप में जोड़ा है</string>
     <string name="friend_detail_send_photo_hint_text">फ़ोटो भेजें</string>
-
+    <!-- 对话框&提示 -->
+    <string name="cancel">रद्द करें</string>
+    <string name="login_account_error">अमान्य खाता या पासवर्ड</string>
 
 </resources>

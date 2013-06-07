@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/default_transparent"
+    tools:context=".MainActivity" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/default_transparent" tools:context=".MainActivity">  
-  <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_centerInParent="true" android:layout_marginLeft="@dimen/default_gap_3x" android:layout_marginRight="@dimen/default_gap_3x" android:background="@drawable/popup_bg" android:padding="@dimen/default_gap_2x" android:orientation="vertical"> 
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="horizontal"> 
-      <Button android:id="@+id/picker_head_source_camera" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:background="@drawable/pop_camera_btn"/>  
-      <Button android:id="@+id/picker_head_source_gallary" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_weight="1" android:layout_marginLeft="@dimen/default_gap_2x" android:background="@drawable/pop_photo_btn"/> 
-    </LinearLayout>  
-    <Button android:id="@+id/picker_head_cancel" android:layout_width="fill_parent" android:layout_height="fill_parent" android:layout_marginTop="@dimen/default_gap_2x" android:background="@drawable/friend_info_send_btn" android:padding="@dimen/default_gap" android:text="@string/cancel" android:textColor="#FFFFFF" android:textSize="20sp"/> 
-  </LinearLayout> 
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="@dimen/default_gap_3x"
+        android:layout_marginRight="@dimen/default_gap_3x"
+        android:background="@drawable/popup_bg"
+        android:orientation="vertical"
+        android:padding="@dimen/default_gap_2x" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/picker_head_source_camera"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/pop_camera_btn" />
+
+            <Button
+                android:id="@+id/picker_head_source_gallary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/default_gap_2x"
+                android:layout_weight="1"
+                android:background="@drawable/pop_photo_btn" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/picker_head_cancel"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginTop="@dimen/default_gap_2x"
+            android:background="@drawable/friend_info_send_btn"
+            android:padding="@dimen/default_gap"
+            android:text="@string/cancel"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+    </LinearLayout>
+
 </RelativeLayout>

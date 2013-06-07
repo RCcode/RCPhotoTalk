@@ -9,7 +9,7 @@
   <dimen name="indicator_internal_padding">3dp</dimen>  
   <dimen name="header_footer_left_right_padding">23dp</dimen>  
   <dimen name="header_footer_top_bottom_padding">11dp</dimen>  
-  <dimen name="add_friend_tab_hight">37dp</dimen>  
+  <dimen name="add_friend_tab_hight">45dp</dimen>  
   <dimen name="friend_tiem_hight">65dp</dimen>  
   <dimen name="friend_head_left">11dp</dimen>  
   <dimen name="friend_head_side">65dp</dimen>  

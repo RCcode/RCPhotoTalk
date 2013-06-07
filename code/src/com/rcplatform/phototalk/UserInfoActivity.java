@@ -117,7 +117,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		mBack.setVisibility(View.VISIBLE);
 		mBack.setOnClickListener(this);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
-		mTitleTextView.setText(getResources().getString(R.string.user_message));
+		mTitleTextView.setText(getResources().getString(R.string.my_account));
 		mTitleTextView.setVisibility(View.VISIBLE);
 	}
 

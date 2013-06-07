@@ -176,8 +176,8 @@
     <string name="use_new_info">Usar um novo perfil</string>
     <string name="other_device_login">Sua conta já está sendo usada em outro dispositivo.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me. Adicionar minha ID %1$s depois de criar uma conta!</string>
-    <string name="invite_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me. Adicionar minha ID %1$s depois de criar uma conta!</string>
+    <string name="join_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me  Adicionar minha ID %1$s depois de criar uma conta!</string>
+    <string name="invite_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me  Adicionar minha ID %1$s depois de criar uma conta!</string>
     <string name="contact_friend">Contactos:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -186,5 +186,9 @@
     <string name="gcm_message">Você tem %1$d novas mensagens</string>
     <string name="gcm_friend">Alguém adicionou você como um amigo</string>
     <string name="friend_detail_send_photo_hint_text">Enviar foto</string>
+
+    <!-- 对话框&提示 -->
+    <string name="cancel">cancelar</string>
+    <string name="login_account_error">Conta ou senha inválida</string>
 
 </resources>

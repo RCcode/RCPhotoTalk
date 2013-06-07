@@ -42,7 +42,8 @@
             android:ellipsize="marquee"
             android:singleLine="true"
             android:textColor="#1B1B1B"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/add_friend_layout"
@@ -57,8 +58,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_friend"
-                android:textColor="#1B1B1B"
-                android:textSize="16sp" />
+                android:textColor="#a19a94"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -74,8 +75,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/add_app"
-                android:textColor="#1B1B1B"
-                android:textSize="16sp" />
+                android:textColor="#a19a94"
+                android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
 

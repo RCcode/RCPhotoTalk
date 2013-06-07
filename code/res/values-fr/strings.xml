@@ -190,6 +190,8 @@
     <string name="gcm_friend">Quelqu’un vous a ajouté comme ami</string>
     <string name="friend_detail_send_photo_hint_text">Envoyer une Photo</string>
 
-
+    <!-- 对话框&提示 -->
+    <string name="cancel">résilier</string>
+    <string name="login_account_error">Compte ou mot de passe non valide</string>
    
 </resources>
