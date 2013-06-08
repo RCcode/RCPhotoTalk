@@ -13,10 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.bean.UserInfo;
 
 public class SelectedFriendsListAdapter extends BaseAdapter {
 
@@ -30,6 +32,8 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 	private ViewHolder holder;
 
 	private final ImageLoader mImageLoader;
+
+	private UserInfo currentUser;
 
 	// private final static Map<Integer, Boolean> statu = new HashMap<Integer,
 	// Boolean>();
@@ -50,6 +54,7 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 			mLetters[i] = listData.get(i).getLetter();
 		}
 		this.mImageLoader = ImageLoader.getInstance();
+		currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 	}
 
 	@Override
@@ -101,7 +106,12 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 			holder.checkBox.setChecked(false);
 		}
 		mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
-		holder.name.setText(friend.getNickName());
+		if (friend.getRcId().equals(currentUser.getRcId())) {
+			holder.name.setText(context.getString(R.string.list_me, friend.getNickName()));
+		} else {
+			holder.name.setText(friend.getNickName());
+		}
+
 		String letter = friend.getLetter();
 		if (!isNeedToShowLetter(position)) {
 			holder.tvLetter.setVisibility(View.GONE);

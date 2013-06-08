@@ -12,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import com.google.android.gcm.GCMRegistrar;
-import com.google.android.gcm.ServerUtilities;
 import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
@@ -32,7 +31,6 @@ import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class LogicUtils {

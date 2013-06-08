@@ -24,6 +24,7 @@ public class RCPlatformTextUtil {
 	private static final long A_MINUTE = 60 * A_SECOND;
 	private static final long A_HOUR = 60 * A_MINUTE;
 	private static final long A_DAY = 24 * A_HOUR;
+	private static final long A_MONTH = 30 * A_DAY;
 
 	private static final String EMAIL_REGEX = "^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$";
 	private static final String NICK_REGEX = "[a-zA-Z0-9]{1,20}";
@@ -81,9 +82,11 @@ public class RCPlatformTextUtil {
 		} else if (timeToNow < A_DAY) {
 			int timeNumber = (int) (timeToNow / A_HOUR);
 			result = context.getString(R.string.ago, context.getString(R.string.hour, timeNumber));
-		} else {
+		} else if (timeToNow < A_MONTH) {
 			int timeNumber = (int) (timeToNow / A_DAY);
 			result = context.getString(R.string.ago, context.getString(R.string.day, timeNumber));
+		} else {
+			result=context.getString(R.string.long_long_ago);
 		}
 		return result;
 	}

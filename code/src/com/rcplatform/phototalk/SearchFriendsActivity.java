@@ -154,9 +154,9 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.back:
-				finish();
-				break;
+		case R.id.back:
+			finish();
+			break;
 		// case R.id.search_btn:
 		// search();
 		// break;
@@ -186,8 +186,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					} else {
 						search_hint_text.setVisibility(View.GONE);
 					}
-				}
-				catch (JSONException e) {
+				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				dismissLoadingDialog();
@@ -257,8 +256,12 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				public void onClick(View v) {
 				}
 			});
+			if (friend.getRcId().equals(getCurrentUser().getRcId())) {
+				nickTextView.setText(getString(R.string.list_me, friend.getNickName()));
+			} else {
+				nickTextView.setText(friend.getNickName());
+			}
 
-			nickTextView.setText(friend.getNickName());
 			if (!friend.isFriend()) {
 				addFriendBtn.setEnabled(true);
 				addFriendBtn.setTag(friend);

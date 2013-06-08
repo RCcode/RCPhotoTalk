@@ -2,7 +2,6 @@ package com.rcplatform.phototalk;
 
 import org.json.JSONObject;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +19,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.umeng.EventUtil;
@@ -208,7 +208,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 					userInfo.setToken(token);
 					userInfo.setTigasePwd(tgpwd);
 					PrefsUtils.LoginState.setLoginUser(ChangePasswordActivity.this, userInfo);
-					finish();
+					LogicUtils.logout(ChangePasswordActivity.this);
 				} catch (Exception e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));

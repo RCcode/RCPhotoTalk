@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	private FacebookClient mFacebookClient;

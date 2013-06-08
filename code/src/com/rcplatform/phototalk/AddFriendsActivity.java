@@ -25,6 +25,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class AddFriendsActivity extends TabActivity implements OnClickListener {
@@ -77,7 +78,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
+				Utils.hideSoftInputKeyboard(AddFriendsActivity.this, v);
 				AddFriendsActivity.this.finish();
 			}
 		});
@@ -97,20 +98,20 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch (checkedId) {
-					case R.id.tab_contact:
-						mHost.setCurrentTabByTag(TAB_CONTACTS);
-						break;
-					case R.id.tab_facebook:
-						EventUtil.Friends_Addfriends.rcpt_facebok(ctx);
-						mHost.setCurrentTabByTag(TAB_FACEBOOK);
-						break;
-					case R.id.tab_vkontakte:
-						EventUtil.Friends_Addfriends.rcpt_vk(ctx);
-						mHost.setCurrentTabByTag(TAB_VK);
-						break;
-					case R.id.tab_search:
-						EventUtil.Friends_Addfriends.rcpt_search(ctx);
-						mHost.setCurrentTabByTag(TAB_SEARCH);
+				case R.id.tab_contact:
+					mHost.setCurrentTabByTag(TAB_CONTACTS);
+					break;
+				case R.id.tab_facebook:
+					EventUtil.Friends_Addfriends.rcpt_facebok(ctx);
+					mHost.setCurrentTabByTag(TAB_FACEBOOK);
+					break;
+				case R.id.tab_vkontakte:
+					EventUtil.Friends_Addfriends.rcpt_vk(ctx);
+					mHost.setCurrentTabByTag(TAB_VK);
+					break;
+				case R.id.tab_search:
+					EventUtil.Friends_Addfriends.rcpt_search(ctx);
+					mHost.setCurrentTabByTag(TAB_SEARCH);
 				}
 			}
 		});
@@ -128,10 +129,10 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.btn_continue:
-				startActivity(new Intent(this, HomeActivity.class));
-				finish();
-				break;
+		case R.id.btn_continue:
+			startActivity(new Intent(this, HomeActivity.class));
+			finish();
+			break;
 		}
 	}
 
@@ -159,7 +160,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		// WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
 		// }
 		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && friendsAdded.size() > 0
-		        && params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
+				&& params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
 			Intent intent = new Intent();
 			intent.putExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS, new ArrayList<Friend>(friendsAdded));
 			setResult(Activity.RESULT_OK, intent);
