@@ -177,41 +177,42 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 
-		case R.id.user_facebook_layout:
-			if (mFacebookClient.isAuthorize()) {
-				EventUtil.More_Setting.rcpt_facebookunlink(baseContext);
-				showDeAuthorizeDialog(FriendType.FACEBOOK);
-			} else {
-				authorizeFacebook();
-			}
-			break;
-		case R.id.user_vk_layout:
-			if (mVKClient.isAuthorize()) {
-				EventUtil.More_Setting.rcpt_vkunlink(baseContext);
-				showDeAuthorizeDialog(FriendType.VK);
-			} else {
-				authorizeVK();
-			}
-			break;
-		case R.id.reset_pw_btn:
-			EventUtil.More_Setting.rcpt_changepasswordsbutton(baseContext);
-			startActivity(ChangePasswordActivity.class);
-			break;
-		case R.id.login_out_btn:
-			EventUtil.More_Setting.rcpt_logout(baseContext);
-			LogicUtils.logout(this);
-			break;
-		case R.id.back:
-			startActivity(new Intent(this, SettingsActivity.class));
-			this.finish();
-			break;
-		case R.id.rela_phone:
-			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0
-					&& PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, getCurrentUser().getRcId())) {
-				startActivityForResult(new Intent(this, RequestSMSActivity.class), REQUEST_CODE_BINDPHONE);
-				EventUtil.More_Setting.rcpt_phonenumber(baseContext);
-			}
-			break;
+			case R.id.user_facebook_layout:
+				if (mFacebookClient.isAuthorize()) {
+					EventUtil.More_Setting.rcpt_facebookunlink(baseContext);
+					showDeAuthorizeDialog(FriendType.FACEBOOK);
+				} else {
+					authorizeFacebook();
+				}
+				break;
+			case R.id.user_vk_layout:
+				if (mVKClient.isAuthorize()) {
+					EventUtil.More_Setting.rcpt_vkunlink(baseContext);
+					showDeAuthorizeDialog(FriendType.VK);
+				} else {
+					authorizeVK();
+				}
+				break;
+			case R.id.reset_pw_btn:
+				EventUtil.More_Setting.rcpt_changepasswordsbutton(baseContext);
+				startActivity(ChangePasswordActivity.class);
+				break;
+			case R.id.login_out_btn:
+				EventUtil.More_Setting.rcpt_logout(baseContext);
+				LogicUtils.logout(this);
+				break;
+			case R.id.back:
+				startActivity(new Intent(this, SettingsActivity.class));
+				this.finish();
+				break;
+			case R.id.rela_phone:
+				if (TextUtils.isEmpty(getCurrentUser().getCellPhone())
+				        && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0
+				        && PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, getCurrentUser().getRcId())) {
+					startActivityForResult(new Intent(this, RequestSMSActivity.class), REQUEST_CODE_BINDPHONE);
+					EventUtil.More_Setting.rcpt_phonenumber(baseContext);
+				}
+				break;
 		}
 	}
 
@@ -286,7 +287,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
 			mDeAuthDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.dialog_confirm_deauth)
-					.setNegativeButton(R.string.confirm, mDeAuthorizeDialogListener).setPositiveButton(R.string.cancel, mDeAuthorizeDialogListener).create();
+			        .setPositiveButton(R.string.confirm, mDeAuthorizeDialogListener).setNegativeButton(R.string.cancel, mDeAuthorizeDialogListener)
+			        .create();
 		}
 		mDeAuthorizeDialogListener.setType(type);
 		mDeAuthDialog.show();
@@ -320,16 +322,16 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
-			case DialogInterface.BUTTON_NEGATIVE:
-				if (mType == FriendType.FACEBOOK) {
-					mFacebookClient.deAuthorize(mDeAuthorizeListener);
-				} else if (mType == FriendType.VK) {
-					mVKClient.deAuthorize(mDeAuthorizeListener);
-				}
-				break;
-			case DialogInterface.BUTTON_POSITIVE:
-				dialog.dismiss();
-				break;
+				case DialogInterface.BUTTON_POSITIVE:
+					if (mType == FriendType.FACEBOOK) {
+						mFacebookClient.deAuthorize(mDeAuthorizeListener);
+					} else if (mType == FriendType.VK) {
+						mVKClient.deAuthorize(mDeAuthorizeListener);
+					}
+					break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					dialog.dismiss();
+					break;
 			}
 		}
 	};

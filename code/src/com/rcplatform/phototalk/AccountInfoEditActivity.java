@@ -43,25 +43,43 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private static final int REQUESTCODE_NAME = 1010;
 
 	protected static final int REQUEST_GALLARY = 1012;
+
 	protected static final int REQUEST_CAMERA = 1013;
 
 	public static final String RESULT_PARAM_USER = "userInfo";
+
 	private TextView mNameView;
+
 	private TextView mSexView;
+
 	private TextView mBirthday;
+
 	private View mBackView;
+
 	private DatePicker mBirthDayPicker;
+
 	private TextView mTitleView;
+
 	private ImageView mMyHeadView;
+
 	private AlertDialog mBirthChooseDialog;
+
 	private Calendar mBirthDayCalender;
+
 	private UserInfo userDetailInfo;
+
 	private String[] sex;
+
 	private boolean isHeadChange = false;
+
 	private boolean isChance = false;
+
 	private SimpleDateFormat mDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
 	private ImageLoader mImageLoader;
+
 	private AlertDialog updateFailDialog;
+
 	private String newHeadPath;
 
 	@Override
@@ -136,44 +154,44 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			updateUserInfo();
-			break;
-		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendsActivity.class));
-			break;
-		case R.id.settings_account_head_portrait:
-			showImagePickMenu(v, CROP_HEAD_IMAGE);
-			break;
-		case R.id.rela_edit_nick:
-			EventUtil.More_Setting.rcpt_nameedit(baseContext);
-			Intent intentName = new Intent(this, UpdateNameActivity.class);
-			intentName.setAction("setting_update_name");
-			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getNickName());
-			startActivityForResult(intentName, REQUESTCODE_NAME);
-			break;
-		case R.id.rela_edit_sex:
-			EventUtil.More_Setting.rcpt_genderedit(baseContext);
-			showSexChooseDialog();
-			break;
-		case R.id.rela_edit_birthday:
-			EventUtil.More_Setting.rcpt_ageedit(baseContext);
-			showDateDialog();
-			break;
+			case R.id.back:
+				updateUserInfo();
+				break;
+			case R.id.choosebutton:
+				startActivity(new Intent(this, AddFriendsActivity.class));
+				break;
+			case R.id.settings_account_head_portrait:
+				showImagePickMenu(v, CROP_HEAD_IMAGE);
+				break;
+			case R.id.rela_edit_nick:
+				EventUtil.More_Setting.rcpt_nameedit(baseContext);
+				Intent intentName = new Intent(this, UpdateNameActivity.class);
+				intentName.setAction("setting_update_name");
+				intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getNickName());
+				startActivityForResult(intentName, REQUESTCODE_NAME);
+				break;
+			case R.id.rela_edit_sex:
+				EventUtil.More_Setting.rcpt_genderedit(baseContext);
+				showSexChooseDialog();
+				break;
+			case R.id.rela_edit_birthday:
+				EventUtil.More_Setting.rcpt_ageedit(baseContext);
+				showDateDialog();
+				break;
 		}
 	}
 
 	private void showSexChooseDialog() {
 		int selectedSex = userDetailInfo.getGender();
 		DialogUtil.getAlertDialogBuilder(this).setTitle(getResources().getString(R.string.settings_select_sex))
-				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
+		        .setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int which) {
-						userDetailInfo.setGender(which + 1);
-						setSex();
-						dialog.dismiss();
-					}
-				}).show();
+			        public void onClick(DialogInterface dialog, int which) {
+				        userDetailInfo.setGender(which + 1);
+				        setSex();
+				        dialog.dismiss();
+			        }
+		        }).show();
 	}
 
 	private void saveBirthDay(int year, int monthOfYear, int dayOfMonth) {
@@ -189,7 +207,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		@Override
 		public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 			if (isSelectedTimeAfterToday(year, monthOfYear, dayOfMonth)) {
-				view.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH), this);
+				view.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH),
+				          this);
 			}
 		}
 	};
@@ -206,23 +225,24 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
-					if (which == DialogInterface.BUTTON_NEGATIVE)
+					if (which == DialogInterface.BUTTON_POSITIVE)
 						saveBirthDay(mBirthDayPicker.getYear(), mBirthDayPicker.getMonth(), mBirthDayPicker.getDayOfMonth());
 				}
 			};
 			mBirthChooseDialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.select_birthday).setView(view)
-					.setNegativeButton(R.string.confirm, birthListener).setPositiveButton(R.string.cancel, birthListener).create();
+			        .setNegativeButton(R.string.cancel, birthListener).setPositiveButton(R.string.confirm, birthListener).create();
 		}
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			try {
 				mBirthDayCalender.setTime(mDateFormat.parse(userDetailInfo.getBirthday()));
-			} catch (ParseException e) {
+			}
+			catch (ParseException e) {
 				e.printStackTrace();
 			}
 
 		}
-		mBirthDayPicker.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH),
-				mOnBirthdayChangeListener);
+		mBirthDayPicker.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH),
+		                     mBirthDayCalender.get(Calendar.DAY_OF_MONTH), mOnBirthdayChangeListener);
 		mBirthChooseDialog.show();
 	}
 
@@ -303,7 +323,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
 					setResult(Activity.RESULT_OK);
 					finish();
-				} catch (JSONException e) {
+				}
+				catch (JSONException e) {
 					e.printStackTrace();
 					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 				}
@@ -325,18 +346,19 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				public void onClick(DialogInterface dialog, int which) {
 
 					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						finish();
-						break;
-					case DialogInterface.BUTTON_NEGATIVE:
-						startUpdate();
-						break;
+						case DialogInterface.BUTTON_POSITIVE:
+							startUpdate();
+
+							break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							finish();
+							break;
 					}
 					dialog.dismiss();
 				}
 			};
-			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.update_fail).setPositiveButton(R.string.cancel, listener)
-					.setNegativeButton(R.string.retry, listener).setCancelable(false).create();
+			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.update_fail).setPositiveButton(R.string.retry, listener)
+			        .setNegativeButton(R.string.cancel, listener).setCancelable(false).create();
 		}
 		updateFailDialog.show();
 	}

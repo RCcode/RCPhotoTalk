@@ -151,7 +151,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		tvTigaseState = (TextView) findViewById(R.id.tv_test);
 		bindTigaseService();
 		checkBindPhone();
-		//注册GCM
+		// 注册GCM
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getApplicationContext());
 		if (userInfo != null) {
 			try {
@@ -184,18 +184,18 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private void checkBindPhone() {
 		String rcId = getCurrentUser().getRcId();
 		if (PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, rcId) && RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone())
-				&& getCurrentUser().getDeviceId().equals(Constants.DEVICE_ID) && !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
+		        && getCurrentUser().getDeviceId().equals(Constants.DEVICE_ID) && !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
 			PrefsUtils.User.MobilePhoneBind.setAttentionToBindPhone(this, rcId);
 			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
-						case DialogInterface.BUTTON_NEGATIVE:
+						case DialogInterface.BUTTON_POSITIVE:
 							EventUtil.Main_Photo.rcpt_phonepop_register(baseContext);
 							startActivity(RequestSMSActivity.class);
 							break;
-						case DialogInterface.BUTTON_POSITIVE:
+						case DialogInterface.BUTTON_NEGATIVE:
 							EventUtil.Main_Photo.rcpt_phonepop_later(baseContext);
 							dialog.dismiss();
 							break;
@@ -203,7 +203,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				}
 			};
 			AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.bind_phone_attention)
-					.setNegativeButton(R.string.bind_now, listener).setPositiveButton(R.string.bind_later, listener).create();
+			        .setNegativeButton(R.string.bind_later, listener).setPositiveButton(R.string.bind_now, listener).create();
 			dialog.show();
 		}
 	}

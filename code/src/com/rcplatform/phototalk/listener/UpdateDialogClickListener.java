@@ -27,11 +27,11 @@ public class UpdateDialogClickListener implements OnClickListener {
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
-			case DialogInterface.BUTTON_NEGATIVE:
+			case DialogInterface.BUTTON_POSITIVE:
 				EventUtil.Main_Photo.rcpt_updatepop_update(mContext);
 				Utils.searchAppInGooglePlay(mContext, Constants.PAGEAGE);
 				break;
-			case DialogInterface.BUTTON_POSITIVE:
+			case DialogInterface.BUTTON_NEGATIVE:
 				EventUtil.Main_Photo.rcpt_updatepop_later(mContext);
 				PrefsUtils.AppInfo.setLastCheckUpdateTime(mContext, System.currentTimeMillis());
 				break;
