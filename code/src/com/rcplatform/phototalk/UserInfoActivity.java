@@ -254,10 +254,12 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void getFacebookInfo() {
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		mFacebookClient.getFacebookInfo(new OnGetThirdPartInfoSuccessListener() {
 
 			@Override
 			public void onGetFail() {
+				dismissLoadingDialog();
 			}
 
 			@Override
@@ -265,6 +267,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 				saveThirdInfo(FriendType.FACEBOOK, friends, user);
 				PrefsUtils.User.ThirdPart.setFacebookUserName(UserInfoActivity.this, getCurrentUser().getRcId(), user.getNick());
 				tvFacebookAuth.setText(user.getNick());
+				dismissLoadingDialog();
 			}
 		});
 	}

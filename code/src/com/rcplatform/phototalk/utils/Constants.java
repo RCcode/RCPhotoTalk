@@ -58,11 +58,13 @@ public class Constants {
 	
 	public static final String VK_INVITE_IMAGE="photo208095303_304829648";
 
-	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 24 * 2;
+	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 2;
 
 	public static String DEVICE_ID;
 
 	public static String LANGUAGE;
+	
+	public static final String PAGEAGE="com.rcplatform.phototalk";
 
 	public static final String INVITE_JOIN_IMAGE_URL = "https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-prn1/943638_133864436812838_2050964251_n.jpg";
 
@@ -132,7 +134,7 @@ public class Constants {
 	}
 
 	public static class Message {
-
+		
 		public static final String MESSAGE_CONTENT_KEY = "message_content";
 
 		public static final String MESSAGE_ACTION_MSG = "1";
@@ -154,8 +156,14 @@ public class Constants {
 		public static final String MESSAGE_APP_PUSH_MESSAGE = "11";
 
 		public static final int MESSAGE_APP_PUSH_MESSAGE_INT = 11;
+		
+		public static final String MESSAGE_TYPE_KEY="messagetype";
+		
+		public static final String MESSAGE_TYPE_NEW_INFORMATIONS="newinformation";
+		
+		public static final String MESSAGE_TYPE_NEW_RECOMMENDS="newrecommends";
 	}
-
+	
 	public static class GCM {
 
 		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";

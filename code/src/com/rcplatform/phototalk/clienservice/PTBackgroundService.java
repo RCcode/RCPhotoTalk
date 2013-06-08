@@ -58,7 +58,7 @@ public class PTBackgroundService extends Service {
 
 	private static final long BIND_STATE_CHECK_DELAY_TIME = 1000 * 60;
 	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 60 * 30;
-	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 60 * 24;
+	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 60 * 2;
 
 	private static final long MAX_THIRD_PART_SYNC_SPACING_TIME = 1000 * 60 * 60 * 24 * 7;
 
@@ -409,23 +409,26 @@ public class PTBackgroundService extends Service {
 	}
 
 	private void onFacebookInfoloaded(GraphUser user, List<ThirdPartUser> friends) {
-		PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends, FriendType.FACEBOOK);
-		PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getRcId());
-		mFacebookAsyncTask = new ThirdPartInfoUploadTask(getApplicationContext(), friends, ThirdPartUtils.parserFacebookUserToThirdPartUser(user),
-				FriendType.FACEBOOK, new RCPlatformResponseHandler() {
+		if (mCurrentUser != null && ThirdPartUtils.isFacebookVlidate(getApplicationContext())) {
+			PhotoTalkDatabaseFactory.getDatabase().saveThirdPartFriends(friends, FriendType.FACEBOOK);
+			PrefsUtils.User.ThirdPart.setFacebookUserName(this, getCurrentUser().getRcId(), ThirdPartUtils.parserFacebookUserToThirdPartUser(user).getNick());
+			PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getRcId());
+			mFacebookAsyncTask = new ThirdPartInfoUploadTask(getApplicationContext(), friends, ThirdPartUtils.parserFacebookUserToThirdPartUser(user),
+					FriendType.FACEBOOK, new RCPlatformResponseHandler() {
 
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getRcId());
-						LogUtil.e("upload facebook success");
-					}
+						@Override
+						public void onSuccess(int statusCode, String content) {
+							PrefsUtils.User.ThirdPart.refreshFacebookAsyncTime(getApplicationContext(), mCurrentUser.getRcId());
+							LogUtil.e("upload facebook success");
+						}
 
-					@Override
-					public void onFailure(int errorCode, String content) {
+						@Override
+						public void onFailure(int errorCode, String content) {
 
-					}
-				});
-		mFacebookAsyncTask.start();
+						}
+					});
+			mFacebookAsyncTask.start();
+		}
 	}
 
 	private BroadcastReceiver mTimeTickReceiver = new BroadcastReceiver() {
@@ -437,10 +440,12 @@ public class PTBackgroundService extends Service {
 			if (mCurrentUser != null) {
 				if (ThirdPartUtils.isVKVlidated(getApplicationContext(), mCurrentUser.getRcId())
 						&& (currentTime - PrefsUtils.User.ThirdPart.getVKSyncTime(getApplicationContext(), mCurrentUser.getRcId())) > MAX_THIRD_PART_SYNC_SPACING_TIME) {
+					LogUtil.e("need to update vk info");
 					updateVKInfo();
 				}
 				if (ThirdPartUtils.isFacebookVlidate(getApplicationContext())
 						&& (currentTime - PrefsUtils.User.ThirdPart.getFacebookLastAsyncTime(getApplicationContext(), mCurrentUser.getRcId())) > MAX_THIRD_PART_SYNC_SPACING_TIME) {
+					LogUtil.e("need to update facebook info");
 					uploadFacebookInfo();
 				}
 			}
