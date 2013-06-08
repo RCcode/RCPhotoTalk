@@ -3,14 +3,15 @@ package com.rcplatform.phototalk;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -26,7 +27,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 import com.rcplatform.phototalk.request.JSONConver;
@@ -250,11 +254,20 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 		@Override
 		public void onSuccess(int statusCode, String content) {
+
+			try {
+				JSONObject jsonObject = new JSONObject(content);
+				List<Friend> recommends = JSONConver.jsonToFriends(jsonObject.getJSONArray("recommendUsers").toString());
+				UserInfo userInfo = JSONConver.jsonToUserInfo(content);
+				PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
+				getPhotoTalkApplication().setCurrentUser(userInfo);
+				PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
+				loginSuccess(userInfo);
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
 			dismissLoadingDialog();
-			UserInfo userInfo = JSONConver.jsonToUserInfo(content);
-			userInfo.setShowRecommends(UserInfo.NOT_FIRST_TIME);
-			PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
-			loginSuccess(userInfo);
+			onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 		}
 
 		@Override
@@ -265,7 +278,6 @@ public class PlatformEditActivity extends ImagePickActivity {
 	};
 
 	private void loginSuccess(UserInfo userInfo) {
-		getPhotoTalkApplication().setCurrentUser(mUserInfo);
 		Intent intent = new Intent(this, InitPageActivity.class);
 		intent.putExtra(PARAM_USER, userInfo);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -276,7 +288,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 	protected void onImageReceive(Uri imageBaseUri, String imagePath) {
 		super.onImageReceive(imageBaseUri, imagePath);
 		mHeadImagePath = imagePath;
-		new LoadImageTask(ivHead).execute(imageBaseUri, Uri.parse(imagePath));
+		mImageLoader.displayImage("file:///" + imagePath, ivHead, ImageOptionsFactory.getHeadImageOptions());
 	}
 
 	@Override

@@ -78,6 +78,8 @@ public class PhotoTalkUtils {
 
 	public static void buildAppList(Context context, LinearLayout linearApps, List<AppInfo> apps, ImageLoader loader) {
 		for (AppInfo info : apps) {
+			if(info.getAppPackage().equals("com.rcplatform.phototalk"))
+				continue;
 			linearApps.addView(getAppImage(context, info, loader));
 		}
 	}

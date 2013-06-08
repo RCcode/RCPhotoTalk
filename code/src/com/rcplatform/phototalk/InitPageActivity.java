@@ -146,7 +146,7 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 		super.onActivityResult(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			UserInfo userInfo = (UserInfo) data.getSerializableExtra(LoginActivity.RESULT_KEY_USERINFO);
-			if (userInfo.getShowRecommends() == 1) {
+			if (userInfo.getShowRecommends() == UserInfo.NOT_FIRST_TIME) {
 				startActivity(HomeActivity.class);
 			} else {
 				startActivity(AddFriendsActivity.class);

@@ -166,32 +166,33 @@ public class EditPictureActivity extends BaseActivity {
 		@Override
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case AudioRecordButton.AUDIO_RECORD_TOO_SHORT:
-					tooShortLayout.setVisibility(View.VISIBLE);
-					voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END, 1000);
-					break;
-				case AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END:
-					tooShortLayout.setVisibility(View.GONE);
-					break;
-				case AudioRecordButton.AUDIO_RECORD_START:
-					recordDisplayLayout.setVisibility(View.VISIBLE);
-					isRecording = true;
-					recordLast = (Integer) msg.obj;
-					voiceRecordHandler.sendEmptyMessage(AudioRecordButton.AUDIO_RECORDING);
-					break;
+			case AudioRecordButton.AUDIO_RECORD_TOO_SHORT:
+				tooShortLayout.setVisibility(View.VISIBLE);
+				voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END, 1000);
+				mButtonTimeLimit.setVisibility(View.VISIBLE);
+				break;
+			case AudioRecordButton.AUDIO_RECORD_TOO_SHORT_SHOW_END:
+				tooShortLayout.setVisibility(View.GONE);
+				break;
+			case AudioRecordButton.AUDIO_RECORD_START:
+				recordDisplayLayout.setVisibility(View.VISIBLE);
+				isRecording = true;
+				recordLast = (Integer) msg.obj;
+				voiceRecordHandler.sendEmptyMessage(AudioRecordButton.AUDIO_RECORDING);
+				break;
 
-				case AudioRecordButton.AUDIO_RECORDING:
-					if (isRecording) {
-						tvVoiceRecordSecond.setText(recordLast.toString() + "s");
-						voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORDING, 1000);
-					}
-					recordLast -= 1;
-					break;
+			case AudioRecordButton.AUDIO_RECORDING:
+				if (isRecording) {
+					tvVoiceRecordSecond.setText(recordLast.toString() + "s");
+					voiceRecordHandler.sendEmptyMessageDelayed(AudioRecordButton.AUDIO_RECORDING, 1000);
+				}
+				recordLast -= 1;
+				break;
 
-				case AudioRecordButton.AUDIO_RECORD_END:
-					recordDisplayLayout.setVisibility(View.GONE);
-					isRecording = false;
-					break;
+			case AudioRecordButton.AUDIO_RECORD_END:
+				recordDisplayLayout.setVisibility(View.GONE);
+				isRecording = false;
+				break;
 			}
 		}
 	};
@@ -247,9 +248,14 @@ public class EditPictureActivity extends BaseActivity {
 				audioBtn.setVisibility(4);
 				make_voice.setVisibility(0);
 				// mButtonTimeLimit.setClickable(false);
-				mButtonTimeLimit.setVisibility(View.GONE);
+				// mButtonTimeLimit.setVisibility(View.GONE);
 				voice_size.setText(((n < timeLimit) ? n : timeLimit) + "s");
 
+			}
+
+			@Override
+			public void onStartRecording() {
+				mButtonTimeLimit.setVisibility(View.GONE);
 			}
 		});
 
@@ -335,112 +341,111 @@ public class EditPictureActivity extends BaseActivity {
 		public void onClick(View v) {
 			int tag = (Integer) v.getTag();
 			switch (tag) {
-				case UNDO_ON_CLICK:
+			case UNDO_ON_CLICK:
+				setSaveable(true);
+				mEditePicView.undo();
+				break;
+
+			case PLAY_VOICE:
+
+				if (player == null) {
+					try {
+
+						player = new MediaPlayer();
+						FileInputStream fis = new FileInputStream(voicePath);
+						player.setDataSource(fis.getFD());
+						player.setAudioStreamType(AudioManager.STREAM_RING);
+						player.prepare();
+						player.setOnCompletionListener(new OnCompletionListener() {
+
+							@Override
+							public void onCompletion(MediaPlayer mp) {
+								player.release();
+								player = null;
+								isPlayer = false;
+								playEndMusic();
+							}
+						});
+					} catch (Exception e) {
+					}
+				}
+
+				if (!isPlayer) {
+					player.start();
+					play_voice.setBackgroundResource(R.drawable.voice_pause);
+					isPlayer = true;
+				} else {
+					player.pause();
+					play_voice.setBackgroundResource(R.drawable.play_voice);
+					isPlayer = false;
+				}
+
+				break;
+			case DELETE_VOICE:
+				EventUtil.Main_Photo.rcpt_recorddelete(baseContext);
+				File file = new File(voicePath);
+				if (file.exists()) {
+					file.delete();
+				}
+				voicePath = null;
+				// mButtonTimeLimit.setClickable(true);
+				mButtonTimeLimit.setVisibility(View.VISIBLE);
+				audioBtn.setVisibility(0);
+				make_voice.setVisibility(4);
+				break;
+			case TUYA_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_graffiti(baseContext);
+				if (mEditePicView.openOrCloseTuya()) {
+					mButtonTuya.setBackgroundResource(R.drawable.scrawl_press);
+					showColorPickerDialog();
+					mEditableViewGroup.setTuyaMode(true);
+					mButtonUndo.setVisibility(View.VISIBLE);
 					setSaveable(true);
-					mEditePicView.undo();
-					break;
+				} else {
+					mButtonTuya.setBackgroundResource(R.drawable.scrawl_normal);
+					mButtonUndo.setVisibility(View.GONE);
+					mEditableViewGroup.setTuyaMode(false);
+					if (colorPickerDialog.isShowing())
+						colorPickerDialog.dismiss();
+				}
 
-				case PLAY_VOICE:
+				break;
+			case TIMELIMIT_ON_CLICK:
+				if (!isShowSelectLayout) {
+					EventUtil.Main_Photo.rcpt_timer(baseContext);
+					showTimeLimitView();
+				} else {
+					select_layout.setVisibility(View.GONE);
+					isShowSelectLayout = false;
+				}
+				break;
 
-					if (player == null) {
-						try {
-
-							player = new MediaPlayer();
-							FileInputStream fis = new FileInputStream(voicePath);
-							player.setDataSource(fis.getFD());
-							player.setAudioStreamType(AudioManager.STREAM_RING);
-							player.prepare();
-							player.setOnCompletionListener(new OnCompletionListener() {
-
-								@Override
-								public void onCompletion(MediaPlayer mp) {
-									player.release();
-									player = null;
-									isPlayer = false;
-									playEndMusic();
-								}
-							});
-						}
-						catch (Exception e) {
-						}
-					}
-
-					if (!isPlayer) {
-						player.start();
-						play_voice.setBackgroundResource(R.drawable.voice_pause);
-						isPlayer = true;
-					} else {
-						player.pause();
-						play_voice.setBackgroundResource(R.drawable.play_voice);
-						isPlayer = false;
-					}
-
-					break;
-				case DELETE_VOICE:
-					EventUtil.Main_Photo.rcpt_recorddelete(baseContext);
-					File file = new File(voicePath);
-					if (file.exists()) {
-						file.delete();
-					}
-					voicePath = null;
-					// mButtonTimeLimit.setClickable(true);
-					mButtonTimeLimit.setVisibility(View.VISIBLE);
-					audioBtn.setVisibility(0);
-					make_voice.setVisibility(4);
-					break;
-				case TUYA_ON_CLICK:
-					EventUtil.Main_Photo.rcpt_graffiti(baseContext);
-					if (mEditePicView.openOrCloseTuya()) {
-						mButtonTuya.setBackgroundResource(R.drawable.scrawl_press);
-						showColorPickerDialog();
-						mEditableViewGroup.setTuyaMode(true);
-						mButtonUndo.setVisibility(View.VISIBLE);
-						setSaveable(true);
-					} else {
-						mButtonTuya.setBackgroundResource(R.drawable.scrawl_normal);
-						mButtonUndo.setVisibility(View.GONE);
-						mEditableViewGroup.setTuyaMode(false);
-						if (colorPickerDialog.isShowing())
-							colorPickerDialog.dismiss();
-					}
-
-					break;
-				case TIMELIMIT_ON_CLICK:
-					if (!isShowSelectLayout) {
-						EventUtil.Main_Photo.rcpt_timer(baseContext);
-						showTimeLimitView();
-					} else {
-						select_layout.setVisibility(View.GONE);
-						isShowSelectLayout = false;
-					}
-					break;
-
-				case SAVE_PICTURE_ON_CLICK:
-					EventUtil.Main_Photo.rcpt_photosave(baseContext);
-					if (enableSave) {
-						mEditableViewGroup.setDrawingCacheEnabled(true);
-						mEditableViewGroup.buildDrawingCache();
-						saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getCameraPath());
-					}
-					break;
-				case SEND_ON_CLICK:
-					EventUtil.Main_Photo.rcpt_sendbutton(baseContext);
+			case SAVE_PICTURE_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_photosave(baseContext);
+				if (enableSave) {
 					mEditableViewGroup.setDrawingCacheEnabled(true);
 					mEditableViewGroup.buildDrawingCache();
-					isSave = true;
-					saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getSendFileCachePath() + "/Photochat.jpg");
-					if (friend == null) {
-						startSelectFriendActivity();
-					} else {
-						Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
-						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-						startActivity(intent);
-					}
-					break;
-				case CLOSE_ON_CLICK:
-					mEditePicView.recyle();
-					finish();
-					break;
+					saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getCameraPath());
+				}
+				break;
+			case SEND_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_sendbutton(baseContext);
+				mEditableViewGroup.setDrawingCacheEnabled(true);
+				mEditableViewGroup.buildDrawingCache();
+				isSave = true;
+				saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getSendFileCachePath() + "/Photochat.jpg");
+				if (friend == null) {
+					startSelectFriendActivity();
+				} else {
+					Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					startActivity(intent);
+				}
+				break;
+			case CLOSE_ON_CLICK:
+				mEditePicView.recyle();
+				finish();
+				break;
 			}
 		}
 	};
@@ -453,14 +458,11 @@ public class EditPictureActivity extends BaseActivity {
 			endplayer.setAudioStreamType(AudioManager.STREAM_RING);
 			endplayer.setDataSource(fileDescriptor.getFileDescriptor(), fileDescriptor.getStartOffset(), fileDescriptor.getLength());
 			endplayer.prepare();
-		}
-		catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-		}
-		catch (IllegalStateException e) {
+		} catch (IllegalStateException e) {
 			e.printStackTrace();
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		endplayer.setOnCompletionListener(new OnCompletionListener() {
@@ -470,8 +472,7 @@ public class EditPictureActivity extends BaseActivity {
 				try {
 					mp.release();
 					play_voice.setBackgroundResource(R.drawable.play_voice);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 			}
 		});
@@ -491,57 +492,57 @@ public class EditPictureActivity extends BaseActivity {
 
 		int action = event.getAction();
 		switch (action) {
-			case MotionEvent.ACTION_DOWN:
-				if (mEditText == null) {
-					EventUtil.Main_Photo.rcpt_text(baseContext);
-					mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
-					editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
-					final Paint paint = editText.getPaint();
-					editText.setFocusable(true);
-					editText.setOnFocusChangeListener(new OnFocusChangeListener() {
+		case MotionEvent.ACTION_DOWN:
+			if (mEditText == null) {
+				EventUtil.Main_Photo.rcpt_text(baseContext);
+				mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
+				editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
+				final Paint paint = editText.getPaint();
+				editText.setFocusable(true);
+				editText.setOnFocusChangeListener(new OnFocusChangeListener() {
 
-						@Override
-						public void onFocusChange(View v, boolean hasFocus) {
-							// editText.setFocusable(true);
-							if (!hasFocus) {
-								if (editText.getText() == null || editText.getText().length() == 0) {
-									mEditText.setVisibility(View.GONE);
-									mEditText = null;
-								}
-							}
-						}
-					});
-					editText.addTextChangedListener(new TextWatcher() {
-
-						@Override
-						public void onTextChanged(CharSequence s, int start, int before, int count) {
-							setSaveable(true);
-						}
-
-						@Override
-						public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-						}
-
-						@Override
-						public void afterTextChanged(Editable s) {
-							float length = paint.measureText(s.toString());
-							if (length == 0) {
+					@Override
+					public void onFocusChange(View v, boolean hasFocus) {
+						// editText.setFocusable(true);
+						if (!hasFocus) {
+							if (editText.getText() == null || editText.getText().length() == 0) {
 								mEditText.setVisibility(View.GONE);
 								mEditText = null;
 							}
-							if (length > app.getScreenWidth()) {
-								s.delete(s.length() - 1, s.length());
-							}
 						}
-					});
-					mEditableViewGroup.addEditeTextView(mEditText);
-					setSaveable(true);
-				}
-				break;
+					}
+				});
+				editText.addTextChangedListener(new TextWatcher() {
 
-			default:
-				break;
+					@Override
+					public void onTextChanged(CharSequence s, int start, int before, int count) {
+						setSaveable(true);
+					}
+
+					@Override
+					public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+					}
+
+					@Override
+					public void afterTextChanged(Editable s) {
+						float length = paint.measureText(s.toString());
+						if (length == 0) {
+							mEditText.setVisibility(View.GONE);
+							mEditText = null;
+						}
+						if (length > app.getScreenWidth()) {
+							s.delete(s.length() - 1, s.length());
+						}
+					}
+				});
+				mEditableViewGroup.addEditeTextView(mEditText);
+				setSaveable(true);
+			}
+			break;
+
+		default:
+			break;
 		}
 
 		return super.onTouchEvent(event);
@@ -630,8 +631,7 @@ public class EditPictureActivity extends BaseActivity {
 					os.flush();
 					os.close();
 					handler.sendEmptyMessage(SAVE_SUCCESS);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					handler.sendEmptyMessage(NO_SDC);
 					e.printStackTrace();
 				}
@@ -645,39 +645,39 @@ public class EditPictureActivity extends BaseActivity {
 		public void handleMessage(android.os.Message msg) {
 			dismissLoadingDialog();
 			switch (msg.what) {
-				case SAVE_SUCCESS:
-					// setSaveable(false);
-					if (isSave) {
-						if (friend != null) {
-							send();
-						}
-					} else {
-						// 保存成功后 刷新本地相册
-						EditPictureActivity.this.getBaseContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
-						                                                                + Environment.getExternalStorageDirectory())));
-						Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
+			case SAVE_SUCCESS:
+				// setSaveable(false);
+				if (isSave) {
+					if (friend != null) {
+						send();
 					}
-					break;
-				case SAVE_FAIL:
-					// if (waitDialog != null && waitDialog.isShowing())
-					// waitDialog.hide();
-					Toast.makeText(EditPictureActivity.this, R.string.save_fail, Toast.LENGTH_SHORT).show();
-					break;
-				case NO_SDC:
-					// if (waitDialog != null && waitDialog.isShowing())
-					// waitDialog.hide();
-					Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
-					break;
-				case SET_LIMIT:
+				} else {
+					// 保存成功后 刷新本地相册
+					EditPictureActivity.this.getBaseContext().sendBroadcast(
+							new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+					Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
+				}
+				break;
+			case SAVE_FAIL:
+				// if (waitDialog != null && waitDialog.isShowing())
+				// waitDialog.hide();
+				Toast.makeText(EditPictureActivity.this, R.string.save_fail, Toast.LENGTH_SHORT).show();
+				break;
+			case NO_SDC:
+				// if (waitDialog != null && waitDialog.isShowing())
+				// waitDialog.hide();
+				Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
+				break;
+			case SET_LIMIT:
 
-					timeLimit = (Integer) msg.obj;
-					EventUtil.Main_Photo.rcpt_timer(baseContext, timeLimit);
-					mButtonTimeLimit.setText(timeLimit + "");
-					mEditePicView.setTimeLimit(timeLimit);
-					audioBtn.setMaxRecoedSize(timeLimit);
-					select_layout.setVisibility(View.GONE);
-					isShowSelectLayout = false;
-					break;
+				timeLimit = (Integer) msg.obj;
+				EventUtil.Main_Photo.rcpt_timer(baseContext, timeLimit);
+				mButtonTimeLimit.setText(timeLimit + "");
+				mEditePicView.setTimeLimit(timeLimit);
+				audioBtn.setMaxRecoedSize(timeLimit);
+				select_layout.setVisibility(View.GONE);
+				isShowSelectLayout = false;
+				break;
 			}
 
 		};
@@ -708,8 +708,7 @@ public class EditPictureActivity extends BaseActivity {
 		try {
 			tempPath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempPath);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		File file = new File(tempPath);
@@ -738,24 +737,23 @@ public class EditPictureActivity extends BaseActivity {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 
 			AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
-			dialogBuilder.setTitle(R.string.operation)
-			        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+			dialogBuilder.setTitle(R.string.operation).setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-				        @Override
-				        public void onClick(DialogInterface dialog, int which) {
-					        dialog.cancel();
-					        finish();
-				        }
-			        }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+					finish();
+				}
+			}).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
-				        @Override
-				        public void onClick(DialogInterface dialog, int which) {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
 
-					        // register(LoginActivity.this, email,
-					        // psw,
-					        // nick);
-				        }
-			        });
+					// register(LoginActivity.this, email,
+					// psw,
+					// nick);
+				}
+			});
 			dialogBuilder.create().show();
 
 		}

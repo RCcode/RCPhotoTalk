@@ -139,9 +139,10 @@ public class Information {
 		if (!(o instanceof Information))
 			return false;
 		Information info = (Information) o;
-		if (info.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE)
+		if (info.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			return this.getSender().getRcId().equals(info.getSender().getRcId()) && this.getReceiver().getRcId().equals(info.getReceiver().getRcId())
 					&& this.type == info.getType();
+		}
 		return this.getSender().getRcId().equals(info.getSender().getRcId()) && this.getReceiver().getRcId().equals(info.getReceiver().getRcId())
 				&& this.createtime == info.getCreatetime() && this.type == info.getType();
 	}

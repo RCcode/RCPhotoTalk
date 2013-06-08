@@ -169,9 +169,6 @@ public class ImagePickActivity extends BaseActivity {
 		mImageSelectPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 	}
 
-	protected void showImage(String path, Uri imageUri, ImageView imageView) {
-		new LoadImageTask(imageView).execute(imageUri, Uri.parse(path));
-	}
 
 	@Override
 	protected void onDestroy() {
@@ -186,51 +183,6 @@ public class ImagePickActivity extends BaseActivity {
 		}
 	}
 
-	public class LoadImageTask extends AsyncTask<Uri, Void, Bitmap> {
-
-		private ImageView mImageView;
-
-		public LoadImageTask(ImageView imageView) {
-			this.mImageView = imageView;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		}
-
-		@Override
-		protected Bitmap doInBackground(Uri... params) {
-			Uri imageUri = params[0];
-			String headPath = params[1].getPath();
-			Bitmap bitmap = null;
-			try {
-				int rotateAngel = Utils.getUriImageAngel(ImagePickActivity.this, imageUri);
-				int nWidth = 0, nHeight = 0;
-				nHeight = mImageView.getHeight();
-				nWidth = mImageView.getWidth();
-				bitmap = Utils.decodeSampledBitmapFromFile(headPath, nWidth, nHeight, rotateAngel);
-			} catch (OutOfMemoryError e) {
-				e.printStackTrace();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return bitmap;
-		}
-
-		@Override
-		protected void onPostExecute(Bitmap result) {
-			super.onPostExecute(result);
-			dismissLoadingDialog();
-			if (result == null) {
-				DialogUtil.showToast(getApplicationContext(), R.string.image_unsupport, Toast.LENGTH_SHORT);
-			} else {
-				bitmaps.add(result);
-				mImageView.setImageBitmap(result);
-			}
-		}
-	}
 
 	protected void cutImage(Uri uri, int width, int height) {
 		Intent intent = new Intent(this, ImageCutActivity.class);
