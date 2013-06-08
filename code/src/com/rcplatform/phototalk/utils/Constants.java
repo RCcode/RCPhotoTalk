@@ -58,7 +58,7 @@ public class Constants {
 	
 	public static final String VK_INVITE_IMAGE="photo208095303_304829648";
 
-	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 24 * 2;
+	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 2;
 
 	public static String DEVICE_ID;
 

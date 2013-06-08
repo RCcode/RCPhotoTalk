@@ -58,7 +58,7 @@ public class PTBackgroundService extends Service {
 
 	private static final long BIND_STATE_CHECK_DELAY_TIME = 1000 * 60;
 	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 60 * 30;
-	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 60 * 24;
+	private static final long MAX_BIND_WAITING_TIME = 1000 * 60 * 60 * 2;
 
 	private static final long MAX_THIRD_PART_SYNC_SPACING_TIME = 1000 * 60 * 60 * 24 * 7;
 
