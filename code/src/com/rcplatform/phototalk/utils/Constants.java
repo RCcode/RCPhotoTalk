@@ -134,7 +134,7 @@ public class Constants {
 	}
 
 	public static class Message {
-
+		
 		public static final String MESSAGE_CONTENT_KEY = "message_content";
 
 		public static final String MESSAGE_ACTION_MSG = "1";
@@ -156,8 +156,14 @@ public class Constants {
 		public static final String MESSAGE_APP_PUSH_MESSAGE = "11";
 
 		public static final int MESSAGE_APP_PUSH_MESSAGE_INT = 11;
+		
+		public static final String MESSAGE_TYPE_KEY="messagetype";
+		
+		public static final String MESSAGE_TYPE_NEW_INFORMATIONS="newinformation";
+		
+		public static final String MESSAGE_TYPE_NEW_RECOMMENDS="newrecommends";
 	}
-
+	
 	public static class GCM {
 
 		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
