@@ -142,9 +142,9 @@ private Button seach_delete_btn;
 
 	protected void setListData(List<Friend> friends, List<Friend> invateFriends, ExpandableListView listView) {
 		Map<Integer, List<Friend>> baseFriendsList = new HashMap<Integer, List<Friend>>();
-		if (friends != null && friends.size() > 0) {
-			baseFriendsList.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS, friends);
-		}
+//		if (friends != null && friends.size() > 0) {
+//			baseFriendsList.put(PhotoTalkFriendsAdapter.TYPE_RECOMMENDS, friends);
+//		}
 		if (invateFriends != null && invateFriends.size() > 0) {
 			baseFriendsList.put(mItemType, invateFriends);
 		}
