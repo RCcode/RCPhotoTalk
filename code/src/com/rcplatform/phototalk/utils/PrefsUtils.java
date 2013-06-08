@@ -66,7 +66,7 @@ public class PrefsUtils {
 		private static final String PREF_KEY_HAS_USED = "hasused";
 		private static final String PREF_KEY_LAST_RCID = "lastrcid";
 
-		public static void setLoginUser(Context context, UserInfo userInfo) {
+		public synchronized static void setLoginUser(Context context, UserInfo userInfo) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
 			sh.edit().putString(PREF_KEY_LOGIN_USER, userInfo.getRcId()).commit();
 			User.saveUserInfo(context, userInfo.getRcId(), userInfo);
@@ -218,7 +218,7 @@ public class PrefsUtils {
 				return getPreference(context, pref).getBoolean(PREF_KEY_ATTENTION_BIND_PHONE, false);
 			}
 
-			public static void saveBindedPhoneNumber(Context context, String phoneNumber, String pref) {
+			public static synchronized void saveBindedPhoneNumber(Context context, String phoneNumber, String pref) {
 				SharedPreferences sharedPreferences = getPreference(context, pref);
 				sharedPreferences.edit().putString(Constants.KEY_PHONE, phoneNumber).commit();
 			}
@@ -302,7 +302,7 @@ public class PrefsUtils {
 		 * @param userInfo
 		 *            用户登录信息
 		 */
-		public static void saveUserInfo(Context context, String pref, UserInfo userInfo) {
+		public static synchronized void saveUserInfo(Context context, String pref, UserInfo userInfo) {
 			SharedPreferences sharedPreferences = getPreference(context, pref);
 			sharedPreferences.edit().putString(Constants.KEY_EMAIL, userInfo.getEmail()).putString(Constants.KEY_USER_TOKEN, userInfo.getToken())
 					.putString(Constants.KEY_NICK, userInfo.getNickName()).putString(Constants.KEY_HEADURL, userInfo.getHeadUrl())
@@ -374,7 +374,7 @@ public class PrefsUtils {
 			return getPreference(context, pref).getString(PREF_KEY_TRENDS_MAX_URL, null);
 		}
 
-		public static void setLoadedFriends(Context context, String pref) {
+		public static synchronized void setLoadedFriends(Context context, String pref) {
 			getPreference(context, pref).edit().putBoolean(PREF_KEY_LOADED_FRIENDS, true).commit();
 		}
 

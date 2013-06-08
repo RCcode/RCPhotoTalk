@@ -32,7 +32,7 @@ public class CheckUpdateTask {
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content).getJSONObject("appConfig");
-					String version = jsonObject.getString("clientVersion");
+					String version = jsonObject.getString("serverVersion");
 					if (!mContext.getString(R.string.version).equals(version)) {
 						String newVersion = jsonObject.getString("clientVersion");
 						if (isAutoRequest && newVersion.equals(PrefsUtils.AppInfo.getNeverAttentionVersion(mContext))) {

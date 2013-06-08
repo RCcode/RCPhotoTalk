@@ -111,6 +111,7 @@ public class AudioRecordButton extends Button {
 			case MotionEvent.ACTION_DOWN:
 				setBackgroundResource(R.drawable.btn_download_p);
 				state = 0;
+				mOnRecordingListener.onStartRecording();
 				// 开始录音
 				play(mFilePath);
 				break;
@@ -240,6 +241,7 @@ public class AudioRecordButton extends Button {
 	}
 
 	public static interface OnRecordingListener {
+		public void onStartRecording();
 
 		public void onRecording(int recordedSecord, int amplitude);
 

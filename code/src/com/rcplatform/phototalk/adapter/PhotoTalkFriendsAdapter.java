@@ -33,11 +33,12 @@ import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 
 public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	public static final int TYPE_RECOMMENDS = 0;
-	public static final int TYPE_CONTACTS = 1;
-	public static final int TYPE_FACEBOOK = 2;
-	public static final int TYPE_VK = 5;
-	public static final int TYPE_FRIEND_ADDED = 3;
-	public static final int TYPE_FRIEND_NEW = 4;
+	public static final int TYPE_THIRD_RECOMMENDS = 1;
+	public static final int TYPE_CONTACTS = 2;
+	public static final int TYPE_FACEBOOK = 3;
+	public static final int TYPE_VK = 6;
+	public static final int TYPE_FRIEND_ADDED = 4;
+	public static final int TYPE_FRIEND_NEW = 5;
 
 	public static final int TYPE_CHILD_RECOMMENT = 0;
 	public static final int TYPE_CHILD_CONTACT = 1;
@@ -143,15 +144,25 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		}
 		TextView tvTitle = (TextView) convertView.findViewById(R.id.content_title);
 		int titleType = mTitles.get(groupPosition);
+		ImageView ivIcon = (ImageView) convertView.findViewById(R.id.group_icon);
+		ivIcon.setVisibility(View.GONE);
+		if (isExpanded)
+			ivIcon.setImageResource(R.drawable.group_open);
+		else
+			ivIcon.setImageResource(R.drawable.group_close);
 		if (titleType == TYPE_RECOMMENDS) {
-			tvTitle.setText(R.string.firend_list_used_photochat_friend_title);
+			tvTitle.setText(R.string.my_firend_suggested_title);
+			ivIcon.setVisibility(View.VISIBLE);
 		} else if (titleType == TYPE_FRIEND_ADDED) {
 			tvTitle.setText(R.string.my_friends_added);
 		} else if (titleType == TYPE_FRIEND_NEW) {
 			tvTitle.setText(R.string.my_friends_new);
+		} else if (titleType == TYPE_THIRD_RECOMMENDS) {
+			tvTitle.setText(R.string.firend_list_used_photochat_friend_title);
 		} else {
 			tvTitle.setText(R.string.firend_list_invite_friend_title);
 		}
+
 		return convertView;
 	}
 
@@ -284,12 +295,12 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
 		mImageLoader.displayImage(friend.getHeadUrl(), ivHead);
-		if(friend.getRcId().equals(currentUser.getRcId())){
+		if (friend.getRcId().equals(currentUser.getRcId())) {
 			tvNick.setText(mContext.getString(R.string.list_me, friend.getNickName()));
-		}else{
+		} else {
 			tvNick.setText(friend.getNickName());
 		}
-		
+
 		return convertView;
 	}
 
@@ -327,7 +338,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	@Override
 	public int getChildType(int groupPosition, int childPosition) {
 		int type = mTitles.get(groupPosition);
-		if (type == TYPE_RECOMMENDS)
+		if (type == TYPE_RECOMMENDS || type == TYPE_THIRD_RECOMMENDS)
 			return TYPE_CHILD_RECOMMENT;
 		else if (type == TYPE_FACEBOOK)
 			return TYPE_CHILD_FACEBOOK;

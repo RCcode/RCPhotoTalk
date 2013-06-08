@@ -74,7 +74,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginRight="@dimen/user_detail_source_margin_left"
                             android:background="@drawable/send_friend_head_bg"
-                            android:padding="5dp" >
+                            android:padding="7dp" >
 
                             <ImageView
                                 android:id="@+id/settings_account_head_portrait"
@@ -209,8 +209,8 @@
                             android:layout_width="@dimen/trend_new_icon_width"
                             android:layout_height="@dimen/trend_new_icon_width"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="4dp"
-                            android:layout_toRightOf="@+id/tv_friend_trends"
+                            android:layout_marginRight="4dp"
+                            android:layout_toLeftOf="@+id/trends_to_right"
                             android:visibility="gone" >
 
                             <ImageView
@@ -230,6 +230,7 @@
                         </RelativeLayout>
 
                         <ImageView
+                            android:id="@+id/trends_to_right"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"

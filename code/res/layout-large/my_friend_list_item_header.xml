@@ -9,12 +9,19 @@
         android:id="@+id/content_title"
         android:layout_width="wrap_content"
         android:layout_height="19dp"
-        android:gravity="center_vertical"
         android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         android:paddingLeft="10dp"
         android:text="邀请好友"
         android:textColor="#EEEEEE"
         android:textSize="16sp" />
 
+    <ImageView
+        android:id="@+id/group_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="5dp" />
 
 </RelativeLayout>

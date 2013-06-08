@@ -95,7 +95,7 @@ public class LongClickShowView extends Dialog {
 		 */
 		public LongClickShowView create() {
 			if (dialog == null)
-				dialog = new LongClickShowView(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+				dialog = new LongClickShowView(context, android.R.style.Theme_Black_NoTitleBar);
 			if (dialog.contentView == null) {
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);

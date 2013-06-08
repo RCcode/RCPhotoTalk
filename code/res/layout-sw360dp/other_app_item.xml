@@ -1,26 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/long_press_dialog_bg"
+    android:background="@drawable/app_list_back"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:padding="4dp" >
 
     <ImageView
         android:id="@+id/iv_logo"
-        android:src="@drawable/platform_icon"
         android:layout_width="@dimen/app_icon_width"
-        android:layout_height="@dimen/app_icon_width" />
+        android:layout_height="@dimen/app_icon_width"
+        android:src="@drawable/platform_icon" />
 
     <TextView
         android:id="@+id/tv_account"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical"
-        android:textColor="@color/black"
-        android:textSize="16sp" >
-    </TextView>
+        android:layout_centerInParent="true"
+        android:textColor="@color/login_otherapp_text"
+        android:textSize="16sp" />
 
-</LinearLayout>
+</RelativeLayout>
