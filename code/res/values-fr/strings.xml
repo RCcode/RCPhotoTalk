@@ -27,7 +27,7 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Erreur de format d’e-mail</string>
     <string name="register_password_error">Saisissez un mot de passe comprenant 6 à 20 caractères</string>
-    <string name="net_error">Aucune connexion réseau</string>
+
     <string name="login_title_login_bubble_text">Identifiant</string>
     <string name="login_username_hint">E-mail,RCID</string>
     <string name="login_forget_psw_hint">Mot de passe oublié</string>
@@ -192,5 +192,6 @@
     <string name="login_account_error">Compte ou mot de passe non valide</string>
     <string name="long_long_ago">Il y a longtemps</string>
     <string name="list_me">%1$s(moi)</string>
-
+    <string name="net_error">Échec, réessayez ultérieurement</string>
+    <string name="no_net">Aucune connexion réseau</string>
 </resources>

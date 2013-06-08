@@ -27,7 +27,6 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Falsches E-Mail-Format</string>
     <string name="register_password_error">Bitte geben Sie ein Passwort mit 6-20 Zeichen ein</string>
-    <string name="net_error">Keine Netzwerkverbindung</string>
     <string name="login_title_login_bubble_text">RC-Anmeldung</string>
     <string name="login_username_hint">E-Mail,RCID</string>
     <string name="login_forget_psw_hint">Passwort vergessen</string>
@@ -191,5 +190,8 @@
     <string name="cancel">stornieren</string>
     <string name="login_account_error">Ungültiges Konto oder Passwort</string>
     <string name="long_long_ago">Vor langer Zeit</string>
-   	<string name="list_me">%1$s(me)</string>
+    <string name="list_me">%1$s(me)</string>
+    <string name="net_error">Fehler, bitte versuchen Sie es später erneut</string>
+    <string name="no_net">Keine Netzwerkverbindung</string>
+
 </resources>

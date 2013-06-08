@@ -27,7 +27,7 @@
     <string name="ok">אישור</string>
     <string name="registe_email_error">תבנית דוא"ל שגויה</string>
     <string name="register_password_error">הזן סיסמה באורך 6-20 תווים</string>
-    <string name="net_error">אין חיבור לרשת</string>
+
     <string name="login_title_login_bubble_text">RC כניסת משתמש</string>
     <string name="login_username_hint">דוא"ל,RCID</string>
     <string name="login_forget_psw_hint">שכחת סיסמה</string>
@@ -191,5 +191,6 @@
     <string name="login_account_error">חשבון או סיסמה שגויים</string>
     <string name="long_long_ago">לפני זמן רב</string>
     <string name="list_me">%1$s(לי)</string>
-
+    <string name="net_error">כשל, נסה שנית מאוחר יותר.</string>
+    <string name="no_net">אין חיבור לרשת</string>
 </resources>

@@ -27,7 +27,7 @@
     <string name="ok">확인</string>
     <string name="registe_email_error">이메일 형식 에러</string>
     <string name="register_password_error">6-20 자 길이로 암호를 입력해 주십시오</string>
-    <string name="net_error">네트워크 연결 없음</string>
+
     <string name="login_title_login_bubble_text">RC 사용자 로그인</string>
     <string name="login_username_hint">이메일,RCID</string>
     <string name="login_forget_psw_hint">암호 분실</string>
@@ -190,5 +190,6 @@
     <string name="login_account_error">잘못된 계정 또는 암호</string>
     <string name="long_long_ago">오래 전</string>
     <string name="list_me">%1$s(나를)</string>
-
+    <string name="net_error">실패, 나중에 다시 시도해 주세요</string>
+    <string name="no_net">네트워크 연결 없음</string>
 </resources>

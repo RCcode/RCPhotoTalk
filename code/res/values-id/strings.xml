@@ -27,7 +27,7 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Kesalahan format email</string>
     <string name="register_password_error">Masukkan sandi yang mengandung 6-20 karakter</string>
-    <string name="net_error">Jaringan tidak tersedia</string>
+
     <string name="login_title_login_bubble_text">Login p’guna RC</string>
     <string name="login_username_hint">Email,RCID</string>
     <string name="login_forget_psw_hint">Lupa sandi</string>
@@ -70,13 +70,11 @@
     <string name="reload">Muat ulang</string>
     <string name="will_quit">Klik lagi "Kembali" untuk menutup apl</string>
 
-
     <!-- menu -->
     <string name="take_score">Mengevaluasi</string>
 
     <!-- 我 -->
     <string name="me">saya</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">Mungkin Nanti</string>
@@ -86,7 +84,7 @@
     <string name="bind_now">Daftar sekarang</string>
     <string name="share_complete">SUKSES!</string>
     <string name="save_success">SUKSES!</string>
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">Rekaman terlalu pendek</string>
     <string name="voice_record">Rekam</string>
@@ -172,16 +170,16 @@
     <string name="compact">Kebijakan privasi</string>
     <string name="no_new_version">Phototalk versi terbaru</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Pilih Profil </string>
     <string name="or">atau</string>
     <string name="use_new_info">Gunakan profil baru</string>
-	<string name="other_device_login">Akun Anda sudah dipergunakan di perangkat lain.</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Akun Anda sudah dipergunakan di perangkat lain.</string>
+    <string name="relogin">OK</string>
     <string name="join_message">Foto audio, penghapusan berdasarkan waktu! Bergabung dengan RC PhotoTalk dan berbagi kegembiraan! Tautan unduhan: http://rctalk.me Tambahkan ID saya %1$s setelah Anda membuat akun!</string>
     <string name="invite_message">Foto audio, penghapusan berdasarkan waktu! Bergabung dengan RC PhotoTalk dan berbagi kegembiraan! Tautan unduhan: http://rctalk.me Tambahkan ID saya %1$s setelah Anda membuat akun!</string>
-	<string name="contact_friend">Kontak:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Kontak:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
@@ -191,8 +189,8 @@
     <!-- 对话框&提示 -->
     <string name="cancel">membatalkanें</string>
     <string name="login_account_error">Akun atau sandi tidak valid</string>
-
     <string name="long_long_ago">Sudah lama</string>
     <string name="list_me">%1$s(saya)</string>
-    
+    <string name="net_error">वGagal, coba lagi nanti</string>
+    <string name="no_net">Jaringan tidak tersedia</string>
 </resources>

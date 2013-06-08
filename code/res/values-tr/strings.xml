@@ -27,7 +27,7 @@
     <string name="ok">Tamam</string>
     <string name="registe_email_error">E-posta biçimi hatası</string>
     <string name="register_password_error">Lütfen 6-20 karakter içeren bir parola girin</string>
-    <string name="net_error">Ağ bağlantısı yok</string>
+
     <string name="login_title_login_bubble_text">RC Kul Ot Açma -</string>
     <string name="login_username_hint">E-posta,RCID</string>
     <string name="login_forget_psw_hint">Parolamı unuttum</string>
@@ -193,5 +193,7 @@
     
     <string name="long_long_ago">Uzun süre önce</string>
     <string name="list_me">%1$s(bana)</string>
-
+    
+ 	<string name="net_error">Başarısız oldu, lütfen daha sonra tekrar deneyin</string>
+    <string name="no_net">Ağ bağlantısı yok</string>
 </resources>

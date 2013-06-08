@@ -27,7 +27,6 @@
     <string name="ok">ठीक</string>
     <string name="registe_email_error">ईमेल फ़ॉरमेट त्रुटि</string>
     <string name="register_password_error">कृपया 6-20 वर्ण का पासवर्ड दर्ज करें</string>
-    <string name="net_error">कोई नेटवर्क कनेक्शन नहीं है</string>
     <string name="login_title_login_bubble_text">RC उपयोगकर्ता लॉगइन</string>
     <string name="login_username_hint">ई-मेल,RCID</string>
     <string name="login_forget_psw_hint">पासवर्ड भूल गए</string>
@@ -191,5 +190,7 @@
     <string name="login_account_error">अमान्य खाता या पासवर्ड</string>
     <string name="long_long_ago">बहुत पहले</string>
     <string name="list_me">%1$s(मुझे)</string>
+    <string name="net_error">विफल - कृपया बाद में पुनः प्रयास करें</string>
+    <string name="no_net">कोई नेटवर्क कनेक्शन नहीं है</string>
 
 </resources>
