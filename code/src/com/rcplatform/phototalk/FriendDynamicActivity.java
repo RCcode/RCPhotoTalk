@@ -38,6 +38,7 @@ import com.rcplatform.phototalk.pulltorefresh.library.PullToRefreshListView;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PinyinComparator;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -45,18 +46,30 @@ import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.views.HeadImageView;
 
 public class FriendDynamicActivity extends BaseActivity {
+
 	private PullToRefreshListView friendDynameicList;
+
 	// 好友动态列表使用此adpter
 	private FriendDynamicListAdpter adpter;
+
 	private List<FriendDynamic> listDynamic;
+
 	private ImageButton back_btn;
+
 	private TextView titleContent;
+
 	private PopupWindow firendMsgPop;
+
 	private final int GET_FIRST = 0;
+
 	private final int GET_PULLDOWN = 1;
+
 	private final int GET_UPDOWN = 2;
+
 	private final int UPDATE_UI = 3;
+
 	private int pageSize = 1;
+
 	private String time = "0";
 
 	@Override
@@ -78,27 +91,41 @@ public class FriendDynamicActivity extends BaseActivity {
 		titleContent.setText(R.string.friend_dynamic);
 		titleContent.setVisibility(View.VISIBLE);
 		friendDynameicList = (PullToRefreshListView) findViewById(R.id.friend_dynamic_list);
-		friendDynameicList
-				.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
+		friendDynameicList.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
 
-					@Override
-					public void onPullDownToRefresh(
-							PullToRefreshBase refreshView) {
-						// TODO Auto-generated method stub
-						getFriendDynamic(1, GET_PULLDOWN);
-					}
+			@Override
+			public void onPullDownToRefresh(PullToRefreshBase refreshView) {
+				// TODO Auto-generated method stub
+				getFriendDynamic(1, GET_PULLDOWN);
+			}
 
-					@Override
-					public void onPullUpToRefresh(PullToRefreshBase refreshView) {
-						// TODO Auto-generated method stub
-						pageSize++;
-						getFriendDynamic(pageSize, GET_UPDOWN);
-					}
-				});
+			@Override
+			public void onPullUpToRefresh(PullToRefreshBase refreshView) {
+				// TODO Auto-generated method stub
+				pageSize++;
+				getFriendDynamic(pageSize, GET_UPDOWN);
+			}
+		});
 		listDynamic = new ArrayList<FriendDynamicActivity.FriendDynamic>();
-		adpter = new FriendDynamicListAdpter(FriendDynamicActivity.this,
-				listDynamic);
+		adpter = new FriendDynamicListAdpter(FriendDynamicActivity.this, listDynamic);
 		friendDynameicList.setAdapter(adpter);
+
+		friendDynameicList.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				// TODO Auto-generated method stub
+				int index = arg2-1;
+				if (listDynamic.get(index).getType() == 1) {
+					// APP INFO
+
+				} else {
+					// USER INFO
+					EventUtil.More_Setting.rcpt_friendsupdate_profileview(baseContext);
+					toFriend(listDynamic.get(index).getOtherId());
+				}
+			}
+		});
 
 		getFriendDynamic(pageSize, GET_FIRST);
 
@@ -108,89 +135,84 @@ public class FriendDynamicActivity extends BaseActivity {
 		int trendId = PrefsUtils.User.getShowedMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId());
 		if (type == GET_PULLDOWN) {
 			time = "0";
-		}else if(type == GET_FIRST){
+		} else if (type == GET_FIRST) {
 			time = "0";
-			trendId=0;
+			trendId = 0;
 		}
-		FriendsProxy.getMyFriendDynamic(
-				FriendDynamicActivity.this,
-				new RCPlatformResponseHandler() {
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						try {
-							List<FriendDynamic> list = jsonToFriendDynamic(content);
-							myHandler.obtainMessage(type, list).sendToTarget();
-						} catch (Exception e) {
-							// TODO: handle exception
-						}
-					}
+		FriendsProxy.getMyFriendDynamic(FriendDynamicActivity.this, new RCPlatformResponseHandler() {
 
-					@Override
-					public void onFailure(int errorCode, String content) {
-					}
-				}, trendId,
-				page, 10, time);
+			@Override
+			public void onSuccess(int statusCode, String content) {
+				try {
+					List<FriendDynamic> list = jsonToFriendDynamic(content);
+					myHandler.obtainMessage(type, list).sendToTarget();
+				}
+				catch (Exception e) {
+					// TODO: handle exception
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+			}
+		}, trendId, page, 10, time);
 	}
 
 	private Handler myHandler = new Handler() {
+
 		@Override
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			switch (msg.what) {
-			case GET_PULLDOWN:
-				List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
-				if (downlist != null) {
-					downlist.addAll(listDynamic);
-					listDynamic.clear();
-					listDynamic.addAll(downlist);
-				}
-				friendDynameicList.onRefreshComplete();
-				adpter.notifyDataSetChanged();
-				break;
-				
-			case GET_FIRST:
-				List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
-				if (list != null) {
-					listDynamic.addAll(list);
-				}
-				friendDynameicList.onRefreshComplete();
-				adpter.notifyDataSetChanged();
-				break;
-			case GET_UPDOWN:
-				List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
-				if (uplist != null) {
-//					listDynamic.clear();
-					listDynamic.addAll(uplist);
-				}
-				friendDynameicList.onRefreshComplete();
-				adpter.notifyDataSetChanged();
-				break;
-			case UPDATE_UI:
-				InformationPageController.getInstance().onNewTread();
-				break;
+				case GET_PULLDOWN:
+					List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
+					if (downlist != null) {
+						downlist.addAll(listDynamic);
+						listDynamic.clear();
+						listDynamic.addAll(downlist);
+					}
+					friendDynameicList.onRefreshComplete();
+					adpter.notifyDataSetChanged();
+					break;
+
+				case GET_FIRST:
+					List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
+					if (list != null) {
+						listDynamic.addAll(list);
+					}
+					friendDynameicList.onRefreshComplete();
+					adpter.notifyDataSetChanged();
+					break;
+				case GET_UPDOWN:
+					List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
+					if (uplist != null) {
+						// listDynamic.clear();
+						listDynamic.addAll(uplist);
+					}
+					friendDynameicList.onRefreshComplete();
+					adpter.notifyDataSetChanged();
+					break;
+				case UPDATE_UI:
+					InformationPageController.getInstance().onNewTread();
+					break;
 			}
 
 		}
 
 	};
 
-	private List<FriendDynamic> jsonToFriendDynamic(String json)
-			throws JSONException {
+	private List<FriendDynamic> jsonToFriendDynamic(String json) throws JSONException {
 		JSONObject jsonObject = new JSONObject(json);
 		List<FriendDynamic> friends = null;
 		JSONArray myFriendsArray = jsonObject.getJSONArray("trends");
 		Gson gson = new Gson();
-		friends = gson
-				.fromJson(
-						myFriendsArray.toString(),
-						new com.google.gson.reflect.TypeToken<ArrayList<FriendDynamic>>() {
-						}.getType());
+		friends = gson.fromJson(myFriendsArray.toString(), new com.google.gson.reflect.TypeToken<ArrayList<FriendDynamic>>() {
+		}.getType());
 
 		if (jsonObject.has("trendId")) {
 			int n = jsonObject.getInt("trendId");
-			PrefsUtils.User.saveShowedMaxTrendsId(getApplicationContext(),
-					getCurrentUser().getRcId(), n);
+			PrefsUtils.User.saveShowedMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId(), n);
 			myHandler.obtainMessage(UPDATE_UI).sendToTarget();
 		}
 		if (jsonObject.has("time")) {
@@ -199,8 +221,7 @@ public class FriendDynamicActivity extends BaseActivity {
 		return friends;
 	}
 
-	public Friend FirendDynamicToFriend(FriendDynamic friendDynamic,
-			boolean isOther) {
+	public Friend FirendDynamicToFriend(FriendDynamic friendDynamic, boolean isOther) {
 		Friend friend = new Friend();
 		if (isOther) {
 			friend.setRcId(friendDynamic.getOtherId());
@@ -211,13 +232,21 @@ public class FriendDynamicActivity extends BaseActivity {
 	}
 
 	public class FriendDynamic {
+
 		private int type;
+
 		private String trendId;
+
 		private String fRcId;
+
 		private String createTime;
+
 		private String fRcName;
+
 		private String fRcHead;
+
 		private String otherId;
+
 		private String otherName;
 
 		public int getType() {
@@ -283,5 +312,39 @@ public class FriendDynamicActivity extends BaseActivity {
 		public void setOtherName(String otherName) {
 			this.otherName = otherName;
 		}
+	}
+
+	private void toFriend(String rcid) {
+		Friend friend = new Friend();
+		friend.setRcId(rcid);
+		getFriendInfo(friend);
+	}
+
+	private void getFriendInfo(Friend friend) {
+		Request.executeGetFriendDetailAsync(baseContext, friend, new FriendDetailListener() {
+
+			@Override
+			public void onSuccess(Friend friend) {
+				dismissLoadingDialog();
+				startFriendDetailActivity(friend);
+			}
+
+			@Override
+			public void onError(int errorCode, String content) {
+				dismissLoadingDialog();
+				showErrorConfirmDialog(content);
+			}
+		}, false);
+	}
+
+	private void startFriendDetailActivity(Friend friend) {
+		Intent intent = new Intent(baseContext, FriendDetailActivity.class);
+		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
+		if (!friend.isFriend()) {
+			intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
+		} else {
+			intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
+		}
+		baseContext.startActivity(intent);
 	}
 }
