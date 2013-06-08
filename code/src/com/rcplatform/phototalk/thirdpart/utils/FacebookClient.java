@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import com.facebook.FacebookException;
 import com.facebook.HttpMethod;
@@ -30,23 +31,31 @@ import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class FacebookClient {
+
 	private static final int MSG_DEAUTHORIZE_SUCCESS = 100;
+
 	private static final int MSG_DEAUTHORIZE_ERROR = 101;
+
 	private static final int MSG_NET_ERROR = 102;
 
 	private OnAuthorizeSuccessListener mAuthListener;
+
 	private OnGetThirdPartInfoSuccessListener mGetInfoSuccessListener;
+
 	private OnDeAuthorizeListener mDeAuthorizeListener;
 
 	private UiLifecycleHelper mUiLifecycleHelper;
+
 	private BaseActivity mContext;
 
 	private boolean hasFriendsLoaded = false;
+
 	private boolean hasUserInfoLoaded = false;
 
 	private boolean isGetFacebookInfoError = false;
 
 	private ThirdPartUser mUser;
+
 	private List<ThirdPartUser> mFriends;
 
 	private enum FacebookAction {
@@ -99,24 +108,27 @@ public class FacebookClient {
 		bundler.putString("name", mContext.getString(R.string.app_name));
 		bundler.putString("picture", Constants.INVITE_JOIN_IMAGE_URL);
 		bundler.putString("to", uid);
-		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
+		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler)
+		        .setOnCompleteListener(new OnCompleteListener() {
 
-			@Override
-			public void onComplete(Bundle values, FacebookException error) {
-				if (error == null) {
-					final String postId = values.getString("post_id");
-					if (postId != null) {
-						mContext.showErrorConfirmDialog(R.string.invite_success);
-						if (listener != null)
-							listener.onInviteSuccess(uid);
-					} else {
-//						mContext.showErrorConfirmDialog(R.string.invite_cancel);
-					}
-				} else {
-					mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? mContext.getString(R.string.invite_fail) : error.getMessage());
-				}
-			}
-		}).build();
+			        @Override
+			        public void onComplete(Bundle values, FacebookException error) {
+				        if (error == null) {
+					        final String postId = values.getString("post_id");
+					        if (postId != null) {
+						        mContext.showErrorConfirmDialog(R.string.invite_success);
+						        if (listener != null)
+							        listener.onInviteSuccess(uid);
+					        } else {
+						        // mContext.showErrorConfirmDialog(R.string.invite_cancel);
+					        }
+				        } else {
+					        // mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage())
+							// ? mContext.getString(R.string.invite_fail) :
+							// error.getMessage());
+				        }
+			        }
+		        }).build();
 		dialog.show();
 	}
 
@@ -127,22 +139,25 @@ public class FacebookClient {
 		bundler.putString("description", mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()));
 		bundler.putString("name", mContext.getString(R.string.app_name));
 		bundler.putString("picture", Constants.INVITE_JOIN_IMAGE_URL);
-		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler).setOnCompleteListener(new OnCompleteListener() {
+		WebDialog dialog = new WebDialog.FeedDialogBuilder(mContext, Session.getActiveSession(), bundler)
+		        .setOnCompleteListener(new OnCompleteListener() {
 
-			@Override
-			public void onComplete(Bundle values, FacebookException error) {
-				if (error == null) {
-					final String postId = values.getString("post_id");
-					if (postId != null) {
-						mContext.showErrorConfirmDialog(R.string.share_complete);
-					} else {
-//						mContext.showErrorConfirmDialog(R.string.share_cancel);
-					}
-				} else {
-//					mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage()) ? mContext.getString(R.string.share_cancel) : error.getMessage());
-				}
-			}
-		}).build();
+			        @Override
+			        public void onComplete(Bundle values, FacebookException error) {
+				        if (error == null) {
+					        final String postId = values.getString("post_id");
+					        if (postId != null) {
+						        mContext.showErrorConfirmDialog(R.string.share_complete);
+					        } else {
+						        // mContext.showErrorConfirmDialog(R.string.share_cancel);
+					        }
+				        } else {
+					        // mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage())
+							// ? mContext.getString(R.string.share_cancel) :
+							// error.getMessage());
+				        }
+			        }
+		        }).build();
 		dialog.show();
 	}
 
@@ -168,15 +183,15 @@ public class FacebookClient {
 		FacebookAction lastAction = mAction;
 		mAction = FacebookAction.NONE;
 		switch (lastAction) {
-		case AUTHORIZE:
-			sendJoinMessage();
-			mAuthListener.onAuthorizeSuccess();
-			break;
-		case GET_INFO:
-			getFacebookInfo();
-			break;
-		default:
-			break;
+			case AUTHORIZE:
+				sendJoinMessage();
+				mAuthListener.onAuthorizeSuccess();
+				break;
+			case GET_INFO:
+				getFacebookInfo();
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -256,6 +271,7 @@ public class FacebookClient {
 						FacebookUtil.clearFacebookVlidated(mContext);
 						PrefsUtils.User.ThirdPart.clearFacebookAccount(mContext, mContext.getCurrentUser().getRcId());
 						mHandler.sendEmptyMessage(MSG_DEAUTHORIZE_SUCCESS);
+						Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
 					} else {
 						if (response.getConnection().getResponseCode() != 200) {
 							mHandler.sendEmptyMessage(MSG_NET_ERROR);
@@ -266,7 +282,8 @@ public class FacebookClient {
 							mHandler.sendMessage(msg);
 						}
 					}
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					e.printStackTrace();
 					mHandler.sendEmptyMessage(MSG_NET_ERROR);
 				}
@@ -276,26 +293,28 @@ public class FacebookClient {
 	}
 
 	private Handler mHandler = new Handler() {
+
 		public void handleMessage(android.os.Message msg) {
 			mContext.dismissLoadingDialog();
 			switch (msg.what) {
-			case MSG_DEAUTHORIZE_SUCCESS:
-				mDeAuthorizeListener.onDeAuthorizeSuccess();
-				break;
-			case MSG_DEAUTHORIZE_ERROR:
-				mDeAuthorizeListener.onDeAuthorizeFail();
-				String message = (String) msg.obj;
-				mContext.showErrorConfirmDialog(message);
-				break;
-			case MSG_NET_ERROR:
-				mDeAuthorizeListener.onDeAuthorizeFail();
-				mContext.showErrorConfirmDialog(R.string.net_error);
-				break;
+				case MSG_DEAUTHORIZE_SUCCESS:
+					mDeAuthorizeListener.onDeAuthorizeSuccess();
+					break;
+				case MSG_DEAUTHORIZE_ERROR:
+					mDeAuthorizeListener.onDeAuthorizeFail();
+					String message = (String) msg.obj;
+					mContext.showErrorConfirmDialog(message);
+					break;
+				case MSG_NET_ERROR:
+					mDeAuthorizeListener.onDeAuthorizeFail();
+					mContext.showErrorConfirmDialog(R.string.net_error);
+					break;
 			}
 		};
 	};
 
 	public static interface OnInviteSuccessListener {
+
 		public void onInviteSuccess(String uid);
 	}
 

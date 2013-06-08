@@ -120,7 +120,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 						return;
 
 					EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
-					menu.setHeaderTitle(R.string.delete_friend);
+					menu.setHeaderTitle(R.string.operation);
 					menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
 
 						@Override
