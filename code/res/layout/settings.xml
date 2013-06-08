@@ -74,7 +74,7 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginRight="@dimen/user_detail_source_margin_left"
                             android:background="@drawable/send_friend_head_bg"
-                            android:padding="5dp" >
+                            android:padding="@dimen/head_boarder_padding" >
 
                             <ImageView
                                 android:id="@+id/settings_account_head_portrait"
