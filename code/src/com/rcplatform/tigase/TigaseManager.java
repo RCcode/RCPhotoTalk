@@ -1,5 +1,11 @@
 package com.rcplatform.tigase;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -49,12 +55,69 @@ public class TigaseManager {
 	private final int INIT_CONNECT_MAX_COUNT = 4;
 
 	private final int CONNECT_INTERVAL = 60000;
+	
+	private final int RESET_PASSWORD_MAX_COUNT = 4;
+	
+	private final int RESET_PASSWORD_INTERVAL = 60000;
+	
+	private final int resetPasswordCount = 0;
+	
+	private final String RESET_PASSWORD_URL = "http://192.168.0.86:8083/rcboss/user/sysTigasePwd.do";
 
 	private Timer initConnectTimer = null;
 
 	private int retryConnectCount = 0;
 
 	private Context ctx = null;
+	
+	class ResetTigasePassword extends TimerTask{
+
+		@Override
+        public void run() {
+	        // TODO Auto-generated method stub
+			String content = null;
+			InputStream is = null;
+			HttpURLConnection conn = null;
+			try {
+				conn = (HttpURLConnection) new URL(TigaseConfig.NODE_BANLANCE_URL).openConnection();
+				conn.setConnectTimeout(10000);
+				conn.setReadTimeout(10000);
+				conn.setRequestMethod("POST");
+				conn.getResponseCode();
+				is = conn.getInputStream();
+				InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+				StringBuilder builder = new StringBuilder();
+				char[] readChars = new char[1024];
+				String temp = null;
+				int result = -1;
+				while ((result = reader.read(readChars, 0, 1024)) != -1) {
+					temp = new String(readChars, 0, result);
+					builder.append(temp);
+				}
+				reader.close();
+				content = builder.toString();
+			}
+			catch (ConnectException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			finally {
+				try {
+					is.close();
+				}
+				catch (Exception e) {
+				}
+				if (conn != null)
+					conn.disconnect();
+
+			}
+        }
+		
+	}
 
 	class TigaseListenter implements ConnectionListener {
 
@@ -105,7 +168,6 @@ public class TigaseManager {
 				catch (XMPPException e) {
 					// TODO Auto-generated catch block
 					if(e.getMessage().equals("SASL authentication failed")){
-						
 						
 					}
 				}
