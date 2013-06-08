@@ -14,9 +14,9 @@
     <dimen name="friend_head_left">10dp</dimen>
     <dimen name="friend_head_side">58dp</dimen>
     <dimen name="friend_text_padding">5dp</dimen>
-    <dimen name="friend_info_rcid_text_size">16sp</dimen>
+    <dimen name="friend_info_rcid_text_size">15sp</dimen>
     <dimen name="friend_info_age_text_size">12sp</dimen>
-    <dimen name="friend_info_nick_text_size">17sp</dimen>
+    <dimen name="friend_info_nick_text_size">15sp</dimen>
     <dimen name="friend_info_edit_left">15dp</dimen>
     <dimen name="friend_info_sex_layout_top">5dp</dimen>
     <dimen name="friend_info_photo_left">8dp</dimen>
@@ -59,7 +59,7 @@
     <dimen name="user_detail_user_infos_height">88dp</dimen>
     <dimen name="user_detail_head_image_width">80dp</dimen>
     <dimen name="app_list_height">53dp</dimen>
-    <dimen name="user_detail_user_infos_bottom_margin">-44dp</dimen>
+    <dimen name="user_detail_user_infos_bottom_margin">-22dp</dimen>
     <dimen name="user_detail_head_width_half">44dp</dimen>
     <dimen name="user_detail_nick_size">18sp</dimen>
     <dimen name="user_detail_rcid_size">14sp</dimen>
@@ -76,7 +76,7 @@
     <dimen name="user_detail_bg_height">177dp</dimen>
     <dimen name="about_icon_width">88dp</dimen>
     <dimen name="friends_adapter_item_padding">4dp</dimen>
-    <dimen name="trend_new_icon_width">35dp</dimen>
+    <dimen name="trend_new_icon_width">30dp</dimen>
     <dimen name="new_point_margin">1dp</dimen>
     <dimen name="imagecut_button_margin">56dp</dimen>
     <dimen name="platform_useredit_margin">8dp</dimen>

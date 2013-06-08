@@ -76,7 +76,7 @@
   <dimen name="user_detail_bg_height">199dp</dimen>  
   <dimen name="about_icon_width">99dp</dimen>  
   <dimen name="friends_adapter_item_padding">4dp</dimen>  
-  <dimen name="trend_new_icon_width">39dp</dimen>  
+  <dimen name="trend_new_icon_width">35dp</dimen>  
   <dimen name="new_point_margin">1dp</dimen>  
   <dimen name="imagecut_button_margin">63dp</dimen>  
   <dimen name="platform_useredit_margin">9dp</dimen>  

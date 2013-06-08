@@ -23,10 +23,12 @@ import android.widget.TextView;
 
 import com.facebook.widget.ProfilePictureView;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 
 public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
@@ -56,6 +58,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 	private Context mContext;
 	private Set<Friend> mWillInvateFriends;
 	private String[] mLetters;
+	private UserInfo currentUser;
 
 	public PhotoTalkFriendsAdapter(Context context, Map<Integer, List<Friend>> friends, Set<Friend> willInvateFriends, ImageLoader imageLoader) {
 		mInflater = LayoutInflater.from(context);
@@ -72,6 +75,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 				}
 			}
 		};
+		currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		initData(friends);
 	}
 
@@ -280,7 +284,12 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
 		mImageLoader.displayImage(friend.getHeadUrl(), ivHead);
-		tvNick.setText(TextUtils.isEmpty(friend.getLocalName()) ? friend.getNickName() : friend.getLocalName());
+		if(friend.getRcId().equals(currentUser.getRcId())){
+			tvNick.setText(mContext.getString(R.string.list_me, friend.getNickName()));
+		}else{
+			tvNick.setText(friend.getNickName());
+		}
+		
 		return convertView;
 	}
 
