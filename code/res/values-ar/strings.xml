@@ -187,6 +187,6 @@
     <string name="gcm_friend">قام أحد الأشخاص بإضافتك كصديق</string>
     <string name="friend_detail_send_photo_hint_text">إرسال صورة</string>
 
-
+    <string name="request_retry">فشل، الرجاء المحاولة مرة أخرى لاحقًا</string>
 
 </resources>
