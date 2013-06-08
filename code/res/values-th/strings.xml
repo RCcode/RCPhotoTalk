@@ -192,8 +192,8 @@
     <!-- 对话框&提示 -->
     <string name="cancel">ยกเลิก</string>
     <string name="login_account_error">บัญชีหรือรหัสผ่านไม่ถูกต้อง</string>
-    <string name="long_long_ago">ฉัน</string>
-    <string name="list_me">เมื่อนานมาแล้ว</string>
+    <string name="long_long_ago">เมื่อนานมาแล้ว</string>
+    <string name="list_me">%1$s(ฉัน)</string>
     
 
 </resources>

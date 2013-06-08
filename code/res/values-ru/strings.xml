@@ -190,7 +190,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">отменить</string>
     <string name="login_account_error">Недопустимая учетная запись или пароль</string>
-    <string name="long_long_ago">мне</string>
-    <string name="list_me">Давно</string>
+    <string name="long_long_ago">Давно</string>
+    <string name="list_me">%1$s(мне)</string>
 
 </resources>
