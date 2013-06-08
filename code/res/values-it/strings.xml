@@ -68,7 +68,8 @@
     <string name="resend">Rinvia</string>
     <string name="delete">Elimina</string>
     <string name="reload">Ricarica</string>
-    <string name="will_quit">Fai di nuovo clic su “Indietro” per uscire dall’app</string><!-- menu -->
+    <string name="will_quit">Fai di nuovo clic su “Indietro” per uscire dall’app</string>
+ <!-- menu -->
     <string name="take_score">Valutare</string>
 
     <!-- 我 -->
@@ -82,7 +83,7 @@
     <string name="bind_now">Iscriviti adesso</string>
     <string name="share_complete">SUCCESSO!</string>
     <string name="save_success">SUCCESSO!</string>
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">Registrazione troppo breve</string>
     <string name="voice_record">Premi per registrare</string>
@@ -168,16 +169,16 @@
     <string name="compact">Direttive sulla privacy</string>
     <string name="no_new_version">Phototalk è la versione più recente</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Scegli un profilo</string>
     <string name="or">o</string>
     <string name="use_new_info">Usa un nuovo profilo</string>
-	<string name="other_device_login">Il tuo account è già utilizzato su un altro dispositivo.</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Il tuo account è già utilizzato su un altro dispositivo.</string>
+    <string name="relogin">OK</string>
     <string name="join_message">Foto con audio, eliminazione a tempo! Unisciti a RC Photo Talk e condividi il divertimento! Scarica dal link: http://rctalk.me  Aggiungi il mio ID %1$s dopo aver creato l\'account!</string>
     <string name="invite_message">Foto con audio, eliminazione a tempo! Unisciti a RC Photo Talk e condividi il divertimento! Scarica dal link: http://rctalk.me  Aggiungi il mio ID %1$s dopo aver creato l\'account!</string>
-	<string name="contact_friend">Contatti:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Contatti:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
@@ -188,5 +189,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">annullare</string>
     <string name="login_account_error">Account o password non valida</string>
+    <string name="long_long_ago">Molto tempo fa</string>
+    <string name="list_me">%1$s(me)</string>
 
 </resources>

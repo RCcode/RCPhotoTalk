@@ -191,6 +191,7 @@
     <string name="cancel">cancel</string>
     <string name="login_account_error">Invalid account or password</string>
     <string name="long_long_ago">Long ago</string>
+   	<string name="list_me">%1$s(me)</string>
 
     <!-- 没有翻译的字符 -->
 
@@ -355,5 +356,5 @@
     <string name="bind_later">以后再说</string>
     <string name="facebook_app_id">447751798632401</string>
     <string name="third_part_info_loaded_fail">第三方平台信息获取失败</string>
-	<string name="list_me">%1$s(我)</string>
+
 </resources>

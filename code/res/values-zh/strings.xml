@@ -192,5 +192,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">取消</string>
     <string name="login_account_error">无效账户或密码</string>
+    <string name="long_long_ago">我</string>
+    <string name="list_me">很久以前</string>
 
 </resources>

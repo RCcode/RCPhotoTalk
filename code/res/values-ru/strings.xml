@@ -186,8 +186,11 @@
     <string name="gcm_message">У вас %1$d новых сообщений</string>
     <string name="gcm_friend">Вас добавили в друзья</string>
     <string name="friend_detail_send_photo_hint_text">Отправить фото</string>
-    
+
     <!-- 对话框&提示 -->
     <string name="cancel">отменить</string>
     <string name="login_account_error">Недопустимая учетная запись или пароль</string>
+    <string name="long_long_ago">мне</string>
+    <string name="list_me">Давно</string>
+
 </resources>

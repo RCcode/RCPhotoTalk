@@ -84,8 +84,7 @@
     <string name="bind_now">רשום עכשיו</string>
     <string name="share_complete">הצלחה!</string>
     <string name="save_success">הצלחה!</string>
-    
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">ההקלטה קצרה מדי</string>
     <string name="voice_record">לחץ להקלטה</string>
@@ -190,4 +189,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">לבטל</string>
     <string name="login_account_error">חשבון או סיסמה שגויים</string>
+    <string name="long_long_ago">לפני זמן רב</string>
+    <string name="list_me">%1$s(לי)</string>
+
 </resources>

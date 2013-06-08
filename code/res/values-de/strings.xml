@@ -190,5 +190,6 @@
     <!-- 对话框&提示 -->
     <string name="cancel">stornieren</string>
     <string name="login_account_error">Ungültiges Konto oder Passwort</string>
-
+    <string name="long_long_ago">Vor langer Zeit</string>
+   	<string name="list_me">%1$s(me)</string>
 </resources>
