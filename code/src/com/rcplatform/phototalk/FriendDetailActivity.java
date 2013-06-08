@@ -105,10 +105,8 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void coverToFriendView() {
-		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0)
+		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0 && !mFriend.getRcId().equals(getCurrentUser().getRcId()))
 			linearApps.setVisibility(View.VISIBLE);
-		else if (mFriend.getRcId().equals(getCurrentUser().getRcId()))
-			linearApps.setVisibility(View.GONE);
 		else
 			linearApps.setVisibility(View.GONE);
 		btnPerform.setText(R.string.friend_detail_send_photo_hint_text);

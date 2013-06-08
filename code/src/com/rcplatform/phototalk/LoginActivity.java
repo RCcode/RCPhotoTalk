@@ -302,11 +302,13 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private void showLoginView() {
 		clearInputInfo();
 		mDescTextView.setText(R.string.user_other_account);
-		mDescTextView.setVisibility(View.GONE);
+
 		if (Constants.userApps.size() > 0) {
 			mLinearAccounts.setVisibility(View.VISIBLE);
+			mDescTextView.setVisibility(View.VISIBLE);
 		} else {
 			mLinearAccounts.setVisibility(View.GONE);
+			mDescTextView.setVisibility(View.GONE);
 		}
 		mTitleTextView.setText(R.string.login_title_login_bubble_text);
 		mForgetPswButton.setVisibility(View.VISIBLE);
@@ -567,12 +569,10 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null)
-				convertView = getLayoutInflater().inflate(R.layout.other_app_item, null);
+				convertView = getLayoutInflater().inflate(R.layout.other_app_item, parent,false);
 			TextView tv = (TextView) convertView.findViewById(R.id.tv_account);
 			UserInfo userInfo = users.get(position);
 			tv.setText(userInfo.getEmail());
-			ImageView iv = (ImageView) convertView.findViewById(R.id.iv_logo);
-			iv.setImageResource(R.drawable.ic_launcher);
 			return convertView;
 		}
 

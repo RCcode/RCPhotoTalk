@@ -93,5 +93,11 @@
     <dimen name="platform_et_padding">13dp</dimen>
     <dimen name="send_image_head_width">53dp</dimen>
     <dimen name="user_detail_name_background_height">60dp</dimen>
+    <dimen name="login_padding_hor">8dp</dimen>
+    <dimen name="login_padding_ver">16dp</dimen>
+    <dimen name="login_otherapplist_margin_bottom">18dp</dimen>
+    <dimen name="login_margin_top_to_attention">13dp</dimen>
+    <dimen name="login_otherapplist_divider_height">8dp</dimen>
+    <dimen name="attention_text_size">16sp</dimen>
 
 </resources>
