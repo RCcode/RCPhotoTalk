@@ -70,13 +70,11 @@
     <string name="reload">Recharger</string>
     <string name="will_quit">Cliquez sur « Retour » pour quitter l’application</string>
 
-
     <!-- menu -->
     <string name="take_score">évaluer</string>
 
     <!-- 我 -->
     <string name="me">moi</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">Peut-être plus tard</string>
@@ -86,8 +84,7 @@
     <string name="bind_now">S’enregistrer maintenant</string>
     <string name="share_complete">SUCCÈS!</string>
     <string name="save_success">SUCCÈS!</string>
-    
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">L’enregistrement est trop court</string>
     <string name="voice_record">Appuyez pour enregistrer</string>
@@ -173,16 +170,16 @@
     <string name="compact">Confidentialité</string>
     <string name="no_new_version">Phototalkest la dernière version</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">Choisir un profil</string>
     <string name="or">ou</string>
     <string name="use_new_info">Utiliser un nouveau profil</string>
-	<string name="other_device_login">Votre compte est déjà utilisé sur un autre périphérique.</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">Votre compte est déjà utilisé sur un autre périphérique.</string>
+    <string name="relogin">OK</string>
     <string name="join_message">Aphotos audio, suppression minutée ! Rejoignez RC PhotoTalk et partagez vos moments funs ! Lien de téléchargement: http://rctalk.me Ajoutez l\'ID %1$s une fois le compte créé !</string>
     <string name="invite_message">Aphotos audio, suppression minutée ! Rejoignez RC PhotoTalk et partagez vos moments funs ! Lien de téléchargement: http://rctalk.me Ajoutez l\'ID %1$s une fois le compte créé !</string>
-	<string name="contact_friend">Contacts:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">Contacts:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
@@ -193,5 +190,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">résilier</string>
     <string name="login_account_error">Compte ou mot de passe non valide</string>
-   
+    <string name="long_long_ago">Il y a longtemps</string>
+    <string name="list_me">%1$s(moi)</string>
+
 </resources>

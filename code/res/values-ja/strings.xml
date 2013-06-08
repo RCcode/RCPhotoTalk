@@ -191,5 +191,6 @@
     <!-- 对话框&提示 -->
     <string name="cancel">キャンセル</string>
     <string name="login_account_error">アカウントまたはパスワードが正しくありません</string>
-
+    <string name="long_long_ago">それ以前</string>
+    <string name="list_me">%1$s(私に)</string>
 </resources>

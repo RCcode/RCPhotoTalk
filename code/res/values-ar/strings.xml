@@ -190,5 +190,8 @@
     <!-- 对话框&提示 -->
     <string name="cancel">إلغاء</string>
     <string name="login_account_error">حساب غير صالح أو كلمة مرور غير صالحة</string>
+    
+    <string name="long_long_ago">منذ فترة طويلة</string>
+   	<string name="list_me">%1$s(أنا)</string>
 
 </resources>

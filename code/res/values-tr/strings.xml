@@ -190,5 +190,8 @@
     <!-- 对话框&提示 -->
     <string name="cancel">iptal</string>
     <string name="login_account_error">Geçersiz hesap veya parola</string>
+    
+    <string name="long_long_ago">Uzun süre önce</string>
+    <string name="list_me">%1$s(bana)</string>
 
 </resources>

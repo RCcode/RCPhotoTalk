@@ -202,7 +202,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				}
 			};
 			AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.bind_phone_attention)
-			        .setNegativeButton(R.string.bind_later, listener).setPositiveButton(R.string.bind_now, listener).create();
+			        .setNegativeButton(R.string.attention_later, listener).setPositiveButton(R.string.bind_now, listener).create();
 			dialog.show();
 		}
 	}

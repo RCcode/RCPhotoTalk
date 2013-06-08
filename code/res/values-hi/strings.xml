@@ -70,13 +70,11 @@
     <string name="reload">पुनः लोड करें</string>
     <string name="will_quit">ऐप से बाहर निकलने के लिए फिर से "वापस" क्लिक करें</string>
 
-
     <!-- menu -->
     <string name="take_score">मूल्यांकन करें</string>
 
     <!-- 我 -->
     <string name="me">मुझे</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">शायद बाद में</string>
@@ -86,7 +84,7 @@
     <string name="bind_now">अभी पंजीकरण करें</string>
     <string name="share_complete">सफलता!</string>
     <string name="save_success">सफलता!</string>
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">रिकॉर्डिंग बहुत छोटी है</string>
     <string name="voice_record">रिकॉर्ड करने के लिए दबाएँ</string>
@@ -172,16 +170,16 @@
     <string name="compact">गोपनीयता नीतियाँ</string>
     <string name="no_new_version">Phototalkनवीनतम संस्करण है</string>
 
-	<!-- 登录个人信息页 -->
+    <!-- 登录个人信息页 -->
     <string name="use_info_below">प्रोफ़ाइल चुनें</string>
     <string name="or">या</string>
     <string name="use_new_info">इसमें नई प्रोफ़ाइल का इस्तेमाल</string>
-	<string name="other_device_login">आपका खाते का पहले ही अन्य डिवाइस पर इस्तेमाल हो रहा है।</string>
-	<string name="relogin">ठीक</string>
+    <string name="other_device_login">आपका खाते का पहले ही अन्य डिवाइस पर इस्तेमाल हो रहा है।</string>
+    <string name="relogin">ठीक</string>
     <string name="join_message">ऑडियो फ़ोटो, नियत हटाना! RC PhotoTalk में शामिल हों और आनंद साझा करें! लिंक डाउनलोड करें: http://rctalk.me खाता बनाने के बाद मेरी ID %1$s जोड़ें!</string>
     <string name="invite_message">ऑडियो फ़ोटो, नियत हटाना! RC PhotoTalk में शामिल हों और आनंद साझा करें! लिंक डाउनलोड करें: http://rctalk.me खाता बनाने के बाद मेरी ID %1$s जोड़ें!</string>
-	<string name="contact_friend">संपर्क:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">संपर्क:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
@@ -191,5 +189,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">रद्द करें</string>
     <string name="login_account_error">अमान्य खाता या पासवर्ड</string>
+    <string name="long_long_ago">बहुत पहले</string>
+    <string name="list_me">%1$s(मुझे)</string>
 
 </resources>

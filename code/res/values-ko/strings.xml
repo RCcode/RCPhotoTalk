@@ -70,13 +70,11 @@
     <string name="reload">다시 로드</string>
     <string name="will_quit">\'뒤로\'를 한 번 더 클릭하면 앱을 종료합니다</string>
 
-
     <!-- menu -->
     <string name="take_score">평가</string>
 
     <!-- 我 -->
     <string name="me">나를</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">나중에</string>
@@ -86,7 +84,7 @@
     <string name="bind_now">지금 등록</string>
     <string name="share_complete">성공!</string>
     <string name="save_success">성공!</string>
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">기록 내용이 너무 짧습니다</string>
     <string name="voice_record">눌러서 기록</string>
@@ -188,7 +186,9 @@
     <string name="gcm_message">새 메시지%1$d개가 있습니다</string>
     <string name="gcm_friend">다른 사람이 사용자를 친구로 추가했습니다</string>
     <string name="friend_detail_send_photo_hint_text">사진 보내기</string>
-
     <string name="cancel">취소</string>
     <string name="login_account_error">잘못된 계정 또는 암호</string>
+    <string name="long_long_ago">오래 전</string>
+    <string name="list_me">%1$s(나를)</string>
+
 </resources>

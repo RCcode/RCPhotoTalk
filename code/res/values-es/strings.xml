@@ -84,7 +84,7 @@
     <string name="bind_now">Registrar ahora</string>
     <string name="share_complete">ÉXITO!</string>
     <string name="save_success">ÉXITO!</string>
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">La grabación es demasiado corta</string>
     <string name="voice_record">Puls par grab</string>
@@ -190,4 +190,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">cancelar</string>
     <string name="login_account_error">Cuenta o contraseña no válida</string>
+    <string name="long_long_ago">Hace mucho</string>
+    <string name="list_me">%1$s(me)</string>
+
 </resources>

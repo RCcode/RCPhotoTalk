@@ -192,5 +192,7 @@
     <string name="cancel">membatalkanें</string>
     <string name="login_account_error">Akun atau sandi tidak valid</string>
 
-
+    <string name="long_long_ago">Sudah lama</string>
+    <string name="list_me">%1$s(saya)</string>
+    
 </resources>

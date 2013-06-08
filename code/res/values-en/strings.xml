@@ -190,5 +190,7 @@
     <!-- 对话框&提示 -->
     <string name="cancel">Cancel</string>
     <string name="login_account_error">Invalid account or password</string>
+    <string name="long_long_ago">Long ago</string>
+    <string name="list_me">%1$s(me)</string>
 
 </resources>
