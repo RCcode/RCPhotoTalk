@@ -97,6 +97,60 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private static final int ITEM_ID = 101;
+	private OnCreateContextMenuListener mCreateContextMenuListener = new OnCreateContextMenuListener() {
+
+		@Override
+		public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+			ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+			int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+			int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+			int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
+			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+				final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList.getExpandableListAdapter()).getChild(group, child);
+				if (getCurrentUser().getRcId().equals(friend.getRcId()) || Constants.OFFICIAL_RCID.equals(friend.getRcId()))
+					return;
+
+				EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
+				menu.setHeaderTitle(R.string.operation);
+				menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						EventUtil.Friends_Addfriends.rcpt_friendsdelete(baseContext);
+						deleteFriend(friend);
+						return false;
+					}
+				});
+			}
+		}
+	};
+	private OnCreateContextMenuListener mSearchListCreateContextMenuListener = new OnCreateContextMenuListener() {
+		
+		@Override
+		public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+			ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
+			int type = ExpandableListView.getPackedPositionType(info.packedPosition);
+			int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
+			int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
+			if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+				final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mSearchList.getExpandableListAdapter()).getChild(group, child);
+				if (getCurrentUser().getRcId().equals(friend.getRcId()) || Constants.OFFICIAL_RCID.equals(friend.getRcId()))
+					return;
+				
+				EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
+				menu.setHeaderTitle(R.string.operation);
+				menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
+					
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						EventUtil.Friends_Addfriends.rcpt_friendsdelete(baseContext);
+						deleteFriend(friend);
+						return false;
+					}
+				});
+			}
+		}
+	};
 
 	private void initView() {
 		initBackButton(R.string.my_firend_title, this);
@@ -107,32 +161,8 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 		mSearchList.setOnGroupClickListener(mGroupClickListener);
 		mList.setOnChildClickListener(mChildClickListener);
 		mSearchList.setOnChildClickListener(mChildClickListener);
-		mList.setOnCreateContextMenuListener(new OnCreateContextMenuListener() {
-			@Override
-			public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
-				ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
-				int type = ExpandableListView.getPackedPositionType(info.packedPosition);
-				int group = ExpandableListView.getPackedPositionGroup(info.packedPosition);
-				int child = ExpandableListView.getPackedPositionChild(info.packedPosition);
-				if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-					final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mList.getExpandableListAdapter()).getChild(group, child);
-					if (getCurrentUser().getRcId().equals(friend.getRcId()) || Constants.OFFICIAL_RCID.equals(friend.getRcId()))
-						return;
-
-					EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
-					menu.setHeaderTitle(R.string.operation);
-					menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-
-						@Override
-						public boolean onMenuItemClick(MenuItem item) {
-							EventUtil.Friends_Addfriends.rcpt_friendsdelete(baseContext);
-							deleteFriend(friend);
-							return false;
-						}
-					});
-				}
-			}
-		});
+		mList.setOnCreateContextMenuListener(mCreateContextMenuListener);
+		mSearchList.setOnCreateContextMenuListener(mSearchListCreateContextMenuListener);
 		etSearch = (EditText) findViewById(R.id.et_search);
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
 		seach_delete_btn.setVisibility(View.GONE);

@@ -295,6 +295,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 				List<Friend> recommends = JSONConver.jsonToFriends(jsonObject.getJSONArray("recommendUsers").toString());
 				UserInfo userInfo = JSONConver.jsonToUserInfo(content);
 				PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
+				userInfo.setDeviceId(Constants.DEVICE_ID);
 				getPhotoTalkApplication().setCurrentUser(userInfo);
 				PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
 				loginSuccess(userInfo);

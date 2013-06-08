@@ -1,6 +1,7 @@
 package com.rcplatform.phototalk.db.impl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -517,5 +518,47 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			}
 		});
 		return result.size();
+	}
+
+	@Override
+	public void handAddedFriendInformation(String currentUserRcId, final Information information) {
+		ObjectSet<Information> infosLocal = db.query(new Predicate<Information>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(Information arg0) {
+				return ((arg0.getSender().getRcId().equals(information.getSender().getRcId()) && arg0.getReceiver().getRcId()
+						.equals(information.getReceiver().getRcId())) || (arg0.getSender().getRcId().equals(information.getReceiver().getRcId()) && arg0
+						.getReceiver().getRcId().equals(information.getSender().getRcId())))
+						&& arg0.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE;
+			}
+		});
+		if (infosLocal.size() == 0) {
+			saveRecordInfos(Arrays.asList(new Information[] { information }));
+		} else {
+			Information infoLocal = infosLocal.get(0);
+			if (infoLocal.getStatu() != information.getStatu()) {
+				if (information.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM) {
+					infoLocal.setStatu(information.getStatu());
+					db.store(infoLocal);
+					db.commit();
+				} else if (information.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
+					String friendId = null;
+					if (information.getReceiver().getRcId().equals(currentUserRcId))
+						friendId = information.getSender().getRcId();
+					else
+						friendId = information.getReceiver().getRcId();
+					Friend friend=new Friend();
+					friend.setFriend(true);
+					friend.setRcId(friendId);
+					ObjectSet<Friend> friendLocal=db.queryByExample(friend);
+					if(friendLocal.size()==0){
+						
+					}else{
+						
+					}
+				}
+			}
+		}
 	}
 }

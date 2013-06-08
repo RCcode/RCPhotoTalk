@@ -207,7 +207,7 @@ public class ChangePasswordActivity extends BaseActivity implements OnClickListe
 					UserInfo userInfo = getCurrentUser();
 					userInfo.setToken(token);
 					userInfo.setTigasePwd(tgpwd);
-					PrefsUtils.LoginState.setLoginUser(ChangePasswordActivity.this, userInfo);
+					PrefsUtils.User.saveUserInfo(ChangePasswordActivity.this, userInfo.getRcId(), userInfo);
 					LogicUtils.logout(ChangePasswordActivity.this);
 				} catch (Exception e) {
 					e.printStackTrace();

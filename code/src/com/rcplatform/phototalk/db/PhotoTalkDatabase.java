@@ -66,4 +66,6 @@ public interface PhotoTalkDatabase {
 	
 	public int getUnSendInformationCountByUrl(String url);
 	
+	public void handAddedFriendInformation(String currentUserRcId,Information information);
+	
 }
