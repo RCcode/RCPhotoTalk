@@ -27,7 +27,6 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Eメール形式エラー</string>
     <string name="register_password_error">パスワードは6～20文字で入力してください</string>
-    <string name="net_error">ネットワークが接続されていません</string>
     <string name="login_title_login_bubble_text">RCユーザーログイン</string>
     <string name="login_username_hint">Eメール,RCID</string>
     <string name="login_forget_psw_hint">パスワードを忘れた場合</string>
@@ -70,13 +69,11 @@
     <string name="reload">リロード</string>
     <string name="will_quit">[戻る] をクリックしてアプリを終了</string>
 
-
     <!-- menu -->
     <string name="take_score">評価する</string>
 
     <!-- 我 -->
     <string name="me">私に</string>
-
 
     <!-- 提示 -->
     <string name="attention_later">後で行う</string>
@@ -86,7 +83,7 @@
     <string name="bind_now">今すぐ登録する</string>
     <string name="share_complete">SUCCESS！</string>
     <string name="save_success">SUCCESS！</string>
-    
+
     <!-- 图像编辑 -->
     <string name="voice_too_short">録音が短すぎます</string>
     <string name="voice_record">録音開始</string>
@@ -176,12 +173,12 @@
     <string name="use_info_below">プロファイル選択</string>
     <string name="or">または</string>
     <string name="use_new_info">新しいプロファイルを使用</string>
-	<string name="other_device_login">既にこのアカウントを使用している端末があります。</string>
-	<string name="relogin">OK</string>
+    <string name="other_device_login">既にこのアカウントを使用している端末があります。</string>
+    <string name="relogin">OK</string>
     <string name="join_message">音声写真、自動削除！RC PhotoTalk に加入して一緒に楽しみましょう！ダウンロードリンク: http://rctalk.me アカウント作成後に私の ID %1$s を加えてください。</string>
     <string name="invite_message">音声写真、自動削除！RC PhotoTalk に加入して一緒に楽しみましょう！ダウンロードリンク: http://rctalk.me アカウント作成後に私の ID %1$s を加えてください</string>
-	<string name="contact_friend">コンタクト:</string>
-	<string name="facebook_friend">Facebook:</string>
+    <string name="contact_friend">コンタクト:</string>
+    <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
 
     <!-- gcm -->
@@ -193,4 +190,7 @@
     <string name="login_account_error">アカウントまたはパスワードが正しくありません</string>
     <string name="long_long_ago">それ以前</string>
     <string name="list_me">%1$s(私に)</string>
+    <string name="net_error">失敗しました。やり直してください</string>
+    <string name="no_net">ネットワークが接続されていません</string>
+    
 </resources>

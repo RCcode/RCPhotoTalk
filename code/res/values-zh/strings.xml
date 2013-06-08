@@ -27,7 +27,7 @@
     <string name="ok">确定</string>
     <string name="registe_email_error">邮箱格式错误</string>
     <string name="register_password_error">请输入6-20个字符的密码</string>
-    <string name="net_error">无网络连接</string>
+
     <string name="login_title_login_bubble_text">RC用户登录</string>
     <string name="login_username_hint">邮箱,RCID</string>
     <string name="login_forget_psw_hint">忘记密码</string>
@@ -194,5 +194,7 @@
     <string name="login_account_error">无效账户或密码</string>
     <string name="long_long_ago">很久以前</string>
     <string name="list_me">%1$s(我)</string>
+ 	<string name="net_error">失败，请稍后重试</string>
+    <string name="no_net">无网络连接</string>
 
 </resources>

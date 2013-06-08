@@ -27,7 +27,7 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Email format error</string>
     <string name="register_password_error">Please enter a password containing 6-20 characters</string>
-    <string name="net_error">No network connection</string>
+
     <string name="login_title_login_bubble_text">RC User Login</string>
     <string name="login_username_hint">E-mail,RCID</string>
     <string name="login_forget_psw_hint">Forgot password</string>
@@ -192,7 +192,9 @@
     <string name="login_account_error">Invalid account or password</string>
     <string name="long_long_ago">Long ago</string>
    	<string name="list_me">%1$s(me)</string>
-
+   	
+    <string name="no_net">No network connection</string>
+    <string name="net_error">Failed, please try again later</string>
     <!-- 没有翻译的字符 -->
 
     <string name="app_name">PhotoTalk</string>
@@ -305,7 +307,7 @@
     <string name="never_attention">不再提醒</string>
     <string name="receive_looked_one_second_ago">1秒以前-已查看</string>
     <string name="registe_fail">注册失败</string>
-    <string name="no_net">没有可用网络</string>
+
     <string name="vk_auth">绑定VK</string>
     <string name="vk_load_fail">VK信息获取失败</string>
     <string name="third_part_join_title">我加入PT啦！</string>

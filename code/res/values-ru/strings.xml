@@ -27,7 +27,7 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Ошибка формата адреса эл. почты</string>
     <string name="register_password_error">Введите пароль, содержащий 6-20 символов</string>
-    <string name="net_error">Сетевое подключение отсутствует</string>
+
     <string name="login_title_login_bubble_text">Вход в RC</string>
     <string name="login_username_hint">Эл. почта,RCID</string>
     <string name="login_forget_psw_hint">Забыли пароль?</string>
@@ -192,5 +192,7 @@
     <string name="login_account_error">Недопустимая учетная запись или пароль</string>
     <string name="long_long_ago">Давно</string>
     <string name="list_me">%1$s(мне)</string>
-
+    
+    <string name="net_error">Произошел сбой, попробуйте позже</string>
+    <string name="no_net">Сетевое подключение отсутствует</string>
 </resources>

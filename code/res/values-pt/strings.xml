@@ -27,7 +27,7 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Erro no formato do E-mail</string>
     <string name="register_password_error">Por favor, insira uma senha contendo 6-20 caracteres</string>
-    <string name="net_error">Sem conexão de rede</string>
+
     <string name="login_title_login_bubble_text">Login de Usuário RC</string>
     <string name="login_username_hint">E-mail,RCID</string>
     <string name="login_forget_psw_hint">Esqueceu a senha</string>
@@ -192,5 +192,6 @@
     <string name="login_account_error">Conta ou senha inválida</string>
     <string name="long_long_ago">Muito tempo atrás</string>
     <string name="list_me">%1$s(me)</string>
-
+    <string name="net_error">Falha, por favor, tente novamente mais tarde</string>
+    <string name="no_net">Sem conexão de rede</string>
 </resources>

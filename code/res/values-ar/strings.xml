@@ -27,7 +27,6 @@
     <string name="ok">موافق</string>
     <string name="registe_email_error">خطأ في تنسيق البريد الإلكتروني</string>
     <string name="register_password_error">الرجاء إدخال كلمة مرور تتراوح من 6 إلى 20 حرف</string>
-    <string name="net_error">لا يوجد اتصال بالشبكة</string>
     <string name="login_title_login_bubble_text">تسجيل دخول مستخدم RC</string>
     <string name="login_username_hint">البريد الإلكتروني,RCID</string>
     <string name="login_forget_psw_hint">نسيت كلمة المرور</string>
@@ -190,8 +189,9 @@
     <!-- 对话框&提示 -->
     <string name="cancel">إلغاء</string>
     <string name="login_account_error">حساب غير صالح أو كلمة مرور غير صالحة</string>
-    
     <string name="long_long_ago">منذ فترة طويلة</string>
-   	<string name="list_me">%1$s(أنا)</string>
+    <string name="list_me">%1$s(أنا)</string>
+    <string name="net_error">فشل، الرجاء المحاولة مرة أخرى لاحقًا</string>
+    <string name="no_net">لا يوجد اتصال بالشبكة</string>
 
 </resources>

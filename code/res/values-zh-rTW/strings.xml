@@ -27,7 +27,7 @@
     <string name="ok">確定</string>
     <string name="registe_email_error">郵箱格式錯誤</string>
     <string name="register_password_error">請輸入6-20個字元的密碼</string>
-    <string name="net_error">無網路連接</string>
+
     <string name="login_title_login_bubble_text">RC用戶登錄</string>
     <string name="login_username_hint">郵箱,RCID</string>
     <string name="login_forget_psw_hint">忘記密碼</string>
@@ -192,6 +192,6 @@
     <string name="login_account_error">無效賬戶或密碼</string>
     <string name="long_long_ago">很久以前</string>
     <string name="list_me">%1$s(我)</string>
-    
-
+ 	<string name="net_error">失敗，請稍後重試</string>
+    <string name="no_net">無網路連接</string>
 </resources>
