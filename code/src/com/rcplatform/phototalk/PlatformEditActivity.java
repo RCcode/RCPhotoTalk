@@ -10,9 +10,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -69,6 +72,30 @@ public class PlatformEditActivity extends ImagePickActivity {
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		ivHead.setOnClickListener(mOnClickListener);
 		etNick = (EditText) findViewById(R.id.et_nick);
+		
+		etNick.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+
+
+		etNick.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				etNick.setHintTextColor(getResources().getColor(R.color.register_input_hint));
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+		});
+		
 		vpUsers = (HorizontalListView) findViewById(R.id.vp_accounts);
 		Map<AppInfo, UserInfo> userApps = (Map<AppInfo, UserInfo>) getIntent().getSerializableExtra(PARAM_USER_APPS);
 		final BaseAdapter adapter = new AccountAdapter(userApps);
@@ -229,6 +256,13 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	private void updateUserInfo() {
 		String nick = etNick.getText().toString().trim();
+		if (nick.equals("")) {
+			etNick.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
+			etNick.requestFocus();
+			InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+			imm.showSoftInput(etNick, 0);
+			return;
+		}
 		if (checkInfo(nick)) {
 			Request request = new Request(this, PhotoTalkApiUrl.RCPLATFORM_ACCTION_CREATE_USERINFO, mResponseHandler);
 			request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());

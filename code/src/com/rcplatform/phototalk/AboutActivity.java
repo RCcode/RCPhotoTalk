@@ -67,14 +67,13 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 			case R.id.contact_us_btn:
 				EventUtil.More_Setting.rcpt_feedback(baseContext);
 				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-				String emailSubject = SystemMessageUtil.getLanguage(baseContext) + SystemMessageUtil.getAppName(baseContext)
-				        + SystemMessageUtil.getPhoneNumber(baseContext) + SystemMessageUtil.getNetworkName(baseContext)
-				        + SystemMessageUtil.getImsi(baseContext);
-				// email.putExtra(android.content.Intent.EXTRA_SUBJECT,
-				// emailSubject);
-				// 设置要默认发送的内容
+				String emailSubject = "\n\n\n\n\n\n" + SystemMessageUtil.getAppName(baseContext) + "\n" + MetaHelper.getAppVersionName(baseContext)
+				        + "\n" + SystemMessageUtil.getPhoneBrand() + "\n" + SystemMessageUtil.getPhoneModel() + "\n"
+				        + SystemMessageUtil.getOsVersion(baseContext) + "\n\n";
 				email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
-				// 调用系统的邮件系统
+
+				email.putExtra(Intent.EXTRA_SUBJECT,
+				               "[" + SystemMessageUtil.getAppName(baseContext) + "-" + MetaHelper.getAppVersionName(baseContext) + "]");// 邮件标题
 				startActivity(email);
 
 				break;
