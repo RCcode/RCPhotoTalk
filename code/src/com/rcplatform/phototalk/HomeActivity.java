@@ -23,7 +23,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -896,7 +895,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 					@Override
 					public void run() {
-						// TODO Auto-generated method stub
 						willQuit = false;
 					}
 

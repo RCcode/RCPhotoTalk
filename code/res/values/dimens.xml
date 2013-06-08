@@ -42,7 +42,7 @@
     <dimen name="take_photo_left">7dp</dimen>
     <dimen name="take_photo_bottom">11dp</dimen>
     <dimen name="take_photo_wheel_bottom">8dp</dimen>
-    <dimen name="edit_photo_voice_text_size">11sp</dimen>
+    <dimen name="edit_photo_voice_text_size">14sp</dimen>
     <dimen name="long_press_dialog_width">222dp</dimen>
     <dimen name="long_press_dialog_text_size">20sp</dimen>
     <dimen name="long_press_dialog_text_padding">4dp</dimen>
@@ -99,6 +99,6 @@
     <dimen name="login_margin_top_to_attention">13dp</dimen>
     <dimen name="login_otherapplist_divider_height">8dp</dimen>
     <dimen name="attention_text_size">16sp</dimen>
-    <dimen name="head_boarder_padding">7dp</dimen>
+    <dimen name="head_boarder_padding">5dp</dimen>
 
 </resources>

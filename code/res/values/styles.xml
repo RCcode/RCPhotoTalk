@@ -68,8 +68,6 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">19sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:paddingLeft">0dp</item>
-        <item name="android:gravity">center_vertical</item>
     </style>
 
     <style name="ContentOverlay" parent="android:style/Theme.Dialog">

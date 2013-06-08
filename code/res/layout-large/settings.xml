@@ -211,8 +211,8 @@
                             android:layout_width="@dimen/trend_new_icon_width"
                             android:layout_height="@dimen/trend_new_icon_width"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="5dp"
-                            android:layout_toRightOf="@+id/tv_friend_trends"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@+id/trends_to_right"
                             android:visibility="gone" >
 
                             <ImageView
@@ -232,6 +232,7 @@
                         </RelativeLayout>
 
                         <ImageView
+                            android:id="@+id/trends_to_right"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"

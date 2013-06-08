@@ -1,36 +1,219 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical">  
-  <com.rcplatform.phototalk.views.EditableViewGroup android:id="@+id/edit_group" android:layout_width="fill_parent" android:layout_height="fill_parent"></com.rcplatform.phototalk.views.EditableViewGroup>  
-  <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_marginLeft="@dimen/take_photo_left" android:layout_marginRight="@dimen/take_photo_left" android:layout_marginTop="@dimen/take_photo_left"> 
-    <Button android:id="@+id/btn_edit_pic_close" android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/close_edit_button_selector"/>  
-    <Button android:id="@+id/btn_edit_pic_save" android:layout_width="42dp" android:layout_height="42dp" android:layout_centerHorizontal="true" android:background="@drawable/save_button_selector"/>  
-    <Button android:id="@+id/btn_edit_pic_undo" android:layout_width="42dp" android:layout_height="42dp" android:layout_marginRight="@dimen/take_photo_left" android:layout_toLeftOf="@+id/btn_edit_pic_tuya" android:background="@drawable/undo_button_selector"/>  
-    <ImageView android:id="@+id/btn_edit_pic_tuya" android:layout_width="42dp" android:layout_height="42dp" android:layout_alignParentRight="true" android:src="@drawable/scrawl_button_selector"/> 
-  </RelativeLayout>  
-  <RelativeLayout android:id="@+id/select_layout" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/ll" android:layout_gravity="center_horizontal" android:layout_marginLeft="@dimen/take_photo_left" android:background="@drawable/wheelview_bg"> 
-    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:background="@drawable/wheelview_select"/>  
-    <com.rcplatform.phototalk.views.wheel.WheelView android:id="@+id/wv_hours" android:layout_width="35dp" android:layout_height="88dp" android:layout_centerInParent="true" android:layout_gravity="center_horizontal" android:layout_marginBottom="@dimen/take_photo_wheel_bottom" android:layout_marginLeft="@dimen/take_photo_wheel_bottom"/> 
-  </RelativeLayout>  
-  <RelativeLayout android:id="@+id/ll" android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginBottom="@dimen/take_photo_bottom" android:layout_marginLeft="@dimen/take_photo_left" android:layout_marginRight="@dimen/take_photo_left"> 
-    <Button android:id="@+id/btn_edit_pic_timelimit" android:layout_width="42dp" android:layout_height="42dp" android:background="@drawable/timelimit_button_selector" android:gravity="center" android:paddingTop="3dp" android:textColor="@color/white" android:textSize="12sp"/>  
-    <LinearLayout android:id="@+id/make_voice" android:layout_width="133dp" android:layout_height="42dp" android:layout_centerHorizontal="true" android:background="@drawable/voice_bg" android:visibility="invisible"> 
-      <TextView android:id="@+id/voice_size" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_vertical" android:layout_marginLeft="@dimen/edit_photo_voice_text_size" android:textColor="#FFFFFF"/>  
-      <Button android:id="@+id/play_voice" android:layout_width="31dp" android:layout_height="31dp" android:layout_gravity="center_vertical" android:layout_marginLeft="8dp" android:background="@drawable/play_voice"/>  
-      <Button android:id="@+id/delete_voice" android:layout_width="18dp" android:layout_height="18dp" android:layout_gravity="center_vertical" android:layout_marginLeft="35dp" android:background="@drawable/delete_voice"/> 
-    </LinearLayout>  
-    <com.rcplatform.phototalk.views.AudioRecordButton android:id="@+id/audioBtn" style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:background="@drawable/btn_record" android:maxWidth="177dp" android:text="@string/voice_record" android:textColor="#FFFFFF" android:textSize="@dimen/edit_photo_voice_text_size"/>  
-    <Button android:id="@+id/btn_edit_pic_send" android:layout_width="42dp" android:layout_height="42dp" android:layout_alignParentRight="true" android:background="@drawable/send_edit_button_selector"/> 
-  </RelativeLayout>  
-  <RelativeLayout android:id="@+id/layout_voice_record" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:visibility="invisible"> 
-    <ImageView android:id="@+id/iv_voice_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:src="@drawable/voice_record_bg"/>  
-    <ImageView android:id="@+id/voice_volume_bg" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_above="@+id/tv_record_second" android:layout_centerHorizontal="true" android:layout_marginBottom="53dp" android:background="@drawable/voice_volume_bg"/>  
-    <ImageView android:id="@+id/iv_voice_volume" android:layout_width="wrap_content" android:layout_height="8dp" android:layout_above="@+id/tv_record_second" android:layout_centerHorizontal="true" android:layout_marginBottom="53dp" android:background="@drawable/voice_volume"/>  
-    <ImageView android:id="@+id/voice_volume_gride" android:layout_width="wrap_content" android:layout_height="7dp" android:layout_above="@id/iv_voice_volume" android:layout_centerHorizontal="true" android:background="@drawable/voice_volume_gride"/>  
-    <TextView android:id="@+id/tv_record_second" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/iv_voice_bg" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:text="10s"/> 
-  </RelativeLayout>  
-  <RelativeLayout android:id="@+id/layout_voice_record_too_short" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:visibility="gone"> 
-    <ImageView android:id="@+id/voice_record_too_short_image" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerHorizontal="true" android:src="@drawable/voice_too_short"/>  
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_below="@+id/voice_record_too_short_image" android:layout_centerHorizontal="true" android:layout_marginTop="8dp" android:text="@string/voice_too_short"/> 
-  </RelativeLayout> 
+    <com.rcplatform.phototalk.views.EditableViewGroup
+        android:id="@+id/edit_group"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </com.rcplatform.phototalk.views.EditableViewGroup>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/take_photo_left"
+        android:layout_marginRight="@dimen/take_photo_left"
+        android:layout_marginTop="@dimen/take_photo_left" >
+
+        <Button
+            android:id="@+id/btn_edit_pic_close"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/close_edit_button_selector" />
+
+        <Button
+            android:id="@+id/btn_edit_pic_save"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/save_button_selector" />
+
+        <Button
+            android:id="@+id/btn_edit_pic_undo"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_marginRight="@dimen/take_photo_left"
+            android:layout_toLeftOf="@+id/btn_edit_pic_tuya"
+            android:background="@drawable/undo_button_selector" />
+
+        <ImageView
+            android:id="@+id/btn_edit_pic_tuya"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/scrawl_button_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/select_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/ll"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="@dimen/take_photo_left"
+        android:background="@drawable/wheelview_bg" >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/wheelview_select" />
+
+        <com.rcplatform.phototalk.views.wheel.WheelView
+            android:id="@+id/wv_hours"
+            android:layout_width="35dp"
+            android:layout_height="88dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/take_photo_wheel_bottom"
+            android:layout_marginLeft="@dimen/take_photo_wheel_bottom" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/ll"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/take_photo_bottom"
+        android:layout_marginLeft="@dimen/take_photo_left"
+        android:layout_marginRight="@dimen/take_photo_left" >
+
+        <Button
+            android:id="@+id/btn_edit_pic_timelimit"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="@drawable/timelimit_button_selector"
+            android:gravity="center"
+            android:paddingTop="3dp"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+        <LinearLayout
+            android:id="@+id/make_voice"
+            android:layout_width="133dp"
+            android:layout_height="42dp"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/voice_bg"
+            android:visibility="invisible" >
+
+            <TextView
+                android:id="@+id/voice_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/edit_photo_voice_text_size"
+                android:textColor="#FFFFFF" />
+
+            <Button
+                android:id="@+id/play_voice"
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/play_voice" />
+
+            <Button
+                android:id="@+id/delete_voice"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="35dp"
+                android:background="@drawable/delete_voice" />
+        </LinearLayout>
+
+        <com.rcplatform.phototalk.views.AudioRecordButton
+            android:id="@+id/audioBtn"
+            style="@style/text_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/btn_record"
+            android:maxWidth="177dp"
+            android:text="@string/voice_record"
+            android:textColor="#FFFFFF"
+            android:textSize="@dimen/edit_photo_voice_text_size" />
+
+        <Button
+            android:id="@+id/btn_edit_pic_send"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/send_edit_button_selector" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_voice_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/iv_voice_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/voice_record_bg" />
+
+        <ImageView
+            android:id="@+id/voice_volume_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/tv_record_second"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="53dp"
+            android:background="@drawable/voice_volume_bg" />
+
+        <ImageView
+            android:id="@+id/iv_voice_volume"
+            android:layout_width="wrap_content"
+            android:layout_height="8dp"
+            android:layout_above="@+id/tv_record_second"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="53dp"
+            android:background="@drawable/voice_volume" />
+
+        <ImageView
+            android:id="@+id/voice_volume_gride"
+            android:layout_width="wrap_content"
+            android:layout_height="7dp"
+            android:layout_above="@id/iv_voice_volume"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/voice_volume_gride" />
+
+        <TextView
+            android:id="@+id/tv_record_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_voice_bg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="10s" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_voice_record_too_short"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/voice_record_too_short_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/voice_too_short" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/voice_record_too_short_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:text="@string/voice_too_short" />
+    </RelativeLayout>
+
 </RelativeLayout>

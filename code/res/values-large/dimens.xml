@@ -42,7 +42,7 @@
   <dimen name="take_photo_left">7dp</dimen>  
   <dimen name="take_photo_bottom">12dp</dimen>  
   <dimen name="take_photo_wheel_bottom">9dp</dimen>  
-  <dimen name="edit_photo_voice_text_size">11sp</dimen>  
+  <dimen name="edit_photo_voice_text_size">15sp</dimen>  
   <dimen name="long_press_dialog_width">249dp</dimen>  
   <dimen name="long_press_dialog_text_size">20sp</dimen>  
   <dimen name="long_press_dialog_text_padding">4dp</dimen>  
