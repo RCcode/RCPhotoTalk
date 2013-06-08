@@ -43,6 +43,7 @@ import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PinyinComparator;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.HeadImageView;
 
 public class FriendDynamicActivity extends BaseActivity {
@@ -118,7 +119,8 @@ public class FriendDynamicActivity extends BaseActivity {
 				int index = arg2-1;
 				if (listDynamic.get(index).getType() == 1) {
 					// APP INFO
-
+					
+					Utils.searchAppInGooglePlay(baseContext, "");
 				} else {
 					// USER INFO
 					EventUtil.More_Setting.rcpt_friendsupdate_profileview(baseContext);

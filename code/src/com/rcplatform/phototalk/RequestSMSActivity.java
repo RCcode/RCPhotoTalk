@@ -118,17 +118,17 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_country_code:
-			showCountryChooseDialog();
-			break;
+			case R.id.btn_country_code:
+				showCountryChooseDialog();
+				break;
 
-		case R.id.btn_commit:
-			EventUtil.More_Setting.rcpt_getcode(baseContext);
-			requestSms();
-			break;
-		case R.id.title_linear_back:
-			finish();
-			break;
+			case R.id.btn_commit:
+				EventUtil.More_Setting.rcpt_getcode(baseContext);
+				requestSms();
+				break;
+			case R.id.title_linear_back:
+				finish();
+				break;
 		}
 	}
 
@@ -147,34 +147,34 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 			final String phoneNumber = "+" + mCountryCode.getCountryCode() + number;
 			AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
 			dialogBuilder.setTitle(phoneNumber).setMessage(getResources().getString(R.string.sms_reciver_info)).setCancelable(false)
-					.setPositiveButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+			        .setNegativeButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-						}
-					}).setNegativeButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+				        @Override
+				        public void onClick(DialogInterface dialog, int which) {
+				        }
+			        }).setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-							UserSettingProxy.requestSMS(RequestSMSActivity.this, new RCPlatformResponseHandler() {
+				        @Override
+				        public void onClick(DialogInterface dialog, int which) {
+					        showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+					        UserSettingProxy.requestSMS(RequestSMSActivity.this, new RCPlatformResponseHandler() {
 
-								@Override
-								public void onSuccess(int statusCode, String content) {
-									dismissLoadingDialog();
-									PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
-									startBindPhoneActivity(number);
-								}
+						        @Override
+						        public void onSuccess(int statusCode, String content) {
+							        dismissLoadingDialog();
+							        PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
+							        startBindPhoneActivity(number);
+						        }
 
-								@Override
-								public void onFailure(int errorCode, String content) {
-									dismissLoadingDialog();
-									showErrorConfirmDialog(content);
-								}
-							}, phoneNumber);
+						        @Override
+						        public void onFailure(int errorCode, String content) {
+							        dismissLoadingDialog();
+							        showErrorConfirmDialog(content);
+						        }
+					        }, phoneNumber);
 
-						}
-					});
+				        }
+			        });
 			dialogBuilder.create().show();
 
 		}
