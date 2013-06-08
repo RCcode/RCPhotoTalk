@@ -272,9 +272,9 @@ public class PlatformEditActivity extends ImagePickActivity {
 			Request request = new Request(this, PhotoTalkApiUrl.RCPLATFORM_ACCTION_CREATE_USERINFO, mResponseHandler);
 			request.putParam(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());
 			request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_NICK, nick);
-			if ((RCPlatformTextUtil.isEmpty(mHeadImagePath) && mHeadImagePath.startsWith("http://"))) {
+			if ((!RCPlatformTextUtil.isEmpty(mHeadImagePath) && mHeadImagePath.startsWith("http://"))) {
 				request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_HEAD_URL, mHeadImagePath);
-			} else if (RCPlatformTextUtil.isEmpty(mHeadImagePath)) {
+			} else if (!RCPlatformTextUtil.isEmpty(mHeadImagePath)) {
 				request.setFile(new File(mHeadImagePath));
 			}
 			request.putParam(PhotoTalkParams.CreateUserInfo.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(this) + "");

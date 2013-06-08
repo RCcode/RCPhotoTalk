@@ -197,7 +197,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 		@Override
 		public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
 			long groupId = parent.getExpandableListAdapter().getGroupId(groupPosition);
-			if (groupId == PhotoTalkFriendsAdapter.TYPE_RECOMMENDS) {
+			if (groupId == PhotoTalkFriendsAdapter.TYPE_RECOMMENDS || groupId == PhotoTalkFriendsAdapter.TYPE_THIRD_RECOMMENDS) {
 				return false;
 			}
 			return true;

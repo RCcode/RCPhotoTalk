@@ -151,7 +151,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		bindTigaseService();
 		checkBindPhone();
 		// 注册GCM
-		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getApplicationContext());
+		UserInfo userInfo = getCurrentUser();
 		if (userInfo != null) {
 			try {
 				ServerUtilities.register(this, userInfo.getRcId(), userInfo.getToken());
