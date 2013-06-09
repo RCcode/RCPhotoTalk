@@ -2,6 +2,8 @@ package com.rcplatform.phototalk.views;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
@@ -16,6 +18,7 @@ import android.media.MediaRecorder.OutputFormat;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,7 +69,13 @@ public class AudioRecordButton extends Button {
 	}
 
 	public void setSavePath(String path) {
-		mFilePath = path+mFilePath;
+		mFilePath = path + mFilePath;
+		// 清理遗留声音文件
+		File file = new File(mFilePath);
+		if (file.exists()) {
+			System.out.println("file.exists()");
+			file.delete();
+		}
 	}
 
 	public void setVoiceHandler(Handler handler) {
@@ -80,9 +89,9 @@ public class AudioRecordButton extends Button {
 			// TODO Auto-generated method stub
 			if (state == STATE_RECORDING) {
 				mOnRecordingListener.onRecording(mRecordedSeconds++, mRecorder.getMaxAmplitude());
-				mHandler.postDelayed(mRecordingListenerTask, 50);
+				mHandler.postDelayed(mRecordingListenerTask, 40);
 
-				if (mRecordedSeconds > maxRecoedSize*20) {
+				if ((System.currentTimeMillis() - mStartTime) > maxRecoedSize * 1000) {
 					stopRecord();
 				}
 			}
@@ -119,10 +128,11 @@ public class AudioRecordButton extends Button {
 				setBackgroundResource(R.drawable.btn_download_n);
 				if (state == STATE_RECORDING) {
 					stopRecord();
-				} else {
-					mRecordHandler.sendEmptyMessage(AUDIO_RECORD_TOO_SHORT);
-
 				}
+				// else {
+				// mRecordHandler.sendEmptyMessage(AUDIO_RECORD_TOO_SHORT);
+				//
+				// }
 				state = STATE_RECORD_STOP;
 				break;
 		}
@@ -175,11 +185,11 @@ public class AudioRecordButton extends Button {
 
 	private void startRecord(String filePath) {
 		// TODO Auto-generated method stub
-		File file = new File(filePath);
-		if (file.exists()) {
-			System.out.println("file.exists()");
-			file.delete();
-		}
+		System.out.println("---------------------start record!-----------------------");
+
+		// recordLimitTimer = new Timer();
+		// RecordLimitTimerTask task = new RecordLimitTimerTask();
+		// recordLimitTimer.schedule(task, this.maxRecoedSize*1000);
 		// showAttention();
 		mStartTime = System.currentTimeMillis();
 		mRecorder = new MediaRecorder();
@@ -221,10 +231,12 @@ public class AudioRecordButton extends Button {
 
 	private void stopRecord() {
 
+		System.out.println("-----------------stop record!----------------------");
 		stopMediaRecorder();
 		if ((System.currentTimeMillis() - mStartTime) < 1 * 1000) {
 			// Toast.makeText(getContext(), "录音时间太短",
 			// Toast.LENGTH_SHORT).show();
+
 			mRecordHandler.sendEmptyMessage(AUDIO_RECORD_TOO_SHORT);
 		} else {
 			mRecordedSeconds = (int) (System.currentTimeMillis() - mStartTime) / 1000;
@@ -241,6 +253,7 @@ public class AudioRecordButton extends Button {
 	}
 
 	public static interface OnRecordingListener {
+
 		public void onStartRecording();
 
 		public void onRecording(int recordedSecord, int amplitude);
