@@ -5,6 +5,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -29,19 +32,20 @@ import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-import com.google.android.gcm.GCMIntentService;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.User;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -58,11 +62,13 @@ import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class PTBackgroundService extends Service {
 
 	private static final int MSG_WHAT_NEWINFOS = 20000;
+	private static final int MSG_WHAT_NEW_RECOMMENDS = 20001;
 
 	private static final long BIND_STATE_CHECK_DELAY_TIME = 1000 * 60;
 	private static final long BIND_STATE_CHECK_SPACING_TIME = 1000 * 60 * 30;
@@ -500,57 +506,94 @@ public class PTBackgroundService extends Service {
 	private BroadcastReceiver mGCMReceiver = new BroadcastReceiver() {
 
 		@Override
-		public void onReceive(Context context, final Intent intent) {
+		public void onReceive(Context context, Intent intent) {
 
 			if (mCurrentUser != null) {
 				String type = intent.getStringExtra(Constants.Message.MESSAGE_TYPE_KEY);
 				if (type != null) {
 					if (type.equals(Constants.Message.MESSAGE_TYPE_NEW_INFORMATIONS)) {
-						LogUtil.e("gcm receive informations....");
-						Thread thread = new Thread() {
-							public void run() {
-								List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY));
-								Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(gcms, mCurrentUser);
-								Message msg = newInformationHandler.obtainMessage();
-								msg.what = MSG_WHAT_NEWINFOS;
-								msg.obj = result;
-								newInformationHandler.sendMessage(msg);
-							};
-						};
-						thread.start();
+						handlerNewInformation(intent);
 					} else if (type.equals(Constants.Message.MESSAGE_TYPE_NEW_RECOMMENDS)) {
-						LogUtil.e("gcm receive new recommends....");
-						String msg = intent.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY);
-						PrefsUtils.User.setNewRecommends(getApplicationContext(), mCurrentUser.getRcId(), true);
-						InformationPageController.getInstance().onNewRecommends();
-						if (!Utils.isRunningForeground(getApplicationContext()))
-							notifyNewRecommends(msg);
+						handlerNewRecommends(intent, mCurrentUser.getRcId());
 					}
 				}
 			}
 		};
 	};
 
-	private void notifyNewRecommends(String msg) {
+	private void handlerNewInformation(final Intent data) {
+		LogUtil.e("gcm receive informations....");
+		RCThreadPool.getInstance().addTask(new Runnable() {
+
+			@Override
+			public void run() {
+				List<Information> gcms = JSONConver.jsonToInformations(data.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY));
+				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(gcms, mCurrentUser);
+				Message msg = newInformationHandler.obtainMessage();
+				msg.what = MSG_WHAT_NEWINFOS;
+				msg.obj = result;
+				newInformationHandler.sendMessage(msg);
+			}
+		});
+	}
+
+	private void handlerNewRecommends(final Intent data, final String rcId) {
+		LogUtil.e("gcm receive new recommends....");
+		final String msg = data.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY);
+		FriendsProxy.getAllRecommends(PTBackgroundService.this, new RCPlatformResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, final String content) {
+				if (mCurrentUser != null && mCurrentUser.getRcId().equals(rcId)) {
+					RCThreadPool.getInstance().addTask(new Runnable() {
+
+						@Override
+						public void run() {
+							try {
+								JSONObject jsonObject = new JSONObject(content);
+								List<Friend> recommends = JSONConver.jsonToFriends(jsonObject.getJSONArray("recommendUsers").toString());
+								if (recommends != null && recommends.size() > 0) {
+									PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
+									PrefsUtils.User.setNewRecommends(getApplicationContext(), mCurrentUser.getRcId(), true);
+									Message handlerMsg = newInformationHandler.obtainMessage();
+									handlerMsg.what = MSG_WHAT_NEW_RECOMMENDS;
+									handlerMsg.obj = msg;
+									newInformationHandler.sendMessage(handlerMsg);
+								}
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+					});
+				}
+			}
+
+			@Override
+			public void onFailure(int errorCode, String content) {
+
+			}
+		});
+	}
+
+	private static void notifyNewRecommends(Context context, String msg) {
 		try {
 
-			// Notification notification = new Notification();
 			Notification notification = new Notification();
 			notification.icon = R.drawable.ic_launcher;
 
-			notification.contentView = new RemoteViews(getPackageName(), R.layout.gcm_notification);
+			notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
 			notification.contentView.setImageViewResource(R.id.gcm_image, R.drawable.ic_launcher);
-			notification.contentView.setTextViewText(R.id.gcm_title, getText(R.string.app_name));
+			notification.contentView.setTextViewText(R.id.gcm_title, context.getText(R.string.app_name));
 			notification.contentView.setTextViewText(R.id.gcm_decs, msg);
 			notification.when = System.currentTimeMillis();
 			notification.defaults |= Notification.DEFAULT_SOUND;
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			;
-			Intent notificationIntent = new Intent(this, WelcomeActivity.class);
+			Intent notificationIntent = new Intent(context, WelcomeActivity.class);
 			notificationIntent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, ApplicationStartMode.APPLICATION_START_RECOMMENDS);
 			// set intent so it does not start a new activity
-			PendingIntent intent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			notification.contentIntent = intent;
 			notificationManager.notify(0, notification);
 		} catch (Exception e) {
@@ -558,10 +601,16 @@ public class PTBackgroundService extends Service {
 		}
 	}
 
-	private static Handler newInformationHandler = new Handler() {
+	private Handler newInformationHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			if (msg.what == MSG_WHAT_NEWINFOS)
+			if (msg.what == MSG_WHAT_NEWINFOS) {
 				InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
+			} else if (msg.what == MSG_WHAT_NEW_RECOMMENDS) {
+				String notifyMessage = (String) msg.obj;
+				InformationPageController.getInstance().onNewRecommends();
+				if (!Utils.isRunningForeground(PTBackgroundService.this))
+					notifyNewRecommends(getApplicationContext(), notifyMessage);
+			}
 		};
 	};
 }

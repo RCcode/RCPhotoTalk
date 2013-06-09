@@ -395,4 +395,9 @@ public class FriendsProxy {
 		}
 		return responseHandler;
 	}
+
+	public static void getAllRecommends(Context context, RCPlatformResponseHandler responseHandler) {
+		Request request = new Request(context, PhotoTalkApiUrl.GET_ALL_RECOMMENDS_URL, responseHandler);
+		request.excuteAsync();
+	}
 }

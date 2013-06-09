@@ -34,6 +34,8 @@ public class PhotoTalkApiUrl {
 
 	public static final String GET_MY_FRIENDS_URL = USER_URL + "queryAllUsers.do";
 
+	public static final String GET_ALL_RECOMMENDS_URL = USER_URL + "queryRecommendUsers.do";
+
 	public static final String CREATE_TACOTY_ID_URL = USER_URL + "saveTacoty.do";
 
 	public static final String USER_NOTICES_URL = NOTICE_URL + "mainUserNoticeList.do";

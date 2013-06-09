@@ -398,7 +398,7 @@ public class PrefsUtils {
 			return getPreference(context, pref).getBoolean(PREF_KEY_HAS_RECOMMENDS, false);
 		}
 
-		public static void setNewRecommends(Context context, String pref, boolean hasNew) {
+		public static synchronized void setNewRecommends(Context context, String pref, boolean hasNew) {
 			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_RECOMMENDS, hasNew).commit();
 		}
 
