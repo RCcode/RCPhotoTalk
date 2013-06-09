@@ -122,6 +122,11 @@ public class InformationPageController {
 			mActivity.onNewTrends();
 	}
 
+	public void onFriendAlreadyAdded(Information information) {
+		if (mActivity != null)
+			mActivity.onFriendAlreadyAdded(information);
+	}
+
 	public void destroy() {
 		mActivity = null;
 	}

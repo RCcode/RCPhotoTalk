@@ -217,6 +217,12 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
+
+			@Override
+			public void onAlreadyAdded() {
+				// TODO Auto-generated method stub
+				
+			}
 		}, friend).execute();
 	}
 

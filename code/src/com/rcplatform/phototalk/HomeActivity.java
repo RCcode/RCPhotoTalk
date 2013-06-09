@@ -325,7 +325,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		mInformationList.setSnapListener(this);
 		mTakePhoto = (Button) findViewById(R.id.btn_home_take_photo);
 
-		mTvContentTitle = (TextView) findViewById(R.id.titleContent);
+		ImageView mTvContentTitle = (ImageView) findViewById(R.id.title_image);
 		mTvContentTitle.setVisibility(View.VISIBLE);
 		mTvContentTitle.setBackgroundResource(R.drawable.app_title);
 		mBtFriendList = (TextView) findViewById(R.id.choosebutton0);
@@ -904,5 +904,13 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 		}
 		return false;
+	}
+
+	public void onFriendAlreadyAdded(Information information) {
+		for (Information info : getAdapterData()) {
+			if (info.equals(information))
+				info.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+		}
+		adapter.notifyDataSetChanged();
 	}
 }

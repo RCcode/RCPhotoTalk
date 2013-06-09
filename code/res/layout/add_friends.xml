@@ -34,6 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="1dp"
+                    android:gravity="left"
                     android:text="@string/add_friend_title" />
             </LinearLayout>
 
@@ -43,6 +44,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                 android:gravity="left"
                 android:layout_marginLeft="@dimen/friend_info_phone_left"
                 android:text="@string/find_friend_title"
                 android:visibility="gone" />

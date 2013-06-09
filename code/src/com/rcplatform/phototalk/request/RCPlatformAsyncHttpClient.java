@@ -18,7 +18,6 @@ import com.loopj.android.http.RequestParams;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
-import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class RCPlatformAsyncHttpClient {

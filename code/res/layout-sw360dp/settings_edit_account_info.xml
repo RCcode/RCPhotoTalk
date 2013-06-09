@@ -53,7 +53,8 @@
                 android:background="@drawable/edit_fields_background" >
 
                 <TextView
-                    android:layout_width="match_parent"
+                    style="@style/text_base"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/default_gap_2x"
@@ -86,7 +87,8 @@
                 android:background="@drawable/edit_fields_background" >
 
                 <TextView
-                    android:layout_width="match_parent"
+                    style="@style/text_base"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/default_gap_2x"
@@ -119,7 +121,8 @@
                 android:background="@drawable/edit_fields_background" >
 
                 <TextView
-                    android:layout_width="match_parent"
+                    style="@style/text_base"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/default_gap_2x"

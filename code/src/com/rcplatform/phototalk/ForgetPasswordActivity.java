@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
@@ -90,7 +91,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 			public void onSuccess(int statusCode, String content) {
 				dismissLoadingDialog();
 				String resetMsg = String.format(getResources().getString(R.string.forget_password_reset_text), mEmail);
-				DialogUtil.createMsgDialog(ForgetPasswordActivity.this, resetMsg, getString(R.string.confirm)).show();
+				DialogUtil.showToast(getApplicationContext(), resetMsg, Toast.LENGTH_SHORT);
+				finish();
 			}
 
 			@Override

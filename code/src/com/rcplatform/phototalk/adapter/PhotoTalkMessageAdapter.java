@@ -4,14 +4,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -21,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.SimpleImageLoadingListener;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
@@ -113,9 +110,9 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED
 				&& !LogicUtils.isSender(context, record)) {
-			if(record.isHasVoice()){
+			if (record.isHasVoice()) {
 				holder.item_new.setImageResource(R.drawable.new_item_voice);
-			}else{
+			} else {
 				holder.item_new.setImageResource(R.drawable.item_new_bg);
 			}
 			holder.item_new.setVisibility(View.VISIBLE);
@@ -302,8 +299,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 			@Override
 			public void onFriendAddSuccess(Friend friend, int addType) {
-				// record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
-				// notifyDataSetChanged();
 				activity.dismissLoadingDialog();
 			}
 
@@ -312,34 +307,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				activity.dismissLoadingDialog();
 				activity.showErrorConfirmDialog(content);
 			}
+
+			@Override
+			public void onAlreadyAdded() {
+				LogicUtils.friendAlreadyAdded(record);
+				activity.dismissLoadingDialog();
+			}
 		}, friend).execute();
-		// FriendsProxy.addFriendFromInformation(context, new
-		// RCPlatformResponseHandler() {
-		//
-		// @Override
-		// public void onSuccess(int statusCode, String content) {
-		// try {
-		// JSONObject jsonObject = new JSONObject(content);
-		// Friend friend =
-		// JSONConver.jsonToObject(jsonObject.getJSONObject("userInfo").toString(),
-		// Friend.class);
-		// record.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
-		// notifyDataSetChanged();
-		// activity.dismissLoadingDialog();
-		// LogicUtils.informationFriendAdded(context, record, friend);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL,
-		// context.getString(R.string.net_error));
-		// }
-		// }
-		//
-		// @Override
-		// public void onFailure(int errorCode, String content) {
-		// activity.dismissLoadingDialog();
-		// activity.showErrorConfirmDialog(content);
-		// }
-		// }, record);
 	}
 
 	public String getStatuTime(String prefix, String postfix, long time) {

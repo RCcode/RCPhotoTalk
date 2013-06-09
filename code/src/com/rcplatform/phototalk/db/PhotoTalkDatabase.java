@@ -32,7 +32,7 @@ public interface PhotoTalkDatabase {
 	public void updateFriendRequestInformationByFriend(Friend friend);
 
 	public Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime, List<String> receivableUserIds,
-			final List<String> allReceiverIds, int state, int totleLength,boolean hasVoice);
+			final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice);
 
 	public void saveFriends(List<Friend> friends);
 
@@ -63,9 +63,10 @@ public interface PhotoTalkDatabase {
 	public Map<Integer, List<Information>> filterNewInformations(Collection<Information> newInformations, UserInfo currentUser);
 
 	public List<Information> getInformationByPage(int page, int pageSize);
-	
+
 	public int getUnSendInformationCountByUrl(String url);
-	
-	public void handAddedFriendInformation(String currentUserRcId,Information information);
-	
+
+	public void handAddedFriendInformation(boolean hasLoadedFriends, String currentUserRcId, Information information);
+
+	public void updateFriendInformationState(Information information);
 }

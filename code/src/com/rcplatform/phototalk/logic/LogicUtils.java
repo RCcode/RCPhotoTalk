@@ -114,7 +114,7 @@ public class LogicUtils {
 	public static boolean isSender(Context context, Information record) {
 
 		if (((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId())
-		        && !record.getReceiver().getRcId().equals(record.getSender().getRcId()))
+				&& !record.getReceiver().getRcId().equals(record.getSender().getRcId()))
 			return true;
 		return false;
 	}
@@ -134,18 +134,15 @@ public class LogicUtils {
 		Information information = null;
 		if (addType == Constants.FriendAddType.ADD_FRIEND_PASSIVE) {
 			RecordUser sender = new RecordUser(friend.getRcId(), friend.getNickName(), friend.getHeadUrl(), friend.getTigaseId());
-			RecordUser receiver = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(),
-			        currentUser.getTigaseId());
+			RecordUser receiver = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
-			                                              InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM, sender, receiver,
-			                                              createTime);
+					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM, sender, receiver, createTime);
 			PhotoTalkDatabaseFactory.getDatabase().updateFriendRequestInformationByFriend(friend);
 		} else if (addType == Constants.FriendAddType.ADD_FRIEND_ACTIVE) {
 			RecordUser receiver = new RecordUser(friend.getRcId(), friend.getNickName(), friend.getHeadUrl(), friend.getTigaseId());
 			RecordUser sender = new RecordUser(currentUser.getRcId(), currentUser.getNickName(), currentUser.getHeadUrl(), currentUser.getTigaseId());
 			information = MessageSender.createInformation(InformationType.TYPE_FRIEND_REQUEST_NOTICE,
-			                                              InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST, sender, receiver,
-			                                              createTime);
+					InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST, sender, receiver, createTime);
 			information.setReceiveTime(createTime);
 			List<Information> infos = new ArrayList<Information>();
 			infos.add(information);
@@ -153,10 +150,14 @@ public class LogicUtils {
 		}
 		if (information != null) {
 			MessageSender.getInstance().sendInformation(context, friend.getTigaseId(), friend.getRcId(), information);
-			// MessageSender.sendInformation(context, friend.getTigaseId(),
-			// friend.getRcId(), information);
 			InformationPageController.getInstance().friendAdded(information, addType);
 		}
+	}
+
+	public static void friendAlreadyAdded(Information information) {
+		information.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+		PhotoTalkDatabaseFactory.getDatabase().updateFriendInformationState(information);
+		InformationPageController.getInstance().onFriendAlreadyAdded(information);
 	}
 
 	public static void clearInformations(Context context) {
@@ -174,11 +175,11 @@ public class LogicUtils {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						break;
-					case DialogInterface.BUTTON_NEGATIVE:
-						clearInformations(context);
-						break;
+				case DialogInterface.BUTTON_POSITIVE:
+					break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					clearInformations(context);
+					break;
 				}
 				dialog.dismiss();
 			}
@@ -235,15 +236,14 @@ public class LogicUtils {
 				}
 
 			}, friendIds, hasVoice, hasGraf);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			InformationPageController.getInstance().onPhotoSendFail(flag);
 		}
 	}
 
 	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file,
-	        boolean hasVoice, boolean hasGraf) throws JSONException {
+			boolean hasVoice, boolean hasGraf) throws JSONException {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {

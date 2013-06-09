@@ -169,9 +169,8 @@ public class BaseActivity extends Activity {
 	}
 
 	protected void initForwordButton(int resId, OnClickListener onClickListener) {
-		TextView tvForward = (TextView) findViewById(R.id.tv_choosebutton_text);
-		tvForward.setBackgroundResource(resId);
 		View view = findViewById(R.id.choosebutton);
+		view.setBackgroundResource(resId);
 		view.setOnClickListener(onClickListener);
 		view.setVisibility(View.VISIBLE);
 	}

@@ -99,6 +99,11 @@ public class FriendDetailActivity extends BaseActivity {
 						showErrorConfirmDialog(content);
 						dismissLoadingDialog();
 					}
+
+					@Override
+					public void onAlreadyAdded() {
+						
+					}
 				}, mFriend).execute();
 			}
 		});

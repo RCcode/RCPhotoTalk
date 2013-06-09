@@ -429,11 +429,10 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		for (Information newInfo : newInformations) {
 			newInfo.setReceiveTime(receiveTime);
 			if (localInformations.contains(newInfo)) {
-				Information localInfo = localInformations.get(localInformations.indexOf(newInfo));
-				localInfo = updateInformation(currentUser, localInfo, newInfo);
-				if (localInfo != null)
-					db.store(localInfo);
-				updatedInfos.add(localInfo);
+				List<Information> localInfos = updateInformation(currentUser, localInformations, newInfo);
+				if (localInfos.size() > 0)
+					db.store(localInfos);
+				updatedInfos.addAll(localInfos);
 			} else {
 				db.store(newInfo);
 				newInfos.add(newInfo);
@@ -446,17 +445,18 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		return result;
 	}
 
-	private Information updateInformation(UserInfo userInfo, Information localInformation, Information newInformation) {
-		Information informationUpdated = null;
+	private List<Information> updateInformation(UserInfo userInfo, List<Information> localInformations, Information newInformation) {
+		Information localInformation = localInformations.get(localInformations.indexOf(newInformation));
+		List<Information> informationUpdateds = new ArrayList<Information>();
 		if (newInformation.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
-			informationUpdated = updateFriendRequestInformation(localInformation, newInformation);
+			informationUpdateds.addAll(updateFriendRequestInformation(localInformations, newInformation));
 		} else if (newInformation.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {
 			if (userInfo.getRcId().equals(newInformation.getSender().getRcId())
 					&& !newInformation.getReceiver().getRcId().equals(newInformation.getSender().getRcId())) {
-				informationUpdated = updateInformationSended(localInformation, newInformation);
+				informationUpdateds.add(updateInformationSended(localInformation, newInformation));
 			}
 		}
-		return informationUpdated;
+		return informationUpdateds;
 	}
 
 	private Information updateInformationSended(Information localInformation, Information newInformation) {
@@ -483,9 +483,17 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		return localInformation;
 	}
 
-	private Information updateFriendRequestInformation(Information localInformation, Information newInformation) {
-		localInformation.setStatu(newInformation.getStatu());
-		return localInformation;
+	private List<Information> updateFriendRequestInformation(List<Information> localInformations, Information newInformation) {
+		List<Information> updateInformations = new ArrayList<Information>();
+		for (Information localInfo : localInformations) {
+			if (localInfo.equals(newInformation)) {
+				if (newInformation.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM) {
+					localInfo.setStatu(newInformation.getStatu());
+					updateInformations.add(localInfo);
+				}
+			}
+		}
+		return updateInformations;
 	}
 
 	@Override
@@ -521,7 +529,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void handAddedFriendInformation(String currentUserRcId, final Information information) {
+	public void handAddedFriendInformation(boolean hasLoadedFriends, String currentUserRcId, final Information information) {
 		ObjectSet<Information> infosLocal = db.query(new Predicate<Information>() {
 			private static final long serialVersionUID = 1L;
 
@@ -534,31 +542,28 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			}
 		});
 		if (infosLocal.size() == 0) {
-			saveRecordInfos(Arrays.asList(new Information[] { information }));
-		} else {
-			Information infoLocal = infosLocal.get(0);
-			if (infoLocal.getStatu() != information.getStatu()) {
-				if (information.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM) {
-					infoLocal.setStatu(information.getStatu());
-					db.store(infoLocal);
-					db.commit();
-				} else if (information.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
-					String friendId = null;
-					if (information.getReceiver().getRcId().equals(currentUserRcId))
-						friendId = information.getSender().getRcId();
-					else
-						friendId = information.getReceiver().getRcId();
-					Friend friend=new Friend();
-					friend.setFriend(true);
-					friend.setRcId(friendId);
-					ObjectSet<Friend> friendLocal=db.queryByExample(friend);
-					if(friendLocal.size()==0){
-						
-					}else{
-						
-					}
-				}
+			if (hasLoadedFriends) {
+				Friend friend = new Friend();
+				saveRecordInfos(Arrays.asList(new Information[] { information }));
+			} else {
+
 			}
+
+		} else {
 		}
+	}
+
+	@Override
+	public synchronized void updateFriendInformationState(Information information) {
+		Information informationExample = new Information();
+		informationExample.setSender(new RecordUser(information.getSender().getRcId(), null, null, null));
+		informationExample.setReceiver(new RecordUser(information.getReceiver().getRcId(), null, null, null));
+		informationExample.setType(InformationType.TYPE_FRIEND_REQUEST_NOTICE);
+		ObjectSet<Information> localInfos = db.queryByExample(informationExample);
+		for (Information info : localInfos) {
+			info.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+			db.store(info);
+		}
+		db.commit();
 	}
 }

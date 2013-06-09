@@ -199,6 +199,12 @@ private Button seach_delete_btn;
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
 			}
+
+			@Override
+			public void onAlreadyAdded() {
+				// TODO Auto-generated method stub
+				
+			}
 		}, friend).execute();
 	}
 

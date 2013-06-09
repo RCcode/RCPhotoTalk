@@ -27,7 +27,6 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.MD5;
-import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;

@@ -11,12 +11,12 @@ import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.RCPlatformServiceError;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformAsyncHttpClient;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
@@ -52,6 +52,11 @@ public class AddFriendTask {
 
 			@Override
 			public void onFailure(int errorCode, String content) {
+				if (errorCode == RCPlatformServiceError.ERROR_CODE_FRIEND_ALREADY_ADDED) {
+					if (mListener != null) {
+						mListener.onAlreadyAdded();
+					}
+				}
 				if (mListener != null)
 					mListener.onFriendAddFail(errorCode, content);
 			}
@@ -82,6 +87,8 @@ public class AddFriendTask {
 
 	public static interface AddFriendListener {
 		public void onFriendAddSuccess(Friend friend, int addType);
+
+		public void onAlreadyAdded();
 
 		public void onFriendAddFail(int statusCode, String content);
 	}

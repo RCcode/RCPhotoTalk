@@ -27,10 +27,8 @@ import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
-import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.activity.MenuBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
@@ -337,6 +335,12 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			public void onFriendAddFail(int statusCode, String content) {
 				dismissLoadingDialog();
 				showErrorConfirmDialog(content);
+			}
+
+			@Override
+			public void onAlreadyAdded() {
+				// TODO Auto-generated method stub
+				
 			}
 		}, friend).execute();
 	}
