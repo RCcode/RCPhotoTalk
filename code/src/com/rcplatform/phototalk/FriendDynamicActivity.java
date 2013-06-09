@@ -116,11 +116,11 @@ public class FriendDynamicActivity extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
 				// TODO Auto-generated method stub
-				int index = arg2-1;
+				int index = arg2 - 1;
 				if (listDynamic.get(index).getType() == 1) {
 					// APP INFO
-					
-					Utils.searchAppInGooglePlay(baseContext, "");
+
+					Utils.searchAppInGooglePlay(baseContext, FriendDynamicListAdpter.getAppInfos(listDynamic.get(index).getOtherName())[1]);
 				} else {
 					// USER INFO
 					EventUtil.More_Setting.rcpt_friendsupdate_profileview(baseContext);
@@ -148,8 +148,7 @@ public class FriendDynamicActivity extends BaseActivity {
 				try {
 					List<FriendDynamic> list = jsonToFriendDynamic(content);
 					myHandler.obtainMessage(type, list).sendToTarget();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					// TODO: handle exception
 				}
 			}
@@ -167,37 +166,37 @@ public class FriendDynamicActivity extends BaseActivity {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
 			switch (msg.what) {
-				case GET_PULLDOWN:
-					List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
-					if (downlist != null) {
-						downlist.addAll(listDynamic);
-						listDynamic.clear();
-						listDynamic.addAll(downlist);
-					}
-					friendDynameicList.onRefreshComplete();
-					adpter.notifyDataSetChanged();
-					break;
+			case GET_PULLDOWN:
+				List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
+				if (downlist != null) {
+					downlist.addAll(listDynamic);
+					listDynamic.clear();
+					listDynamic.addAll(downlist);
+				}
+				friendDynameicList.onRefreshComplete();
+				adpter.notifyDataSetChanged();
+				break;
 
-				case GET_FIRST:
-					List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
-					if (list != null) {
-						listDynamic.addAll(list);
-					}
-					friendDynameicList.onRefreshComplete();
-					adpter.notifyDataSetChanged();
-					break;
-				case GET_UPDOWN:
-					List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
-					if (uplist != null) {
-						// listDynamic.clear();
-						listDynamic.addAll(uplist);
-					}
-					friendDynameicList.onRefreshComplete();
-					adpter.notifyDataSetChanged();
-					break;
-				case UPDATE_UI:
-					InformationPageController.getInstance().onNewTread();
-					break;
+			case GET_FIRST:
+				List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
+				if (list != null) {
+					listDynamic.addAll(list);
+				}
+				friendDynameicList.onRefreshComplete();
+				adpter.notifyDataSetChanged();
+				break;
+			case GET_UPDOWN:
+				List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
+				if (uplist != null) {
+					// listDynamic.clear();
+					listDynamic.addAll(uplist);
+				}
+				friendDynameicList.onRefreshComplete();
+				adpter.notifyDataSetChanged();
+				break;
+			case UPDATE_UI:
+				InformationPageController.getInstance().onNewTread();
+				break;
 			}
 
 		}

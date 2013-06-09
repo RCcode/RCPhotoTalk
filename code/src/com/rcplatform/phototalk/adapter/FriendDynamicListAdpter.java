@@ -97,34 +97,34 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 			}
 		});
 		viewHolder.friendNick.setText(list.get(position).getfRcName());
-//		viewHolder.friendNick.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				toFriend(list.get(position).getfRcId());
-//			}
-//		});
+		// viewHolder.friendNick.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// toFriend(list.get(position).getfRcId());
+		// }
+		// });
 
 		if (list.get(position).getType() == 1) {
 
 			viewHolder.add_friend_layout.setVisibility(View.GONE);
 			viewHolder.add_app_layout.setVisibility(View.VISIBLE);
-			viewHolder.appMessage.setText(context.getResources().getString(R.string.add_app, list.get(position).getOtherName()));
+			viewHolder.appMessage.setText(context.getResources().getString(R.string.add_app, getAppInfos(list.get(position).getOtherName())[0]));
 		} else {
 			viewHolder.add_friend_layout.setVisibility(View.VISIBLE);
 			viewHolder.add_app_layout.setVisibility(View.GONE);
 			viewHolder.friendMessage.setText(context.getResources().getString(R.string.add_friend, list.get(position).getOtherName()));
 		}
-//		viewHolder.friendMessage.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				EventUtil.More_Setting.rcpt_friendsupdate_profileview(context);
-//				toFriend(list.get(position).getOtherId());
-//			}
-//		});
+		// viewHolder.friendMessage.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// EventUtil.More_Setting.rcpt_friendsupdate_profileview(context);
+		// toFriend(list.get(position).getOtherId());
+		// }
+		// });
 
 		Long time = Long.decode(list.get(position).getCreateTime());
 		viewHolder.sendTime.setText(RCPlatformTextUtil.getTextFromTimeToNow(context, time));
@@ -251,5 +251,10 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 	public void dismissLoadingDialog() {
 		if (mProgressDialog != null && mProgressDialog.isShowing())
 			mProgressDialog.dismiss();
+	}
+
+	public static  String[] getAppInfos(String otherName) {
+		String[] infos = otherName.split("\\|");
+		return infos;
 	}
 }
