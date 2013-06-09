@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 通用 -->
+    <string name="confirm">OK</string>
+
+    <!-- 引導頁面 -->
+    <string name="init_page_login">RC用戶登錄</string>
+    <string name="init_page_signup">註冊新帳號</string>
+    <string name="init_message_title_one">分享瞬間</string>
+    <string name="init_message_text_one">分享生活中每一個精彩的瞬間</string>
+    <string name="init_message_title_two">照片處理</string>
+    <string name="init_message_text_two">用語音、塗鴉使照片更有趣</string>
+    <string name="init_message_title_three">限時銷毀</string>
+    <string name="init_message_text_three">照片查看後自動銷毀，不用擔心隱私被洩露</string>
+
+    <!-- 註冊登錄頁面 -->
+    <string name="reg_bubble_desc_text">註冊後你可以登錄任何RC應用</string>
+    <string name="registe_email_hint">郵箱</string>
+    <string name="login_password_hint">密碼（6-20個字元）</string>
+    <string name="init_regist_agreement">註冊即表示您接受服務條款和隱私政策</string>
+    <string name="landing_page_signup">註冊</string>
+    <string name="login_title_bubble_text">註冊新帳號</string>
+    <string name="login_nick_hint">昵稱（20個字元以內）</string>
+    <string name="register_confirm_email_address">你的郵箱是:</string>
+    <string name="modify">修改</string>
+    <string name="ok">確定</string>
+    <string name="registe_email_error">郵箱格式錯誤</string>
+    <string name="register_password_error">請輸入6-20個字元的密碼</string>
+
+    <string name="login_title_login_bubble_text">RC用戶登錄</string>
+    <string name="login_username_hint">郵箱,RCID</string>
+    <string name="login_forget_psw_hint">忘記密碼</string>
+    <string name="landing_page_login">登錄</string>
+    <string name="login_use_account_below">選擇RC帳號登錄</string>
+    <string name="user_other_account">其它RC帳號登錄</string>
+
+    <!-- 忘記密碼 -->
+    <string name="forget_password_text_hint">輸入你已註冊的郵箱</string>
+    <string name="forget_password_reset_text">已將密碼重置郵件發到你的郵箱%s</string>
+
+    <!-- 查找好友頁面 -->
+    <string name="find_friend_title">查找好友</string>
+    <string name="firend_list_invite_friend_title">邀請好友</string>
+    <string name="firend_list_used_photochat_friend_title">使用PhotoTalk的好友</string>
+    <string name="search_hint">未找到相關用戶</string>
+
+    <!-- 消息頁面 -->
+    <string name="minute">%1$d分前</string>
+    <string name="second">%1$d秒前</string>
+    <string name="hour">%1$d小時前</string>
+    <string name="day">%1$d天前</string>
+    <string name="ago">%1$s</string>
+    <string name="send_sending">發送中</string>
+    <string name="send_sended">%1$s-已發送</string>
+    <string name="send_received"> %1$s-已接收</string>
+    <string name="send_looked">%1$s-已查看</string>
+    <string name="send_fail">發送失敗，點擊重試</string>
+    <string name="receive_downloading">載入中</string>
+    <string name="receive_loaded">%1$s-按住查看</string>
+    <string name="receive_looked">%1$s-已查看</string>
+    <string name="receive_fail">接收失敗，點擊重試</string>
+    <string name="added_by_friend">%1$s將我加為好友</string>
+    <string name="added_friend_back">我添加%1$s為好友</string>
+    <string name="added_friend_confirm">%1$s將我加為好友</string>
+    <string name="added_friend">我添加%1$s為好友</string>
+    <string name="operation">操作</string>
+    <string name="resend">重發</string>
+    <string name="delete">刪除</string>
+    <string name="reload">重新接收</string>
+    <string name="will_quit">再次點擊"返回"退出應用</string>
+
+    <!-- menu -->
+    <string name="take_score">評價</string>
+
+    <!-- 我 -->
+    <string name="me">我</string>
+
+    <!-- 提示 -->
+    <string name="attention_later">以後再說</string>
+    <string name="update_now">馬上更新</string>
+    <string name="update_dialog_title">有更新了！</string>
+    <string name="bind_phone_attention">註冊手機號碼後你的朋友可以更容易找到你</string>
+    <string name="bind_now">馬上註冊</string>
+    <string name="share_complete">成功！</string>
+    <string name="save_success">成功！</string>
+
+    <!-- 圖像編輯 -->
+    <string name="voice_too_short">錄音時間太短</string>
+    <string name="voice_record">按住錄音</string>
+
+    <!-- 發送消息 -->
+    <string name="select_friend_title">發送給</string>
+
+    <!-- 好友列表 -->
+    <string name="my_firend_title">好友</string>
+    <string name="my_friends_added">我的好友</string>
+    <string name="my_firend_suggested_title">好友推薦</string>
+    <string name="add_friend_title">添加好友</string>
+
+    <!-- 加為好友 -->
+    <string name="add_to_friend">加為好友</string>
+
+    <!-- 更多 -->
+    <string name="my_firend_setting_more_title">更多</string>
+    <string name="friend_dynamic">好友動態</string>
+    <string name="my_account">我的RC帳號</string>
+    <string name="setting">設置</string>
+    <string name="about">關於</string>
+    <string name="setting_page_clean_history">清空記錄</string>
+    <string name="clear_infos_message">確定要清空所有記錄</string>
+
+    <!-- 好友動態 -->
+    <string name="add_friend">將%1$s加為好友</string>
+    <string name="add_app">加入了%1$s</string>
+
+    <!-- RC帳戶設置 -->
+    <string name="setting_update_facebook_unbind"></string>
+    <string name="unauthorized">未連結</string>
+    <string name="phone_unbind">未註冊</string>
+    <string name="setting_update_login_password">修改登錄密碼</string>
+    <string name="login_out_account">註銷</string>
+    <string name="dialog_confirm_deauth">確定解除連結？</string>
+
+    <!-- 修改密碼 -->
+    <string name="change_password">修改登錄密碼</string>
+    <string name="input_current_password">輸入現密碼</string>
+    <string name="forget_password_title">忘記密碼</string>
+    <string name="change_password_edit_title">設置新密碼</string>
+    <string name="change_password_new_password_hint">新密碼</string>
+    <string name="change_password_confirm_password_hint">再次輸入</string>
+    <string name="two_password_not_same">兩次密碼輸入不同</string>
+    <string name="password_change_complete">修改成功</string>
+
+    <!-- 手動綁定手機號 -->
+    <string name="bind_phone">註冊手機號</string>
+    <string name="bind_phone_input_phone_hint">輸入手機號</string>
+    <string name="next_number">獲取驗證碼(%1$d)</string>
+    <string name="sms_reciver_info">將會收到一條包含驗證碼的短信</string>
+    <string name="input_validate">輸入驗證碼</string>
+    <string name="commit">提交</string>
+    <string name="resend_sms_number">重新獲取驗證碼(%1$d)</string>
+    <string name="resend_sms_second">重新獲取驗證碼(%1$d)</string>
+    <string name="phone_number_validate">手機號驗證</string>
+
+    <!-- profile -->
+    <string name="settings_update_person_info_title">個人資料</string>
+    <string name="nick">昵稱</string>
+    <string name="sex">性別</string>
+    <string name="birthday">生日</string>
+    <string name="settings_update_name_title">昵稱</string>
+    <string name="settings_select_sex">性別</string>
+    <string name="male">男</string>
+    <string name="famale">女</string>
+    <string name="select_birthday">生日</string>
+    <string name="sex_secret"></string>
+
+    <!-- 設定 -->
+    <string name="receive_setting">誰可以給我發送照片</string>
+    <string name="receive_all">任何人</string>
+    <string name="receive_friend">我的好友</string>
+    <string name="dynamic_setting">在好友中共用我的動態</string>
+    <string name="trends_share">共用</string>
+    <string name="trends_hide">不共用</string>
+
+    <!-- 關於 -->
+    <string name="check_update">檢查更新</string>
+    <string name="contact_us">聯繫我們</string>
+    <string name="term_service">服務條款</string>
+    <string name="compact">隱私政策</string>
+    <string name="no_new_version">Phototalk是最新版本</string>
+
+    <!-- 登錄個人資訊頁 -->
+    <string name="use_info_below">選擇個人資料</string>
+    <string name="or">或者</string>
+    <string name="use_new_info">使用新的個人資料</string>
+    <string name="other_device_login">你的帳號已在其它設備登錄</string>
+    <string name="relogin">確定</string>
+    <string name="join_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址 http://rctalk.me 註冊後加我ID:%1$s</string>
+    <string name="invite_message">有聲照片，限時銷毀！加入RC PhotoTalk，與我分享美妙時刻！下載地址 http://rctalk.me 註冊後加我ID:%1$s</string>
+    <string name="contact_friend">通訊錄:</string>
+    <string name="facebook_friend">Facebook:</string>
+    <string name="vk_friend">VKontakte:</string>
+
+    <!-- gcm -->
+    <string name="gcm_message">你有%1$d條信息</string>
+    <string name="gcm_friend">有人加你為好友</string>
+    <string name="friend_detail_send_photo_hint_text">發照片</string>
+
+    <!-- 对话框&提示 -->
+    <string name="cancel">取消</string>
+    <string name="login_account_error">無效賬戶或密碼</string>
+    <string name="long_long_ago">很久以前</string>
+    <string name="list_me">%1$s(我)</string>
+ 	<string name="net_error">失敗，請稍後重試</string>
+    <string name="no_net">無網路連接</string>
+</resources>

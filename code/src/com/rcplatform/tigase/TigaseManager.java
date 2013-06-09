@@ -49,7 +49,7 @@ public class TigaseManager {
 
 	private ChatManager chatManager = null;
 
-	private TigaseDb4oDatabase db = null;
+	static private TigaseDb4oDatabase db = null;
 
 	private String user = null;
 
@@ -94,7 +94,7 @@ public class TigaseManager {
 				resetPasswordTimer.schedule(task, delay);
 			}
 			resetPasswordCount++;
-			
+
 			boolean updateFlag = false;
 
 			UserInfo userInfo = ((PhotoTalkApplication) ctx.getApplicationContext()).getCurrentUser();
@@ -149,7 +149,7 @@ public class TigaseManager {
 				}
 				catch (Exception e) {
 				}
-				if (conn != null){
+				if (conn != null) {
 					conn.disconnect();
 				}
 
@@ -175,7 +175,7 @@ public class TigaseManager {
 				}
 			}
 			catch (Exception e) {
-				
+
 				e.printStackTrace();
 
 			}
@@ -224,11 +224,9 @@ public class TigaseManager {
 			// login
 
 			if (null != user && null != password) {
-				Log.d("user=", user);
-				Log.d("password=", password);
 				try {
 					if (!connection.isAuthenticated()) {
-						connection.login(user+"@" + node.getDomain().trim(), password);
+						connection.login(user + "@" + node.getDomain().trim(), password);
 					}
 				}
 				catch (XMPPException e) {
@@ -276,7 +274,9 @@ public class TigaseManager {
 
 	private TigaseManager(Context ctx) {
 		this.ctx = ctx;
-		db = new TigaseDb4oDatabase();
+		if (db == null) {
+			db = new TigaseDb4oDatabase();
+		}
 	}
 
 	static public TigaseManager getInstance(Context ctx) {
