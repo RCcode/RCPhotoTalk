@@ -91,7 +91,7 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 			public void onSuccess(int statusCode, String content) {
 				dismissLoadingDialog();
 				String resetMsg = String.format(getResources().getString(R.string.forget_password_reset_text), mEmail);
-				DialogUtil.showToast(getApplicationContext(), resetMsg, Toast.LENGTH_SHORT);
+				DialogUtil.showToast(getApplicationContext(), resetMsg, Toast.LENGTH_LONG);
 				finish();
 			}
 
