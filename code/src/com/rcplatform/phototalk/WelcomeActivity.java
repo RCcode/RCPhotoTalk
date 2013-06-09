@@ -25,6 +25,7 @@ import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
+import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -113,6 +114,10 @@ public class WelcomeActivity extends BaseActivity {
 		if (userInfo != null) {
 			getPhotoTalkApplication().setCurrentUser(userInfo);
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
+			int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
+			if (startMode != -1) {
+				intent.putExtra(ApplicationStartMode.APPLICATION_START_KEY, startMode);
+			}
 			startActivity(intent);
 			finish();
 			return;

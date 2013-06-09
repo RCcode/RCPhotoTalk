@@ -365,7 +365,6 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	@Override
 	public boolean onMenuOpened(int featureId, Menu menu) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 }

@@ -10,16 +10,6 @@
  */
 package com.google.android.gcm;
 
-import com.google.android.gcm.GCMRegistrar;
-import com.rcplatform.phototalk.utils.Constants;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.Location;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -27,11 +17,17 @@ import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Random;
 
 import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+
+import com.rcplatform.phototalk.utils.Constants;
 
 /**
  * Helper class used to communicate with the demo server.

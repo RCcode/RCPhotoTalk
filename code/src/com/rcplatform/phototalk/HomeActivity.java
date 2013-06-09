@@ -68,6 +68,7 @@ import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
+import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -140,6 +141,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
+		checkStartMode();
 		registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
@@ -161,7 +163,13 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			}
 		}
-		onNewRecommends();
+	}
+
+	private void checkStartMode() {
+		int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
+		if (startMode == ApplicationStartMode.APPLICATION_START_RECOMMENDS) {
+			startActivity(MyFriendsActivity.class);
+		}
 	}
 
 	@Override

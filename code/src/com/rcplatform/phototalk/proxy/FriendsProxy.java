@@ -294,14 +294,16 @@ public class FriendsProxy {
 						public void run() {
 							try {
 								JSONObject jObj = new JSONObject(content);
-								final List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("userList").toString());
+								List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("userList").toString());
 								PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, FriendType.CONTACT);
+								final List<Friend> contactsRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends(FriendType.CONTACT);
 								if (needServiceData)
 									context.runOnUiThread(new Runnable() {
 
 										@Override
 										public void run() {
-											listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsService), recommendsService);
+											listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, contactsRecommends),
+													contactsRecommends);
 										}
 									});
 
@@ -346,15 +348,16 @@ public class FriendsProxy {
 						public void run() {
 							try {
 								JSONObject jObj = new JSONObject(content);
-								final List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
+								List<Friend> recommendsService = JSONConver.jsonToFriends(jObj.getJSONArray("thirdUsers").toString());
 								PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommendsService, friendType);
+								final List<Friend> thirdPartRecommends = PhotoTalkDatabaseFactory.getDatabase().getRecommends(friendType);
 								if (needServiceData) {
 									context.runOnUiThread(new Runnable() {
 
 										@Override
 										public void run() {
-											listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsService),
-													recommendsService);
+											listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, thirdPartRecommends),
+													thirdPartRecommends);
 										}
 									});
 								}

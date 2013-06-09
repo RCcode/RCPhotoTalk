@@ -7,6 +7,8 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -19,6 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.telephony.SmsManager;
+import android.widget.RemoteViews;
 
 import com.facebook.Request;
 import com.facebook.Request.GraphUserCallback;
@@ -26,9 +29,12 @@ import com.facebook.Request.GraphUserListCallback;
 import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+import com.google.android.gcm.GCMIntentService;
 import com.perm.kate.api.Api;
 import com.perm.kate.api.User;
 import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.WelcomeActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
@@ -48,9 +54,11 @@ import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
+import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class PTBackgroundService extends Service {
 
@@ -493,22 +501,63 @@ public class PTBackgroundService extends Service {
 
 		@Override
 		public void onReceive(Context context, final Intent intent) {
-			LogUtil.e("gcm receive informations....");
+
 			if (mCurrentUser != null) {
-				Thread thread = new Thread() {
-					public void run() {
-						List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY));
-						Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(gcms, mCurrentUser);
-						Message msg = newInformationHandler.obtainMessage();
-						msg.what = MSG_WHAT_NEWINFOS;
-						msg.obj = result;
-						newInformationHandler.sendMessage(msg);
-					};
-				};
-				thread.start();
+				String type = intent.getStringExtra(Constants.Message.MESSAGE_TYPE_KEY);
+				if (type != null) {
+					if (type.equals(Constants.Message.MESSAGE_TYPE_NEW_INFORMATIONS)) {
+						LogUtil.e("gcm receive informations....");
+						Thread thread = new Thread() {
+							public void run() {
+								List<Information> gcms = JSONConver.jsonToInformations(intent.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY));
+								Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(gcms, mCurrentUser);
+								Message msg = newInformationHandler.obtainMessage();
+								msg.what = MSG_WHAT_NEWINFOS;
+								msg.obj = result;
+								newInformationHandler.sendMessage(msg);
+							};
+						};
+						thread.start();
+					} else if (type.equals(Constants.Message.MESSAGE_TYPE_NEW_RECOMMENDS)) {
+						LogUtil.e("gcm receive new recommends....");
+						String msg = intent.getStringExtra(Constants.Message.MESSAGE_CONTENT_KEY);
+						PrefsUtils.User.setNewRecommends(getApplicationContext(), mCurrentUser.getRcId(), true);
+						InformationPageController.getInstance().onNewRecommends();
+						if (!Utils.isRunningForeground(getApplicationContext()))
+							notifyNewRecommends(msg);
+					}
+				}
 			}
 		};
 	};
+
+	private void notifyNewRecommends(String msg) {
+		try {
+
+			// Notification notification = new Notification();
+			Notification notification = new Notification();
+			notification.icon = R.drawable.ic_launcher;
+
+			notification.contentView = new RemoteViews(getPackageName(), R.layout.gcm_notification);
+			notification.contentView.setImageViewResource(R.id.gcm_image, R.drawable.ic_launcher);
+			notification.contentView.setTextViewText(R.id.gcm_title, getText(R.string.app_name));
+			notification.contentView.setTextViewText(R.id.gcm_decs, msg);
+			notification.when = System.currentTimeMillis();
+			notification.defaults |= Notification.DEFAULT_SOUND;
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			;
+			Intent notificationIntent = new Intent(this, WelcomeActivity.class);
+			notificationIntent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, ApplicationStartMode.APPLICATION_START_RECOMMENDS);
+			// set intent so it does not start a new activity
+			PendingIntent intent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+			notification.contentIntent = intent;
+			notificationManager.notify(0, notification);
+		} catch (Exception e) {
+
+		}
+	}
+
 	private static Handler newInformationHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
 			if (msg.what == MSG_WHAT_NEWINFOS)

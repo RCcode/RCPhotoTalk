@@ -280,7 +280,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	private static void generateMessageNotification(Context context, String msg) {
+	public static void generateMessageNotification(Context context, String msg) {
 		try {
 
 			// Notification notification = new Notification();
