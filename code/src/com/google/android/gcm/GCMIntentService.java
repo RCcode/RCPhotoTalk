@@ -175,6 +175,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			Intent it = new Intent();
 			it.setAction(Constants.Action.ACTION_GCM_MESSAGE);
+			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY, Constants.Message.MESSAGE_TYPE_NEW_INFORMATIONS);
 			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, msg);
 			context.sendBroadcast(it);
 
@@ -194,9 +195,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		} else if (type == Constants.Message.MESSAGE_NEW_USER_MESSAGE_INT) {
 			String userStr = intent.getStringExtra("new_user_info");
-			if (!isRunning) {
-				generateMessageNotification(context, userStr);
-			}
+//			if (!isRunning) {
+//				generateMessageNotification(context, userStr);
+//			}
+//			
+			Intent it = new Intent();
+			it.setAction(Constants.Action.ACTION_GCM_MESSAGE);
+			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, userStr);
+			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY, Constants.Message.MESSAGE_TYPE_NEW_RECOMMENDS);
+			context.sendBroadcast(it);
+			
 		}else if (type == Constants.Message.MESSAGE_APP_PUSH_MESSAGE_INT) {
 
 			String iconUrl = intent.getStringExtra("icon");

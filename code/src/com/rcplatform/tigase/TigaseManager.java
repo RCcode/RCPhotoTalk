@@ -224,8 +224,6 @@ public class TigaseManager {
 			// login
 
 			if (null != user && null != password) {
-				Log.d("user=", user);
-				Log.d("password=", password);
 				try {
 					if (!connection.isAuthenticated()) {
 						connection.login(user + "@" + node.getDomain().trim(), password);
