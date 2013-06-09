@@ -30,7 +30,8 @@
             android:layout_marginLeft="2dp"
             android:singleLine="true"
             android:visibility="gone" />
-           <ImageView
+
+        <ImageView
             android:id="@+id/title_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -73,14 +74,30 @@
         android:background="@drawable/top_line"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/choosebutton0"
-        style="@style/titleBtnStlye"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@id/title_line"
-        android:visibility="gone" />
+        android:layout_toLeftOf="@id/title_line" >
+
+        <TextView
+            android:id="@+id/choosebutton0"
+            style="@style/titleBtnStlye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_recommends_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/choosebutton0"
+            android:layout_alignTop="@+id/choosebutton0"
+            android:layout_marginRight="@dimen/new_point_margin"
+            android:layout_marginTop="@dimen/new_point_margin"
+            android:src="@drawable/item_new_bg"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/iv_trend_new"

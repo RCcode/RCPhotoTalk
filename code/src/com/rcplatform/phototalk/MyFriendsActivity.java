@@ -34,6 +34,7 @@ import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnFriendAddListener;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
@@ -63,6 +64,8 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_friends);
+		PrefsUtils.User.setNewRecommends(this, getCurrentUser().getRcId(), false);
+		InformationPageController.getInstance().onNewRecommendsShowed();
 		initView();
 		mImageLoader = ImageLoader.getInstance();
 		getFriends();
@@ -123,7 +126,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 		}
 	};
 	private OnCreateContextMenuListener mSearchListCreateContextMenuListener = new OnCreateContextMenuListener() {
-		
+
 		@Override
 		public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 			ExpandableListView.ExpandableListContextMenuInfo info = (ExpandableListView.ExpandableListContextMenuInfo) menuInfo;
@@ -134,11 +137,11 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) mSearchList.getExpandableListAdapter()).getChild(group, child);
 				if (getCurrentUser().getRcId().equals(friend.getRcId()) || Constants.OFFICIAL_RCID.equals(friend.getRcId()))
 					return;
-				
+
 				EventUtil.Friends_Addfriends.rcpt_friends_longpress(baseContext);
 				menu.setHeaderTitle(R.string.operation);
 				menu.add(0, ITEM_ID, 0, getString(R.string.delete)).setOnMenuItemClickListener(new OnMenuItemClickListener() {
-					
+
 					@Override
 					public boolean onMenuItemClick(MenuItem item) {
 						EventUtil.Friends_Addfriends.rcpt_friendsdelete(baseContext);
@@ -340,7 +343,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			@Override
 			public void onAlreadyAdded() {
 				// TODO Auto-generated method stub
-				
+
 			}
 		}, friend).execute();
 	}

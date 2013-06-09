@@ -134,6 +134,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private boolean willQuit = false;
 
+	private ImageView ivNewRecommends;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -159,6 +161,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			}
 		}
+		onNewRecommends();
 	}
 
 	@Override
@@ -320,6 +323,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void initViewAndListener() {
+
+		ivNewRecommends = (ImageView) findViewById(R.id.iv_recommends_new);
 		iconTrendNew = (ImageView) findViewById(R.id.iv_trend_new);
 		mInformationList = (SnapListView) findViewById(R.id.lv_home);
 		mInformationList.setSnapListener(this);
@@ -385,6 +390,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				}
 			}
 		});
+		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUser().getRcId()))
+			InformationPageController.getInstance().onNewRecommends();
 	}
 
 	private void showFriendDetail(Information information) {
@@ -912,5 +919,13 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				info.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
 		}
 		adapter.notifyDataSetChanged();
+	}
+
+	public void onNewRecommends() {
+		ivNewRecommends.setVisibility(View.VISIBLE);
+	}
+
+	public void onNewRecommendsShowed() {
+		ivNewRecommends.setVisibility(View.GONE);
 	}
 }

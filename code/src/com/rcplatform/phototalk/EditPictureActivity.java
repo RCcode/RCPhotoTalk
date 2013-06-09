@@ -576,7 +576,7 @@ public class EditPictureActivity extends BaseActivity {
 		if (screenWidth > 480 && screenHeight > 800) {
 			adapter.setTextSize(22);
 		} else {
-			adapter.setTextSize(19);
+			adapter.setTextSize(15);
 		}
 		mWheel.setVisibleItems(3);
 		mWheel.setViewAdapter(adapter);

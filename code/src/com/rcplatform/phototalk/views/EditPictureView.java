@@ -19,6 +19,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class EditPictureView extends View {
 
@@ -122,6 +123,8 @@ public class EditPictureView extends View {
 		mPaint.setColor(color);
 		savePath = new ArrayList<DrawPath>();
 		canclePath = new ArrayList<DrawPath>();
+		if (Constants.SCREEN_WIDTH < 720)
+			srokeWidth = 5;
 	}
 
 	private void initPaint() {

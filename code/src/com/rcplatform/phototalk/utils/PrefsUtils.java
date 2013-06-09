@@ -131,6 +131,8 @@ public class PrefsUtils {
 
 		private static final String PREF_KEY_SELF_BINDPHONE_TIME = "selfbindphonetime";
 
+		private static final String PREF_KEY_HAS_RECOMMENDS = "hasrecommends";
+
 		private static final String PREF_KEY_VK_NAME = "vkname";
 
 		public static class ThirdPart {
@@ -390,6 +392,14 @@ public class PrefsUtils {
 
 		public static int getSelfBindPhoneTimeLeave(Context context, String pref) {
 			return Constants.MAX_SELF_BINDPHONE_TIME - getPreference(context, pref).getInt(PREF_KEY_SELF_BINDPHONE_TIME, 0);
+		}
+
+		public static boolean hasNewRecommends(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_HAS_RECOMMENDS, false);
+		}
+
+		public static void setNewRecommends(Context context, String pref, boolean hasNew) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_RECOMMENDS, hasNew).commit();
 		}
 
 	}

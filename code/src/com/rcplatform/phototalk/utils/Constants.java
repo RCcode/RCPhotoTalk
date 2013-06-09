@@ -162,6 +162,7 @@ public class Constants {
 		public static final String MESSAGE_TYPE_NEW_INFORMATIONS="newinformation";
 		
 		public static final String MESSAGE_TYPE_NEW_RECOMMENDS="newrecommends";
+		
 	}
 	
 	public static class GCM {

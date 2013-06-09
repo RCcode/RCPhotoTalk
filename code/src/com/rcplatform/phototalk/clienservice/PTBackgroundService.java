@@ -201,12 +201,16 @@ public class PTBackgroundService extends Service {
 	private void sendSMS(String number, String rcId) {
 		if (mCurrentUser != null && mCurrentUser.getRcId().equals(rcId)) {
 			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-			Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
-			PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
-			SmsManager smsManager = SmsManager.getDefault();
-			smsManager.sendTextMessage(number, null, RCPlatformTextUtil.getSMSMessage(mCurrentUser.getRcId(), Constants.APP_ID), sendPI, null);
-			PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), mCurrentUser.getRcId(), number);
-			PrefsUtils.User.MobilePhoneBind.setFirstBindPhoneTime(getApplicationContext(), mCurrentUser.getRcId(), System.currentTimeMillis());
+			try {
+				Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
+				PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
+				SmsManager smsManager = SmsManager.getDefault();
+				smsManager.sendTextMessage(number, null, RCPlatformTextUtil.getSMSMessage(mCurrentUser.getRcId(), Constants.APP_ID), sendPI, null);
+				PrefsUtils.User.MobilePhoneBind.setLastBindNumber(getApplicationContext(), mCurrentUser.getRcId(), number);
+				PrefsUtils.User.MobilePhoneBind.setFirstBindPhoneTime(getApplicationContext(), mCurrentUser.getRcId(), System.currentTimeMillis());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -127,6 +127,16 @@ public class InformationPageController {
 			mActivity.onFriendAlreadyAdded(information);
 	}
 
+	public void onNewRecommendsShowed() {
+		if (mActivity != null)
+			mActivity.onNewRecommendsShowed();
+	}
+
+	public void onNewRecommends() {
+		if (mActivity != null)
+			mActivity.onNewRecommends();
+	}
+
 	public void destroy() {
 		mActivity = null;
 	}
