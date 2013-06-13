@@ -221,8 +221,10 @@ public class FriendsProxy {
 										f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
 									}
 									List<Friend> recommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
-									for (Friend f : recommends)
+									for (Friend f : recommends){
 										f.setFriend(false);
+										f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
+									}
 									PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
 									PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
 									if (!PrefsUtils.User.hasLoadedFriends(context, context.getCurrentUser().getRcId())) {
