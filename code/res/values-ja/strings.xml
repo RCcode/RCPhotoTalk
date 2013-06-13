@@ -45,10 +45,10 @@
     <string name="search_hint">検索結果がありません</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d分</string>
-    <string name="second">%1$d秒</string>
-    <string name="hour">%1$d時</string>
-    <string name="day">%1$d日</string>
+    <string name="minute">%1$d分前</string>
+    <string name="second">%1$d秒前</string>
+    <string name="hour">%1$d時間前</string>
+    <string name="day">%1$d日前</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">送信中</string>
     <string name="send_sended">%1$s-送信済み </string>

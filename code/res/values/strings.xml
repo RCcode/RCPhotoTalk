@@ -46,10 +46,10 @@
     <string name="search_hint">No results for this search</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d m ago</string>
-    <string name="second">%1$d s ago</string>
-    <string name="hour">%1$d h ago</string>
-    <string name="day">%1$d d ago</string>
+    <string name="minute">%1$dm ago</string>
+    <string name="second">%1$ds ago</string>
+    <string name="hour">%1$dh ago</string>
+    <string name="day">%1$dd ago</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Sending</string>
     <string name="send_sended">%1$s-Sent</string>
