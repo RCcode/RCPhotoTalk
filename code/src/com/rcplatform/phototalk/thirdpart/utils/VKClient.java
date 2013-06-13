@@ -40,6 +40,8 @@ public class VKClient {
 	private static final int MSG_WHAT_DEAUTHORIZE_SUCCESS = 201;
 
 	private static final int MSG_WHAT_DEAUTHORIZE_FAIL = 501;
+	
+	private static final int INVITE_SUCCESS = 600;
 
 	private OnAuthorizeSuccessListener mAuthorizeSuccessListener;
 
@@ -151,6 +153,9 @@ public class VKClient {
 					if (mDeAuthorizeListener != null)
 						mDeAuthorizeListener.onDeAuthorizeSuccess();
 					break;
+				case INVITE_SUCCESS:
+					Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+					break;
 			}
 		};
 	};
@@ -158,15 +163,15 @@ public class VKClient {
 	public void deAuthorize(OnDeAuthorizeListener listener) {
 		mDeAuthorizeListener = listener;
 		mContext.showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
-		Thread thread = new Thread() {
+		//Thread thread = new Thread() {
 
-			public void run() {
+			//public void run() {
 				PrefsUtils.User.ThirdPart.clearVKAccount(mContext, mContext.getCurrentUser().getRcId());
 				mVKHandler.sendEmptyMessage(MSG_WHAT_DEAUTHORIZE_SUCCESS);
-				Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
-			};
-		};
-		thread.start();
+				Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_LONG).show();
+			//};
+		//};
+		//thread.start();
 	}
 
 	public void sendInviteMessage(final Collection<String> friendIds) {
@@ -187,8 +192,8 @@ public class VKClient {
 						flag = false;
 						e.printStackTrace();
 					}
-					if (flag) {
-						Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+					if(flag){
+						mVKHandler.sendEmptyMessage(INVITE_SUCCESS);
 					}
 				}
 			};

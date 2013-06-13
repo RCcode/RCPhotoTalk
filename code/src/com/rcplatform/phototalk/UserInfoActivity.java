@@ -306,7 +306,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onDeAuthorizeSuccess() {
-				showErrorConfirmDialog(R.string.deauthorize_complete);
+				//showErrorConfirmDialog(R.string.save_success);
 				if (mType == FriendType.FACEBOOK)
 					setFacebookAuthText();
 				else if (mType == FriendType.VK)
