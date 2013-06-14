@@ -67,7 +67,7 @@
     <string name="resend">إعادة الإرسال</string>
     <string name="delete">حذف</string>
     <string name="reload">إعادة التحميل</string>
-    <string name="will_quit">انقر فوق "رجوع" مرة أخرى للخروج من التطبيق</string>
+    <string name="will_quit">انقر فوق "\رجوع"\ مرة أخرى للخروج من التطبيق</string>
 
     <!-- menu -->
     <string name="take_score">تقييم</string>

@@ -68,7 +68,7 @@
     <string name="resend">Отправить снова</string>
     <string name="delete">Удалить</string>
     <string name="reload">Перезагрузить</string>
-    <string name="will_quit">Нажмите "Назад" еще раз для выхода из приложения</string>
+    <string name="will_quit">Нажмите \"Назад\" еще раз для выхода из приложения</string>
 
     <!-- menu -->
     <string name="take_score">Oценивать</string>

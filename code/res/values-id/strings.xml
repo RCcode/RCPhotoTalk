@@ -68,7 +68,7 @@
     <string name="resend">Kirim ulang</string>
     <string name="delete">Hapus</string>
     <string name="reload">Muat ulang</string>
-    <string name="will_quit">Klik lagi "Kembali" untuk menutup apl</string>
+    <string name="will_quit">Klik lagi \"Kembali\" untuk menutup apl</string>
 
     <!-- menu -->
     <string name="take_score">Mengevaluasi</string>

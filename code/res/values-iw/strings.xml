@@ -68,7 +68,7 @@
     <string name="resend">שלח שנית</string>
     <string name="delete">מחק</string>
     <string name="reload">טען שנית</string>
-    <string name="will_quit">הקלק שוב על "חזרה" כדי לצאת מהיישום</string>
+    <string name="will_quit">הקלק שוב על "\חזרה"\ כדי לצאת מהיישום</string>
 
     <!-- menu -->
     <string name="take_score">להעריך</string>

@@ -68,7 +68,7 @@
     <string name="resend">Reenviar</string>
     <string name="delete">Deletar</string>
     <string name="reload">Recarregar</string>
-    <string name="will_quit">Clique "Voltar" novamente para sair do aplicativo</string>
+    <string name="will_quit">Clique \"Voltar\" novamente para sair do aplicativo</string>
 
     <!-- menu -->
     <string name="take_score">Avaliar</string>

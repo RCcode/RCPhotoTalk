@@ -67,7 +67,7 @@
     <string name="resend">重发</string>
     <string name="delete">删除</string>
     <string name="reload">重新接收</string>
-    <string name="will_quit">再次点击"返回"退出应用</string>
+    <string name="will_quit">再次点击\"返回\"退出应用</string>
 
     <!-- menu -->
     <string name="take_score">评价</string>

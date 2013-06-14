@@ -68,7 +68,7 @@
     <string name="resend">Resend</string>
     <string name="delete">Delete</string>
     <string name="reload">Reload</string>
-    <string name="will_quit">Click "Back" again to exit app</string>
+    <string name="will_quit">Click \"Back\" again to exit app</string>
 
     <!-- menu -->
     <string name="take_score">Rate Us</string>

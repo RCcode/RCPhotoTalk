@@ -67,7 +67,7 @@
     <string name="resend">पुनः भेजें</string>
     <string name="delete">हटाएँ</string>
     <string name="reload">पुनः लोड करें</string>
-    <string name="will_quit">ऐप से बाहर निकलने के लिए फिर से "वापस" क्लिक करें</string>
+    <string name="will_quit">ऐप से बाहर निकलने के लिए फिर से \"वापस\" क्लिक करें</string>
 
     <!-- menu -->
     <string name="take_score">मूल्यांकन करें</string>

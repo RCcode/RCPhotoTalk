@@ -68,7 +68,7 @@
     <string name="resend">ส่งใหม่</string>
     <string name="delete">ลบ</string>
     <string name="reload">โหลดใหม่</string>
-    <string name="will_quit">คลิก "ย้อนกลับ" อีกครั้ง เพื่อออกจากแอป</string>
+    <string name="will_quit">คลิก \"ย้อนกลับ\" อีกครั้ง เพื่อออกจากแอป</string>
 
 
     <!-- menu -->
