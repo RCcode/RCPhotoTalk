@@ -126,4 +126,5 @@ public class PhotoTalkApiUrl {
 	public static final String BIND_PHONE_URL = RCBOSS_USER_URL + "checkSms.do";
 	public static final String LOGOUT_URL = RCBOSS_USER_URL + "userLogout.do";
 	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO = RCBOSS_USER_URL + "createUserInfo.do";
+	public static final String CLIENT_LOG_URL = BASE_URL_FOR_RCBOSS + "config/insClientLog.do";
 }

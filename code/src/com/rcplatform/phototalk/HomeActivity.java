@@ -42,6 +42,7 @@ import com.flurry.android.FlurryAgent;
 import com.google.android.gcm.ServerUtilities;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
+import com.rcplatform.clientlog.ClientLogUtil;
 import com.rcplatform.phototalk.activity.MenuBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
@@ -164,6 +165,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			}
 		}
+		
+		//Log 用户信息
+		ClientLogUtil.log(this);
 	}
 
 	private void checkStartMode() {
