@@ -26,15 +26,15 @@ public class PhotoTalkUtils {
 	public static String getSexString(Context context, int sex) {
 		String result = null;
 		switch (sex) {
-		case 0:
-			result = context.getString(R.string.sex_secret);
-			break;
-		case 1:
-			result = context.getString(R.string.male);
-			break;
-		case 2:
-			result = context.getString(R.string.famale);
-			break;
+			case 0:
+				result = context.getString(R.string.sex_secret);
+				break;
+			case 1:
+				result = context.getString(R.string.male);
+				break;
+			case 2:
+				result = context.getString(R.string.famale);
+				break;
 		}
 		return result;
 	}
@@ -78,7 +78,7 @@ public class PhotoTalkUtils {
 
 	public static void buildAppList(Context context, LinearLayout linearApps, List<AppInfo> apps, ImageLoader loader) {
 		for (AppInfo info : apps) {
-			if(info.getAppPackage().equals("com.rcplatform.phototalk"))
+			if (info.getAppPackage().equals("com.rcplatform.phototalk"))
 				continue;
 			linearApps.addView(getAppImage(context, info, loader));
 		}
@@ -91,8 +91,8 @@ public class PhotoTalkUtils {
 		params.setMargins(0, 0, context.getResources().getDimensionPixelSize(R.dimen.app_icon_margin), 0);
 		iv.setLayoutParams(params);
 		iv.setScaleType(ScaleType.FIT_CENTER);
-		
-		if (Constants.installedApps.contains(appInfo)) {
+
+		if (Utils.checkApkExist(context, appInfo.getAppPackage())) {
 			loader.displayImage(appInfo.getColorPicUrl(), iv);
 			iv.setOnClickListener(new OnClickListener() {
 
@@ -112,11 +112,12 @@ public class PhotoTalkUtils {
 				}
 			});
 		}
+
 		return iv;
 	}
 
 	public static boolean isUserNeedToBindPhone(Context context, UserInfo userInfo) {
 		return userInfo != null && RCPlatformTextUtil.isEmpty(userInfo.getCellPhone()) && Constants.DEVICE_ID.equals(userInfo.getDeviceId())
-				&& !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
+		        && !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
 	}
 }

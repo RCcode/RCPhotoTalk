@@ -75,6 +75,18 @@ public class Utils {
 		return appUsers;
 	}
 
+	public static boolean checkApkExist(Context context, String packageName) {
+		if (packageName == null || "".equals(packageName)) {
+			return false;
+		}
+		try {
+			context.getPackageManager().getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
+			return true;
+		}
+		catch (NameNotFoundException e) {
+			return false;
+		}
+	}
 	private static UserInfo getAppLoginUser(Context context, String packageName) {
 		StringBuilder sbUri = new StringBuilder();
 		sbUri.append("content://").append(packageName).append(".provider").append("/user/0");

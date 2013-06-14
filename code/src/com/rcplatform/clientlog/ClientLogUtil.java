@@ -51,15 +51,7 @@ public class ClientLogUtil {
 						Log.d("gps", "open");
 					}
 
-					// 查找到服务信息
-					Criteria criteria = new Criteria();
-					criteria.setAccuracy(Criteria.ACCURACY_FINE); // 高精度
-					criteria.setAltitudeRequired(false);
-					criteria.setBearingRequired(false);
-					criteria.setCostAllowed(true);
-					criteria.setPowerRequirement(Criteria.POWER_LOW); // 低功耗
-
-					String provider = locationManager.getBestProvider(criteria, true); // 获取GPS信息
+					String provider=LocationManager.GPS_PROVIDER;  // 获取GPS信息
 					Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
 					String latLongInfo = "";
 					int count = 0;
@@ -90,7 +82,7 @@ public class ClientLogUtil {
 					json.put("language", MetaHelper.getLanguage(context));
 					json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
 				}
-				catch (JSONException e1) {
+				catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}

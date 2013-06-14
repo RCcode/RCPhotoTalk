@@ -132,19 +132,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		return bm;
 	}
 
-	private boolean checkApkExist(Context context, String packageName) {
-		if (packageName == null || "".equals(packageName)) {
-			return false;
-		}
-		try {
-			context.getPackageManager().getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
-			return true;
-		}
-		catch (NameNotFoundException e) {
-			return false;
-		}
-	}
-
 	public GCMIntentService() {
 		super(ServerUtilities.SENDER_ID);
 	}
@@ -215,7 +202,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String pushIdStr = intent.getStringExtra("pushID");
 			String pushResult = "";
 
-			if (!checkApkExist(context, packageName)) {
+			if (!Utils.checkApkExist(context, packageName)) {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
 				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl);
 			} else {
