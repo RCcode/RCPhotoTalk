@@ -254,15 +254,15 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
 		setFriendSourceInfo(convertView, friend);
 		mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
-		portraitImage.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				if (mOnFriendPortraitListener != null) {
-					mOnFriendPortraitListener.showFriendDetail(v, friend);
-				}
-			}
-		});
+//		portraitImage.setOnClickListener(new View.OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				if (mOnFriendPortraitListener != null) {
+//					mOnFriendPortraitListener.showFriendDetail(v, friend);
+//				}
+//			}
+//		});
 
 		nickTextView.setText(friend.getNickName());
 		if (!friend.isFriend()) {
