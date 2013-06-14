@@ -38,7 +38,7 @@ public class ClientLogUtil {
 					UserInfo user = app.getCurrentUser();
 					json.put("rcId", user.getRcId());
 					json.put("appId", Constants.APP_ID);
-					json.put("deviceID", MetaHelper.getMACAddress(context));
+					json.put("deviceId", MetaHelper.getMACAddress(context));
 					json.put("brand", MetaHelper.getPhoneBrand());
 					json.put("model", MetaHelper.getPhoneModel());
 
