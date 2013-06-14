@@ -240,6 +240,7 @@ public class EditPictureActivity extends BaseActivity {
 						iv_voice_volume.setLayoutParams(layoutParams);
 					}
 				}
+				
 
 			}
 
@@ -258,6 +259,12 @@ public class EditPictureActivity extends BaseActivity {
 			public void onStartRecording() {
 				mButtonTimeLimit.setVisibility(View.GONE);
 			}
+			
+			@Override
+			public void ontRecordTooShort() {
+				mButtonTimeLimit.setVisibility(View.VISIBLE);
+			}
+			
 		});
 
 		mEditableViewGroup = (EditableViewGroup) findViewById(R.id.edit_group);

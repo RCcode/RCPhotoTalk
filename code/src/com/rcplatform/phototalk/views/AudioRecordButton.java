@@ -120,7 +120,7 @@ public class AudioRecordButton extends Button {
 			case MotionEvent.ACTION_DOWN:
 				setBackgroundResource(R.drawable.btn_download_p);
 				state = 0;
-				mOnRecordingListener.onStartRecording();
+
 				// 开始录音
 				play(mFilePath);
 				break;
@@ -186,7 +186,7 @@ public class AudioRecordButton extends Button {
 	private void startRecord(String filePath) {
 		// TODO Auto-generated method stub
 		System.out.println("---------------------start record!-----------------------");
-
+		mOnRecordingListener.onStartRecording();
 		// recordLimitTimer = new Timer();
 		// RecordLimitTimerTask task = new RecordLimitTimerTask();
 		// recordLimitTimer.schedule(task, this.maxRecoedSize*1000);
@@ -236,7 +236,7 @@ public class AudioRecordButton extends Button {
 		if ((System.currentTimeMillis() - mStartTime) < 1 * 1000) {
 			// Toast.makeText(getContext(), "录音时间太短",
 			// Toast.LENGTH_SHORT).show();
-
+			mOnRecordingListener.ontRecordTooShort();
 			mRecordHandler.sendEmptyMessage(AUDIO_RECORD_TOO_SHORT);
 		} else {
 			mRecordedSeconds = (int) (System.currentTimeMillis() - mStartTime) / 1000;
@@ -255,6 +255,8 @@ public class AudioRecordButton extends Button {
 	public static interface OnRecordingListener {
 
 		public void onStartRecording();
+		
+		public void ontRecordTooShort();
 
 		public void onRecording(int recordedSecord, int amplitude);
 

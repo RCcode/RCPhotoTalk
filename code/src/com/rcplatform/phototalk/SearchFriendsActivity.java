@@ -38,6 +38,7 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class SearchFriendsActivity extends BaseActivity implements View.OnClickListener {
@@ -154,9 +155,9 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
+			case R.id.back:
+				finish();
+				break;
 		// case R.id.search_btn:
 		// search();
 		// break;
@@ -186,7 +187,8 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					} else {
 						search_hint_text.setVisibility(View.GONE);
 					}
-				} catch (JSONException e) {
+				}
+				catch (JSONException e) {
 					e.printStackTrace();
 				}
 				dismissLoadingDialog();
@@ -214,14 +216,22 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 
 			@Override
 			public void onFriendAddFail(int statusCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+
+				if (Constants.STATUS_AREADY_FRIENDS == statusCode) {
+					dismissLoadingDialog();
+					friend.setFriend(true);
+					mAdapter.notifyDataSetChanged();
+					AddFriendsActivity.addFriend(friend);
+				} else {
+					showErrorConfirmDialog(content);
+					dismissLoadingDialog();
+				}
 			}
 
 			@Override
 			public void onAlreadyAdded() {
 				// TODO Auto-generated method stub
-				
+
 			}
 		}, friend).execute();
 	}
@@ -289,18 +299,18 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
 				TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
 				switch (source.getAttrType()) {
-				case FriendType.CONTACT:
-					tvFrom.setText(R.string.contact_friend);
-					break;
-				case FriendType.FACEBOOK:
-					tvFrom.setText(R.string.facebook_friend);
-					break;
-				case FriendType.VK:
-					tvFrom.setText(R.string.vk_friend);
-					break;
-				default:
-					tvFrom.setText(null);
-					break;
+					case FriendType.CONTACT:
+						tvFrom.setText(R.string.contact_friend);
+						break;
+					case FriendType.FACEBOOK:
+						tvFrom.setText(R.string.facebook_friend);
+						break;
+					case FriendType.VK:
+						tvFrom.setText(R.string.vk_friend);
+						break;
+					default:
+						tvFrom.setText(null);
+						break;
 				}
 				tvName.setText(source.getName());
 			}

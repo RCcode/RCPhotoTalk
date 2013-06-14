@@ -272,6 +272,8 @@ public class Constants {
 	public static final String FEEDBACK_EMAIL = "rctalk.service@gmail.com";
 
 	public static final String FLURRY_KEY = "93576P6KMW7VYQDQCR3J";
+	
+	public static final int	STATUS_AREADY_FRIENDS = 21301;
 
 	// 头像图片本地缓存地址
 

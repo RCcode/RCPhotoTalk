@@ -46,18 +46,27 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class MyFriendsActivity extends MenuBaseActivity implements OnClickListener {
+
 	private static final int MSG_WHAT_FRIEND_LOADED = 912;
 
 	private static final int REQUEST_KEY_DETAIL = 110;
+
 	private static final int REQUEST_KEY_ADD_FRIEND = 111;
 
 	private ExpandableListView mList;
+
 	private ExpandableListView mSearchList;
+
 	private EditText etSearch;
+
 	private List<Friend> mFriends;
+
 	private List<Friend> mRecommends;
+
 	private ImageLoader mImageLoader;
+
 	private Friend mFriendShowDetail;
+
 	private Button seach_delete_btn;
 
 	@Override
@@ -98,6 +107,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private static final int ITEM_ID = 101;
+
 	private OnCreateContextMenuListener mCreateContextMenuListener = new OnCreateContextMenuListener() {
 
 		@Override
@@ -125,6 +135,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			}
 		}
 	};
+
 	private OnCreateContextMenuListener mSearchListCreateContextMenuListener = new OnCreateContextMenuListener() {
 
 		@Override
@@ -234,6 +245,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			return true;
 		}
 	};
+
 	private OnChildClickListener mChildClickListener = new OnChildClickListener() {
 
 		@Override
@@ -272,13 +284,14 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private Handler mHandler = new Handler() {
+
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case MSG_WHAT_FRIEND_LOADED:
-				dismissLoadingDialog();
-				setListData(mFriends, mRecommends, mList);
-				etSearch.setText(null);
-				break;
+				case MSG_WHAT_FRIEND_LOADED:
+					dismissLoadingDialog();
+					setListData(mFriends, mRecommends, mList);
+					etSearch.setText(null);
+					break;
 			}
 		}
 
@@ -337,7 +350,13 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			@Override
 			public void onFriendAddFail(int statusCode, String content) {
 				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				if (Constants.STATUS_AREADY_FRIENDS == statusCode) {
+					friend.setFriend(true);
+					refreshList();
+
+				} else {
+					showErrorConfirmDialog(content);
+				}
 			}
 
 			@Override
@@ -360,15 +379,15 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
-		case R.id.choosebutton:
-			EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
-			Intent intent = new Intent(MyFriendsActivity.this, AddFriendsActivity.class);
-			intent.setData(Uri.parse("data"));
-			startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
-			break;
+			case R.id.back:
+				finish();
+				break;
+			case R.id.choosebutton:
+				EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
+				Intent intent = new Intent(MyFriendsActivity.this, AddFriendsActivity.class);
+				intent.setData(Uri.parse("data"));
+				startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
+				break;
 		}
 	}
 
@@ -392,6 +411,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	private void handlerAddResult(final List<Friend> newFriends) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Thread thread = new Thread() {
+
 			@Override
 			public void run() {
 				mFriends.addAll(newFriends);
@@ -414,6 +434,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	private void handlerDeleteResult(final Friend friend) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Thread thread = new Thread() {
+
 			@Override
 			public void run() {
 				mFriends.remove(friend);
