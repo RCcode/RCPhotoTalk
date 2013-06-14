@@ -38,6 +38,9 @@ public class EditableViewGroup extends ViewGroup {
 	private boolean isPopupSoftInput;
 
 	private boolean isTuyaMode;
+	
+	private int layoutY =0;
+	private int layoutH =0;
 
 	public EditableViewGroup(Context context) {
 		super(context);
@@ -85,6 +88,9 @@ public class EditableViewGroup extends ViewGroup {
 		editTextView.layout(0, specSize_Heigth / 2,
 				editTextView.getMeasuredWidth(), specSize_Heigth / 2
 						+ editTextView.getMeasuredHeight());
+		layoutY = specSize_Heigth / 2;
+		layoutH = specSize_Heigth / 2
+				+ editTextView.getMeasuredHeight();
 //		editTextView.setFocusable(true);
 		showInputMethod(((Activity) getContext()));
 	}
@@ -138,8 +144,9 @@ public class EditableViewGroup extends ViewGroup {
 				}else if(y>screenHeight-190){
 					y= screenHeight-190;
 				}
-				editTextView.layout(0, y, getChildAt(1).getMeasuredWidth(), y
-						+ getChildAt(1).getMeasuredHeight());
+				layoutY = y;
+				layoutH = y + getChildAt(1).getMeasuredHeight();
+				editTextView.layout(0, layoutY, getChildAt(1).getMeasuredWidth(),layoutH);
 			}
 			break;
 		case MotionEvent.ACTION_UP:
@@ -155,6 +162,12 @@ public class EditableViewGroup extends ViewGroup {
 		return super.dispatchTouchEvent(event);
 	}
 
+	public void setLastLayout(){
+		if(null!=editTextView){
+			editTextView.layout(0, layoutY, getChildAt(1).getMeasuredWidth(),layoutH);
+		}
+	}
+	
 	private boolean isMoveView(View v, int downX, int downY) {
 		if (v == null)
 			return false;

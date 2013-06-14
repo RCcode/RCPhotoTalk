@@ -335,6 +335,12 @@ public class EditPictureActivity extends BaseActivity {
 			}
 		});
 	}
+	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		mEditableViewGroup.setLastLayout();
+	}
 
 	private final OnClickListener clickListener = new OnClickListener() {
 
