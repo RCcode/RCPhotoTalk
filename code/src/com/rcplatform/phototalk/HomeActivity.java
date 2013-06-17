@@ -143,7 +143,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
 		checkStartMode();
-		registeTigaseStateChangeReceiver();
+//		registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();
@@ -644,7 +644,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	protected void onDestroy() {
 		unBindTigaseService();
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
-		unregisterReceiver(mTigaseStateChangeReceiver);
+//		unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
 			mCheckUpdateTask.cancel();
