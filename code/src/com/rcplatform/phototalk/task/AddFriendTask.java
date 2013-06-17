@@ -56,6 +56,7 @@ public class AddFriendTask {
 					if (mListener != null) {
 						mListener.onAlreadyAdded();
 					}
+					return;
 				}
 				if (mListener != null)
 					mListener.onFriendAddFail(errorCode, content);

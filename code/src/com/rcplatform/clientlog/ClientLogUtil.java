@@ -14,6 +14,7 @@ import com.google.android.gcm.MetaHelper;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Constants;
 
 import android.content.Context;
@@ -74,64 +75,65 @@ public class ClientLogUtil {
 						}
 						location = locationManager.getLastKnownLocation(provider);
 					}
-					json.put("gps", latLongInfo);
-
-					json.put("timezoneId", MetaHelper.getTimeZoneId(context));
-					json.put("token", user.getToken());
-					json.put("platform", "1");
-					json.put("language", MetaHelper.getLanguage(context));
-					json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
+					
+					
+					Request request=new Request(context, PhotoTalkApiUrl.CLIENT_LOG_URL, null);
+					request.putParam("gps", latLongInfo);
+					request.putParam("timezoneId", MetaHelper.getTimeZoneId(context)+"");
+					request.putParam("token", user.getToken());
+					request.putParam("platform", "1");
+					request.putParam("language", MetaHelper.getLanguage(context));
+					request.excuteAsync();
 				}
 				catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
-				OutputStream output = null;
-				InputStream is = null;
-				HttpURLConnection conn = null;
-				String content = null;
-				try {
-					conn = (HttpURLConnection) new URL(PhotoTalkApiUrl.CLIENT_LOG_URL).openConnection();
-					conn.setConnectTimeout(5000);
-					conn.setReadTimeout(5000);
-					conn.setDoOutput(true);
-					conn.setRequestMethod("POST");
-					byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
-					output = conn.getOutputStream();
-					output.write(bodyBytes);
-					is = conn.getInputStream();
-					InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-					StringBuilder builder = new StringBuilder();
-					char[] readChars = new char[1024];
-					String temp = null;
-					int result = -1;
-					while ((result = reader.read(readChars, 0, 1024)) != -1) {
-						temp = new String(readChars, 0, result);
-						builder.append(temp);
-					}
-					reader.close();
-					content = builder.toString();
-				}
-				catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				finally {
-					try {
-						output.close();
-					}
-					catch (Exception e) {
-					}
-					try {
-						is.close();
-					}
-					catch (Exception e) {
-					}
-					if (conn != null)
-						conn.disconnect();
-
-				}
+//				OutputStream output = null;
+//				InputStream is = null;
+//				HttpURLConnection conn = null;
+//				String content = null;
+//				try {
+//					conn = (HttpURLConnection) new URL(PhotoTalkApiUrl.CLIENT_LOG_URL).openConnection();
+//					conn.setConnectTimeout(5000);
+//					conn.setReadTimeout(5000);
+//					conn.setDoOutput(true);
+//					conn.setRequestMethod("POST");
+//					byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
+//					output = conn.getOutputStream();
+//					output.write(bodyBytes);
+//					is = conn.getInputStream();
+//					InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+//					StringBuilder builder = new StringBuilder();
+//					char[] readChars = new char[1024];
+//					String temp = null;
+//					int result = -1;
+//					while ((result = reader.read(readChars, 0, 1024)) != -1) {
+//						temp = new String(readChars, 0, result);
+//						builder.append(temp);
+//					}
+//					reader.close();
+//					content = builder.toString();
+//				}
+//				catch (Exception e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//				finally {
+//					try {
+//						output.close();
+//					}
+//					catch (Exception e) {
+//					}
+//					try {
+//						is.close();
+//					}
+//					catch (Exception e) {
+//					}
+//					if (conn != null)
+//						conn.disconnect();
+//
+//				}
 			}
 		});
 		thread.start();

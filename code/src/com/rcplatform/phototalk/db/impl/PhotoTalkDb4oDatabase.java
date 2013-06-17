@@ -356,6 +356,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				fLocal.setHeadUrl(fService.getHeadUrl());
 				fLocal.setLetter(fService.getLetter());
 				fLocal.setHiden(false);
+				fLocal.setFriend(fService.isFriend());
 				db.store(fLocal);
 			} else {
 				db.store(fService);
