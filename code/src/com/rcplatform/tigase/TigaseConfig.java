@@ -2,9 +2,9 @@ package com.rcplatform.tigase;
 
 public class TigaseConfig {
 
-//	static final String NODE_BANLANCE_URL = "http://192.168.0.92:8080/tigaseWeb/clusternode/getClusterNode.do";
+	static final String NODE_BANLANCE_URL = "http://192.168.0.92:8080/tigaseWeb/clusternode/getClusterNode.do";
 	
-	static final String NODE_BANLANCE_URL = "http://tigase.rcplatformhk.net/tigaseWeb/clusternode/getClusterNode.do";
+//	static final String NODE_BANLANCE_URL = "http://tigase.rcplatformhk.net/tigaseWeb/clusternode/getClusterNode.do";
 
 	static final String TIGASE_STATUS = "status";
 	

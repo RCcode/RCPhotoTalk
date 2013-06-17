@@ -262,7 +262,7 @@ public class PrefsUtils {
 
 			public static boolean isUserBindPhoneTimeOut(Context context, String pref) {
 				long startBindTime = getPreference(context, pref).getLong(PREF_KEY_START_BIND_TIME, 0);
-				return startBindTime > 0 && (System.currentTimeMillis() - startBindTime) > Constants.BIND_PHONE_TIME_OUT;
+				return (System.currentTimeMillis() - startBindTime) > Constants.BIND_PHONE_TIME_OUT;
 			}
 		}
 

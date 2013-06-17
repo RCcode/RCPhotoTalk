@@ -76,7 +76,7 @@ public class Constants {
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
-		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + "rcplatform/phototalk";
+		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
 		String language = Locale.getDefault().getLanguage();
 		if (language.equals(Locale.CHINESE.toString())) {

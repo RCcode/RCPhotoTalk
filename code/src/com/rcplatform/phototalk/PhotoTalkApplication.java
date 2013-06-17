@@ -142,7 +142,6 @@ public class PhotoTalkApplication extends Application {
 			file.mkdir();
 		}
 		imagePath = file.getPath();
-		// }
 		return imagePath;
 	}
 
