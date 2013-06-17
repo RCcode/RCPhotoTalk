@@ -1,16 +1,102 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_backgroud"
+    android:orientation="vertical" >
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/app_backgroud" android:orientation="vertical">  
-  <include layout="@layout/base_top_navigate"/>  
-  <LinearLayout android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical" android:padding="4dp"> 
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginTop="35dp" android:orientation="vertical"> 
-      <ImageView android:layout_width="@dimen/about_icon_width" android:layout_height="@dimen/about_icon_width" android:src="@drawable/ic_launcher"/>  
-      <TextView style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:textColor="#908983" android:textSize="20sp" android:layout_marginTop="17dp" android:text="@string/app_name"/>  
-      <TextView style="@style/text_base" android:id="@+id/tv_app_version_name" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:layout_marginTop="8dp" android:textSize="20sp" android:textColor="#908983"/> 
-    </LinearLayout>  
-    <Button android:id="@+id/check_update_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="17dp" android:background="@drawable/about_btn" android:gravity="center" android:padding="4dp" android:textSize="18sp" android:textColor="#534d48" android:layout_gravity="center_horizontal" android:text="@string/check_update"/>  
-    <Button android:id="@+id/contact_us_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:background="@drawable/about_btn" android:gravity="center" android:padding="4dp" android:textSize="18sp" android:textColor="#534d48" android:layout_gravity="center_horizontal" android:text="@string/contact_us"/>  
-    <Button android:id="@+id/term_service_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:background="@drawable/about_btn" android:gravity="center" android:layout_gravity="center_horizontal" android:padding="4dp" android:textColor="#534d48" android:textSize="18sp" android:text="@string/term_service"/>  
-    <Button android:id="@+id/compact_btn" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="8dp" android:background="@drawable/about_btn" android:gravity="center" android:layout_gravity="center_horizontal" android:padding="4dp" android:textSize="18sp" android:textColor="#534d48" android:text="@string/compact"/> 
-  </LinearLayout> 
+    <include layout="@layout/base_top_navigate" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="4dp" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="35dp"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="@dimen/about_icon_width"
+                android:layout_height="@dimen/about_icon_width"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                style="@style/text_base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="17dp"
+                android:text="@string/app_name"
+                android:textColor="#908983"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tv_app_version_name"
+                style="@style/text_base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:textColor="#908983"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/check_update_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="17dp"
+            android:background="@drawable/about_btn"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/check_update"
+            android:textColor="#534d48"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/contact_us_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/about_btn"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/contact_us"
+            android:textColor="#534d48"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/term_service_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/about_btn"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/term_service"
+            android:textColor="#534d48"
+            android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/compact_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/about_btn"
+            android:gravity="center"
+            android:padding="4dp"
+            android:text="@string/compact"
+            android:textColor="#534d48"
+            android:textSize="18sp" />
+    </LinearLayout>
+
 </LinearLayout>
