@@ -86,7 +86,7 @@ public class PhotoTalkApiUrl {
 
 	public static final String CHECK_TRENDS_URL = SETTING_URL + "checkHasTrend.do";
 
-	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO = FILE_URL + "createUserInfo.do";
+	
 
 	public static final String INFORMATION_CENSUS_URL = FILE_URL + "receivedPics.do";
 
@@ -125,4 +125,6 @@ public class PhotoTalkApiUrl {
 	public static final String REQUEST_SMS_URL = RCBOSS_USER_URL + "downSms.do";
 	public static final String BIND_PHONE_URL = RCBOSS_USER_URL + "checkSms.do";
 	public static final String LOGOUT_URL = RCBOSS_USER_URL + "userLogout.do";
+	
+	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO = RCBOSS_USER_URL + "createUserInfo.do";
 }
