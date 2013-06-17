@@ -9,5 +9,17 @@
     <TextView android:id="@+id/tv_record_item_statu" style="@style/text_base" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="@dimen/friend_text_padding" android:textColor="#a19a94" android:textSize="16sp"/> 
   </LinearLayout>  
   <ProgressBar android:id="@+id/progress_home_record" style="?android:attr/progressBarStyleSmall" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:visibility="gone"/>  
-  <com.rcplatform.phototalk.views.RecordTimerLimitView android:id="@+id/btn_record_item_statu_button" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentRight="true" android:layout_centerVertical="true" android:layout_marginRight="11dp" android:layout_marginTop="2dp" android:gravity="center_horizontal" android:paddingTop="8dp" android:textColor="#ff0000" android:textSize="18sp"/> 
+
+  <com.rcplatform.phototalk.views.RecordTimerLimitView
+      android:id="@+id/btn_record_item_statu_button"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginRight="11dp"
+      android:gravity="center_horizontal"
+      android:paddingTop="8dp"
+      android:textColor="#ff0000"
+      android:textSize="18sp" />
+ 
 </RelativeLayout>

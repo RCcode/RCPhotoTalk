@@ -211,7 +211,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				mAdapter.notifyDataSetChanged();
-				AddFriendsActivity.addFriend(friend);
+				AddFriendsActivity.addFriend(f);
 			}
 
 			@Override

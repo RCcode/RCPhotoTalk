@@ -191,7 +191,7 @@ private Button seach_delete_btn;
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();
-				AddFriendsActivity.addFriend(friend);
+				AddFriendsActivity.addFriend(f);
 			}
 
 			@Override

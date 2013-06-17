@@ -181,6 +181,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private void initFriendInformationReceiverView(final Information record, ViewHolder holder) {
 		holder.statuButton.setVisibility(View.VISIBLE);
+		holder.statuButton.setText(null);
 		// 1. 如果更多里面设置了所有人都可以给我发送图片,那么item里面状态显示： XX 将加我为好友，并显示添加按钮
 		if (record.getStatu() == InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_REQUEST) {
 			holder.name.setText(context.getString(R.string.added_by_friend, record.getSender().getNick()));
