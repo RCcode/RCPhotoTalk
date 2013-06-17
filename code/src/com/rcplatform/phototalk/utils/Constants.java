@@ -167,8 +167,8 @@ public class Constants {
 
 	public static class GCM {
 
-//		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
-		public static final String GCM_URL = "http://pt.rcplatformhk.net/phototalk/user/pushOfflineMsg.do";
+		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
+//		public static final String GCM_URL = "http://pt.rcplatformhk.net/phototalk/user/pushOfflineMsg.do";
 
 		public final static String GCM_TYPE_MSG = "1";
 

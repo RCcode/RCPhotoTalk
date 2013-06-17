@@ -188,11 +188,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 			if (!isRunning) {
 				count = ServerUtilities.getGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE) + 1;
 				ServerUtilities.setGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE, count);
-				generateMessageNotification(context, context.getString(R.string.gcm_message, count).toString());
+				generateMessageNotification(context, context.getString(R.string.gcm_message, count).toString(),type);
 			}
 		} else if (type == Constants.Message.MESSAGE_ACTION_FRIEND_INT) {
 			if (!isRunning) {
-				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString());
+				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString(),type);
 			}
 
 		} else if (type == Constants.Message.MESSAGE_NEW_USER_MESSAGE_INT) {
@@ -219,7 +219,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			if (!Utils.checkApkExist(context, packageName)) {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
-				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl);
+				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl,type);
 			} else {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
 			}
@@ -249,7 +249,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	private static void generateNotification(Context context, String iconUrl, String titleStr, String descStr, String downloadUrl) {
+	private static void generateNotification(Context context, String iconUrl, String titleStr, String descStr, String downloadUrl, int id) {
 		try {
 			downloadUrl.trim();
 			Bitmap bp = loadImageFromUrl(context, iconUrl);
@@ -283,7 +283,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	public static void generateMessageNotification(Context context, String msg) {
+	public static void generateMessageNotification(Context context, String msg ,int id) {
 		try {
 
 			// Notification notification = new Notification();
@@ -303,7 +303,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			// set intent so it does not start a new activity
 			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			notification.contentIntent = intent;
-			notificationManager.notify(0, notification);
+			notificationManager.notify(id, notification);
 		}
 		catch (Exception e) {
 

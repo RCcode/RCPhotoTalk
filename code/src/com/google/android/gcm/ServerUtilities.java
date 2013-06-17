@@ -28,7 +28,9 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Constants;
 
 /**
@@ -43,7 +45,11 @@ public final class ServerUtilities {
 
 	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
 
-	private static String serverLogUrl = "http://192.168.0.56:8080/phototalk/push/receivePushStatus.do";
+//	private static String serverLogUrl = "http://192.168.0.86:8083/phototalk/push/receivePushStatus.do";
+	
+	private static String pushServerUrl = "http://push.rcplatformhk.com/gcm/boss/createUserInfo.do";
+	private static String pushServerLogUrl = "http://push.rcplatformhk.com/gcm/boss/receivePushStatus.do";
+	
 
 	private final static String status = "status";
 
@@ -137,7 +143,26 @@ public final class ServerUtilities {
 		mreceivePushStatusTask.execute(null, null, null);
 	}
 
-	private static void logPushResultService(final Context context, final String pushId, final String pushFlag) {
+	
+//	private static void logPushResultService(final Context context, final String pushId, final String pushFlag) {
+//		
+//		
+//		Request request=new Request(context, serverLogUrl, null);
+//		request.putParam("pushID", pushId);
+//		request.putParam("appID", Constants.APP_ID);
+//		request.putParam("packageName", MetaHelper.getAppName(context));
+//		request.putParam("status", pushFlag);
+//		
+//		request.putParam("deviceID", MetaHelper.getImsi(context));
+//		request.putParam("clientMac", MetaHelper.getMACAddress(context));
+//		request.putParam("osVersion", MetaHelper.getOsVersion(context));
+//		request.putParam("language", MetaHelper.getLanguage(context));
+//		request.putParam("timeZone", MetaHelper.getTimeZone(context));
+//		request.putParam("timeZoneID", String.format("%d",  MetaHelper.getTimeZoneId(context)));
+//		request.putParam("pushResult", pushFlag);
+//		request.excuteAsync();
+		
+		/*
 		JSONObject json = new JSONObject();
 		try {
 			json.put("pushID", pushId);
@@ -213,10 +238,12 @@ public final class ServerUtilities {
 				conn.disconnect();
 
 		}
-
-	}
-
+	*/
+//	}
+	
 	private static void registerToService(final Context context, final String regId, final String rcId) {
+		
+		registerToPushService(context,  regId , Constants.APP_ID);
 
 		JSONObject json = new JSONObject();
 		try {
@@ -310,6 +337,149 @@ public final class ServerUtilities {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			GCMRegistrar.setRegisteredOnServer(context, false, RC_ID);
+		}
+	}
+	
+	private static void logPushResultService(final Context context, final String pushId, final String pushFlag) {
+		JSONObject json = new JSONObject();
+		try {
+			json.put("pushID", pushId);
+			json.put("appID", Constants.APP_ID);
+			json.put("packageName", MetaHelper.getAppName(context));
+			json.put("status", pushFlag);
+			json.put("deviceID", MetaHelper.getImsi(context));
+			json.put("clientMac", MetaHelper.getMACAddress(context));
+			json.put("osVersion", MetaHelper.getOsVersion(context));
+			json.put("language", MetaHelper.getLanguage(context));
+			json.put("timeZone", MetaHelper.getTimeZone(context));
+			json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
+			json.put("pushResult", pushFlag);
+		}
+		catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		OutputStream output = null;
+		InputStream is = null;
+		HttpURLConnection conn = null;
+		String content = null;
+		try {
+			conn = (HttpURLConnection) new URL(pushServerLogUrl).openConnection();
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
+			output = conn.getOutputStream();
+			output.write(bodyBytes);
+			is = conn.getInputStream();
+			InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+			StringBuilder builder = new StringBuilder();
+			char[] readChars = new char[1024];
+			String temp = null;
+			int result = -1;
+			while ((result = reader.read(readChars, 0, 1024)) != -1) {
+				temp = new String(readChars, 0, result);
+				builder.append(temp);
+			}
+			reader.close();
+			content = builder.toString();
+		}
+		catch (ConnectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				output.close();
+			}
+			catch (Exception e) {
+			}
+			try {
+				is.close();
+			}
+			catch (Exception e) {
+			}
+			if (conn != null)
+				conn.disconnect();
+
+		}
+
+	}
+
+	private static void registerToPushService(final Context context, final String regId , final String appID) {
+
+		JSONObject json = new JSONObject();
+		try {
+			json.put("userKey", regId);
+			json.put("appID", appID);
+			json.put("packageName", MetaHelper.getAppName(context));
+			json.put("status", STATUS_CREATE_USERINFO );
+			json.put("deviceID", MetaHelper.getImsi(context));
+			json.put("clientMac", MetaHelper.getMACAddress(context));
+			json.put("osVersion", MetaHelper.getOsVersion(context));
+			json.put("language", MetaHelper.getLanguage(context));
+			json.put("timeZone", MetaHelper.getTimeZone(context));
+			json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
+		}
+		catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		OutputStream output = null;
+		InputStream is = null;
+		HttpURLConnection conn = null;
+		String content = null;
+		try {
+			conn = (HttpURLConnection) new URL(pushServerUrl).openConnection();
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
+			output = conn.getOutputStream();
+			output.write(bodyBytes);
+			is = conn.getInputStream();
+			InputStreamReader reader = new InputStreamReader(is, "UTF-8");
+			StringBuilder builder = new StringBuilder();
+			char[] readChars = new char[1024];
+			String temp = null;
+			int result = -1;
+			while ((result = reader.read(readChars, 0, 1024)) != -1) {
+				temp = new String(readChars, 0, result);
+				builder.append(temp);
+			}
+			reader.close();
+			content = builder.toString();
+		}
+		catch (ConnectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				output.close();
+			}
+			catch (Exception e) {
+			}
+			try {
+				is.close();
+			}
+			catch (Exception e) {
+			}
+			if (conn != null)
+				conn.disconnect();
+
 		}
 	}
 
