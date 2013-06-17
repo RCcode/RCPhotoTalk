@@ -2,25 +2,19 @@ package com.rcplatform.phototalk;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -30,7 +24,6 @@ import com.google.gson.Gson;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.FriendDynamicListAdpter;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.pulltorefresh.library.PullToRefreshBase;
@@ -40,11 +33,8 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
-import com.rcplatform.phototalk.utils.PinyinComparator;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
-import com.rcplatform.phototalk.views.HeadImageView;
 
 public class FriendDynamicActivity extends BaseActivity {
 
@@ -72,6 +62,8 @@ public class FriendDynamicActivity extends BaseActivity {
 	private int pageSize = 1;
 
 	private String time = "0";
+
+	private static final int PAGE_SIZE = 10;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -134,29 +126,26 @@ public class FriendDynamicActivity extends BaseActivity {
 	}
 
 	private void getFriendDynamic(final int page, final int type) {
-		int trendId = PrefsUtils.User.getShowedMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId());
 		if (type == GET_PULLDOWN) {
 			time = "0";
 		} else if (type == GET_FIRST) {
 			time = "0";
-			trendId = 0;
 		}
 		FriendsProxy.getMyFriendDynamic(FriendDynamicActivity.this, new RCPlatformResponseHandler() {
 
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
-					List<FriendDynamic> list = jsonToFriendDynamic(content);
+					List<FriendDynamic> list = jsonToFriendDynamic(type, content);
 					myHandler.obtainMessage(type, list).sendToTarget();
 				} catch (Exception e) {
-					// TODO: handle exception
 				}
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
 			}
-		}, trendId, page, 10, time);
+		}, page, PAGE_SIZE, time);
 	}
 
 	private Handler myHandler = new Handler() {
@@ -203,7 +192,7 @@ public class FriendDynamicActivity extends BaseActivity {
 
 	};
 
-	private List<FriendDynamic> jsonToFriendDynamic(String json) throws JSONException {
+	private List<FriendDynamic> jsonToFriendDynamic(int type, String json) throws JSONException {
 		JSONObject jsonObject = new JSONObject(json);
 		List<FriendDynamic> friends = null;
 		JSONArray myFriendsArray = jsonObject.getJSONArray("trends");
