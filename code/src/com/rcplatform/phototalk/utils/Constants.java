@@ -66,7 +66,8 @@ public class Constants {
 
 	public static final String PAGEAGE = "com.rcplatform.phototalk";
 
-	public static final String INVITE_JOIN_IMAGE_URL = "https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-prn1/943638_133864436812838_2050964251_n.jpg";
+	public static final String INVITE_JOIN_IMAGE_URL = "http://img1.ph.126.net/HvcVzHANbBP4eKGcGKd4TQ==/3789216136578905707.png";
+//	public static final String INVITE_JOIN_IMAGE_URL = "http://img.hb.aicdn.com/48bb7e63918158fb7524c28adcaf8bf4833629854a35b-v0Gv9F_fw580";
 
 	public static final String OFFICIAL_RCID = "1000000";
 
@@ -167,7 +168,8 @@ public class Constants {
 
 	public static class GCM {
 
-//		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
+		// public static final String GCM_URL =
+		// "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
 		public static final String GCM_URL = "http://pt.rcplatformhk.net/phototalk/user/pushOfflineMsg.do";
 
 		public final static String GCM_TYPE_MSG = "1";
@@ -273,8 +275,8 @@ public class Constants {
 	public static final String FEEDBACK_EMAIL = "rctalk.service@gmail.com";
 
 	public static final String FLURRY_KEY = "93576P6KMW7VYQDQCR3J";
-	
-	public static final int	STATUS_AREADY_FRIENDS = 21301;
+
+	public static final int STATUS_AREADY_FRIENDS = 21301;
 
 	// 头像图片本地缓存地址
 
