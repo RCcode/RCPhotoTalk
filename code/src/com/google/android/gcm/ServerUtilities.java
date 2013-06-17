@@ -40,10 +40,10 @@ public final class ServerUtilities {
 
 	public static final String SENDER_ID = "302738588217";
 
-	// private static String serverUrl =  "http://pt.rcplatformhk.net/phototalk/user/syncUserkey.do";
+	 private static String serverUrl =  "http://pt.rcplatformhk.net/phototalk/user/syncUserkey.do";
     // private static String serverLogUrl = "http://pt.rcplatformhk.net/phototalk/push/receivePushStatus.do";
 
-	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
+//	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
 
 //	private static String serverLogUrl = "http://192.168.0.86:8083/phototalk/push/receivePushStatus.do";
 	
