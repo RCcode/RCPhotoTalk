@@ -27,6 +27,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
+import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.utils.Constants;
 
 /**
@@ -36,10 +38,12 @@ public final class ServerUtilities {
 
 	public static final String SENDER_ID = "302738588217";
 
-	private static String serverUrl = "http://pt.rcplatformhk.net/phototalk/user/syncUserkey.do";
+	// private static String serverUrl =  "http://pt.rcplatformhk.net/phototalk/user/syncUserkey.do";
+    // private static String serverLogUrl = "http://pt.rcplatformhk.net/phototalk/push/receivePushStatus.do";
 
-//	TODO 新的log url
-	private static String serverLogUrl = "http://push.rcplatformhk.com/gcm/boss/receivePushStatus.do";
+	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
+
+	private static String serverLogUrl = "http://192.168.0.56:8080/phototalk/push/receivePushStatus.do";
 
 	private final static String status = "status";
 
@@ -48,16 +52,16 @@ public final class ServerUtilities {
 	public final static String STATUS_RECIVIE_MSG_INSTALLED = "1001";
 
 	public final static String STATUS_RECIVIE_MSG_NEW_APP = "1002";
-	
+
 	public final static String GCM_MSG_USER_MESSAGE = "user_message";
-	
+
 	private static AsyncTask<Void, Void, Void> mRegisterTask;
 
 	private static AsyncTask<Void, Void, Void> mreceivePushStatusTask;
 
 	private static String RC_ID = "";
-	
-	private static String USER_TOKEN ="";
+
+	private static String USER_TOKEN = "";
 
 	public static void register(Context ctx, String rcId, String token) {
 		RC_ID = rcId;
@@ -79,8 +83,8 @@ public final class ServerUtilities {
 				registerUserID(ctx, regId);
 			}
 		}
-		
-		setGcmMessageCount(ctx,GCM_MSG_USER_MESSAGE,0);
+
+		setGcmMessageCount(ctx, GCM_MSG_USER_MESSAGE, 0);
 	}
 
 	public static void onDestroy(Context ctx) {
@@ -147,6 +151,13 @@ public final class ServerUtilities {
 			json.put("timeZone", MetaHelper.getTimeZone(context));
 			json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
 			json.put("pushResult", pushFlag);
+			PhotoTalkApplication app = (PhotoTalkApplication) context.getApplicationContext();
+			UserInfo user = app.getCurrentUser();
+			if(user!=null){
+				json.put("token", user.getToken());
+			}else{
+				json.put("token", "000000");
+			}
 		}
 		catch (JSONException e1) {
 			// TODO Auto-generated catch block
@@ -210,21 +221,21 @@ public final class ServerUtilities {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("userKey", regId);
-			json.put("appId",Constants.APP_ID);
+			json.put("appId", Constants.APP_ID);
 			json.put("rcId", rcId);
-			//TODO 设置真是token
+			// TODO 设置真是token
 			json.put("token", USER_TOKEN);
 			json.put("deviceId", MetaHelper.getMACAddress(context));
 			/*
-			json.put("packageName", MetaHelper.getAppName(context));
-			json.put("status", STATUS_CREATE_USERINFO);
-			json.put("deviceID", MetaHelper.getImsi(context));
-			json.put("clientMac", MetaHelper.getMACAddress(context));
-			json.put("osVersion", MetaHelper.getOsVersion(context));
-			json.put("language", MetaHelper.getLanguage(context));
-			json.put("timeZone", MetaHelper.getTimeZone(context));
-			json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
-			*/
+			 * json.put("packageName", MetaHelper.getAppName(context));
+			 * json.put("status", STATUS_CREATE_USERINFO); json.put("deviceID",
+			 * MetaHelper.getImsi(context)); json.put("clientMac",
+			 * MetaHelper.getMACAddress(context)); json.put("osVersion",
+			 * MetaHelper.getOsVersion(context)); json.put("language",
+			 * MetaHelper.getLanguage(context)); json.put("timeZone",
+			 * MetaHelper.getTimeZone(context)); json.put("timeZoneID",
+			 * MetaHelper.getTimeZoneId(context));
+			 */
 		}
 		catch (JSONException e1) {
 			// TODO Auto-generated catch block
@@ -287,18 +298,18 @@ public final class ServerUtilities {
 			if (resultJSON.has(status)) {
 				int flag = resultJSON.getInt(status);
 				if (flag == 10000) {
-					GCMRegistrar.setRegisteredOnServer(context, true,RC_ID);
-				}else{
-					GCMRegistrar.setRegisteredOnServer(context, false,RC_ID);
+					GCMRegistrar.setRegisteredOnServer(context, true, RC_ID);
+				} else {
+					GCMRegistrar.setRegisteredOnServer(context, false, RC_ID);
 				}
-			}else{
-				GCMRegistrar.setRegisteredOnServer(context, false,RC_ID);
+			} else {
+				GCMRegistrar.setRegisteredOnServer(context, false, RC_ID);
 			}
 		}
 		catch (Exception e) {
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
-			GCMRegistrar.setRegisteredOnServer(context, false,RC_ID);
+			GCMRegistrar.setRegisteredOnServer(context, false, RC_ID);
 		}
 	}
 
@@ -306,16 +317,15 @@ public final class ServerUtilities {
 	 * Unregister this account/device pair within the server.
 	 */
 	static void unregister(final Context context, final String regId) {
-		
+
 	}
-	
-	
-	static void setGcmMessageCount(final Context context,String key, int count){
+
+	static void setGcmMessageCount(final Context context, String key, int count) {
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		pref.edit().putInt(key, count).commit();
 	}
-	
-	static int getGcmMessageCount(final Context context,String key){
+
+	static int getGcmMessageCount(final Context context, String key) {
 		int count = 0;
 		SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
 		count = pref.getInt(key, count);
