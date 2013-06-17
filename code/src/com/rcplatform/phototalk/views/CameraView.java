@@ -192,7 +192,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 			// TODO Auto-generated method stub
 			if (camera != null) {
 				BitmapFactory.Options options = new BitmapFactory.Options();
-				options.inSampleSize = 2;
 				Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 				Bitmap tempBitmap = null;
 				Matrix matrix = new Matrix();
@@ -344,6 +343,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				}
 				int w = 0;
 				int h = 0;
+				int picWidth = 0;
+				int picHeight = 0;
 
 				if (Build.VERSION.SDK_INT >= 8)
 					setCameraDisplayOrientation((Activity) mContext, mCurrentCameraNum, mCamera);
@@ -356,6 +357,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 						w = 480;
 						h = 800;
 					}
+					picWidth = 720;
+					picHeight = 1280;
 				}
 				if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
 					parameters.set("orientation", "landscape");
@@ -365,6 +368,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 						h = 480;
 						w = 800;
 					}
+					picHeight = 720;
+					picWidth = 1280;
 				}
 
 				if (mCurrentCameraNum == mFrontCameraNum) {
@@ -379,7 +384,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 
 				}
 
-				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
+				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), picHeight, picWidth);
 				if (pictureSize != null)
 					parameters.setPictureSize(pictureSize.width, pictureSize.height);
 				List<String> focusModes = parameters.getSupportedFocusModes();

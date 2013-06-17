@@ -372,14 +372,12 @@ public class ProfilePictureView extends FrameLayout {
 		removeAllViews();
 
 		image = new ImageView(context);
-
 		LayoutParams imageLayout = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-
 		image.setLayoutParams(imageLayout);
 
 		// We want to prevent up-scaling the image, but still have it fit within
 		// the layout bounds as best as possible.
-		image.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+		image.setScaleType(ImageView.ScaleType.FIT_XY);
 		addView(image);
 	}
 

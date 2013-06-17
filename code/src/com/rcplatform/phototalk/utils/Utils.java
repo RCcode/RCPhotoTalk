@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,11 +83,11 @@ public class Utils {
 		try {
 			context.getPackageManager().getApplicationInfo(packageName, PackageManager.GET_UNINSTALLED_PACKAGES);
 			return true;
-		}
-		catch (NameNotFoundException e) {
+		} catch (NameNotFoundException e) {
 			return false;
 		}
 	}
+
 	private static UserInfo getAppLoginUser(Context context, String packageName) {
 		StringBuilder sbUri = new StringBuilder();
 		sbUri.append("content://").append(packageName).append(".provider").append("/user/0");
@@ -531,7 +532,15 @@ public class Utils {
 	}
 
 	public static List<Friend> getFriendOrderByLetter(List<Friend> friends) {
-		TreeSet<Friend> resultTemp = new TreeSet<Friend>(new PinyinComparator());
+		TreeSet<Friend> resultTemp = new TreeSet<Friend>(new Comparator<Friend>() {
+
+			@Override
+			public int compare(Friend lhs, Friend rhs) {
+				if (lhs.getLetter().equals(rhs.getLetter()))
+					return -1;
+				return lhs.getLetter().compareTo(rhs.getLetter());
+			}
+		});
 		resultTemp.addAll(friends);
 		List<Friend> result = new ArrayList<Friend>(resultTemp);
 		friends.clear();

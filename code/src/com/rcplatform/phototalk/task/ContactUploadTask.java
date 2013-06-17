@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.task;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -85,6 +86,7 @@ public class ContactUploadTask {
 		public void run() {
 			boolean hasUpdate = false;
 			List<Contacts> contacts = ContactUtil.getContacts(mContext);
+			List<Contacts> newContacts = new ArrayList<Contacts>();
 			if (!PrefsUtils.LoginState.hasAppUsed(mContext)) {
 				hasUpdate = true;
 			} else {
@@ -92,7 +94,7 @@ public class ContactUploadTask {
 				for (Contacts contact : contacts) {
 					if (!contactsLocal.contains(contact)) {
 						hasUpdate = true;
-						break;
+						newContacts.add(contact);
 					}
 				}
 			}
@@ -100,7 +102,7 @@ public class ContactUploadTask {
 			if (hasUpdate) {
 				PhotoTalkDatabaseFactory.getGlobalDatabase().saveContacts(contacts);
 				if (contacts.size() > 0) {
-					String entity = getEntity(contacts);
+					String entity = getEntity(newContacts);
 					while (mCurrentTime <= MAX_RETRY_TIME) {
 						mCurrentTime++;
 						try {

@@ -70,7 +70,6 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="13dp"
-        android:layout_marginTop="3dp"
         android:gravity="center_horizontal"
         android:paddingTop="9dp"
         android:textColor="#ff0000"

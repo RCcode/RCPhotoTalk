@@ -1,6 +1,8 @@
 package com.rcplatform.phototalk;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -18,6 +20,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class BindPhoneActivity extends BaseActivity implements OnClickListener {
@@ -197,22 +200,54 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	}
 
 	private void requestReSendSMS() {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-		UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
+		AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
+		dialogBuilder.setTitle(fullTempNumber).setMessage(getResources().getString(R.string.sms_reciver_info)).setCancelable(false)
+		        .setNegativeButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(R.string.sms_sended);
-				PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
-				mCountDownTask = new CountDownTask().execute();
-			}
+			        @Override
+			        public void onClick(DialogInterface dialog, int which) {
+			        }
+		        }).setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		},fullTempNumber);
+			        @Override
+			        public void onClick(DialogInterface dialog, int which) {
+				        showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+				        UserSettingProxy.requestSMS(BindPhoneActivity.this, new RCPlatformResponseHandler() {
+
+					        @Override
+					        public void onSuccess(int statusCode, String content) {
+					        	dismissLoadingDialog();
+								showErrorConfirmDialog(R.string.sms_sended);
+								PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
+								mCountDownTask = new CountDownTask().execute();
+					        }
+
+					        @Override
+					        public void onFailure(int errorCode, String content) {
+						        dismissLoadingDialog();
+						        showErrorConfirmDialog(content);
+					        }
+				        }, fullTempNumber);
+
+			        }
+		        });
+		dialogBuilder.create().show();
+//		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+//		UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
+//
+//			@Override
+//			public void onSuccess(int statusCode, String content) {
+//				dismissLoadingDialog();
+//				showErrorConfirmDialog(R.string.sms_sended);
+//				PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
+//				mCountDownTask = new CountDownTask().execute();
+//			}
+//
+//			@Override
+//			public void onFailure(int errorCode, String content) {
+//				dismissLoadingDialog();
+//				showErrorConfirmDialog(content);
+//			}
+//		},fullTempNumber);
 	}
 }
