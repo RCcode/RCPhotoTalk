@@ -62,7 +62,7 @@ public class Utils {
 				AppInfo appInfo = new AppInfo();
 				appInfo.setAppPackage(info.packageName);
 				appInfo.setAppName(info.applicationInfo.loadLabel(manager).toString());
-				if (info.packageName.equals("com.rcplatform.phototalk")) {
+				if (info.packageName.equals("com.rcplatform.videotalk")) {
 					Constants.installedApps.add(appInfo);
 					continue;
 				}
