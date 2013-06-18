@@ -753,33 +753,33 @@ public class EditPictureActivity extends BaseActivity {
 		return new File(voicePath).exists();
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-
-			AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
-			dialogBuilder.setTitle(R.string.operation)
-			        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-
-				        @Override
-				        public void onClick(DialogInterface dialog, int which) {
-					        dialog.cancel();
-					        finish();
-				        }
-			        }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-
-				        @Override
-				        public void onClick(DialogInterface dialog, int which) {
-
-					        // register(LoginActivity.this, email,
-					        // psw,
-					        // nick);
-				        }
-			        });
-			dialogBuilder.create().show();
-
-		}
-		return false;
-	}
+//	@Override
+//	public boolean onKeyDown(int keyCode, KeyEvent event) {
+//		if (keyCode == KeyEvent.KEYCODE_BACK) {
+//
+//			AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
+//			dialogBuilder.setTitle(R.string.operation)
+//			        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+//
+//				        @Override
+//				        public void onClick(DialogInterface dialog, int which) {
+//					        dialog.cancel();
+//					        finish();
+//				        }
+//			        }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
+//
+//				        @Override
+//				        public void onClick(DialogInterface dialog, int which) {
+//
+//					        // register(LoginActivity.this, email,
+//					        // psw,
+//					        // nick);
+//				        }
+//			        });
+//			dialogBuilder.create().show();
+//
+//		}
+//		return false;
+//	}
 
 }

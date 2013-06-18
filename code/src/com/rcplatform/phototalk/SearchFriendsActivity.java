@@ -231,7 +231,10 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			@Override
 			public void onAlreadyAdded() {
 				// TODO Auto-generated method stub
-
+				dismissLoadingDialog();
+				friend.setFriend(true);
+				mAdapter.notifyDataSetChanged();
+				AddFriendsActivity.addFriend(friend);
 			}
 		}, friend).execute();
 	}
