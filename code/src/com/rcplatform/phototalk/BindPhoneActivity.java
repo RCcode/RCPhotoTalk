@@ -28,6 +28,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	private static final int SMS_SEND_SPACE = 60;
 
 	public static final String REQUEST_PAMAM_NUMBER = "cellphone_number";
+
 	public static final String REQUEST_PARAM_COUNTRY_CODE = "country_code";
 
 	private Button btnResend;
@@ -109,7 +110,8 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 				try {
 					Thread.sleep(1000);
 					publishProgress();
-				} catch (InterruptedException e) {
+				}
+				catch (InterruptedException e) {
 					e.printStackTrace();
 				}
 			}
@@ -135,17 +137,17 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_resend:
-			requestReSendSMS();
-			break;
-		case R.id.btn_commit:
-			EventUtil.More_Setting.rcpt_success_phonenumber(baseContext);
-			sendValidate();
-			break;
-		case R.id.btn_change_number:
-		case R.id.title_linear_back:
-			finish();
-			break;
+			case R.id.btn_resend:
+				requestReSendSMS();
+				break;
+			case R.id.btn_commit:
+				EventUtil.More_Setting.rcpt_success_phonenumber(baseContext);
+				sendValidate();
+				break;
+			case R.id.btn_change_number:
+			case R.id.title_linear_back:
+				finish();
+				break;
 		}
 	}
 
@@ -175,7 +177,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 					dismissLoadingDialog();
 					showErrorConfirmDialog(content);
 				}
-			}, validate,fullTempNumber);
+			}, validate, fullTempNumber);
 		}
 	}
 
@@ -206,6 +208,7 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 
 			        @Override
 			        public void onClick(DialogInterface dialog, int which) {
+				        finish();
 			        }
 		        }).setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
 
@@ -216,10 +219,10 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 
 					        @Override
 					        public void onSuccess(int statusCode, String content) {
-					        	dismissLoadingDialog();
-								showErrorConfirmDialog(R.string.sms_sended);
-								PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
-								mCountDownTask = new CountDownTask().execute();
+						        dismissLoadingDialog();
+//						        showErrorConfirmDialog(R.string.sms_sended);
+						        PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
+						        mCountDownTask = new CountDownTask().execute();
 					        }
 
 					        @Override
@@ -232,22 +235,23 @@ public class BindPhoneActivity extends BaseActivity implements OnClickListener {
 			        }
 		        });
 		dialogBuilder.create().show();
-//		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-//		UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
-//
-//			@Override
-//			public void onSuccess(int statusCode, String content) {
-//				dismissLoadingDialog();
-//				showErrorConfirmDialog(R.string.sms_sended);
-//				PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this, getCurrentUser().getRcId());
-//				mCountDownTask = new CountDownTask().execute();
-//			}
-//
-//			@Override
-//			public void onFailure(int errorCode, String content) {
-//				dismissLoadingDialog();
-//				showErrorConfirmDialog(content);
-//			}
-//		},fullTempNumber);
+		// showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		// UserSettingProxy.requestSMS(this, new RCPlatformResponseHandler() {
+		//
+		// @Override
+		// public void onSuccess(int statusCode, String content) {
+		// dismissLoadingDialog();
+		// showErrorConfirmDialog(R.string.sms_sended);
+		// PrefsUtils.User.addSelfBindPhoneTime(BindPhoneActivity.this,
+		// getCurrentUser().getRcId());
+		// mCountDownTask = new CountDownTask().execute();
+		// }
+		//
+		// @Override
+		// public void onFailure(int errorCode, String content) {
+		// dismissLoadingDialog();
+		// showErrorConfirmDialog(content);
+		// }
+		// },fullTempNumber);
 	}
 }
