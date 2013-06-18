@@ -166,12 +166,14 @@ public class PTBackgroundService extends Service {
 	}
 
 	private void uploadContact() {
-		ContactUploadTask task = ContactUploadTask.getInstance(getApplicationContext());
-		if (task.getStatus() == Status.STATUS_FINISH) {
-			task = ContactUploadTask.createNewTask(getApplicationContext());
-			task.startUpload();
-		} else if (task.getStatus() == Status.STATUS_PENDING) {
-			task.startUpload();
+		if (mCurrentUser != null) {
+			ContactUploadTask task = ContactUploadTask.getInstance(getApplicationContext());
+			if (task.getStatus() == Status.STATUS_FINISH) {
+				task = ContactUploadTask.createNewTask(getApplicationContext());
+				task.startUpload();
+			} else if (task.getStatus() == Status.STATUS_PENDING) {
+				task.startUpload();
+			}
 		}
 	}
 

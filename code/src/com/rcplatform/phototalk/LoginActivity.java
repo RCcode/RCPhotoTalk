@@ -680,21 +680,27 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 	private void loginSuccess(final UserInfo userInfo) {
 		saveUserInfo(userInfo);
 		PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(userInfo));
-		if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME && !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
-			ContactUploadTask task = ContactUploadTask.getInstance(LoginActivity.this);
-			if (task.getStatus() == Status.STATUS_RUNNING) {
-				showLoadingDialog(LOADING_NO_MSG, R.string.uploading_contacts, false);
-				task.setOnUploadOverListener(new OnUploadOverListener() {
-
-					@Override
-					public void onUploadOver(boolean isSuccess) {
-						dismissLoadingDialog();
-						closePage(userInfo);
-					}
-				});
-				return;
-			}
-		}
+		ContactUploadTask task = ContactUploadTask.createNewTask(this);
+		task.setLogin();
+		task.startUpload();
+		// if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME &&
+		// !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
+		// ContactUploadTask task =
+		// ContactUploadTask.getInstance(LoginActivity.this);
+		// if (task.getStatus() == Status.STATUS_RUNNING) {
+		// showLoadingDialog(LOADING_NO_MSG, R.string.uploading_contacts,
+		// false);
+		// task.setOnUploadOverListener(new OnUploadOverListener() {
+		//
+		// @Override
+		// public void onUploadOver(boolean isSuccess) {
+		// dismissLoadingDialog();
+		// closePage(userInfo);
+		// }
+		// });
+		// return;
+		// }
+		// }
 		closePage(userInfo);
 	}
 
