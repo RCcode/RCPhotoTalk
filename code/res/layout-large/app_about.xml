@@ -24,7 +24,7 @@
                 android:layout_width="@dimen/about_icon_width"
                 android:layout_height="@dimen/about_icon_width"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/icon_512" />
 
             <TextView
                 style="@style/text_base"
