@@ -54,14 +54,25 @@ public class ContactUtil {
 		return new Friend(contact.getName(), contact.getMobilePhoneNumber(), null);
 	}
 
-	public static List<Friend> getContactFriendNotRepeat(Collection<Contacts> contacts, List<Friend> friends) {
+	public static List<Friend> getContactFriendNotRepeat(Collection<Contacts> contacts, List<Friend> recommendFriends, List<Friend> friends) {
 		List<Contacts> contactRepeat = new ArrayList<Contacts>();
-		for (Friend friend : friends) {
+		for (Friend friend : recommendFriends) {
 			String mobilePhoneNumber = friend.getSource().getValue();
 			for (Contacts contact : contacts) {
 				if (contact.getMobilePhoneNumber().equals(mobilePhoneNumber)) {
 					contactRepeat.add(contact);
 					break;
+				}
+			}
+		}
+		for (Friend friend : friends) {
+			if (friend.getSource() != null) {
+				String mobilePhoneNumber = friend.getSource().getValue();
+				for (Contacts contact : contacts) {
+					if (contact.getMobilePhoneNumber().equals(mobilePhoneNumber)) {
+						contactRepeat.add(contact);
+						break;
+					}
 				}
 			}
 		}

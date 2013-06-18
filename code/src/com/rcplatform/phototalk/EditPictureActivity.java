@@ -646,7 +646,7 @@ public class EditPictureActivity extends BaseActivity {
 						file.createNewFile();
 					BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file)); //
 					// b.compress(Bitmap.CompressFormat.JPEG, 100, os);
-					bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+					bitmap.compress(Bitmap.CompressFormat.JPEG, 60, os);
 					os.flush();
 					os.close();
 					handler.sendEmptyMessage(SAVE_SUCCESS);
