@@ -2,9 +2,9 @@ package com.rcplatform.videotalk.api;
 
 public class PhotoTalkApiUrl {
 
-	private static final String BASE_URL = "http://192.168.0.86:8083/";
+//	private static final String BASE_URL = "http://192.168.0.86:8083/";
 	// private static final String BASE_URL = "http://192.168.0.111/";
-	// private static final String BASE_URL = "http://pt.rcplatformhk.net/";
+	 private static final String BASE_URL = "http://pt.rcplatformhk.net/";
 	// private static final String BASE_URL = "http://103.247.169.150:8083/";
 	// private static final String BASE_URL = "http://192.168.0.106/";
 
@@ -92,9 +92,9 @@ public class PhotoTalkApiUrl {
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net";
+	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
 
-	private static final String BASE_URL_FOR_RCBOSS = BASE_URL + "rcboss/";
+	private static final String BASE_URL_FOR_RCBOSS = RCBOSS_BASE_URL + "rcboss/";
 
 	private static final String RCBOSS_USER_URL = BASE_URL_FOR_RCBOSS + "user/";
 

@@ -193,7 +193,7 @@
 
     <!-- 没有翻译的字符 -->
 
-    <string name="app_name">PhotoTalk</string>
+    <string name="app_name">VideoTalk</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="version">Beta v1.3</string>
