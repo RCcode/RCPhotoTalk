@@ -547,6 +547,7 @@ public class EditPictureActivity extends BaseActivity {
 						public void afterTextChanged(Editable s) {
 							float length = paint.measureText(s.toString());
 							if (length == 0) {
+								hideSoftKeyboard(getCurrentFocus());
 								mEditText.setVisibility(View.GONE);
 								mEditText = null;
 							}
