@@ -407,7 +407,7 @@ public class EditPictureView extends View {
 			top = (int) ((Constants.SCREEN_HEIGHT - bgHeight) / 2);
 			bottom = Constants.SCREEN_HEIGHT - top;
 		}
-		RectF dst = new RectF(left, top, right, bottom);
+		RectF dst = new RectF(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
 		canvas.drawBitmap(tempBitmap, null, dst, mBitmapPaint);
 
 		// tempBitmap.recycle();
