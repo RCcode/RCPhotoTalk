@@ -65,6 +65,8 @@ public class FriendDynamicActivity extends BaseActivity {
 
 	private static final int PAGE_SIZE = 10;
 
+	protected static final int FAIL = 4;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -102,7 +104,6 @@ public class FriendDynamicActivity extends BaseActivity {
 		listDynamic = new ArrayList<FriendDynamicActivity.FriendDynamic>();
 		adpter = new FriendDynamicListAdpter(FriendDynamicActivity.this, listDynamic);
 		friendDynameicList.setAdapter(adpter);
-
 		friendDynameicList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -111,7 +112,6 @@ public class FriendDynamicActivity extends BaseActivity {
 				int index = arg2 - 1;
 				if (listDynamic.get(index).getType() == 1) {
 					// APP INFO
-
 					Utils.searchAppInGooglePlay(baseContext, FriendDynamicListAdpter.getAppInfos(listDynamic.get(index).getOtherName())[1]);
 				} else {
 					// USER INFO
@@ -120,9 +120,8 @@ public class FriendDynamicActivity extends BaseActivity {
 				}
 			}
 		});
-
 		getFriendDynamic(pageSize, GET_FIRST);
-
+		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 	}
 
 	private void getFriendDynamic(final int page, final int type) {
@@ -139,11 +138,13 @@ public class FriendDynamicActivity extends BaseActivity {
 					List<FriendDynamic> list = jsonToFriendDynamic(type, content);
 					myHandler.obtainMessage(type, list).sendToTarget();
 				} catch (Exception e) {
+					myHandler.sendEmptyMessage(FAIL);
 				}
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
+				myHandler.sendEmptyMessage(FAIL);
 			}
 		}, page, PAGE_SIZE, time);
 	}
@@ -154,6 +155,7 @@ public class FriendDynamicActivity extends BaseActivity {
 		public void handleMessage(Message msg) {
 			// TODO Auto-generated method stub
 			super.handleMessage(msg);
+			dismissLoadingDialog();
 			switch (msg.what) {
 			case GET_PULLDOWN:
 				List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
@@ -162,8 +164,8 @@ public class FriendDynamicActivity extends BaseActivity {
 					listDynamic.clear();
 					listDynamic.addAll(downlist);
 				}
-				friendDynameicList.onRefreshComplete();
 				adpter.notifyDataSetChanged();
+				friendDynameicList.onRefreshComplete();
 				break;
 
 			case GET_FIRST:
@@ -171,8 +173,8 @@ public class FriendDynamicActivity extends BaseActivity {
 				if (list != null) {
 					listDynamic.addAll(list);
 				}
-				friendDynameicList.onRefreshComplete();
 				adpter.notifyDataSetChanged();
+				friendDynameicList.onRefreshComplete();
 				break;
 			case GET_UPDOWN:
 				List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
@@ -180,11 +182,14 @@ public class FriendDynamicActivity extends BaseActivity {
 					// listDynamic.clear();
 					listDynamic.addAll(uplist);
 				}
-				friendDynameicList.onRefreshComplete();
 				adpter.notifyDataSetChanged();
+				friendDynameicList.onRefreshComplete();
 				break;
 			case UPDATE_UI:
 				InformationPageController.getInstance().onNewTread();
+				break;
+			case FAIL:
+				friendDynameicList.onRefreshComplete();
 				break;
 			}
 

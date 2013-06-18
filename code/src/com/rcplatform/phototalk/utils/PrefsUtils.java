@@ -20,26 +20,6 @@ public class PrefsUtils {
 		public static final String NEVER_ATTENTION_VERSION = "never_attention";
 		public static final String LAST_UPDATE_TIME = "last_update_time";
 
-		public static boolean hasUploadContacts(Context context) {
-			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
-			return sh.getBoolean(APP_KEY_CONTACT_UPLOADED, false);
-		}
-
-		public static void setLastContactUploadTime(Context context) {
-			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
-			sh.edit().putLong(LAST_CONTACT_UPLOAD_TIME, System.currentTimeMillis()).commit();
-		}
-
-		public static void setContactsUploaded(Context context) {
-			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
-			sh.edit().putBoolean(APP_KEY_CONTACT_UPLOADED, true).putLong(LAST_CONTACT_UPLOAD_TIME, System.currentTimeMillis()).commit();
-		}
-
-		public static long getLastContactUploadTime(Context context) {
-			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
-			return sh.getLong(LAST_CONTACT_UPLOAD_TIME, 0l);
-		}
-
 		public static void setNeverAttentionVersion(Context context, String version) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
 			sh.edit().putString(NEVER_ATTENTION_VERSION, version).commit();
@@ -85,16 +65,6 @@ public class PrefsUtils {
 		public static void clearLoginInfo(Context context) {
 			SharedPreferences sh = getPreference(context, PREF_NAME);
 			sh.edit().remove(PREF_KEY_LOGIN_USER).commit();
-		}
-
-		public static void setAppUsed(Context context) {
-			SharedPreferences sh = getPreference(context, PREF_NAME);
-			sh.edit().putBoolean(PREF_KEY_HAS_USED, true).commit();
-		}
-
-		public static boolean hasAppUsed(Context context) {
-			SharedPreferences sh = getPreference(context, PREF_NAME);
-			return sh.getBoolean(PREF_KEY_HAS_USED, false);
 		}
 
 		public static void setLastRcId(Context context, String rcId) {
@@ -262,7 +232,10 @@ public class PrefsUtils {
 
 			public static boolean isUserBindPhoneTimeOut(Context context, String pref) {
 				long startBindTime = getPreference(context, pref).getLong(PREF_KEY_START_BIND_TIME, 0);
-				return (System.currentTimeMillis() - startBindTime) > Constants.BIND_PHONE_TIME_OUT;
+				if (startBindTime == 0) {
+					setFirstBindPhoneTime(context, pref, System.currentTimeMillis());
+				}
+				return startBindTime > 0 && (System.currentTimeMillis() - startBindTime) > Constants.BIND_PHONE_TIME_OUT;
 			}
 		}
 

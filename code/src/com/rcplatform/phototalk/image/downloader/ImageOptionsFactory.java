@@ -9,6 +9,7 @@ public class ImageOptionsFactory {
 	private static final int DEFAULT_HEAD_DRAWABLE = R.drawable.default_head;
 	private static final int DEFAULT_USERINFO_BACK_DRAWABLE = R.drawable.user_detail_bg;
 	private static DisplayImageOptions mCircleImageOption;
+	private static DisplayImageOptions mVKHeadImageOption;
 
 	private static DisplayImageOptions defaultImageOption = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc()
 			.showStubImage(DEFAULT_HEAD_DRAWABLE).showImageOnFail(DEFAULT_HEAD_DRAWABLE).showImageForEmptyUri(DEFAULT_HEAD_DRAWABLE).build();
@@ -54,5 +55,11 @@ public class ImageOptionsFactory {
 			mCircleImageOption = new DisplayImageOptions.Builder().showImageForEmptyUri(DEFAULT_HEAD_DRAWABLE).showImageOnFail(DEFAULT_HEAD_DRAWABLE)
 					.showStubImage(DEFAULT_HEAD_DRAWABLE).displayer(new RoundedBitmapDisplayer(90)).cacheInMemory().cacheOnDisc().build();
 		return mCircleImageOption;
+	}
+
+	public static DisplayImageOptions getVKHeadImageOption() {
+		if (mVKHeadImageOption == null)
+			mVKHeadImageOption = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc().build();
+		return mVKHeadImageOption;
 	}
 }

@@ -58,7 +58,7 @@ public class FriendsProxy {
 	}
 
 	// 田镇源 发送图片时 请求好友动态
-	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler,  int page, int size, String time) {
+	public static void getMyFriendDynamic(Context context, RCPlatformResponseHandler responseHandler, int page, int size, String time) {
 		Request request = new Request(context, PhotoTalkApiUrl.GET_FRIENDS_DYNAMIC_URL, responseHandler);
 		request.putParam("page", page + "");
 		request.putParam("size", size + "");
@@ -281,6 +281,7 @@ public class FriendsProxy {
 	}
 
 	private static RCPlatformResponseHandler loadLocalRecommends(final Activity context, final int friendType, final LoadFriendsListener listener) {
+		final List<Friend> friendsLocal = PhotoTalkDatabaseFactory.getDatabase().getFriends();
 		final List<Friend> recommendsLocal = PhotoTalkDatabaseFactory.getDatabase().getRecommends(friendType);
 		RCPlatformResponseHandler responseHandler = null;
 		if (friendType == FriendType.CONTACT) {
@@ -303,7 +304,7 @@ public class FriendsProxy {
 
 										@Override
 										public void run() {
-											listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, contactsRecommends),
+											listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, contactsRecommends, friendsLocal),
 													contactsRecommends);
 										}
 									});
@@ -334,7 +335,7 @@ public class FriendsProxy {
 				context.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsLocal), recommendsLocal);
+						listener.onFriendsLoaded(ContactUtil.getContactFriendNotRepeat(localContacts, recommendsLocal, friendsLocal), recommendsLocal);
 					}
 				});
 			}
@@ -357,7 +358,8 @@ public class FriendsProxy {
 
 										@Override
 										public void run() {
-											listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, thirdPartRecommends),
+											listener.onFriendsLoaded(
+													ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, thirdPartRecommends, friendsLocal),
 													thirdPartRecommends);
 										}
 									});
@@ -389,7 +391,7 @@ public class FriendsProxy {
 				context.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
-						listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsLocal), recommendsLocal);
+						listener.onFriendsLoaded(ThirdPartUtils.getFriendsNotRepeat(localFacebookFriends, recommendsLocal, friendsLocal), recommendsLocal);
 					}
 				});
 			}

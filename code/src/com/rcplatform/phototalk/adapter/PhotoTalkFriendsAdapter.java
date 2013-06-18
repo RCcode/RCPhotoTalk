@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 
 public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
@@ -331,7 +332,7 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 					mWillInvateFriends.remove(friend);
 			}
 		});
-		mImageLoader.displayImage(friend.getHeadUrl(), head);
+		mImageLoader.displayImage(friend.getHeadUrl(), head,ImageOptionsFactory.getVKHeadImageOption());
 		return convertView;
 	}
 

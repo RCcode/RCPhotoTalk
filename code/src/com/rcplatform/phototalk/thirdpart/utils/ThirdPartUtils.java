@@ -32,7 +32,7 @@ public class ThirdPartUtils {
 		return result;
 	}
 
-	public static List<Friend> getFriendsNotRepeat(List<Friend> thirdPartFriends, List<Friend> recommendFriends) {
+	public static List<Friend> getFriendsNotRepeat(List<Friend> thirdPartFriends, List<Friend> recommendFriends, List<Friend> friends) {
 		List<Friend> friendsRepeat = new ArrayList<Friend>();
 		for (Friend friend : recommendFriends) {
 			String facebookId = friend.getSource().getValue();
@@ -40,6 +40,17 @@ public class ThirdPartUtils {
 				if (facebookFriend.getRcId().equals(facebookId)) {
 					friendsRepeat.add(facebookFriend);
 					break;
+				}
+			}
+		}
+		for (Friend friend : friends) {
+			if (friend.getSource() != null) {
+				String facebookId = friend.getSource().getValue();
+				for (Friend facebookFriend : thirdPartFriends) {
+					if (facebookFriend.getRcId().equals(facebookId)) {
+						friendsRepeat.add(facebookFriend);
+						break;
+					}
 				}
 			}
 		}
@@ -114,5 +125,5 @@ public class ThirdPartUtils {
 	private static boolean isTokenExpiration(long expirationDate) {
 		return System.currentTimeMillis() > expirationDate;
 	}
-	
+
 }

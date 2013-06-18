@@ -41,6 +41,7 @@ import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.task.ContactUploadTask;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -77,9 +78,8 @@ public class PlatformEditActivity extends ImagePickActivity {
 		ivHead = (ImageView) findViewById(R.id.iv_head);
 		ivHead.setOnClickListener(mOnClickListener);
 		etNick = (EditText) findViewById(R.id.et_nick);
-		
-		etNick.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 
+		etNick.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 
 		etNick.addTextChangedListener(new TextWatcher() {
 
@@ -100,7 +100,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 			}
 		});
-		
+
 		vpUsers = (HorizontalListView) findViewById(R.id.vp_accounts);
 		Map<AppInfo, UserInfo> userApps = (Map<AppInfo, UserInfo>) getIntent().getSerializableExtra(PARAM_USER_APPS);
 		final BaseAdapter adapter = new AccountAdapter(userApps);
@@ -314,6 +314,9 @@ public class PlatformEditActivity extends ImagePickActivity {
 	};
 
 	private void loginSuccess(UserInfo userInfo) {
+		ContactUploadTask task = ContactUploadTask.createNewTask(this);
+		task.setLogin();
+		task.startUpload();
 		Intent intent = new Intent(this, InitPageActivity.class);
 		intent.putExtra(PARAM_USER, userInfo);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

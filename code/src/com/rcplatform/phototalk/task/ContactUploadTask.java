@@ -2,7 +2,6 @@ package com.rcplatform.phototalk.task;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -17,14 +16,16 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.os.Handler;
 
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.Contacts;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponse;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.ContactUtil;
-import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class ContactUploadTask {
 
@@ -37,12 +38,6 @@ public class ContactUploadTask {
 			switch (msg.what) {
 			case MSG_KEY_UPLOAD_SUCCESS:
 				uploadResult = true;
-				if (!PrefsUtils.AppInfo.hasUploadContacts(mContext))
-					PrefsUtils.AppInfo.setContactsUploaded(mContext);
-				else
-					PrefsUtils.AppInfo.setLastContactUploadTime(mContext);
-				if (!PrefsUtils.LoginState.hasAppUsed(mContext))
-					PrefsUtils.LoginState.setAppUsed(mContext);
 				break;
 			case MSG_KEY_UPLOAD_FAIL:
 				mTask = new ContactUploadTask(mContext);
@@ -63,9 +58,11 @@ public class ContactUploadTask {
 	private Thread mUploadTask;
 	private boolean uploadResult = false;
 	private static ContactUploadTask mTask;
+	private UserInfo mUserInfo;
 
 	private ContactUploadTask(Context context) {
 		this.mContext = context.getApplicationContext();
+		mUserInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		mUploadTask = new UploadThread();
 	};
 
@@ -86,15 +83,14 @@ public class ContactUploadTask {
 		public void run() {
 			boolean hasUpdate = false;
 			List<Contacts> contacts = ContactUtil.getContacts(mContext);
-			List<Contacts> newContacts = new ArrayList<Contacts>();
-			if (!PrefsUtils.LoginState.hasAppUsed(mContext)) {
+			if (isLogin) {
 				hasUpdate = true;
 			} else {
 				List<Contacts> contactsLocal = PhotoTalkDatabaseFactory.getGlobalDatabase().getContacts();
 				for (Contacts contact : contacts) {
 					if (!contactsLocal.contains(contact)) {
 						hasUpdate = true;
-						newContacts.add(contact);
+						break;
 					}
 				}
 			}
@@ -102,7 +98,8 @@ public class ContactUploadTask {
 			if (hasUpdate) {
 				PhotoTalkDatabaseFactory.getGlobalDatabase().saveContacts(contacts);
 				if (contacts.size() > 0) {
-					String entity = getEntity(newContacts);
+					String entity = getEntity(contacts);
+					LogUtil.e("upload contact params is : " + entity);
 					while (mCurrentTime <= MAX_RETRY_TIME) {
 						mCurrentTime++;
 						try {
@@ -112,6 +109,7 @@ public class ContactUploadTask {
 							HttpResponse response = client.execute(post);
 							if (response.getStatusLine().getStatusCode() == 200) {
 								String result = readStream(response.getEntity().getContent());
+								LogUtil.e("upload contact result is : " + result);
 								if (result != null) {
 									if (RCPlatformResponse.ResponseStatus.isRequestSuccess(result)) {
 										mHandler.sendEmptyMessage(MSG_KEY_UPLOAD_SUCCESS);
@@ -133,13 +131,20 @@ public class ContactUploadTask {
 		}
 	}
 
+	private boolean isLogin = false;
+
+	public void setLogin() {
+		isLogin = true;
+	}
+
 	private String getEntity(Collection<Contacts> contacts) {
 		try {
 			JSONObject entity = new JSONObject();
-			entity.put(PhotoTalkParams.PARAM_KEY_TOKEN, PhotoTalkParams.PARAM_VALUE_TOKEN_DEFAULT);
+			entity.put(PhotoTalkParams.PARAM_KEY_TOKEN, mUserInfo.getToken());
 			entity.put(PhotoTalkParams.PARAM_KEY_LANGUAGE, Constants.LANGUAGE);
 			entity.put(PhotoTalkParams.PARAM_KEY_DEVICE_ID, Constants.DEVICE_ID);
 			entity.put(PhotoTalkParams.PARAM_KEY_APP_ID, Constants.APP_ID);
+			entity.put(PhotoTalkParams.PARAM_KEY_USER_ID, mUserInfo.getRcId());
 			JSONArray arrayContacts = new JSONArray();
 			for (Contacts contact : contacts) {
 				JSONObject jsonContact = new JSONObject();
@@ -156,8 +161,10 @@ public class ContactUploadTask {
 	}
 
 	public void startUpload() {
-		status = Status.STATUS_RUNNING;
-		mUploadTask.start();
+		if (mUserInfo != null) {
+			status = Status.STATUS_RUNNING;
+			mUploadTask.start();
+		}
 	}
 
 	public int getStatus() {
