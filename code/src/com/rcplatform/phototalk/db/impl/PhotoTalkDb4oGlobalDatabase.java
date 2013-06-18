@@ -30,14 +30,14 @@ public class PhotoTalkDb4oGlobalDatabase implements GlobalDatabase {
 	}
 
 	@Override
-	public void saveContacts(List<Contacts> contacts) {
+	public synchronized void saveContacts(List<Contacts> contacts) {
 		deleteContacts();
 		db.store(contacts);
 		db.commit();
 	}
 
 	@Override
-	public List<Contacts> getContacts() {
+	public synchronized List<Contacts> getContacts() {
 		ObjectSet<Contacts> result = db.query(Contacts.class);
 		List<Contacts> contacts = new ArrayList<Contacts>();
 		contacts.addAll(result);
@@ -45,7 +45,7 @@ public class PhotoTalkDb4oGlobalDatabase implements GlobalDatabase {
 	}
 
 	@Override
-	public void deleteContacts() {
+	public synchronized void deleteContacts() {
 		ObjectSet<Contacts> result = db.query(Contacts.class);
 		while (result.hasNext())
 			db.delete(result.next());
@@ -53,7 +53,7 @@ public class PhotoTalkDb4oGlobalDatabase implements GlobalDatabase {
 	}
 
 	@Override
-	public void savePlatformAppInfos(List<AppInfo> appInfos) {
+	public synchronized void savePlatformAppInfos(List<AppInfo> appInfos) {
 		ObjectSet<AppInfo> localApps = db.query(AppInfo.class);
 		for (AppInfo info : localApps)
 			db.delete(info);
@@ -62,7 +62,7 @@ public class PhotoTalkDb4oGlobalDatabase implements GlobalDatabase {
 	}
 
 	@Override
-	public List<AppInfo> getPlatformAppInfos() {
+	public synchronized List<AppInfo> getPlatformAppInfos() {
 		ObjectSet<AppInfo> result = db.query(AppInfo.class);
 		List<AppInfo> apps = new ArrayList<AppInfo>();
 		apps.addAll(result);
