@@ -1,5 +1,7 @@
 package com.rcplatform.phototalk;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -52,16 +54,34 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
-		case R.id.forget_password_confirm_button:
-			String email = mEmailEditTextView.getText().toString();
-			if (checkEmail(email)) {
-				EventUtil.Register_Login_Invite.rcpt_resetpassword(baseContext);
-				doGetPassword(email);
-			}
-			break;
+			case R.id.back:
+				finish();
+				break;
+			case R.id.forget_password_confirm_button:
+				final String email = mEmailEditTextView.getText().toString();
+				if (checkEmail(email)) {
+
+					AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
+					dialogBuilder.setTitle(R.string.register_confirm_email_address).setMessage(email).setCancelable(false)
+					        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
+
+						        @Override
+						        public void onClick(DialogInterface dialog, int which) {
+							        dialog.cancel();
+							        EventUtil.Register_Login_Invite.rcpt_resetpassword(baseContext);
+							        doGetPassword(email);
+						        }
+					        }).setNegativeButton(getResources().getString(R.string.modify), new DialogInterface.OnClickListener() {
+
+						        @Override
+						        public void onClick(DialogInterface dialog, int which) {
+
+						        }
+					        });
+					dialogBuilder.create().show();
+
+				}
+				break;
 
 		}
 	}
@@ -76,7 +96,8 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 			return false;
 		}
 		if (!RCPlatformTextUtil.isEmailMatches(email)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(R.string.confirm)).show();
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(R.string.confirm))
+			        .show();
 			return false;
 		}
 		return true;

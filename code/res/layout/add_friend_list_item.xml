@@ -75,7 +75,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/default_gap"
             android:background="@drawable/add_friend_bg"
-            android:focusable="false" />
+            android:focusable="false"
+            android:scaleType="centerInside" />
     </RelativeLayout>
 
 </RelativeLayout>

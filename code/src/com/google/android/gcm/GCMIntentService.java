@@ -22,8 +22,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -33,8 +31,10 @@ import android.widget.RemoteViews;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.rcplatform.message.UserMessageService;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -156,7 +156,22 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 		String typeStr = intent.getStringExtra("type");
 		String msg = intent.getStringExtra("extra");
+		String rcID = intent.getStringExtra("rc_id");
+		PhotoTalkApplication app = (PhotoTalkApplication) context.getApplicationContext();
+		UserInfo user = app.getCurrentUser();
+		boolean isCurrentUserMsg = false;
+		if (null != user && rcID != null) {
+			isCurrentUserMsg = rcID.equals(user.getRcId());
+		}
+
 		int type = Integer.parseInt(typeStr);
+
+		if (type != Constants.Message.MESSAGE_APP_PUSH_MESSAGE_INT) {
+			if (!isCurrentUserMsg) {
+				return;
+			}
+		}
+
 		if (Constants.Message.MESSAGE_ACTION_FRIEND_INT == type || Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT == type
 		        || Constants.Message.MESSAGE_ACTION_MSG_INT == type) {
 
@@ -173,26 +188,26 @@ public class GCMIntentService extends GCMBaseIntentService {
 			if (!isRunning) {
 				count = ServerUtilities.getGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE) + 1;
 				ServerUtilities.setGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE, count);
-				generateMessageNotification(context, context.getString(R.string.gcm_message, count).toString());
+				generateMessageNotification(context, context.getString(R.string.gcm_message, count).toString(),type);
 			}
 		} else if (type == Constants.Message.MESSAGE_ACTION_FRIEND_INT) {
 			if (!isRunning) {
-				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString());
+				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString(),type);
 			}
 
 		} else if (type == Constants.Message.MESSAGE_NEW_USER_MESSAGE_INT) {
 			String userStr = intent.getStringExtra("new_user_info");
-//			if (!isRunning) {
-//				generateMessageNotification(context, userStr);
-//			}
-//			
+			// if (!isRunning) {
+			// generateMessageNotification(context, userStr);
+			// }
+			//
 			Intent it = new Intent();
 			it.setAction(Constants.Action.ACTION_GCM_MESSAGE);
 			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, userStr);
 			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY, Constants.Message.MESSAGE_TYPE_NEW_RECOMMENDS);
 			context.sendBroadcast(it);
-			
-		}else if (type == Constants.Message.MESSAGE_APP_PUSH_MESSAGE_INT) {
+
+		} else if (type == Constants.Message.MESSAGE_APP_PUSH_MESSAGE_INT) {
 
 			String iconUrl = intent.getStringExtra("icon");
 			String titleStr = intent.getStringExtra("title");
@@ -204,7 +219,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			if (!Utils.checkApkExist(context, packageName)) {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
-				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl);
+				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl,type);
 			} else {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
 			}
@@ -234,7 +249,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	private static void generateNotification(Context context, String iconUrl, String titleStr, String descStr, String downloadUrl) {
+	private static void generateNotification(Context context, String iconUrl, String titleStr, String descStr, String downloadUrl, int id) {
 		try {
 			downloadUrl.trim();
 			Bitmap bp = loadImageFromUrl(context, iconUrl);
@@ -250,6 +265,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.contentView.setTextViewText(R.id.gcm_decs, descStr);
 			notification.when = System.currentTimeMillis();
 			notification.defaults |= Notification.DEFAULT_SOUND;
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 			Uri uri = Uri.parse(downloadUrl);
 			Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
@@ -267,7 +283,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	public static void generateMessageNotification(Context context, String msg) {
+	public static void generateMessageNotification(Context context, String msg ,int id) {
 		try {
 
 			// Notification notification = new Notification();
@@ -287,7 +303,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			// set intent so it does not start a new activity
 			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
 			notification.contentIntent = intent;
-			notificationManager.notify(0, notification);
+			notificationManager.notify(id, notification);
 		}
 		catch (Exception e) {
 

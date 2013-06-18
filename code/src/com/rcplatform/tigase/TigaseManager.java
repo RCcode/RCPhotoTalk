@@ -353,6 +353,7 @@ public class TigaseManager {
 	public boolean sendMessage(String to, String msg) {
 		if (null == connection) {
 			initConnect();
+			return false;
 		}
 
 		if (false == isConnected) {

@@ -357,7 +357,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					dialog.dismiss();
 				}
 			};
-			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.net_error).setPositiveButton(R.string.retry, listener)
+			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.net_error).setPositiveButton(R.string.ok, listener)
 			        .setNegativeButton(R.string.cancel, listener).setCancelable(false).create();
 		}
 		updateFailDialog.show();

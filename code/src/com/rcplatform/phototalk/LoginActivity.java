@@ -221,7 +221,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				RCWebview.startWebview(ctx, "http://192.168.0.86:8082/rchome/priser.html");
+				RCWebview.startWebview(ctx, "http://rctalk.me/priser.html",R.string.null_str);
 			}
 		});
 		// init_regist_agreement_text.setMovementMethod(LinkMovementMethod.getInstance());

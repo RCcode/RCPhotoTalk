@@ -195,6 +195,8 @@
    	
     <string name="no_net">No network connection</string>
     <string name="net_error">Failed, please try again later</string>
+    
+    <string name="null_str"></string>
     <!-- 没有翻译的字符 -->
 
     <string name="app_name">PhotoTalk</string>
