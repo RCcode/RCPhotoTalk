@@ -253,7 +253,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	private boolean checkInfo(String nick) {
 		if (!RCPlatformTextUtil.isNickMatches(nick)) {
-			DialogUtil.createMsgDialog(this, getString(R.string.register_nick_empty), getString(R.string.confirm)).show();
+			DialogUtil.createMsgDialog(this, getString(R.string.register_nick_empty), getString(R.string.ok)).show();
 			return false;
 		}
 		return true;

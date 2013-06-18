@@ -184,7 +184,7 @@ public class LogicUtils {
 				dialog.dismiss();
 			}
 		};
-		DialogUtil.showInformationClearConfirmDialog(context, R.string.clear_infos_message, R.string.cancel, R.string.confirm, listener);
+		DialogUtil.showInformationClearConfirmDialog(context, R.string.clear_infos_message, R.string.cancel, R.string.ok, listener);
 	}
 
 	public static void deleteInformation(Context context, Information information) {

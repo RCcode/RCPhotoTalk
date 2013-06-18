@@ -125,7 +125,7 @@ public class DialogUtil {
 	public static Dialog createErrorInfoDialog(Context context, int resId) {
 
 		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
-		dialogBuilder.setMessage(resId).setCancelable(false).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+		dialogBuilder.setMessage(resId).setCancelable(false).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -137,7 +137,7 @@ public class DialogUtil {
 	public static Dialog createErrorInfoDialog(Context context, String msg) {
 
 		AlertDialog.Builder dialogBuilder = getAlertDialogBuilder(context);
-		dialogBuilder.setMessage(msg).setCancelable(false).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+		dialogBuilder.setMessage(msg).setCancelable(false).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

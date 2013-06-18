@@ -92,11 +92,11 @@ public class ForgetPasswordActivity extends BaseActivity implements View.OnClick
 	private boolean checkEmail(String email) {
 		// 邮箱正则表达式
 		if (TextUtils.isEmpty(email)) {
-			DialogUtil.createMsgDialog(this, getString(R.string.registe_email_empty), getString(R.string.confirm)).show();
+			DialogUtil.createMsgDialog(this, getString(R.string.registe_email_empty), getString(R.string.ok)).show();
 			return false;
 		}
 		if (!RCPlatformTextUtil.isEmailMatches(email)) {
-			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(R.string.confirm))
+			DialogUtil.createMsgDialog(this, getResources().getString(R.string.registe_email_error), getResources().getString(R.string.ok))
 			        .show();
 			return false;
 		}

@@ -230,7 +230,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				}
 			};
 			mBirthChooseDialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.select_birthday).setView(view)
-			        .setNegativeButton(R.string.cancel, birthListener).setPositiveButton(R.string.confirm, birthListener).create();
+			        .setNegativeButton(R.string.cancel, birthListener).setPositiveButton(R.string.ok, birthListener).create();
 		}
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			try {

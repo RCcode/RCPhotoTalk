@@ -287,7 +287,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
 			mDeAuthDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.dialog_confirm_deauth)
-			        .setPositiveButton(R.string.confirm, mDeAuthorizeDialogListener).setNegativeButton(R.string.cancel, mDeAuthorizeDialogListener)
+			        .setPositiveButton(R.string.ok, mDeAuthorizeDialogListener).setNegativeButton(R.string.cancel, mDeAuthorizeDialogListener)
 			        .create();
 		}
 		mDeAuthorizeDialogListener.setType(type);
