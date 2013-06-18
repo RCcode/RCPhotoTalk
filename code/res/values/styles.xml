@@ -251,6 +251,7 @@
     <style name="attention_text" parent="text_base">
         <item name="android:textSize">@dimen/attention_text_size</item>
         <item name="android:textColor">@color/attention_text_gray</item>
+        <item name="android:singleLine">false</item>
     </style>
 	
 </resources>
