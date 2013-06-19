@@ -27,7 +27,7 @@
         android:layout_toLeftOf="@+id/cb_invite"
         android:layout_toRightOf="@+id/iv_vk_head"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <CheckBox

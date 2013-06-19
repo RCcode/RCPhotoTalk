@@ -26,7 +26,7 @@
             android:paddingLeft="35dp"
             android:singleLine="true"
             android:textColor="#3f3f3f"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/seach_delete_btn"

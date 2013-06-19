@@ -43,7 +43,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/init_message_title_one"
         android:textColor="#FFFFFF"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textStyle="bold" />
     <!-- android:textColor="#FF4000" -->
 
@@ -57,7 +57,7 @@
         android:gravity="center_horizontal"
         android:text="@string/init_message_text_one"
         android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
     <com.rcplatform.phototalk.views.PageIndicator
         android:id="@+id/page_indicator_other"

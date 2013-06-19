@@ -61,7 +61,7 @@
                     android:layout_marginLeft="@dimen/default_gap_2x"
                     android:text="@string/nick"
                     android:textColor="#313131"
-                    android:textSize="20sp" >
+                    android:textSize="18sp" >
                 </TextView>
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:drawableRight="@drawable/app_arrow"
                     android:gravity="center_vertical"
                     android:textColor="#919191"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -95,7 +95,7 @@
                     android:layout_marginLeft="@dimen/default_gap_2x"
                     android:text="@string/sex"
                     android:textColor="#313131"
-                    android:textSize="20sp" >
+                    android:textSize="18sp" >
                 </TextView>
 
                 <TextView
@@ -108,7 +108,7 @@
                     android:drawableRight="@drawable/app_arrow"
                     android:gravity="center_vertical"
                     android:textColor="#919191"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -129,7 +129,7 @@
                     android:layout_marginLeft="@dimen/default_gap_2x"
                     android:text="@string/birthday"
                     android:textColor="#313131"
-                    android:textSize="20sp" >
+                    android:textSize="18sp" >
                 </TextView>
 
                 <TextView
@@ -142,7 +142,7 @@
                     android:drawableRight="@drawable/app_arrow"
                     android:gravity="center_vertical"
                     android:textColor="#919191"
-                    android:textSize="20sp" />
+                    android:textSize="18sp" />
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

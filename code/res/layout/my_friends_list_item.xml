@@ -38,7 +38,7 @@
             android:gravity="center_vertical"
             android:text="A"
             android:textColor="@color/black"
-            android:textSize="22sp" />
+            android:textSize="20sp" />
         <!-- </RelativeLayout> -->
 
         <View
@@ -69,7 +69,7 @@
                 android:layout_marginLeft="@dimen/default_gap_2x"
                 android:text="Andy"
                 android:textColor="@color/gray"
-                android:textSize="19sp" />
+                android:textSize="17sp" />
         </LinearLayout>
     </LinearLayout>
 
