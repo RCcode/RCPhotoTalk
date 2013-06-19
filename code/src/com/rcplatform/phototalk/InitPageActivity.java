@@ -62,7 +62,7 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 		setContentView(R.layout.init_page);
 		cancelRelogin();
 		initView();
-		if (getIntent().getBooleanExtra(REQUEST_PARAM_RELOGIN, false)) {
+		if (getIntent().getBooleanExtra(REQUEST_PARAM_RELOGIN, false) || (Constants.userApps != null && Constants.userApps.size() > 0)) {
 			startLoginActivity();
 		}
 	}
@@ -221,18 +221,18 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 
 	public void onCheckMain(int n) {
 		switch (n) {
-			case 0:
-				init_message_title.setText(R.string.init_message_title_one);
-				init_message_text.setText(R.string.init_message_text_one);
-				break;
-			case 1:
-				init_message_title.setText(R.string.init_message_title_two);
-				init_message_text.setText(R.string.init_message_text_two);
-				break;
-			case 2:
-				init_message_title.setText(R.string.init_message_title_three);
-				init_message_text.setText(R.string.init_message_text_three);
-				break;
+		case 0:
+			init_message_title.setText(R.string.init_message_title_one);
+			init_message_text.setText(R.string.init_message_text_one);
+			break;
+		case 1:
+			init_message_title.setText(R.string.init_message_title_two);
+			init_message_text.setText(R.string.init_message_text_two);
+			break;
+		case 2:
+			init_message_title.setText(R.string.init_message_title_three);
+			init_message_text.setText(R.string.init_message_text_three);
+			break;
 		}
 		pager.setDisplayedChild(n);
 		mPageIndicator.setActiveDot(n);
