@@ -74,7 +74,9 @@ public class TigaseManager {
 	private int resetPasswordCount = 0;
 
 	private final String RESET_PASSWORD_URL = "http://rc.rcplatformhk.net/rcboss/user/syncTigasePwd.do";
-//	private final String RESET_PASSWORD_URL = "http://192.168.0.86:8083/rcboss/user/syncTigasePwd.do";
+
+	// private final String RESET_PASSWORD_URL =
+	// "http://192.168.0.86:8083/rcboss/user/syncTigasePwd.do";
 
 	private Timer initConnectTimer = null;
 
@@ -321,7 +323,16 @@ public class TigaseManager {
 			try {
 				connection.removeConnectionCreationListener(createListener);
 				connection.removeConnectionListener(connectListenter);
-				connection.disconnect();
+
+				Thread thread = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						connection.disconnect();
+					}
+				});
+				thread.start();
+
 			}
 			catch (Exception e) {
 
