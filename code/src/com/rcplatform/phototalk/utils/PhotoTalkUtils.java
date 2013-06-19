@@ -26,15 +26,15 @@ public class PhotoTalkUtils {
 	public static String getSexString(Context context, int sex) {
 		String result = null;
 		switch (sex) {
-			case 0:
-				result = context.getString(R.string.sex_secret);
-				break;
-			case 1:
-				result = context.getString(R.string.male);
-				break;
-			case 2:
-				result = context.getString(R.string.famale);
-				break;
+		case 0:
+			result = context.getString(R.string.sex_secret);
+			break;
+		case 1:
+			result = context.getString(R.string.male);
+			break;
+		case 2:
+			result = context.getString(R.string.famale);
+			break;
 		}
 		return result;
 	}
@@ -118,6 +118,12 @@ public class PhotoTalkUtils {
 
 	public static boolean isUserNeedToBindPhone(Context context, UserInfo userInfo) {
 		return userInfo != null && RCPlatformTextUtil.isEmpty(userInfo.getCellPhone()) && Constants.DEVICE_ID.equals(userInfo.getDeviceId())
-		        && !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
+				&& !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
+	}
+
+	public static UserInfo copyUserInfo(UserInfo userInfo) {
+		UserInfo userCopy = new UserInfo();
+		userCopy.clone(userInfo);
+		return userCopy;
 	}
 }
