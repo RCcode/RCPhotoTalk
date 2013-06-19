@@ -252,13 +252,14 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 			EventUtil.Friends_Addfriends.rcpt_friends_profileview(baseContext);
 			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-			Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
+			final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
+			mFriendShowDetail = friend;
 			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(MyFriendsActivity.this, friend, new FriendDetailListener() {
 
 				@Override
-				public void onSuccess(Friend friend) {
+				public void onSuccess(Friend f) {
 					dismissLoadingDialog();
-					showDetail(friend);
+					showDetail(f);
 				}
 
 				@Override
@@ -272,7 +273,6 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	};
 
 	private void showDetail(Friend friend) {
-		mFriendShowDetail = friend;
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (!friend.isFriend()) {

@@ -171,15 +171,14 @@ public class Utils {
 	 */
 	public static File createTmpPic() {
 
-		File tmpFile = new File(Environment.getExternalStorageDirectory(), "rcplatform/phototalk");
+		File tmpFile = new File(Environment.getExternalStorageDirectory(), ".rcplatform/phototalk");
 
 		if (!tmpFile.exists()) {
 			if (!tmpFile.mkdirs()) {
 				return null;
 			}
 		}
-		File imageFile = new File(tmpFile.getPath() + "image_cut" + ".png");
-
+		File imageFile = new File(tmpFile.getPath() + "image_cut_"+System.currentTimeMillis() + ".png");
 		return imageFile;
 	}
 

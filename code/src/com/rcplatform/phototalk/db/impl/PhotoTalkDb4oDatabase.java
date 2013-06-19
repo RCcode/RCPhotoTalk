@@ -411,11 +411,14 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		});
 		LogUtil.e(result.size() + " is result size");
 		boolean isHiden = true;
+		boolean isFriend = false;
 		for (Friend f : result) {
 			isHiden = f.isHiden();
+			isFriend = f.isFriend();
 			db.delete(f);
 		}
 		friend.setHiden(isHiden);
+		friend.setFriend(isFriend);
 		db.store(friend);
 		db.commit();
 	}
