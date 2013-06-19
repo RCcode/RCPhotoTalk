@@ -95,7 +95,6 @@ public class UserInfo implements Serializable {
 		this.country = country;
 	}
 
-
 	public String getEmail() {
 		return email;
 	}
@@ -233,13 +232,20 @@ public class UserInfo implements Serializable {
 		cellPhone = userInfo.getCellPhone();
 		birthday = userInfo.getBirthday();
 		rcId = userInfo.getRcId();
-		token = userInfo.getToken();
 		shareNews = userInfo.getShareNews();
 		gender = userInfo.getGender();
 		allowsend = userInfo.getAllowsend();
 		headUrl = userInfo.getHeadUrl();
 		deviceId = userInfo.getDeviceId();
 		nickName = userInfo.getNickName();
+		background = userInfo.getBackground();
+		tigaseId = userInfo.getTigaseId();
+		tigasePwd = userInfo.getTigasePwd();
+		country = userInfo.getCountry();
+		email = userInfo.getEmail();
+		appId = userInfo.getAppId();
+		token = userInfo.getToken();
+		showRecommends = userInfo.getShowRecommends();
 	}
 
 	public int getAge() {

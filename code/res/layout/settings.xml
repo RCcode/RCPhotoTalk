@@ -200,7 +200,7 @@
                             android:gravity="center_vertical"
                             android:text="@string/friend_dynamic"
                             android:textColor="#313131"
-                            android:textSize="18sp" >
+                            android:textSize="16sp" >
                         </TextView>
 
                         <RelativeLayout
@@ -257,7 +257,7 @@
                             android:gravity="left"
                             android:text="@string/my_account"
                             android:textColor="#313131"
-                            android:textSize="18sp" >
+                            android:textSize="16sp" >
                         </TextView>
 
                         <ImageView
@@ -289,7 +289,7 @@
                             android:gravity="left"
                             android:text="@string/setting"
                             android:textColor="#313131"
-                            android:textSize="18sp" >
+                            android:textSize="16sp" >
                         </TextView>
 
                         <ImageView
@@ -321,7 +321,7 @@
                             android:gravity="left"
                             android:text="@string/about"
                             android:textColor="#313131"
-                            android:textSize="18sp" >
+                            android:textSize="16sp" >
                         </TextView>
 
                         <ImageView

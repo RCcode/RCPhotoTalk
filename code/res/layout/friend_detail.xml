@@ -157,6 +157,6 @@
         android:layout_marginTop="@dimen/friend_info_app_right"
         android:background="@drawable/friend_info_send_btn"
         android:textColor="#FFFFFF"
-        android:textSize="18sp" />
+        android:textSize="16sp" />
 
 </LinearLayout>

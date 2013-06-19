@@ -87,7 +87,7 @@
             android:layout_marginTop="@dimen/login_margin_top_to_attention"
             android:text="@string/init_regist_agreement"
             android:textColor="#909090"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/login_page_signup_button"
@@ -98,7 +98,7 @@
             android:background="@drawable/login_btn"
             android:text="@string/landing_page_signup"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <Button
             android:id="@+id/login_page_login_button"
@@ -109,7 +109,7 @@
             android:background="@drawable/login_btn"
             android:text="@string/landing_page_login"
             android:textColor="@android:color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:visibility="gone" />
 
         <Button
@@ -121,7 +121,7 @@
             android:background="@drawable/modify_btn"
             android:text="@string/login_forget_psw_hint"
             android:textColor="#909090"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
     </RelativeLayout>
 
 </RelativeLayout>

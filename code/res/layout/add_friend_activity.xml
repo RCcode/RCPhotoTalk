@@ -41,7 +41,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/add_friend_search_key_hint_text"
                 android:textColor="#3f3f3f"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
         </RelativeLayout>
         <!-- style="@style/contentTextStyle" -->
 
@@ -63,7 +63,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/add_friend_from_phonebook_hint_text"
                 android:textColor="#3f3f3f"
-                android:textSize="15sp" >
+                android:textSize="13sp" >
             </TextView>
 
             <ImageView
@@ -93,7 +93,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/add_friend_from_facebook_hint_text"
                 android:textColor="#3f3f3f"
-                android:textSize="15sp" >
+                android:textSize="13sp" >
             </TextView>
 
             <ImageView
