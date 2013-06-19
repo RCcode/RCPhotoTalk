@@ -328,7 +328,14 @@ public class TigaseManager {
 
 					@Override
 					public void run() {
-						connection.disconnect();
+						if (null != connection) {
+							connection.disconnect();
+							connection = null;
+							chatManager = null;
+							createListener = null;
+							connectListenter = null;
+							isConnected = false;
+						}
 					}
 				});
 				thread.start();
@@ -338,11 +345,7 @@ public class TigaseManager {
 
 			}
 		}
-		connection = null;
-		chatManager = null;
-		createListener = null;
-		connectListenter = null;
-		isConnected = false;
+
 	}
 
 	public boolean getIsConnected() {
