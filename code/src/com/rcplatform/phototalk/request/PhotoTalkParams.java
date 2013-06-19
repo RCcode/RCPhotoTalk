@@ -123,6 +123,9 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_FRIENDS = "friends";
 		public static final String PARAM_KEY_FRIEND_SUID = "rcId";
 		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
+		public static final String PARAM_KEY_FRIEND_SOURCE_NAME = "name";
+		public static final String PARAM_KEY_FRIEND_SOURCE_VALUE = "value";
+		
 	}
 
 	public static class DelFriends {

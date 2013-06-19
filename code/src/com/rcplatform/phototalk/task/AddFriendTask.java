@@ -72,8 +72,11 @@ public class AddFriendTask {
 			try {
 				JSONObject jsonFriend = new JSONObject();
 				jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SUID, friend.getRcId());
-				if (friend.getSource() != null)
+				if (friend.getSource() != null){
 					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_TYPE, friend.getSource().getAttrType());
+					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SOURCE_NAME, friend.getSource().getName());
+					jsonFriend.put(PhotoTalkParams.AddFriends.PARAM_KEY_FRIEND_SOURCE_VALUE, friend.getSource().getValue());
+				}
 				array.put(jsonFriend);
 			} catch (JSONException e) {
 				e.printStackTrace();
