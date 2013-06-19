@@ -160,7 +160,7 @@ public class FriendDynamicActivity extends BaseActivity {
 			case GET_PULLDOWN:
 				List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
 				if (downlist != null) {
-					downlist.addAll(listDynamic);
+//					downlist.addAll(listDynamic);
 					listDynamic.clear();
 					listDynamic.addAll(downlist);
 				}
