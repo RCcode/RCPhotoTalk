@@ -45,10 +45,10 @@
     <string name="search_hint">Keine Ergebnisse für diese Suche</string>
 
     <!-- 消息页面 -->
-    <string name="minute">Vor%1$dMinuten</string>
-    <string name="second">Vor%1$dSekunden</string>
-    <string name="hour">Vor%1$dStunden</string>
-    <string name="day">Vor%1$dTagen</string>
+    <string name="minute">Vor %1$d Min</string>
+    <string name="second">Vor %1$d Sek</string>
+    <string name="hour">Vor %1$d Std</string>
+    <string name="day">v. %1$d Tgn.</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Senden</string>
     <string name="send_sended">%1$s-Gesendet</string>
@@ -86,7 +86,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Die Aufnahme ist zu kurz</string>
-    <string name="voice_record">Für Aufnahme drücken</string>
+    <string name="voice_record">Aufnehmen</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">Senden an:</string>

@@ -45,9 +45,9 @@
     <string name="search_hint">इस खोज के कोई परिणाम नहीं हैं</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d मिनट पहले</string>
-    <string name="second">%1$d सेकंड पहले</string>
-    <string name="hour">%1$d घंटे पहले</string>
+    <string name="minute">%1$d ममि. पहले</string>
+    <string name="second">%1$d से. पहलेे</string>
+    <string name="hour">%1$d घं. पहलेे</string>
     <string name="day">%1$d दिन पहले</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">भेजा जा रहा है</string>
@@ -86,7 +86,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">रिकॉर्डिंग बहुत छोटी है</string>
-    <string name="voice_record">रिकॉर्ड करने के लिए दबाएँ</string>
+    <string name="voice_record">रिकॉर्ड करें</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">इन्हें भेजें:</string>

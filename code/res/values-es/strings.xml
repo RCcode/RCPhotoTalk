@@ -46,10 +46,10 @@
     <string name="search_hint">Ningún resultado para esta búsqueda</string>
 
     <!-- 消息页面 -->
-    <string name="minute">hace %1$d minutos</string>
-    <string name="second">hace %1$d segundos</string>
-    <string name="hour">hace %1$d horas</string>
-    <string name="day">hace %1$d días</string>
+    <string name="minute">hace %1$d m</string>
+    <string name="second">hace %1$d s</string>
+    <string name="hour">hace %1$d h</string>
+    <string name="day">hace %1$d d</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Enviando</string>
     <string name="send_sended">%1$s-Enviado</string>

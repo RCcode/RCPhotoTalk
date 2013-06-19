@@ -46,10 +46,10 @@
     <string name="search_hint">Nenhum resultado para esta pesquisa</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d minutos atrás</string>
-    <string name="second">%1$d segundos atrás</string>
-    <string name="hour">%1$d horas atrás</string>
-    <string name="day">%1$d dias atrás</string>
+    <string name="minute">Há %1$d min.</string>
+    <string name="second">Há %1$d seg.</string>
+    <string name="hour">Há %1$d hrs</string>
+    <string name="day">Há %1$d dias</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Enviando</string>
     <string name="send_sended">%1$s-Enviado</string>
@@ -87,7 +87,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Gravação é muito curta</string>
-    <string name="voice_record">Pressione para gravar</string>
+    <string name="voice_record">Aperte e grave</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">Enviar para:</string>

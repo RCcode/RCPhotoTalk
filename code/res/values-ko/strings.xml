@@ -87,7 +87,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">기록 내용이 너무 짧습니다</string>
-    <string name="voice_record">눌러서 기록</string>
+    <string name="voice_record">길게 눌러서 기록</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">다음으로 보내기:</string>
