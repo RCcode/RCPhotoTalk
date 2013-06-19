@@ -2,11 +2,10 @@ package com.rcplatform.videotalk.api;
 
 public class PhotoTalkApiUrl {
 
-//	private static final String BASE_URL = "http://192.168.0.86:8083/";
-	// private static final String BASE_URL = "http://192.168.0.111/";
-	 private static final String BASE_URL = "http://pt.rcplatformhk.net/";
+	// private static final String BASE_URL = "http://192.168.0.86:8083/";
+	// private static final String BASE_URL = "http://pt.rcplatformhk.net/";
+	private static final String BASE_URL = "http://192.168.0.13:8080/";
 	// private static final String BASE_URL = "http://103.247.169.150:8083/";
-	// private static final String BASE_URL = "http://192.168.0.106/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "phototalk/";
 
@@ -86,13 +85,13 @@ public class PhotoTalkApiUrl {
 
 	public static final String CHECK_TRENDS_URL = SETTING_URL + "checkHasTrend.do";
 
-	
-
 	public static final String INFORMATION_CENSUS_URL = FILE_URL + "receivedPics.do";
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
+	private static final String RCBOSS_BASE_URL = "http://192.168.0.13:8080/";
+	// private static final String RCBOSS_BASE_URL =
+	// "http://rc.rcplatformhk.net/";
 
 	private static final String BASE_URL_FOR_RCBOSS = RCBOSS_BASE_URL + "rcboss/";
 
@@ -125,6 +124,6 @@ public class PhotoTalkApiUrl {
 	public static final String REQUEST_SMS_URL = RCBOSS_USER_URL + "downSms.do";
 	public static final String BIND_PHONE_URL = RCBOSS_USER_URL + "checkSms.do";
 	public static final String LOGOUT_URL = RCBOSS_USER_URL + "userLogout.do";
-	
+
 	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO = RCBOSS_USER_URL + "createUserInfo.do";
 }
