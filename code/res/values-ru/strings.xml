@@ -46,10 +46,10 @@
     <string name="search_hint">По данному запросу ничего не найдено</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d минут назад</string>
-    <string name="second">%1$d секунд назад</string>
-    <string name="hour">%1$d часов назад</string>
-    <string name="day">%1$d дней назад</string>
+    <string name="minute">%1$d минут</string>
+    <string name="second">%1$d секунд</string>
+    <string name="hour">%1$d часов</string>
+    <string name="day">%1$d дней</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Отправляется</string>
     <string name="send_sended">%1$s-Отправлено</string>
@@ -87,7 +87,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Слишком короткая запись</string>
-    <string name="voice_record">Нажмите, чтобы начать запись</string>
+    <string name="voice_record">Запись</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">Отправить:</string>

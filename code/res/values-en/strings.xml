@@ -87,7 +87,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Recording is too short</string>
-    <string name="voice_record">Press to record</string>
+    <string name="voice_record">Hold to record</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">Send to:</string>

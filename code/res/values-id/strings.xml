@@ -46,10 +46,10 @@
     <string name="search_hint">Pencarian ini tanpa hasil</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d menit lalu</string>
-    <string name="second">%1$d detik lalu</string>
-    <string name="hour">%1$d jam lalu</string>
-    <string name="day">%1$d hari lalu</string>
+    <string name="minute">%1$d menit</string>
+    <string name="second">%1$d detik</string>
+    <string name="hour">%1$d jam</string>
+    <string name="day">%1$d hari</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Mengirim</string>
     <string name="send_sended">%1$s-Dikirim</string>

@@ -46,10 +46,10 @@
     <string name="search_hint">La ricerca non ha dato risultati</string>
 
     <!-- 消息页面 -->
-    <string name="minute">%1$d minuti fa</string>
-    <string name="second">%1$d secondi fa</string>
+    <string name="minute">%1$d min fa</string>
+    <string name="second">%1$d sec fa</string>
     <string name="hour">%1$d ore fa</string>
-    <string name="day">%1$d giorni fa</string>
+    <string name="day">%1$d gg fa</string>
     <string name="ago">%1$s</string>
     <string name="send_sending">Invio</string>
     <string name="send_sended">%1$s-Inviato</string>
@@ -86,7 +86,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Registrazione troppo breve</string>
-    <string name="voice_record">Premi per registrare</string>
+    <string name="voice_record">Registra</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">Invia a:</string>

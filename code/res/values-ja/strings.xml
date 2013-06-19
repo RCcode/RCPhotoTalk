@@ -86,7 +86,7 @@
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">録音が短すぎます</string>
-    <string name="voice_record">録音開始</string>
+    <string name="voice_record">長押し録音</string>
 
     <!-- 发送消息 -->
     <string name="select_friend_title">送信先:</string>
