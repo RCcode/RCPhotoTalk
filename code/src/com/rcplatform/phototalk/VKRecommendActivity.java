@@ -61,6 +61,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
 		mVkClient.onActivityResult(requestCode, resultCode, data);
 		hasTryLogin = true;
 	}
