@@ -178,8 +178,7 @@ public class Utils {
 				return null;
 			}
 		}
-		File imageFile = new File(tmpFile.getPath() + "image_cut" + ".png");
-
+		File imageFile = new File(tmpFile.getPath() + "image_cut_"+System.currentTimeMillis() + ".png");
 		return imageFile;
 	}
 
