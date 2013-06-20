@@ -221,7 +221,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				RCWebview.startWebview(ctx, "http://rctalk.me/priser.html",R.string.null_str);
+				RCWebview.startWebview(ctx, "http://rctalk.me/priser.html", R.string.null_str);
 			}
 		});
 		// init_regist_agreement_text.setMovementMethod(LinkMovementMethod.getInstance());
@@ -628,7 +628,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 							userInfo.setToken(token);
 							AppInfo appInfo = new AppInfo();
 							appInfo.setAppId(jsonAppUser.getInt("appId"));
-							appInfo.setAppName("appName");
+							appInfo.setAppName(jsonAppUser.getString("appName"));
 							appUsers.put(appInfo, userInfo);
 						}
 						startPlatformUserEditActivity(appUsers);
