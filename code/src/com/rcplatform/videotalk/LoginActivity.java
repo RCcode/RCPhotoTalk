@@ -639,7 +639,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 							userInfo.setToken(token);
 							AppInfo appInfo = new AppInfo();
 							appInfo.setAppId(jsonAppUser.getInt("appId"));
-							appInfo.setAppName("appName");
+							appInfo.setAppName(jsonAppUser.getString("appName"));
 							appUsers.put(appInfo, userInfo);
 						}
 						startPlatformUserEditActivity(appUsers);
