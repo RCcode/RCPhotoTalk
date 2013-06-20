@@ -362,7 +362,9 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			@Override
 			public void onAlreadyAdded() {
 				// TODO Auto-generated method stub
-
+				friend.setFriend(true);
+				refreshList();
+				dismissLoadingDialog();
 			}
 		}, friend).execute();
 	}
