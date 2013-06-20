@@ -63,6 +63,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		cancelRelogin();
 		setContentView(R.layout.platform_user_edit);
 		mImageLoader = ImageLoader.getInstance();
 		initView();
