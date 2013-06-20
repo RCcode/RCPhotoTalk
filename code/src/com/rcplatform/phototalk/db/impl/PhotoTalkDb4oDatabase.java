@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 
 public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
@@ -210,6 +211,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveFriends(List<Friend> friends) {
+		for (Friend friend : friends)
+			friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
 		ObjectSet<Friend> localCache = db.query(Friend.class);
 		updateFriendsAndStore(localCache, friends);
 		db.commit();
@@ -228,12 +231,19 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 			@Override
 			public int compare(Friend lhs, Friend rhs) {
+				checkLetter(rhs);
+				checkLetter(lhs);
 				return lhs.getLetter().compareTo(rhs.getLetter());
 			}
 		});
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.addAll(result);
 		return friends;
+	}
+
+	private void checkLetter(Friend friend) {
+		if (friend.getLetter() == null)
+			friend.setLetter("#");
 	}
 
 	@Override
@@ -268,6 +278,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveRecommends(List<Friend> recommends) {
+		for (Friend recommend : recommends) {
+			recommend.setLetter(RCPlatformTextUtil.getLetter(recommend.getNickName()));
+		}
 		ObjectSet<Friend> localCache = db.query(Friend.class);
 		updateFriendsAndStore(localCache, recommends);
 		db.commit();
@@ -340,6 +353,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized void saveRecommends(List<Friend> recommends, final int friendType) {
+		for (Friend recommend : recommends) {
+			recommend.setLetter(RCPlatformTextUtil.getLetter(recommend.getNickName()));
+		}
 		ObjectSet<Friend> result = db.query(Friend.class);
 		updateFriendsAndStore(result, recommends);
 		db.commit();
