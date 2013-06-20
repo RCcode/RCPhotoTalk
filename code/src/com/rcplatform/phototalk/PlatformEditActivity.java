@@ -44,6 +44,7 @@ import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.task.ContactUploadTask;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
@@ -316,6 +317,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	private void loginSuccess(UserInfo userInfo) {
 		ContactUploadTask task = ContactUploadTask.createNewTask(this);
+		PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(userInfo));
 		task.setLogin();
 		task.startUpload();
 		Intent intent = new Intent(this, InitPageActivity.class);
