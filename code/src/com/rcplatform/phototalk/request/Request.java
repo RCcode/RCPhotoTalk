@@ -157,6 +157,7 @@ public class Request implements Serializable {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
 					int firstTime = jsonObject.getInt("showRecommends");
+					String token = jsonObject.getString("token");
 					if (firstTime == UserInfo.FIRST_TIME) {
 						JSONArray arrayOthers = jsonObject.getJSONArray("otherInfos");
 						Map<AppInfo, UserInfo> result = new HashMap<AppInfo, UserInfo>();
@@ -168,12 +169,12 @@ public class Request implements Serializable {
 							userInfo.setRcId(jsonApp.getString("rcId"));
 							userInfo.setNickName(jsonApp.getString("nickName"));
 							userInfo.setHeadUrl(jsonApp.getString("headUrl"));
+							userInfo.setToken(token);
 							result.put(appInfo, userInfo);
 						}
 						if (listener != null)
 							listener.onOthreAppUserInfoLoaded(result);
 					} else {
-						String token = jsonObject.getString("token");
 						String rcId = jsonObject.getString("rcId");
 						executeGetMyInfo(context, new OnUserInfoLoadedListener() {
 
@@ -362,12 +363,10 @@ public class Request implements Serializable {
 		request.excuteAsync();
 	}
 
-
 	public static void executeLogoutAsync(Context context) {
 		Request request = new Request(context, PhotoTalkApiUrl.LOGOUT_URL, null);
 		request.excuteAsync();
 	}
-
 
 	public static void executeGetFriendDetailAsync(final Context context, Friend friend, final FriendDetailListener listener, boolean isUpdate) {
 		Friend friendCache = PhotoTalkDatabaseFactory.getDatabase().getFriendById(friend.getRcId());
