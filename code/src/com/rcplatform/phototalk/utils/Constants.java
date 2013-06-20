@@ -67,7 +67,8 @@ public class Constants {
 	public static final String PAGEAGE = "com.rcplatform.phototalk";
 
 	public static final String INVITE_JOIN_IMAGE_URL = "http://img1.ph.126.net/HvcVzHANbBP4eKGcGKd4TQ==/3789216136578905707.png";
-//	public static final String INVITE_JOIN_IMAGE_URL = "http://img.hb.aicdn.com/48bb7e63918158fb7524c28adcaf8bf4833629854a35b-v0Gv9F_fw580";
+	// public static final String INVITE_JOIN_IMAGE_URL =
+	// "http://img.hb.aicdn.com/48bb7e63918158fb7524c28adcaf8bf4833629854a35b-v0Gv9F_fw580";
 
 	public static final String OFFICIAL_RCID = "1000000";
 
@@ -168,8 +169,10 @@ public class Constants {
 
 	public static class GCM {
 
-//		public static final String GCM_URL = "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
-//		public static final String GCM_URL = "http://pt.rcplatformhk.net/phototalk/user/pushOfflineMsg.do";
+		// public static final String GCM_URL =
+		// "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
+		// public static final String GCM_URL =
+		// "http://pt.rcplatformhk.net/phototalk/user/pushOfflineMsg.do";
 		// public static final String GCM_URL =
 		// "http://192.168.0.86:8083/phototalk/user/pushOfflineMsg.do";
 		public static final String GCM_URL = "http://pt.rcplatformhk.net/phototalk/user/pushOfflineMsg.do";
@@ -332,4 +335,5 @@ public class Constants {
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
 
 	public static final String KEY_APP_ID = "appId";
+
 }
