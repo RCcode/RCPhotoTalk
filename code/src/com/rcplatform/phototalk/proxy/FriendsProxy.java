@@ -149,7 +149,6 @@ public class FriendsProxy {
 									JSONArray myFriendsArray = jsonObject.getJSONArray("myUsers");
 									List<Friend> friends = JSONConver.jsonToFriends(myFriendsArray.toString());
 									for (Friend friend : friends) {
-										friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
 										friend.setFriend(true);
 									}
 									PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
@@ -217,12 +216,10 @@ public class FriendsProxy {
 									List<Friend> friends = JSONConver.jsonToFriends(jObj.getJSONArray("myUsers").toString());
 									for (Friend f : friends) {
 										f.setFriend(true);
-										f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
 									}
 									List<Friend> recommends = JSONConver.jsonToFriends(jObj.getJSONArray("recommendUsers").toString());
 									for (Friend f : recommends) {
 										f.setFriend(false);
-										f.setLetter(RCPlatformTextUtil.getLetter(f.getNickName()));
 									}
 									PhotoTalkDatabaseFactory.getDatabase().saveFriends(friends);
 									PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
