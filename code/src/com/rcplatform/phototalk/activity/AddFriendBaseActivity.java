@@ -202,8 +202,10 @@ private Button seach_delete_btn;
 
 			@Override
 			public void onAlreadyAdded() {
-				// TODO Auto-generated method stub
-				
+				dismissLoadingDialog();
+				friend.setFriend(true);
+				refreshList();
+				AddFriendsActivity.addFriend(friend);
 			}
 		}, friend).execute();
 	}
