@@ -102,7 +102,9 @@ public class FriendDetailActivity extends BaseActivity {
 
 					@Override
 					public void onAlreadyAdded() {
-						
+						mFriend.setFriend(true);
+						coverToFriendView();
+						dismissLoadingDialog();
 					}
 				}, mFriend).execute();
 			}
