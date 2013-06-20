@@ -158,6 +158,7 @@ public class Request implements Serializable {
 				try {
 					JSONObject jsonObject = new JSONObject(content);
 					int firstTime = jsonObject.getInt("showRecommends");
+					String token = jsonObject.getString("token");
 					if (firstTime == UserInfo.FIRST_TIME) {
 						JSONArray arrayOthers = jsonObject.getJSONArray("otherInfos");
 						Map<AppInfo, UserInfo> result = new HashMap<AppInfo, UserInfo>();
@@ -168,13 +169,13 @@ public class Request implements Serializable {
 							UserInfo userInfo = new UserInfo();
 							userInfo.setRcId(jsonApp.getString("rcId"));
 							userInfo.setNickName(jsonApp.getString("nickName"));
+							userInfo.setToken(token);
 							userInfo.setHeadUrl(jsonApp.getString("headUrl"));
 							result.put(appInfo, userInfo);
 						}
 						if (listener != null)
 							listener.onOthreAppUserInfoLoaded(result);
 					} else {
-						String token = jsonObject.getString("token");
 						String rcId = jsonObject.getString("rcId");
 						executeGetMyInfo(context, new OnUserInfoLoadedListener() {
 
