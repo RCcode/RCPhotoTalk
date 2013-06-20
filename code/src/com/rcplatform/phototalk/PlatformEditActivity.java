@@ -302,9 +302,9 @@ public class PlatformEditActivity extends ImagePickActivity {
 				loginSuccess(userInfo);
 			} catch (JSONException e) {
 				e.printStackTrace();
+				onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 			}
 			dismissLoadingDialog();
-			onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
 		}
 
 		@Override
