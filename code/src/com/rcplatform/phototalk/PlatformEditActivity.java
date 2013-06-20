@@ -291,13 +291,20 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 		@Override
 		public void onSuccess(int statusCode, String content) {
+//06-20 21:28:53.165: E/PhotoTalk(21650): {"message":"成功","rcId":1000012,"recommendUsers":[],"email":"a@a.com","token":"x5lPlqbz1XdsVhBxmCBVPOQzzMOGL1d2rN22b6DY0XqQMRSBEZMa2cqfPwl5iulm","status":10000,"tgId":"1000012_1","tgpwd":"96e79218965eb72c92a549dd5a330112"}
 
 			try {
 				JSONObject jsonObject = new JSONObject(content);
+				String tigaseId=jsonObject.getString("tgId");
+				String tigasePwd=jsonObject.getString("tgpwd");
 				List<Friend> recommends = JSONConver.jsonToFriends(jsonObject.getJSONArray("recommendUsers").toString());
 				UserInfo userInfo = JSONConver.jsonToUserInfo(content);
-				PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
+				userInfo.setNickName(mUserInfo.getNickName());
+				userInfo.setAppId(Constants.APP_ID);
 				userInfo.setDeviceId(Constants.DEVICE_ID);
+				userInfo.setTigaseId(tigaseId);
+				userInfo.setTigasePwd(tigasePwd);
+				PrefsUtils.LoginState.setLoginUser(getApplicationContext(), userInfo);
 				getPhotoTalkApplication().setCurrentUser(userInfo);
 				PhotoTalkDatabaseFactory.getDatabase().saveRecommends(recommends);
 				loginSuccess(userInfo);
