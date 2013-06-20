@@ -674,6 +674,7 @@ public class EditPictureActivity extends BaseActivity {
 						}
 					} else {
 						// 保存成功后 刷新本地相册
+						mEditableViewGroup.setDrawingCacheEnabled(false);
 						EditPictureActivity.this.getBaseContext().sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://"
 						                                                                + Environment.getExternalStorageDirectory())));
 						Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
@@ -687,6 +688,7 @@ public class EditPictureActivity extends BaseActivity {
 				case NO_SDC:
 					// if (waitDialog != null && waitDialog.isShowing())
 					// waitDialog.hide();
+					mEditableViewGroup.setDrawingCacheEnabled(false);
 					Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
 					break;
 				case SET_LIMIT:
