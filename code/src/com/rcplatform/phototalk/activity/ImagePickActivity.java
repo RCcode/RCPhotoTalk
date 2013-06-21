@@ -139,7 +139,10 @@ public class ImagePickActivity extends BaseActivity {
 						return;
 					}
 					mImageSelectPopupWindow.dismiss();
-					startCamera();
+					try {
+						startCamera();
+					} catch (Exception e) {
+					}
 				}
 			});
 			Button gallaryBtn = (Button) detailsView.findViewById(R.id.picker_head_source_gallary);
@@ -169,7 +172,6 @@ public class ImagePickActivity extends BaseActivity {
 		mImageSelectPopupWindow.showAtLocation(view, Gravity.BOTTOM, 0, 0);
 	}
 
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -182,7 +184,6 @@ public class ImagePickActivity extends BaseActivity {
 			bitmaps.clear();
 		}
 	}
-
 
 	protected void cutImage(Uri uri, int width, int height) {
 		Intent intent = new Intent(this, ImageCutActivity.class);
