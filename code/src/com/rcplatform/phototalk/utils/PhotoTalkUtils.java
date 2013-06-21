@@ -82,6 +82,8 @@ public class PhotoTalkUtils {
 				continue;
 			linearApps.addView(getAppImage(context, info, loader));
 		}
+		if (linearApps.getChildCount() == 0)
+			linearApps.setVisibility(View.GONE);
 	}
 
 	private static ImageView getAppImage(final Context context, final AppInfo appInfo, ImageLoader loader) {
