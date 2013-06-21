@@ -16,7 +16,7 @@ public class LogUtil {
 	private static final int Log_Level_verbose = 0;
 
 	/** Log信息级别>=logLevel的日志信息打印出来 */
-	private static int logLevel = 0;
+	private static int logLevel = 5;
 
 	//是否将日志写到文件中
 	private static final boolean Log_IN_FILE = false;

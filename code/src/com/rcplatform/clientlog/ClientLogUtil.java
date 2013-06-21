@@ -33,15 +33,9 @@ public class ClientLogUtil {
 
 			@Override
 			public void run() {
-				JSONObject json = new JSONObject();
 				try {
 					PhotoTalkApplication app = (PhotoTalkApplication) context.getApplicationContext();
 					UserInfo user = app.getCurrentUser();
-					json.put("rcId", user.getRcId());
-					json.put("appId", Constants.APP_ID);
-					json.put("deviceId", MetaHelper.getMACAddress(context));
-					json.put("brand", MetaHelper.getPhoneBrand());
-					json.put("model", MetaHelper.getPhoneModel());
 
 					// 获取位置管理服务
 					LocationManager locationManager;
@@ -52,7 +46,7 @@ public class ClientLogUtil {
 						Log.d("gps", "open");
 					}
 
-					String provider=LocationManager.GPS_PROVIDER;  // 获取GPS信息
+					String provider = LocationManager.GPS_PROVIDER; // 获取GPS信息
 					Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
 					String latLongInfo = "";
 					int count = 0;
@@ -75,11 +69,16 @@ public class ClientLogUtil {
 						}
 						location = locationManager.getLastKnownLocation(provider);
 					}
-					
-					
-					Request request=new Request(context, PhotoTalkApiUrl.CLIENT_LOG_URL, null);
+
+					Request request = new Request(context, PhotoTalkApiUrl.CLIENT_LOG_URL, null);
+					request.putParam("rcId", user.getRcId());
+					request.putParam("appId", Constants.APP_ID);
+					request.putParam("deviceId", MetaHelper.getMACAddress(context));
+					request.putParam("brand", MetaHelper.getPhoneBrand());
+					request.putParam("model", MetaHelper.getPhoneModel());
+
 					request.putParam("gps", latLongInfo);
-					request.putParam("timezoneId", MetaHelper.getTimeZoneId(context)+"");
+					request.putParam("timezoneId", MetaHelper.getTimeZoneId(context) + "");
 					request.putParam("token", user.getToken());
 					request.putParam("platform", "1");
 					request.putParam("language", MetaHelper.getLanguage(context));
@@ -88,52 +87,6 @@ public class ClientLogUtil {
 				catch (Exception e1) {
 					e1.printStackTrace();
 				}
-
-//				OutputStream output = null;
-//				InputStream is = null;
-//				HttpURLConnection conn = null;
-//				String content = null;
-//				try {
-//					conn = (HttpURLConnection) new URL(PhotoTalkApiUrl.CLIENT_LOG_URL).openConnection();
-//					conn.setConnectTimeout(5000);
-//					conn.setReadTimeout(5000);
-//					conn.setDoOutput(true);
-//					conn.setRequestMethod("POST");
-//					byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
-//					output = conn.getOutputStream();
-//					output.write(bodyBytes);
-//					is = conn.getInputStream();
-//					InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-//					StringBuilder builder = new StringBuilder();
-//					char[] readChars = new char[1024];
-//					String temp = null;
-//					int result = -1;
-//					while ((result = reader.read(readChars, 0, 1024)) != -1) {
-//						temp = new String(readChars, 0, result);
-//						builder.append(temp);
-//					}
-//					reader.close();
-//					content = builder.toString();
-//				}
-//				catch (Exception e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
-//				}
-//				finally {
-//					try {
-//						output.close();
-//					}
-//					catch (Exception e) {
-//					}
-//					try {
-//						is.close();
-//					}
-//					catch (Exception e) {
-//					}
-//					if (conn != null)
-//						conn.disconnect();
-//
-//				}
 			}
 		});
 		thread.start();
