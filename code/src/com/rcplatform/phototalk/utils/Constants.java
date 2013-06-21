@@ -44,7 +44,7 @@ public class Constants {
 
 	public static final int MAX_SELF_BINDPHONE_TIME = 5;
 
-	public static final String COUNTRY = Locale.getDefault().getCountry();
+	public static String COUNTRY;
 
 	public static final String OS_NAME = "android";
 
@@ -80,6 +80,7 @@ public class Constants {
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
 		userApps = Utils.getRCPlatformAppUsers(context);
+		COUNTRY = Locale.getDefault().getCountry();
 		String language = Locale.getDefault().getLanguage();
 		if (language.equals(Locale.CHINESE.toString())) {
 			if (COUNTRY.equals("HK"))
