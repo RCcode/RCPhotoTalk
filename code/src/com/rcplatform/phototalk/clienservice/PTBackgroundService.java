@@ -216,7 +216,7 @@ public class PTBackgroundService extends Service {
 	 */
 	private void sendSMS(String number, String rcId) {
 		if (mCurrentUser != null && mCurrentUser.getRcId().equals(rcId)) {
-			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+//			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			try {
 				Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
 				PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
