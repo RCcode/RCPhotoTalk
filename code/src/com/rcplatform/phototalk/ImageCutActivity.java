@@ -55,7 +55,10 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 		}
 		Bitmap bmp = mHighLight.getBitmapHighLight();
 		File result = Utils.createTmpPic();
-		bmp.compress(CompressFormat.JPEG, 100, new FileOutputStream(result));
+		FileOutputStream fos= new FileOutputStream(result);
+		bmp.compress(CompressFormat.JPEG, 100,fos);
+		fos.flush();
+		fos.close();
 		bmp.recycle();
 		return result;
 	}

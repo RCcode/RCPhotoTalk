@@ -202,7 +202,6 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 				LogicUtils.logout(this);
 				break;
 			case R.id.back:
-				startActivity(new Intent(this, SettingsActivity.class));
 				this.finish();
 				break;
 			case R.id.rela_phone:

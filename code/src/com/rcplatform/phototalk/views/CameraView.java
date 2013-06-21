@@ -24,6 +24,7 @@ import android.view.SurfaceView;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.TakePhotoActivity;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
@@ -190,16 +191,29 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			// TODO Auto-generated method stub
+
 			if (camera != null) {
+				int rotateAngel = 0;
+				if (mCurrentCameraNum == 1) {
+					rotateAngel = 270;
+				} else {
+					rotateAngel = round;
+				}
 				BitmapFactory.Options options = new BitmapFactory.Options();
+				options.inJustDecodeBounds = true;
+				BitmapFactory.decodeByteArray(data, 0, data.length, options);
+				int sampleSize = Utils.calculateInSampleSize(options, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, rotateAngel);
+				
+				options = new BitmapFactory.Options();
+				options.inSampleSize = sampleSize;
 				Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
 				Bitmap tempBitmap = null;
 				Matrix matrix = new Matrix();
 				if (mCurrentCameraNum == 1) {
-					matrix.postRotate(270);
+					matrix.postRotate(rotateAngel);
 					matrix.preScale(1, -1);
 				} else {
-					matrix.setRotate(round);
+					matrix.setRotate(rotateAngel);
 				}
 				tempBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
 				mBitmap.recycle();
