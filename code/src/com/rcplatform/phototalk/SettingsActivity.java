@@ -33,6 +33,8 @@ import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.rcad.RcAd;
+import com.rcplatform.rcad.constants.AdType;
 
 public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
 
@@ -57,6 +59,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private ImageView ivTrend;
 	private ImageLoader mImageLoader;
 	private LinearLayout linearApps;
+	private RcAd popupAdlayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,8 +93,12 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		InformationPageController.getInstance().onNewTread();
 		setUserInfo(getCurrentUser());
 		initAppList();
+		showRcAd();
 	}
-
+	private void showRcAd(){
+		popupAdlayout = new RcAd(this, AdType.FULLSCREEN,
+				"1002603", true);
+	}
 	private void initAppList() {
 		linearApps = (LinearLayout) findViewById(R.id.my_friend_details_apps_listview);
 
@@ -257,6 +264,9 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		if (popupAdlayout != null) {
+			popupAdlayout.destroyAd();
+		}
 		SettingPageController.getInstance().destroy();
 	}
 
@@ -330,4 +340,5 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		super.onRestoreInstanceState(savedInstanceState);
 		CAMERA_CODE = savedInstanceState.getInt(INSTANCE_KEY_SETTING_CROP_MODE);
 	}
+	
 }
