@@ -2,33 +2,45 @@ package com.rcplatform.phototalk;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.TreeSet;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.rcplatform.phototalk.activity.BaseTabActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartClient;
+import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.utils.Constants.Action;
+import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.Utils;
 
-public class AddFriendsActivity extends TabActivity implements OnClickListener {
+public class AddFriendsActivity extends BaseTabActivity implements OnClickListener {
 
 	private TabHost mHost;
 
@@ -39,6 +51,7 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private static final String TAB_VK = "vkontakte";
 
 	private static final String TAB_SEARCH = "search";
+	private static final String TAB_TWITTER = "twitter";
 
 	private static TreeSet<Friend> friendsAdded;
 
@@ -51,6 +64,8 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 	private Context ctx;
 
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
+
+	private Map<Integer, ThirdPartClient> thirdPartClients = new LinkedHashMap<Integer, ThirdPartClient>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +83,11 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 			}
 		});
 		initView();
+		initData();
+	}
+
+	private void initData() {
+		thirdPartClients.put(R.id.btn_twitter, new TwitterClient(this));
 	}
 
 	private void initView() {
@@ -112,9 +132,14 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 				case R.id.tab_search:
 					EventUtil.Friends_Addfriends.rcpt_search(ctx);
 					mHost.setCurrentTabByTag(TAB_SEARCH);
+					// case R.id.tab_twitter:
+					// mHost.setCurrentTabByTag(TAB_TWITTER);
+					// break;
 				}
 			}
 		});
+		Button btnTwitter = (Button) findViewById(R.id.btn_twitter);
+		btnTwitter.setOnClickListener(this);
 		mHost = getTabHost();
 		addTabs();
 	}
@@ -124,6 +149,13 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		mHost.addTab(mHost.newTabSpec(TAB_FACEBOOK).setIndicator(TAB_FACEBOOK).setContent(new Intent(this, FacebookFriendRecommendActivity.class)));
 		mHost.addTab(mHost.newTabSpec(TAB_VK).setIndicator(TAB_VK).setContent(new Intent(this, VKRecommendActivity.class)));
 		mHost.addTab(mHost.newTabSpec(TAB_SEARCH).setIndicator(TAB_SEARCH).setContent(new Intent(this, SearchFriendsActivity.class)));
+		addTab(FriendType.TWITTER);
+	}
+
+	private void addTab(int type) {
+		Intent intent = new Intent(this, ThirdPartRecommendsActivity.class);
+		intent.putExtra(ThirdPartRecommendsActivity.PARAM_KEY_TYPE, type);
+		mHost.addTab(mHost.newTabSpec(TAB_TWITTER).setIndicator(TAB_TWITTER).setContent(intent));
 	}
 
 	@Override
@@ -133,7 +165,29 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 			startActivity(new Intent(this, HomeActivity.class));
 			finish();
 			break;
+		case R.id.btn_twitter:
+			invite(R.id.btn_twitter);
+			break;
 		}
+	}
+
+	private void invite(final int id) {
+		ThirdPartClient client = thirdPartClients.get(id);
+		if (client.isAuthorized()) {
+			sendInviteMessage(id);
+		} else {
+			client.authorize(new OnAuthorizeSuccessListener() {
+
+				@Override
+				public void onAuthorizeSuccess() {
+					sendInviteMessage(id);
+				}
+			});
+		}
+	}
+
+	private void sendInviteMessage(int id) {
+		thirdPartClients.get(id).sendJoinMessage(getString(R.string.join_message, getCurrentUser().getRcId()));
 	}
 
 	@Override
@@ -142,23 +196,13 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		LogicUtils.uploadFriendInvite(this, Action.ACTION_UPLOAD_INTITE_CONTACT, FriendType.CONTACT);
 		friendsAdded.clear();
 		friendsAdded = null;
+		for (ThirdPartClient client : thirdPartClients.values())
+			client.destroy();
 	}
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		WindowManager.LayoutParams params = getWindow().getAttributes();
-		//
-		// if () {
-		//
-		// // 隐藏软键盘
-		//
-		// getWindow().setSoftInputMode(
-		//
-		// WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-		//
-		// params.softInputMode =
-		// WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN;
-		// }
 		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && friendsAdded.size() > 0
 				&& params.softInputMode != WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE) {
 			Intent intent = new Intent();
@@ -178,4 +222,11 @@ public class AddFriendsActivity extends TabActivity implements OnClickListener {
 		friendsAdded.add(friend);
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		for (ThirdPartClient client : thirdPartClients.values()) {
+			client.onAuthorizeInformationReceived(requestCode, resultCode, data);
+		}
+	}
 }

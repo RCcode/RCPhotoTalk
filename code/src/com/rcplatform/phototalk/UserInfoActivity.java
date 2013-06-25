@@ -25,6 +25,8 @@ import com.rcplatform.phototalk.thirdpart.utils.FacebookClient;
 import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnDeAuthorizeListener;
 import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListener;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartClient;
+import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -50,6 +52,8 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 	private RelativeLayout vK_layout;
 
+	private RelativeLayout twitter_layout;
+
 	private Button reset_pw_btn;
 
 	private Button login_out_btn;
@@ -62,9 +66,13 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 	private TextView tvVKAuth;
 
+	private TextView tvTwitterAuth;
+
 	private View phoneLayout;
 
 	private static final int REQUEST_CODE_BINDPHONE = 731;
+
+	private ThirdPartClient twitterClient;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +88,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		mFacebookClient = new FacebookClient(this);
 		mFacebookClient.onCreate(savedInstanceState);
 		mVKClient = new VKClient(this);
+		twitterClient = new TwitterClient(this);
 	}
 
 	@Override
@@ -98,6 +107,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	protected void onDestroy() {
 		super.onDestroy();
 		mFacebookClient.onDestroy();
+		twitterClient.destroy();
 	}
 
 	@Override
@@ -105,6 +115,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		super.onActivityResult(requestCode, resultCode, data);
 		mFacebookClient.onActivityResult(requestCode, resultCode, data);
 		mVKClient.onActivityResult(requestCode, resultCode, data);
+		twitterClient.onAuthorizeInformationReceived(requestCode, resultCode, data);
 		if (resultCode == Activity.RESULT_OK) {
 			if (requestCode == REQUEST_CODE_BINDPHONE) {
 				user_Phone.setText(getCurrentUser().getCellPhone());
@@ -131,6 +142,9 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		faceBook_layout.setOnClickListener(this);
 		vK_layout = (RelativeLayout) findViewById(R.id.user_vk_layout);
 		vK_layout.setOnClickListener(this);
+		twitter_layout = (RelativeLayout) findViewById(R.id.user_twitter_layout);
+		twitter_layout.setOnClickListener(this);
+		tvTwitterAuth = (TextView) findViewById(R.id.tv_twitter_authstate);
 		reset_pw_btn = (Button) findViewById(R.id.reset_pw_btn);
 		reset_pw_btn.setOnClickListener(this);
 		login_out_btn = (Button) findViewById(R.id.login_out_btn);
@@ -140,7 +154,15 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		user_Phone = (TextView) findViewById(R.id.tv_phone_authstate);
 		setFacebookAuthText();
 		setVKAuthText();
+		setTwitterText();
+	}
 
+	private void setTwitterText() {
+		if (twitterClient.isAuthorized()) {
+			tvTwitterAuth.setText(PrefsUtils.User.ThirdPart.getTwitterName(this, getCurrentUser().getRcId()));
+		} else {
+			tvTwitterAuth.setText(R.string.unauthorized);
+		}
 	}
 
 	private void setVKAuthText() {
@@ -177,42 +199,59 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		switch (v.getId()) {
 
-			case R.id.user_facebook_layout:
-				if (mFacebookClient.isAuthorize()) {
-					EventUtil.More_Setting.rcpt_facebookunlink(baseContext);
-					showDeAuthorizeDialog(FriendType.FACEBOOK);
-				} else {
-					authorizeFacebook();
-				}
-				break;
-			case R.id.user_vk_layout:
-				if (mVKClient.isAuthorize()) {
-					EventUtil.More_Setting.rcpt_vkunlink(baseContext);
-					showDeAuthorizeDialog(FriendType.VK);
-				} else {
-					authorizeVK();
-				}
-				break;
-			case R.id.reset_pw_btn:
-				EventUtil.More_Setting.rcpt_changepasswordsbutton(baseContext);
-				startActivity(ChangePasswordActivity.class);
-				break;
-			case R.id.login_out_btn:
-				EventUtil.More_Setting.rcpt_logout(baseContext);
-				LogicUtils.logout(this);
-				break;
-			case R.id.back:
-				this.finish();
-				break;
-			case R.id.rela_phone:
-				if (TextUtils.isEmpty(getCurrentUser().getCellPhone())
-				        && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0
-				        && PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, getCurrentUser().getRcId())) {
-					startActivityForResult(new Intent(this, RequestSMSActivity.class), REQUEST_CODE_BINDPHONE);
-					EventUtil.More_Setting.rcpt_phonenumber(baseContext);
-				}
-				break;
+		case R.id.user_facebook_layout:
+			if (mFacebookClient.isAuthorize()) {
+				EventUtil.More_Setting.rcpt_facebookunlink(baseContext);
+				showDeAuthorizeDialog(FriendType.FACEBOOK);
+			} else {
+				authorizeFacebook();
+			}
+			break;
+		case R.id.user_vk_layout:
+			if (mVKClient.isAuthorize()) {
+				EventUtil.More_Setting.rcpt_vkunlink(baseContext);
+				showDeAuthorizeDialog(FriendType.VK);
+			} else {
+				authorizeVK();
+			}
+			break;
+		case R.id.reset_pw_btn:
+			EventUtil.More_Setting.rcpt_changepasswordsbutton(baseContext);
+			startActivity(ChangePasswordActivity.class);
+			break;
+		case R.id.login_out_btn:
+			EventUtil.More_Setting.rcpt_logout(baseContext);
+			LogicUtils.logout(this);
+			break;
+		case R.id.back:
+			this.finish();
+			break;
+		case R.id.rela_phone:
+			if (TextUtils.isEmpty(getCurrentUser().getCellPhone()) && PrefsUtils.User.getSelfBindPhoneTimeLeave(this, getCurrentUser().getRcId()) > 0
+					&& PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, getCurrentUser().getRcId())) {
+				startActivityForResult(new Intent(this, RequestSMSActivity.class), REQUEST_CODE_BINDPHONE);
+				EventUtil.More_Setting.rcpt_phonenumber(baseContext);
+			}
+			break;
+		case R.id.user_twitter_layout:
+			if (twitterClient.isAuthorized()) {
+				showDeAuthorizeDialog(FriendType.TWITTER);
+			} else {
+				authorizeTwitter();
+			}
+			break;
 		}
+	}
+
+	private void authorizeTwitter() {
+		twitterClient.authorize(new OnAuthorizeSuccessListener() {
+
+			@Override
+			public void onAuthorizeSuccess() {
+				setTwitterText();
+				twitterClient.sendJoinMessage(getString(R.string.join_message, getCurrentUser().getRcId()));
+			}
+		});
 	}
 
 	private void authorizeFacebook() {
@@ -286,8 +325,7 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		if (mDeAuthDialog == null) {
 			mDeAuthorizeDialogListener = new DeAuthorizeDialogListener();
 			mDeAuthDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.dialog_confirm_deauth)
-			        .setPositiveButton(R.string.ok, mDeAuthorizeDialogListener).setNegativeButton(R.string.cancel, mDeAuthorizeDialogListener)
-			        .create();
+					.setPositiveButton(R.string.ok, mDeAuthorizeDialogListener).setNegativeButton(R.string.cancel, mDeAuthorizeDialogListener).create();
 		}
 		mDeAuthorizeDialogListener.setType(type);
 		mDeAuthDialog.show();
@@ -305,11 +343,13 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onDeAuthorizeSuccess() {
-				//showErrorConfirmDialog(R.string.save_success);
+				// showErrorConfirmDialog(R.string.save_success);
 				if (mType == FriendType.FACEBOOK)
 					setFacebookAuthText();
 				else if (mType == FriendType.VK)
 					setVKAuthText();
+				else if (mType == FriendType.TWITTER)
+					setTwitterText();
 			}
 
 			@Override
@@ -321,16 +361,18 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
-				case DialogInterface.BUTTON_POSITIVE:
-					if (mType == FriendType.FACEBOOK) {
-						mFacebookClient.deAuthorize(mDeAuthorizeListener);
-					} else if (mType == FriendType.VK) {
-						mVKClient.deAuthorize(mDeAuthorizeListener);
-					}
-					break;
-				case DialogInterface.BUTTON_NEGATIVE:
-					dialog.dismiss();
-					break;
+			case DialogInterface.BUTTON_POSITIVE:
+				if (mType == FriendType.FACEBOOK) {
+					mFacebookClient.deAuthorize(mDeAuthorizeListener);
+				} else if (mType == FriendType.VK) {
+					mVKClient.deAuthorize(mDeAuthorizeListener);
+				} else if (mType == FriendType.TWITTER) {
+					twitterClient.deAuthorize(mDeAuthorizeListener);
+				}
+				break;
+			case DialogInterface.BUTTON_NEGATIVE:
+				dialog.dismiss();
+				break;
 			}
 		}
 	};

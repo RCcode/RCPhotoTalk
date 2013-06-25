@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -32,11 +33,20 @@ public class Constants {
 
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
-	public static Map<AppInfo, UserInfo> userApps;
+	public static Map<AppInfo, UserInfo> userApps = new HashMap<AppInfo, UserInfo>();
 
 	public static List<AppInfo> installedApps = new ArrayList<AppInfo>();
 
+	//-----------------------第三方App-----------------------------
+	
 	public static String VK_API_ID = "3567525";
+	
+	public static final String TWITTER_APP_KEY = "avqYEua265Ce3K3bBP4Q";
+
+	public static final String TWITTER_APP_SECRET = "xQFTT41dw3AcBqhs3H2SmB2ZPxxUsAB9tUxB4Y6g";
+
+	//-----------------------------------------------------------
+	
 
 	public static File USER_IMAGE_DIR;
 
@@ -79,7 +89,8 @@ public class Constants {
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
 		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
-		userApps = Utils.getRCPlatformAppUsers(context);
+		userApps.clear();
+		userApps.putAll(Utils.getRCPlatformAppUsers(context));
 		COUNTRY = Locale.getDefault().getCountry();
 		String language = Locale.getDefault().getLanguage();
 		if (language.equals(Locale.CHINESE.toString())) {

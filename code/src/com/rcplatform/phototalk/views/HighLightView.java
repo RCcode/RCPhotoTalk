@@ -83,6 +83,10 @@ public class HighLightView extends View {
 		mPaint = new Paint();
 		width = Constants.SCREEN_WIDTH;
 		height = Constants.SCREEN_HEIGHT;
+		if (width == 0)
+			width = 480;
+		if (height == 0)
+			height = 800;
 
 	}
 

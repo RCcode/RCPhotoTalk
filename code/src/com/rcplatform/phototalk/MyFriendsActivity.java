@@ -386,7 +386,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				break;
 			case R.id.choosebutton:
 				EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
-				Intent intent = new Intent(MyFriendsActivity.this, AddFriendsActivity.class);
+				Intent intent = new Intent(MyFriendsActivity.this, InviteActivity.class);
 				intent.setData(Uri.parse("data"));
 				startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
 				break;

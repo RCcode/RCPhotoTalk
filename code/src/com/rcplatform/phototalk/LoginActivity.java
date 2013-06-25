@@ -558,12 +558,17 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 		public OtherAppsAdapter(Map<AppInfo, UserInfo> platformUsers) {
 			users = new ArrayList<UserInfo>();
-			for (UserInfo user : platformUsers.values()) {
-				if (!users.contains(user)) {
-					users.add(user);
+			if (platformUsers != null) {
+				for (UserInfo user : platformUsers.values()) {
+					if (!users.contains(user)) {
+						users.add(user);
+					}
 				}
+				installedApps = platformUsers;
+			} else {
+				installedApps = new HashMap<AppInfo, UserInfo>();
 			}
-			installedApps = platformUsers;
+
 		}
 
 		@Override

@@ -100,5 +100,7 @@
     <dimen name="login_otherapplist_divider_height">8dp</dimen>
     <dimen name="attention_text_size">16sp</dimen>
     <dimen name="head_boarder_padding">5dp</dimen>
+    <dimen name="share_text_max_height">100dp</dimen>
+    <dimen name="share_text_size">12sp</dimen>
 
 </resources>

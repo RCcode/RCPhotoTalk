@@ -360,5 +360,11 @@
     <string name="bind_later">以后再说</string>
     <string name="facebook_app_id">447751798632401</string>
     <string name="third_part_info_loaded_fail">第三方平台信息获取失败</string>
+    
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="confirm_share_text">确认分享文字</string>
+    <string name="share_title">分享</string>
+    <string name="authorize_fail">认证失败</string>
 
 </resources>

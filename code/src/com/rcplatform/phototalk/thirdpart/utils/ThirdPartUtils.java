@@ -3,6 +3,7 @@ package com.rcplatform.phototalk.thirdpart.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import twitter4j.PagableResponseList;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,6 +11,7 @@ import android.text.TextUtils;
 import com.facebook.SharedPreferencesTokenCachingStrategy;
 import com.facebook.model.GraphUser;
 import com.perm.kate.api.User;
+import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
@@ -85,6 +87,21 @@ public class ThirdPartUtils {
 		return thirdPartFriend;
 	}
 
+	public static List<ThirdPartUser> parserTwitterUsersToThirdPartUser(PagableResponseList<twitter4j.User> users) {
+		List<ThirdPartUser> result = new ArrayList<ThirdPartUser>();
+		for (int i = 0; i < users.size(); i++) {
+			twitter4j.User user = users.get(i);
+			ThirdPartUser thirdPartUser = new ThirdPartUser();
+			thirdPartUser.setHeadUrl(user.getProfileImageURL());
+			thirdPartUser.setId(user.getId() + "");
+			thirdPartUser.setNick(user.getScreenName());
+			thirdPartUser.setType(FriendType.TWITTER);
+			result.add(thirdPartUser);
+		}
+		return result;
+
+	}
+
 	public static String getVKUserHeadUrl(User user) {
 		if (!TextUtils.isEmpty(user.photo))
 			return user.photo;
@@ -109,6 +126,10 @@ public class ThirdPartUtils {
 		return PrefsUtils.User.ThirdPart.getVKAccount(context, pref) != null;
 	}
 
+	public static boolean isTwitterVlidated(Context context, String pref) {
+		return PrefsUtils.User.ThirdPart.getTwitterAccessToken(context, pref) != null;
+	}
+
 	public static boolean isFacebookVlidate(Context context) {
 		SharedPreferencesTokenCachingStrategy strategy = new SharedPreferencesTokenCachingStrategy(context);
 		Bundle bundle = strategy.load();
@@ -125,5 +146,4 @@ public class ThirdPartUtils {
 	private static boolean isTokenExpiration(long expirationDate) {
 		return System.currentTimeMillis() > expirationDate;
 	}
-
 }
