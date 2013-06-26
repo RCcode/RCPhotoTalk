@@ -63,7 +63,7 @@ public class InviteFriendUploadService extends IntentService {
 				String number = cursor.getString(cursor.getColumnIndex("address"));
 				numbers.add(number);
 			}
-		}
+		}     
 		cursor.close();
 		if (numbers.size() > 0) {
 			try {
