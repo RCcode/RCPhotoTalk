@@ -46,7 +46,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -306,6 +306,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+        <activity
+            android:name=".RotateCameraActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
 
         <service android:name="com.rcplatform.phototalk.clienservice.PTBackgroundService" />
         <service android:name="com.rcplatform.phototalk.clienservice.InviteFriendUploadService" />
@@ -320,7 +325,7 @@
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -354,7 +359,7 @@
         <activity
             android:name="com.rcplatform.phototalk.thirdpart.BindFacebookActivity"
             android:screenOrientation="portrait" />
-   <!--广告SDK的声明  -->
+        <!-- 广告SDK的声明 -->
         <activity
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
@@ -370,7 +375,6 @@
         <activity
             android:name="com.inmobi.androidsdk.IMBrowserActivity"
             android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize" />
-        
-        </application>
+    </application>
 
 </manifest>
