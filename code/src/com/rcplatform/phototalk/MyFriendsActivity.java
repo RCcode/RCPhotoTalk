@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +44,7 @@ import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -94,10 +97,26 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 			@Override
 			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				String rcId = getCurrentUser().getRcId();
+				if (friends.size() == 2 && recommends.size() == 0 && !PrefsUtils.User.hasAttentionAddFriends(MyFriendsActivity.this, rcId)) {
+					showAttentionAddFriendsDialog();
+				}
+				PrefsUtils.User.setAttentionAddFriends(MyFriendsActivity.this, rcId);
 				dismissLoadingDialog();
 				sendFriendLoadedMessage(friends, recommends);
 			}
 		});
+	}
+
+	protected void showAttentionAddFriendsDialog() {
+		DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.add_friend_title).setMessage("来加点好友吧")
+				.setPositiveButton(R.string.add_friend_title, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startAddFriendsActivity();
+					}
+				}).setNegativeButton(R.string.cancel, null).create().show();
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {
@@ -287,11 +306,11 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case MSG_WHAT_FRIEND_LOADED:
-					dismissLoadingDialog();
-					setListData(mFriends, mRecommends, mList);
-					etSearch.setText(null);
-					break;
+			case MSG_WHAT_FRIEND_LOADED:
+				dismissLoadingDialog();
+				setListData(mFriends, mRecommends, mList);
+				etSearch.setText(null);
+				break;
 			}
 		}
 
@@ -381,16 +400,20 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.back:
-				finish();
-				break;
-			case R.id.choosebutton:
-				EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
-				Intent intent = new Intent(MyFriendsActivity.this, InviteActivity.class);
-				intent.setData(Uri.parse("data"));
-				startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
-				break;
+		case R.id.back:
+			finish();
+			break;
+		case R.id.choosebutton:
+			EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
+			startAddFriendsActivity();
+			break;
 		}
+	}
+
+	private void startAddFriendsActivity() {
+		Intent intent = new Intent(MyFriendsActivity.this, InviteActivity.class);
+		intent.setData(Uri.parse("data"));
+		startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
 	}
 
 	@Override

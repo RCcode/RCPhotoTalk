@@ -57,6 +57,12 @@ public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	}
 
 	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		mFacebookClient.onSaveInstanceState(outState);
+	}
+
+	@Override
 	protected void onResume() {
 		super.onResume();
 		mFacebookClient.onResume();

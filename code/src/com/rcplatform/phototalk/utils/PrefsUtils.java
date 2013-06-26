@@ -103,8 +103,10 @@ public class PrefsUtils {
 		private static final String PREF_KEY_SELF_BINDPHONE_TIME = "selfbindphonetime";
 
 		private static final String PREF_KEY_HAS_RECOMMENDS = "hasrecommends";
-
+		
 		private static final String PREF_KEY_VK_NAME = "vkname";
+		
+		private static final String PREF_KEY_ATTENTION_ADD_FRIENDS="attentionaddfriends";
 
 		public static class ThirdPart {
 
@@ -413,6 +415,13 @@ public class PrefsUtils {
 
 		public static synchronized void setNewRecommends(Context context, String pref, boolean hasNew) {
 			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_RECOMMENDS, hasNew).commit();
+		}
+		public static boolean hasAttentionAddFriends(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_ATTENTION_ADD_FRIENDS, false);
+		}
+		
+		public static synchronized void setAttentionAddFriends(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_ATTENTION_ADD_FRIENDS, true).commit();
 		}
 
 	}

@@ -62,6 +62,10 @@ public class FacebookClient {
 		NONE, AUTHORIZE, SEND_INVATE, GET_INFO, SEND_JOIN_MESSAGE, DE_AUTHORIZE;
 	}
 
+	public void onSaveInstanceState(Bundle outState) {
+		mUiLifecycleHelper.onSaveInstanceState(outState);
+	}
+
 	private FacebookAction mAction = FacebookAction.NONE;
 
 	public FacebookClient(BaseActivity context) {
@@ -115,8 +119,8 @@ public class FacebookClient {
 				if (error == null) {
 					final String postId = values.getString("post_id");
 					if (postId != null) {
-//						mContext.showErrorConfirmDialog(R.string.invite_success);
-						 Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+						// mContext.showErrorConfirmDialog(R.string.invite_success);
+						Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
 						if (listener != null)
 							listener.onInviteSuccess(uid);
 					} else {
