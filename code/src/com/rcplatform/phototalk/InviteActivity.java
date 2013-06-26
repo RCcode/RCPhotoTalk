@@ -47,6 +47,8 @@ public class InviteActivity extends BaseActivity {
 	private static TreeSet<Friend> friendsAdded;
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
 	private static final String GOOGLE_PLUS_PACKAGE = "com.google.android.apps.plus";
+	
+	private static final int REQUEST_CODE_INSTAGRAM_CAMERA=20000;
 
 	private void initBasicInviteActions() {
 		localInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.DEFAULT));
@@ -282,15 +284,8 @@ public class InviteActivity extends BaseActivity {
 		}
 
 		public void invite(Activity paramContext) {
-			File localFile = new File(Environment.getExternalStorageDirectory(), "instagram_share.jpg");
-			if (localFile == null || !localFile.exists())
-				return;
-			Intent localIntent = getTargetedSendIntent();
-			Uri localUri = Uri.fromFile(localFile);
-			localIntent.setData(localUri);
-			localIntent.setType("image/*");
-			localIntent.putExtra("android.intent.extra.STREAM", localUri);
-			paramContext.startActivity(localIntent);
+			Intent intent=new Intent(paramContext,RotateCameraActivity.class);
+			paramContext.startActivityForResult(intent, REQUEST_CODE_INSTAGRAM_CAMERA);
 		}
 	}
 
@@ -411,6 +406,17 @@ public class InviteActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		for (ThirdPartClient client : thirdPartClients)
 			client.onAuthorizeInformationReceived(requestCode, resultCode, data);
+		if(requestCode==REQUEST_CODE_INSTAGRAM_CAMERA&&resultCode==Activity.RESULT_OK){
+//			File localFile = new File(Environment.getExternalStorageDirectory(), "instagram_share.jpg");
+//			if (localFile == null || !localFile.exists())
+//				return;
+//			Intent localIntent = getTargetedSendIntent();
+//			Uri localUri = Uri.fromFile(localFile);
+//			localIntent.setData(localUri);
+//			localIntent.setType("image/*");
+//			localIntent.putExtra("android.intent.extra.STREAM", localUri);
+//			paramContext.startActivity(localIntent);
+		}
 	}
 
 	@Override
