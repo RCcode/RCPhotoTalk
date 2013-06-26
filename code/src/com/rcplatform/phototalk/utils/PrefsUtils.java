@@ -106,7 +106,7 @@ public class PrefsUtils {
 		
 		private static final String PREF_KEY_VK_NAME = "vkname";
 		
-		private static final String PREF_KEY_ATTENTION_ADD_FRIENDS="attentionaddfriends";
+		private static final String PREF_KEY_INTO_FRIENDS_LIST_TIME="intofriendslisttime";
 
 		public static class ThirdPart {
 
@@ -416,12 +416,12 @@ public class PrefsUtils {
 		public static synchronized void setNewRecommends(Context context, String pref, boolean hasNew) {
 			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_RECOMMENDS, hasNew).commit();
 		}
-		public static boolean hasAttentionAddFriends(Context context, String pref) {
-			return getPreference(context, pref).getBoolean(PREF_KEY_ATTENTION_ADD_FRIENDS, false);
+		public static long getIntoFriendsListTime(Context context, String pref) {
+			return getPreference(context, pref).getLong(PREF_KEY_INTO_FRIENDS_LIST_TIME, 0);
 		}
 		
-		public static synchronized void setAttentionAddFriends(Context context, String pref) {
-			getPreference(context, pref).edit().putBoolean(PREF_KEY_ATTENTION_ADD_FRIENDS, true).commit();
+		public static synchronized void setIntoFriendsListTime(Context context, String pref,long time) {
+			getPreference(context, pref).edit().putLong(PREF_KEY_INTO_FRIENDS_LIST_TIME, time).commit();
 		}
 
 	}
