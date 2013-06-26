@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
@@ -29,7 +30,6 @@ import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.Utils;
 
 public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 	private FacebookClient mFacebookClient;
@@ -41,6 +41,13 @@ public class FacebookFriendRecommendActivity extends AddFriendBaseActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.facebook_recommends);
 		findViewById(R.id.wish_to_invate).setVisibility(View.GONE);
+		initBackButton(R.string.facebook, new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		mFacebookClient = new FacebookClient(this);
 		mFacebookClient.onCreate(savedInstanceState);
 		initAddFriendsView();

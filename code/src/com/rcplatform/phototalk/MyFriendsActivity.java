@@ -403,7 +403,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				mFriendShowDetail.setLocalName(result.getLocalName());
 				refreshList();
 			} else if (requestCode == REQUEST_KEY_ADD_FRIEND) {
-				List<Friend> newFriends = (List<Friend>) data.getSerializableExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
+				List<Friend> newFriends = (List<Friend>) data.getSerializableExtra(InviteActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
 				handlerAddResult(newFriends);
 			}
 

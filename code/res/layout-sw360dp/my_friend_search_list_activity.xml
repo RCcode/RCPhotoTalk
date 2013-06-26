@@ -4,7 +4,9 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/app_backgroud" >
-
+ <include
+            android:id="@+id/title"
+            layout="@layout/base_top_navigate" />
     <RelativeLayout
         android:id="@+id/home_search_bar"
         android:layout_width="fill_parent"

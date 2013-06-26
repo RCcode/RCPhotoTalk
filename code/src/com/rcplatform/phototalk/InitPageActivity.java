@@ -137,7 +137,7 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		startActivity(AddFriendsActivity.class);
+		startActivity(InviteActivity.class);
 		finish();
 	}
 
@@ -149,7 +149,7 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 			if (userInfo.getShowRecommends() == UserInfo.NOT_FIRST_TIME) {
 				startActivity(HomeActivity.class);
 			} else {
-				startActivity(AddFriendsActivity.class);
+				startActivity(InviteActivity.class);
 			}
 			finish();
 		}

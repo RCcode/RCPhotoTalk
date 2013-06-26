@@ -170,7 +170,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/default_gap"
-                    android:background="@drawable/vk_icon" >
+                    android:background="@drawable/twitter_icon_invite" >
                 </ImageView>
 
                 <TextView

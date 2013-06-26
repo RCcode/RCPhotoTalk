@@ -3,11 +3,12 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/app_backgroud" >
-
+	<include layout="@layout/base_top_navigate" android:id="@+id/title"/>
     <RelativeLayout
         android:id="@+id/home_search_bar"
         android:layout_width="fill_parent"
         android:layout_height="53dp"
+        android:layout_below="@+id/title"
         android:background="@drawable/seach_bg" >
 
         <EditText

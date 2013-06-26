@@ -9,6 +9,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
@@ -17,9 +19,7 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
-import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.task.ThirdPartInfoUploadTask;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
@@ -27,9 +27,9 @@ import com.rcplatform.phototalk.thirdpart.utils.OnGetThirdPartInfoSuccessListene
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.thirdpart.utils.VKClient;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class VKRecommendActivity extends AddFriendBaseActivity {
 
@@ -41,6 +41,13 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.vk_recommends);
+		initBackButton(R.string.vkontakte, new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		setItemType(PhotoTalkFriendsAdapter.TYPE_VK);
 		mVkClient = new VKClient(this);
 		initView();
@@ -120,12 +127,12 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 	private void getVkRecommends() {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		FriendsProxy.getRecommends(this, FriendType.VK, new LoadFriendsListener() {
-			
+
 			@Override
 			public void onLoadedFail(String reason) {
 				dismissLoadingDialog();
 			}
-			
+
 			@Override
 			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				dismissLoadingDialog();
@@ -149,7 +156,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 				vkIds.add(f.getRcId());
 			}
 			mVkClient.sendInviteMessage(vkIds);
-			//showErrorConfirmDialog(R.string.invite_success);
+			// showErrorConfirmDialog(R.string.invite_success);
 			uploadInviteInfo(vkIds);
 			clearInviteFriends();
 		}
@@ -165,6 +172,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 		}
 		LogicUtils.uploadFriendInvite(this, Action.ACTION_UPLOAD_INTITE_THIRDPART, FriendType.VK, ids);
 	}
+
 	private void showVKInfoGetFailDialog() {
 		if (mLoadThirdPartFailDialog == null) {
 			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {

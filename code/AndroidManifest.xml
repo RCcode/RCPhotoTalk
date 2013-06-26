@@ -129,7 +129,8 @@
             android:name="com.rcplatform.phototalk.FacebookFriendRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FriendDetailActivity"
             android:configChanges="orientation"
@@ -216,7 +217,8 @@
             android:name="com.rcplatform.phototalk.ContactFriendRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" />
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name="com.rcplatform.phototalk.MoreActivity"
             android:configChanges="orientation"
@@ -292,7 +294,8 @@
             android:name="com.rcplatform.phototalk.VKRecommendActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
+            android:theme="@android:style/Theme.NoTitleBar"
+            android:windowSoftInputMode="stateHidden" >
         </activity>
         <activity
             android:name="com.rcplatform.phototalk.ThirdPartRecommendsActivity"
@@ -302,6 +305,12 @@
         </activity>
         <activity
             android:name="com.rcplatform.phototalk.thirdpart.activity.TwitterAuthorizeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+        <activity
+            android:name="com.rcplatform.phototalk.GmailRecommendsActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >

@@ -5,6 +5,7 @@ import java.util.Set;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import com.rcplatform.phototalk.activity.AddFriendBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
@@ -45,6 +46,13 @@ public class ContactFriendRecommendActivity extends AddFriendBaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_friend_source_activity);
+		initBackButton(R.string.contact, new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		initAddFriendsView();
 		setItemType(PhotoTalkFriendsAdapter.TYPE_CONTACTS);
 		getContactRecommends();

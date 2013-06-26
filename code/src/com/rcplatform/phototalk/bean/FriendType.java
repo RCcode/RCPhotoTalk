@@ -6,4 +6,5 @@ public class FriendType {
 	public static final int VK = -2;
 	public static final int TWITTER = -3;
 	public static final int DEFAULT = 10;
+	public static final int EMAIL=101;
 }
