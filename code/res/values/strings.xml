@@ -366,5 +366,8 @@
     <string name="confirm_share_text">确认分享文字</string>
     <string name="share_title">分享</string>
     <string name="authorize_fail">认证失败</string>
+    <string name="twitter">Twitter</string>
+    <string name="search">搜索好友</string>
+    <string name="googleplus">google+</string>
 
 </resources>

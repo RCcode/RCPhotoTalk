@@ -211,7 +211,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				mAdapter.notifyDataSetChanged();
-				AddFriendsActivity.addFriend(f);
+				InviteActivity.addFriend(f);
 			}
 
 			@Override
@@ -221,7 +221,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					dismissLoadingDialog();
 					friend.setFriend(true);
 					mAdapter.notifyDataSetChanged();
-					AddFriendsActivity.addFriend(friend);
+					InviteActivity.addFriend(friend);
 				} else {
 					showErrorConfirmDialog(content);
 					dismissLoadingDialog();
@@ -233,7 +233,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				mAdapter.notifyDataSetChanged();
-				AddFriendsActivity.addFriend(friend);
+				InviteActivity.addFriend(friend);
 			}
 		}, friend).execute();
 	}
@@ -355,7 +355,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			if (REQUEST_CODE_DETAIL == requestCode) {
 				Friend friendNew = (Friend) data.getSerializableExtra(FriendDetailActivity.RESULT_PARAM_FRIEND);
 				friendShowDetail.setFriend(friendNew.isFriend());
-				AddFriendsActivity.addFriend(friendNew);
+				InviteActivity.addFriend(friendNew);
 				mAdapter.notifyDataSetChanged();
 			}
 		}

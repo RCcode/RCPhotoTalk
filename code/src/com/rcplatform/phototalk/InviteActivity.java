@@ -1,12 +1,16 @@
 package com.rcplatform.phototalk;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -14,8 +18,10 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -25,14 +31,58 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.plus.PlusShare;
 import com.rcplatform.phototalk.activity.BaseActivity;
+import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
+import com.rcplatform.phototalk.thirdpart.utils.ThirdPartClient;
+import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class InviteActivity extends BaseActivity {
 
+	private List<InviteAction> basicInviteActions = new ArrayList<InviteActivity.InviteAction>();
+	private List<ThirdPartClient> thirdPartClients = new ArrayList<ThirdPartClient>();
+	private static TreeSet<Friend> friendsAdded;
+	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
+	private static final String GOOGLE_PLUS_PACKAGE = "com.google.android.apps.plus";
+
+	private void initBasicInviteActions() {
+		basicInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.FACEBOOK));
+		basicInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.VK));
+		basicInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.DEFAULT));
+		basicInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.CONTACT));
+
+		ThirdPartClient twitterClient = new TwitterClient(this);
+		basicInviteActions.add(InviteActionFactory.getThirdPartInviteAction(this, twitterClient, FriendType.TWITTER));
+		thirdPartClients.add(twitterClient);
+		// GOOGLE PLUS
+		if (Utils.checkApkExist(this, GOOGLE_PLUS_PACKAGE)) {
+			InviteAction googlePlusAction = new GooglePlusInviteAction();
+			googlePlusAction.appIcon = getResources().getDrawable(R.drawable.radio_contact_down);
+			googlePlusAction.appName = getString(R.string.googleplus);
+			basicInviteActions.add(googlePlusAction);
+		}
+
+	}
+
+	// com.google.android.apps.plus
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.invite_friends);
+		initBasicInviteActions();
+		friendsAdded = new TreeSet<Friend>(new Comparator<Friend>() {
+
+			@Override
+			public int compare(Friend lhs, Friend rhs) {
+				if (lhs.getRcId().equals(rhs.getRcId())) {
+					return 0;
+				}
+				return 1;
+			}
+		});
 		new AsyncTask<Void, Void, List<InviteAction>>() {
 			@Override
 			protected void onPreExecute() {
@@ -49,7 +99,10 @@ public class InviteActivity extends BaseActivity {
 			protected void onPostExecute(List<InviteAction> result) {
 				super.onPostExecute(result);
 				dissmissLoadingDialog();
-				initInviteList(result);
+				List<InviteAction> allInviteActions = new ArrayList<InviteActivity.InviteAction>();
+				allInviteActions.addAll(basicInviteActions);
+				allInviteActions.addAll(result);
+				initInviteList(allInviteActions);
 			}
 		}.execute();
 	}
@@ -73,6 +126,9 @@ public class InviteActivity extends BaseActivity {
 		matchingPackages.put("jp.naver.line.android", new TargetApp("line", TextInviteAction.class));
 		matchingPackages.put("com.tencent.mm", new TargetApp("wechat", TextInviteAction.class));
 		matchingPackages.put("kik.android", new TargetApp("kik", TextInviteAction.class));
+		matchingPackages.put("com.kakao.talk", new TargetApp("kakao", TextInviteAction.class));
+		matchingPackages.put("com.sgiggle.production", new TargetApp("tanggo", TextInviteAction.class));
+		matchingPackages.put("com.instagram.android", new TargetApp("instagram", InstagramInviteAction.class));
 	}
 
 	private static abstract class InviteAction {
@@ -94,7 +150,7 @@ public class InviteActivity extends BaseActivity {
 			return localIntent;
 		}
 
-		public abstract void invite(Context paramContext);
+		public abstract void invite(Activity paramContext);
 
 		public void setActivityInfo(ActivityInfo paramActivityInfo) {
 			this.packageName = paramActivityInfo.packageName;
@@ -127,11 +183,104 @@ public class InviteActivity extends BaseActivity {
 			super();
 		}
 
-		public void invite(Context paramContext) {
+		public void invite(Activity paramContext) {
 			Intent localIntent = getTargetedSendIntent();
 			localIntent.setType("text/plain");
 			localIntent.putExtra("android.intent.extra.TEXT", getInviteText(paramContext));
 			paramContext.startActivity(localIntent);
+		}
+	}
+
+	private static class LocalInviteAction extends InviteAction {
+		private int type;
+
+		public LocalInviteAction(int type) {
+			super();
+			this.type = type;
+		}
+
+		@Override
+		public void invite(Activity paramContext) {
+			switch (type) {
+			case FriendType.FACEBOOK:
+				paramContext.startActivity(new Intent(paramContext, FacebookFriendRecommendActivity.class));
+				break;
+			case FriendType.CONTACT:
+				paramContext.startActivity(new Intent(paramContext, ContactFriendRecommendActivity.class));
+				break;
+			case FriendType.VK:
+				paramContext.startActivity(new Intent(paramContext, VKRecommendActivity.class));
+				break;
+			default:
+				paramContext.startActivity(new Intent(paramContext, SearchFriendsActivity.class));
+				break;
+			}
+		}
+
+	}
+
+	private static class ThirdPartInviteAction extends InviteAction {
+		private ThirdPartClient client;
+
+		public ThirdPartInviteAction(ThirdPartClient client) {
+			super();
+			this.client = client;
+		}
+
+		@Override
+		public void invite(final Activity paramContext) {
+			if (client.isAuthorized()) {
+				client.sendJoinMessage(getInviteText(paramContext));
+			} else {
+				client.authorize(new OnAuthorizeSuccessListener() {
+
+					@Override
+					public void onAuthorizeSuccess() {
+						client.sendJoinMessage(getInviteText(paramContext));
+					}
+				});
+			}
+		}
+	}
+
+	private static class InstagramInviteAction extends InviteAction {
+		public InstagramInviteAction() {
+			super();
+		}
+
+		public void invite(Activity paramContext) {
+			File localFile = new File(Environment.getExternalStorageDirectory(), "instagram_share.jpg");
+			if (localFile == null || !localFile.exists())
+				return;
+			Intent localIntent = getTargetedSendIntent();
+			Uri localUri = Uri.fromFile(localFile);
+			localIntent.setData(localUri);
+			localIntent.setType("image/*");
+			localIntent.putExtra("android.intent.extra.STREAM", localUri);
+			paramContext.startActivity(localIntent);
+		}
+	}
+
+	private static class GooglePlusInviteAction extends InviteAction {
+
+		public GooglePlusInviteAction() {
+			super();
+		}
+
+		@Override
+		public void invite(final Activity paramContext) {
+			Intent shareIntent = new PlusShare.Builder(paramContext).setText(getInviteText(paramContext)).setType("text/plain")
+					.setContentDeepLinkId("phototalk", /**
+					 * Deep-link identifier
+					 */
+					paramContext.getString(R.string.app_name), /** Snippet title */
+					"A tasty recipe for making lemon cheesecake.", /**
+					 * Snippet
+					 * description
+					 */
+					Uri.parse("https://lh6.ggpht.com/BxPGNo_gbqq_WEN9Qvqi47JEk4VHt7Et4WDS7Nb2Mi2qzffAx_whtBVJ3Pc0xn8Vh246=w124")).getIntent();
+
+			paramContext.startActivityForResult(shareIntent, 0);
 		}
 	}
 
@@ -216,7 +365,74 @@ public class InviteActivity extends BaseActivity {
 			tvName.setText(action.appName);
 			return convertView;
 		}
-
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		for (ThirdPartClient client : thirdPartClients)
+			client.onAuthorizeInformationReceived(requestCode, resultCode, data);
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		for (ThirdPartClient client : thirdPartClients)
+			client.destroy();
+		friendsAdded.clear();
+		friendsAdded = null;
+	}
+
+	public static void addFriend(Friend friend) {
+		friendsAdded.add(friend);
+	}
+
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent();
+		intent.putExtra(RESULT_PARAM_KEY_NEW_ADD_FRIENDS, new ArrayList<Friend>(friendsAdded));
+		setResult(Activity.RESULT_OK, intent);
+		finish();
+	}
+
+	private static class InviteActionFactory {
+
+		public static InviteAction getThirdPartInviteAction(Context context, ThirdPartClient client, int thirdPartType) {
+			InviteAction action = new ThirdPartInviteAction(client);
+			switch (thirdPartType) {
+			case FriendType.TWITTER:
+				action.appIcon = context.getResources().getDrawable(R.drawable.radio_facebook_down);
+				action.appName = context.getString(R.string.twitter);
+				break;
+			}
+			return action;
+		}
+
+		public static InviteAction getFriendInviteAction(Context context, int friendType) {
+			InviteAction action = null;
+			switch (friendType) {
+			case FriendType.FACEBOOK:
+				action = new LocalInviteAction(FriendType.FACEBOOK);
+				action.appIcon = context.getResources().getDrawable(R.drawable.radio_facebook_down);
+				action.appName = context.getString(R.string.facebook);
+				break;
+			case FriendType.CONTACT:
+				action = new LocalInviteAction(FriendType.CONTACT);
+				action.appIcon = context.getResources().getDrawable(R.drawable.radio_contact_down);
+				action.appName = context.getString(R.string.contact);
+				break;
+			case FriendType.VK:
+				action = new LocalInviteAction(FriendType.VK);
+				action.appIcon = context.getResources().getDrawable(R.drawable.radio_vk_down);
+				action.appName = context.getString(R.string.vkontakte);
+				break;
+			default:
+				action = new LocalInviteAction(FriendType.DEFAULT);
+				action.appIcon = context.getResources().getDrawable(R.drawable.radio_seach_down);
+				action.appName = context.getString(R.string.search);
+				break;
+			}
+			return action;
+		}
+	}
 }
