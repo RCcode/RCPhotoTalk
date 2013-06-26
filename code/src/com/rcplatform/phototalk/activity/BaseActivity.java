@@ -25,14 +25,14 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
-public class BaseActivity extends Activity {
+public class BaseActivity extends Activity implements ActivityFunction{
 
 	public static final int LOADING_NO_MSG = -1;
 	ProgressDialog mProgressDialog;
 	private AlertDialog logoutDialog;
 	protected Context baseContext;
 	private boolean needRelogin = true;
-
+	private ActivityFunction functionImpl;
 	protected void cancelRelogin() {
 		needRelogin = false;
 	}
@@ -41,6 +41,7 @@ public class BaseActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		baseContext = this;
+		functionImpl=new ActivityFunctionBasic(this);
 	}
 
 	@Override
@@ -114,41 +115,21 @@ public class BaseActivity extends Activity {
 	protected void startActivity(Class<? extends Activity> clazz) {
 		startActivity(new Intent(this, clazz));
 	}
-
+	@Deprecated
 	public void showLoadingDialog(int titleResId, int msgResId, boolean cancelAble) {
-		if (mProgressDialog == null) {
-			if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.GINGERBREAD_MR1)
-				mProgressDialog = new ProgressDialog(this, R.style.Theme_Dialog_Update);
-			else
-				mProgressDialog = new ProgressDialog(this);
-		}
-		mProgressDialog.setCancelable(cancelAble);
-		if (titleResId != LOADING_NO_MSG)
-			mProgressDialog.setTitle(getString(titleResId));
-		else
-			mProgressDialog.setTitle(null);
-		if (msgResId != LOADING_NO_MSG)
-			mProgressDialog.setMessage(getString(msgResId));
-		else
-			mProgressDialog.setMessage(null);
-
-		if (!mProgressDialog.isShowing() && !isFinishing()) {
-			mProgressDialog.show();
-			mProgressDialog.setContentView(R.layout.operation_loading);
-		}
+		showLoadingDialog(cancelAble);
 	}
-
+	@Deprecated
 	public void dismissLoadingDialog() {
-		if (mProgressDialog != null && mProgressDialog.isShowing())
-			mProgressDialog.dismiss();
+		dissmissLoadingDialog();
 	}
 
 	public PhotoTalkApplication getPhotoTalkApplication() {
-		return (PhotoTalkApplication) getApplication();
+		return functionImpl.getPhotoTalkApplication();
 	}
 
 	public UserInfo getCurrentUser() {
-		return getPhotoTalkApplication().getCurrentUser();
+		return functionImpl.getCurrentUser();
 	}
 
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
@@ -158,14 +139,13 @@ public class BaseActivity extends Activity {
 		tv.setText(textResId);
 		findViewById(R.id.back).setVisibility(View.VISIBLE);
 	}
-
+	@Deprecated
 	public void showErrorConfirmDialog(String msg) {
-		if (!isFinishing())
-			DialogUtil.createErrorInfoDialog(this, msg).show();
+		showConfirmDialog(msg);
 	}
-
+	@Deprecated
 	public void showErrorConfirmDialog(int msgResId) {
-		DialogUtil.createErrorInfoDialog(this, msgResId).show();
+		showConfirmDialog(msgResId);
 	}
 
 	protected void initForwordButton(int resId, OnClickListener onClickListener) {
@@ -197,5 +177,35 @@ public class BaseActivity extends Activity {
 		} else {
 			file.delete();
 		}
+	}
+
+	@Override
+	public Context getContext() {
+		return functionImpl.getContext();
+	}
+
+	@Override
+	public void showLoadingDialog(boolean cancelAble) {
+		functionImpl.showLoadingDialog(cancelAble);
+	}
+
+	@Override
+	public void dissmissLoadingDialog() {
+		functionImpl.dissmissLoadingDialog();
+	}
+
+	@Override
+	public Activity getActivity() {
+		return functionImpl.getActivity();
+	}
+
+	@Override
+	public void showConfirmDialog(String msg) {
+		functionImpl.showConfirmDialog(msg);
+	}
+
+	@Override
+	public void showConfirmDialog(int resId) {
+		functionImpl.showConfirmDialog(resId);		
 	}
 }

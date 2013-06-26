@@ -81,6 +81,8 @@ import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListen
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
+import com.rcplatform.rcad.RcAd;
+import com.rcplatform.rcad.constants.AdType;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
@@ -136,6 +138,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private boolean willQuit = false;
 
+	private RcAd popupAdlayout;
 	private ImageView ivNewRecommends;
 
 	@Override
@@ -168,8 +171,13 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		
 		//Log 用户信息
 		ClientLogUtil.log(this);
+		showRcAd();
 	}
 
+	private void showRcAd(){
+		popupAdlayout = new RcAd(this, AdType.FULLSCREEN,
+				"1002602", true);
+	}
 	private void checkStartMode() {
 		int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
 		if (startMode == ApplicationStartMode.APPLICATION_START_RECOMMENDS) {
@@ -653,6 +661,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (mLongPressDialog != null && mLongPressDialog.isShowing())
 			mLongPressDialog.dismiss();
 		ImageLoader.getInstance().stop();
+		
+		//广告销毁
+		if (popupAdlayout != null) {
+			popupAdlayout.destroyAd();
+		}
 		super.onDestroy();
 	}
 

@@ -1,0 +1,99 @@
+{
+default_banner_sdk:0,
+default_icon_sdk:0,
+default_popup_sdk:0,
+default_fullscreen_sdk:0,
+host_sdk:0,
+app_id:10026,
+sdk_key:'adlayout3.0xxx',
+sdk_version:'3.0',
+
+sdk_list:[
+		{
+			sdk_code:0,
+			description:"这是自主平台，session是服务器获取的，所以这里为空串，但是不能不写",
+			sdk_name:"adlayout",
+			sdk_key_names:["session"],
+			session:""
+		},
+		{
+			sdk_code:1,
+			description:"这是admob平台，需要publisher_id，但是banner和interstitial的publisher_id申请了不同的id,所以提供了两个。注意顺序：先banner后interstitial.还有即使两者id相同，如果集成了两种类型的广告也都必须写上",
+			sdk_name:"admob",
+			sdk_key_names:["banner_publisher_id","interstitial_publisher_id"],
+			banner_publisher_id:"a1515bd4aa4aa94",
+			interstitial_publisher_id:"a1515bd5dca6365"
+		},
+		{
+			sdk_code:2,
+			description:"这是inmobi平台，需要app_id，但是banner和fullpage的app_id申请了不同的id,所以提供了两个。注意顺序：先banner后fullpage.还有即使两者id相同，如果集成了两种类型的广告也都必须写上",
+			sdk_name:"inmobi",
+			sdk_key_names:["banner_app_id","fullpage_app_id"],
+			banner_app_id:"915428f6e8b6474fa65571c65eb38346",
+			fullpage_app_id:"4e338116cd0b4a3e94f14dc58c915d32"
+		},
+		{
+		 	sdk_code:3,
+			description:"这是millennial平台，需要app_id，但是banner和interstitial的app_id申请了不同的id,所以提供了两个。注意顺序：先banner后fullpage.还有即使两者id相同，如果集成了两种类型的广告也都必须写上",
+			sdk_name:"mmedia",
+			sdk_key_names:["banner_app_id","interstitial_app_id"],
+			banner_app_id:"118664",
+			interstitial_app_id:"118670"
+		},
+		{
+			sdk_code:4,
+			sdk_name:"flurry",
+			description:"这是flurry平台，需要session_id和adSpace",
+			sdk_key_names:["session_id","adSpace"],
+			session_id:"",
+			"adSpace":""
+		},
+		{
+			sdk_code:5,
+			sdk_name:"imobile",
+			description:"这是imobile平台，需要Publisher_I、Media_ID和Spot_ID",
+			sdk_key_names:["Publisher_ID","Media_ID","Spot_ID"],
+			Publisher_ID:"",
+			Media_ID:"",
+			Spot_ID:""
+		},
+		{
+			sdk_code:6,
+			sdk_name:"adlantis",
+			sdk_key_names:["publisher_id"],
+			publisher_id:""
+		},
+		{
+			sdk_code:7,
+			sdk_name:"mediba",
+			sdk_key_names:["app_id"],
+			app_id:""
+		},
+		{
+			sdk_code:8,
+			sdk_name:"chartboost",
+			sdk_key_names:["app_id","app_signature"],
+			app_id:"",
+			app_signature:""
+		},
+		{
+			sdk_code:9,
+			sdk_name:"nexage",
+			sdk_key_names:["app_id"],
+			app_id:""
+		},
+		{
+			sdk_code:10,
+			sdk_name:"mobfox",
+			sdk_key_names:["publisher_id"],
+			publisher_id:""
+		},
+		{
+			sdk_code:11,
+			sdk_name:"mopub",
+			sdk_key_names:["id"],
+			id:""
+		}
+		
+		]
+}

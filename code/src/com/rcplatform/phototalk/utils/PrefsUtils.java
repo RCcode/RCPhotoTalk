@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.utils;
 
+import twitter4j.auth.AccessToken;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -106,6 +107,45 @@ public class PrefsUtils {
 		private static final String PREF_KEY_VK_NAME = "vkname";
 
 		public static class ThirdPart {
+
+			private static final String PREF_KEY_TWITTER_TOKEN = "twitter_token";
+
+			private static final String PREF_KEY_TWITTER_SECRET = "twitter_secret";
+
+			private static final String PREF_KEY_TWITTER_ID = "twitter_id";
+
+			private static final String PREF_KEY_TWITTER_SCREEN_NAME = "twitter_screenname";
+
+			public static void saveTwitterAccessToken(Context context, String pref, AccessToken token) {
+				SharedPreferences sh = getPreference(context, pref);
+				sh.edit().putString(PREF_KEY_TWITTER_TOKEN, token.getToken()).putString(PREF_KEY_TWITTER_SECRET, token.getTokenSecret())
+						.putLong(PREF_KEY_TWITTER_ID, token.getUserId()).putString(PREF_KEY_TWITTER_SCREEN_NAME, token.getScreenName()).commit();
+			}
+
+			public static void clearTwitterAccount(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				sh.edit().remove(PREF_KEY_TWITTER_TOKEN).remove(PREF_KEY_TWITTER_SECRET).remove(PREF_KEY_TWITTER_ID).remove(PREF_KEY_TWITTER_SCREEN_NAME)
+						.commit();
+			}
+
+			public static AccessToken getTwitterAccessToken(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				String token = sh.getString(PREF_KEY_TWITTER_TOKEN, null);
+				String secret = sh.getString(PREF_KEY_TWITTER_SECRET, null);
+				Long userId = sh.getLong(PREF_KEY_TWITTER_ID, -1l);
+				if (token == null || secret == null) {
+					return null;
+				} else {
+					AccessToken accessToken = new AccessToken(token, secret, userId);
+					return accessToken;
+				}
+
+			}
+
+			public static String getTwitterName(Context context, String pref) {
+				SharedPreferences sh = getPreference(context, pref);
+				return sh.getString(PREF_KEY_TWITTER_SCREEN_NAME, null);
+			}
 
 			public static void setFacebookUserName(Context context, String pref, String userName) {
 				SharedPreferences sp = getPreference(context, pref);
