@@ -24,6 +24,8 @@ import com.google.gson.Gson;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.FriendDynamicListAdpter;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.FriendDynamic;
+import com.rcplatform.phototalk.db.impl.FriendDynamicDatabase;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.pulltorefresh.library.PullToRefreshBase;
@@ -39,6 +41,8 @@ import com.rcplatform.phototalk.utils.Utils;
 public class FriendDynamicActivity extends BaseActivity {
 
 	private PullToRefreshListView friendDynameicList;
+	
+	private static FriendDynamicDatabase db;
 
 	// 好友动态列表使用此adpter
 	private FriendDynamicListAdpter adpter;
@@ -72,6 +76,10 @@ public class FriendDynamicActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.friend_dynamic);
+		
+		if(null == db){
+			db = new FriendDynamicDatabase();
+		}
 		back_btn = (ImageButton) findViewById(R.id.back);
 		back_btn.setVisibility(View.VISIBLE);
 		back_btn.setOnClickListener(new OnClickListener() {
@@ -101,7 +109,8 @@ public class FriendDynamicActivity extends BaseActivity {
 				getFriendDynamic(pageSize, GET_UPDOWN);
 			}
 		});
-		listDynamic = new ArrayList<FriendDynamicActivity.FriendDynamic>();
+//		listDynamic = new ArrayList<FriendDynamic>();
+		listDynamic = db.getFriendDynamics();
 		adpter = new FriendDynamicListAdpter(FriendDynamicActivity.this, listDynamic);
 		friendDynameicList.setAdapter(adpter);
 		friendDynameicList.setOnItemClickListener(new OnItemClickListener() {
@@ -137,7 +146,8 @@ public class FriendDynamicActivity extends BaseActivity {
 				try {
 					List<FriendDynamic> list = jsonToFriendDynamic(type, content);
 					myHandler.obtainMessage(type, list).sendToTarget();
-				} catch (Exception e) {
+				}
+				catch (Exception e) {
 					myHandler.sendEmptyMessage(FAIL);
 				}
 			}
@@ -157,40 +167,47 @@ public class FriendDynamicActivity extends BaseActivity {
 			super.handleMessage(msg);
 			dismissLoadingDialog();
 			switch (msg.what) {
-			case GET_PULLDOWN:
-				List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
-				if (downlist != null) {
-//					downlist.addAll(listDynamic);
-					listDynamic.clear();
-					listDynamic.addAll(downlist);
-				}
-				adpter.notifyDataSetChanged();
-				friendDynameicList.onRefreshComplete();
-				break;
+				case GET_PULLDOWN:
+					List<FriendDynamic> downlist = (List<FriendDynamic>) msg.obj;
+					if (downlist != null) {
+						// downlist.addAll(listDynamic);
+						listDynamic.clear();
+						listDynamic.addAll(downlist);
+						db.clearAll();
+						db.saveFriendDynamics(downlist);
+					}
+					adpter.notifyDataSetChanged();
+					friendDynameicList.onRefreshComplete();
+					break;
 
-			case GET_FIRST:
-				List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
-				if (list != null) {
-					listDynamic.addAll(list);
-				}
-				adpter.notifyDataSetChanged();
-				friendDynameicList.onRefreshComplete();
-				break;
-			case GET_UPDOWN:
-				List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
-				if (uplist != null) {
-					// listDynamic.clear();
-					listDynamic.addAll(uplist);
-				}
-				adpter.notifyDataSetChanged();
-				friendDynameicList.onRefreshComplete();
-				break;
-			case UPDATE_UI:
-				InformationPageController.getInstance().onNewTread();
-				break;
-			case FAIL:
-				friendDynameicList.onRefreshComplete();
-				break;
+				case GET_FIRST:
+					List<FriendDynamic> list = (List<FriendDynamic>) msg.obj;
+					if (list != null) {
+						// downlist.addAll(listDynamic);
+						listDynamic.clear();
+						listDynamic.addAll(list);
+						db.clearAll();
+						db.saveFriendDynamics(list);
+					}
+					adpter.notifyDataSetChanged();
+					friendDynameicList.onRefreshComplete();
+					break;
+				case GET_UPDOWN:
+					List<FriendDynamic> uplist = (List<FriendDynamic>) msg.obj;
+					if (uplist != null) {
+						// listDynamic.clear();
+						listDynamic.addAll(uplist);
+						db.saveFriendDynamics(uplist);
+					}
+					adpter.notifyDataSetChanged();
+					friendDynameicList.onRefreshComplete();
+					break;
+				case UPDATE_UI:
+					InformationPageController.getInstance().onNewTread();
+					break;
+				case FAIL:
+					friendDynameicList.onRefreshComplete();
+					break;
 			}
 
 		}
@@ -224,89 +241,6 @@ public class FriendDynamicActivity extends BaseActivity {
 			friend.setRcId(friendDynamic.getfRcId());
 		}
 		return friend;
-	}
-
-	public class FriendDynamic {
-
-		private int type;
-
-		private String trendId;
-
-		private String fRcId;
-
-		private String createTime;
-
-		private String fRcName;
-
-		private String fRcHead;
-
-		private String otherId;
-
-		private String otherName;
-
-		public int getType() {
-			return type;
-		}
-
-		public void setType(int type) {
-			this.type = type;
-		}
-
-		public String getTrendId() {
-			return trendId;
-		}
-
-		public void setTrendId(String trendId) {
-			this.trendId = trendId;
-		}
-
-		public String getfRcId() {
-			return fRcId;
-		}
-
-		public void setfRcId(String fRcId) {
-			this.fRcId = fRcId;
-		}
-
-		public String getCreateTime() {
-			return createTime;
-		}
-
-		public void setCreateTime(String createTime) {
-			this.createTime = createTime;
-		}
-
-		public String getfRcName() {
-			return fRcName;
-		}
-
-		public void setfRcName(String fRcName) {
-			this.fRcName = fRcName;
-		}
-
-		public String getfRcHead() {
-			return fRcHead;
-		}
-
-		public void setfRcHead(String fRcHead) {
-			this.fRcHead = fRcHead;
-		}
-
-		public String getOtherId() {
-			return otherId;
-		}
-
-		public void setOtherId(String otherId) {
-			this.otherId = otherId;
-		}
-
-		public String getOtherName() {
-			return otherName;
-		}
-
-		public void setOtherName(String otherName) {
-			this.otherName = otherName;
-		}
 	}
 
 	private void toFriend(String rcid) {

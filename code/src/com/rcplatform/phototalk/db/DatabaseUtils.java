@@ -10,6 +10,7 @@ public class DatabaseUtils {
 	public static final String DATABSE_CONTACT = "global.db";
 	public static final String DATABASE_COUNTRY = "country_code.db";
 	public static final String DATABASE_TIGASE_MSG = "tigase_msg.db";
+	public static final String DATABASE_FRIEND_DYNAMIC = "friend_dynamic.db";
 
 	public static String getDatabasePath(UserInfo userInfo) {
 		return Constants.Database.USERS_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + userInfo.getRcId() + ".db";
@@ -29,5 +30,9 @@ public class DatabaseUtils {
 	
 	public static String getTigaseMsgDatabasePath(){
 		return  Constants.Database.GLOBAL_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + DATABASE_TIGASE_MSG;
+	}
+	
+	public static String getFriendDynamicDatabasePath(){
+		return  Constants.Database.GLOBAL_DATABASE_PATH + "/" + BASE_DATABASE_NAME + "_" + DATABASE_FRIEND_DYNAMIC;
 	}
 }
