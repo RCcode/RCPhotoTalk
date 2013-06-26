@@ -369,5 +369,9 @@
     <string name="twitter">Twitter</string>
     <string name="search">搜索好友</string>
     <string name="googleplus">google+</string>
+    <string name="gmail">Gmail</string>
+    <string name="search_friend_from">用%1$s邀请好友</string>
+    <string name="search_friend_from_local">从%1$s寻找好友</string>
+    <string name="search_friend">用Email或RCID寻找好友</string>
 
 </resources>

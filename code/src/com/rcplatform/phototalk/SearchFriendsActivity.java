@@ -63,6 +63,13 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.my_friend_search_list_activity);
+		initBackButton(R.string.search, new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
 		mImageLoader = ImageLoader.getInstance();
 		initView();
 	}
@@ -155,9 +162,9 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.back:
-				finish();
-				break;
+		case R.id.back:
+			finish();
+			break;
 		// case R.id.search_btn:
 		// search();
 		// break;
@@ -187,8 +194,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 					} else {
 						search_hint_text.setVisibility(View.GONE);
 					}
-				}
-				catch (JSONException e) {
+				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				dismissLoadingDialog();
@@ -301,18 +307,18 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 				TextView tvName = (TextView) convertView.findViewById(R.id.tv_source_name);
 				TextView tvFrom = (TextView) convertView.findViewById(R.id.tv_source_from);
 				switch (source.getAttrType()) {
-					case FriendType.CONTACT:
-						tvFrom.setText(R.string.contact_friend);
-						break;
-					case FriendType.FACEBOOK:
-						tvFrom.setText(R.string.facebook_friend);
-						break;
-					case FriendType.VK:
-						tvFrom.setText(R.string.vk_friend);
-						break;
-					default:
-						tvFrom.setText(null);
-						break;
+				case FriendType.CONTACT:
+					tvFrom.setText(R.string.contact_friend);
+					break;
+				case FriendType.FACEBOOK:
+					tvFrom.setText(R.string.facebook_friend);
+					break;
+				case FriendType.VK:
+					tvFrom.setText(R.string.vk_friend);
+					break;
+				default:
+					tvFrom.setText(null);
+					break;
 				}
 				tvName.setText(source.getName());
 			}

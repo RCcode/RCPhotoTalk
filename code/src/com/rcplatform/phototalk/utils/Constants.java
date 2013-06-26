@@ -66,7 +66,7 @@ public class Constants {
 
 	public static final String INVITE_URL = "http://rctalk.me";
 
-	public static final String VK_INVITE_IMAGE = "photo208095303_304829648";
+	public static final String VK_INVITE_IMAGE = "photo208095303_305881321";
 
 	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 2;
 

@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="5dp" >
+    android:background="@drawable/user_info_item_bg"
+    android:padding="10dp" >
 
     <ImageView
         android:id="@+id/iv_app_icon"
-        android:layout_width="@dimen/app_icon_width"
-        android:layout_height="@dimen/app_icon_width" />
+        android:layout_width="@dimen/app_icon_width_invite"
+        android:layout_height="@dimen/app_icon_width_invite" />
 
     <TextView
         android:id="@+id/tv_app_name"
@@ -16,6 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
+        android:textSize="@dimen/invite_text"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp" />
 
