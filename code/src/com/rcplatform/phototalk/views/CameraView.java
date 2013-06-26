@@ -3,6 +3,8 @@ package com.rcplatform.phototalk.views;
 import java.io.IOException;
 import java.util.List;
 
+
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -21,13 +23,17 @@ import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.view.ViewGroup;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.TakePhotoActivity;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Utils;
 
-public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
+public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
+
+	private SurfaceView mSurfaceView;
 
 	private static final int INVALID_CAMERA = -1;
 
@@ -58,6 +64,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	private boolean isShowCamera = false;
 
 	private boolean isAutoFocus;
+
 	private static int round;
 
 	public CameraView(Context context) {
@@ -76,12 +83,14 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	}
 
 	private void init(Context context) {
-		// 获得SurfaceHolder对象
-		mHolder = getHolder();
-		// 指定用于捕捉拍照事件的SurfaceHolder.Callback对象
-		mHolder.addCallback(this);
-		// 设置SurfaceHolder对象的类型
-		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		if (!isInEditMode()) {
+			mSurfaceView = new SurfaceView(context);
+			addView(mSurfaceView);
+
+			mHolder = mSurfaceView.getHolder();
+			mHolder.addCallback(this);
+			mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		}
 		this.mContext = context;
 		app = (PhotoTalkApplication) context.getApplicationContext();
 	}
@@ -101,6 +110,9 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		}
 		if (mNumCamera == INVALID_CAMERA)
 			return;
+		releaseCamera();
+		initCamera();
+		
 	}
 
 	public static Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
@@ -176,7 +188,6 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 	@Override
 	public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 		initCamera();
-
 	}
 
 	@Override
@@ -203,7 +214,7 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 				options.inJustDecodeBounds = true;
 				BitmapFactory.decodeByteArray(data, 0, data.length, options);
 				int sampleSize = Utils.calculateInSampleSize(options, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, rotateAngel);
-				
+
 				options = new BitmapFactory.Options();
 				options.inSampleSize = sampleSize;
 				Bitmap mBitmap = BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -231,18 +242,18 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
 		int degrees = 0;
 		switch (rotation) {
-		case Surface.ROTATION_0:
-			degrees = 0;
-			break;
-		case Surface.ROTATION_90:
-			degrees = 90;
-			break;
-		case Surface.ROTATION_180:
-			degrees = 180;
-			break;
-		case Surface.ROTATION_270:
-			degrees = 270;
-			break;
+			case Surface.ROTATION_0:
+				degrees = 0;
+				break;
+			case Surface.ROTATION_90:
+				degrees = 90;
+				break;
+			case Surface.ROTATION_180:
+				degrees = 180;
+				break;
+			case Surface.ROTATION_270:
+				degrees = 270;
+				break;
 		}
 		int result;
 		if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -275,7 +286,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					// }
 				}
 			});
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -319,7 +331,8 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 						Thread.sleep(3000);
 						manager.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolumnBeforeTaken, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 						manager.setStreamVolume(AudioManager.STREAM_SYSTEM, systemVolumnBeforeTaken, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-					} catch (Exception e) {
+					}
+					catch (Exception e) {
 						// Log.e(TAG, "静音计时线程被中断。", e);
 					}
 
@@ -403,16 +416,62 @@ public class CameraView extends SurfaceView implements SurfaceHolder.Callback {
 					isAutoFocus = false;
 				}
 				mCamera.setParameters(parameters);
-				// 开始拍照
+
+				int height = h;
+				int width = w;
+				int previewWidth = height;
+				int previewHeight = width;
+				if (previewSize != null) {
+					previewWidth = previewSize.height;
+					previewHeight = previewSize.width;
+				}
+
+				// Center the child SurfaceView within the parent.
+				if (width * previewHeight > height * previewWidth) {
+					final int scaledChildWidth = previewWidth * height / previewHeight;
+					mLayoutX = (width - scaledChildWidth) / 2;
+					mLayoutY = 0;
+					mLayoutW = (width + scaledChildWidth) / 2;
+					mLayoutH = height;
+					// this.layout((width - scaledChildWidth) / 2, 0, (width +
+					// scaledChildWidth) / 2, height);
+				} else {
+					final int scaledChildHeight = previewHeight * width / previewWidth;
+					// this.layout(0, (height - scaledChildHeight) / 2, width,
+					// (height + scaledChildHeight) / 2);
+					mLayoutX = 0;
+					mLayoutY = (height - scaledChildHeight) / 2;
+					mLayoutW = width;
+					mLayoutH = (height + scaledChildHeight) / 2;
+				}
+
 				mCamera.startPreview();
-				// 设置保存的图像大小
+				requestLayout();
 				isShowCamera = true;
-			} catch (IOException exception) {
+			}
+			catch (IOException exception) {
 				// 释放手机摄像头
 				releaseCamera();
 			}
 		}
 
+	}
+
+	private int mLayoutX = 0;
+
+	private int mLayoutY = 0;
+
+	private int mLayoutW = 0;
+
+	private int mLayoutH = 0;
+
+	protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+		if (getChildCount() > 0) {
+			final View child = getChildAt(0);
+			if (mLayoutW != 0 && mLayoutH != 0) {
+				child.layout(mLayoutX, mLayoutY, mLayoutW, mLayoutH);
+			}
+		}
 	}
 
 	private void releaseCamera() {

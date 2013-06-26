@@ -391,10 +391,10 @@ public class EditPictureView extends View {
 			float widthScale = (bgWidth - Constants.SCREEN_WIDTH) / bgWidth;
 			float heightScale = (bgHeight - Constants.SCREEN_HEIGHT) / bgHeight;
 			if (widthScale > heightScale) {
-				showWidth = (int) (bgWidth - Constants.SCREEN_WIDTH);
+				showWidth = Constants.SCREEN_WIDTH;
 				showHeight = (int) (bgHeight - (bgHeight * widthScale));
 			} else {
-				showHeight = (int) (bgHeight - Constants.SCREEN_HEIGHT);
+				showHeight = Constants.SCREEN_HEIGHT ;
 				showWidth = (int) (bgWidth - (bgWidth * heightScale));
 			}
 			left = (Constants.SCREEN_WIDTH - showWidth) / 2;
@@ -407,7 +407,7 @@ public class EditPictureView extends View {
 			top = (int) ((Constants.SCREEN_HEIGHT - bgHeight) / 2);
 			bottom = Constants.SCREEN_HEIGHT - top;
 		}
-		RectF dst = new RectF(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT);
+		RectF dst = new RectF(left, top, right, bottom);
 		canvas.drawBitmap(tempBitmap, null, dst, mBitmapPaint);
 
 		// tempBitmap.recycle();

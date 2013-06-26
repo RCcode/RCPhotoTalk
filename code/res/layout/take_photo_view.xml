@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="vertical">  
-  <com.rcplatform.phototalk.views.CameraView android:id="@+id/sf_camera_view" android:layout_width="fill_parent" android:layout_height="fill_parent"/>  
-  <Button android:id="@+id/btn_close_take_photo" android:layout_width="42dp" android:layout_height="42dp" android:layout_alignParentLeft="true" android:layout_marginLeft="@dimen/take_photo_left" android:layout_marginTop="@dimen/take_photo_bottom" android:background="@drawable/close_edit_button_selector"/>  
-  <RelativeLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:layout_marginBottom="@dimen/take_photo_bottom"> 
-    <Button android:id="@+id/btn_take_photo_flashlight" android:layout_width="42dp" android:layout_height="42dp" android:layout_centerVertical="true" android:layout_marginLeft="@dimen/take_photo_left" android:background="@drawable/open_flash_light_button_selector"/>  
-    <Button android:id="@+id/btn_take_photo_change_camera" android:layout_width="42dp" android:layout_height="42dp" android:layout_alignParentRight="true" android:layout_centerInParent="true" android:layout_marginRight="@dimen/take_photo_left" android:background="@drawable/change_camera_button_selector"/>  
-    <Button android:id="@+id/btn_take_photo_take" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_centerInParent="true" android:background="@drawable/take_photo_btn"/> 
-  </RelativeLayout> 
+    <com.rcplatform.phototalk.views.CameraView
+        android:id="@+id/sf_camera_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/btn_close_take_photo"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/take_photo_left"
+        android:layout_marginTop="@dimen/take_photo_bottom"
+        android:background="@drawable/close_edit_button_selector" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/take_photo_bottom" >
+
+        <Button
+            android:id="@+id/btn_take_photo_flashlight"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/take_photo_left"
+            android:background="@drawable/open_flash_light_button_selector" />
+
+        <Button
+            android:id="@+id/btn_take_photo_change_camera"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/take_photo_left"
+            android:background="@drawable/change_camera_button_selector" />
+
+        <Button
+            android:id="@+id/btn_take_photo_take"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/take_photo_btn" />
+    </RelativeLayout>
+
 </RelativeLayout>
