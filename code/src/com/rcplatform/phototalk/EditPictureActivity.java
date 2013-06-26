@@ -190,6 +190,7 @@ public class EditPictureActivity extends BaseActivity {
 					break;
 
 				case AudioRecordButton.AUDIO_RECORD_END:
+					EventUtil.Main_Photo.rcpt_record(baseContext);
 					recordDisplayLayout.setVisibility(View.GONE);
 					isRecording = false;
 					break;
@@ -219,7 +220,7 @@ public class EditPictureActivity extends BaseActivity {
 
 			@Override
 			public void onRecording(int recordedSecord, int amplitude) {
-				EventUtil.Main_Photo.rcpt_record(baseContext);
+
 				int height = voice_volume_bg.getHeight();
 				if (height > 0) {
 					RelativeLayout.LayoutParams layoutParams = (android.widget.RelativeLayout.LayoutParams) iv_voice_volume.getLayoutParams();
@@ -240,7 +241,6 @@ public class EditPictureActivity extends BaseActivity {
 						iv_voice_volume.setLayoutParams(layoutParams);
 					}
 				}
-				
 
 			}
 
@@ -259,12 +259,12 @@ public class EditPictureActivity extends BaseActivity {
 			public void onStartRecording() {
 				mButtonTimeLimit.setVisibility(View.GONE);
 			}
-			
+
 			@Override
 			public void ontRecordTooShort() {
 				mButtonTimeLimit.setVisibility(View.VISIBLE);
 			}
-			
+
 		});
 
 		mEditableViewGroup = (EditableViewGroup) findViewById(R.id.edit_group);
@@ -342,9 +342,9 @@ public class EditPictureActivity extends BaseActivity {
 			}
 		});
 	}
-	
+
 	@Override
-	protected void onResume(){
+	protected void onResume() {
 		super.onResume();
 		mEditableViewGroup.setLastLayout();
 	}
@@ -756,33 +756,36 @@ public class EditPictureActivity extends BaseActivity {
 		return new File(voicePath).exists();
 	}
 
-//	@Override
-//	public boolean onKeyDown(int keyCode, KeyEvent event) {
-//		if (keyCode == KeyEvent.KEYCODE_BACK) {
-//
-//			AlertDialog.Builder dialogBuilder = DialogUtil.getAlertDialogBuilder(this);
-//			dialogBuilder.setTitle(R.string.operation)
-//			        .setPositiveButton(getResources().getString(R.string.ok), new DialogInterface.OnClickListener() {
-//
-//				        @Override
-//				        public void onClick(DialogInterface dialog, int which) {
-//					        dialog.cancel();
-//					        finish();
-//				        }
-//			        }).setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//
-//				        @Override
-//				        public void onClick(DialogInterface dialog, int which) {
-//
-//					        // register(LoginActivity.this, email,
-//					        // psw,
-//					        // nick);
-//				        }
-//			        });
-//			dialogBuilder.create().show();
-//
-//		}
-//		return false;
-//	}
+	// @Override
+	// public boolean onKeyDown(int keyCode, KeyEvent event) {
+	// if (keyCode == KeyEvent.KEYCODE_BACK) {
+	//
+	// AlertDialog.Builder dialogBuilder =
+	// DialogUtil.getAlertDialogBuilder(this);
+	// dialogBuilder.setTitle(R.string.operation)
+	// .setPositiveButton(getResources().getString(R.string.ok), new
+	// DialogInterface.OnClickListener() {
+	//
+	// @Override
+	// public void onClick(DialogInterface dialog, int which) {
+	// dialog.cancel();
+	// finish();
+	// }
+	// }).setNegativeButton(getResources().getString(R.string.cancel), new
+	// DialogInterface.OnClickListener() {
+	//
+	// @Override
+	// public void onClick(DialogInterface dialog, int which) {
+	//
+	// // register(LoginActivity.this, email,
+	// // psw,
+	// // nick);
+	// }
+	// });
+	// dialogBuilder.create().show();
+	//
+	// }
+	// return false;
+	// }
 
 }
