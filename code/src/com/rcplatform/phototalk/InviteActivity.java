@@ -407,6 +407,8 @@ public class InviteActivity extends BaseActivity {
 		for (ThirdPartClient client : thirdPartClients)
 			client.onAuthorizeInformationReceived(requestCode, resultCode, data);
 		if(requestCode==REQUEST_CODE_INSTAGRAM_CAMERA&&resultCode==Activity.RESULT_OK){
+			String url = data.getStringExtra("Image_url");
+			System.out.println("--->"+url);
 //			File localFile = new File(Environment.getExternalStorageDirectory(), "instagram_share.jpg");
 //			if (localFile == null || !localFile.exists())
 //				return;

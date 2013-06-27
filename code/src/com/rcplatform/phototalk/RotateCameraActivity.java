@@ -4,10 +4,15 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.hardware.Camera;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +21,7 @@ import android.view.View.OnClickListener;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -24,6 +30,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
+import com.rcplatform.phototalk.views.CameraView.TakeOnSuccess;
 
 public class RotateCameraActivity extends BaseActivity {
 	private CameraView rCameraView;
@@ -37,6 +44,8 @@ public class RotateCameraActivity extends BaseActivity {
 	private Intent intent;
 	private TextView rcId_text, url_text;
 	private String url;
+	private ImageView top_layout;
+	private ImageView back_view;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +55,10 @@ public class RotateCameraActivity extends BaseActivity {
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.rotate_camera);
-		intent = getIntent();
 
 		app = (PhotoTalkApplication) getApplication();
+		top_layout = (ImageView) findViewById(R.id.top_layout);
+		back_view = (ImageView) findViewById(R.id.back_view);
 		w = app.getScreenWidth();
 		h = app.getScreentHeight();
 		if (w > h) {
@@ -57,11 +67,12 @@ public class RotateCameraActivity extends BaseActivity {
 			h = w;
 		}
 		rcId_text = (TextView) findViewById(R.id.rc_id);
+		rcId_text.setText("RC ID:" + getCurrentUser().getRcId());
 		url_text = (TextView) findViewById(R.id.url_text);
 		rcId_text.setShadowLayer(3F, 3F, 1F, Color.BLACK);
 		url_text.setShadowLayer(3F, 3F, 1F, Color.BLACK);
-
 		rCameraView = (CameraView) findViewById(R.id.rotate_camera);
+		rCameraView.setTakeOnSuccess(takeOnSuccess);
 		view_layout = (RelativeLayout) findViewById(R.id.view_layout);
 		LinearLayout lin = new LinearLayout(this);
 		view_layout.addView(lin, w, h);
@@ -79,15 +90,41 @@ public class RotateCameraActivity extends BaseActivity {
 		take_btn.setOnClickListener(clickListener);
 	}
 
+	private TakeOnSuccess takeOnSuccess = new TakeOnSuccess() {
+
+		@Override
+		public void successMethod() {
+			// TODO Auto-generated method stub
+			Bitmap bitmap1 = app.getEditeBitmap();
+			rCameraView.setVisibility(View.GONE);
+			back_view.setImageBitmap(bitmap1);
+			saveBitmap();
+		}
+	};
+	
+	public void saveBitmap(){
+		View view = getWindow().getDecorView();
+		view.setDrawingCacheEnabled(true);
+		view.buildDrawingCache();
+		Bitmap b1 = view.getDrawingCache();
+		int start = (b1.getHeight()-b1.getWidth())/2;
+		bitmap = Bitmap
+				.createBitmap(b1, 0, start, w, h);
+		url = app.getCameraFileCachePath()+"/"+System.currentTimeMillis()+".jpg";
+		saveEditedPictrue(bitmap,url);
+		b1.recycle();
+		Intent intent = new Intent();
+		intent.putExtra("Image_url", url);
+		setResult(Activity.RESULT_OK, intent);
+		this.finish();
+	}
 	private final OnClickListener clickListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.take_btn:
-				bitmap = view_layout.getDrawingCache();
-				url = app.getCameraPath();
-				saveEditedPictrue(bitmap, url); 
+				rCameraView.takePhoto();
 				break;
 			case R.id.change_camera_btn:
 				rCameraView.changeCamera();

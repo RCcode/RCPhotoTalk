@@ -17,6 +17,7 @@ import android.widget.Button;
 
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.views.CameraView;
+import com.rcplatform.phototalk.views.CameraView.TakeOnSuccess;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
 
 public class TakePhotoActivity extends Activity {
@@ -46,6 +47,7 @@ public class TakePhotoActivity extends Activity {
 	private Intent intent;
 
 	private Context ctx;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +63,8 @@ public class TakePhotoActivity extends Activity {
 		mButtonChangeCamera = (Button) findViewById(R.id.btn_take_photo_change_camera);
 		mButtonClose = (Button) findViewById(R.id.btn_close_take_photo);
 		mCameraView = (CameraView) findViewById(R.id.sf_camera_view);
+		mCameraView.setTakeOnSuccess(takeOnSuccess);
+		
 		if (Camera.getNumberOfCameras() == 1) {
 			mButtonChangeCamera.setVisibility(View.GONE);
 		}
@@ -74,7 +78,14 @@ public class TakePhotoActivity extends Activity {
 		mButtonTake.setTag(TAKE_ON_CLICK);
 
 	}
-
+	private TakeOnSuccess takeOnSuccess = new TakeOnSuccess() {
+		
+		@Override
+		public void successMethod() {
+			// TODO Auto-generated method stub
+			startOtherActivity();
+		}
+	};
 	private final OnClickListener clickListener = new OnClickListener() {
 
 		@Override
