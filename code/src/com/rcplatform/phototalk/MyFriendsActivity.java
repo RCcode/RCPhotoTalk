@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -71,7 +70,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	private Friend mFriendShowDetail;
 
 	private Button seach_delete_btn;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,10 +97,12 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			@Override
 			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				String rcId = getCurrentUser().getRcId();
-				if (friends.size() == 2 && recommends.size() == 0 && !PrefsUtils.User.hasAttentionAddFriends(MyFriendsActivity.this, rcId)) {
+				long intoFriendsListTime = PrefsUtils.User.getIntoFriendsListTime(MyFriendsActivity.this, rcId);
+				if (friends.size() == 2 && recommends.size() == 0 && intoFriendsListTime == 1) {
 					showAttentionAddFriendsDialog();
 				}
-				PrefsUtils.User.setAttentionAddFriends(MyFriendsActivity.this, rcId);
+				if (intoFriendsListTime <= 1)
+					PrefsUtils.User.setIntoFriendsListTime(MyFriendsActivity.this, rcId, (intoFriendsListTime + 1));
 				dismissLoadingDialog();
 				sendFriendLoadedMessage(friends, recommends);
 			}
@@ -109,14 +110,14 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	protected void showAttentionAddFriendsDialog() {
-		DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.add_friend_title).setMessage("来加点好友吧")
-				.setPositiveButton(R.string.add_friend_title, new DialogInterface.OnClickListener() {
+		DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.invite_your_friends)
+				.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						startAddFriendsActivity();
 					}
-				}).setNegativeButton(R.string.cancel, null).create().show();
+				}).setNegativeButton(R.string.invite_later, null).create().show();
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {
