@@ -135,7 +135,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	}
 
 	private void setUserHead() {
-		mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getFriendHeadImageOptions());
+		mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getSettingHeadImageOption());
 	}
 
 	private void setUserBackground() {

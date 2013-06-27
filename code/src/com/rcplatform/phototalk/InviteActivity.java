@@ -39,6 +39,7 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartClient;
 import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
+import com.rcplatform.phototalk.utils.Constants;
 
 public class InviteActivity extends BaseActivity {
 	private List<InviteAction> localInviteActions = new ArrayList<InviteActivity.InviteAction>();
@@ -302,11 +303,11 @@ public class InviteActivity extends BaseActivity {
 					 * Deep-link identifier
 					 */
 					paramContext.getString(R.string.app_name), /** Snippet title */
-					"A tasty recipe for making lemon cheesecake.", /**
+					"PhotoTalk", /**
 					 * Snippet
 					 * description
 					 */
-					Uri.parse("https://lh6.ggpht.com/BxPGNo_gbqq_WEN9Qvqi47JEk4VHt7Et4WDS7Nb2Mi2qzffAx_whtBVJ3Pc0xn8Vh246=w124")).getIntent();
+					Uri.parse(Constants.GOOGLE_PLUS_INVITE_IMAGE_URL)).getIntent();
 
 			paramContext.startActivityForResult(shareIntent, 0);
 		}

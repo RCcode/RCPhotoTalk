@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.os.Handler;
+import android.widget.ListView;
 
 import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.bean.Information;
@@ -139,5 +140,11 @@ public class InformationPageController {
 
 	public void destroy() {
 		mActivity = null;
+	}
+
+	public ListView getInformationList() {
+		if (mActivity != null)
+			return mActivity.getInformationList();
+		return null;
 	}
 }
