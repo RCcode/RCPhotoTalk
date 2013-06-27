@@ -329,7 +329,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			break;
 
 		case R.id.choosebutton:
-			startActivity(new Intent(SelectFriendsActivity.this, AddFriendsActivity.class));
+			startActivity(new Intent(SelectFriendsActivity.this, InviteActivity.class));
 			break;
 		}
 	}

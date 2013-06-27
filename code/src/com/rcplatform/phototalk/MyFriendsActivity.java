@@ -53,7 +53,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 	private static final int REQUEST_KEY_DETAIL = 110;
 
-	private static final int REQUEST_KEY_ADD_FRIEND = 111;
+	public static final int REQUEST_KEY_ADD_FRIEND = 111;
 
 	private ExpandableListView mList;
 

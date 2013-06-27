@@ -6,7 +6,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gcm.MetaHelper;
-import com.rcplatform.phototalk.AddFriendsActivity;
+import com.rcplatform.phototalk.InviteActivity;
+import com.rcplatform.phototalk.MyFriendsActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
@@ -27,9 +28,9 @@ public class MenuBaseActivity extends BaseActivity {
 		switch (item.getItemId()) {
 			case 1:
 				EventUtil.Main_Photo.rcpt_menu_feedback(baseContext);
-				Intent intent = new Intent(MenuBaseActivity.this, AddFriendsActivity.class);
+				Intent intent = new Intent(MenuBaseActivity.this, InviteActivity.class);
 				intent.putExtra("from", "base");
-				startActivity(intent);
+				startActivityForResult(intent,MyFriendsActivity.REQUEST_KEY_ADD_FRIEND);
 				break;
 			case 2:
 				EventUtil.Main_Photo.rcpt_menu_feedback(baseContext);

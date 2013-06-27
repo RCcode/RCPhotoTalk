@@ -158,7 +158,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			updateUserInfo();
 			break;
 		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendsActivity.class));
+			startActivity(new Intent(this, InviteActivity.class));
 			break;
 		case R.id.settings_account_head_portrait:
 			showImagePickMenu(v, CROP_HEAD_IMAGE);

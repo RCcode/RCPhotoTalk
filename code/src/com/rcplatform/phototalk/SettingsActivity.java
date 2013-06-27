@@ -173,7 +173,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			startActivity(new Intent(this, UserInfoActivity.class));
 			break;
 		case R.id.choosebutton:
-			startActivity(new Intent(this, AddFriendsActivity.class));
+			startActivity(new Intent(this, InviteActivity.class));
 			break;
 		case R.id.settings_clean_history_record_btn:
 			EventUtil.More_Setting.rcpt_clear(baseContext);

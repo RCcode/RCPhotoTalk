@@ -28,7 +28,6 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.AddFriendsActivity;
 import com.rcplatform.phototalk.FriendDetailActivity;
 import com.rcplatform.phototalk.InviteActivity;
 import com.rcplatform.phototalk.R;
