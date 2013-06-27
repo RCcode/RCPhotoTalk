@@ -48,8 +48,9 @@ public class InviteActivity extends BaseActivity {
 	private static TreeSet<Friend> friendsAdded;
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
 	private static final String GOOGLE_PLUS_PACKAGE = "com.google.android.apps.plus";
-	
-	private static final int REQUEST_CODE_INSTAGRAM_CAMERA=20000;
+
+	private static final int REQUEST_CODE_INSTAGRAM_CAMERA = 20000;
+	private static InviteAction instagramAction;
 
 	private void initBasicInviteActions() {
 		localInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.DEFAULT));
@@ -57,7 +58,7 @@ public class InviteActivity extends BaseActivity {
 		localInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.FACEBOOK));
 		localInviteActions.add(InviteActionFactory.getFriendInviteAction(this, FriendType.VK));
 		basicInviteActions.addAll(localInviteActions);
-		
+
 		ThirdPartClient twitterClient = new TwitterClient(this);
 		basicInviteActions.add(InviteActionFactory.getThirdPartInviteAction(this, twitterClient, FriendType.TWITTER));
 		thirdPartClients.add(twitterClient);
@@ -285,8 +286,9 @@ public class InviteActivity extends BaseActivity {
 		}
 
 		public void invite(Activity paramContext) {
-			Intent intent=new Intent(paramContext,RotateCameraActivity.class);
+			Intent intent = new Intent(paramContext, RotateCameraActivity.class);
 			paramContext.startActivityForResult(intent, REQUEST_CODE_INSTAGRAM_CAMERA);
+			instagramAction = this;
 		}
 	}
 
@@ -304,8 +306,7 @@ public class InviteActivity extends BaseActivity {
 					 */
 					paramContext.getString(R.string.app_name), /** Snippet title */
 					"PhotoTalk", /**
-					 * Snippet
-					 * description
+					 * Snippet description
 					 */
 					Uri.parse(Constants.GOOGLE_PLUS_INVITE_IMAGE_URL)).getIntent();
 
@@ -407,18 +408,17 @@ public class InviteActivity extends BaseActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 		for (ThirdPartClient client : thirdPartClients)
 			client.onAuthorizeInformationReceived(requestCode, resultCode, data);
-		if(requestCode==REQUEST_CODE_INSTAGRAM_CAMERA&&resultCode==Activity.RESULT_OK){
+		if (requestCode == REQUEST_CODE_INSTAGRAM_CAMERA && resultCode == Activity.RESULT_OK) {
 			String url = data.getStringExtra("Image_url");
-			System.out.println("--->"+url);
-//			File localFile = new File(Environment.getExternalStorageDirectory(), "instagram_share.jpg");
-//			if (localFile == null || !localFile.exists())
-//				return;
-//			Intent localIntent = getTargetedSendIntent();
-//			Uri localUri = Uri.fromFile(localFile);
-//			localIntent.setData(localUri);
-//			localIntent.setType("image/*");
-//			localIntent.putExtra("android.intent.extra.STREAM", localUri);
-//			paramContext.startActivity(localIntent);
+			File localFile = new File(url);
+			if (localFile == null || !localFile.exists())
+				return;
+			Intent localIntent = instagramAction.getTargetedSendIntent();
+			Uri localUri = Uri.fromFile(localFile);
+			localIntent.setData(localUri);
+			localIntent.setType("image/*");
+			localIntent.putExtra("android.intent.extra.STREAM", localUri);
+			startActivity(localIntent);
 		}
 	}
 
@@ -429,6 +429,7 @@ public class InviteActivity extends BaseActivity {
 			client.destroy();
 		friendsAdded.clear();
 		friendsAdded = null;
+		instagramAction = null;
 	}
 
 	public static void addFriend(Friend friend) {

@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
 import com.rcplatform.phototalk.views.CameraView.TakeOnSuccess;
@@ -110,7 +111,7 @@ public class RotateCameraActivity extends BaseActivity {
 		int start = (b1.getHeight()-b1.getWidth())/2;
 		bitmap = Bitmap
 				.createBitmap(b1, 0, start, w, h);
-		url = app.getCameraFileCachePath()+"/"+System.currentTimeMillis()+".jpg";
+		url =Utils.createTmpPic().getPath();
 		saveEditedPictrue(bitmap,url);
 		b1.recycle();
 		Intent intent = new Intent();
