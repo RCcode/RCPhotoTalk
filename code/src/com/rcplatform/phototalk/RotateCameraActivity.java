@@ -25,9 +25,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
@@ -53,8 +55,7 @@ public class RotateCameraActivity extends BaseActivity {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-				WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.rotate_camera);
 
 		app = (PhotoTalkApplication) getApplication();
@@ -102,23 +103,27 @@ public class RotateCameraActivity extends BaseActivity {
 			saveBitmap();
 		}
 	};
-	
-	public void saveBitmap(){
+
+	public void saveBitmap() {
+		if (!Utils.isExternalStorageUsable()) {
+			DialogUtil.showToast(this, R.string.no_sdc, Toast.LENGTH_SHORT);
+			return;
+		}
 		View view = getWindow().getDecorView();
 		view.setDrawingCacheEnabled(true);
 		view.buildDrawingCache();
 		Bitmap b1 = view.getDrawingCache();
-		int start = (b1.getHeight()-b1.getWidth())/2;
-		bitmap = Bitmap
-				.createBitmap(b1, 0, start, w, h);
-		url =Utils.createTmpPic().getPath();
-		saveEditedPictrue(bitmap,url);
+		int start = (b1.getHeight() - b1.getWidth()) / 2;
+		bitmap = Bitmap.createBitmap(b1, 0, start, w, h);
+		url = Utils.createTmpPic().getPath();
+		saveEditedPictrue(bitmap, url);
 		b1.recycle();
 		Intent intent = new Intent();
 		intent.putExtra("Image_url", url);
 		setResult(Activity.RESULT_OK, intent);
 		this.finish();
 	}
+
 	private final OnClickListener clickListener = new OnClickListener() {
 
 		@Override
@@ -138,20 +143,17 @@ public class RotateCameraActivity extends BaseActivity {
 					mToDegrees = 180;
 					flashlight_btn.setVisibility(View.VISIBLE);
 				}
-				Animation animation = new Rotate3dAnimation(mFromDegrees,
-						mToDegrees, change_camera_btn.getWidth() / 2,
-						change_camera_btn.getHeight() / 2, 200.0f, true);
+				Animation animation = new Rotate3dAnimation(mFromDegrees, mToDegrees, change_camera_btn.getWidth() / 2, change_camera_btn.getHeight() / 2,
+						200.0f, true);
 				animation.setDuration(500);
 				animation.setInterpolator(new AccelerateInterpolator());
 				change_camera_btn.startAnimation(animation);
 				break;
 			case R.id.flashlight_btn:
 				if (rCameraView.setLightStatu()) {
-					flashlight_btn
-							.setBackgroundResource(R.drawable.flashlight_press);
+					flashlight_btn.setBackgroundResource(R.drawable.flashlight_press);
 				} else
-					flashlight_btn
-							.setBackgroundResource(R.drawable.flashlight_normal);
+					flashlight_btn.setBackgroundResource(R.drawable.flashlight_normal);
 				break;
 			case R.id.close_btn:
 				finish();
@@ -173,8 +175,7 @@ public class RotateCameraActivity extends BaseActivity {
 					}
 					if (!file.exists())
 						file.createNewFile();
-					BufferedOutputStream os = new BufferedOutputStream(
-							new FileOutputStream(file)); //
+					BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file)); //
 					// b.compress(Bitmap.CompressFormat.JPEG, 100, os);
 					bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
 					os.flush();
