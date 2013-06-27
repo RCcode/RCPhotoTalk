@@ -366,5 +366,15 @@
     <string name="confirm_share_text">确认分享文字</string>
     <string name="share_title">分享</string>
     <string name="authorize_fail">认证失败</string>
+    <string name="twitter">Twitter</string>
+    <string name="search">搜索好友</string>
+    <string name="googleplus">google+</string>
+    <string name="gmail">Gmail</string>
+    <string name="search_friend_from">用%1$s邀请好友</string>
+    <string name="search_friend_from_local">从%1$s寻找好友</string>
+    <string name="search_friend">用Email或RCID寻找好友</string>
+    <string name="invite_your_friends">是否想要邀请你的朋友加入PhotoTalk？</string>
+    <string name="invite">邀请</string>
+    <string name="invite_later">稍后再说</string>
 
 </resources>

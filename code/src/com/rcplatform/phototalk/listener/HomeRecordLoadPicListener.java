@@ -12,6 +12,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.MessageSender;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
@@ -65,6 +66,7 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 
 	private void updateView(int visibitity, String text) {
 		String baseTag = PhotoTalkUtils.getInformationTagBase(record);
+		ListView listView=InformationPageController.getInstance().getInformationList();
 		if (listView != null) {
 			ProgressBar bar = (ProgressBar) listView.findViewWithTag(baseTag + ProgressBar.class.getName());
 			if (bar != null)
@@ -72,7 +74,6 @@ public class HomeRecordLoadPicListener implements OnLoadingListener {
 			TextView statu = (TextView) listView.findViewWithTag(baseTag + TextView.class.getName());
 			if (statu != null)
 				statu.setText(text);
-
 		}
 	}
 }

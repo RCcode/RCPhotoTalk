@@ -96,7 +96,11 @@ public class UserInfoActivity extends BaseActivity implements OnClickListener {
 		super.onResume();
 		mFacebookClient.onResume();
 	}
-
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		mFacebookClient.onSaveInstanceState(outState);
+	}
 	@Override
 	protected void onPause() {
 		super.onPause();

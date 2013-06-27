@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <ImageView
+        android:id="@+id/back_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+    <com.rcplatform.phototalk.views.CameraView
+        android:id="@+id/rotate_camera"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+
+    <ImageView
+        android:id="@+id/top_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/view_layout"
+        android:background="#90000000" />
+
+    <RelativeLayout
+        android:id="@+id/view_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" >
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rc_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/url_text"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/url_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/view_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:text="http://www.rctalk.me"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/view_layout"
+        android:background="#90000000" />
+
+    <Button
+        android:id="@+id/close_btn"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/take_photo_left"
+        android:layout_marginTop="@dimen/take_photo_bottom"
+        android:background="@drawable/close_edit_button_selector" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/take_photo_bottom" >
+
+        <Button
+            android:id="@+id/flashlight_btn"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/take_photo_left"
+            android:background="@drawable/open_flash_light_button_selector" />
+
+        <Button
+            android:id="@+id/change_camera_btn"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="@dimen/take_photo_left"
+            android:background="@drawable/change_camera_button_selector" />
+
+        <Button
+            android:id="@+id/take_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/take_photo_btn" />
+    </RelativeLayout>
+
+</RelativeLayout>

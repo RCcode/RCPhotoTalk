@@ -17,6 +17,7 @@ public class ImageOptionsFactory {
 	private static DisplayImageOptions mFriendHeadImageOptions;
 	private static DisplayImageOptions mBackImageOptions;
 	private static DisplayImageOptions mFriendBackImageOptions;
+	private static DisplayImageOptions mSettingHeadImageOptions;
 
 	public static DisplayImageOptions getHeadImageOptions() {
 		if (mHeadImageOptions == null)
@@ -61,5 +62,13 @@ public class ImageOptionsFactory {
 		if (mVKHeadImageOption == null)
 			mVKHeadImageOption = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc().build();
 		return mVKHeadImageOption;
+	}
+
+	public static DisplayImageOptions getSettingHeadImageOption() {
+		if (mSettingHeadImageOptions == null)
+			mSettingHeadImageOptions = new DisplayImageOptions.Builder().cacheInMemory().cacheOnDisc().showImageForEmptyUri(R.drawable.user_default_head)
+					.showImageOnFail(R.drawable.user_default_head).showStubImage(R.drawable.user_default_head).displayer(new RoundedBitmapDisplayer(90))
+					.build();
+		return mSettingHeadImageOptions;
 	}
 }

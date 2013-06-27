@@ -20,12 +20,14 @@ import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.umeng.analytics.MobclickAgent;
 
-public class BaseActivity extends Activity implements ActivityFunction{
+public class BaseActivity extends Activity implements ActivityFunction {
 
 	public static final int LOADING_NO_MSG = -1;
 	ProgressDialog mProgressDialog;
@@ -33,6 +35,7 @@ public class BaseActivity extends Activity implements ActivityFunction{
 	protected Context baseContext;
 	private boolean needRelogin = true;
 	private ActivityFunction functionImpl;
+
 	protected void cancelRelogin() {
 		needRelogin = false;
 	}
@@ -41,7 +44,7 @@ public class BaseActivity extends Activity implements ActivityFunction{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		baseContext = this;
-		functionImpl=new ActivityFunctionBasic(this);
+		functionImpl = new ActivityFunctionBasic(this);
 	}
 
 	@Override
@@ -115,10 +118,12 @@ public class BaseActivity extends Activity implements ActivityFunction{
 	protected void startActivity(Class<? extends Activity> clazz) {
 		startActivity(new Intent(this, clazz));
 	}
+
 	@Deprecated
 	public void showLoadingDialog(int titleResId, int msgResId, boolean cancelAble) {
 		showLoadingDialog(cancelAble);
 	}
+
 	@Deprecated
 	public void dismissLoadingDialog() {
 		dissmissLoadingDialog();
@@ -139,10 +144,12 @@ public class BaseActivity extends Activity implements ActivityFunction{
 		tv.setText(textResId);
 		findViewById(R.id.back).setVisibility(View.VISIBLE);
 	}
+
 	@Deprecated
 	public void showErrorConfirmDialog(String msg) {
 		showConfirmDialog(msg);
 	}
+
 	@Deprecated
 	public void showErrorConfirmDialog(int msgResId) {
 		showConfirmDialog(msgResId);
@@ -206,6 +213,18 @@ public class BaseActivity extends Activity implements ActivityFunction{
 
 	@Override
 	public void showConfirmDialog(int resId) {
-		functionImpl.showConfirmDialog(resId);		
+		functionImpl.showConfirmDialog(resId);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		Constants.initUI(this);
+		Constants.initDatabase(this);
+		Constants.initCountryDatabase(this);
+		if (needRelogin) {
+			UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
+			getPhotoTalkApplication().setCurrentUser(userInfo);
+		}
 	}
 }

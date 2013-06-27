@@ -66,7 +66,7 @@ public class Constants {
 
 	public static final String INVITE_URL = "http://rctalk.me";
 
-	public static final String VK_INVITE_IMAGE = "photo208095303_304829648";
+	public static final String VK_INVITE_IMAGE = "photo208095303_305881321";
 
 	public static final long BIND_PHONE_TIME_OUT = 1000 * 60 * 60 * 2;
 
@@ -77,6 +77,8 @@ public class Constants {
 	public static final String PAGEAGE = "com.rcplatform.phototalk";
 
 	public static final String INVITE_JOIN_IMAGE_URL = "http://img1.ph.126.net/HvcVzHANbBP4eKGcGKd4TQ==/3789216136578905707.png";
+	
+	public static final String GOOGLE_PLUS_INVITE_IMAGE_URL="http://img0.ph.126.net/2E44P8D2t01fZnotAzx5sw==/1652258113391767956.jpg";
 	// public static final String INVITE_JOIN_IMAGE_URL =
 	// "http://img.hb.aicdn.com/48bb7e63918158fb7524c28adcaf8bf4833629854a35b-v0Gv9F_fw580";
 

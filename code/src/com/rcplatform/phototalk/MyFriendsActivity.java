@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -42,6 +43,7 @@ import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -51,7 +53,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 	private static final int REQUEST_KEY_DETAIL = 110;
 
-	private static final int REQUEST_KEY_ADD_FRIEND = 111;
+	public static final int REQUEST_KEY_ADD_FRIEND = 111;
 
 	private ExpandableListView mList;
 
@@ -68,7 +70,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	private Friend mFriendShowDetail;
 
 	private Button seach_delete_btn;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -94,10 +96,28 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 			@Override
 			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
+				String rcId = getCurrentUser().getRcId();
+				long intoFriendsListTime = PrefsUtils.User.getIntoFriendsListTime(MyFriendsActivity.this, rcId);
+				if (friends.size() == 2 && recommends.size() == 0 && intoFriendsListTime == 1) {
+					showAttentionAddFriendsDialog();
+				}
+				if (intoFriendsListTime <= 1)
+					PrefsUtils.User.setIntoFriendsListTime(MyFriendsActivity.this, rcId, (intoFriendsListTime + 1));
 				dismissLoadingDialog();
 				sendFriendLoadedMessage(friends, recommends);
 			}
 		});
+	}
+
+	protected void showAttentionAddFriendsDialog() {
+		DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.invite_your_friends)
+				.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startAddFriendsActivity();
+					}
+				}).setNegativeButton(R.string.invite_later, null).create().show();
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {
@@ -287,11 +307,11 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case MSG_WHAT_FRIEND_LOADED:
-					dismissLoadingDialog();
-					setListData(mFriends, mRecommends, mList);
-					etSearch.setText(null);
-					break;
+			case MSG_WHAT_FRIEND_LOADED:
+				dismissLoadingDialog();
+				setListData(mFriends, mRecommends, mList);
+				etSearch.setText(null);
+				break;
 			}
 		}
 
@@ -381,16 +401,20 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.back:
-				finish();
-				break;
-			case R.id.choosebutton:
-				EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
-				Intent intent = new Intent(MyFriendsActivity.this, InviteActivity.class);
-				intent.setData(Uri.parse("data"));
-				startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
-				break;
+		case R.id.back:
+			finish();
+			break;
+		case R.id.choosebutton:
+			EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
+			startAddFriendsActivity();
+			break;
 		}
+	}
+
+	private void startAddFriendsActivity() {
+		Intent intent = new Intent(MyFriendsActivity.this, InviteActivity.class);
+		intent.setData(Uri.parse("data"));
+		startActivityForResult(intent, REQUEST_KEY_ADD_FRIEND);
 	}
 
 	@Override
@@ -403,7 +427,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				mFriendShowDetail.setLocalName(result.getLocalName());
 				refreshList();
 			} else if (requestCode == REQUEST_KEY_ADD_FRIEND) {
-				List<Friend> newFriends = (List<Friend>) data.getSerializableExtra(AddFriendsActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
+				List<Friend> newFriends = (List<Friend>) data.getSerializableExtra(InviteActivity.RESULT_PARAM_KEY_NEW_ADD_FRIENDS);
 				handlerAddResult(newFriends);
 			}
 

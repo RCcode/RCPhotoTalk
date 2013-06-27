@@ -3,8 +3,6 @@ package com.rcplatform.phototalk.views;
 import java.io.IOException;
 import java.util.List;
 
-
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
@@ -67,6 +65,12 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private static int round;
 
+	private TakeOnSuccess takeOnSuccess;
+
+	public void setTakeOnSuccess(TakeOnSuccess takeOnSuccess) {
+		this.takeOnSuccess = takeOnSuccess;
+	}
+
 	public CameraView(Context context) {
 		super(context);
 		init(context);
@@ -112,7 +116,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			return;
 		releaseCamera();
 		initCamera();
-		
+
 	}
 
 	public static Size getOptimalPreviewSize(List<Size> sizes, int w, int h) {
@@ -232,9 +236,18 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				mBitmap = null;
 				tempBitmap = null;
 			}
-			((TakePhotoActivity) mContext).startOtherActivity();
+
+			if (takeOnSuccess != null) {
+				takeOnSuccess.successMethod();
+			}
+			// ((TakePhotoActivity) mContext).startOtherActivity();
 		}
 	};
+
+	public interface TakeOnSuccess {
+
+		void successMethod();
+	}
 
 	public static int setCameraDisplayOrientation(Activity activity, int cameraId, android.hardware.Camera camera) {
 		android.hardware.Camera.CameraInfo info = new android.hardware.Camera.CameraInfo();

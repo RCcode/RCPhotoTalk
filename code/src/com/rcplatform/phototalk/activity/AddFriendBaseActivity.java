@@ -28,8 +28,8 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.AddFriendsActivity;
 import com.rcplatform.phototalk.FriendDetailActivity;
+import com.rcplatform.phototalk.InviteActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter.OnCheckBoxChangedListener;
@@ -191,7 +191,7 @@ private Button seach_delete_btn;
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();
-				AddFriendsActivity.addFriend(f);
+				InviteActivity.addFriend(f);
 			}
 
 			@Override
@@ -205,7 +205,7 @@ private Button seach_delete_btn;
 				dismissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();
-				AddFriendsActivity.addFriend(friend);
+				InviteActivity.addFriend(friend);
 			}
 		}, friend).execute();
 	}
@@ -354,7 +354,7 @@ private Button seach_delete_btn;
 			if (requestCode == REQUEST_CODE_RECOMMENDS_DETAIL) {
 				Friend friendNew = (Friend) data.getSerializableExtra(FriendDetailActivity.RESULT_PARAM_FRIEND);
 				mFriendShowDetail.setFriend(true);
-				AddFriendsActivity.addFriend(friendNew);
+				InviteActivity.addFriend(friendNew);
 				refreshList();
 			}
 		}

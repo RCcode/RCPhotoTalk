@@ -124,7 +124,7 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 			Bitmap bitmap = null;
 			try {
 				rotateAngel = Utils.getUriImageAngel(ImageCutActivity.this, imageUri);
-				int nWidth = Constants.SCREEN_WIDTH, nHeight = (int) (nWidth * ((float) height / width));
+				int nWidth = Constants.SCREEN_WIDTH*2, nHeight = (int) (nWidth * ((float) height / width));
 				bitmap = Utils.decodeSampledBitmapFromFile(Utils.getRealPath(ImageCutActivity.this, imageUri), nWidth, nHeight, rotateAngel);
 			} catch (OutOfMemoryError e) {
 				e.printStackTrace();
