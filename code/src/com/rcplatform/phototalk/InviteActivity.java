@@ -300,16 +300,7 @@ public class InviteActivity extends BaseActivity {
 
 		@Override
 		public void invite(final Activity paramContext) {
-			Intent shareIntent = new PlusShare.Builder(paramContext).setText(getInviteText(paramContext)).setType("text/plain")
-					.setContentDeepLinkId("phototalk", /**
-					 * Deep-link identifier
-					 */
-					paramContext.getString(R.string.app_name), /** Snippet title */
-					"PhotoTalk", /**
-					 * Snippet description
-					 */
-					Uri.parse(Constants.GOOGLE_PLUS_INVITE_IMAGE_URL)).getIntent();
-
+			Intent shareIntent = new PlusShare.Builder(paramContext).setText(getInviteText(paramContext)).setType("text/plain").getIntent();
 			paramContext.startActivityForResult(shareIntent, 0);
 		}
 	}
