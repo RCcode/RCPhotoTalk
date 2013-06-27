@@ -32,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/url_text"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="6dp"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
@@ -42,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/view_layout"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="10dp"
         android:text="http://www.rctalk.me"
         android:textColor="@color/white"
         android:textSize="18sp" />
