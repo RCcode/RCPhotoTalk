@@ -97,6 +97,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		}
 		this.mContext = context;
 		app = (PhotoTalkApplication) context.getApplicationContext();
+		initCamera();
 	}
 
 	@Override
