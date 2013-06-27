@@ -2,16 +2,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-
+    
+    <ImageView
+        android:id="@+id/back_view"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
     <com.rcplatform.phototalk.views.CameraView
         android:id="@+id/rotate_camera"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <LinearLayout
+    <ImageView
+        android:id="@+id/top_layout"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/layout"
+        android:layout_above="@+id/view_layout"
         android:background="#90000000" />
 
     <RelativeLayout
@@ -19,33 +24,33 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true" >
-
-        <TextView
-            android:id="@+id/rc_id"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_above="@+id/url_text"
-            android:layout_marginBottom="10dp"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/url_text"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="20dp"
-            android:text="http://www.rctalk.me"
-            android:textColor="@color/white"
-            android:textSize="18sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/rc_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/url_text"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="6dp"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/url_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/view_layout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="http://www.rctalk.me"
+        android:textColor="@color/white"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/layout"
+        android:layout_below="@+id/view_layout"
         android:background="#90000000" />
 
     <Button

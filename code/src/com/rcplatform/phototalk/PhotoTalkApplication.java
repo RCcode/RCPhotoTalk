@@ -133,6 +133,17 @@ public class PhotoTalkApplication extends Application {
 		// }
 		return imagePath;
 	}
+	public String getCameraFileCachePath() {
+		String imagePath = "";
+		String sdUrl = getCacheDir() + "/RcCamera";
+		File file = new File(sdUrl);
+		if (!file.exists()) {
+			file.mkdir();
+		}
+		imagePath = file.getAbsolutePath();
+		// }
+		return imagePath;
+	}
 
 	public String getSendZipFileCachePath() {
 		String imagePath = "";
