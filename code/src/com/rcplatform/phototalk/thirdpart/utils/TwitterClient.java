@@ -200,11 +200,11 @@ public class TwitterClient extends ThirdPartClient {
 				break;
 			case MSG_WHAT_JOIN_SUCCESS:
 				mContext.dissmissLoadingDialog();
-				mContext.showConfirmDialog((String) msg.obj);
+				mContext.showConfirmDialog(R.string.share_complete);
 				break;
 			case MSG_WHAT_JOIN_FAIL:
 				mContext.dissmissLoadingDialog();
-				mContext.showConfirmDialog(R.string.share_fail);
+				mContext.showConfirmDialog(R.string.net_error);
 				break;
 			}
 		}
