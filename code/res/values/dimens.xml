@@ -103,6 +103,6 @@
     <dimen name="share_text_max_height">100dp</dimen>
     <dimen name="share_text_size">12sp</dimen>
     <dimen name="app_icon_width_invite">30dp</dimen>
-    <dimen name="invite_text">16sp</dimen>
+    <dimen name="invite_text">14sp</dimen>
 
 </resources>
