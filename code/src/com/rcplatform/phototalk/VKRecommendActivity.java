@@ -34,7 +34,9 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 public class VKRecommendActivity extends AddFriendBaseActivity {
 
 	private VKClient mVkClient;
+
 	private boolean hasTryLogin = false;
+
 	private AlertDialog mLoadThirdPartFailDialog;
 
 	@Override
@@ -180,15 +182,15 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						getVkInfos();
-						break;
+						case DialogInterface.BUTTON_POSITIVE:
+							getVkInfos();
+							break;
 					}
 					dialog.dismiss();
 				}
 			};
-			mLoadThirdPartFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.third_part_info_loaded_fail)
-					.setPositiveButton(R.string.retry, listener).setNegativeButton(R.string.cancel, listener).create();
+			mLoadThirdPartFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.net_error)
+			        .setPositiveButton(R.string.retry, listener).setNegativeButton(R.string.cancel, listener).create();
 		}
 		mLoadThirdPartFailDialog.show();
 	}
