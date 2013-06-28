@@ -69,7 +69,7 @@ public class RotateCameraActivity extends BaseActivity {
 			h = w;
 		}
 		rcId_text = (TextView) findViewById(R.id.rc_id);
-		rcId_text.setText("RC ID:" + getCurrentUser().getRcId());
+		rcId_text.setText(getString(R.string.instagram_add_message) + getCurrentUser().getRcId());
 		url_text = (TextView) findViewById(R.id.url_text);
 		rcId_text.setShadowLayer(3F, 3F, 1F, Color.BLACK);
 		url_text.setShadowLayer(3F, 3F, 1F, Color.BLACK);
