@@ -207,7 +207,7 @@
     <string name="search_friend_from_local">חיפש חברים באתר %1$s</string>
     <string name="search_friend">חיפש חברים באמצעות E-mail או RCID</string>
     <string name="search_friend_from">הזמנת חברים דרך %1$s</string>
-   	<string name="join_message">התחבר איתי באתר #PhotoTalk‏, יישום מסרים מיידיים פרטי המאפשר שילוב תמונות ושמע. מס\' הזיהוי שלי:%1$s. תוכל לקבל אותו כאן http://rctalk.me</string>
+   	<string name="join_message">התחבר איתי באתר #PhotoTalk ‏, יישום מסרים מיידיים פרטי המאפשר שילוב תמונות ושמע. מס\' הזיהוי שלי:%1$s. תוכל לקבל אותו כאן http://rctalk.me</string>
     <string name="invite_message">הי! אני מבקש לשלוח לך תמונה פרטית דרך #PhotoTalk. קבל אותה כאן http://rctalk.me והוסף את מס\' הזיהוי שלי %1$s</string>
     <string name="invite_your_friends">האם להזמין את חבריך להצטרף ל-PhotoTalk?</string>
 </resources>

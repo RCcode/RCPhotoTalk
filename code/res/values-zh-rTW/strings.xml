@@ -204,8 +204,8 @@
     <string name="search_friend_from_local">從%1$s中尋找朋友</string>
     <string name="search_friend">用E-mail或RCID尋找朋友</string>
     <string name="search_friend_from">用%1$s邀請朋友</string>
-    <string name="join_message">在#PhotoTalk 上加我為好友，用有聲照片和我私密聊天，我的ID：%1$s。下載地址 http://rctalk.me</string>
-    <string name="invite_message">我想和你在#PhotoTalk上發私密照片，下載地址http://rctalk.me 安裝後加我ID：%1$s</string>
+    <string name="join_message">在 #PhotoTalk 上加我為好友，用有聲照片和我私密聊天，我的ID：%1$s。下載地址 http://rctalk.me</string>
+    <string name="invite_message">我想和你在 #PhotoTalk 上發私密照片，下載地址 http://rctalk.me 安裝後加我ID：%1$s</string>
     <string name="invite_your_friends">是否想要邀請你的朋友加入PhotoTalk？</string>
 
 </resources>

@@ -206,7 +206,7 @@
     <string name="search_friend_from_local">%1$s에서 친구 찾기</string>
     <string name="search_friend">E-mail 또는 RCID로 친구 찾기</string>
     <string name="search_friend_from">%1$s를 통해 친구 초대하기</string>
-   	<string name="join_message">사진과 오디오를 지원하는 개인 메시징 앱인 #PhotoTalk에서 나와 친구를 맺어주세요. 나의 ID:%1$s. http://rctalk.me에서 확인해 보세요.</string>
-    <string name="invite_message">안녕하세요! #PhotoTalk에서 개인 사진을 보내려고 합니다. http://rctalk.me에서 내 ID %1$s를 추가해 주세요.</string>
+   	<string name="join_message">사진과 오디오를 지원하는 개인 메시징 앱인 #PhotoTalk에서 나와 친구를 맺어주세요. 나의 ID:%1$s. http://rctalk.me 에서 확인해 보세요.</string>
+    <string name="invite_message">안녕하세요! #PhotoTalk에서 개인 사진을 보내려고 합니다. http://rctalk.me 에서 내 ID %1$s를 추가해 주세요.</string>
     <string name="invite_your_friends">친구에게 PhotoTalk 가입 초대를 보내시겠습니까?</string>
 </resources>
