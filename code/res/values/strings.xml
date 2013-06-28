@@ -202,7 +202,7 @@
     <string name="app_name">PhotoTalk</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="version">v1.0</string>
+    <string name="version">v1.1</string>
     <string name="my_friends_new">新的好友</string>
 
     <!-- 添加好友页面 -->
