@@ -63,6 +63,55 @@ public class EventUtil {
 		static public void rcpt_resetpassword(Context ctx) {
 			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_resetpassword");
 		}
+
+		static public void rcpt_contacts(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_contacts");
+		}
+
+		static public void rcpt_twitter(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_twitter");
+		}
+
+		static public void rcpt_success_twitter(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_success_twitter");
+		}
+
+		static public void rcpt_whatsapp(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_whatsapp");
+		}
+
+		static public void rcpt_weixin(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_weixin");
+		}
+
+		static public void rcpt_line(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_line");
+		}
+
+		static public void rcpt_kakao(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_kakao");
+		}
+
+		static public void rcpt_kik(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_kik");
+		}
+
+		static public void rcpt_googleplus(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_googleplus");
+		}
+
+		static public void rcpt_instagram(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_instagram");
+		}
+
+		static public void rcpt_success_instagram(Context ctx) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_success_instagram");
+		}
+		
+		static public void rcpt_invite_from_package(Context ctx,String packageName) {
+			MobclickAgent.onEvent(ctx, "Register_Login_Invite", packageName);
+		}
+
 	}
 
 	public static class Main_Photo {
@@ -220,6 +269,14 @@ public class EventUtil {
 			onEvent(ctx, "rcpt_friends_profileview");
 		}
 
+		static public void rcpt_invitepop_invite(Context ctx) {
+			onEvent(ctx, "rcpt_invitepop_invite");
+		}
+
+		static public void rcpt_invitepop_later(Context ctx) {
+			onEvent(ctx, "rcpt_invitepop_later");
+		}
+
 	}
 
 	public static class More_Setting {
@@ -269,7 +326,7 @@ public class EventUtil {
 		static public void rcpt_success_changepassword(Context ctx) {
 			onEvent(ctx, "rcpt_success_changepassword");
 		}
-		
+
 		static public void rcpt_changepasswordsbutton(Context ctx) {
 			onEvent(ctx, "rcpt_changepasswordsbutton");
 		}

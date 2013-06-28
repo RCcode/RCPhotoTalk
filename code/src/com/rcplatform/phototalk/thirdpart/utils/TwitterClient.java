@@ -29,6 +29,7 @@ import com.rcplatform.phototalk.activity.ActivityFunction;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.thirdpart.activity.TwitterAuthorizeActivity;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -90,7 +91,9 @@ public class TwitterClient extends ThirdPartClient {
 	}
 
 	public void sendJoinMessage() {
+
 		mContext.showLoadingDialog(false);
+		EventUtil.Register_Login_Invite.rcpt_twitter(mContext.getContext());
 		Thread thread = new Thread() {
 			public void run() {
 				try {

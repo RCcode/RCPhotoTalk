@@ -70,7 +70,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	private Friend mFriendShowDetail;
 
 	private Button seach_delete_btn;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -111,13 +111,20 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 	protected void showAttentionAddFriendsDialog() {
 		DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.invite_your_friends)
-				.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
+		        .setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						startAddFriendsActivity();
-					}
-				}).setNegativeButton(R.string.attention_later, null).create().show();
+			        @Override
+			        public void onClick(DialogInterface dialog, int which) {
+				        startAddFriendsActivity();
+				        EventUtil.Friends_Addfriends.rcpt_invitepop_invite(baseContext);
+			        }
+		        }).setNegativeButton(R.string.attention_later, new DialogInterface.OnClickListener() {
+
+			        @Override
+			        public void onClick(DialogInterface dialog, int which) {
+				        EventUtil.Friends_Addfriends.rcpt_invitepop_later(baseContext);
+			        }
+		        }).create().show();
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {
@@ -307,11 +314,11 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-			case MSG_WHAT_FRIEND_LOADED:
-				dismissLoadingDialog();
-				setListData(mFriends, mRecommends, mList);
-				etSearch.setText(null);
-				break;
+				case MSG_WHAT_FRIEND_LOADED:
+					dismissLoadingDialog();
+					setListData(mFriends, mRecommends, mList);
+					etSearch.setText(null);
+					break;
 			}
 		}
 
@@ -401,13 +408,13 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
-		case R.id.choosebutton:
-			EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
-			startAddFriendsActivity();
-			break;
+			case R.id.back:
+				finish();
+				break;
+			case R.id.choosebutton:
+				EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
+				startAddFriendsActivity();
+				break;
 		}
 	}
 

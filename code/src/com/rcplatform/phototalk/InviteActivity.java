@@ -39,6 +39,7 @@ import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartClient;
 import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
+import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 
 public class InviteActivity extends BaseActivity {
@@ -226,6 +227,10 @@ public class InviteActivity extends BaseActivity {
 		public int getType() {
 			return this.type;
 		}
+		
+		public String getPackageName(){
+			return packageName;
+		}
 
 		public void setTargetApp(TargetApp paramTargetApp) {
 			this.trackFrom = paramTargetApp.trackFrom;
@@ -251,6 +256,7 @@ public class InviteActivity extends BaseActivity {
 		}
 
 		public void invite(Activity paramContext) {
+			EventUtil.Register_Login_Invite.rcpt_invite_from_package(paramContext, this.getPackageName());
 			Intent localIntent = getTargetedSendIntent();
 			localIntent.setType("text/plain");
 			localIntent.putExtra("android.intent.extra.TEXT", getInviteText(paramContext));
@@ -274,6 +280,7 @@ public class InviteActivity extends BaseActivity {
 					paramContext.startActivity(new Intent(paramContext, FacebookFriendRecommendActivity.class));
 					break;
 				case FriendType.CONTACT:
+					EventUtil.Register_Login_Invite.rcpt_contacts(paramContext);
 					paramContext.startActivity(new Intent(paramContext, ContactFriendRecommendActivity.class));
 					break;
 				case FriendType.VK:
@@ -322,6 +329,7 @@ public class InviteActivity extends BaseActivity {
 		}
 
 		public void invite(Activity paramContext) {
+			EventUtil.Register_Login_Invite.rcpt_instagram(paramContext);
 			Intent intent = new Intent(paramContext, RotateCameraActivity.class);
 			paramContext.startActivityForResult(intent, REQUEST_CODE_INSTAGRAM_CAMERA);
 			instagramAction = this;
@@ -336,6 +344,7 @@ public class InviteActivity extends BaseActivity {
 
 		@Override
 		public void invite(final Activity paramContext) {
+			EventUtil.Register_Login_Invite.rcpt_googleplus(paramContext);
 			Intent shareIntent = new PlusShare.Builder(paramContext).setText(getInviteText(paramContext)).setType("text/plain").getIntent();
 			paramContext.startActivityForResult(shareIntent, 0);
 		}
