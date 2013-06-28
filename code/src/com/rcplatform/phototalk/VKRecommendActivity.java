@@ -190,7 +190,7 @@ public class VKRecommendActivity extends AddFriendBaseActivity {
 				}
 			};
 			mLoadThirdPartFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.net_error)
-			        .setPositiveButton(R.string.retry, listener).setNegativeButton(R.string.cancel, listener).create();
+			        .setPositiveButton(R.string.ok, listener).setNegativeButton(R.string.cancel, listener).create();
 		}
 		mLoadThirdPartFailDialog.show();
 	}

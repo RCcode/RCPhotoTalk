@@ -41,9 +41,9 @@ public class Constants {
 	
 	public static String VK_API_ID = "3567525";
 	
-	public static final String TWITTER_APP_KEY = "avqYEua265Ce3K3bBP4Q";
+	public static final String TWITTER_APP_KEY = "KEQS9CFIaxW22MPCrhvQsA";
 
-	public static final String TWITTER_APP_SECRET = "xQFTT41dw3AcBqhs3H2SmB2ZPxxUsAB9tUxB4Y6g";
+	public static final String TWITTER_APP_SECRET = "U03svkXUYgZZB6QF7GZOlm5I5c3BRySFEpv5tJVfpI";
 
 	//-----------------------------------------------------------
 	
