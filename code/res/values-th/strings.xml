@@ -178,8 +178,6 @@
     <string name="use_new_info">ใช้โปรไฟล์ใหม่ใน </string>
 	<string name="other_device_login">บัญชีของคุณถูกใช้งานอยู่แล้วบนอุปกรณ์เครื่องอื่น</string>
 	<string name="relogin">ตกลง</string>
-    <string name="join_message">ภาพถ่ายแบบมีเสียง ลบทิ้งตามเวลาที่คุณตั้งไว้! ใช้ RC PhotoTalk แล้วแบ่งปันความสนุกด้วยกัน! ลิงก์การดาวน์โหลด http://rctalk.me เพิ่ม ID ของฉัน %1$s หลังจากที่คุณสร้างบัญชีแล้ว!</string>
-    <string name="invite_message">ภาพถ่ายแบบมีเสียง ลบทิ้งตามเวลาที่คุณตั้งไว้! ใช้ RC PhotoTalk แล้วแบ่งปันความสนุกด้วยกัน! ลิงก์การดาวน์โหลด http://rctalk.me เพิ่ม ID ของฉัน %1$s หลังจากที่คุณสร้างบัญชีแล้ว!</string>
 	<string name="contact_friend">ติดต่อ:</string>
 	<string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -197,4 +195,25 @@
     
 	<string name="net_error">ดำเนินการไม่สำเร็จ กรุณาลองอีกครั้งในภายหลัง</string>
     <string name="no_net">ไม่มีการเชื่อมต่อเครือข่าย</string>
+    
+    
+        <!-- 1.1 NEW TEXT -->
+    <string name="contact">ติดต่อ</string>
+    <string name="search">ค้นหา</string>
+    <string name="invite">เชิญ</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">แบ่งปันบน Twitter</string>
+    <string name="search_friend_from_contacts">ค้นหาเพื่อนจากรายชื่อผู้ติดต่อ</string>
+    <string name="search_friend_from_local">ค้นหาเพื่อนบน %1$s</string>
+    <string name="search_friend">ค้นหาเพื่อนโดยใช้ E-mail หรือ RCID</string>
+    <string name="search_friend_from">เชิญเพื่อนทาง %1$s</string>
+   	<string name="join_message">เป็นเพื่อนกับฉันบน #PhotoTalk แอปการรับส่งข้อความส่วนตัวที่ใส่ภาพถ่ายและเสียงได้ ID ของฉันคือ:%1$s รับแอปได้ที่ http://rctalk.me</string>
+    <string name="invite_message">สวัสดี ฉันต้องการส่งภาพถ่ายส่วนตัวให้กับคุณบน #PhotoTalk รับแอปได้ที่ http://rctalk.me แล้วเพิ่ม ID ของฉัน %1$s</string>
+    <string name="invite_your_friends">เชิญเพื่อน ๆ ของคุณให้เข้าร่วม PhotoTalk?</string>
+    
 </resources>

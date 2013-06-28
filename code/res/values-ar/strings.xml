@@ -175,8 +175,6 @@
     <string name="use_new_info">استخدم ملف تعريفي جديد في</string>
     <string name="other_device_login">حسابك قيد الاستخدام بالفعل على جهاز آخر.</string>
     <string name="relogin">موافق</string>
-    <string name="join_message">إضافة صوت على الصور وحذفها بعد انتهاء الوقت المحدد! انضم إلى برنامج RC PhotoTalk وشارك المرح! رابط التنزيل  http://rctalk.me إضافة رقمي التعري%1$s456 بعد قيامك بإنشاء حساب!</string>
-    <string name="invite_message">إضافة صوت على الصور وحذفها بعد انتهاء الوقت المحدد! انضم إلى برنامج RC PhotoTalk وشارك المرح! رابط التنزيل  http://rctalk.me إضافة رقمي التعري%1$s456 بعد قيامك بإنشاء حساب!</string>
     <string name="contact_friend">اتصالات:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -193,5 +191,22 @@
     <string name="list_me">%1$s(أنا)</string>
     <string name="net_error">فشل، الرجاء المحاولة مرة أخرى لاحقًا</string>
     <string name="no_net">لا يوجد اتصال بالشبكة</string>
+    
+     <!-- 1.1 NEW TEXT -->
+    <string name="contact">اتصالات</string>
+    <string name="share_title">مشاركة على Twitter</string>
+    <string name="twitter">Twitter</string>
+    <string name="search">بحث</string>
+    <string name="invite">دعا</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    <string name="search_friend_from">دعوة الأصدقاء عبر %1$s</string>
+    <string name="search_friend_from_local">العثور على أصدقاء في %1$s</string>
+    <string name="search_friend_from_contacts">العثور على أصدقاء في جهات الاتصال</string>
+    <string name="search_friend">العثور على أصدقاء عبر E-mail أو RCID</string>
+    <string name="invite_your_friends">دعوة أصدقائك للانضمام إلى PhotoTalk؟</string>
+    <string name="join_message">إرسال طلب صداقة لي على #PhotoTalk، تطبيق رسائل خاصة بالصوت والصورة. المعرف الخاص بي: %1$s. احصل عليه من هنا http://rctalk.me</string>
+    <string name="invite_message">مرحبًا! أرغب في إرسال صورة خاصة لك على #PhotoTalk. احصل عليه من هنا http://rctalk.me وأضف المعرف الخاص بي %1$s</string>
+    
 
 </resources>

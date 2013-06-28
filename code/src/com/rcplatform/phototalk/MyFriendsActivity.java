@@ -117,7 +117,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 					public void onClick(DialogInterface dialog, int which) {
 						startAddFriendsActivity();
 					}
-				}).setNegativeButton(R.string.invite_later, null).create().show();
+				}).setNegativeButton(R.string.attention_later, null).create().show();
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {

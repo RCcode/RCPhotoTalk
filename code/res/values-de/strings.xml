@@ -175,8 +175,6 @@
     <string name="use_new_info">Neues Profil verwenden</string>
     <string name="other_device_login">Ihr Konto wird bereits auf einem anderen Gerät verwendet.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Audio Fotos, geplantes Löschen! Werden Sie Mitglied bei RC PhotoTalk und genießen Sie den Spaß! Download-Link: http://rctalk.me Fügen Sie meine ID %1$s hinzu, wenn Sie ein Konto erstellt haben!</string>
-    <string name="invite_message">Audio Fotos, geplantes Löschen! Werden Sie Mitglied bei RC PhotoTalk und genießen Sie den Spaß! Download-Link: http://rctalk.me Fügen Sie meine ID %1$s hinzu, wenn Sie ein Konto erstellt haben!</string>
     <string name="contact_friend">Kontakte:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -193,5 +191,25 @@
     <string name="list_me">%1$s(me)</string>
     <string name="net_error">Fehler, bitte versuchen Sie es später erneut</string>
     <string name="no_net">Keine Netzwerkverbindung</string>
+ 
+ 	<!-- 1.1 NEW TEXT -->
+    <string name="contact">Kontakte</string>
+    <string name="search">Suche</string>
+    <string name="invite">Laden</string>
+    
 
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Auf Twitter teilen</string>
+    <string name="search_friend_from_contacts">Freunde unter den Kontakten finden</string>
+    <string name="search_friend_from_local">Freunde auf %1$s finden</string>
+    <string name="search_friend">Freunde per E-Mail oder RCID finden</string>
+    <string name="search_friend_from">Laden Sie Freunde über %1$s ein</string>
+   	<string name="join_message">Freunde dich mit mir auf #PhotoTalk an, einer privaten Messaging-App mit Foto und Audio. Meine ID: %1$s. Hier findest du die App: http://rctalk.me</string>
+    <string name="invite_message">Hallo! Ich möchte dir ein privates Foto auf #PhotoTalk schicken. Hier findest du die App: http://rctalk.me. Füge meine ID %1$s hinzu.</string>
+    <string name="invite_your_friends">Möchten Sie Ihre Freunde zu PhotoTalk einladen?</string>
+ 
+    
 </resources>

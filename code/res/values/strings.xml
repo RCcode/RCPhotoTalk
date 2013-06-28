@@ -27,7 +27,6 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Email format error</string>
     <string name="register_password_error">Please enter a password containing 6-20 characters</string>
-
     <string name="login_title_login_bubble_text">RC User Login</string>
     <string name="login_username_hint">E-mail,RCID</string>
     <string name="login_forget_psw_hint">Forgot password</string>
@@ -176,8 +175,6 @@
     <string name="use_new_info">Use a new profile</string>
     <string name="other_device_login">Your account is already being used on another device.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Audio photos, timed deletion! Join RC PhotoTalk and share the fun! Download link: http://rctalk.me  Add my ID %1$s after you create an account!</string>
-    <string name="invite_message">Hey! I\'d like to send you a private audio photo on RC PhotoTalk. Get it here: http://rctalk.me and add my ID %1$s</string>
     <string name="contact_friend">Contacts:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -191,11 +188,9 @@
     <string name="cancel">cancel</string>
     <string name="login_account_error">Invalid account or password</string>
     <string name="long_long_ago">Long ago</string>
-   	<string name="list_me">%1$s(me)</string>
-   	
+    <string name="list_me">%1$s(me)</string>
     <string name="no_net">No network connection</string>
     <string name="net_error">Failed, please try again later</string>
-    
     <string name="null_str"></string>
     <!-- 没有翻译的字符 -->
 
@@ -283,7 +278,6 @@
 
     <!-- home 页面 -->
 
-    <string name="contact">通讯录</string>
     <string name="facebook">Facebook</string>
     <string name="vkontakte">VKontakte</string>
     <string name="uploading_contacts">正在上传通讯录</string>
@@ -309,7 +303,6 @@
     <string name="never_attention">不再提醒</string>
     <string name="receive_looked_one_second_ago">1秒以前-已查看</string>
     <string name="registe_fail">注册失败</string>
-
     <string name="vk_auth">绑定VK</string>
     <string name="vk_load_fail">VK信息获取失败</string>
     <string name="third_part_join_title">我加入PT啦！</string>
@@ -360,21 +353,23 @@
     <string name="bind_later">以后再说</string>
     <string name="facebook_app_id">447751798632401</string>
     <string name="third_part_info_loaded_fail">第三方平台信息获取失败</string>
-    
-    
+
     <!-- 1.1 NEW TEXT -->
-    <string name="confirm_share_text">确认分享文字</string>
-    <string name="share_title">分享</string>
-    <string name="authorize_fail">认证失败</string>
+    <!-- <string name="confirm_share_text">确认分享文字</string> -->
+    <!-- <string name="authorize_fail">认证失败</string> -->
+    <string name="contact">Contacts</string>
+    <string name="share_title">Share on Twitter</string>
     <string name="twitter">Twitter</string>
-    <string name="search">搜索好友</string>
-    <string name="googleplus">google+</string>
+    <string name="search">Search</string>
+    <string name="invite">Invite</string>
+    <string name="googleplus">Google+</string>
     <string name="gmail">Gmail</string>
-    <string name="search_friend_from">用%1$s邀请好友</string>
-    <string name="search_friend_from_local">从%1$s寻找好友</string>
-    <string name="search_friend">用Email或RCID寻找好友</string>
-    <string name="invite_your_friends">是否想要邀请你的朋友加入PhotoTalk？</string>
-    <string name="invite">邀请</string>
-    <string name="invite_later">稍后再说</string>
+    <string name="search_friend_from">Invite Friends via %1$s</string>
+    <string name="search_friend_from_local">Find Friends on %1$s</string>
+    <string name="search_friend_from_contacts">Find Friends in Contacts</string>
+    <string name="search_friend">Find Friends by E-mail or RCID</string>
+    <string name="invite_your_friends">Invite your friends to join PhotoTalk?</string>
+    <string name="join_message">Friend me on #PhotoTalk, a private messaging app with photo and audio. My ID:%1$s. Get it here http://rctalk.me</string>
+    <string name="invite_message">Hey! I\'d like to send you a private photo on #PhotoTalk. Get it here http://rctalk.me and add my ID %1$s</string>
 
 </resources>

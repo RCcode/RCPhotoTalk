@@ -175,8 +175,6 @@
     <string name="use_new_info">使用新的个人资料</string>
     <string name="other_device_login">你的账号已在其它设备登录</string>
     <string name="relogin">确定</string>
-    <string name="join_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址 http://rctalk.me 注册后加我ID:%1$s</string>
-    <string name="invite_message">有声照片，限时销毁！加入RC PhotoTalk，与我分享美妙时刻！下载地址 http://rctalk.me 注册后加我ID:%1$s</string>
     <string name="contact_friend">通讯录:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -193,5 +191,24 @@
     <string name="list_me">%1$s(我)</string>
     <string name="net_error">失败，请稍后重试</string>
     <string name="no_net">无网络连接</string>
+
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">通讯录</string>
+    <string name="search">搜索</string>
+    <string name="invite">邀请</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">分享至Twitter</string>
+    <string name="search_friend_from_contacts">从通讯录中寻找朋友</string>
+    <string name="search_friend_from_local">从%1$s中寻找朋友</string>
+    <string name="search_friend">用E-mail或RCID寻找朋友</string>
+    <string name="search_friend_from">用%1$s邀请朋友</string>
+   	<string name="join_message">在 #PhotoTalk 上加我为好友，用有声照片和我私密聊天，我的ID：%1$s。下载地址 http://rctalk.me</string>
+    <string name="invite_message">我想和你在#PhotoTalk上发私密照片，下载地址 http://rctalk.me 安装后加我ID：%1$s</string>
+    <string name="invite_your_friends">是否想要邀请你的朋友加入PhotoTalk？</string>
 
 </resources>

@@ -176,8 +176,6 @@
     <string name="use_new_info">Usar un nuevo perfil</string>
     <string name="other_device_login">Su cuenta ya está siendo utilizada en otro dispositivo</string>
     <string name="relogin">OK</string>
-    <string name="join_message">¡Fotos con audio, eliminación por tiempo! ¡Únase a RC PhotoTalk y comparta la diversión! Vínculo de descarga: http://rctalk.me ¡Añada mi Id. %1$s después de crear una cuenta!</string>
-    <string name="invite_message">¡Fotos con audio, eliminación por tiempo! ¡Únase a RC PhotoTalk y comparta la diversión! Vínculo de descarga: http://rctalk.me ¡Añada mi Id. %1$s después de crear una cuenta!</string>
     <string name="contact_friend">Contactos:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -194,4 +192,25 @@
     <string name="list_me">%1$s(me)</string>
    	<string name="net_error">Error, intente nuevamente más tarde</string>
     <string name="no_net">Sin conexión de red</string>
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">Contactos</string>
+    <string name="search">Búsqueda</string>
+    <string name="invite">Invitar</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Compartir en Twitter</string>
+    <string name="search_friend_from_contacts">Buscar amigos en los Contactos</string>
+    <string name="search_friend_from_local">Buscar amigos en %1$s</string>
+    <string name="search_friend">Buscar amigos por E-mail o RCID</string>
+    <string name="search_friend_from">Invitar amigos mediante %1$s</string>
+   	<string name="join_message">Hazme amigo en #PhotoTalk, una aplicación de mensajería privada con foto y audio. Mi Id: %1$s. Obténgalo aquí http://rctalk.me</string>
+    <string name="invite_message">¡Oye! Me gustaría enviarte una foto privada en #PhotoTalk. Aquí la tienes http://rctalk.me y añade mi Id. %1$s</string>
+    <string name="invite_your_friends">¿Desea invitar a sus amigos a unirse a PhotoTalk?</string>
+    
+    
 </resources>

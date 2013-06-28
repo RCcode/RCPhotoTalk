@@ -176,8 +176,6 @@
     <string name="use_new_info">yeni bir profil kullanın</string>
     <string name="other_device_login">Bu hesap bir başka cihazda zaten kullanılıyor.</string>
     <string name="relogin">Tamam</string>
-    <string name="join_message">Sesli fotoğraf, zaman sınırlı silme! RC PhotoTalk\'a katılın ve eğlenceyi paylaşın! Karşıdan indirme bağlantısı: http://rctalk.me Bir hesap oluşturduktan sonra kimliğim %1$s\'yı ekleyin!</string>
-    <string name="invite_message">Sesli fotoğraf, zaman sınırlı silme! RC PhotoTalk\'a katılın ve eğlenceyi paylaşın! Karşıdan indirme bağlantısı: http://rctalk.me Bir hesap oluşturduktan sonra kimliğim %1$s\'yı ekleyin!</string>
     <string name="contact_friend">İletişim:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -196,4 +194,25 @@
     
  	<string name="net_error">Başarısız oldu, lütfen daha sonra tekrar deneyin</string>
     <string name="no_net">Ağ bağlantısı yok</string>
+    
+    
+        <!-- 1.1 NEW TEXT -->
+    <string name="contact">İletişim</string>
+    <string name="search">İletişim</string>
+    <string name="invite">Davet etmek</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Twitter üzerinde paylaşın</string>
+    <string name="search_friend_from_contacts">Kişiler içerisinde Arkadaşlar bulun</string>
+    <string name="search_friend_from_local">%1$s üzerinde Arkadaşlar bulun</string>
+    <string name="search_friend">E-mail veya RCID ile Arkadaşlar bulun</string>
+    <string name="search_friend_from">Arkadaşlarınızı %1$s üzerinden davet edin</string>
+   	<string name="join_message">Fotoğraflı ve sesli özel bir mesajlaşma uygulaması #PhotoTalk üzerinden benimle arkadaş ol. Kimliğim:%1$s. Buradan ulaş; http://rctalk.me</string>
+    <string name="invite_message">Hey! #PhotoTalk üzerinden sana özel bir fotoğraf göndermek istiyorum. Buradan ulaş; http://rctalk.me ve Kimliğimi %1$s ekle</string>
+    <string name="invite_your_friends">Arkadaşlarınız PhotoTalk\'a katılmaya davet edilsin mi?</string>
+    
 </resources>

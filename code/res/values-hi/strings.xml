@@ -175,8 +175,6 @@
     <string name="use_new_info">इसमें नई प्रोफ़ाइल का इस्तेमाल</string>
     <string name="other_device_login">आपका खाते का पहले ही अन्य डिवाइस पर इस्तेमाल हो रहा है।</string>
     <string name="relogin">ठीक</string>
-    <string name="join_message">ऑडियो फ़ोटो, नियत हटाना! RC PhotoTalk में शामिल हों और आनंद साझा करें! लिंक डाउनलोड करें: http://rctalk.me खाता बनाने के बाद मेरी ID %1$s जोड़ें!</string>
-    <string name="invite_message">ऑडियो फ़ोटो, नियत हटाना! RC PhotoTalk में शामिल हों और आनंद साझा करें! लिंक डाउनलोड करें: http://rctalk.me खाता बनाने के बाद मेरी ID %1$s जोड़ें!</string>
     <string name="contact_friend">संपर्क:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -193,4 +191,23 @@
     <string name="net_error">विफल - कृपया बाद में पुनः प्रयास करें</string>
     <string name="no_net">कोई नेटवर्क कनेक्शन नहीं है</string>
 
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">संपर्क</string>
+    <string name="search">खोज</string>
+    <string name="invite">आमंत्रण</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Twitter पर साझा करें</string>
+    <string name="search_friend_from_contacts">संपर्कों में मित्र ढूँढ़ें</string>
+    <string name="search_friend_from_local">%1$s पर मित्र ढूँढ़ें</string>
+    <string name="search_friend">E-mail या RCID द्वारा मित्र ढूँढ़ें</string>
+    <string name="search_friend_from">%1$s के द्वारा मित्र आमंत्रित करें</string>
+   	<string name="join_message">मुझसे #PhotoTalk पर मित्रता करें, जो फ़ोटो और ऑडियो के साथ निजी संदेश ऐप है। मेरी ID:%1$s. यहाँ प्राप्त करेंhttp://rctalk.me</string>
+    <string name="invite_message">अरे! मैं आपको #PhotoTalk पर निजी फ़ोटो भेजना चाहूँगा। इसे यहाँ प्राप्त करें http://rctalk.me और मेरी ID %1$s जोड़ें</string>
+    <string name="invite_your_friends">अपने मित्रों को PhotoTalk में शामिल होने के लिए आमंत्रित करें?</string>
 </resources>

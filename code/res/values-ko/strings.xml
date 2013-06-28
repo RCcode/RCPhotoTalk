@@ -176,8 +176,6 @@
     <string name="use_new_info">새 프로필 사용</string>
     <string name="other_device_login">해당 계정이 이미 다른 장치에서 사용 중입니다.</string>
     <string name="relogin">확인</string>
-    <string name="join_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크: http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
-    <string name="invite_message">오디오 사진, 제한 시간 적용 삭제! RC PhotoTalk에 가입하셔서 즐거움을 공유하세요! 다운로드 링크: http://rctalk.me 계정 생성 후에 제 ID %1$s을 추가해 주세요!</string>
     <string name="contact_friend">연락처:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -192,4 +190,23 @@
     <string name="list_me">%1$s(나를)</string>
     <string name="net_error">실패, 나중에 다시 시도해 주세요</string>
     <string name="no_net">네트워크 연결 없음</string>
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">연락처</string>
+    <string name="search">검색</string>
+    <string name="invite">초대</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Twitter에서 공유</string>
+    <string name="search_friend_from_contacts">연락처에서 친구 찾기</string>
+    <string name="search_friend_from_local">%1$s에서 친구 찾기</string>
+    <string name="search_friend">E-mail 또는 RCID로 친구 찾기</string>
+    <string name="search_friend_from">%1$s를 통해 친구 초대하기</string>
+   	<string name="join_message">사진과 오디오를 지원하는 개인 메시징 앱인 #PhotoTalk에서 나와 친구를 맺어주세요. 나의 ID:%1$s. http://rctalk.me에서 확인해 보세요.</string>
+    <string name="invite_message">안녕하세요! #PhotoTalk에서 개인 사진을 보내려고 합니다. http://rctalk.me에서 내 ID %1$s를 추가해 주세요.</string>
+    <string name="invite_your_friends">친구에게 PhotoTalk 가입 초대를 보내시겠습니까?</string>
 </resources>

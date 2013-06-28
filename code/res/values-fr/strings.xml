@@ -176,8 +176,6 @@
     <string name="use_new_info">Utiliser un nouveau profil</string>
     <string name="other_device_login">Votre compte est déjà utilisé sur un autre périphérique.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Aphotos audio, suppression minutée ! Rejoignez RC PhotoTalk et partagez vos moments funs ! Lien de téléchargement: http://rctalk.me Ajoutez l\'ID %1$s une fois le compte créé !</string>
-    <string name="invite_message">Aphotos audio, suppression minutée ! Rejoignez RC PhotoTalk et partagez vos moments funs ! Lien de téléchargement: http://rctalk.me Ajoutez l\'ID %1$s une fois le compte créé !</string>
     <string name="contact_friend">Contacts:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -194,4 +192,24 @@
     <string name="list_me">%1$s(moi)</string>
     <string name="net_error">Échec, réessayez ultérieurement</string>
     <string name="no_net">Aucune connexion réseau</string>
+    
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">contacts</string>
+    <string name="search">Rechercher</string>
+    <string name="invite">Inviter</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Partager sur Twitter</string>
+    <string name="search_friend_from_contacts">Trouver des amis dans les contacts</string>
+    <string name="search_friend_from_local">Trouver des amis sur %1$s</string>
+    <string name="search_friend">Trouver des amis par E-mail ou RCID</string>
+    <string name="search_friend_from">Inviter des amis via %1$s</string>
+   	<string name="join_message">Me retrouver sur #PhotoTalk, une application de messagerie privée avec photo et son. Mon ID : %1$s. Obtenez-la ici http://rctalk.me</string>
+    <string name="invite_message">Hé ! J\'aimerais vous envoyer une photo privée sur #PhotoTalk. Obtenez-la ici http://rctalk.me et ajoutez mon ID %1$s</string>
+    <string name="invite_your_friends">Inviter vos amis à rejoindre PhotoTalk ?</string>
 </resources>

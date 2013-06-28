@@ -175,8 +175,6 @@
     <string name="use_new_info">Usa un nuovo profilo</string>
     <string name="other_device_login">Il tuo account è già utilizzato su un altro dispositivo.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Foto con audio, eliminazione a tempo! Unisciti a RC Photo Talk e condividi il divertimento! Scarica dal link: http://rctalk.me  Aggiungi il mio ID %1$s dopo aver creato l\'account!</string>
-    <string name="invite_message">Foto con audio, eliminazione a tempo! Unisciti a RC Photo Talk e condividi il divertimento! Scarica dal link: http://rctalk.me  Aggiungi il mio ID %1$s dopo aver creato l\'account!</string>
     <string name="contact_friend">Contatti:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -194,4 +192,24 @@
     <string name="net_error">Non riuscito, riprova più tardi</string>
     
     <string name="no_net">Connessione assente</string>
+    
+        <!-- 1.1 NEW TEXT -->
+    <string name="contact">Contatti</string>
+    <string name="search">Ricerca</string>
+    <string name="invite">Invitare</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Condividi su Twitter</string>
+    <string name="search_friend_from_contacts">Trova amici nei Contatti</string>
+    <string name="search_friend_from_local">Trova amici su %1$s</string>
+    <string name="search_friend">Trova amici via E-mail o RCID</string>
+    <string name="search_friend_from">Invita amici via %1$s</string>
+   	<string name="join_message">Dammi l\'amicizia su #PhotoTalk, un\'app di messaggistica privata con foto e audio. Il mio ID è:%1$s. Scaricala qui http://rctalk.me</string>
+    <string name="invite_message">Ciao! Vorrei inviarti una foto privata su #PhotoTalk. Scaricala qui http://rctalk.me e aggiungi il mio ID %1$s</string>
+    <string name="invite_your_friends">Vuoi invitare i tuoi amici a iscriversi su PhotoTalk?</string>
+    
 </resources>

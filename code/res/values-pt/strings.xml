@@ -27,7 +27,6 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Erro no formato do E-mail</string>
     <string name="register_password_error">Por favor, insira uma senha contendo 6-20 caracteres</string>
-
     <string name="login_title_login_bubble_text">Login de Usuário RC</string>
     <string name="login_username_hint">E-mail,RCID</string>
     <string name="login_forget_psw_hint">Esqueceu a senha</string>
@@ -176,8 +175,6 @@
     <string name="use_new_info">Usar um novo perfil</string>
     <string name="other_device_login">Sua conta já está sendo usada em outro dispositivo.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me  Adicionar minha ID %1$s depois de criar uma conta!</string>
-    <string name="invite_message">Fotos áudio, exclusão temporizada! Junte-se ao RC PhotoTalk e divirta-se! Link para download: http://rctalk.me  Adicionar minha ID %1$s depois de criar uma conta!</string>
     <string name="contact_friend">Contactos:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -194,4 +191,21 @@
     <string name="list_me">%1$s(me)</string>
     <string name="net_error">Falha, por favor, tente novamente mais tarde</string>
     <string name="no_net">Sem conexão de rede</string>
+
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">Contactos</string>
+    <string name="search">Procurar</string>
+    <string name="invite">Convidar</string>
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    <string name="share_title">Compartilhar no Twitter</string>
+    <string name="search_friend_from_contacts">Encontrar amigos nos Contatos</string>
+    <string name="search_friend_from_local">Encontrar amigos no %1$s</string>
+    <string name="search_friend">Encontrar amigos por E-mail ou RCID</string>
+    <string name="search_friend_from">Convidar amigos pelo %1$s</string>
+    <string name="join_message">Seja meu amigo no #PhotoTalk, um aplicativo de mensagens particulares com foto e áudio. Minha ID:%1$s. Tenha o seu aqui http://rctalk.me</string>
+    <string name="invite_message">Ei, eu gostaria de enviar a você uma foto particular pelo #PhotoTalk. Tenha o seu aqui http://rctalk.me e adicione minha ID %1$s</string>
+    <string name="invite_your_friends">Quer convidar seus amigos para entrar no PhotoTalk?</string>
+
 </resources>

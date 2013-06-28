@@ -176,8 +176,6 @@
     <string name="use_new_info">Gunakan profil baru</string>
     <string name="other_device_login">Akun Anda sudah dipergunakan di perangkat lain.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Foto audio, penghapusan berdasarkan waktu! Bergabung dengan RC PhotoTalk dan berbagi kegembiraan! Tautan unduhan: http://rctalk.me Tambahkan ID saya %1$s setelah Anda membuat akun!</string>
-    <string name="invite_message">Foto audio, penghapusan berdasarkan waktu! Bergabung dengan RC PhotoTalk dan berbagi kegembiraan! Tautan unduhan: http://rctalk.me Tambahkan ID saya %1$s setelah Anda membuat akun!</string>
     <string name="contact_friend">Kontak:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -193,4 +191,24 @@
     <string name="list_me">%1$s(saya)</string>
     <string name="net_error">वGagal, coba lagi nanti</string>
     <string name="no_net">Jaringan tidak tersedia</string>
+    
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">kontak</string>
+    <string name="search">Mencari</string>
+    <string name="invite">Mengundang</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">Berbagi di Twitter</string>
+    <string name="search_friend_from_contacts">Cari Teman dalam Kontak</string>
+    <string name="search_friend_from_local">Cari Teman di %1$s</string>
+    <string name="search_friend">Cari Teman menurut E-mail atau RCID</string>
+    <string name="search_friend_from">Undang Teman via %1$s</string>
+   	<string name="join_message">Mari berteman di #PhotoTalk, aplikasi pesan pribadi dilengkapi foto dan audio. ID saya:%1$s. Dapatkan di sini http://rctalk.me</string>
+    <string name="invite_message">Hai! Saya ingin mengirim foto pribadi di #PhotoTalk. Dapatkan di sini http://rctalk.me dan tambahkan ID saya %1$s</string>
+    <string name="invite_your_friends">Undang teman Anda untuk bergabung di PhotoTalk?</string>
 </resources>

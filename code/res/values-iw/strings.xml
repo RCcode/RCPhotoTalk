@@ -176,8 +176,6 @@
     <string name="use_new_info">השתמש בפרופיל חדש</string>
     <string name="other_device_login">חשבונך נמצא כבר בשימוש בהתקן אחר.</string>
     <string name="relogin">אישור</string>
-    <string name="join_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me  הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
-    <string name="invite_message">תמונות שמע, מחיקה מתוזמנת! הצטרף אל ‎RC PhotoTalk‏ והשתתף בחגיגה! קישור להורדה: http://rctalk.me  הוסף את המזהה שלי%1$s6 לאחר שפתחת חשבון!</string>
     <string name="contact_friend">אנשי קשר:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -193,4 +191,23 @@
     <string name="list_me">%1$s(לי)</string>
     <string name="net_error">כשל, נסה שנית מאוחר יותר.</string>
     <string name="no_net">אין חיבור לרשת</string>
+    
+    <!-- 1.1 NEW TEXT -->
+    <string name="contact">אנשי קשר</string>
+    <string name="search">לחפש</string>
+    <string name="invite">להזמין את</string>
+    
+
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    
+    <string name="share_title">שיתוף באתר Twitter</string>
+    <string name="search_friend_from_contacts">חיפוש חברים בין אנשי קשר</string>
+    <string name="search_friend_from_local">חיפש חברים באתר %1$s</string>
+    <string name="search_friend">חיפש חברים באמצעות E-mail או RCID</string>
+    <string name="search_friend_from">הזמנת חברים דרך %1$s</string>
+   	<string name="join_message">התחבר איתי באתר #PhotoTalk‏, יישום מסרים מיידיים פרטי המאפשר שילוב תמונות ושמע. מס\' הזיהוי שלי:%1$s. תוכל לקבל אותו כאן http://rctalk.me</string>
+    <string name="invite_message">הי! אני מבקש לשלוח לך תמונה פרטית דרך #PhotoTalk. קבל אותה כאן http://rctalk.me והוסף את מס\' הזיהוי שלי %1$s</string>
+    <string name="invite_your_friends">האם להזמין את חבריך להצטרף ל-PhotoTalk?</string>
 </resources>

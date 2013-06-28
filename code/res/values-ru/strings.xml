@@ -176,8 +176,6 @@
     <string name="use_new_info">Используйте новый профиль</string>
     <string name="other_device_login">Ваша учетная запись уже используется на другом устройстве.</string>
     <string name="relogin">OK</string>
-    <string name="join_message">Звуковые фото, удаление по времени. Присоединяйтесь к RC PhotoTalk и получайте удовольствие от общения. Ссылка для загрузки: http://rctalk.me Добавьте мой идентификатор %1$s после создания учетной записи.</string>
-    <string name="invite_message">Звуковые фото, удаление по времени. Присоединяйтесь к RC PhotoTalk и получайте удовольствие от общения. Ссылка для загрузки: http://rctalk.me Добавьте мой идентификатор %1$s после создания учетной записи.</string>
     <string name="contact_friend">связи:</string>
     <string name="facebook_friend">Facebook:</string>
     <string name="vk_friend">VKontakte:</string>
@@ -195,4 +193,22 @@
     
     <string name="net_error">Произошел сбой, попробуйте позже</string>
     <string name="no_net">Сетевое подключение отсутствует</string>
+    
+    
+   <!-- 1.1 NEW TEXT -->
+    <string name="contact">связи</string>
+    <string name="search">Поиск</string>
+    <string name="invite">Приглашать</string>
+    <string name="twitter">Twitter</string>
+    <string name="googleplus">Google+</string>
+    <string name="gmail">Gmail</string>
+    <string name="share_title">Поделиться на Twitter</string>
+    <string name="search_friend_from_contacts">Найти друзей в контактах</string>
+    <string name="search_friend_from_local">Найти друзей на %1$s</string>
+    <string name="search_friend">Найти друзей с помощью E-mail или RCID</string>
+    <string name="search_friend_from">Пригласить друзей с помощью %1$s</string>
+    <string name="join_message">Подружись со мной на #PhotoTalk, приложении для обмена фото и аудио. Мой идентификатор:%1$s. Загрузить можно здесь http://rctalk.me</string>
+    <string name="invite_message">Привет! Я хочу отправить тебе личную фотографию через #PhotoTalk. Загрузи приложение с сайта http://rctalk.me и добавь мой идентификатор %1$s</string>
+    <string name="invite_your_friends">Пригласить ваших друзей в PhotoTalk?</string>
+    
 </resources>

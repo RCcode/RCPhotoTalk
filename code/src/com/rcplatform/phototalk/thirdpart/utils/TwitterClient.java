@@ -186,7 +186,7 @@ public class TwitterClient extends ThirdPartClient {
 			switch (msg.what) {
 			case MSG_WHAT_AUTHORIZE_FAIL:
 				mContext.dissmissLoadingDialog();
-				mContext.showConfirmDialog(R.string.authorize_fail);
+				mContext.showConfirmDialog(R.string.net_error);
 				break;
 			case MSG_WHAT_AUTHORIZE_WEB:
 				startTwitterAuthorizeActivity((String) msg.obj);

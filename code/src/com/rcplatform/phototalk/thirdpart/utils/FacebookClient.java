@@ -138,7 +138,7 @@ public class FacebookClient {
 
 	public void sendJoinMessage() {
 		Bundle bundler = new Bundle();
-		bundler.putString("caption", mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()));
+		bundler.putString("caption", mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()));
 		bundler.putString("description", " ");
 		bundler.putString("name", mContext.getString(R.string.app_name));
 		bundler.putString("picture", Constants.INVITE_JOIN_IMAGE_URL);

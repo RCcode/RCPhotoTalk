@@ -42,14 +42,21 @@ import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
 import com.rcplatform.phototalk.utils.Constants;
 
 public class InviteActivity extends BaseActivity {
+
 	private List<InviteAction> localInviteActions = new ArrayList<InviteActivity.InviteAction>();
+
 	private List<InviteAction> basicInviteActions = new ArrayList<InviteActivity.InviteAction>();
+
 	private List<ThirdPartClient> thirdPartClients = new ArrayList<ThirdPartClient>();
+
 	private static TreeSet<Friend> friendsAdded;
+
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
+
 	private static final String GOOGLE_PLUS_PACKAGE = "com.google.android.apps.plus";
 
 	private static final int REQUEST_CODE_INSTAGRAM_CAMERA = 20000;
+
 	private static InviteAction instagramAction;
 
 	private void initBasicInviteActions() {
@@ -93,6 +100,7 @@ public class InviteActivity extends BaseActivity {
 			}
 		});
 		new AsyncTask<Void, Void, List<InviteAction>>() {
+
 			@Override
 			protected void onPreExecute() {
 				super.onPreExecute();
@@ -166,15 +174,29 @@ public class InviteActivity extends BaseActivity {
 	}
 
 	private static abstract class InviteAction {
+
 		private Drawable appIcon;
+
 		private String appName;
+
 		private String className;
+
 		private String packageName;
+
 		private String trackFrom;
 
+		private int type;
+
 		protected String getInviteText(Context paramContext) {
-			String inviteText = paramContext.getString(R.string.join_message, ((PhotoTalkApplication) paramContext.getApplicationContext()).getCurrentUser()
-					.getRcId());
+			String inviteText = "";
+
+			if (  type == FriendType.TWITTER || type == FriendType.GOOGLE_PLUS) {
+				inviteText = paramContext.getString(R.string.join_message, ((PhotoTalkApplication) paramContext.getApplicationContext())
+				        .getCurrentUser().getRcId());
+			}else{
+				inviteText = paramContext.getString(R.string.invite_message, ((PhotoTalkApplication) paramContext.getApplicationContext())
+				   			        .getCurrentUser().getRcId());
+			}
 			return inviteText;
 		}
 
@@ -197,13 +219,23 @@ public class InviteActivity extends BaseActivity {
 			this.appIcon = localPackageManager.getApplicationIcon(paramApplicationInfo);
 		}
 
+		public void setType(int type) {
+			this.type = type;
+		}
+
+		public int getType() {
+			return this.type;
+		}
+
 		public void setTargetApp(TargetApp paramTargetApp) {
 			this.trackFrom = paramTargetApp.trackFrom;
 		}
 	}
 
 	private static class TargetApp {
+
 		final Class<? extends InviteAction> inviteClass;
+
 		final String trackFrom;
 
 		public TargetApp(String paramString2, Class<? extends InviteAction> paramClass) {
@@ -213,6 +245,7 @@ public class InviteActivity extends BaseActivity {
 	}
 
 	private static class TextInviteAction extends InviteAction {
+
 		public TextInviteAction() {
 			super();
 		}
@@ -226,6 +259,7 @@ public class InviteActivity extends BaseActivity {
 	}
 
 	private static class LocalInviteAction extends InviteAction {
+
 		private int type;
 
 		public LocalInviteAction(int type) {
@@ -236,27 +270,28 @@ public class InviteActivity extends BaseActivity {
 		@Override
 		public void invite(Activity paramContext) {
 			switch (type) {
-			case FriendType.FACEBOOK:
-				paramContext.startActivity(new Intent(paramContext, FacebookFriendRecommendActivity.class));
-				break;
-			case FriendType.CONTACT:
-				paramContext.startActivity(new Intent(paramContext, ContactFriendRecommendActivity.class));
-				break;
-			case FriendType.VK:
-				paramContext.startActivity(new Intent(paramContext, VKRecommendActivity.class));
-				break;
-			case FriendType.EMAIL:
-				paramContext.startActivity(new Intent(paramContext, GmailRecommendsActivity.class));
-				break;
-			default:
-				paramContext.startActivity(new Intent(paramContext, SearchFriendsActivity.class));
-				break;
+				case FriendType.FACEBOOK:
+					paramContext.startActivity(new Intent(paramContext, FacebookFriendRecommendActivity.class));
+					break;
+				case FriendType.CONTACT:
+					paramContext.startActivity(new Intent(paramContext, ContactFriendRecommendActivity.class));
+					break;
+				case FriendType.VK:
+					paramContext.startActivity(new Intent(paramContext, VKRecommendActivity.class));
+					break;
+				case FriendType.EMAIL:
+					paramContext.startActivity(new Intent(paramContext, GmailRecommendsActivity.class));
+					break;
+				default:
+					paramContext.startActivity(new Intent(paramContext, SearchFriendsActivity.class));
+					break;
 			}
 		}
 
 	}
 
 	private static class ThirdPartInviteAction extends InviteAction {
+
 		private ThirdPartClient client;
 
 		public ThirdPartInviteAction(ThirdPartClient client) {
@@ -281,6 +316,7 @@ public class InviteActivity extends BaseActivity {
 	}
 
 	private static class InstagramInviteAction extends InviteAction {
+
 		public InstagramInviteAction() {
 			super();
 		}
@@ -336,7 +372,8 @@ public class InviteActivity extends BaseActivity {
 						localInviteAction.setActivityInfo(localResolveInfo.activityInfo);
 						localInviteAction.setTargetApp(localTargetApp);
 						localHashMap.put(str, localInviteAction);
-					} catch (Exception localException) {
+					}
+					catch (Exception localException) {
 						localException.printStackTrace();
 					}
 					break;
@@ -353,6 +390,7 @@ public class InviteActivity extends BaseActivity {
 	}
 
 	private class InviteAdapter extends BaseAdapter {
+
 		private List<InviteAction> actions;
 
 		public InviteAdapter(List<InviteAction> actions) {
@@ -387,7 +425,11 @@ public class InviteActivity extends BaseActivity {
 			if (position == 0)
 				tvName.setText(R.string.search_friend);
 			else if (position < localInviteActions.size())
-				tvName.setText(getString(R.string.search_friend_from_local, action.appName));
+				if (action.getType() == FriendType.CONTACT) {
+					tvName.setText(getString(R.string.search_friend_from_contacts));
+				} else {
+					tvName.setText(getString(R.string.search_friend_from_local, action.appName));
+				}
 			else
 				tvName.setText(getString(R.string.search_friend_from, action.appName));
 			return convertView;
@@ -437,11 +479,12 @@ public class InviteActivity extends BaseActivity {
 		public static InviteAction getThirdPartInviteAction(Context context, ThirdPartClient client, int thirdPartType) {
 			InviteAction action = new ThirdPartInviteAction(client);
 			switch (thirdPartType) {
-			case FriendType.TWITTER:
-				action.appIcon = context.getResources().getDrawable(R.drawable.twitter_icon_invite);
-				action.appName = context.getString(R.string.twitter);
-				break;
+				case FriendType.TWITTER:
+					action.appIcon = context.getResources().getDrawable(R.drawable.twitter_icon_invite);
+					action.appName = context.getString(R.string.twitter);
+					break;
 			}
+			action.setType(thirdPartType);
 			return action;
 		}
 
@@ -452,8 +495,10 @@ public class InviteActivity extends BaseActivity {
 				InviteAction googlePlusAction = new GooglePlusInviteAction();
 				googlePlusAction.appName = localPackageManager.getApplicationLabel(googlePlusInfo).toString();
 				googlePlusAction.appIcon = localPackageManager.getApplicationIcon(googlePlusInfo);
+				googlePlusAction.setType(FriendType.GOOGLE_PLUS);
 				return googlePlusAction;
-			} catch (Exception e) {
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}
@@ -462,32 +507,33 @@ public class InviteActivity extends BaseActivity {
 		public static InviteAction getFriendInviteAction(Context context, int friendType) {
 			InviteAction action = null;
 			switch (friendType) {
-			case FriendType.FACEBOOK:
-				action = new LocalInviteAction(FriendType.FACEBOOK);
-				action.appIcon = context.getResources().getDrawable(R.drawable.facebook_icon_invite);
-				action.appName = context.getString(R.string.facebook);
-				break;
-			case FriendType.CONTACT:
-				action = new LocalInviteAction(FriendType.CONTACT);
-				action.appIcon = context.getResources().getDrawable(R.drawable.contact_icon_invite);
-				action.appName = context.getString(R.string.contact);
-				break;
-			case FriendType.VK:
-				action = new LocalInviteAction(FriendType.VK);
-				action.appIcon = context.getResources().getDrawable(R.drawable.vk_icon_invite);
-				action.appName = context.getString(R.string.vkontakte);
-				break;
-			case FriendType.EMAIL:
-				action = new LocalInviteAction(FriendType.EMAIL);
-				action.appIcon = context.getResources().getDrawable(R.drawable.radio_vk_down);
-				action.appName = context.getString(R.string.gmail);
-				break;
-			default:
-				action = new LocalInviteAction(FriendType.DEFAULT);
-				action.appIcon = context.getResources().getDrawable(R.drawable.search_icon_invite);
-				action.appName = context.getString(R.string.search);
-				break;
+				case FriendType.FACEBOOK:
+					action = new LocalInviteAction(FriendType.FACEBOOK);
+					action.appIcon = context.getResources().getDrawable(R.drawable.facebook_icon_invite);
+					action.appName = context.getString(R.string.facebook);
+					break;
+				case FriendType.CONTACT:
+					action = new LocalInviteAction(FriendType.CONTACT);
+					action.appIcon = context.getResources().getDrawable(R.drawable.contact_icon_invite);
+					action.appName = context.getString(R.string.contact);
+					break;
+				case FriendType.VK:
+					action = new LocalInviteAction(FriendType.VK);
+					action.appIcon = context.getResources().getDrawable(R.drawable.vk_icon_invite);
+					action.appName = context.getString(R.string.vkontakte);
+					break;
+				case FriendType.EMAIL:
+					action = new LocalInviteAction(FriendType.EMAIL);
+					action.appIcon = context.getResources().getDrawable(R.drawable.radio_vk_down);
+					action.appName = context.getString(R.string.gmail);
+					break;
+				default:
+					action = new LocalInviteAction(FriendType.DEFAULT);
+					action.appIcon = context.getResources().getDrawable(R.drawable.search_icon_invite);
+					action.appName = context.getString(R.string.search);
+					break;
 			}
+			action.setType(friendType);
 			return action;
 		}
 	}
