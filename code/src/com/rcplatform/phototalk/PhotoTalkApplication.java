@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Environment;
 import android.view.WindowManager;
@@ -39,6 +40,9 @@ public class PhotoTalkApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		startService(new Intent(this, PhotoTalkWebService.class));
+		startService(new Intent(this, PTBackgroundService.class));
+
 		PhotoInformationCountDownService.getInstance().setApplication(this);
 		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).threadPriority(Thread.NORM_PRIORITY - 2)
 				.defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions()).tasksProcessingOrder(QueueProcessingType.LIFO)
@@ -133,6 +137,7 @@ public class PhotoTalkApplication extends Application {
 		// }
 		return imagePath;
 	}
+
 	public String getCameraFileCachePath() {
 		String imagePath = "";
 		String sdUrl = getCacheDir() + "/RcCamera";

@@ -19,6 +19,8 @@ import android.widget.TextView;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.clienservice.PTBackgroundService;
+import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
@@ -219,6 +221,8 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		startService(new Intent(this, PTBackgroundService.class));
+		startService(new Intent(this, PhotoTalkWebService.class));
 		Constants.initUI(this);
 		Constants.initDatabase(this);
 		Constants.initCountryDatabase(this);

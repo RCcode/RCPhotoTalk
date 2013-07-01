@@ -98,15 +98,15 @@ public class PTBackgroundService extends Service {
 	}
 
 	public void setCurrentUser(UserInfo currentUser) {
-
 		if (mCurrentUser == null || (!currentUser.getRcId().equals(mCurrentUser.getRcId()))) {
 			cancelCurrentBindCheckTask();
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
-		} else {
+		}else{
 			this.mCurrentUser = currentUser;
 		}
+		
 	}
 
 	@Override
@@ -195,7 +195,6 @@ public class PTBackgroundService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(mConnectivityReceiver);
 		LogUtil.e("destroy service ~~~~~~~~~~~~~~~~phototalk background service");
 	}
 
