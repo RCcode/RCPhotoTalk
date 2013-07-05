@@ -119,6 +119,8 @@ public class PhotoTalkUtils {
 	}
 
 	public static boolean isUserNeedToBindPhone(Context context, UserInfo userInfo) {
+		if(context==null)
+			return false;
 		return userInfo != null && RCPlatformTextUtil.isEmpty(userInfo.getCellPhone()) && Constants.DEVICE_ID.equals(userInfo.getDeviceId())
 				&& !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
 	}

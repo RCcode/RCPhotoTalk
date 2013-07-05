@@ -29,6 +29,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
+import com.google.ads.m;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.MenuBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
@@ -111,20 +112,20 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 	protected void showAttentionAddFriendsDialog() {
 		DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.invite_your_friends)
-		        .setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
+				.setPositiveButton(R.string.invite, new DialogInterface.OnClickListener() {
 
-			        @Override
-			        public void onClick(DialogInterface dialog, int which) {
-				        startAddFriendsActivity();
-				        EventUtil.Friends_Addfriends.rcpt_invitepop_invite(baseContext);
-			        }
-		        }).setNegativeButton(R.string.attention_later, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						startAddFriendsActivity();
+						EventUtil.Friends_Addfriends.rcpt_invitepop_invite(baseContext);
+					}
+				}).setNegativeButton(R.string.attention_later, new DialogInterface.OnClickListener() {
 
-			        @Override
-			        public void onClick(DialogInterface dialog, int which) {
-				        EventUtil.Friends_Addfriends.rcpt_invitepop_later(baseContext);
-			        }
-		        }).create().show();
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						EventUtil.Friends_Addfriends.rcpt_invitepop_later(baseContext);
+					}
+				}).create().show();
 	}
 
 	private void sendFriendLoadedMessage(List<Friend> friends, List<Friend> recommends) {
@@ -314,11 +315,11 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
-				case MSG_WHAT_FRIEND_LOADED:
-					dismissLoadingDialog();
-					setListData(mFriends, mRecommends, mList);
-					etSearch.setText(null);
-					break;
+			case MSG_WHAT_FRIEND_LOADED:
+				dismissLoadingDialog();
+				setListData(mFriends, mRecommends, mList);
+				etSearch.setText(null);
+				break;
 			}
 		}
 
@@ -408,13 +409,13 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.back:
-				finish();
-				break;
-			case R.id.choosebutton:
-				EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
-				startAddFriendsActivity();
-				break;
+		case R.id.back:
+			finish();
+			break;
+		case R.id.choosebutton:
+			EventUtil.Friends_Addfriends.rcpt_addfriends(baseContext);
+			startAddFriendsActivity();
+			break;
 		}
 	}
 
@@ -462,6 +463,26 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 			}
 		};
 		thread.start();
+	}
+
+	private static final String SAVE_KEY_FRIENDS = "friends";
+	private static final String SAVE_KEY_RECOMMENDS = "recommends";
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putSerializable(SAVE_KEY_FRIENDS, new ArrayList<Friend>(mFriends));
+		outState.putSerializable(SAVE_KEY_RECOMMENDS, new ArrayList<Friend>(mRecommends));
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		mFriends = (List<Friend>) savedInstanceState.getSerializable(SAVE_KEY_FRIENDS);
+		mRecommends = (List<Friend>) savedInstanceState.getSerializable(SAVE_KEY_RECOMMENDS);
+		mSearchList.setVisibility(View.GONE);
+		mList.setVisibility(View.VISIBLE);
+		setListData(mFriends, mRecommends, mList);
 	}
 
 	private void handlerDeleteResult(final Friend friend) {

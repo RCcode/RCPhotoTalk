@@ -8,6 +8,7 @@ import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class ActivityFunctionBasic implements ActivityFunction {
 	private Activity context;
@@ -33,9 +34,14 @@ public class ActivityFunctionBasic implements ActivityFunction {
 		mProgressDialog.setCancelable(cancelAble);
 		mProgressDialog.setTitle(null);
 		mProgressDialog.setMessage(null);
-		if (!mProgressDialog.isShowing()) {
-			mProgressDialog.show();
-			mProgressDialog.setContentView(R.layout.operation_loading);
+		if (!mProgressDialog.isShowing() && !context.isFinishing()) {
+			try {
+				mProgressDialog.show();
+				mProgressDialog.setContentView(R.layout.operation_loading);
+			} catch (Exception e) {
+
+			}
+
 		}
 	}
 
@@ -47,7 +53,10 @@ public class ActivityFunctionBasic implements ActivityFunction {
 
 	@Override
 	public UserInfo getCurrentUser() {
-		return getPhotoTalkApplication().getCurrentUser();
+		UserInfo userInfo = getPhotoTalkApplication().getCurrentUser();
+		if (userInfo == null)
+			userInfo = PrefsUtils.LoginState.getLoginUser(context);
+		return userInfo;
 	}
 
 	@Override
@@ -67,7 +76,7 @@ public class ActivityFunctionBasic implements ActivityFunction {
 
 	@Override
 	public void showConfirmDialog(int resId) {
-		DialogUtil.createErrorInfoDialog(context, resId).show();		
+		DialogUtil.createErrorInfoDialog(context, resId).show();
 	}
 
 }

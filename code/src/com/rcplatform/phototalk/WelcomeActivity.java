@@ -62,14 +62,13 @@ public class WelcomeActivity extends BaseActivity {
 	}
 
 	private void startBackgroundService() {
-		startService(new Intent(this, PhotoTalkWebService.class));
 		startService(new Intent(this, PTBackgroundService.class));
 	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		printHashKey();
+//		printHashKey();
 		setContentView(R.layout.loading);
 		startBackgroundService();
 		cancelRelogin();
