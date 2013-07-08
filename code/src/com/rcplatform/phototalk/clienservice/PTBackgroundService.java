@@ -106,7 +106,6 @@ public class PTBackgroundService extends Service {
 		}else{
 			this.mCurrentUser = currentUser;
 		}
-		
 	}
 
 	@Override

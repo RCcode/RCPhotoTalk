@@ -155,8 +155,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
-		tvTigaseState = (TextView) findViewById(R.id.tv_test);
-		bindTigaseService();
+//		tvTigaseState = (TextView) findViewById(R.id.tv_test);
+//		bindTigaseService();
 		checkBindPhone();
 		// 注册GCM
 		UserInfo userInfo = getCurrentUser();
@@ -646,7 +646,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	@Override
 	protected void onDestroy() {
-		unBindTigaseService();
+//		unBindTigaseService();
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
 		// unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();

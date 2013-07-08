@@ -2,28 +2,41 @@ package com.rcplatform.phototalk;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.os.IBinder;
 import android.view.WindowManager;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
+import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.tigase.TigaseMessageBinderService;
+import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
+import com.rcplatform.tigase.TigaseMessageReceiver;
 
 public class PhotoTalkApplication extends Application {
 
@@ -36,6 +49,8 @@ public class PhotoTalkApplication extends Application {
 	public File cacheDir;
 
 	private final Map<String, Activity> mActivityMap = new HashMap<String, Activity>();
+
+	private boolean isBindTigaseService = false;
 
 	@Override
 	public void onCreate() {
@@ -204,12 +219,71 @@ public class PhotoTalkApplication extends Application {
 	}
 
 	public void setCurrentUser(UserInfo userInfo) {
-		if (!userInfo.getRcId().equals(PrefsUtils.LoginState.getLastRcId(this)))
+		if (!userInfo.getRcId().equals(PrefsUtils.LoginState.getLastRcId(this))) {
 			FacebookUtil.clearFacebookVlidated(this);
-		UserInfo currentUser = getCurrentUser();
-		if (currentUser == null || (!userInfo.getRcId().equals(currentUser.getRcId())))
+		}
+		UserInfo lastUser = getCurrentUser();
+		boolean isUserChange = lastUser == null || (!userInfo.getRcId().equals(lastUser.getRcId()));
+		if (isUserChange) {
 			PhotoTalkDatabaseFactory.open(userInfo);
+		}
 		mService.setCurrentUser(userInfo);
+		if (isUserChange) {
+			reBindTigaseService();
+		}
+		lastUser = null;
 	}
 
+	private void reBindTigaseService() {
+		unBindTigaseService();
+		bindTigaseService();
+	}
+
+	private void bindTigaseService() {
+		Intent service = new Intent(this, TigaseMessageBinderService.class);
+		bindService(service, tigaseServiceConnection, Context.BIND_AUTO_CREATE);
+		isBindTigaseService = true;
+	}
+
+	private void unBindTigaseService() {
+		if (isBindTigaseService) {
+			unbindService(tigaseServiceConnection);
+			isBindTigaseService = false;
+		}
+	}
+
+	private ServiceConnection tigaseServiceConnection = new ServiceConnection() {
+
+		@Override
+		public void onServiceDisconnected(ComponentName name) {
+
+		}
+
+		@Override
+		public void onServiceConnected(ComponentName name, IBinder service) {
+			LocalBinder binder = (LocalBinder) service;
+			binder.getService().setOnMessageReciver(new TigaseMessageReceiver() {
+
+				@Override
+				public boolean onMessageHandle(String msg, String from) {
+					LogUtil.e("tigase receive message "+ msg);
+					List<Information> informations = JSONConver.jsonToInformations(msg);
+					filteInformations(informations);
+					return false;
+				}
+			});
+			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(), getCurrentUser().getTigasePwd());
+			MessageSender.getInstance().setTigaseService(binder.getService());
+		}
+	};
+
+	private void filteInformations(final List<Information> infos) {
+		Thread th = new Thread() {
+			public void run() {
+				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
+				InformationPageController.getInstance().onNewInformation(result);
+			};
+		};
+		th.start();
+	}
 }
