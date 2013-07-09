@@ -223,7 +223,7 @@ public class PhotoTalkApplication extends Application {
 			FacebookUtil.clearFacebookVlidated(this);
 		}
 		UserInfo lastUser = getCurrentUser();
-		boolean isUserChange = lastUser == null || (!userInfo.getRcId().equals(lastUser.getRcId()));
+		boolean isUserChange = (lastUser == null || (!userInfo.getRcId().equals(lastUser.getRcId())));
 		if (isUserChange) {
 			PhotoTalkDatabaseFactory.open(userInfo);
 		}

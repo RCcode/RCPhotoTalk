@@ -24,6 +24,7 @@ import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.db.PhotoTalkDatabase;
+import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
@@ -588,5 +589,39 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			db.store(info);
 		}
 		db.commit();
+	}
+
+	@Override
+	public void saveDriftInformation(DriftInformation information) {
+		db.store(information);
+	}
+
+	@Override
+	public List<DriftInformation> getDriftInformations(int start, int pageSize) {
+		ObjectSet<DriftInformation> localInformations = queryDriftInformations();
+		List<DriftInformation> result = new ArrayList<DriftInformation>();
+		if (localInformations != null) {
+			int end = start + pageSize;
+			for (int i = start; i < end; i++) {
+				if (i >= localInformations.size())
+					break;
+				DriftInformation information = localInformations.get(i);
+				result.add(information);
+			}
+		}
+		return result;
+	}
+
+	private ObjectSet<DriftInformation> queryDriftInformations() {
+		try {
+			Query query = db.query();
+			query.constrain(DriftInformation.class);
+			query.descend("receiveTime").orderDescending();
+			ObjectSet<DriftInformation> infos = query.execute();
+			return infos;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
