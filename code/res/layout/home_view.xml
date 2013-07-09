@@ -1,20 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_backgroud"
+    android:orientation="vertical" >
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="match_parent" android:background="@drawable/app_backgroud" android:orientation="vertical">  
-  <LinearLayout android:layout_width="fill_parent" android:layout_height="fill_parent" android:orientation="vertical"> 
-    <include layout="@layout/base_top_navigate"/>  
-    <com.rcplatform.phototalk.views.SnapListView android:id="@+id/lv_home" android:layout_width="fill_parent" android:layout_height="fill_parent" android:cacheColorHint="#00000000" android:divider="@null" android:fadingEdge="none"></com.rcplatform.phototalk.views.SnapListView> 
-  </LinearLayout>  
-  <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentBottom="true" android:gravity="center_horizontal" android:orientation="horizontal"> 
-    <Button android:id="@+id/btn_home_take_photo" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginBottom="4dp" android:background="@drawable/take_photo_button_selector"/> 
-  </LinearLayout>  
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
 
-  <TextView
-      android:id="@+id/tv_test"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:background="@android:color/black"
-      android:visibility="gone"
-      android:textColor="@color/white" />
- 
+        <include layout="@layout/base_top_navigate" />
+
+        <LinearLayout
+            android:id="@+id/linear_new_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="@dimen/friend_head_left" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                style="@style/text_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/know_strangers"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <include layout="@layout/line" />
+
+        <com.rcplatform.phototalk.views.SnapListView
+            android:id="@+id/lv_home"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:fadingEdge="none" >
+        </com.rcplatform.phototalk.views.SnapListView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/btn_home_take_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/take_photo_button_selector" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/black"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
 </RelativeLayout>

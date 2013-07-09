@@ -52,6 +52,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.drift.DriftInformationActivity;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
@@ -140,6 +141,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private RcAd popupAdlayout;
 	private ImageView ivNewRecommends;
+	private View knowStrangerView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -155,8 +157,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
-//		tvTigaseState = (TextView) findViewById(R.id.tv_test);
-//		bindTigaseService();
+		// tvTigaseState = (TextView) findViewById(R.id.tv_test);
+		// bindTigaseService();
 		checkBindPhone();
 		// 注册GCM
 		UserInfo userInfo = getCurrentUser();
@@ -343,7 +345,14 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void initViewAndListener() {
+		knowStrangerView = findViewById(R.id.linear_new_friends);
+		knowStrangerView.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				startActivity(DriftInformationActivity.class);
+			}
+		});
 		ivNewRecommends = (ImageView) findViewById(R.id.iv_recommends_new);
 		iconTrendNew = (ImageView) findViewById(R.id.iv_trend_new);
 		mInformationList = (SnapListView) findViewById(R.id.lv_home);
@@ -646,7 +655,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	@Override
 	protected void onDestroy() {
-//		unBindTigaseService();
+		// unBindTigaseService();
 		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
 		// unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
