@@ -695,4 +695,10 @@ public class Utils {
 		intent.setData(Uri.parse(url));
 		context.startActivity(intent);
 	}
+	
+	public static long exponentialBackOff(long count,long interval,long maxInterval){
+		long delay = (long) Math.pow(2, count) * interval;
+		delay = Math.min(maxInterval, delay);
+		return delay;
+	}
 }
