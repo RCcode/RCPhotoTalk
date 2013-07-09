@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -62,7 +62,7 @@
         	       字体颜色为  白色
         	       字体样式为  加粗
         	       字体大小为  16sp
-        	       距离左边距  14dp
+        	       距离左边距  14dp
     -->
     <style name="titleTextStyle">
         <item name="android:textColor">@android:color/white</item>
@@ -90,7 +90,7 @@
                                                字体颜色为   黑色
                                                字体大小为   12sp
     	                   距离左边距  14dp                                                                                        
-                                              字体垂直居中
+                                              字体垂直居中
     -->
     <style name="contentInfoTextStyle">
         <item name="android:textColor">@android:color/black</item>
@@ -106,7 +106,7 @@
 	    字体颜色   黑色   
 	    提示字体颜色    灰色 #a5a5a5
 	    字体大小  14sp
-	    字体垂直居中
+	    字体垂直居中
     -->
     <style name="editTextStlye">
         <item name="android:textColor">@android:color/black</item>
@@ -127,7 +127,7 @@
                                                字体颜色为   黑色
                                                字体大小为   14sp
     	                   距离左边距  14dp                                                                                        
-                                              字体垂直居中
+                                              字体垂直居中
     -->
     <style name="contentTextStyle">
         <item name="android:textColor">@android:color/black</item>
@@ -205,6 +205,7 @@
     <style name="text_base">
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
+        <item name="android:gravity">left</item>
     </style>
 
     <style name="login_edittext" parent="text_base">
@@ -241,17 +242,18 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.6</item>
+        <item name="android:backgroundDimAmount">0.6</item>
         -->
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@drawable/translucent_background</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:colorForeground">#AA000000</item>
     </style>
+
     <style name="attention_text" parent="text_base">
         <item name="android:textSize">@dimen/attention_text_size</item>
         <item name="android:textColor">@color/attention_text_gray</item>
         <item name="android:singleLine">false</item>
     </style>
-	
+
 </resources>

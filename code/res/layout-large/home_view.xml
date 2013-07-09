@@ -11,7 +11,28 @@
         android:orientation="vertical" >
 
         <include layout="@layout/base_top_navigate" />
+ <LinearLayout
+            android:id="@+id/linear_new_friends"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:padding="@dimen/friend_head_left" >
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                style="@style/text_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="@string/know_strangers"
+                android:textColor="@color/black" />
+        </LinearLayout>
+
+        <include layout="@layout/line" />
         <com.rcplatform.phototalk.views.SnapListView
             android:id="@+id/lv_home"
             android:layout_width="fill_parent"

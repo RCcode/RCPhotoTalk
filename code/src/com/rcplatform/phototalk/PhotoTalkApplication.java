@@ -7,14 +7,20 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.Application;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.view.WindowManager;
+import android.widget.RemoteViews;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -24,6 +30,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
+import com.rcplatform.phototalk.db.PhotoTalkDatabase;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
@@ -33,7 +40,10 @@ import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.FacebookUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
@@ -43,6 +53,8 @@ public class PhotoTalkApplication extends Application {
 	private WindowManager.LayoutParams wmParams;
 
 	private static final String CACHE_FILE_PATH = "phototalk/cache";
+
+	protected static final int NEW_INFORMATION = 4321;
 
 	private Bitmap editeBitmap;
 
@@ -266,7 +278,7 @@ public class PhotoTalkApplication extends Application {
 
 				@Override
 				public boolean onMessageHandle(String msg, String from) {
-					LogUtil.e("tigase receive message "+ msg);
+					LogUtil.e("tigase receive message " + msg);
 					List<Information> informations = JSONConver.jsonToInformations(msg);
 					filteInformations(informations);
 					return false;
@@ -281,9 +293,23 @@ public class PhotoTalkApplication extends Application {
 		Thread th = new Thread() {
 			public void run() {
 				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
+				List<Information> newInformations = result.get(PhotoTalkDatabase.NEW_INFORMATION);
+				if (newInformations != null && newInformations.size() > 0 && !Utils.isRunningForeground(getApplicationContext())) {
+					Message msg = newInformationHandler.obtainMessage();
+					msg.what = NEW_INFORMATION;
+					msg.obj = newInformations.size();
+					newInformationHandler.sendMessage(msg);
+				}
 				InformationPageController.getInstance().onNewInformation(result);
 			};
 		};
 		th.start();
 	}
+
+	private final Handler newInformationHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			int count = (Integer) msg.obj;
+			PhotoTalkUtils.sendNewInformationNotification(PhotoTalkApplication.this, count);
+		};
+	};
 }
