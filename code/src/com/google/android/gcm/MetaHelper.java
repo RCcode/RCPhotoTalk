@@ -227,6 +227,20 @@ public class MetaHelper {
 		return packageInfo.versionName;
 	}
 
+	public static int getAppVersionCode(Context context) {
+		int code = -1;
+		PackageInfo packageInfo;
+		try {
+			packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+			code = packageInfo.versionCode;
+		}
+		catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return code;
+	}
+
 	/*
 	 * public static String getLabel(Context ctx) { return
 	 * labels.get(ctx.getClass()) ; } public static void putLabel(){ } static
