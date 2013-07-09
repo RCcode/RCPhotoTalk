@@ -277,7 +277,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			result = (info.orientation - degrees + 360) % 360;
 		}
 		camera.setDisplayOrientation(result);
-		round = result;
 		return result;
 	}
 
@@ -384,9 +383,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				}
 				int w = 0;
 				int h = 0;
-
 				if (Build.VERSION.SDK_INT >= 8)
-					setCameraDisplayOrientation((Activity) mContext, mCurrentCameraNum, mCamera);
+					round = setCameraDisplayOrientation((Activity) mContext, mCurrentCameraNum, mCamera);
 
 				if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
 					parameters.set("orientation", "portrait");
@@ -407,11 +405,11 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					}
 				}
 
-				if (mCurrentCameraNum == mFrontCameraNum) {
-					parameters.setRotation(270);
-				} else {
-					parameters.setRotation(90);
-				}
+//				if (mCurrentCameraNum == mFrontCameraNum) {
+//					parameters.setRotation(270);
+//				} else {
+//					parameters.setRotation(90);
+//				}
 
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
 				if (previewSize != null) {
