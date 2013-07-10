@@ -703,4 +703,9 @@ public class Utils {
 			return true;
 		return false;
 	}
+	public static long exponentialBackOff(long count,long interval,long maxInterval){
+		long delay = (long) Math.pow(2, count) * interval;
+		delay = Math.min(maxInterval, delay);
+		return delay;
+	}
 }

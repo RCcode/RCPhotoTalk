@@ -38,6 +38,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class TigaseManager {
 
@@ -65,11 +66,15 @@ public class TigaseManager {
 
 	private final int INIT_CONNECT_MAX_COUNT = 4;
 
-	private final int CONNECT_INTERVAL = 60000;
+	private final int CONNECT_INTERVAL = 1000;
+	
+	private final int CONNECT_MAX_INTERVAL = 300000;
 
 	private final int RESET_PASSWORD_MAX_COUNT = 5;
 
 	private final int RESET_PASSWORD_INTERVAL = 10000;
+	
+	private final int RESET_PASSWORD_MAX_INTERVAL = 300000;
 
 	private int resetPasswordCount = 0;
 
@@ -93,12 +98,13 @@ public class TigaseManager {
 			resetPasswordTimer = new Timer();
 			ResetTigasePasswordTask task = new ResetTigasePasswordTask();
 			if (resetPasswordCount < RESET_PASSWORD_MAX_COUNT) {
-				int delay = (int) Math.pow(2, resetPasswordCount) * RESET_PASSWORD_INTERVAL;
+//				int delay = (int) Math.pow(2, resetPasswordCount) * RESET_PASSWORD_INTERVAL;
+				long delay = Utils.exponentialBackOff(resetPasswordCount, RESET_PASSWORD_INTERVAL, RESET_PASSWORD_MAX_INTERVAL);
 				resetPasswordTimer.schedule(task, delay);
 			}
 			resetPasswordCount++;
 
-			boolean updateFlag = false;
+//			boolean updateFlag = false;
 
 			UserInfo userInfo = ((PhotoTalkApplication) ctx.getApplicationContext()).getCurrentUser();
 			JSONObject json = new JSONObject();
@@ -168,7 +174,7 @@ public class TigaseManager {
 						userInfo.setTigasePwd(pwd);
 						PrefsUtils.User.saveUserInfo(ctx, userInfo.getRcId(), userInfo);
 						password = pwd;
-						updateFlag = true;
+//						updateFlag = true;
 						resetPasswordTimer.cancel();
 						disConnect();
 						initConnect();
@@ -265,10 +271,11 @@ public class TigaseManager {
 		public void run() {
 			initConnectTimer = new Timer();
 			ConnectTimerTask task = new ConnectTimerTask();
-			if (retryConnectCount < INIT_CONNECT_MAX_COUNT) {
-				int delay = (int) Math.pow(2, retryConnectCount) * CONNECT_INTERVAL;
-				initConnectTimer.schedule(task, delay);
-			}
+			// 改为长连接，所以不用限制初始化连接次数
+			// if (retryConnectCount < INIT_CONNECT_MAX_COUNT) {
+			long delay = Utils.exponentialBackOff(retryConnectCount, CONNECT_INTERVAL, CONNECT_MAX_INTERVAL);
+			initConnectTimer.schedule(task, delay);
+			// }
 			retryConnectCount++;
 			connect();
 		}
