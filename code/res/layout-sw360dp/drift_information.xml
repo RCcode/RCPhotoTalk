@@ -1,18 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent" >
 
-    <include layout="@layout/base_top_navigate" />
+    <include
+        android:id="@+id/title"
+        layout="@layout/base_top_navigate" />
 
     <com.rcplatform.phototalk.views.SnapListView
         android:id="@+id/lv_drift"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/title"
         android:cacheColorHint="#00000000"
         android:divider="@null"
         android:fadingEdge="none" >
     </com.rcplatform.phototalk.views.SnapListView>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center_horizontal" >
+
+        <Button
+            android:id="@+id/btn_get_drift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fish_information" />
+
+        <Button
+            android:id="@+id/btn_throw_drift"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:text="@string/throw_information" />
+    </LinearLayout>
+
+</RelativeLayout>

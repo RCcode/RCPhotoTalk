@@ -20,6 +20,7 @@ public class PrefsUtils {
 		public static final String LAST_CONTACT_UPLOAD_TIME = "lastuploadtime";
 		public static final String NEVER_ATTENTION_VERSION = "never_attention";
 		public static final String LAST_UPDATE_TIME = "last_update_time";
+		public static final String MAX_FISH_TIME = "maxfishtime";
 
 		public static void setNeverAttentionVersion(Context context, String version) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
@@ -38,13 +39,20 @@ public class PrefsUtils {
 		public static long getLastCheckUpdateTime(Context context) {
 			return getPreference(context, PREF_APP_INFO).getLong(LAST_UPDATE_TIME, 0);
 		}
+
+		public static synchronized int getMaxFishTime(Context context) {
+			return getPreference(context, PREF_APP_INFO).getInt(MAX_FISH_TIME, Constants.MAX_FISH_DRIFT_TIME);
+		}
+
+		public static synchronized void setMaxFishTime(Context context, int maxTime) {
+			getPreference(context, PREF_APP_INFO).edit().putInt(MAX_FISH_TIME, maxTime).commit();
+		}
 	}
 
 	public static class LoginState {
 
 		private static final String PREF_NAME = "loginstate";
 		private static final String PREF_KEY_LOGIN_USER = "loginuser";
-		private static final String PREF_KEY_HAS_USED = "hasused";
 		private static final String PREF_KEY_LAST_RCID = "lastrcid";
 
 		public synchronized static void setLoginUser(Context context, UserInfo userInfo) {
@@ -103,10 +111,14 @@ public class PrefsUtils {
 		private static final String PREF_KEY_SELF_BINDPHONE_TIME = "selfbindphonetime";
 
 		private static final String PREF_KEY_HAS_RECOMMENDS = "hasrecommends";
-		
+
 		private static final String PREF_KEY_VK_NAME = "vkname";
-		
-		private static final String PREF_KEY_INTO_FRIENDS_LIST_TIME="intofriendslisttime";
+
+		private static final String PREF_KEY_INTO_FRIENDS_LIST_TIME = "intofriendslisttime";
+
+		private static final String PREF_KEY_LAST_THROW_TIME = "lastthrowtime";
+
+		private static final String PFEF_KEY_FISH_LEAVE_TIME = "fishleavetime";
 
 		public static class ThirdPart {
 
@@ -330,15 +342,6 @@ public class PrefsUtils {
 					.putString(Constants.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Constants.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
 
-		/**
-		 * 退出登录。 Method description
-		 * 
-		 * @param context
-		 */
-		public static void cleanUserInfoLogin(Context context) {
-			SharedPreferences sharedPreferences = context.getSharedPreferences(Constants.PREFS_FILE_USER_INFO, Context.MODE_WORLD_READABLE);
-			sharedPreferences.edit().clear().commit();
-		}
 
 		public static void setUserReceiveSet(Context context, String pref, int set) {
 			SharedPreferences sh = getPreference(context, pref);
@@ -416,13 +419,39 @@ public class PrefsUtils {
 		public static synchronized void setNewRecommends(Context context, String pref, boolean hasNew) {
 			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_RECOMMENDS, hasNew).commit();
 		}
+
 		public static long getIntoFriendsListTime(Context context, String pref) {
 			return getPreference(context, pref).getLong(PREF_KEY_INTO_FRIENDS_LIST_TIME, 0);
 		}
-		
-		public static synchronized void setIntoFriendsListTime(Context context, String pref,long time) {
+
+		public static synchronized void setIntoFriendsListTime(Context context, String pref, long time) {
 			getPreference(context, pref).edit().putLong(PREF_KEY_INTO_FRIENDS_LIST_TIME, time).commit();
 		}
 
+		public static synchronized boolean isThrowToday(Context context, String pref) {
+			long time = getPreference(context, pref).getLong(PREF_KEY_LAST_THROW_TIME, 0);
+			if (time == 0)
+				return false;
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - time) < Constants.TimeMillins.A_DAY) {
+				if (Utils.isSameDay(time, currentTime)) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		public static synchronized void setThrowToday(Context context, String pref) {
+			long time = System.currentTimeMillis();
+			getPreference(context, pref).edit().putLong(PREF_KEY_LAST_THROW_TIME, time).commit();
+		}
+
+		public static synchronized int getFishLeaveTime(Context context, String pref) {
+			return getPreference(context, pref).getInt(PFEF_KEY_FISH_LEAVE_TIME, Constants.MAX_FISH_DRIFT_TIME);
+		}
+
+		public static synchronized void setFishLeaveTime(Context context, String pref, int time) {
+			getPreference(context, pref).edit().putInt(PFEF_KEY_FISH_LEAVE_TIME, time).commit();
+		}
 	}
 }

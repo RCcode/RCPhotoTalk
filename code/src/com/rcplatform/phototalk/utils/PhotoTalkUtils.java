@@ -155,4 +155,9 @@ public class PhotoTalkUtils {
 		notification.contentIntent = intent;
 		notificationManager.notify(0, notification);
 	}
+	public static Friend getDriftFriend(){
+		Friend friend=new Friend();
+		friend.setRcId("-1");
+		return friend;
+	}
 }

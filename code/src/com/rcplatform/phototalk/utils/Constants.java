@@ -21,6 +21,10 @@ import com.rcplatform.phototalk.db.DatabaseUtils;
 
 public class Constants {
 
+	public static class TimeMillins {
+		public static long A_DAY = 1000 * 60 * 60 * 24;
+	}
+
 	public static int SCREEN_WIDTH;
 
 	public static int SCREEN_HEIGHT;
@@ -37,16 +41,15 @@ public class Constants {
 
 	public static List<AppInfo> installedApps = new ArrayList<AppInfo>();
 
-	//-----------------------第三方App-----------------------------
-	
+	// -----------------------第三方App-----------------------------
+
 	public static String VK_API_ID = "3567525";
-	
+
 	public static final String TWITTER_APP_KEY = "KEQS9CFIaxW22MPCrhvQsA";
 
 	public static final String TWITTER_APP_SECRET = "U03svkXUYgZZB6QF7GZOlm5I5c3BRySFEpv5tJVfpI";
 
-	//-----------------------------------------------------------
-	
+	// -----------------------------------------------------------
 
 	public static File USER_IMAGE_DIR;
 
@@ -77,12 +80,13 @@ public class Constants {
 	public static final String PAGEAGE = "com.rcplatform.phototalk";
 
 	public static final String INVITE_JOIN_IMAGE_URL = "http://img1.ph.126.net/HvcVzHANbBP4eKGcGKd4TQ==/3789216136578905707.png";
-	
-	public static final String GOOGLE_PLUS_INVITE_IMAGE_URL="http://img0.ph.126.net/2E44P8D2t01fZnotAzx5sw==/1652258113391767956.jpg";
+
+	public static final String GOOGLE_PLUS_INVITE_IMAGE_URL = "http://img0.ph.126.net/2E44P8D2t01fZnotAzx5sw==/1652258113391767956.jpg";
 	// public static final String INVITE_JOIN_IMAGE_URL =
 	// "http://img.hb.aicdn.com/48bb7e63918158fb7524c28adcaf8bf4833629854a35b-v0Gv9F_fw580";
 
 	public static final String OFFICIAL_RCID = "1000000";
+	public static final int MAX_FISH_DRIFT_TIME = 50;
 
 	public static void initUI(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();

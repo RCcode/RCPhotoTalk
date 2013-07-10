@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.clienservice;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +104,7 @@ public class PTBackgroundService extends Service {
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
-		}else{
+		} else {
 			this.mCurrentUser = currentUser;
 		}
 	}
@@ -214,7 +215,8 @@ public class PTBackgroundService extends Service {
 	 */
 	private void sendSMS(String number, String rcId) {
 		if (mCurrentUser != null && mCurrentUser.getRcId().equals(rcId)) {
-//			LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			// LogUtil.e("~~~~~~~~~~~~~~~~~~~~~~~send msm to number " + number +
+			// "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			try {
 				Intent deliveryIntent = new Intent(ACTION_SMS_SEND);
 				PendingIntent sendPI = PendingIntent.getBroadcast(this, 0, deliveryIntent, 0);
@@ -466,6 +468,7 @@ public class PTBackgroundService extends Service {
 					LogUtil.e("need to update facebook info");
 					uploadFacebookInfo();
 				}
+				tryToResetDriftFishTime();
 			}
 		}
 	};
@@ -501,6 +504,17 @@ public class PTBackgroundService extends Service {
 				}
 			}
 		}.start();
+	}
+
+	protected void tryToResetDriftFishTime() {
+		long currentTime = System.currentTimeMillis();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(currentTime);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+		int minute = calendar.get(Calendar.MINUTE);
+		if (hour == 0 && minute == 0) {
+			PrefsUtils.User.setFishLeaveTime(getApplicationContext(), mCurrentUser.getRcId(), PrefsUtils.AppInfo.getMaxFishTime(getApplicationContext()));
+		}
 	}
 
 	private BroadcastReceiver mGCMReceiver = new BroadcastReceiver() {
