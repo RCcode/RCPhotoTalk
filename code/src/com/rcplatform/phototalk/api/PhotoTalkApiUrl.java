@@ -1,9 +1,9 @@
 package com.rcplatform.phototalk.api;
 
 public class PhotoTalkApiUrl {
-	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
+//	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
 //	private static final String BASE_URL = "http://192.168.0.86:8083/";
-//	 private static final String BASE_URL = "http://192.168.0.118/";
+	 private static final String BASE_URL = "http://192.168.0.114/";
 	// private static final String BASE_URL = "http://192.168.0.86:8083/";
 	// private static final String BASE_URL = "http://pt.rcplatformhk.net/";
 	// private static final String BASE_URL = "http://103.247.169.150:8083/";
@@ -93,9 +93,9 @@ public class PhotoTalkApiUrl {
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
+//	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
 //	private static final String RCBOSS_BASE_URL = "http://192.168.0.86:8083/";
-//	private static final String RCBOSS_BASE_URL = "http://192.168.0.118/";
+	private static final String RCBOSS_BASE_URL = "http://192.168.0.114/";
 	// private static final String RCBOSS_BASE_URL =
 	// "http://192.168.0.86:8083/";
 
@@ -132,4 +132,6 @@ public class PhotoTalkApiUrl {
 	public static final String LOGOUT_URL = RCBOSS_USER_URL + "userLogout.do";
 	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO = RCBOSS_USER_URL + "createUserInfo.do";
 	public static final String CLIENT_LOG_URL = BASE_URL_FOR_RCBOSS + "config/insClientLog.do";
+//	public static final String CHANGE_COUNTRY_CODE= "http://192.168.0.114/skypool/pool/editProfile.do";
+	public static final String CHANGE_COUNTRY_CODE= BASE_URL+"skypool/pool/editProfile.do";
 }

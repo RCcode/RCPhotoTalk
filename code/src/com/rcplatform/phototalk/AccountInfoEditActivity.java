@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.flurry.org.apache.avro.util.Utf8;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -34,17 +36,22 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.RCPlatformServiceError;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
+import com.rcplatform.rcad.view.constants.Constant;
 
-public class AccountInfoEditActivity extends ImagePickActivity implements View.OnClickListener {
+public class AccountInfoEditActivity extends ImagePickActivity implements
+		View.OnClickListener {
 
 	private static final int REQUESTCODE_NAME = 1010;
 
 	protected static final int REQUEST_GALLARY = 1012;
 
 	protected static final int REQUEST_CAMERA = 1013;
+	protected static final int REQUEST_EDIT_COUNTRY = 1014;
 
 	public static final String RESULT_PARAM_USER = "userInfo";
 
@@ -82,12 +89,16 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 
 	private String newHeadPath;
 
+	private ImageView user_country_flag;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.settings_edit_account_info);
-		userDetailInfo = PhotoTalkUtils.copyUserInfo(getPhotoTalkApplication().getCurrentUser());
-		sex = new String[] { getString(R.string.male), getString(R.string.famale) };
+		userDetailInfo = PhotoTalkUtils.copyUserInfo(getPhotoTalkApplication()
+				.getCurrentUser());
+		sex = new String[] { getString(R.string.male),
+				getString(R.string.famale) };
 		mImageLoader = ImageLoader.getInstance();
 		initView();
 	}
@@ -98,9 +109,12 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		mNameView = (TextView) findViewById(R.id.settings_modify_name);
 		mSexView = (TextView) findViewById(R.id.settings_modify_sex);
 		mBirthday = (TextView) findViewById(R.id.settings_modify_age);
+		user_country_flag = (ImageView) findViewById(R.id.user_country_flag);
 		findViewById(R.id.rela_edit_sex).setOnClickListener(this);
 		findViewById(R.id.rela_edit_birthday).setOnClickListener(this);
 		findViewById(R.id.rela_edit_nick).setOnClickListener(this);
+		findViewById(R.id.rela_edit_country).setOnClickListener(this);
+
 		mMyHeadView.setOnClickListener(this);
 		setUserInfo();
 	}
@@ -110,6 +124,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		setSex();
 		setBirthday();
 		loadHeadPicture();
+		setCountry();
 	}
 
 	private void setBirthday() {
@@ -120,8 +135,19 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		}
 	}
 
+	private void setCountry() {
+		if (userDetailInfo.getCountry() != null) {
+			Bitmap bitmap = Utils.getAssetCountryFlag(this,
+					userDetailInfo.getCountry());
+			if (bitmap != null) {
+				user_country_flag.setImageBitmap(bitmap);
+			}
+		}
+	}
+
 	private void loadHeadPicture() {
-		mImageLoader.displayImage(userDetailInfo.getHeadUrl(), mMyHeadView, ImageOptionsFactory.getFriendHeadImageOptions());
+		mImageLoader.displayImage(userDetailInfo.getHeadUrl(), mMyHeadView,
+				ImageOptionsFactory.getFriendHeadImageOptions());
 	}
 
 	private void setNick() {
@@ -137,12 +163,16 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		mBackView.setVisibility(View.VISIBLE);
 		mBackView.setOnClickListener(this);
 		mTitleView = (TextView) findViewById(R.id.titleContent);
-		mTitleView.setText("" + getResources().getString(R.string.settings_update_person_info_title));
+		mTitleView.setText(""
+				+ getResources().getString(
+						R.string.settings_update_person_info_title));
 		mTitleView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this,
+				getResources().getString(R.string.login_error),
+				getResources().getString(R.string.ok)).show();
 		finish();
 	}
 
@@ -167,7 +197,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			EventUtil.More_Setting.rcpt_nameedit(baseContext);
 			Intent intentName = new Intent(this, UpdateNameActivity.class);
 			intentName.setAction("setting_update_name");
-			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT, userDetailInfo.getNickName());
+			intentName.putExtra(UpdateNameActivity.REQUEST_PARAM_KEY_TEXT,
+					userDetailInfo.getNickName());
 			startActivityForResult(intentName, REQUESTCODE_NAME);
 			break;
 		case R.id.rela_edit_sex:
@@ -178,26 +209,37 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 			EventUtil.More_Setting.rcpt_ageedit(baseContext);
 			showDateDialog();
 			break;
+		case R.id.rela_edit_country:
+			EventUtil.More_Setting.rcpt_ageedit(baseContext);
+			Intent intent = new Intent(this,EditUserCountryActivity.class);
+			startActivityForResult(intent,REQUEST_EDIT_COUNTRY);
+			break;
 		}
 	}
 
 	private void showSexChooseDialog() {
 		int selectedSex = userDetailInfo.getGender();
-		DialogUtil.getAlertDialogBuilder(this).setTitle(getResources().getString(R.string.settings_select_sex))
-				.setSingleChoiceItems(sex, selectedSex, new DialogInterface.OnClickListener() {
+		DialogUtil
+				.getAlertDialogBuilder(this)
+				.setTitle(
+						getResources().getString(R.string.settings_select_sex))
+				.setSingleChoiceItems(sex, selectedSex,
+						new DialogInterface.OnClickListener() {
 
-					public void onClick(DialogInterface dialog, int which) {
-						userDetailInfo.setGender(which + 1);
-						setSex();
-						dialog.dismiss();
-					}
-				}).show();
+							public void onClick(DialogInterface dialog,
+									int which) {
+								userDetailInfo.setGender(which + 1);
+								setSex();
+								dialog.dismiss();
+							}
+						}).show();
 	}
 
 	private void saveBirthDay(int year, int monthOfYear, int dayOfMonth) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(year, monthOfYear, dayOfMonth);
-		userDetailInfo.setBirthday(mDateFormat.format(new Date(calendar.getTimeInMillis())));
+		userDetailInfo.setBirthday(mDateFormat.format(new Date(calendar
+				.getTimeInMillis())));
 		isChance = true;
 		setBirthday();
 	}
@@ -205,9 +247,12 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	private OnDateChangedListener mOnBirthdayChangeListener = new OnDateChangedListener() {
 
 		@Override
-		public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+		public void onDateChanged(DatePicker view, int year, int monthOfYear,
+				int dayOfMonth) {
 			if (isSelectedTimeAfterToday(year, monthOfYear, dayOfMonth)) {
-				view.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH), this);
+				view.init(mBirthDayCalender.get(Calendar.YEAR),
+						mBirthDayCalender.get(Calendar.MONTH),
+						mBirthDayCalender.get(Calendar.DAY_OF_MONTH), this);
 			}
 		}
 	};
@@ -225,30 +270,39 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 				public void onClick(DialogInterface dialog, int which) {
 					dialog.dismiss();
 					if (which == DialogInterface.BUTTON_POSITIVE)
-						saveBirthDay(mBirthDayPicker.getYear(), mBirthDayPicker.getMonth(), mBirthDayPicker.getDayOfMonth());
+						saveBirthDay(mBirthDayPicker.getYear(),
+								mBirthDayPicker.getMonth(),
+								mBirthDayPicker.getDayOfMonth());
 				}
 			};
-			mBirthChooseDialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.select_birthday).setView(view)
-					.setNegativeButton(R.string.cancel, birthListener).setPositiveButton(R.string.ok, birthListener).create();
+			mBirthChooseDialog = DialogUtil.getAlertDialogBuilder(this)
+					.setTitle(R.string.select_birthday).setView(view)
+					.setNegativeButton(R.string.cancel, birthListener)
+					.setPositiveButton(R.string.ok, birthListener).create();
 		}
 		if (!TextUtils.isEmpty(userDetailInfo.getBirthday())) {
 			try {
-				mBirthDayCalender.setTime(mDateFormat.parse(userDetailInfo.getBirthday()));
+				mBirthDayCalender.setTime(mDateFormat.parse(userDetailInfo
+						.getBirthday()));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 
 		}
-		mBirthDayPicker.init(mBirthDayCalender.get(Calendar.YEAR), mBirthDayCalender.get(Calendar.MONTH), mBirthDayCalender.get(Calendar.DAY_OF_MONTH),
+		mBirthDayPicker.init(mBirthDayCalender.get(Calendar.YEAR),
+				mBirthDayCalender.get(Calendar.MONTH),
+				mBirthDayCalender.get(Calendar.DAY_OF_MONTH),
 				mOnBirthdayChangeListener);
 		mBirthChooseDialog.show();
 	}
 
-	private boolean isSelectedTimeAfterToday(int year, int monthOfYear, int dayOfMonth) {
+	private boolean isSelectedTimeAfterToday(int year, int monthOfYear,
+			int dayOfMonth) {
 		Calendar calenderSelected = Calendar.getInstance();
 		calenderSelected.set(year, monthOfYear, dayOfMonth);
 		Calendar calendarCurrent = Calendar.getInstance();
-		return calenderSelected.getTimeInMillis() > calendarCurrent.getTimeInMillis();
+		return calenderSelected.getTimeInMillis() > calendarCurrent
+				.getTimeInMillis();
 	}
 
 	@Override
@@ -262,6 +316,11 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					userDetailInfo.setNickName(nick);
 					setNick();
 				}
+			}else if(REQUEST_EDIT_COUNTRY == requestCode){
+				isChance = true;
+				String code = data.getStringExtra("countryCode");
+				userDetailInfo.setCountry(code);
+				setCountry();
 			}
 		}
 	}
@@ -280,7 +339,8 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 	@Override
 	protected void onImagePickFail() {
 		super.onImagePickFail();
-		DialogUtil.showToast(getApplicationContext(), R.string.get_image_fail, Toast.LENGTH_SHORT);
+		DialogUtil.showToast(getApplicationContext(), R.string.get_image_fail,
+				Toast.LENGTH_SHORT);
 	}
 
 	@Override
@@ -306,33 +366,44 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 		File file = null;
 		if (isHeadChange)
 			file = new File(newHeadPath);
-		FriendsProxy.upUserInfo(this, file, new RCPlatformResponseHandler() {
+		FriendsProxy.upUserInfo(
+				this,
+				file,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					JSONObject jsonObject = new JSONObject(content);
-					String url = jsonObject.getString("headUrl");
-					if (!TextUtils.isEmpty(url)) {
-						userDetailInfo.setHeadUrl(url);
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						try {
+							JSONObject jsonObject = new JSONObject(content);
+							String url = jsonObject.getString("headUrl");
+							if (!TextUtils.isEmpty(url)) {
+								userDetailInfo.setHeadUrl(url);
+							}
+							PrefsUtils.User.saveUserInfo(
+									getApplicationContext(),
+									userDetailInfo.getRcId(), userDetailInfo);
+							getPhotoTalkApplication().setCurrentUser(
+									userDetailInfo);
+							PhotoTalkDatabaseFactory.getDatabase().addFriend(
+									PhotoTalkUtils
+											.userToFriend(getCurrentUser()));
+							setResult(Activity.RESULT_OK);
+							finish();
+						} catch (JSONException e) {
+							e.printStackTrace();
+							onFailure(
+									RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL,
+									getString(R.string.net_error));
+						}
 					}
-					PrefsUtils.User.saveUserInfo(getApplicationContext(), userDetailInfo.getRcId(), userDetailInfo);
-					getPhotoTalkApplication().setCurrentUser(userDetailInfo);
-					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
-					setResult(Activity.RESULT_OK);
-					finish();
-				} catch (JSONException e) {
-					e.printStackTrace();
-					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
-				}
-			}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showUpdateFailDialog();
-			}
-		}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "");
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						showUpdateFailDialog();
+					}
+				}, userDetailInfo.getNickName(), userDetailInfo.getBirthday(),
+				userDetailInfo.getGender() + "",userDetailInfo.getCountry()+"");
 	}
 
 	private void showUpdateFailDialog() {
@@ -354,8 +425,11 @@ public class AccountInfoEditActivity extends ImagePickActivity implements View.O
 					dialog.dismiss();
 				}
 			};
-			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.net_error).setPositiveButton(R.string.ok, listener)
-					.setNegativeButton(R.string.cancel, listener).setCancelable(false).create();
+			updateFailDialog = DialogUtil.getAlertDialogBuilder(this)
+					.setMessage(R.string.net_error)
+					.setPositiveButton(R.string.ok, listener)
+					.setNegativeButton(R.string.cancel, listener)
+					.setCancelable(false).create();
 		}
 		updateFailDialog.show();
 	}

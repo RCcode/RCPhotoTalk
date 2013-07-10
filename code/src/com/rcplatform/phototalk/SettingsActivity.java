@@ -124,6 +124,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			tv_sex.setVisibility(View.GONE);
 			break;
 		}
+		
+		System.out.println("国家码------->"+userInfo.getCountry());
 		mNickView.setText("" + userInfo.getNickName());
 		userRcId.setText("" + userInfo.getRcId());
 		userAge.setText("" + userInfo.getAge());

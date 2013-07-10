@@ -349,5 +349,15 @@ public class Constants {
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
 
 	public static final String KEY_APP_ID = "appId";
+	//国家码 小写 后加.png为asset目录下对应的国家国旗
+	public static final String[] COUNTRY_CODE = new String[] { "CN", "US", "JP", "RU", "KR", "IT", "MX", "DE", "GB", "ES", "BR", "FR", "PL", "UA", "AR",
+	        "CA", "IL", "CZ", "PT", "SE", "NL", "DK", "IN", "IR", "PH", "ID", "MY", "AU", "CF", "CL", "TD", "VN", "NZ", "GR", "TV", "TT", "TO", "LK",
+	        "KN", "ST", "SA", "CY", "SV", "CH", "NO", "NG", "ZA", "RO", "LR", "TC", "GN", "GF", "CU", "CR", "CO", "CD", "FK", "FI", "MC", "VA", "TP",
+	        "GQ", "KP", "BT", "BA", "BH", "AG", "AE", "EG", "IE", "EE", "AT", "BS", "PK", "PS", "BG", "BJ", "BE", "IS", "BO", "BW", "TL", "TG", "GD",
+	        "KI", "KG", "GW", "GH", "GA", "ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM",
+	        "MD", "MA", "MZ", "NE", "PW", "WS", "SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM",
+	        "YE", "IQ", "JO", "DZ", "AF", "ET", "AD", "AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH",
+	        "QA", "KM", "CI", "HR", "KE", "LV", "LS", "LU", "RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE",
+	        "UY", "UZ", "TJ", "EH", "AM", "ZM" };
 
 }

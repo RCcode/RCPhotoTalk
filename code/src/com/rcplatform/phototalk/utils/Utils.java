@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -694,5 +695,21 @@ public class Utils {
 		Intent intent = new Intent(Intent.ACTION_VIEW);
 		intent.setData(Uri.parse(url));
 		context.startActivity(intent);
+	}
+	
+	public static Bitmap getAssetCountryFlag(Context context,String name){
+		Bitmap bitmap = null;
+		AssetManager assets = context.getAssets();
+		String fileName = name.toLowerCase()+".png";
+		InputStream is = null;
+		try {
+			is = assets.open(fileName);
+			bitmap = BitmapFactory.decodeStream(is);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return bitmap;
+		
 	}
 }

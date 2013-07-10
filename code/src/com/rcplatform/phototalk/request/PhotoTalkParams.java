@@ -31,6 +31,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NICK = "nick";
 		public static final String PARAM_KEY_BIRTHDAY = "birthday";
 		public static final String PARAM_KEY_GENDER = "gender";
+		public static final String PARAM_KEY_COUNTRY = "country";
 	}
 
 	public static class SendPhoto {
