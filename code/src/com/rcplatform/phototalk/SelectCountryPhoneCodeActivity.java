@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.rcplatform.phototalk.EditUserCountryActivity.CountryHolder;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.SeachCountryAdapter;
@@ -58,10 +60,11 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_user_country);
+		initTitle();
 		initData();
 		getOldList();
-		initTitle();
 		initView();
+
 	}
 
 	// 初始化数据 获取 当前语言的国家电话码
@@ -85,6 +88,7 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 
 	// 获取最原始的数据内容列表
 	private void getOldList() {
+		oldData.clear();
 		String itemTextBase = getString(R.string.country_code);
 		for (int i = 0; i < allCountryCodes.size(); i++) {
 			PhoneHodler phoneHodler = new PhoneHodler();
@@ -99,6 +103,7 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 			}
 			oldData.add(phoneHodler);
 		}
+
 	}
 
 	private void initTitle() {
@@ -136,10 +141,12 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 				String keyWords = s.toString().trim();
 				if (TextUtils.isEmpty(keyWords)) {
 					seach_delete_btn.setVisibility(View.GONE);
+					getOldList();
+					listData = oldData;
 					// initData();
-					// adapter = new SeachCountryAdapter(
-					// SelectCountryPhoneCodeActivity.this, countryList);
-					// listView.setAdapter(adapter);
+					myAdapter = new MyAdapter(
+							SelectCountryPhoneCodeActivity.this, listData);
+					listView.setAdapter(myAdapter);
 				} else {
 					search(keyWords);
 					seach_delete_btn.setVisibility(View.VISIBLE);
@@ -155,8 +162,21 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 					int position, long id) {
 				// TODO Auto-generated method stub
 				phone = listData.get(position).getText();
+				reSetListData();
+				myAdapter.notifyDataSetChanged();
 			}
 		});
+		listView.setAdapter(myAdapter);
+	}
+
+	private void reSetListData() {
+		for (int i = 0; i < listData.size(); i++) {
+			if (listData.get(i).getText().equals(phone)) {
+				listData.get(i).setSelect(true);
+			} else {
+				listData.get(i).setSelect(false);
+			}
+		}
 	}
 
 	private void search(String keyWords) {
@@ -165,12 +185,12 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 		}
 		List<PhoneHodler> list = new ArrayList<PhoneHodler>();
 		for (int i = 0; i < oldData.size(); i++) {
-			if(oldData.get(i).getText().toLowerCase().contains(keyWords)){
+			if (oldData.get(i).getText().toLowerCase().contains(keyWords)) {
 				PhoneHodler hodler = new PhoneHodler();
 				hodler.setText(oldData.get(i).getText());
-				if(oldData.get(i).getText().equals(phone)){
+				if (oldData.get(i).getText().equals(phone)) {
 					hodler.setSelect(true);
-				}else{
+				} else {
 					hodler.setSelect(false);
 				}
 				list.add(hodler);
@@ -181,21 +201,34 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 		listView.setAdapter(myAdapter);
 	}
 
+	public int getNum(){
+	int num = -1;
+		for(int i = 0;i<oldData.size();i++){
+			if(oldData.get(i).getText().equals(phone)){
+				num = i;
+				break;
+			}
+		}
+		return num;
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.back:
-			setResult(Activity.RESULT_OK);
+			Intent intent = new Intent();
+			intent.putExtra("text", phone);
+			intent.putExtra("size", getNum());
+			setResult(Activity.RESULT_OK, intent);
 			this.finish();
 			break;
 		case R.id.seach_delete_btn:
 			seachEdit.setText("");
-			initData();
-			// adapter = new
-			// SeachCountryAdapter(SelectCountryPhoneCodeActivity.this,
-			// countryList);
-			// listView.setAdapter(adapter);
+			getOldList();
+			listData = oldData;
+			myAdapter = new MyAdapter(SelectCountryPhoneCodeActivity.this,
+					listData);
+			listView.setAdapter(myAdapter);
 			break;
 		}
 	}
@@ -204,20 +237,22 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			setResult(Activity.RESULT_OK);
+			Intent intent = new Intent();
+			intent.putExtra("text", phone);
+			intent.putExtra("size", getNum());
+			setResult(Activity.RESULT_OK, intent);
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 
 	class MyAdapter extends BaseAdapter {
 		Context context;
-		List<PhoneHodler> listData;
-		ViewHodler viewHodler;
+		List<PhoneHodler> list;
 
 		public MyAdapter(Context context, List<PhoneHodler> listData) {
 			// TODO Auto-generated constructor stub
 			this.context = context;
-			this.listData = listData;
+			this.list = listData;
 		}
 
 		@Override
@@ -241,6 +276,7 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			// TODO Auto-generated method stub
+			ViewHodler viewHodler;
 			if (convertView == null) {
 				convertView = LayoutInflater.from(context).inflate(
 						R.layout.select_phone_country_item, null);
@@ -253,11 +289,11 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 			} else {
 				viewHodler = (ViewHodler) convertView.getTag();
 			}
-			viewHodler.phoneCode.setText(listData.get(position).getText());
-			if (listData.get(position).isSelect) {
-				viewHodler.phoneCode.setVisibility(View.VISIBLE);
+			viewHodler.phoneCode.setText(list.get(position).getText());
+			if (list.get(position).isSelect) {
+				viewHodler.selectView.setVisibility(View.VISIBLE);
 			} else {
-				viewHodler.phoneCode.setVisibility(View.INVISIBLE);
+				viewHodler.selectView.setVisibility(View.INVISIBLE);
 			}
 			return convertView;
 		}
