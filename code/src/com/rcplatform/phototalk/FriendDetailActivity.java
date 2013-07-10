@@ -2,6 +2,7 @@ package com.rcplatform.phototalk;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class FriendDetailActivity extends BaseActivity {
 	private Friend mFriend;
@@ -38,6 +40,7 @@ public class FriendDetailActivity extends BaseActivity {
 	private String mAction;
 	private ImageView ivHead;
 	private ImageView ivBackground;
+	private ImageView ivCountryFlag;
 	private TextView tvSexAge;
 	private TextView tvSource;
 	private Button btnPerform;
@@ -57,21 +60,27 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendInfo() {
-		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead, ImageOptionsFactory.getFriendHeadImageOptions());
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getFriendBackImageOptions());
+		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead,
+				ImageOptionsFactory.getFriendHeadImageOptions());
+		mImageLoader.displayImage(mFriend.getBackground(), ivBackground,
+				ImageOptionsFactory.getFriendBackImageOptions());
 		if (mFriend.getSource() != null) {
 			setFriendSource(mFriend.getSource());
 		}
 		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0)
-			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(), mImageLoader);
+			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(),
+					mImageLoader);
 		setFriendName();
-		tvSexAge.setText(getString(R.string.friend_sex_age, PhotoTalkUtils.getSexString(this, mFriend.getGender()), mFriend.getAge()));
+		tvSexAge.setText(getString(R.string.friend_sex_age,
+				PhotoTalkUtils.getSexString(this, mFriend.getGender()),
+				mFriend.getAge()));
 	}
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
 		if (!mFriend.getRcId().equals(getCurrentUser().getRcId()))
-			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(this, mFriend, null, true);
+			com.rcplatform.phototalk.request.Request
+					.executeGetFriendDetailAsync(this, mFriend, null, true);
 		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		mAction = getIntent().getAction();
@@ -85,34 +94,39 @@ public class FriendDetailActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-				new AddFriendTask(FriendDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
+				new AddFriendTask(FriendDetailActivity.this,
+						getPhotoTalkApplication().getCurrentUser(),
+						new AddFriendTask.AddFriendListener() {
 
-					@Override
-					public void onFriendAddSuccess(Friend friend, int addType) {
-						mFriend.setFriend(true);
-						coverToFriendView();
-						dismissLoadingDialog();
-					}
+							@Override
+							public void onFriendAddSuccess(Friend friend,
+									int addType) {
+								mFriend.setFriend(true);
+								coverToFriendView();
+								dismissLoadingDialog();
+							}
 
-					@Override
-					public void onFriendAddFail(int statusCode, String content) {
-						showErrorConfirmDialog(content);
-						dismissLoadingDialog();
-					}
+							@Override
+							public void onFriendAddFail(int statusCode,
+									String content) {
+								showErrorConfirmDialog(content);
+								dismissLoadingDialog();
+							}
 
-					@Override
-					public void onAlreadyAdded() {
-						mFriend.setFriend(true);
-						coverToFriendView();
-						dismissLoadingDialog();
-					}
-				}, mFriend).execute();
+							@Override
+							public void onAlreadyAdded() {
+								mFriend.setFriend(true);
+								coverToFriendView();
+								dismissLoadingDialog();
+							}
+						}, mFriend).execute();
 			}
 		});
 	}
 
 	private void coverToFriendView() {
-		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0 && !mFriend.getRcId().equals(getCurrentUser().getRcId()))
+		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0
+				&& !mFriend.getRcId().equals(getCurrentUser().getRcId()))
 			linearApps.setVisibility(View.VISIBLE);
 		else
 			linearApps.setVisibility(View.GONE);
@@ -121,7 +135,8 @@ public class FriendDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				EventUtil.Friends_Addfriends.rcpt_profile_takephotobutton(baseContext);
+				EventUtil.Friends_Addfriends
+						.rcpt_profile_takephotobutton(baseContext);
 				startTakePhotoActivity();
 			}
 		});
@@ -143,6 +158,7 @@ public class FriendDetailActivity extends BaseActivity {
 		tvSource = (TextView) findViewById(R.id.tv_source_name);
 		tvName = (TextView) findViewById(R.id.tv_name);
 		btnPerform = (Button) findViewById(R.id.btn_perform);
+		ivCountryFlag = (ImageView) findViewById(R.id.iv_country_flag);
 		setFriendInfo();
 		if (mAction.equals(Constants.Action.ACTION_FRIEND_DETAIL)) {
 			coverToFriendView();
@@ -164,7 +180,33 @@ public class FriendDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendName() {
-		tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName());
+		switch (mFriend.getGender()) {
+		case 0:
+			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+					.getLocalName() : mFriend.getNickName() + ", "
+					+ mFriend.getAge());
+			break;
+		case 1:
+			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+					.getLocalName() : mFriend.getNickName() + ", "
+					+ mFriend.getAge() + ", " + getString(R.string.male));
+			break;
+		case 2:
+			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+					.getLocalName() : mFriend.getNickName() + ", "
+					+ mFriend.getAge() + ", " + getString(R.string.famale));
+			break;
+		}
+		// tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+		// .getLocalName() : mFriend.getNickName());
+
+		if (mFriend.getCountry() != null && !mFriend.getCountry().equals("")) {
+			Bitmap bitmapFlag = Utils.getAssetCountryFlag(this,
+					mFriend.getCountry());
+			if (bitmapFlag != null) {
+				ivCountryFlag.setImageBitmap(bitmapFlag);
+			}
+		}
 		tv_rcid.setText(mFriend.getRcId());
 
 	}
@@ -185,7 +227,8 @@ public class FriendDetailActivity extends BaseActivity {
 	};
 
 	private boolean hasChangeUserInfo() {
-		if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL) && mFriend.isFriend()) {
+		if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL)
+				&& mFriend.isFriend()) {
 			return true;
 		}
 		if (mLastRemark != null && !mLastRemark.equals(mFriend.getLocalName())) {
@@ -198,9 +241,12 @@ public class FriendDetailActivity extends BaseActivity {
 
 	private void showRemaikWindow(View v) {
 		if (mRemarkEditWindow == null) {
-			View editView = getLayoutInflater().inflate(R.layout.my_friend_details_layout_edit, null, false);
-			Button btnConfirm = (Button) editView.findViewById(R.id.btn_remark_confirm);
-			final EditText etRemark = (EditText) editView.findViewById(R.id.et_remark);
+			View editView = getLayoutInflater().inflate(
+					R.layout.my_friend_details_layout_edit, null, false);
+			Button btnConfirm = (Button) editView
+					.findViewById(R.id.btn_remark_confirm);
+			final EditText etRemark = (EditText) editView
+					.findViewById(R.id.et_remark);
 			etRemark.setText(mFriend.getLocalName());
 			btnConfirm.setOnClickListener(new OnClickListener() {
 
@@ -210,7 +256,9 @@ public class FriendDetailActivity extends BaseActivity {
 					updateRemark(remark);
 				}
 			});
-			mRemarkEditWindow = new PopupWindow(editView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+			mRemarkEditWindow = new PopupWindow(editView,
+					WindowManager.LayoutParams.MATCH_PARENT,
+					WindowManager.LayoutParams.WRAP_CONTENT);
 
 			mRemarkEditWindow.setFocusable(true);
 			mRemarkEditWindow.setOutsideTouchable(true);

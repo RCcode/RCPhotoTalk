@@ -114,6 +114,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" />
         <activity
+            android:name="com.rcplatform.phototalk.SelectCountryPhoneCodeActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" />
+        <activity
             android:name="com.rcplatform.phototalk.PlatformEditActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"

@@ -229,6 +229,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 							public void onClick(DialogInterface dialog,
 									int which) {
 								userDetailInfo.setGender(which + 1);
+								isChance = true;
 								setSex();
 								dialog.dismiss();
 							}

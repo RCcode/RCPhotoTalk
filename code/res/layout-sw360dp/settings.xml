@@ -84,6 +84,11 @@
                                 android:gravity="center"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/default_head" />
+
+                            <ImageView
+                                android:id="@+id/settings_account_country_flag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
                         </RelativeLayout>
 
                         <LinearLayout
@@ -167,7 +172,6 @@
                     </LinearLayout>
                 </RelativeLayout>
 
-
                 <LinearLayout
                     android:id="@+id/my_friend_details_apps_listview"
                     android:layout_width="match_parent"
@@ -178,7 +182,6 @@
                     android:background="@drawable/app_list_back"
                     android:gravity="center_vertical"
                     android:orientation="horizontal" >
-
                 </LinearLayout>
 
                 <LinearLayout
