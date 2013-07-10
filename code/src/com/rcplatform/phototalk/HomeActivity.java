@@ -495,7 +495,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
 
 			@Override
-			public void onSendSuccess(long flag) {
+			public void onSendSuccess(long flag,String url) {
 				InformationPageController.getInstance().onPhotoResendSuccess(information);
 			}
 

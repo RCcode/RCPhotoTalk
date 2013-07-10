@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -37,6 +40,7 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.HorizontalListView;
@@ -80,6 +84,8 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private EditText etSearch;
 	private boolean hasVoice = false;
 	private boolean hasGraf = false;
+	private CheckBox cbStrange;
+	private boolean sendToStrange = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +198,14 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				mHandler.obtainMessage(MSG_CHANGE).sendToTarget();
 			}
 		});
+		cbStrange = (CheckBox) findViewById(R.id.cb_strange);
+		cbStrange.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				sendToStrange = isChecked;
+			}
+		});
 	}
 
 	private void search(String keyWords) {
@@ -304,6 +317,9 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void sendPicture(String imagePath, final String timeLimit, final List<Friend> friends, boolean hasVoice) {
 		timeSnap = System.currentTimeMillis();
 		final File file = new File(imagePath);
+		if (sendToStrange) {
+			friends.add(PhotoTalkUtils.getDriftFriend());
+		}
 		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf);
 	}
 

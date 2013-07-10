@@ -27,11 +27,14 @@ import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class LogicUtils {
@@ -226,21 +229,35 @@ public class LogicUtils {
 		context.startActivity(intent);
 	}
 
-	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file, boolean hasVoice, boolean hasGraf) {
+	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice, final boolean hasGraf) {
 		long flag = System.currentTimeMillis();
+		final boolean sendToStranges=friends.contains(PhotoTalkUtils.getDriftFriend());
+		if (friends.size() == 1 && sendToStranges) {
+			DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(),
+					((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(), flag);
+			return;
+		}
 		try {
 			UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
-				public void onSendSuccess(long flag) {
+				public void onSendSuccess(long flag, String url) {
 					InformationPageController.getInstance().onPhotoSendSuccess(flag);
+					if(sendToStranges){
+						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(),
+								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(), flag);
+					}
 				}
 
 				@Override
 				public void onFail(long flag, int errorCode, String content) {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
+					if(sendToStranges){
+						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(),
+								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(), flag);
+					}
 				}
 
 			}, friendIds, hasVoice, hasGraf);

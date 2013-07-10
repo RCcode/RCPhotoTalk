@@ -380,4 +380,8 @@
     <string name="know_strangers">结识陌生人</string>
     <string name="fish_information">捞</string>
     <string name="throw_information">扔</string>
+    <string name="send_to_stranges">发送到陌生人</string>
+    <string name="show_all_drift">显示所有消息</string>
+    <string name="show_receive_drift">显示收到的消息</string>
+    <string name="show_send_drift">显示发送的消息</string>
 </resources>

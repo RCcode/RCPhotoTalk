@@ -13,6 +13,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.MessageSender;
+import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.utils.FileDownloader.OnLoadingListener;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
@@ -38,7 +39,7 @@ public class DriftInformationPicListener implements OnLoadingListener {
 	public void onDownloadSuccess() {
 		if (record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			record.setState(InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
-//			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
+			// PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 		}
 		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
 		updateView(View.GONE, text);
@@ -47,7 +48,7 @@ public class DriftInformationPicListener implements OnLoadingListener {
 	@Override
 	public void onDownloadFail() {
 		record.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
-//		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
+		// PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
 		updateView(View.GONE, context.getResources().getString(R.string.receive_fail));
 	}
 
@@ -59,8 +60,8 @@ public class DriftInformationPicListener implements OnLoadingListener {
 	}
 
 	private void updateView(int visibitity, String text) {
-		String baseTag = record.getPicId()+"";
-		ListView listView = InformationPageController.getInstance().getInformationList();
+		String baseTag = record.getPicId() + "";
+		ListView listView = DriftInformationPageController.getInstance().getListView();
 		if (listView != null) {
 			ProgressBar bar = (ProgressBar) listView.findViewWithTag(baseTag + ProgressBar.class.getName());
 			if (bar != null)

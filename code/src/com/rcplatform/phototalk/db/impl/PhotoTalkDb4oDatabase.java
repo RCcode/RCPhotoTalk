@@ -15,6 +15,7 @@ import com.db4o.config.AndroidSupport;
 import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.query.Predicate;
 import com.db4o.query.Query;
+import com.db4o.query.QueryComparator;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.Information;
@@ -592,12 +593,12 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void saveDriftInformation(DriftInformation information) {
+	public synchronized void saveDriftInformation(DriftInformation information) {
 		db.store(information);
 	}
 
 	@Override
-	public List<DriftInformation> getDriftInformations(int start, int pageSize) {
+	public synchronized List<DriftInformation> getDriftInformations(int start, int pageSize) {
 		ObjectSet<DriftInformation> localInformations = queryDriftInformations();
 		List<DriftInformation> result = new ArrayList<DriftInformation>();
 		if (localInformations != null) {
@@ -622,6 +623,134 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+
+	@Override
+	public synchronized List<DriftInformation> getSendedDriftInformations(int start, int pageSize, final String currentRcid) {
+		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return currentRcid.equals(arg0.getSender().getRcId());
+			}
+		}, new QueryComparator<DriftInformation>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(DriftInformation arg0, DriftInformation arg1) {
+				if (arg0.getReceiveTime() > arg1.getReceiveTime())
+					return 1;
+				else
+					return -1;
+			}
+		});
+		return slipDataByPage(start, pageSize, result);
+	}
+
+	@Override
+	public synchronized List<DriftInformation> getReceiveDriftInformations(int start, int pageSize, final String currentRcid) {
+		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return !currentRcid.equals(arg0.getSender().getRcId());
+			}
+		}, new QueryComparator<DriftInformation>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(DriftInformation arg0, DriftInformation arg1) {
+				if (arg0.getReceiveTime() > arg1.getReceiveTime())
+					return 1;
+				else
+					return -1;
+			}
+		});
+
+		return slipDataByPage(start, pageSize, result);
+	}
+
+	private <T> ObjectSet<T> getData(Predicate<T> predicate, QueryComparator<T> comparater) {
+		if (comparater != null)
+			return db.query(predicate, comparater);
+		return db.query(predicate);
+	}
+
+	private <T> List<T> slipDataByPage(int start, int pageSize, ObjectSet<T> queryResult) {
+		int end = 0;
+		if (queryResult.size() > start + pageSize) {
+			end = start + pageSize;
+		} else {
+			end = queryResult.size();
+		}
+		List<T> result = new ArrayList<T>();
+		for (int i = 0; i < end; i++) {
+			result.add(queryResult.get(i));
+		}
+		return result;
+	}
+
+	@Override
+	public void setDriftInformationSendSuccess(final long flag, int picId, final String rcId) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && rcId.equals(arg0.getSender().getRcId());
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation information : queryResult) {
+				information.setPicId(picId);
+				information.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				db.store(information);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public void deleteDriftInformation(final DriftInformation information) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getPicId() == information.getPicId();
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult)
+				db.delete(info);
+			db.commit();
 		}
 	}
 }

@@ -70,8 +70,17 @@ public interface PhotoTalkDatabase {
 	public void handAddedFriendInformation(boolean hasLoadedFriends, String currentUserRcId, Information information);
 
 	public void updateFriendInformationState(Information information);
-	
+
 	public void saveDriftInformation(DriftInformation information);
 
-	public List<DriftInformation> getDriftInformations(int start,int pageSize);
+	public List<DriftInformation> getDriftInformations(int start, int pageSize);
+
+	public List<DriftInformation> getSendedDriftInformations(int start, int pageSize, String currentRcid);
+
+	public List<DriftInformation> getReceiveDriftInformations(int start, int pageSize, String currentRcid);
+
+	public void setDriftInformationSendSuccess(long flag, int picId,String rcId);
+	
+	public void deleteDriftInformation(DriftInformation information);
+		
 }

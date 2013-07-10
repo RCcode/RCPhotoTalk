@@ -12,6 +12,15 @@ public class DriftInformation {
 	private int picId;
 	private String url;
 	private int state = 1;
+	private long flag;
+
+	public long getFlag() {
+		return flag;
+	}
+
+	public void setFlag(long flag) {
+		this.flag = flag;
+	}
 
 	public int getState() {
 		return state;
