@@ -25,6 +25,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.CensusService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
@@ -115,6 +116,13 @@ public class LogicUtils {
 
 		if (((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId())
 				&& !record.getReceiver().getRcId().equals(record.getSender().getRcId()))
+			return true;
+		return false;
+	}
+
+	public static boolean isSender(Context context, DriftInformation record) {
+
+		if (((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId()))
 			return true;
 		return false;
 	}

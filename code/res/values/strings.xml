@@ -376,4 +376,10 @@
     <string name="instagram_add_message">Add me on PhotoTalk, My ID:</string>
     <string name="phototalk_url">Get it here, http://rctalk.me</string>
 
+    <!-- 2.0 NEW TEXT -->
+    
+    <string name="drift_information">漂流瓶</string>
+    <string name="know_strangers">结识陌生人</string>
+    <string name="fish_information">捞</string>
+    <string name="throw_information">扔</string>
 </resources>

@@ -179,7 +179,7 @@ public class Utils {
 				return null;
 			}
 		}
-		File imageFile = new File(tmpFile.getPath() + "image_cut_"+System.currentTimeMillis() + ".png");
+		File imageFile = new File(tmpFile.getPath() + "image_cut_" + System.currentTimeMillis() + ".png");
 		return imageFile;
 	}
 
@@ -710,6 +710,18 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return bitmap;
-		
+	}
+
+	public static boolean isSameDay(long time, long time2) {
+		long date = time / Constants.TimeMillins.A_DAY;
+		long date2 = time2 / Constants.TimeMillins.A_DAY;
+		if (date == date2)
+			return true;
+		return false;
+	}
+	public static long exponentialBackOff(long count,long interval,long maxInterval){
+		long delay = (long) Math.pow(2, count) * interval;
+		delay = Math.min(maxInterval, delay);
+		return delay;
 	}
 }

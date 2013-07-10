@@ -4,15 +4,22 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.WelcomeActivity;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
@@ -20,6 +27,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 
 public class PhotoTalkUtils {
 
@@ -119,7 +127,7 @@ public class PhotoTalkUtils {
 	}
 
 	public static boolean isUserNeedToBindPhone(Context context, UserInfo userInfo) {
-		if(context==null)
+		if (context == null)
 			return false;
 		return userInfo != null && RCPlatformTextUtil.isEmpty(userInfo.getCellPhone()) && Constants.DEVICE_ID.equals(userInfo.getDeviceId())
 				&& !PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(context, userInfo.getRcId());
@@ -129,5 +137,27 @@ public class PhotoTalkUtils {
 		UserInfo userCopy = new UserInfo();
 		userCopy.clone(userInfo);
 		return userCopy;
+	}
+
+	public static void sendNewInformationNotification(Context context, int count) {
+		Notification notification = new Notification();
+		notification.icon = R.drawable.ic_launcher;
+		notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
+		notification.contentView.setImageViewResource(R.id.gcm_image, R.drawable.ic_launcher);
+		notification.contentView.setTextViewText(R.id.gcm_title, context.getString(R.string.app_name));
+		notification.contentView.setTextViewText(R.id.gcm_decs, context.getString(R.string.gcm_message, count ));
+		notification.when = System.currentTimeMillis();
+		notification.defaults |= Notification.DEFAULT_SOUND;
+		notification.flags |= Notification.FLAG_AUTO_CANCEL;
+		NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		Intent notificationIntent = new Intent(context, WelcomeActivity.class);
+		PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+		notification.contentIntent = intent;
+		notificationManager.notify(0, notification);
+	}
+	public static Friend getDriftFriend(){
+		Friend friend=new Friend();
+		friend.setRcId("-1");
+		return friend;
 	}
 }

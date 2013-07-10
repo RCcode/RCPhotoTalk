@@ -7,6 +7,7 @@ import java.util.Map;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 
 public interface PhotoTalkDatabase {
@@ -69,4 +70,8 @@ public interface PhotoTalkDatabase {
 	public void handAddedFriendInformation(boolean hasLoadedFriends, String currentUserRcId, Information information);
 
 	public void updateFriendInformationState(Information information);
+	
+	public void saveDriftInformation(DriftInformation information);
+
+	public List<DriftInformation> getDriftInformations(int start,int pageSize);
 }

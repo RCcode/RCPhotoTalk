@@ -126,7 +126,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_FRIEND_TYPE = "attrType";
 		public static final String PARAM_KEY_FRIEND_SOURCE_NAME = "name";
 		public static final String PARAM_KEY_FRIEND_SOURCE_VALUE = "value";
-		
+
 	}
 
 	public static class DelFriends {
@@ -188,5 +188,27 @@ public class PhotoTalkParams {
 
 	public static class PlatformAccountLogin {
 		public static final String APP_ID = "fromApp";
+	}
+
+	public static class ReportPicture {
+		public static final String PARAM_KEY_GENDER = "gender";
+		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_PICURL = "picUrl";
+		public static final String PARAM_KEY_PICID = "picId";
+		public static final String PARAM_KEY_REP_RCID = "repRcId";
+		public static final String PARAM_KEY_REP_COUNTRY = "repCountry";
+		public static final String PARAM_KEY_REP_GENDER = "repGender";
+	}
+
+	public static class FishDrift {
+		public static final String PARAM_KEY_TIMEZONE = "timeZone";
+		public static final String PARAM_KEY_OS_NAME = "os_name";
+		public static final String PARAM_KEY_OS_VERSION = "os_version";
+		public static final String PARAM_KEY_NICK="nick";
+		public static final String PARAM_KEY_COUNTRY="country";
+		public static final String PARAM_KEY_GENDER="gender";
+	}
+	public static class DriftShowTime{
+		public static final String PARAM_KEY_PICIDS="picId";
 	}
 }

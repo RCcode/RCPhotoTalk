@@ -8,104 +8,133 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 
 public class RecordTimerLimitView extends TextView {
 
-    private int mSeconds;
+	private int mSeconds;
 
-    private Information infoRecord;
+	private Information infoRecord;
 
-    private OnTimeEndListener endListener;
+	private DriftInformation driftInformation;
 
-    private Object statuTag;
+	private OnTimeEndListener endListener;
 
-    private Object buttonTag;
+	private Object statuTag;
 
-    public interface OnTimeEndListener {
+	private Object buttonTag;
 
-        void onEnd(Object statuTag, Object buttonTag);
-    }
+	public interface OnTimeEndListener {
 
-    public RecordTimerLimitView(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+		void onEnd(Object statuTag, Object buttonTag);
+	}
 
-    public RecordTimerLimitView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+	public RecordTimerLimitView(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
 
-    public RecordTimerLimitView(Context context) {
-        super(context);
-    }
+	public RecordTimerLimitView(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-    public RecordTimerLimitView(Context context, int seconds) {
-        super(context);
-        this.mSeconds = seconds;
-    }
+	public RecordTimerLimitView(Context context) {
+		super(context);
+	}
 
-    public void initParm(int seconds) {
-        mSeconds = seconds;
+	public RecordTimerLimitView(Context context, int seconds) {
+		super(context);
+		this.mSeconds = seconds;
+	}
 
-    }
+	public void initParm(int seconds) {
+		mSeconds = seconds;
 
-    @Override
-    protected void onWindowVisibilityChanged(int visibility) {
-        super.onWindowVisibilityChanged(visibility);
-    }
+	}
 
-    public void scheuleTask(Information info) {
-        handler.removeCallbacks(timerTask);
-        this.infoRecord = info;
-        mSeconds = info.getLimitTime();
-        handler.post(timerTask);
-    }
+	@Override
+	protected void onWindowVisibilityChanged(int visibility) {
+		super.onWindowVisibilityChanged(visibility);
+	}
 
-    public void setOnTimeEndListener(OnTimeEndListener listener, Object statuTag, Object buttonTag) {
-        this.endListener = listener;
-        this.statuTag = statuTag;
-        this.buttonTag = buttonTag;
-    }
+	public void scheuleTask(Information info) {
+		handler.removeCallbacks(timerTask);
+		this.infoRecord = info;
+		mSeconds = info.getLimitTime();
+		handler.post(timerTask);
+	}
 
-    Runnable timerTask = new Runnable() {
+	public void scheuleTask(DriftInformation info) {
+		handler.removeCallbacks(driftTimerTask);
+		this.driftInformation = info;
+		mSeconds = info.getLimitTime();
+		handler.post(driftTimerTask);
+	}
 
-        @Override
-        public void run() {
+	public void setOnTimeEndListener(OnTimeEndListener listener, Object statuTag, Object buttonTag) {
+		this.endListener = listener;
+		this.statuTag = statuTag;
+		this.buttonTag = buttonTag;
+	}
 
-            if (infoRecord.getLimitTime() <= 0) {
-                handler.removeCallbacks(this);
-                if (endListener != null) {
-                    endListener.onEnd(statuTag, buttonTag);
-                }
-                return;
-            } else {
-            	LogUtil.i(infoRecord.getLimitTime() + "");
-                setText(infoRecord.getLimitTime() + "");
-            }
+	Runnable timerTask = new Runnable() {
 
-            handler.postDelayed(this, 1000);
-        }
-    };
+		@Override
+		public void run() {
 
-    public void stopTask() {
-        handler.removeCallbacks(timerTask);
-    }
+			if (infoRecord.getLimitTime() <= 0) {
+				handler.removeCallbacks(this);
+				if (endListener != null) {
+					endListener.onEnd(statuTag, buttonTag);
+				}
+				return;
+			} else {
+				LogUtil.i(infoRecord.getLimitTime() + "");
+				setText(infoRecord.getLimitTime() + "");
+			}
 
-    Handler handler = new Handler() {
+			handler.postDelayed(this, 1000);
+		}
+	};
+	Runnable driftTimerTask = new Runnable() {
 
-        @Override
-        public void handleMessage(android.os.Message msg) {
-        }
-    };
+		@Override
+		public void run() {
 
-    private Timer timer;
+			if (infoRecord.getLimitTime() <= 0) {
+				handler.removeCallbacks(this);
+				if (endListener != null) {
+					endListener.onEnd(statuTag, buttonTag);
+				}
+				return;
+			} else {
+				LogUtil.i(driftInformation.getLimitTime() + "");
+				setText(driftInformation.getLimitTime() + "");
+			}
 
-    public int getRemainingTime() {
-        return mSeconds;
-    }
+			handler.postDelayed(this, 1000);
+		}
+	};
 
-    public void stopTimeTask() {
-        handler.removeCallbacks(timerTask);
-    }
+	public void stopTask() {
+		handler.removeCallbacks(timerTask);
+	}
+
+	Handler handler = new Handler() {
+
+		@Override
+		public void handleMessage(android.os.Message msg) {
+		}
+	};
+
+	private Timer timer;
+
+	public int getRemainingTime() {
+		return mSeconds;
+	}
+
+	public void stopTimeTask() {
+		handler.removeCallbacks(timerTask);
+	}
 
 }

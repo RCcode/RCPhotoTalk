@@ -22,7 +22,7 @@ import com.rcplatform.phototalk.utils.Constants.Action;
 
 public class RCPlatformAsyncHttpClient {
 	private static final String CONTENT_TYPE_JSON = "application/json";
-	private static final int TIME_OUT = 30 * 1000;
+	private static final int TIME_OUT = 5 * 1000;
 	private AsyncHttpClient mClient;
 	private RequestParams mRequestParams;
 	private boolean isCancel = false;
