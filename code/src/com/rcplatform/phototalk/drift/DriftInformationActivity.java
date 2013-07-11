@@ -326,7 +326,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		friend.setHeadUrl(information.getSender().getHeadUrl());
 		friend.setCountry(information.getSender().getCountry());
 		friend.setGender(information.getSender().getGender());
-		//缺少年龄 和是否为好友
+		//缺少年龄 和是否为好友 背景地址
 //		friend.setBirthday(information.getSender().get)
 //		friend.setFriend(true);
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
