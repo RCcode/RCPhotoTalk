@@ -36,15 +36,13 @@ public class DriftInformationAdapter extends BaseAdapter {
 	private ImageLoader mImageLoader;
 	private DriftInformation mPressedInformation;
 	private int mPressedPosition = -1;
-	private ListView mList;
 	private LayoutInflater mInflater;
 	private UserInfo currentUser;
 
-	public DriftInformationAdapter(Context context, List<DriftInformation> data, ListView list, ImageLoader imageLoader) {
+	public DriftInformationAdapter(Context context, List<DriftInformation> data, ImageLoader imageLoader) {
 		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = imageLoader;
-		this.mList = list;
 		mInflater = LayoutInflater.from(context);
 		currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 	}
@@ -123,11 +121,12 @@ public class DriftInformationAdapter extends BaseAdapter {
 			initPhotoInformationSenderView(record, holder);
 		}
 		mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
-		if (isSender(record) && record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
+		if (!isSender(record) && record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.name.getPaint().setFakeBoldText(true);
 		} else {
 			holder.name.getPaint().setFakeBoldText(false);
 		}
+		holder.name.setText(record.getSender().getNick());
 		return convertView;
 	}
 
@@ -137,7 +136,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			// TODO load information picture;
+			RCPlatformImageLoader.loadPictureForDriftList(context, record);
 			holder.statuButton.stopTask();
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
@@ -150,7 +149,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.receive_downloading);
-				// TODO load information picture;
+				RCPlatformImageLoader.loadPictureForDriftList(context, record);
 				holder.statuButton.stopTask();
 			}
 			// 状态为4.表示正在查看

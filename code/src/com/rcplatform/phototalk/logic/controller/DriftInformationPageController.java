@@ -43,4 +43,8 @@ public class DriftInformationPageController {
 			return mActivity.getInformationList();
 		return null;
 	}
+	public void onDriftShowEnd(DriftInformation information){
+		if(mActivity!=null)
+			mActivity.onInformationShowEnd(information);
+	}
 }

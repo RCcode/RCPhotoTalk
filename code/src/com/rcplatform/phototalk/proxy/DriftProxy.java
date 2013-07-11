@@ -38,7 +38,7 @@ public class DriftProxy {
 	}
 
 	public static void fishDrift(Context context, RCPlatformResponseHandler handler) {
-		Request request = new Request(context, "", handler);
+		Request request = new Request(context, PhotoTalkApiUrl.FISH_DRIFT, handler);
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_COUNTRY, userInfo.getCountry());
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_GENDER, userInfo.getGender() + "");
@@ -46,6 +46,7 @@ public class DriftProxy {
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_OS_NAME, Constants.OS_NAME);
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_OS_VERSION, Constants.OS_VERSION);
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
+		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_TIMESNAMP, System.currentTimeMillis()+"");
 		request.excuteAsync();
 	}
 

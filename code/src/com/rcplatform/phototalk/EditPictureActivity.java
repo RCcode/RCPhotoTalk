@@ -7,12 +7,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
@@ -29,7 +25,6 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,9 +44,10 @@ import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.drift.DriftInformationActivity;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
@@ -451,8 +447,13 @@ public class EditPictureActivity extends BaseActivity {
 					saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getSendFileCachePath() + "/Photochat.jpg");
 					if (friend == null) {
 						startSelectFriendActivity();
-					} else {
-						Intent intent = new Intent(EditPictureActivity.this, HomeActivity.class);
+					} else{
+						Intent intent=null;
+						if(friend.equals(PhotoTalkUtils.getDriftFriend())){
+							intent = new Intent(EditPictureActivity.this, DriftInformationActivity.class);
+						}else{
+							intent = new Intent(EditPictureActivity.this, HomeActivity.class);
+						}
 						intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 						startActivity(intent);
 					}
@@ -755,37 +756,5 @@ public class EditPictureActivity extends BaseActivity {
 			return false;
 		return new File(voicePath).exists();
 	}
-
-	// @Override
-	// public boolean onKeyDown(int keyCode, KeyEvent event) {
-	// if (keyCode == KeyEvent.KEYCODE_BACK) {
-	//
-	// AlertDialog.Builder dialogBuilder =
-	// DialogUtil.getAlertDialogBuilder(this);
-	// dialogBuilder.setTitle(R.string.operation)
-	// .setPositiveButton(getResources().getString(R.string.ok), new
-	// DialogInterface.OnClickListener() {
-	//
-	// @Override
-	// public void onClick(DialogInterface dialog, int which) {
-	// dialog.cancel();
-	// finish();
-	// }
-	// }).setNegativeButton(getResources().getString(R.string.cancel), new
-	// DialogInterface.OnClickListener() {
-	//
-	// @Override
-	// public void onClick(DialogInterface dialog, int which) {
-	//
-	// // register(LoginActivity.this, email,
-	// // psw,
-	// // nick);
-	// }
-	// });
-	// dialogBuilder.create().show();
-	//
-	// }
-	// return false;
-	// }
 
 }

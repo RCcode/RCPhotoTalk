@@ -206,6 +206,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NICK="nick";
 		public static final String PARAM_KEY_COUNTRY="country";
 		public static final String PARAM_KEY_GENDER="gender";
+		public static final String PARAM_KEY_TIMESNAMP="timeStamp";
 	}
 	public static class DriftShowTime{
 		public static final String PARAM_KEY_PICIDS="picId";

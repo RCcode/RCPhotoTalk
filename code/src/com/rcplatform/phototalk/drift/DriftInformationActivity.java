@@ -1,7 +1,7 @@
 package com.rcplatform.phototalk.drift;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Intent;
 import android.graphics.Rect;
@@ -36,14 +36,11 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
-import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
-import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler.OnFishListener;
@@ -61,7 +58,6 @@ import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListen
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
-import com.rcplatform.tigase.TigaseMessageReceiver;
 
 /**
  * 主界面. <br>
@@ -70,13 +66,11 @@ import com.rcplatform.tigase.TigaseMessageReceiver;
  * 
  * @version 1.0.0
  */
-public class DriftInformationActivity extends BaseActivity implements SnapShowListener, TigaseMessageReceiver, OnClickListener {
+public class DriftInformationActivity extends BaseActivity implements SnapShowListener, OnClickListener {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
-
-	protected static final int MSG_TIGASE_NEW_INFORMATION = 3;
 
 	private SnapListView mInformationList;
 
@@ -106,6 +100,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.drift_information);
 		mImageLoader = ImageLoader.getInstance();
+		DriftInformationPageController.getInstance().setup(this);
 		initViewAndListener();
 		loadLocalInformation();
 		ClientLogUtil.log(this);
@@ -317,17 +312,16 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
-		Information infoRecord = (Information) adapter.getItem(position);
-		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
+		DriftInformation infoRecord = (DriftInformation) adapter.getItem(position);
+		if (!LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
-			if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
-					|| infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
+			if (infoRecord.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
+					|| infoRecord.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(DriftInformationActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(PhotoTalkUtils.getInformationTagBase(infoRecord)
-						+ Button.class.getName());
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getPicId() + Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
 				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
@@ -414,9 +408,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			case MSG_WHAT_INFORMATION_LOADED:
 				initOrRefreshListView((List<DriftInformation>) msg.obj);
 				break;
-			case MSG_TIGASE_NEW_INFORMATION:
-				InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
-				break;
 			case MSG_WHAT_LOCAL_INFORMATION_LOADED:
 				addListData((List<DriftInformation>) msg.obj);
 				break;
@@ -426,7 +417,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void addListData(List<DriftInformation> localInformations) {
 		if (adapter == null) {
-			adapter = new DriftInformationAdapter(this, localInformations, mInformationList, mImageLoader);
+			adapter = new DriftInformationAdapter(this, localInformations, mImageLoader);
 			loadingFooter = getLayoutInflater().inflate(R.layout.information_loading_item, null);
 			mInformationList.addFooterView(loadingFooter);
 			mInformationList.setAdapter(adapter);
@@ -442,9 +433,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		isLoading = false;
 	};
 
+	protected void addNewInformation(DriftInformation obj) {
+
+	}
+
 	private void initOrRefreshListView(List<DriftInformation> data) {
 		if (adapter == null) {
-			adapter = new DriftInformationAdapter(this, data, mInformationList, mImageLoader);
+			adapter = new DriftInformationAdapter(this, data, mImageLoader);
 			mInformationList.setAdapter(adapter);
 		} else {
 			adapter.addData(data);
@@ -455,6 +450,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	@Override
 	protected void onDestroy() {
 		ImageLoader.getInstance().stop();
+		DriftInformationPageController.getInstance().destroy();
 		super.onDestroy();
 	}
 
@@ -480,8 +476,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			adapter.resetPressedInformation();
 	}
 
-	public void onInformationShowEnd(Information information) {
-		String tagBase = PhotoTalkUtils.getInformationTagBase(information);
+	public void onInformationShowEnd(DriftInformation information) {
+		String tagBase = information.getPicId() + "";
 		String buttonTag = tagBase + Button.class.getName();
 		String statuTag = tagBase + TextView.class.getName();
 		String newTag = tagBase + ImageView.class.getName();
@@ -556,20 +552,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		}
 	}
 
-	private void filteInformations(final List<Information> infos) {
-		Thread th = new Thread() {
-
-			public void run() {
-				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
-				Message msg = myHandler.obtainMessage();
-				msg.what = MSG_TIGASE_NEW_INFORMATION;
-				msg.obj = result;
-				myHandler.sendMessage(msg);
-			};
-		};
-		th.start();
-	}
-
 	public void onNewInformation(List<DriftInformation> infosNeedUpdate, List<DriftInformation> infosNew) {
 		List<DriftInformation> localInformation = getAdapterData();
 		for (DriftInformation info : infosNeedUpdate) {
@@ -618,14 +600,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		thread.start();
 	}
 
-	@Override
-	public boolean onMessageHandle(String msg, String from) {
-		LogUtil.e("tigase receive informations...");
-		List<Information> informations = JSONConver.jsonToInformations(msg);
-		filteInformations(informations);
-		return false;
-	}
-
 	public ListView getInformationList() {
 		return mInformationList;
 	}
@@ -654,18 +628,19 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		if (PrefsUtils.User.isThrowToday(this, currentRcId) && fishLeaveTime > 0) {
 			showLoadingDialog(false);
 			DriftProxy.fishDrift(this, new FishDriftResponseHandler(this, new OnFishListener() {
-				
+
 				@Override
 				public void onFishSuccess(DriftInformation information) {
-					
+					List<DriftInformation> infos = new ArrayList<DriftInformation>();
+					infos.add(information);
+					sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
 				}
-				
+
 				@Override
 				public void onFishFail(String failReason) {
-					
+					showConfirmDialog(failReason);
 				}
 			}));
-			PrefsUtils.User.setFishLeaveTime(this, currentRcId, fishLeaveTime - 1);
 		} else if (fishLeaveTime == 0) {
 			DialogUtil.showToast(this, "今天的瓶子捞完啦", Toast.LENGTH_SHORT);
 		} else {
@@ -677,7 +652,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", PhotoTalkUtils.getDriftFriend());
 		startActivity(intent);
-		PrefsUtils.User.setThrowToday(this, getCurrentUser().getRcId());
 	}
 
 	private PopupWindow filterMenu;

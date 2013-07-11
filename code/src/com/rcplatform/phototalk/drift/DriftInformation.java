@@ -1,8 +1,9 @@
 package com.rcplatform.phototalk.drift;
 
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 
-public class DriftInformation {
+public class DriftInformation{
 	private long createTime;
 	private long receiveTime;
 	private int hasVoice;

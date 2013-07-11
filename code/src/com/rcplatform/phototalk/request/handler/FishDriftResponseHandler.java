@@ -2,10 +2,13 @@ package com.rcplatform.phototalk.request.handler;
 
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.ActivityFunction;
+import com.rcplatform.phototalk.bean.InformationState;
+import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.RCPlatformServiceError;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class FishDriftResponseHandler implements RCPlatformResponseHandler {
 
@@ -33,12 +36,17 @@ public class FishDriftResponseHandler implements RCPlatformResponseHandler {
 	@Override
 	public void onSuccess(int statusCode, String content) {
 		DriftInformation driftInformation = JSONConver.jsonToObject(content, DriftInformation.class);
+		driftInformation.setReceiveTime(System.currentTimeMillis());
+		driftInformation.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 		if (driftInformation == null || driftInformation.getPicId() == 0) {
 			onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, mFunction.getContext().getString(R.string.net_error));
 		} else {
+			String rcId = mFunction.getCurrentUser().getRcId();
+			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(driftInformation);
+			PrefsUtils.User.setFishLeaveTime(mFunction.getContext(), rcId, PrefsUtils.User.getFishLeaveTime(mFunction.getContext(), rcId) - 1);
+			mFunction.dissmissLoadingDialog();
 			if (mListener != null)
 				mListener.onFishSuccess(driftInformation);
 		}
 	}
-
 }

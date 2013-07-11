@@ -83,4 +83,7 @@ public interface PhotoTalkDatabase {
 	
 	public void deleteDriftInformation(DriftInformation information);
 		
+	public void updateDriftInformationSendSuccess(long flag,int picId);
+	
+	public void updateDriftInformationState(int picId,int state);
 }

@@ -382,26 +382,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		}
 	}
 
-	private Friend cloneFriend(Friend friend, Friend friendNew) {
-		friendNew.setFriend(friend.isFriend());
-		friendNew.setAppId(friend.getAppId());
-		friendNew.setAppList(friend.getAppList());
-		friendNew.setBackground(friend.getBackground());
-		friendNew.setBirthday(friend.getBirthday());
-		friendNew.setCellPhone(friend.getCellPhone());
-		friendNew.setCountry(friend.getCountry());
-		friendNew.setGender(friend.getGender());
-		friendNew.setHeadUrl(friend.getHeadUrl());
-		friendNew.setHiden(friend.isHiden());
-		friendNew.setLetter(friend.getLetter());
-		friendNew.setNickName(friend.getNickName());
-		friendNew.setRcId(friend.getRcId());
-		friendNew.setSource(friend.getSource());
-		friendNew.setTigaseId(friend.getTigaseId());
-		return friendNew;
-
-	}
-
 	@Override
 	public synchronized List<Friend> getHidenFriends() {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
@@ -595,6 +575,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public synchronized void saveDriftInformation(DriftInformation information) {
 		db.store(information);
+		db.commit();
 	}
 
 	@Override
@@ -629,10 +610,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public synchronized List<DriftInformation> getSendedDriftInformations(int start, int pageSize, final String currentRcid) {
 		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -640,10 +617,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				return currentRcid.equals(arg0.getSender().getRcId());
 			}
 		}, new QueryComparator<DriftInformation>() {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -660,10 +633,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public synchronized List<DriftInformation> getReceiveDriftInformations(int start, int pageSize, final String currentRcid) {
 		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -671,10 +640,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				return !currentRcid.equals(arg0.getSender().getRcId());
 			}
 		}, new QueryComparator<DriftInformation>() {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -710,12 +675,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void setDriftInformationSendSuccess(final long flag, int picId, final String rcId) {
+	public synchronized void setDriftInformationSendSuccess(final long flag, int picId, final String rcId) {
 		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -734,12 +695,8 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void deleteDriftInformation(final DriftInformation information) {
+	public synchronized void deleteDriftInformation(final DriftInformation information) {
 		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -753,4 +710,44 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			db.commit();
 		}
 	}
+
+	@Override
+	public synchronized void updateDriftInformationSendSuccess(final long flag, int picId) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && arg0.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				info.setPicId(picId);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public synchronized void updateDriftInformationState(final int picId, int state) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getPicId() == picId;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(state);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
 }

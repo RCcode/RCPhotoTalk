@@ -101,7 +101,7 @@ public class RecordTimerLimitView extends TextView {
 		@Override
 		public void run() {
 
-			if (infoRecord.getLimitTime() <= 0) {
+			if (driftInformation.getLimitTime() <= 0) {
 				handler.removeCallbacks(this);
 				if (endListener != null) {
 					endListener.onEnd(statuTag, buttonTag);

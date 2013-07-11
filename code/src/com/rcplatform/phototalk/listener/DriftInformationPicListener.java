@@ -39,7 +39,8 @@ public class DriftInformationPicListener implements OnLoadingListener {
 	public void onDownloadSuccess() {
 		if (record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			record.setState(InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
-			// PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
+			PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationState(record.getPicId(),
+					InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED);
 		}
 		String text = context.getString(R.string.receive_loaded, RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()));
 		updateView(View.GONE, text);
@@ -47,8 +48,8 @@ public class DriftInformationPicListener implements OnLoadingListener {
 
 	@Override
 	public void onDownloadFail() {
-		record.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
-		// PhotoTalkDatabaseFactory.getDatabase().updateInformationState(record);
+		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationState(record.getPicId(),
+				InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 		updateView(View.GONE, context.getResources().getString(R.string.receive_fail));
 	}
 
