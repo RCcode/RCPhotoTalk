@@ -86,6 +86,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private boolean hasGraf = false;
 	private CheckBox cbStrange;
 	private boolean sendToStrange = false;
+	private Friend driftFriend = PhotoTalkUtils.getDriftFriend();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -203,6 +204,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				changeReceiver(driftFriend, isChecked);
 				sendToStrange = isChecked;
 			}
 		});
@@ -230,7 +232,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
+			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis()+".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -258,26 +260,27 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 			@Override
 			public void onChange(Friend friend, boolean isChecked) {
-
-				if (isChecked) {
-					EventUtil.Main_Photo.rcpt_choosefriends(baseContext);
-					if (!sendData.contains(friend)) {
-						sendData.add(friend);
-					}
-					send_layout.setVisibility(View.VISIBLE);
-				} else {
-					if (sendData.contains(friend)) {
-						sendData.remove(friend);
-					}
-					if (sendData.size() <= 0) {
-						send_layout.setVisibility(View.GONE);
-					}
-				}
-				setAdapterDataSetChanged();
+				changeReceiver(friend, isChecked);
 			}
 		});
 	}
-
+	private void changeReceiver(Friend friend,boolean isChecked){
+		if (isChecked) {
+			EventUtil.Main_Photo.rcpt_choosefriends(baseContext);
+			if (!sendData.contains(friend)) {
+				sendData.add(friend);
+			}
+			send_layout.setVisibility(View.VISIBLE);
+		} else {
+			if (sendData.contains(friend)) {
+				sendData.remove(friend);
+			}
+			if (sendData.size() <= 0) {
+				send_layout.setVisibility(View.GONE);
+			}
+		}
+		setAdapterDataSetChanged();
+	}
 	private void sendStringMessage(int what, String content) {
 		Message msg = mHandler.obtainMessage();
 		msg.what = what;

@@ -44,6 +44,7 @@ import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler.OnFishListener;
+import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
@@ -52,6 +53,7 @@ import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
@@ -94,6 +96,16 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private Button btnFish;
 	private Button btnThrow;
+
+	private static DriftShowMode mShowMode = DriftShowMode.ALL;
+
+	static enum DriftShowMode {
+		ALL, SEND, RECEIVE;
+	}
+
+	public static void setDriftShowMode(DriftShowMode mode) {
+		mShowMode = mode;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +197,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void initViewAndListener() {
-		initBackButton(R.string.drift_information, new OnClickListener() {
+		initBackButton(R.string.know_strangers, new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
@@ -293,13 +305,17 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	protected void reSendPicture(DriftInformation record) {
-
+		record.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
+		PhotoTalkDatabaseFactory.getDatabase().resendDriftInformation(record.getFlag(), getCurrentUser().getRcId());
+		adapter.notifyDataSetChanged();
+		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(this, record.getFlag()), getCurrentUser(), null, record.getTotleLength() + "",
+				record.hasGraf(), record.hasVoice(), record.getUrl(), record.getFlag());
 	}
 
 	private void deleteInformation(DriftInformation information) {
 		adapter.getData().remove(information);
 		adapter.notifyDataSetChanged();
-		// LogicUtils.deleteInformation(this, information);
+		LogicUtils.deleteInformation(this, information);
 	}
 
 	public ListView getDriftInformationList() {
@@ -584,20 +600,34 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void loadLocalInformations() {
-		Thread thread = new Thread() {
+		RCThreadPool.getInstance().addTask(new Runnable() {
 
+			@Override
 			public void run() {
 				int start = 0;
 				if (mInformationList.getAdapter() != null)
-					start = mInformationList.getAdapter().getCount();
-				List<DriftInformation> informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformations(start, Constants.INFORMATION_PAGE_SIZE);
+					start = mInformationList.getAdapter().getCount() - 1;
+				List<DriftInformation> informations = null;
+				switch (mShowMode) {
+				case ALL:
+					informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformations(start, Constants.INFORMATION_PAGE_SIZE);
+					break;
+				case SEND:
+					informations = PhotoTalkDatabaseFactory.getDatabase().getSendedDriftInformations(start, Constants.INFORMATION_PAGE_SIZE,
+							getCurrentUser().getRcId());
+					break;
+				case RECEIVE:
+					informations = PhotoTalkDatabaseFactory.getDatabase().getReceiveDriftInformations(start, Constants.INFORMATION_PAGE_SIZE,
+							getCurrentUser().getRcId());
+					break;
+				}
+
 				Message msg = myHandler.obtainMessage();
 				msg.what = MSG_WHAT_LOCAL_INFORMATION_LOADED;
 				msg.obj = informations;
 				myHandler.sendMessage(msg);
-			};
-		};
-		thread.start();
+			}
+		});
 	}
 
 	public ListView getInformationList() {
@@ -614,12 +644,33 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			throwInformation();
 			break;
 		case R.id.btn_show_all:
+			if (mShowMode != DriftShowMode.ALL) {
+				changeShowMode(DriftShowMode.ALL);
+			}
 			break;
 		case R.id.btn_show_receive:
+			if (mShowMode != DriftShowMode.RECEIVE) {
+				changeShowMode(DriftShowMode.RECEIVE);
+			}
 			break;
 		case R.id.btn_show_send:
+			if (mShowMode != DriftShowMode.SEND) {
+				changeShowMode(DriftShowMode.SEND);
+			}
 			break;
 		}
+	}
+
+	private void changeShowMode(DriftShowMode mode) {
+		mShowMode = mode;
+		clearInformation();
+		reset();
+		loadLocalInformation();
+	}
+
+	private void reset() {
+		hasNextPage = true;
+		isLoading = false;
 	}
 
 	private void fishInformation() {

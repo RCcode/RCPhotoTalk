@@ -6,10 +6,10 @@ import org.json.JSONObject;
 import android.content.Context;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
-import com.rcplatform.phototalk.activity.ActivityFunction;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
+import com.rcplatform.phototalk.request.RCPlatformServiceError;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
@@ -23,6 +23,7 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 
 	@Override
 	public void onFailure(int errorCode, String content) {
+		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendFail(mFlag);
 		DriftInformationPageController.getInstance().onDriftInformationSendFail(mFlag);
 	}
 
@@ -36,6 +37,7 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 			PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendSuccess(flag, picId);
 			DriftInformationPageController.getInstance().onDriftInformationSendSuccess(flag, picId);
 		} catch (JSONException e) {
+			onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, content);
 			e.printStackTrace();
 		}
 	}

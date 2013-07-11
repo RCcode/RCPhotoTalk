@@ -750,4 +750,60 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		}
 	}
 
+	@Override
+	public void updateDriftTempInformationFail() {
+		ObjectSet<DriftInformation> result = db.query(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING == arg0.getState();
+			}
+		});
+		while (result.hasNext()) {
+			DriftInformation info = result.next();
+			info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+			db.store(info);
+		}
+		db.commit();
+	}
+
+	@Override
+	public void resendDriftInformation(final long flag, final String rcId) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && arg0.getSender().getRcId().equals(rcId);
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public void updateDriftInformationSendFail(final long flag) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && arg0.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+				db.store(info);
+			}
+			db.commit();
+		}		
+	}
+
 }

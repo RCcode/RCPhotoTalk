@@ -86,4 +86,7 @@ public interface PhotoTalkDatabase {
 	public void updateDriftInformationSendSuccess(long flag,int picId);
 	
 	public void updateDriftInformationState(int picId,int state);
+	public void updateDriftTempInformationFail();
+	public void resendDriftInformation(long flag,String rcId);
+	public void updateDriftInformationSendFail(long flag);
 }

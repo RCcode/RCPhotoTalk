@@ -3,7 +3,7 @@ package com.rcplatform.phototalk.drift;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 
-public class DriftInformation{
+public class DriftInformation {
 	private long createTime;
 	private long receiveTime;
 	private int hasVoice;
@@ -50,9 +50,15 @@ public class DriftInformation{
 	public int getHasVoice() {
 		return hasVoice;
 	}
-	public boolean hasVoice(){
-		return hasVoice==Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
+
+	public boolean hasVoice() {
+		return hasVoice == Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
 	}
+
+	public boolean hasGraf() {
+		return hasGraf == Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);
+	}
+
 	public void setHasVoice(int hasVoice) {
 		this.hasVoice = hasVoice;
 	}

@@ -210,6 +210,10 @@ public class LogicUtils {
 		PhotoTalkDatabaseFactory.getDatabase().deleteInformation(information);
 	}
 
+	public static void deleteInformation(Context context, DriftInformation information) {
+		PhotoTalkDatabaseFactory.getDatabase().deleteDriftInformation(information);
+	}
+
 	public static void logout(Context context) {
 		// 本机注销gcm user key
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(context.getApplicationContext());
@@ -324,6 +328,8 @@ public class LogicUtils {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
+			if (f.equals(PhotoTalkUtils.getDriftFriend()))
+				continue;
 			friendIds.add(f.getRcId());
 			if (f.getRcId().equals(currentUser.getRcId()))
 				continue;
