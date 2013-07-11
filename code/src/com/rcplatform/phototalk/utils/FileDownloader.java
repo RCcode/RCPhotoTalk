@@ -27,7 +27,6 @@ public class FileDownloader {
 	private Map<String, OnLoadingListener> mTaskStore = new HashMap<String, FileDownloader.OnLoadingListener>();
 
 	private FileDownloader() {
-		// TODO Auto-generated constructor stub
 		mPool = (ThreadPoolExecutor) Executors.newScheduledThreadPool(5);
 	}
 
@@ -79,20 +78,17 @@ public class FileDownloader {
 		private String mVideoPath, mSavePString;
 
 		public DownloadTask(String videoPath, String savePath) {
-			// TODO Auto-generated constructor stub
 			this.mVideoPath = videoPath;
 			this.mSavePString = savePath;
 		}
 
 		@Override
 		public void run() {
-			// TODO Auto-generated method stub
 			try {
 				deleteFailFile(mSavePString);
 				downloadFile(mVideoPath, mSavePString);
 				sendSuccessMessage(mVideoPath);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				deleteFailFile(mSavePString);
 				sendFailMessage(mVideoPath);
@@ -103,7 +99,6 @@ public class FileDownloader {
 	}
 
 	private void deleteFailFile(String path) {
-		// TODO Auto-generated method stub
 		File file = new File(path);
 		if (file.exists())
 			file.delete();
