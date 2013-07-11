@@ -31,6 +31,7 @@ import com.rcplatform.clientlog.ClientLogUtil;
 import com.rcplatform.phototalk.FriendDetailActivity;
 import com.rcplatform.phototalk.InitPageActivity;
 import com.rcplatform.phototalk.R;
+import com.rcplatform.phototalk.StrangerDetailActivity;
 import com.rcplatform.phototalk.TakePhotoActivity;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
@@ -154,13 +155,14 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void startFriendDetailActivity(Friend friend) {
-		Intent intent = new Intent(this, FriendDetailActivity.class);
+		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
-		if (!friend.isFriend()) {
-			intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
-		} else {
-			intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
-		}
+		intent.putExtra("isFromStangerPage", true);
+//		if (!friend.isFriend()) {
+//			intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
+//		} else {
+//			intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
+//		}
 		startActivity(intent);
 	}
 

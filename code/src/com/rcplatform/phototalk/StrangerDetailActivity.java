@@ -155,6 +155,7 @@ public class StrangerDetailActivity extends BaseActivity {
 		tvName = (TextView) findViewById(R.id.strange_name);
 		strangePerformBtn = (Button) findViewById(R.id.strange_perform_btn);
 		ivCountryFlag = (ImageView) findViewById(R.id.strange_country_flag);
+		linearApps = (LinearLayout)findViewById(R.id.stranger_linear_apps);
 		setFriendInfo();
 		if (mFriend.isFriend()) {
 			coverToFriendView();
@@ -208,11 +209,11 @@ public class StrangerDetailActivity extends BaseActivity {
 
 	public boolean onKeyDown(int keyCode, android.view.KeyEvent event) {
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (hasChangeUserInfo()) {
-				Intent data = new Intent();
-				data.putExtra(RESULT_PARAM_FRIEND, mFriend);
-				setResult(Activity.RESULT_OK, data);
-			}
+//			if (hasChangeUserInfo()) {
+//				Intent data = new Intent();
+//				data.putExtra(RESULT_PARAM_FRIEND, mFriend);
+//				setResult(Activity.RESULT_OK, data);
+//			}
 			finish();
 			return true;
 		}
