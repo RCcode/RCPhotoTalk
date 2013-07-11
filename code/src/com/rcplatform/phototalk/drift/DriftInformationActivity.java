@@ -49,11 +49,9 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
-import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler.OnFishListener;
 import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
-import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
@@ -145,36 +143,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		super.onResume();
 	}
 
-	private void searchFriend(Friend friend) {
-		showLoadingDialog(false);
-		Request.executeGetFriendDetailAsync(this, friend,
-				new FriendDetailListener() {
 
-					@Override
-					public void onSuccess(Friend friend) {
-						dissmissLoadingDialog();
-						startFriendDetailActivity(friend);
-					}
-
-					@Override
-					public void onError(int errorCode, String content) {
-						dissmissLoadingDialog();
-						showConfirmDialog(content);
-					}
-				}, false);
-	}
-
-	private void startFriendDetailActivity(Friend friend) {
-		Intent intent = new Intent(this, StrangerDetailActivity.class);
-		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
-		intent.putExtra("isFromStangerPage", true);
-		// if (!friend.isFriend()) {
-		// intent.setAction(Constants.Action.ACTION_RECOMMEND_DETAIL);
-		// } else {
-		// intent.setAction(Constants.Action.ACTION_FRIEND_DETAIL);
-		// }
-		startActivity(intent);
-	}
 
 	@Override
 	protected void onNewIntent(Intent intent) {
@@ -343,15 +312,23 @@ public class DriftInformationActivity extends BaseActivity implements
 
 
 	private void showFriendDetail(DriftInformation information) {
-		if (information.getSender().getRcId()
-				.equals(information.getSender().getRcId())) {
-			Friend friend = PhotoTalkUtils.userToFriend(getCurrentUser());
-			startFriendDetailActivity(friend);
-			return;
-		}
+//		if (information.getSender().getRcId()
+//				.equals(information.getSender().getRcId())) {
+//			Friend friend = PhotoTalkUtils.userToFriend(getCurrentUser());
+//			startFriendDetailActivity(friend);
+//			return;
+//		}
 		Friend friend = new Friend();
 		friend.setRcId(information.getSender().getRcId());
-		searchFriend(friend);
+		friend.setTigaseId(information.getSender().getTigaseId());
+		friend.setAppId(information.getSender().getAppId());
+		friend.setHeadUrl(information.getSender().getHeadUrl());
+		friend.setCountry(information.getSender().getCountry());
+		friend.setGender(information.getSender().getGender());
+		Intent intent = new Intent(this, StrangerDetailActivity.class);
+		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
+		intent.putExtra("isFromStangerPage", true);
+		startActivity(intent);
 	}
 
 	protected void showLongClickDialog(int position) {
