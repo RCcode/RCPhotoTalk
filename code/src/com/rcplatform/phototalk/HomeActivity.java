@@ -40,7 +40,9 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -146,15 +148,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener,
 	private boolean isLoading = false;
 
 	private boolean willQuit = false;
-
 	private RcAd popupAdlayout;
 	private ImageView ivNewRecommends;
 	private View knowStrangerView;
 	// 引导
-	private ViewPager vPager;
-	private List<View> listViews;
-	private final int GUIDE_PAGE_COUNT = 10;
-	private PageIndicator mPageIndicator;
+	private LinearLayout vPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -467,75 +465,17 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener,
 	 * 初始化ViewPager
 	 */
 	private void initViewPager() {
-		vPager = (ViewPager) findViewById(R.id.vPager);
-		vPager.setAdapter(new IntroAdapter());
-		vPager.setCurrentItem(0);
-		vPager.setOnPageChangeListener(new OnPageChangeListener() {
-
+		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
+		vPager.setOnClickListener(new OnClickListener() {
+			
 			@Override
-			public void onPageSelected(int arg0) {
-				setIndicator(arg0);
-			}
-
-			@Override
-			public void onPageScrolled(int arg0, float arg1, int arg2) {
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int arg0) {
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				vPager.setVisibility(View.GONE);
 			}
 		});
-		mPageIndicator = (PageIndicator) findViewById(R.id.page_indicator_home);
-		mPageIndicator.setDotCount(GUIDE_PAGE_COUNT);
 	}
 
-	private void setIndicator(int n){
-		mPageIndicator.setActiveDot(n);
-		if(n == GUIDE_PAGE_COUNT-1){
-			mPageIndicator.setVisibility(View.GONE);
-			vPager.setVisibility(View.GONE);
-		}
-	}
-	class IntroAdapter extends PagerAdapter {
-		private List<View> views = new ArrayList<View>();
-
-		public IntroAdapter() {
-			initPager();
-		}
-
-		private void initPager() {
-			for (int i = 0; i < GUIDE_PAGE_COUNT; i++) {
-				ImageView iv = new ImageView(HomeActivity.this);
-				iv.setLayoutParams(new ViewGroup.LayoutParams(
-						ViewGroup.LayoutParams.MATCH_PARENT,
-						ViewGroup.LayoutParams.MATCH_PARENT));
-				iv.setScaleType(ScaleType.FIT_XY);
-				iv.setImageResource(R.drawable.init_page_three);
-				views.add(iv);
-			}
-		}
-
-		@Override
-		public int getCount() {
-			return views.size();
-		}
-
-		@Override
-		public boolean isViewFromObject(View arg0, Object arg1) {
-			return arg0 == arg1;
-		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView(views.get(position));
-		}
-
-		@Override
-		public Object instantiateItem(ViewGroup container, int position) {
-			container.addView(views.get(position));
-			return views.get(position);
-		}
-	}
 
 	private void showFriendDetail(Information information) {
 		if (information.getSender().getRcId()

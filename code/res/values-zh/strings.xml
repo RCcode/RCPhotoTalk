@@ -202,7 +202,7 @@
     <string name="twitter">Twitter</string>
     <string name="googleplus">Google+</string>
     <string name="gmail">Gmail</string>
-    
+    <string name="reply">回复</string>
     <string name="share_title">分享至Twitter</string>
     <string name="search_friend_from_contacts">从通讯录中寻找朋友</string>
     <string name="search_friend_from_local">从%1$s中寻找朋友</string>

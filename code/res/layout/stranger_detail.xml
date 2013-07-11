@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/user_info_detail"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/stranger_iv_bg"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/user_detail_bg_height"
+            android:scaleType="centerCrop"
+            android:src="@drawable/user_detail_bg" />
+
+        <Button
+            android:id="@+id/report_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/base_back_btn" />
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignBottom="@id/stranger_iv_bg"
+            android:layout_alignTop="@+id/strange_rela_userinfo"
+            android:background="#50000000" />
+
+        <RelativeLayout
+            android:id="@+id/strange_rela_head"
+            android:layout_width="@dimen/user_head_image_width_bg"
+            android:layout_height="@dimen/user_head_image_width_bg"
+            android:layout_alignBottom="@+id/stranger_iv_bg"
+            android:layout_marginBottom="@dimen/user_detail_user_infos_bottom_margin"
+            android:background="@drawable/send_friend_head_bg"
+            android:padding="@dimen/head_boarder_padding" >
+
+            <ImageView
+                android:id="@+id/strange_iv_head"
+                android:layout_width="@dimen/user_detail_head_image_width"
+                android:layout_height="@dimen/user_detail_head_image_width"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="@dimen/user_detail_source_margin_left"
+                android:gravity="center"
+                android:scaleType="centerInside"
+                android:src="@drawable/default_head" />
+
+            <ImageView
+                android:id="@+id/strange_country_flag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/strange_rela_userinfo"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/stranger_iv_bg"
+            android:layout_toRightOf="@+id/strange_rela_head"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/strange_name"
+                style="@style/text_base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#FFFFFF"
+                android:textSize="@dimen/friend_info_nick_text_size"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="RC ID:"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/friend_info_rcid_text_size" />
+
+                <TextView
+                    android:id="@+id/strange_rcid"
+                    style="@style/text_base"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/friend_info_app_left"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/friend_info_rcid_text_size" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/stranger_linear_apps"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:layout_marginRight="@dimen/friend_info_app_right"
+        android:background="@drawable/app_list_bg" />
+
+    <Button
+        android:id="@+id/stranger_add_friend_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/friend_info_app_left"
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:layout_marginRight="@dimen/friend_info_app_right"
+        android:layout_marginTop="@dimen/friend_info_app_right"
+        android:background="@drawable/friend_info_send_btn"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/strange_perform_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/friend_info_send_top"
+        android:layout_marginLeft="@dimen/friend_info_app_left"
+        android:layout_marginRight="@dimen/friend_info_app_right"
+        android:layout_marginTop="@dimen/friend_info_app_right"
+        android:background="@drawable/friend_info_send_btn"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp" />
+
+</LinearLayout>
