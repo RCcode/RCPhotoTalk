@@ -581,17 +581,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	@Override
 	public synchronized List<DriftInformation> getDriftInformations(int start, int pageSize) {
 		ObjectSet<DriftInformation> localInformations = queryDriftInformations();
-		List<DriftInformation> result = new ArrayList<DriftInformation>();
-		if (localInformations != null) {
-			int end = start + pageSize;
-			for (int i = start; i < end; i++) {
-				if (i >= localInformations.size())
-					break;
-				DriftInformation information = localInformations.get(i);
-				result.add(information);
-			}
-		}
-		return result;
+		if (localInformations == null)
+			return new ArrayList<DriftInformation>();
+		return slipDataByPage(start, pageSize, localInformations);
 	}
 
 	private ObjectSet<DriftInformation> queryDriftInformations() {
@@ -622,9 +614,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			@Override
 			public int compare(DriftInformation arg0, DriftInformation arg1) {
 				if (arg0.getReceiveTime() > arg1.getReceiveTime())
-					return 1;
-				else
 					return -1;
+				else
+					return 1;
 			}
 		});
 		return slipDataByPage(start, pageSize, result);
@@ -645,9 +637,9 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			@Override
 			public int compare(DriftInformation arg0, DriftInformation arg1) {
 				if (arg0.getReceiveTime() > arg1.getReceiveTime())
-					return 1;
-				else
 					return -1;
+				else
+					return 1;
 			}
 		});
 
@@ -668,7 +660,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			end = queryResult.size();
 		}
 		List<T> result = new ArrayList<T>();
-		for (int i = 0; i < end; i++) {
+		for (int i = start; i < end; i++) {
 			result.add(queryResult.get(i));
 		}
 		return result;
@@ -803,7 +795,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 				db.store(info);
 			}
 			db.commit();
-		}		
+		}
 	}
 
 }

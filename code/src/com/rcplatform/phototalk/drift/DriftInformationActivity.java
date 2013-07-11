@@ -422,7 +422,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case MSG_WHAT_INFORMATION_LOADED:
-				initOrRefreshListView((List<DriftInformation>) msg.obj);
+				addInformationAtFirst((List<DriftInformation>) msg.obj);
 				break;
 			case MSG_WHAT_LOCAL_INFORMATION_LOADED:
 				addListData((List<DriftInformation>) msg.obj);
@@ -453,14 +453,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	}
 
-	private void initOrRefreshListView(List<DriftInformation> data) {
-		if (adapter == null) {
-			adapter = new DriftInformationAdapter(this, data, mImageLoader);
-			mInformationList.setAdapter(adapter);
-		} else {
-			adapter.addData(data);
-			adapter.notifyDataSetChanged();
-		}
+	private void addInformationAtFirst(List<DriftInformation> data) {
+		adapter.addData(data);
+		adapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -493,6 +488,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onInformationShowEnd(DriftInformation information) {
+		if (mShowMode == DriftShowMode.SEND)
+			return;
 		String tagBase = information.getPicId() + "";
 		String buttonTag = tagBase + Button.class.getName();
 		String statuTag = tagBase + TextView.class.getName();
@@ -518,10 +515,14 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoSending(List<DriftInformation> informations) {
+		if (mShowMode == DriftShowMode.RECEIVE)
+			return;
 		sendDataLoadedMessage(informations, MSG_WHAT_INFORMATION_LOADED);
 	}
 
 	public void onPhotoSendSuccess(long flag, int picId) {
+		if (mShowMode == DriftShowMode.RECEIVE)
+			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (DriftInformation info : localInfos) {
@@ -535,6 +536,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoResendSuccess(Information information) {
+		if (mShowMode == DriftShowMode.RECEIVE)
+			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
@@ -546,6 +549,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoSendFail(long flag) {
+		if (mShowMode == DriftShowMode.RECEIVE)
+			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (DriftInformation info : localInfos) {
@@ -558,6 +563,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoResendFail(Information information) {
+		if (mShowMode == DriftShowMode.RECEIVE)
+			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
@@ -566,16 +573,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				adapter.notifyDataSetChanged();
 			}
 		}
-	}
-
-	public void onNewInformation(List<DriftInformation> infosNeedUpdate, List<DriftInformation> infosNew) {
-		List<DriftInformation> localInformation = getAdapterData();
-		for (DriftInformation info : infosNeedUpdate) {
-			if (localInformation != null && localInformation.contains(info)) {
-				localInformation.get(localInformation.indexOf(info)).setState(info.getState());
-			}
-		}
-		// sendDataLoadedMessage(infosNew, MSG_WHAT_INFORMATION_LOADED);
 	}
 
 	private OnScrollListener mScrollListener = new PauseOnScrollListener(mImageLoader, false, true) {
@@ -595,11 +592,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void loadLocalInformation() {
 		if (hasNextPage && !isLoading) {
 			isLoading = true;
-			loadLocalInformations();
+			loadLocalInformationsAsync();
 		}
 	}
 
-	private void loadLocalInformations() {
+	private void loadLocalInformationsAsync() {
 		RCThreadPool.getInstance().addTask(new Runnable() {
 
 			@Override
@@ -644,16 +641,19 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			throwInformation();
 			break;
 		case R.id.btn_show_all:
+			filterMenu.dismiss();
 			if (mShowMode != DriftShowMode.ALL) {
 				changeShowMode(DriftShowMode.ALL);
 			}
 			break;
 		case R.id.btn_show_receive:
+			filterMenu.dismiss();
 			if (mShowMode != DriftShowMode.RECEIVE) {
 				changeShowMode(DriftShowMode.RECEIVE);
 			}
 			break;
 		case R.id.btn_show_send:
+			filterMenu.dismiss();
 			if (mShowMode != DriftShowMode.SEND) {
 				changeShowMode(DriftShowMode.SEND);
 			}
@@ -663,14 +663,17 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void changeShowMode(DriftShowMode mode) {
 		mShowMode = mode;
-		clearInformation();
 		reset();
 		loadLocalInformation();
 	}
 
 	private void reset() {
+		clearInformation();
 		hasNextPage = true;
 		isLoading = false;
+		adapter = null;
+		mInformationList.setAdapter(null);
+		mInformationList.setOnScrollListener(null);
 	}
 
 	private void fishInformation() {
@@ -682,6 +685,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 				@Override
 				public void onFishSuccess(DriftInformation information) {
+					if (mShowMode == DriftShowMode.SEND)
+						return;
 					List<DriftInformation> infos = new ArrayList<DriftInformation>();
 					infos.add(information);
 					sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
