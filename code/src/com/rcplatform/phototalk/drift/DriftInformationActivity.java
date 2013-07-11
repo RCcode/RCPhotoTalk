@@ -319,12 +319,16 @@ public class DriftInformationActivity extends BaseActivity implements
 //			return;
 //		}
 		Friend friend = new Friend();
+		friend.setNickName(information.getSender().getNick());
 		friend.setRcId(information.getSender().getRcId());
 		friend.setTigaseId(information.getSender().getTigaseId());
 		friend.setAppId(information.getSender().getAppId());
 		friend.setHeadUrl(information.getSender().getHeadUrl());
 		friend.setCountry(information.getSender().getCountry());
 		friend.setGender(information.getSender().getGender());
+		//缺少年龄 和是否为好友
+//		friend.setBirthday(information.getSender().get)
+//		friend.setFriend(true);
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		intent.putExtra("isFromStangerPage", true);
