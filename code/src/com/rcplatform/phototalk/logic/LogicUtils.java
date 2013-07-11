@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.logic;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -26,12 +27,18 @@ import com.rcplatform.phototalk.clienservice.CensusService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.drift.DriftSender;
+import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
+import com.rcplatform.phototalk.proxy.DriftProxy;
+import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class LogicUtils {
@@ -177,6 +184,10 @@ public class LogicUtils {
 		PhotoInformationCountDownService.getInstance().addInformation(information);
 	}
 
+	public static void startShowPhotoInformation(DriftInformation information) {
+		DriftInformationCountDownService.getInstance().addInformation(information);
+	}
+
 	public static void showInformationClearDialog(final Context context) {
 		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
@@ -197,6 +208,10 @@ public class LogicUtils {
 
 	public static void deleteInformation(Context context, Information information) {
 		PhotoTalkDatabaseFactory.getDatabase().deleteInformation(information);
+	}
+
+	public static void deleteInformation(Context context, DriftInformation information) {
+		PhotoTalkDatabaseFactory.getDatabase().deleteDriftInformation(information);
 	}
 
 	public static void logout(Context context) {
@@ -226,28 +241,86 @@ public class LogicUtils {
 		context.startActivity(intent);
 	}
 
-	public static void sendPhoto(final Context context, String timeLimit, List<Friend> friends, File file, boolean hasVoice, boolean hasGraf) {
+	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice,
+			final boolean hasGraf) {
 		long flag = System.currentTimeMillis();
+		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
+		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
+		if (sendToStranges) {
+			DriftInformation tempDriftInformation = buildDriftTempInformation(currentUser, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
+			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(tempDriftInformation);
+			DriftInformationPageController.getInstance().onDriftInformationSending(Arrays.asList(new DriftInformation[] { tempDriftInformation }));
+		}
+		if (friends.size() == 1 && sendToStranges) {
+			// 只是扔漂流瓶
+			DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag), currentUser, null, timeLimit, hasGraf, hasVoice,
+					file.getPath(), flag);
+			return;
+		}
+		// 发送给好友并扔漂流瓶
 		try {
-			UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
-				public void onSendSuccess(long flag) {
+				public void onSendSuccess(long flag, String url) {
 					InformationPageController.getInstance().onPhotoSendSuccess(flag);
+					if (sendToStranges) {
+						// 发送给好友后判断是否需要扔漂流瓶
+						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag),
+								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(),
+								flag);
+					}
 				}
 
 				@Override
 				public void onFail(long flag, int errorCode, String content) {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
+					if (sendToStranges) {
+						// 发送给好友失败后判断是否需要扔漂流瓶，如果需要扔，也尝试下
+						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag),
+								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(),
+								flag);
+					}
 				}
 
 			}, friendIds, hasVoice, hasGraf);
 		} catch (Exception e) {
 			e.printStackTrace();
 			InformationPageController.getInstance().onPhotoSendFail(flag);
+			if (sendToStranges)
+				DriftInformationPageController.getInstance().onDriftInformationSendFail(flag);
 		}
+	}
+
+	private static DriftInformation buildDriftTempInformation(UserInfo currentUser, long flag, int timeLimit, File file, boolean hasVoice, boolean hasGraf) {
+		DriftInformation tempDriftInformation = new DriftInformation();
+		tempDriftInformation.setFlag(flag);
+		if (hasVoice) {
+			tempDriftInformation.setHasVoice(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE));
+		} else {
+			tempDriftInformation.setHasVoice(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_VOICE));
+		}
+		if (hasGraf) {
+			tempDriftInformation.setHasGraf(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF));
+		} else {
+			tempDriftInformation.setHasGraf(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_GRAF));
+		}
+		tempDriftInformation.setLimitTime(timeLimit);
+		tempDriftInformation.setReceiveTime(flag);
+		DriftSender sender = new DriftSender();
+		sender.setAppId(Integer.parseInt(Constants.APP_ID));
+		sender.setCountry(currentUser.getCountry());
+		sender.setGender(currentUser.getGender());
+		sender.setHeadUrl(currentUser.getHeadUrl());
+		sender.setNick(currentUser.getNickName());
+		sender.setRcId(currentUser.getRcId());
+		sender.setTigaseId(currentUser.getTigaseId());
+		tempDriftInformation.setSender(sender);
+		tempDriftInformation.setReceiveTime(flag);
+		tempDriftInformation.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
+		tempDriftInformation.setUrl(file.getPath());
+		return tempDriftInformation;
 	}
 
 	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file,
@@ -255,6 +328,8 @@ public class LogicUtils {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
+			if (f.equals(PhotoTalkUtils.getDriftFriend()))
+				continue;
 			friendIds.add(f.getRcId());
 			if (f.getRcId().equals(currentUser.getRcId()))
 				continue;

@@ -104,6 +104,7 @@ public class PTBackgroundService extends Service {
 			this.mCurrentUser = currentUser;
 			checkPhoneBindState();
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
+			PhotoTalkDatabaseFactory.getDatabase().updateDriftTempInformationFail();
 		} else {
 			this.mCurrentUser = currentUser;
 		}

@@ -43,6 +43,37 @@
                 android:background="@drawable/seach_text_delete_btn" />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/rela_stranges"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <ImageView
+                android:id="@+id/strange_icon"
+                android:layout_width="@dimen/friend_head_side"
+                android:layout_height="@dimen/friend_head_side"
+                android:layout_marginLeft="@dimen/friend_head_left"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                style="@style/text_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="5dp"
+                android:layout_toLeftOf="@+id/cb_strange"
+                android:layout_toRightOf="@+id/strange_icon"
+                android:text="@string/send_to_stranges" />
+
+            <CheckBox
+                android:id="@+id/cb_strange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp" />
+        </RelativeLayout>
+
         <ListView
             android:id="@+id/lv_sfl_friends"
             android:layout_width="fill_parent"
@@ -64,11 +95,12 @@
             android:id="@+id/g_sfl_added_friends"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
-            android:scrollbars="none"
             android:layout_marginLeft="@dimen/default_gap"
-            android:layout_toLeftOf="@+id/btn_sfl_send" />
+            android:layout_toLeftOf="@+id/btn_sfl_send"
+            android:scrollbars="none" />
 
-           <!--  <FrameLayout
+        <!--
+        <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent" >
 
@@ -89,7 +121,7 @@
                         android:stretchMode="none" />
                 </LinearLayout>
             </FrameLayout>
-        </HorizontalScrollView> -->
+        </HorizontalScrollView> -->
 
         <Button
             android:id="@+id/btn_sfl_send"

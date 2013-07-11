@@ -104,5 +104,7 @@
     <dimen name="share_text_size">12sp</dimen>
     <dimen name="app_icon_width_invite">30dp</dimen>
     <dimen name="invite_text">14sp</dimen>
+    <dimen name="drift_filter_menu_width">150dp</dimen>
+    <dimen name="information_country_marginleft">5dp</dimen>
 
 </resources>

@@ -207,8 +207,22 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_NICK="nick";
 		public static final String PARAM_KEY_COUNTRY="country";
 		public static final String PARAM_KEY_GENDER="gender";
+		public static final String PARAM_KEY_TIMESNAMP="timeStamp";
 	}
 	public static class DriftShowTime{
 		public static final String PARAM_KEY_PICIDS="picId";
+	}
+	public static class ThrowDriftInformation{
+		public static final String PARAM_KEY_GENDER="gender";
+		public static final String PARAM_KEY_NICK="nick";
+		public static final String PARAM_KEY_BACKGROUND="backUrl";
+		public static final String PARAM_KEY_PICURL="picUrl";
+		public static final String PARAM_KEY_COUNTRY="country";
+		public static final String PARAM_KEY_TIMEZONE="timeZone";
+		public static final String PARAM_KEY_SHOW_LENGTH="totalLength";
+		public static final String PARAM_KEY_OSNAME="osName";
+		public static final String PARAM_KEY_FLAG="flag";
+		public static final String PARAM_KEY_OSVERSION="osVersion";
+		public static final String PARAM_KEY_FILE="file";
 	}
 }

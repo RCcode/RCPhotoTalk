@@ -559,11 +559,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener,
 				information.getUrl()), information.getTotleLength() + "",
 				new PhotoSendListener() {
 
-					@Override
-					public void onSendSuccess(long flag) {
-						InformationPageController.getInstance()
-								.onPhotoResendSuccess(information);
-					}
+			@Override
+			public void onSendSuccess(long flag,String url) {
+				InformationPageController.getInstance().onPhotoResendSuccess(information);
+			}
 
 					@Override
 					public void onFail(long flag, int errorCode, String content) {

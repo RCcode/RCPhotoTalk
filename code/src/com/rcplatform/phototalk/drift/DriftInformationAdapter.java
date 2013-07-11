@@ -26,6 +26,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 
 public class DriftInformationAdapter extends BaseAdapter {
@@ -36,15 +37,13 @@ public class DriftInformationAdapter extends BaseAdapter {
 	private ImageLoader mImageLoader;
 	private DriftInformation mPressedInformation;
 	private int mPressedPosition = -1;
-	private ListView mList;
 	private LayoutInflater mInflater;
 	private UserInfo currentUser;
 
-	public DriftInformationAdapter(Context context, List<DriftInformation> data, ListView list, ImageLoader imageLoader) {
+	public DriftInformationAdapter(Context context, List<DriftInformation> data, ImageLoader imageLoader) {
 		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = imageLoader;
-		this.mList = list;
 		mInflater = LayoutInflater.from(context);
 		currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 	}
@@ -82,6 +81,8 @@ public class DriftInformationAdapter extends BaseAdapter {
 			holder.statu = (TextView) convertView.findViewById(R.id.tv_record_item_statu);
 			holder.bar = (ProgressBar) convertView.findViewById(R.id.progress_home_record);
 			holder.statuButton = (RecordTimerLimitView) convertView.findViewById(R.id.btn_record_item_statu_button);
+			holder.ivCountry = (ImageView) convertView.findViewById(R.id.iv_country);
+			holder.ivCountry.setVisibility(View.VISIBLE);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -123,11 +124,14 @@ public class DriftInformationAdapter extends BaseAdapter {
 			initPhotoInformationSenderView(record, holder);
 		}
 		mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
-		if (isSender(record) && record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
+		if (!isSender(record) && record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.name.getPaint().setFakeBoldText(true);
 		} else {
 			holder.name.getPaint().setFakeBoldText(false);
 		}
+		holder.name.setText(record.getSender().getNick());
+		if (record.getSender().getCountry() != null)
+			holder.ivCountry.setImageBitmap(Utils.getAssetCountryFlag(context, record.getSender().getCountry()));
 		return convertView;
 	}
 
@@ -137,21 +141,21 @@ public class DriftInformationAdapter extends BaseAdapter {
 		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			// TODO load information picture;
-			holder.statuButton.stopTask();
+			RCPlatformImageLoader.loadPictureForDriftList(context, record);
+			holder.statuButton.stopDriftTask();
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
 				// 如果缓存文件存在
 				holder.bar.setVisibility(View.GONE);
-				holder.statuButton.stopTask();
+				holder.statuButton.stopDriftTask();
 				holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
 			} else {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.receive_downloading);
-				// TODO load information picture;
-				holder.statuButton.stopTask();
+				RCPlatformImageLoader.loadPictureForDriftList(context, record);
+				holder.statuButton.stopDriftTask();
 			}
 			// 状态为4.表示正在查看
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
@@ -163,19 +167,19 @@ public class DriftInformationAdapter extends BaseAdapter {
 			// 状态为3 表示 已经查看，
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.stopTask();
+			holder.statuButton.stopDriftTask();
 			holder.statu.setText(getTimeText(R.string.receive_looked, record.getReceiveTime()));
 
 			// 状态为5 表示正在下载
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			holder.statuButton.stopTask();
+			holder.statuButton.stopDriftTask();
 			// 7 下载失败
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(R.string.receive_fail);
-			holder.statuButton.stopTask();
+			holder.statuButton.stopDriftTask();
 			holder.statuButton.setVisibility(View.VISIBLE);
 			holder.statuButton.setBackgroundResource(R.drawable.send_failed);
 		}
@@ -187,7 +191,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 		holder.statuButton.setVisibility(View.VISIBLE);
 		holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
 		holder.statuButton.setText(null);
-		holder.statuButton.stopTask();
+		holder.statuButton.stopDriftTask();
 		// 状态为1 表示已经发送到服务器
 		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.GONE);
@@ -257,6 +261,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 		RecordTimerLimitView statuButton;
 		RelativeLayout timerLayout;
 		ProgressBar bar;
+		ImageView ivCountry;
 	}
 
 	public List<DriftInformation> getData() {
