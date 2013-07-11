@@ -46,7 +46,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -138,6 +138,12 @@
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".FriendDetailActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Friend_Detail"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".StrangerDetailActivity"
             android:configChanges="orientation"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Friend_Detail"
