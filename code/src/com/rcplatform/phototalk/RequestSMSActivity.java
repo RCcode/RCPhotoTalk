@@ -31,7 +31,7 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 public class RequestSMSActivity extends BaseActivity implements OnClickListener {
 
 	private static final int REQUEST_CODE_BIND = 100;
-
+	private static final int REQUEST_CODE_COUNTRY = 101;
 	private EditText etNumber;
 
 	private Button btnCountryCode;
@@ -45,6 +45,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private CountryCodeDatabase mCountryCodeDatabase;
 
 	private Button btnCommit;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +120,9 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.btn_country_code:
-				showCountryChooseDialog();
+				Intent intent =new Intent(this,SelectCountryPhoneCodeActivity.class);
+				startActivityForResult(intent,REQUEST_CODE_COUNTRY);
+//				showCountryChooseDialog();
 				break;
 
 			case R.id.btn_commit:
@@ -219,9 +222,18 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_BIND) {
+		if (resultCode == Activity.RESULT_OK){
+			if(requestCode == REQUEST_CODE_BIND) {
 			setResult(Activity.RESULT_OK);
 			finish();
+			}else if(requestCode == REQUEST_CODE_COUNTRY){
+				String text = data.getStringExtra("text");
+				btnCountryCode.setText(text);
+				int n = data.getIntExtra("size", -1);
+				if(n!=-1){
+				mCountryCode = allCountryCodes.get(n);
+				}				
+			}
 		}
 
 	}

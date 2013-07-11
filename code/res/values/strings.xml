@@ -147,6 +147,8 @@
     <string name="nick">Nickname</string>
     <string name="sex">Gender</string>
     <string name="birthday">Birthday</string>
+    <string name="country">Country</string>
+    
     <string name="settings_update_name_title">Nickname</string>
     <string name="settings_select_sex">Gender</string>
     <string name="male">Male</string>

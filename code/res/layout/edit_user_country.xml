@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/app_backgroud"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/title"
+        layout="@layout/base_top_navigate" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="53dp"
+        android:background="@drawable/seach_bg" >
+
+        <EditText
+            android:id="@+id/search_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:background="@drawable/seach_edit_text"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:imeOptions="actionSearch"
+            android:paddingLeft="35dp"
+            android:singleLine="true"
+            android:textColor="#3f3f3f"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/seach_delete_btn"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignRight="@+id/search_country"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/seach_text_delete_btn" />
+        <!-- The speaker button -->
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/country_list"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>
