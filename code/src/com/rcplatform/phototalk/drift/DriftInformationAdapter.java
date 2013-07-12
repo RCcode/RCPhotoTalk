@@ -132,6 +132,9 @@ public class DriftInformationAdapter extends BaseAdapter {
 		holder.name.setText(record.getSender().getNick());
 		if (record.getSender().getCountry() != null)
 			holder.ivCountry.setImageBitmap(Utils.getAssetCountryFlag(context, record.getSender().getCountry()));
+		else
+			holder.ivCountry.setImageBitmap(null);
+			
 		return convertView;
 	}
 

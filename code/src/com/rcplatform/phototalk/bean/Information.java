@@ -29,6 +29,16 @@ public class Information {
 	private boolean hasVoice;
 
 	private boolean hasGraf;
+	
+	private int photoType;
+	
+	public int getPhotoType() {
+		return photoType;
+	}
+
+	public void setPhotoType(int photoType) {
+		this.photoType = photoType;
+	}
 
 	public boolean isHasGraf() {
 		return hasGraf;
