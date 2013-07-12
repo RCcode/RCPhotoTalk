@@ -224,5 +224,6 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_FLAG="flag";
 		public static final String PARAM_KEY_OSVERSION="osVersion";
 		public static final String PARAM_KEY_FILE="file";
+		public static final String PARAM_KEY_BIRTHDAY="birthday";
 	}
 }

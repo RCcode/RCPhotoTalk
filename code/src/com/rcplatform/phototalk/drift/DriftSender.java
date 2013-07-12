@@ -10,6 +10,25 @@ public class DriftSender extends RecordUser implements Serializable{
 	private int gender;
 	private int appId;
 	private int isFriend;
+	private String backUrl;
+	private String birthday;
+	
+
+	public String getBirthday() {
+		return birthday;
+	}
+
+	public void setBirthday(String birthday) {
+		this.birthday = birthday;
+	}
+
+	public String getBackUrl() {
+		return backUrl;
+	}
+
+	public void setBackUrl(String backUrl) {
+		this.backUrl = backUrl;
+	}
 
 	public String getCountry() {
 		return country;

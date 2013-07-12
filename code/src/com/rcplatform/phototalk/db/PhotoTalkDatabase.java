@@ -90,5 +90,5 @@ public interface PhotoTalkDatabase {
 	public void updateDriftTempInformationFail();
 	public void resendDriftInformation(long flag,String rcId);
 	public void updateDriftInformationSendFail(long flag);
-	public void updateDriftInformationSenderInfo(int picId,Friend sender);
+	public void updateDriftInformationSenderInfo(Friend sender);
 }

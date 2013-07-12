@@ -800,13 +800,13 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void updateDriftInformationSenderInfo(final int picId, Friend sender) {
+	public void updateDriftInformationSenderInfo( final Friend sender) {
 		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public boolean match(DriftInformation arg0) {
-				return arg0.getPicId() == picId;
+				return arg0.getSender().getRcId().equals(sender.getRcId());
 			}
 		}, null);
 		if (queryResult.size() > 0) {

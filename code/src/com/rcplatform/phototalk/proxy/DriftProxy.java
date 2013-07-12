@@ -75,6 +75,7 @@ public class DriftProxy {
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_OSNAME, Constants.OS_NAME);
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_OSVERSION, Constants.OS_VERSION);
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_SHOW_LENGTH, totalLength);
+		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_BIRTHDAY, currentUser.getBirthday());
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
 		if (hasGraf)
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_GRAF, PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);

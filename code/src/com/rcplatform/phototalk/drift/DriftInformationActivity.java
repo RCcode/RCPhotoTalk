@@ -79,7 +79,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 	public static final String PARAM_FRIEND = "friend";
-			public static final String PARAM_INFORMATION = "information";
+	public static final String PARAM_INFORMATION = "information";
 	private SnapListView mInformationList;
 
 	protected LongClickShowView mShowDialog;
@@ -295,28 +295,22 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void showFriendDetail(DriftInformation information) {
 		Friend friend = new Friend();
 		friend.setRcId(information.getSender().getRcId());
-		searchFriend(friend,information);
+		friend.setAppId(information.getSender().getAppId());
+		friend.setAdded(information.getSender().getIsFriend());
+		friend.setGender(information.getSender().getGender());
+		friend.setHeadUrl(information.getSender().getHeadUrl());
+		friend.setCountry(information.getSender().getCountry());
+		friend.setNickName(information.getSender().getNick());
+		friend.setBackground(information.getSender().getBackUrl());
+		friend.setBirthday(information.getSender().getBirthday());
+		searchFriend(friend, information);
 	}
 
-	private void searchFriend(Friend friend,final DriftInformation information) {
-		showLoadingDialog(false);
-		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
-
-			@Override
-			public void onSuccess(Friend friend) {
-				dissmissLoadingDialog();
-				startFriendDetailActivity(friend,information);
-			}
-
-			@Override
-			public void onError(int errorCode, String content) {
-				dissmissLoadingDialog();
-				showConfirmDialog(content);
-			}
-		}, false);
+	private void searchFriend(Friend friend, final DriftInformation information) {
+		startFriendDetailActivity(friend, information);
 	}
 
-	private void startFriendDetailActivity(Friend friend,DriftInformation information) {
+	private void startFriendDetailActivity(Friend friend, DriftInformation information) {
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(PARAM_FRIEND, friend);
 		intent.putExtra(PARAM_INFORMATION, information);

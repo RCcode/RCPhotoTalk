@@ -119,4 +119,5 @@ public class DriftInformation implements Serializable{
 	public void setSender(DriftSender sender) {
 		this.sender = sender;
 	}
+	
 }
