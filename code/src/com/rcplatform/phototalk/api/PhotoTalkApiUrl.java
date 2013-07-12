@@ -135,4 +135,5 @@ public class PhotoTalkApiUrl {
 	public static final String REPORT_URL = BASE_URL_FOR_POOL + "reportPic.do";
 	public static final String THROW_DRIFT_URL=BASE_URL_FOR_POOL+"throwBottle.do";
 	public static final String FISH_DRIFT = BASE_URL_FOR_POOL+"getBottle.do";
+	public static final String DRIFT_SHOW_TIME_URL=BASE_URL_FOR_POOL+"getViewTimes.do";
 }

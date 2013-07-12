@@ -38,7 +38,7 @@ public class DriftShowTimeResponseHandler implements RCPlatformResponseHandler {
 			SparseIntArray showTimes = new SparseIntArray();
 			for (int i = 0; i < picIdsArray.length(); i++) {
 				JSONObject jsonTime = picIdsArray.getJSONObject(i);
-				showTimes.put(jsonTime.getInt("picId"), jsonTime.getInt("count"));
+				showTimes.put(jsonTime.getInt("picId"), jsonTime.getInt("num"));
 			}
 			if (mListener != null)
 				mListener.onGetSuccess(showTimes);

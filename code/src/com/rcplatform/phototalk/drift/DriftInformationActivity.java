@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.SparseIntArray;
 import android.view.GestureDetector;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
@@ -47,7 +48,9 @@ import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.handler.DriftShowTimeResponseHandler;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
+import com.rcplatform.phototalk.request.handler.DriftShowTimeResponseHandler.OnDriftShowTimeListener;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler.OnFishListener;
 import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
@@ -679,13 +682,32 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 							getCurrentUser().getRcId());
 					break;
 				}
-
+				List<Integer> picIds = new ArrayList<Integer>();
+				String currentRcId = getCurrentUser().getRcId();
+				for (DriftInformation information : informations) {
+					if (information.getSender().getRcId().equals(currentRcId))
+						picIds.add(information.getPicId());
+				}
+				if (picIds.size() > 0) {
+					loadSendedDriftShowTimes(picIds);
+				}
 				Message msg = myHandler.obtainMessage();
 				msg.what = MSG_WHAT_LOCAL_INFORMATION_LOADED;
 				msg.obj = informations;
 				myHandler.sendMessage(msg);
 			}
 		});
+	}
+
+	protected void loadSendedDriftShowTimes(List<Integer> picIds) {
+		DriftProxy.getDriftInformationShowTime(this, new DriftShowTimeResponseHandler(this, new OnDriftShowTimeListener() {
+
+			@Override
+			public void onGetSuccess(SparseIntArray picShowTimes) {
+				adapter.addShowTimes(picShowTimes);
+				adapter.notifyDataSetChanged();
+			}
+		}), picIds);
 	}
 
 	public ListView getInformationList() {
@@ -733,6 +755,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		hasNextPage = true;
 		isLoading = false;
 		adapter = null;
+		mInformationList.removeFooterView(loadingFooter);
 		mInformationList.setAdapter(null);
 		mInformationList.setOnScrollListener(null);
 	}

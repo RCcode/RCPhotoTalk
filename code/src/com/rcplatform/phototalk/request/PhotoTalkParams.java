@@ -210,7 +210,7 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_TIMESNAMP="timeStamp";
 	}
 	public static class DriftShowTime{
-		public static final String PARAM_KEY_PICIDS="picId";
+		public static final String PARAM_KEY_PICIDS="picIds";
 	}
 	public static class ThrowDriftInformation{
 		public static final String PARAM_KEY_GENDER="gender";
