@@ -33,6 +33,18 @@ public class DriftProxy {
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, information.getSender().getRcId());
 		request.excuteAsync();
 	}
+	public static void AddFriend(Context context, RCPlatformResponseHandler handler, DriftInformation information) {
+		Request request = new Request(context, PhotoTalkApiUrl.SKY_POOL_ADD_FRIEND, handler);
+		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_COUNTRY, userInfo.getCountry());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_GENDER, userInfo.getGender() + "");
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICID, information.getPicId() + "");
+//		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICURL, information.getUrl());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_COUNTRY, information.getSender().getCountry());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_GENDER, information.getSender().getGender() + "");
+//		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, information.getSender().getRcId());
+		request.excuteAsync();
+	}
 
 	public static void getMaxFishTime(Context context, RCPlatformResponseHandler handler) {
 		Request request = new Request(context, "", handler);

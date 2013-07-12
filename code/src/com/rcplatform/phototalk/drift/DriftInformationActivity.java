@@ -83,6 +83,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 	public static final String PARAM_FRIEND = "friend";
 	public static final String PARAM_INFORMATION = "information";
+	public static final String PARAM_FROM_PAGE = "isFromStangerPage";
 	private SnapListView mInformationList;
 
 	protected LongClickShowView mShowDialog;
@@ -317,7 +318,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(PARAM_FRIEND, friend);
 		intent.putExtra(PARAM_INFORMATION, information);
-		intent.putExtra("isFromStangerPage", true);
+		intent.putExtra(PARAM_FROM_PAGE, true);
 		startActivity(intent);
 	}
 
