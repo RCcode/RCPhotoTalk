@@ -294,17 +294,17 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void showFriendDetail(DriftInformation information) {
 		Friend friend = new Friend();
 		friend.setRcId(information.getSender().getRcId());
-		searchFriend(friend);
+		searchFriend(friend,information);
 	}
 
-	private void searchFriend(Friend friend) {
+	private void searchFriend(Friend friend,final DriftInformation information) {
 		showLoadingDialog(false);
 		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
 
 			@Override
 			public void onSuccess(Friend friend) {
 				dissmissLoadingDialog();
-				startFriendDetailActivity(friend);
+				startFriendDetailActivity(friend,information);
 			}
 
 			@Override
@@ -315,7 +315,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		}, false);
 	}
 
-	private void startFriendDetailActivity(Friend friend) {
+	private void startFriendDetailActivity(Friend friend,DriftInformation information) {
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		intent.putExtra("isFromStangerPage", true);
