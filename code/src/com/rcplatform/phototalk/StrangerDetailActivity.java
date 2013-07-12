@@ -24,6 +24,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
+import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
@@ -148,7 +149,27 @@ public class StrangerDetailActivity extends BaseActivity {
 		} else {
 			reportBtn.setVisibility(View.INVISIBLE);
 		}
-
+//		reportBtn.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				DriftProxy.reportPic(this, new RCPlatformResponseHandler() {
+//					
+//					@Override
+//					public void onSuccess(int statusCode, String content) {
+//						// TODO Auto-generated method stub
+//						
+//					}
+//					
+//					@Override
+//					public void onFailure(int errorCode, String content) {
+//						// TODO Auto-generated method stub
+//						
+//					}
+//				}, information);
+//			}
+//		});
 		ivHead = (ImageView) findViewById(R.id.strange_iv_head);
 		ivBackground = (ImageView) findViewById(R.id.stranger_iv_bg);
 		tv_rcid = (TextView) findViewById(R.id.strange_rcid);
