@@ -1,9 +1,11 @@
 package com.rcplatform.phototalk.drift;
 
+import java.io.Serializable;
+
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.RecordUser;
 
-public class DriftSender extends RecordUser {
+public class DriftSender extends RecordUser implements Serializable{
 	private String country;
 	private int gender;
 	private int appId;
