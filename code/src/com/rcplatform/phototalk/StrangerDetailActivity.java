@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -22,8 +21,6 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendSourse;
-import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;

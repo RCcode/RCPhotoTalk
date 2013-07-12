@@ -319,6 +319,7 @@ public class PrefsUtils {
 			userInfo.setBackground(sp.getString(Constants.KEY_BACKGROUND, null));
 			userInfo.setTigaseId(sp.getString(Constants.KEY_TIGASE_ID, null));
 			userInfo.setTigasePwd((sp.getString(Constants.KEY_TIGASE_PASSWORD, null)));
+			userInfo.setCountry(sp.getString(Constants.KEY_COUNTRY, null));
 			return userInfo;
 		}
 
@@ -338,10 +339,10 @@ public class PrefsUtils {
 					.putInt(Constants.KEY_SEX, userInfo.getGender()).putInt(Constants.KEY_RECEIVESET, userInfo.getAllowsend())
 					.putInt(Constants.KEY_TRENDSET, userInfo.getShareNews()).putString(Constants.KEY_RCID, userInfo.getRcId())
 					.putString(Constants.KEY_PHONE, userInfo.getCellPhone()).putString(Constants.KEY_TIGASE_ID, userInfo.getTigaseId())
-					.putString(Constants.KEY_TIGASE_PASSWORD, userInfo.getTigasePwd()).putString(Constants.KEY_BIRTHDAY, userInfo.getBirthday())
-					.putString(Constants.KEY_DEVICE_ID, userInfo.getDeviceId()).putString(Constants.KEY_BACKGROUND, userInfo.getBackground()).commit();
+					.putString(Constants.KEY_COUNTRY, userInfo.getCountry()).putString(Constants.KEY_TIGASE_PASSWORD, userInfo.getTigasePwd())
+					.putString(Constants.KEY_BIRTHDAY, userInfo.getBirthday()).putString(Constants.KEY_DEVICE_ID, userInfo.getDeviceId())
+					.putString(Constants.KEY_BACKGROUND, userInfo.getBackground()).commit();
 		}
-
 
 		public static void setUserReceiveSet(Context context, String pref, int set) {
 			SharedPreferences sh = getPreference(context, pref);

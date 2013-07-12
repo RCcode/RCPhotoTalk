@@ -351,6 +351,8 @@ public class Constants {
 	public static final String KEY_TIGASE_ID = "tigaseid";
 
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
+	
+	public static final String KEY_COUNTRY="country";
 
 	public static final String KEY_APP_ID = "appId";
 	//国家码 小写 后加.png为asset目录下对应的国家国旗
