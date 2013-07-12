@@ -7,6 +7,4 @@ public class InformationType {
 	public static final int TYPE_PICTURE_OR_VIDEO = 1;
 
 	public static final int TYPE_FRIEND_REQUEST_NOTICE = 2;
-
-	public static final int TYPE_DRIFT = 3;
 }

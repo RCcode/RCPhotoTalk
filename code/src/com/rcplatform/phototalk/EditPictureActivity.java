@@ -741,7 +741,7 @@ public class EditPictureActivity extends BaseActivity {
 		File file = new File(imagePath);
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.add(friend);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed());
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), getIntent().getIntExtra("photoType", 0));
 	}
 
 }

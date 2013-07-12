@@ -20,6 +20,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceCensus;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -242,7 +243,7 @@ public class LogicUtils {
 	}
 
 	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice,
-			final boolean hasGraf) {
+			final boolean hasGraf, int photoType) {
 		long flag = System.currentTimeMillis();
 		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
@@ -259,7 +260,7 @@ public class LogicUtils {
 		}
 		// 发送给好友并扔漂流瓶
 		try {
-			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
+			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf, photoType);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
@@ -324,7 +325,7 @@ public class LogicUtils {
 	}
 
 	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file,
-			boolean hasVoice, boolean hasGraf) throws JSONException {
+			boolean hasVoice, boolean hasGraf, int photoType) throws JSONException {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
@@ -358,6 +359,7 @@ public class LogicUtils {
 			record.setUrl(file.getPath());
 			record.setHasVoice(hasVoice);
 			record.setHasGraf(hasGraf);
+			record.setPhotoType(photoType);
 			infoRecords.add(record);
 		}
 		PhotoTalkDatabaseFactory.getDatabase().saveRecordInfos(infoRecords);

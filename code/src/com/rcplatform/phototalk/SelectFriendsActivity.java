@@ -35,6 +35,7 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
@@ -232,7 +233,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis()+".zip";
+			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -264,7 +265,8 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			}
 		});
 	}
-	private void changeReceiver(Friend friend,boolean isChecked){
+
+	private void changeReceiver(Friend friend, boolean isChecked) {
 		if (isChecked) {
 			EventUtil.Main_Photo.rcpt_choosefriends(baseContext);
 			if (!sendData.contains(friend)) {
@@ -281,6 +283,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		}
 		setAdapterDataSetChanged();
 	}
+
 	private void sendStringMessage(int what, String content) {
 		Message msg = mHandler.obtainMessage();
 		msg.what = what;
@@ -323,7 +326,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		if (sendToStrange) {
 			friends.add(PhotoTalkUtils.getDriftFriend());
 		}
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf, PhotoInformationType.TYPE_NORMAL);
 	}
 
 	@Override

@@ -1,9 +1,16 @@
 package com.rcplatform.phototalk.drift;
 
+import java.io.Serializable;
+
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 
-public class DriftInformation {
+public class DriftInformation implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long createTime;
 	private long receiveTime;
 	private int hasVoice;

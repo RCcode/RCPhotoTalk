@@ -8,14 +8,12 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.TranslateAnimation;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -31,7 +29,6 @@ import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.flurry.android.FlurryAgent;
-import com.google.ads.f;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.rcplatform.clientlog.ClientLogUtil;
@@ -49,9 +46,11 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
+import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler.OnFishListener;
 import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
+import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
@@ -74,8 +73,7 @@ import com.rcplatform.phototalk.views.SnapShowListener;
  * 
  * @version 1.0.0
  */
-public class DriftInformationActivity extends BaseActivity implements
-		SnapShowListener, OnClickListener{
+public class DriftInformationActivity extends BaseActivity implements SnapShowListener, OnClickListener {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
@@ -143,8 +141,6 @@ public class DriftInformationActivity extends BaseActivity implements
 		super.onResume();
 	}
 
-
-
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
@@ -195,29 +191,24 @@ public class DriftInformationActivity extends BaseActivity implements
 		});
 		mInformationList = (SnapListView) findViewById(R.id.lv_drift);
 		mInformationList.setSnapListener(this);
-		mInformationList
-				.setOnItemLongClickListener(new OnItemLongClickListener() {
+		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-					@Override
-					public boolean onItemLongClick(AdapterView<?> arg0,
-							View arg1, int arg2, long arg3) {
-						EventUtil.Main_Photo.rcpt_main_longpress(baseContext);
-						showLongClickDialog(arg2);
-						return false;
-					}
-				});
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				EventUtil.Main_Photo.rcpt_main_longpress(baseContext);
+				showLongClickDialog(arg2);
+				return false;
+			}
+		});
 		mInformationList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				DriftInformation information = (DriftInformation) adapter
-						.getItem(arg2);
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				DriftInformation information = (DriftInformation) adapter.getItem(arg2);
 				if (information.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
 					return;
 				if (information.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
-					if (LogicUtils.isSender(DriftInformationActivity.this,
-							information)) {
+					if (LogicUtils.isSender(DriftInformationActivity.this, information)) {
 						reSendPicture(information);
 					} else {
 						reLoadPictrue(information);
@@ -234,47 +225,39 @@ public class DriftInformationActivity extends BaseActivity implements
 		btnThrow.setOnClickListener(this);
 		pager = (ViewFlipper) findViewById(R.id.drift_view_pager);
 		pager.setOnTouchListener(new OnTouchListener() {
-			
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				// TODO Auto-generated method stub
 				return mGestureDetector.onTouchEvent(event);
 			}
 		});
 		pager.setLongClickable(true);
 		mGestureDetector = new GestureDetector(new OnGestureListener() {
-			
+
 			@Override
 			public boolean onSingleTapUp(MotionEvent e) {
-				// TODO Auto-generated method stub
 				return false;
 			}
-			
+
 			@Override
 			public void onShowPress(MotionEvent e) {
-				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-					float distanceY) {
-				// TODO Auto-generated method stub
+			public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
 				return false;
 			}
-			
+
 			@Override
 			public void onLongPress(MotionEvent e) {
-				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
-			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-					float velocityY) {
-				// TODO Auto-generated method stub
+			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-					
+
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
 					if (numView < pager.getChildCount() - 1) {
@@ -291,42 +274,48 @@ public class DriftInformationActivity extends BaseActivity implements
 				}
 				return false;
 			}
-			
+
 			@Override
 			public boolean onDown(MotionEvent e) {
-				// TODO Auto-generated method stub
 				return false;
 			}
 		});
 		mGestureDetector.setIsLongpressEnabled(true);
-		ImageView image = (ImageView)findViewById(R.id.drift_page);
+		ImageView image = (ImageView) findViewById(R.id.drift_page);
 		image.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				pager.setVisibility(View.GONE);
 			}
 		});
 	}
 
-
 	private void showFriendDetail(DriftInformation information) {
-//		if (information.getSender().getRcId()
-//				.equals(information.getSender().getRcId())) {
-//			Friend friend = PhotoTalkUtils.userToFriend(getCurrentUser());
-//			startFriendDetailActivity(friend);
-//			return;
-//		}
 		Friend friend = new Friend();
-		friend.setNickName(information.getSender().getNick());
 		friend.setRcId(information.getSender().getRcId());
-		friend.setTigaseId(information.getSender().getTigaseId());
-		friend.setAppId(information.getSender().getAppId());
-		friend.setHeadUrl(information.getSender().getHeadUrl());
-		friend.setCountry(information.getSender().getCountry());
-		friend.setGender(information.getSender().getGender());
-		friend.setFriend(information.getSender().isFriend());
+		searchFriend(friend);
+	}
+
+	private void searchFriend(Friend friend) {
+		showLoadingDialog(false);
+		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
+
+			@Override
+			public void onSuccess(Friend friend) {
+				dissmissLoadingDialog();
+				startFriendDetailActivity(friend);
+			}
+
+			@Override
+			public void onError(int errorCode, String content) {
+				dissmissLoadingDialog();
+				showConfirmDialog(content);
+			}
+		}, false);
+	}
+
+	private void startFriendDetailActivity(Friend friend) {
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		intent.putExtra("isFromStangerPage", true);
@@ -341,34 +330,29 @@ public class DriftInformationActivity extends BaseActivity implements
 					return;
 				} else {
 					if (mLongPressDialog == null) {
-						mLongPressDialog = new LongPressDialog(this,
-								new String[] { getString(R.string.resend),
-										getString(R.string.reload),
-										getString(R.string.delete) },
-								new OnLongPressItemClickListener() {
+						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload),
+								getString(R.string.delete) }, new OnLongPressItemClickListener() {
 
-									@Override
-									public void onClick(int listPostion,
-											int itemIndex) {
-										DriftInformation record = adapter
-												.getData().get(listPostion);
-										switch (itemIndex) {
-										case 0:
-											// 重新下载
-											reSendPicture(record);
-											break;
-										case 1:
-											reLoadPictrue(record);
-											mLongPressDialog.hide();
-											break;
+							@Override
+							public void onClick(int listPostion, int itemIndex) {
+								DriftInformation record = adapter.getData().get(listPostion);
+								switch (itemIndex) {
+								case 0:
+									// 重新下载
+									reSendPicture(record);
+									break;
+								case 1:
+									reLoadPictrue(record);
+									mLongPressDialog.hide();
+									break;
 
-										case 2:
-											deleteInformation(record);
-											mLongPressDialog.hide();
-											break;
-										}
-									}
-								});
+								case 2:
+									deleteInformation(record);
+									mLongPressDialog.hide();
+									break;
+								}
+							}
+						});
 					}
 
 					if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
@@ -386,13 +370,10 @@ public class DriftInformationActivity extends BaseActivity implements
 
 	protected void reSendPicture(DriftInformation record) {
 		record.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
-		PhotoTalkDatabaseFactory.getDatabase().resendDriftInformation(
-				record.getFlag(), getCurrentUser().getRcId());
+		PhotoTalkDatabaseFactory.getDatabase().resendDriftInformation(record.getFlag(), getCurrentUser().getRcId());
 		adapter.notifyDataSetChanged();
-		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(
-				this, record.getFlag()), getCurrentUser(), null,
-				record.getTotleLength() + "", record.hasGraf(), record
-						.hasVoice(), record.getUrl(), record.getFlag());
+		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(this, record.getFlag()), getCurrentUser(), null, record.getTotleLength() + "",
+				record.hasGraf(), record.hasVoice(), record.getUrl(), record.getFlag());
 	}
 
 	private void deleteInformation(DriftInformation information) {
@@ -411,21 +392,16 @@ public class DriftInformationActivity extends BaseActivity implements
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
-		DriftInformation infoRecord = (DriftInformation) adapter
-				.getItem(position);
+		DriftInformation infoRecord = (DriftInformation) adapter.getItem(position);
 		if (!LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
 					|| infoRecord.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
-					LongClickShowView.Builder builder = new LongClickShowView.Builder(
-							DriftInformationActivity.this,
-							R.layout.receice_to_show_view);
+					LongClickShowView.Builder builder = new LongClickShowView.Builder(DriftInformationActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList
-						.findViewWithTag(infoRecord.getPicId()
-								+ Button.class.getName());
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getPicId() + Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
 				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
@@ -465,8 +441,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		if (0 == first) {
 			if (eY > firstR.bottom) {
 				/* 触摸不在listview header上，根据触摸的Y坐标和listitem的高度计算索引 */
-				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0)
-						.getHeight());
+				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
 				count++;
 				index_in_adapter += count;
 			} else {
@@ -478,8 +453,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		else {
 			if (eY > firstR.bottom) {
 				/* 用触摸点坐标和item高度相除来计算索引 */
-				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0)
-						.getHeight());
+				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
 				count++;
 				index_in_adapter += count;
 			} else {
@@ -523,10 +497,8 @@ public class DriftInformationActivity extends BaseActivity implements
 
 	private void addListData(List<DriftInformation> localInformations) {
 		if (adapter == null) {
-			adapter = new DriftInformationAdapter(this, localInformations,
-					mImageLoader);
-			loadingFooter = getLayoutInflater().inflate(
-					R.layout.information_loading_item, null);
+			adapter = new DriftInformationAdapter(this, localInformations, mImageLoader);
+			loadingFooter = getLayoutInflater().inflate(R.layout.information_loading_item, null);
 			mInformationList.addFooterView(loadingFooter);
 			mInformationList.setAdapter(adapter);
 			mInformationList.setOnScrollListener(mScrollListener);
@@ -586,17 +558,13 @@ public class DriftInformationActivity extends BaseActivity implements
 		String buttonTag = tagBase + Button.class.getName();
 		String statuTag = tagBase + TextView.class.getName();
 		String newTag = tagBase + ImageView.class.getName();
-		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList
-				.findViewWithTag(buttonTag);
+		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
 			timerLimitView.setVisibility(View.GONE);
 		}
 		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {
-			statu.setText(getString(
-					R.string.receive_looked,
-					RCPlatformTextUtil.getTextFromTimeToNow(this,
-							information.getReceiveTime())));
+			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getReceiveTime())));
 		}
 		View newView = mInformationList.findViewWithTag(newTag);
 		if (newView != null)
@@ -622,8 +590,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (DriftInformation info : localInfos) {
-				if (info.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING
-						&& info.getFlag() == flag) {
+				if (info.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING && info.getFlag() == flag) {
 					info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 					info.setPicId(picId);
 				}
@@ -639,10 +606,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
 			if (index != -1) {
-				localInfos
-						.get(index)
-						.setState(
-								InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				localInfos.get(index).setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 				adapter.notifyDataSetChanged();
 			}
 		}
@@ -654,8 +618,7 @@ public class DriftInformationActivity extends BaseActivity implements
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (DriftInformation info : localInfos) {
-				if (info.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING
-						&& info.getFlag() == flag) {
+				if (info.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING && info.getFlag() == flag) {
 					info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 				}
 			}
@@ -670,27 +633,21 @@ public class DriftInformationActivity extends BaseActivity implements
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
 			if (index != -1) {
-				localInfos
-						.get(index)
-						.setState(
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+				localInfos.get(index).setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 				adapter.notifyDataSetChanged();
 			}
 		}
 	}
 
-	private OnScrollListener mScrollListener = new PauseOnScrollListener(
-			mImageLoader, false, true) {
+	private OnScrollListener mScrollListener = new PauseOnScrollListener(mImageLoader, false, true) {
 
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
 		}
 
 		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem,
-				int visibleItemCount, int totalItemCount) {
-			if (mInformationList.getAdapter().getCount()
-					- view.getLastVisiblePosition() <= 2) {
+		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+			if (mInformationList.getAdapter().getCount() - view.getLastVisiblePosition() <= 2) {
 				loadLocalInformation();
 			}
 		}
@@ -714,21 +671,15 @@ public class DriftInformationActivity extends BaseActivity implements
 				List<DriftInformation> informations = null;
 				switch (mShowMode) {
 				case ALL:
-					informations = PhotoTalkDatabaseFactory.getDatabase()
-							.getDriftInformations(start,
-									Constants.INFORMATION_PAGE_SIZE);
+					informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformations(start, Constants.INFORMATION_PAGE_SIZE);
 					break;
 				case SEND:
-					informations = PhotoTalkDatabaseFactory.getDatabase()
-							.getSendedDriftInformations(start,
-									Constants.INFORMATION_PAGE_SIZE,
-									getCurrentUser().getRcId());
+					informations = PhotoTalkDatabaseFactory.getDatabase().getSendedDriftInformations(start, Constants.INFORMATION_PAGE_SIZE,
+							getCurrentUser().getRcId());
 					break;
 				case RECEIVE:
-					informations = PhotoTalkDatabaseFactory.getDatabase()
-							.getReceiveDriftInformations(start,
-									Constants.INFORMATION_PAGE_SIZE,
-									getCurrentUser().getRcId());
+					informations = PhotoTalkDatabaseFactory.getDatabase().getReceiveDriftInformations(start, Constants.INFORMATION_PAGE_SIZE,
+							getCurrentUser().getRcId());
 					break;
 				}
 
@@ -792,27 +743,24 @@ public class DriftInformationActivity extends BaseActivity implements
 	private void fishInformation() {
 		String currentRcId = getCurrentUser().getRcId();
 		int fishLeaveTime = PrefsUtils.User.getFishLeaveTime(this, currentRcId);
-		if (PrefsUtils.User.isThrowToday(this, currentRcId)
-				&& fishLeaveTime > 0) {
+		if (PrefsUtils.User.isThrowToday(this, currentRcId) && fishLeaveTime > 0) {
 			showLoadingDialog(false);
-			DriftProxy.fishDrift(this, new FishDriftResponseHandler(this,
-					new OnFishListener() {
+			DriftProxy.fishDrift(this, new FishDriftResponseHandler(this, new OnFishListener() {
 
-						@Override
-						public void onFishSuccess(DriftInformation information) {
-							if (mShowMode == DriftShowMode.SEND)
-								return;
-							List<DriftInformation> infos = new ArrayList<DriftInformation>();
-							infos.add(information);
-							sendDataLoadedMessage(infos,
-									MSG_WHAT_INFORMATION_LOADED);
-						}
+				@Override
+				public void onFishSuccess(DriftInformation information) {
+					if (mShowMode == DriftShowMode.SEND)
+						return;
+					List<DriftInformation> infos = new ArrayList<DriftInformation>();
+					infos.add(information);
+					sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
+				}
 
-						@Override
-						public void onFishFail(String failReason) {
-							showConfirmDialog(failReason);
-						}
-					}));
+				@Override
+				public void onFishFail(String failReason) {
+					showConfirmDialog(failReason);
+				}
+			}));
 		} else if (fishLeaveTime == 0) {
 			DialogUtil.showToast(this, "今天的瓶子捞完啦", Toast.LENGTH_SHORT);
 		} else {
@@ -831,11 +779,9 @@ public class DriftInformationActivity extends BaseActivity implements
 	private void showFilterMenu(View v) {
 		if (filterMenu == null) {
 			filterMenu = new PopupWindow(this);
-			View view = getLayoutInflater().inflate(
-					R.layout.driftinformation_filter_menu, null);
+			View view = getLayoutInflater().inflate(R.layout.driftinformation_filter_menu, null);
 			Button btnSend = (Button) view.findViewById(R.id.btn_show_send);
-			Button btnReceive = (Button) view
-					.findViewById(R.id.btn_show_receive);
+			Button btnReceive = (Button) view.findViewById(R.id.btn_show_receive);
 			Button btnAll = (Button) view.findViewById(R.id.btn_show_all);
 			btnSend.setOnClickListener(this);
 			btnReceive.setOnClickListener(this);
@@ -843,8 +789,7 @@ public class DriftInformationActivity extends BaseActivity implements
 			filterMenu.setTouchable(true);
 			filterMenu.setFocusable(true);
 			filterMenu.setOutsideTouchable(true);
-			filterMenu.setWidth(getResources().getDimensionPixelSize(
-					R.dimen.drift_filter_menu_width));
+			filterMenu.setWidth(getResources().getDimensionPixelSize(R.dimen.drift_filter_menu_width));
 			filterMenu.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 			filterMenu.setContentView(view);
 		}
