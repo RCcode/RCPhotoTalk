@@ -294,7 +294,7 @@ public class PhotoTalkApplication extends Application {
 			public void run() {
 				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
 				List<Information> newInformations = result.get(PhotoTalkDatabase.NEW_INFORMATION);
-				if (newInformations != null && newInformations.size() > 0 && !Utils.isRunningForeground(getApplicationContext())) {
+				if (newInformations != null && newInformations.size() > 0 ) {
 					Message msg = newInformationHandler.obtainMessage();
 					msg.what = NEW_INFORMATION;
 					msg.obj = newInformations.size();

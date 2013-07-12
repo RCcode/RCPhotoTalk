@@ -494,6 +494,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				mFriends.remove(friend);
 				mRecommends.remove(friend);
 				PhotoTalkDatabaseFactory.getDatabase().deleteFriend(friend);
+				PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSenderInfo(friend);
 				mFriends = Utils.getFriendOrderByLetter(mFriends);
 				mHandler.sendEmptyMessage(MSG_WHAT_FRIEND_LOADED);
 			}

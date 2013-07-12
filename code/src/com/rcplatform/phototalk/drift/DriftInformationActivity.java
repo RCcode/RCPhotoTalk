@@ -488,6 +488,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				addInformationAtFirst((List<DriftInformation>) msg.obj);
 				break;
 			case MSG_WHAT_LOCAL_INFORMATION_LOADED:
+				dissmissLoadingDialog();
 				addListData((List<DriftInformation>) msg.obj);
 				break;
 			}
@@ -654,6 +655,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void loadLocalInformation() {
 		if (hasNextPage && !isLoading) {
+			showLoadingDialog(false);
 			isLoading = true;
 			loadLocalInformationsAsync();
 		}
