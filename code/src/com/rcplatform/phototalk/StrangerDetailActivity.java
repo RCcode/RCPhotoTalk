@@ -22,6 +22,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.PhotoInformationType;
+import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
@@ -40,8 +41,9 @@ public class StrangerDetailActivity extends BaseActivity {
 	private ImageLoader mImageLoader;
 	public static final String PARAM_FRIEND = "friend";
 	public static final String PARAM_INFORMATION = "information";
+	public static final String PARAM_FROM_PAGE = "isFromStangerPage";
 	public static final String RESULT_PARAM_FRIEND = "friend";
-	private String mAction;
+//	private String mAction;
 	private ImageView ivHead;
 	private ImageView ivBackground;
 	private ImageView ivCountryFlag;
@@ -54,6 +56,7 @@ public class StrangerDetailActivity extends BaseActivity {
 	private LinearLayout linearApps;
 	private boolean isFromStangerPage;
 	private DriftInformation information;
+	private UserInfo useInfo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +75,12 @@ public class StrangerDetailActivity extends BaseActivity {
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
-		isFromStangerPage = getIntent().getBooleanExtra("isFromStangerPage", false);
+		isFromStangerPage = getIntent().getBooleanExtra(PARAM_FROM_PAGE, false);
 		information = (DriftInformation) getIntent().getSerializableExtra(PARAM_INFORMATION);
 		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
-		mAction = getIntent().getAction();
+//		mAction = getIntent().getAction();
+		useInfo = getCurrentUser();
 	}
 
 	private void coverToRecommendView() {
@@ -132,7 +136,7 @@ public class StrangerDetailActivity extends BaseActivity {
 
 	private void startTakePhotoActivity() {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
-		intent.putExtra("friend", mFriend);
+		intent.putExtra(RESULT_PARAM_FRIEND, mFriend);
 		startActivity(intent);
 	}
 
@@ -155,13 +159,13 @@ public class StrangerDetailActivity extends BaseActivity {
 						@Override
 						public void onSuccess(int statusCode, String content) {
 							// TODO Auto-generated method stub
-							Toast.makeText(StrangerDetailActivity.this, "成功", Toast.LENGTH_LONG).show();
+							Toast.makeText(StrangerDetailActivity.this, "举报成功", Toast.LENGTH_LONG).show();
 						}
 
 						@Override
 						public void onFailure(int errorCode, String content) {
 							// TODO Auto-generated method stub
-
+							showErrorConfirmDialog(content);
 						}
 					}, information);
 				}
@@ -179,7 +183,7 @@ public class StrangerDetailActivity extends BaseActivity {
 		}
 		linearApps = (LinearLayout) findViewById(R.id.stranger_linear_apps);
 		setFriendInfo();
-		if (mFriend.isFriend()) {
+		if (mFriend.isFriend()||useInfo.getRcId().equals(mFriend.getRcId())) {
 			coverToFriendView();
 		} else {
 			coverToRecommendView();
@@ -243,17 +247,17 @@ public class StrangerDetailActivity extends BaseActivity {
 		return super.onKeyDown(keyCode, event);
 	};
 
-	private boolean hasChangeUserInfo() {
-		if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL) && mFriend.isFriend()) {
-			return true;
-		}
-		if (mLastRemark != null && !mLastRemark.equals(mFriend.getLocalName())) {
-			return true;
-		} else if (mLastRemark == null && null != mFriend.getLocalName()) {
-			return true;
-		}
-		return false;
-	}
+//	private boolean hasChangeUserInfo() {
+//		if (mAction.equals(Constants.Action.ACTION_RECOMMEND_DETAIL) && mFriend.isFriend()) {
+//			return true;
+//		}
+//		if (mLastRemark != null && !mLastRemark.equals(mFriend.getLocalName())) {
+//			return true;
+//		} else if (mLastRemark == null && null != mFriend.getLocalName()) {
+//			return true;
+//		}
+//		return false;
+//	}
 
 	private void showRemaikWindow(View v) {
 		if (mRemarkEditWindow == null) {
