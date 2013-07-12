@@ -527,6 +527,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	protected void onDestroy() {
 		ImageLoader.getInstance().stop();
 		DriftInformationPageController.getInstance().destroy();
+		if (mShowDialog != null && mShowDialog.isShowing())
+			mShowDialog.dismiss();
 		super.onDestroy();
 	}
 
