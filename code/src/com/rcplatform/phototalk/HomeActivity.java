@@ -34,6 +34,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +51,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformationActivity;
@@ -138,10 +140,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private boolean isLoading = false;
 
 	private boolean willQuit = false;
-
 	private RcAd popupAdlayout;
 	private ImageView ivNewRecommends;
 	private View knowStrangerView;
+	// 引导
+	private LinearLayout vPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -281,25 +284,31 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		}, PrefsUtils.User.getShowedMaxTrendsId(this, getCurrentUser().getRcId()));
 	}
 
-	private void searchFriend(Friend friend) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+	private void searchFriend(Friend friend, final int type) {
+		showLoadingDialog(false);
 		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
 
 			@Override
 			public void onSuccess(Friend friend) {
-				dismissLoadingDialog();
-				startFriendDetailActivity(friend);
+				dissmissLoadingDialog();
+				startFriendDetailActivity(friend, type);
 			}
 
 			@Override
 			public void onError(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				dissmissLoadingDialog();
+				showConfirmDialog(content);
 			}
 		}, false);
 	}
 
-	private void startFriendDetailActivity(Friend friend) {
+	private void startFriendDetailActivity(Friend friend, int type) {
+		if (type == PhotoInformationType.TYPE_DRIFT) {
+			Intent intent = new Intent(this, StrangerDetailActivity.class);
+			intent.putExtra(StrangerDetailActivity.PARAM_FRIEND, friend);
+			startActivity(intent);
+			return;
+		}
 		Intent intent = new Intent(this, FriendDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		if (!friend.isFriend()) {
@@ -421,12 +430,30 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		});
 		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUser().getRcId()))
 			InformationPageController.getInstance().onNewRecommends();
+
+		initViewPager();
+
+	}
+
+	/**
+	 * 初始化ViewPager
+	 */
+	private void initViewPager() {
+		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
+		vPager.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				vPager.setVisibility(View.GONE);
+			}
+		});
 	}
 
 	private void showFriendDetail(Information information) {
 		if (information.getSender().getRcId().equals(information.getReceiver().getRcId())) {
 			Friend friend = PhotoTalkUtils.userToFriend(getCurrentUser());
-			startFriendDetailActivity(friend);
+			startFriendDetailActivity(friend, information.getPhotoType());
 			return;
 		}
 		Friend friend = new Friend();
@@ -435,7 +462,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		} else {
 			friend.setRcId(information.getSender().getRcId());
 		}
-		searchFriend(friend);
+		searchFriend(friend, information.getPhotoType());
 	}
 
 	protected void showLongClickDialog(int position) {
@@ -495,7 +522,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
 
 			@Override
-			public void onSendSuccess(long flag) {
+			public void onSendSuccess(long flag, String url) {
 				InformationPageController.getInstance().onPhotoResendSuccess(information);
 			}
 

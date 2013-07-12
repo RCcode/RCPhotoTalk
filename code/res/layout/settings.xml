@@ -84,6 +84,11 @@
                                 android:gravity="center"
                                 android:scaleType="centerInside"
                                 android:src="@drawable/default_head" />
+
+                            <ImageView
+                                android:id="@+id/settings_account_country_flag"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
                         </RelativeLayout>
 
                         <LinearLayout

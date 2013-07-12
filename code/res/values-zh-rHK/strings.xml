@@ -148,6 +148,7 @@
     <string name="nick">昵稱</string>
     <string name="sex">性別</string>
     <string name="birthday">生日</string>
+     <string name="country">國家</string>
     <string name="settings_update_name_title">昵稱</string>
     <string name="settings_select_sex">性別</string>
     <string name="male">男</string>

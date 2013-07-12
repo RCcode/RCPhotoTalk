@@ -25,6 +25,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
@@ -84,6 +85,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statu = (TextView) convertView.findViewById(R.id.tv_record_item_statu);
 			holder.bar = (ProgressBar) convertView.findViewById(R.id.progress_home_record);
 			holder.statuButton = (RecordTimerLimitView) convertView.findViewById(R.id.btn_record_item_statu_button);
+			holder.ivDrift = (ImageView) convertView.findViewById(R.id.iv_country);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -101,6 +103,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				return false;
 			}
 		});
+		holder.ivDrift.setImageBitmap(null);
 		String tagBase = PhotoTalkUtils.getInformationTagBase(record);
 		String buttonTag = tagBase + Button.class.getName();
 		holder.statuButton.setTag(buttonTag);
@@ -255,7 +258,8 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setVisibility(View.VISIBLE);
 			holder.statuButton.setBackgroundResource(R.drawable.send_failed);
 		}
-
+		if (record.getPhotoType() == PhotoInformationType.TYPE_DRIFT)
+			holder.ivDrift.setImageResource(R.drawable.drift_item_icon);
 	}
 
 	private void initPhotoInformationSenderView(Information record, ViewHolder holder) {
@@ -359,6 +363,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		RecordTimerLimitView statuButton;
 		RelativeLayout timerLayout;
 		ProgressBar bar;
+		ImageView ivDrift;
 	}
 
 	public List<Information> getData() {

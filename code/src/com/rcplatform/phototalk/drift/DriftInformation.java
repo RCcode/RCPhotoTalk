@@ -1,8 +1,16 @@
 package com.rcplatform.phototalk.drift;
 
+import java.io.Serializable;
+
+import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 
-public class DriftInformation {
+public class DriftInformation implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private long createTime;
 	private long receiveTime;
 	private int hasVoice;
@@ -12,6 +20,15 @@ public class DriftInformation {
 	private int picId;
 	private String url;
 	private int state = 1;
+	private long flag;
+
+	public long getFlag() {
+		return flag;
+	}
+
+	public void setFlag(long flag) {
+		this.flag = flag;
+	}
 
 	public int getState() {
 		return state;
@@ -40,9 +57,15 @@ public class DriftInformation {
 	public int getHasVoice() {
 		return hasVoice;
 	}
-	public boolean hasVoice(){
-		return hasVoice==Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
+
+	public boolean hasVoice() {
+		return hasVoice == Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
 	}
+
+	public boolean hasGraf() {
+		return hasGraf == Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);
+	}
+
 	public void setHasVoice(int hasVoice) {
 		this.hasVoice = hasVoice;
 	}
@@ -96,4 +119,5 @@ public class DriftInformation {
 	public void setSender(DriftSender sender) {
 		this.sender = sender;
 	}
+	
 }

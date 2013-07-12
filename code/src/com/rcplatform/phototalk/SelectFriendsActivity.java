@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -32,11 +35,13 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.HorizontalListView;
@@ -80,6 +85,9 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private EditText etSearch;
 	private boolean hasVoice = false;
 	private boolean hasGraf = false;
+	private CheckBox cbStrange;
+	private boolean sendToStrange = false;
+	private Friend driftFriend = PhotoTalkUtils.getDriftFriend();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +200,15 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				mHandler.obtainMessage(MSG_CHANGE).sendToTarget();
 			}
 		});
+		cbStrange = (CheckBox) findViewById(R.id.cb_strange);
+		cbStrange.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				changeReceiver(driftFriend, isChecked);
+				sendToStrange = isChecked;
+			}
+		});
 	}
 
 	private void search(String keyWords) {
@@ -245,24 +261,27 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 			@Override
 			public void onChange(Friend friend, boolean isChecked) {
-
-				if (isChecked) {
-					EventUtil.Main_Photo.rcpt_choosefriends(baseContext);
-					if (!sendData.contains(friend)) {
-						sendData.add(friend);
-					}
-					send_layout.setVisibility(View.VISIBLE);
-				} else {
-					if (sendData.contains(friend)) {
-						sendData.remove(friend);
-					}
-					if (sendData.size() <= 0) {
-						send_layout.setVisibility(View.GONE);
-					}
-				}
-				setAdapterDataSetChanged();
+				changeReceiver(friend, isChecked);
 			}
 		});
+	}
+
+	private void changeReceiver(Friend friend, boolean isChecked) {
+		if (isChecked) {
+			EventUtil.Main_Photo.rcpt_choosefriends(baseContext);
+			if (!sendData.contains(friend)) {
+				sendData.add(friend);
+			}
+			send_layout.setVisibility(View.VISIBLE);
+		} else {
+			if (sendData.contains(friend)) {
+				sendData.remove(friend);
+			}
+			if (sendData.size() <= 0) {
+				send_layout.setVisibility(View.GONE);
+			}
+		}
+		setAdapterDataSetChanged();
 	}
 
 	private void sendStringMessage(int what, String content) {
@@ -304,7 +323,10 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void sendPicture(String imagePath, final String timeLimit, final List<Friend> friends, boolean hasVoice) {
 		timeSnap = System.currentTimeMillis();
 		final File file = new File(imagePath);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf);
+		if (sendToStrange) {
+			friends.add(PhotoTalkUtils.getDriftFriend());
+		}
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf, PhotoInformationType.TYPE_NORMAL);
 	}
 
 	@Override

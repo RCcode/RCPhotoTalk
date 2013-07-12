@@ -65,13 +65,20 @@ public class FriendsProxy {
 		request.putParam("time", time);
 		request.excuteAsync();
 	}
+	// 田镇源 发送图片时 请求好友动态
+		public static void postCountryCode(Context context, RCPlatformResponseHandler responseHandler, String countryCode) {
+			Request request = new Request(context, PhotoTalkApiUrl.CHANGE_COUNTRY_CODE, responseHandler);
+			
+			request.excuteAsync();
+		}
 
 	// 田镇源 上传修改个人信息方法
-	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex) {
-		Request request = new Request(context, PhotoTalkApiUrl.USER_INFO_UPDATE_URL, responseHandler);
+	public static void upUserInfo(Context context, File file, RCPlatformResponseHandler responseHandler, String nick, String birthday, String sex,String country) {
+		Request request = new Request(context, PhotoTalkApiUrl.CHANGE_COUNTRY_CODE, responseHandler);
 		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_NICK, nick);
 		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_BIRTHDAY, birthday);
 		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_GENDER, sex);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_COUNTRY, country);
 		if (file != null)
 			request.setFile(file);
 		request.executePostNameValuePairAsync();

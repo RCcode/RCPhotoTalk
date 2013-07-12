@@ -101,7 +101,7 @@ public class RecordTimerLimitView extends TextView {
 		@Override
 		public void run() {
 
-			if (infoRecord.getLimitTime() <= 0) {
+			if (driftInformation.getLimitTime() <= 0) {
 				handler.removeCallbacks(this);
 				if (endListener != null) {
 					endListener.onEnd(statuTag, buttonTag);
@@ -120,6 +120,10 @@ public class RecordTimerLimitView extends TextView {
 		handler.removeCallbacks(timerTask);
 	}
 
+	public void stopDriftTask() {
+		handler.removeCallbacks(driftTimerTask);
+	}
+
 	Handler handler = new Handler() {
 
 		@Override
@@ -131,10 +135,6 @@ public class RecordTimerLimitView extends TextView {
 
 	public int getRemainingTime() {
 		return mSeconds;
-	}
-
-	public void stopTimeTask() {
-		handler.removeCallbacks(timerTask);
 	}
 
 }

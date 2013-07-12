@@ -68,4 +68,28 @@
         android:textColor="@color/white"
         android:visibility="gone" />
 
+    <LinearLayout
+        android:id="@+id/home_init_pager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/home_init_page_1"
+        android:orientation="vertical" >
+
+        <TextView android:text="结识陌生人"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:textSize="26sp"
+            android:layout_marginLeft="90dp"
+            android:layout_marginTop="72dp"
+            android:textStyle="bold"/>
+        <TextView android:text="v2.0新功能\n结识来自全世界有趣的朋友"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:layout_marginLeft="70dp"
+            android:layout_marginTop="40dp"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
 </RelativeLayout>

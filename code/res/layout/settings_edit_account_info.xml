@@ -144,6 +144,45 @@
                     android:textColor="#919191"
                     android:textSize="18sp" />
             </RelativeLayout>
+
+            <RelativeLayout
+                 android:id="@+id/rela_edit_country"
+                android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:layout_marginLeft="@dimen/default_gap"
+                android:layout_marginRight="@dimen/default_gap"
+                android:layout_marginTop="@dimen/default_gap_2x"
+                android:background="@drawable/edit_fields_background" >
+
+                <TextView
+                    style="@style/text_base"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/default_gap_2x"
+                    android:text="@string/country"
+                    android:textColor="#313131"
+                    android:textSize="18sp" >
+                </TextView>
+
+                <ImageView
+                    android:id="@+id/user_country_flag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toLeftOf="@+id/country_arrow"
+                    android:layout_centerVertical="true"/>
+
+                <ImageView
+                    android:id="@+id/country_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/default_gap"
+                    android:gravity="center_vertical"
+                    android:src="@drawable/app_arrow" />
+            </RelativeLayout>
         </LinearLayout>
     </ScrollView>
 

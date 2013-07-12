@@ -8,6 +8,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.drift.DriftSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 
 public interface PhotoTalkDatabase {
@@ -70,8 +71,24 @@ public interface PhotoTalkDatabase {
 	public void handAddedFriendInformation(boolean hasLoadedFriends, String currentUserRcId, Information information);
 
 	public void updateFriendInformationState(Information information);
-	
+
 	public void saveDriftInformation(DriftInformation information);
 
-	public List<DriftInformation> getDriftInformations(int start,int pageSize);
+	public List<DriftInformation> getDriftInformations(int start, int pageSize);
+
+	public List<DriftInformation> getSendedDriftInformations(int start, int pageSize, String currentRcid);
+
+	public List<DriftInformation> getReceiveDriftInformations(int start, int pageSize, String currentRcid);
+
+	public void setDriftInformationSendSuccess(long flag, int picId,String rcId);
+	
+	public void deleteDriftInformation(DriftInformation information);
+		
+	public void updateDriftInformationSendSuccess(long flag,int picId);
+	
+	public void updateDriftInformationState(int picId,int state);
+	public void updateDriftTempInformationFail();
+	public void resendDriftInformation(long flag,String rcId);
+	public void updateDriftInformationSendFail(long flag);
+	public void updateDriftInformationSenderInfo(Friend sender);
 }

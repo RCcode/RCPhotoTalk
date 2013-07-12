@@ -15,6 +15,7 @@ import com.db4o.config.AndroidSupport;
 import com.db4o.config.EmbeddedConfiguration;
 import com.db4o.query.Predicate;
 import com.db4o.query.Query;
+import com.db4o.query.QueryComparator;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.Information;
@@ -25,6 +26,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.db.PhotoTalkDatabase;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.drift.DriftSender;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
@@ -381,26 +383,6 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		}
 	}
 
-	private Friend cloneFriend(Friend friend, Friend friendNew) {
-		friendNew.setFriend(friend.isFriend());
-		friendNew.setAppId(friend.getAppId());
-		friendNew.setAppList(friend.getAppList());
-		friendNew.setBackground(friend.getBackground());
-		friendNew.setBirthday(friend.getBirthday());
-		friendNew.setCellPhone(friend.getCellPhone());
-		friendNew.setCountry(friend.getCountry());
-		friendNew.setGender(friend.getGender());
-		friendNew.setHeadUrl(friend.getHeadUrl());
-		friendNew.setHiden(friend.isHiden());
-		friendNew.setLetter(friend.getLetter());
-		friendNew.setNickName(friend.getNickName());
-		friendNew.setRcId(friend.getRcId());
-		friendNew.setSource(friend.getSource());
-		friendNew.setTigaseId(friend.getTigaseId());
-		return friendNew;
-
-	}
-
 	@Override
 	public synchronized List<Friend> getHidenFriends() {
 		ObjectSet<Friend> result = db.query(new Predicate<Friend>() {
@@ -592,24 +574,17 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void saveDriftInformation(DriftInformation information) {
+	public synchronized void saveDriftInformation(DriftInformation information) {
 		db.store(information);
+		db.commit();
 	}
 
 	@Override
-	public List<DriftInformation> getDriftInformations(int start, int pageSize) {
+	public synchronized List<DriftInformation> getDriftInformations(int start, int pageSize) {
 		ObjectSet<DriftInformation> localInformations = queryDriftInformations();
-		List<DriftInformation> result = new ArrayList<DriftInformation>();
-		if (localInformations != null) {
-			int end = start + pageSize;
-			for (int i = start; i < end; i++) {
-				if (i >= localInformations.size())
-					break;
-				DriftInformation information = localInformations.get(i);
-				result.add(information);
-			}
-		}
-		return result;
+		if (localInformations == null)
+			return new ArrayList<DriftInformation>();
+		return slipDataByPage(start, pageSize, localInformations);
 	}
 
 	private ObjectSet<DriftInformation> queryDriftInformations() {
@@ -624,4 +599,232 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			return null;
 		}
 	}
+
+	@Override
+	public synchronized List<DriftInformation> getSendedDriftInformations(int start, int pageSize, final String currentRcid) {
+		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return currentRcid.equals(arg0.getSender().getRcId());
+			}
+		}, new QueryComparator<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(DriftInformation arg0, DriftInformation arg1) {
+				if (arg0.getReceiveTime() > arg1.getReceiveTime())
+					return -1;
+				else
+					return 1;
+			}
+		});
+		return slipDataByPage(start, pageSize, result);
+	}
+
+	@Override
+	public synchronized List<DriftInformation> getReceiveDriftInformations(int start, int pageSize, final String currentRcid) {
+		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return !currentRcid.equals(arg0.getSender().getRcId());
+			}
+		}, new QueryComparator<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(DriftInformation arg0, DriftInformation arg1) {
+				if (arg0.getReceiveTime() > arg1.getReceiveTime())
+					return -1;
+				else
+					return 1;
+			}
+		});
+
+		return slipDataByPage(start, pageSize, result);
+	}
+
+	private <T> ObjectSet<T> getData(Predicate<T> predicate, QueryComparator<T> comparater) {
+		if (comparater != null)
+			return db.query(predicate, comparater);
+		return db.query(predicate);
+	}
+
+	private <T> List<T> slipDataByPage(int start, int pageSize, ObjectSet<T> queryResult) {
+		int end = 0;
+		if (queryResult.size() > start + pageSize) {
+			end = start + pageSize;
+		} else {
+			end = queryResult.size();
+		}
+		List<T> result = new ArrayList<T>();
+		for (int i = start; i < end; i++) {
+			result.add(queryResult.get(i));
+		}
+		return result;
+	}
+
+	@Override
+	public synchronized void setDriftInformationSendSuccess(final long flag, int picId, final String rcId) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && rcId.equals(arg0.getSender().getRcId());
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation information : queryResult) {
+				information.setPicId(picId);
+				information.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				db.store(information);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public synchronized void deleteDriftInformation(final DriftInformation information) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getPicId() == information.getPicId();
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult)
+				db.delete(info);
+			db.commit();
+		}
+	}
+
+	@Override
+	public synchronized void updateDriftInformationSendSuccess(final long flag, int picId) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && arg0.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				info.setPicId(picId);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public synchronized void updateDriftInformationState(final int picId, int state) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getPicId() == picId;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(state);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public void updateDriftTempInformationFail() {
+		ObjectSet<DriftInformation> result = db.query(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING == arg0.getState();
+			}
+		});
+		while (result.hasNext()) {
+			DriftInformation info = result.next();
+			info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+			db.store(info);
+		}
+		db.commit();
+	}
+
+	@Override
+	public void resendDriftInformation(final long flag, final String rcId) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && arg0.getSender().getRcId().equals(rcId);
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public void updateDriftInformationSendFail(final long flag) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getFlag() == flag && arg0.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public void updateDriftInformationSenderInfo( final Friend sender) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getSender().getRcId().equals(sender.getRcId());
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				DriftSender sder = new DriftSender();
+				sder.setAppId(sender.getAppId());
+				sder.setCountry(sender.getCountry());
+				sder.setGender(sender.getGender());
+				sder.setHeadUrl(sender.getHeadUrl());
+				sder.setIsFriend(sender.getAdded());
+				sder.setNick(sender.getNickName());
+				sder.setRcId(sender.getRcId());
+				sder.setTigaseId(sender.getTigaseId());
+				info.setSender(sder);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
 }

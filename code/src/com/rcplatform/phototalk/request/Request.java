@@ -238,7 +238,7 @@ public class Request implements Serializable {
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
 									Integer.parseInt(timeLimit), hasVoice);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
-							listener.onSendSuccess(flag);
+							listener.onSendSuccess(flag,informationUrl);
 							RCThreadPool.getInstance().addTask(new Runnable() {
 
 								@Override

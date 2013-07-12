@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants" >
+
+    <ImageView
+        android:id="@+id/country_flag_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/default_gap"
+        android:scaleType="fitCenter" >
+    </ImageView>
+
+    <TextView
+        android:id="@+id/country_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+         android:layout_marginLeft="@dimen/default_gap_2x"
+         android:textSize="18sp"
+        android:layout_toRightOf="@+id/country_flag_view" >
+    </TextView>
+
+    <Button
+        android:id="@+id/select_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/default_gap"
+        android:background="@drawable/added"
+        android:visibility="invisible"
+        android:layout_centerVertical="true" />
+
+</RelativeLayout>

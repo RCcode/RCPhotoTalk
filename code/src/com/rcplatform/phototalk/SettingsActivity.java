@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -33,10 +34,12 @@ import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.rcad.RcAd;
 import com.rcplatform.rcad.constants.AdType;
 
-public class SettingsActivity extends ImagePickActivity implements View.OnClickListener {
+public class SettingsActivity extends ImagePickActivity implements
+		View.OnClickListener {
 
 	private static final int REQUEST_CODE_EDIT_INFO = 100;
 	protected static final int REQUEST_CODE_GALLARY = 1012;
@@ -48,6 +51,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	private View mBack;
 	private TextView mTitleTextView;
 	private ImageView mHeadView;
+	private ImageView mCountryFlag;
 	private TextView mNickView;
 	private TextView userRcId;
 	private TextView userAge;
@@ -73,6 +77,7 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		ivTrend = (ImageView) findViewById(R.id.iv_trend_head);
 		mHeadView = (ImageView) findViewById(R.id.settings_account_head_portrait);
 		mHeadView.setOnClickListener(this);
+		mCountryFlag = (ImageView) findViewById(R.id.settings_account_country_flag);
 		mNickView = (TextView) findViewById(R.id.settings_user_nick);
 		userRcId = (TextView) findViewById(R.id.user_rc_id);
 		userAge = (TextView) findViewById(R.id.tv_age);
@@ -95,28 +100,37 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		initAppList();
 		showRcAd();
 	}
-	private void showRcAd(){
-		popupAdlayout = new RcAd(this, AdType.FULLSCREEN,
-				"1002603", true);
+
+	private void showRcAd() {
+		popupAdlayout = new RcAd(this, AdType.FULLSCREEN, "1002603", true);
 	}
+
 	private void initAppList() {
 		linearApps = (LinearLayout) findViewById(R.id.my_friend_details_apps_listview);
 
-		List<AppInfo> allApps = PhotoTalkDatabaseFactory.getGlobalDatabase().getPlatformAppInfos();
+		List<AppInfo> allApps = PhotoTalkDatabaseFactory.getGlobalDatabase()
+				.getPlatformAppInfos();
 		PhotoTalkUtils.buildAppList(this, linearApps, allApps, mImageLoader);
 	}
 
 	private void setUserInfo(UserInfo userInfo) {
 		setUserImage();
+
 		switch (userInfo.getGender()) {
 		case 0:
+			mNickView.setText("" + userInfo.getNickName() + ", "
+					+ userInfo.getAge());
 			tv_sex.setVisibility(View.GONE);
 			break;
 		case 1:
+			mNickView.setText(userInfo.getNickName() + ", " + userInfo.getAge()+ ", "
+					+ getString(R.string.male) );
 			tv_sex.setVisibility(View.VISIBLE);
 			tv_sex.setBackgroundResource(R.drawable.boy_icon);
 			break;
 		case 2:
+			mNickView.setText(userInfo.getNickName()  + ", " + userInfo.getAge()+ ", "
+					+ getString(R.string.famale));
 			tv_sex.setVisibility(View.VISIBLE);
 			tv_sex.setBackgroundResource(R.drawable.girl_icon);
 			break;
@@ -124,7 +138,13 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			tv_sex.setVisibility(View.GONE);
 			break;
 		}
-		mNickView.setText("" + userInfo.getNickName());
+		if (userInfo.getCountry() != null && !userInfo.getCountry().equals("")) {
+			Bitmap bitmapFlag = Utils.getAssetCountryFlag(this,
+					userInfo.getCountry());
+			if (bitmapFlag != null) {
+				mCountryFlag.setImageBitmap(bitmapFlag);
+			}
+		}
 		userRcId.setText("" + userInfo.getRcId());
 		userAge.setText("" + userInfo.getAge());
 	}
@@ -135,11 +155,13 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	}
 
 	private void setUserHead() {
-		mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView, ImageOptionsFactory.getSettingHeadImageOption());
+		mImageLoader.displayImage(getCurrentUser().getHeadUrl(), mHeadView,
+				ImageOptionsFactory.getSettingHeadImageOption());
 	}
 
 	private void setUserBackground() {
-		mImageLoader.displayImage(getCurrentUser().getBackground(), user_bg_View, ImageOptionsFactory.getFriendBackImageOptions());
+		mImageLoader.displayImage(getCurrentUser().getBackground(),
+				user_bg_View, ImageOptionsFactory.getFriendBackImageOptions());
 	}
 
 	private void initTitle() {
@@ -147,12 +169,15 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		mBack.setVisibility(View.VISIBLE);
 		mBack.setOnClickListener(this);
 		mTitleTextView = (TextView) findViewById(R.id.titleContent);
-		mTitleTextView.setText(getResources().getString(R.string.my_firend_setting_more_title));
+		mTitleTextView.setText(getResources().getString(
+				R.string.my_firend_setting_more_title));
 		mTitleTextView.setVisibility(View.VISIBLE);
 	}
 
 	protected void failure(JSONObject obj) {
-		DialogUtil.createMsgDialog(this, getResources().getString(R.string.login_error), getResources().getString(R.string.ok)).show();
+		DialogUtil.createMsgDialog(this,
+				getResources().getString(R.string.login_error),
+				getResources().getString(R.string.ok)).show();
 	}
 
 	@Override
@@ -166,7 +191,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			startActivity(new Intent(this, FriendDynamicActivity.class));
 			break;
 		case R.id.settings_user_info_edit_action:
-			startActivityForResult(new Intent(this, AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
+			startActivityForResult(new Intent(this,
+					AccountInfoEditActivity.class), REQUEST_CODE_EDIT_INFO);
 			break;
 		case R.id.use_account_message:
 			EventUtil.More_Setting.rcpt_myaccount(baseContext);
@@ -235,30 +261,37 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 	public void upUpdateUserBackground(final String imageUrl, final Uri imageUri) {
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		File file = new File(imageUrl);
-		FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file, new RCPlatformResponseHandler() {
-			@Override
-			public void onSuccess(int statusCode, String content) {
+		FriendsProxy.upUserBackgroundImage(SettingsActivity.this, file,
+				new RCPlatformResponseHandler() {
+					@Override
+					public void onSuccess(int statusCode, String content) {
 
-				try {
-					JSONObject jsonObject = new JSONObject(content);
-					String url = jsonObject.getString("background");
-					getCurrentUser().setBackground(url);
-					PrefsUtils.User.setBackground(SettingsActivity.this, getCurrentUser().getRcId(), url);
-					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
-					setUserBackground();
-				} catch (JSONException e) {
-					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
-					e.printStackTrace();
-				}
-				dismissLoadingDialog();
-			}
+						try {
+							JSONObject jsonObject = new JSONObject(content);
+							String url = jsonObject.getString("background");
+							getCurrentUser().setBackground(url);
+							PrefsUtils.User.setBackground(
+									SettingsActivity.this, getCurrentUser()
+											.getRcId(), url);
+							PhotoTalkDatabaseFactory.getDatabase().addFriend(
+									PhotoTalkUtils
+											.userToFriend(getCurrentUser()));
+							setUserBackground();
+						} catch (JSONException e) {
+							onFailure(
+									RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL,
+									getString(R.string.net_error));
+							e.printStackTrace();
+						}
+						dismissLoadingDialog();
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				});
 	}
 
 	@Override
@@ -276,7 +309,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		try {
 			contentJson = new JSONObject(content);
 			if (contentJson.has("userInfo")) {
-				JSONObject json = new JSONObject(contentJson.getString("userInfo"));
+				JSONObject json = new JSONObject(
+						contentJson.getString("userInfo"));
 				if (json.has("headUrl")) {
 					headUrl = json.getString(name);
 				}
@@ -291,30 +325,37 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		// 资料发生改变 上传服务器
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		File file = new File(path);
-		FriendsProxy.upUserInfoHeadImage(this, file, new RCPlatformResponseHandler() {
+		FriendsProxy.upUserInfoHeadImage(this, file,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					JSONObject jsonObject = new JSONObject(content);
-					String url = jsonObject.getString("headUrl");
-					getCurrentUser().setHeadUrl(url);
-					PrefsUtils.User.saveUserInfo(SettingsActivity.this, getCurrentUser().getRcId(), getCurrentUser());
-					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
-					setUserHead();
-				} catch (JSONException e) {
-					e.printStackTrace();
-					onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, getString(R.string.net_error));
-				}
-				dismissLoadingDialog();
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						try {
+							JSONObject jsonObject = new JSONObject(content);
+							String url = jsonObject.getString("headUrl");
+							getCurrentUser().setHeadUrl(url);
+							PrefsUtils.User.saveUserInfo(SettingsActivity.this,
+									getCurrentUser().getRcId(),
+									getCurrentUser());
+							PhotoTalkDatabaseFactory.getDatabase().addFriend(
+									PhotoTalkUtils
+											.userToFriend(getCurrentUser()));
+							setUserHead();
+						} catch (JSONException e) {
+							e.printStackTrace();
+							onFailure(
+									RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL,
+									getString(R.string.net_error));
+						}
+						dismissLoadingDialog();
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
-			}
-		});
+					@Override
+					public void onFailure(int errorCode, String content) {
+						dismissLoadingDialog();
+						showErrorConfirmDialog(content);
+					}
+				});
 	}
 
 	public void onNewTrend(boolean show, String url) {
@@ -322,7 +363,8 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 			newTrend.setVisibility(View.GONE);
 		else {
 			newTrend.setVisibility(View.VISIBLE);
-			mImageLoader.displayImage(url, ivTrend,ImageOptionsFactory.getCircleImageOption());
+			mImageLoader.displayImage(url, ivTrend,
+					ImageOptionsFactory.getCircleImageOption());
 		}
 
 	}
@@ -340,5 +382,5 @@ public class SettingsActivity extends ImagePickActivity implements View.OnClickL
 		super.onRestoreInstanceState(savedInstanceState);
 		CAMERA_CODE = savedInstanceState.getInt(INSTANCE_KEY_SETTING_CROP_MODE);
 	}
-	
+
 }
