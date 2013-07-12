@@ -155,6 +155,10 @@ public class StrangerDetailActivity extends BaseActivity {
 		tvName = (TextView) findViewById(R.id.strange_name);
 		strangePerformBtn = (Button) findViewById(R.id.strange_perform_btn);
 		ivCountryFlag = (ImageView) findViewById(R.id.strange_country_flag);
+		Bitmap bitmap = Utils.getAssetCountryFlag(this, mFriend.getCountry());
+		if(bitmap!=null){
+			ivCountryFlag.setImageBitmap(bitmap);
+		}
 		linearApps = (LinearLayout)findViewById(R.id.stranger_linear_apps);
 		setFriendInfo();
 		if (mFriend.isFriend()) {

@@ -37,4 +37,22 @@
             android:text="@string/throw_information" />
     </LinearLayout>
 
+    <ViewFlipper
+        android:id="@+id/drift_view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/home_init_page_2" />
+
+        <ImageView
+            android:id="@+id/drift_page"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/home_init_page_3" />
+
+    </ViewFlipper>
+
 </RelativeLayout>
