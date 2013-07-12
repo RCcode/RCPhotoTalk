@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -180,7 +181,11 @@ public class RCPlatformAsyncHttpClient {
 		JSONObject jsonObject = new JSONObject();
 		List<BasicNameValuePair> params = mRequestParams.getParamsList();
 		for (BasicNameValuePair pair : params) {
-			jsonObject.put(pair.getName(), pair.getValue());
+			String value = pair.getValue();
+			if (value.startsWith("[") && value.endsWith("]"))
+				jsonObject.put(pair.getName(), new JSONArray(value));
+			else
+				jsonObject.put(pair.getName(), value);
 		}
 		LogUtil.e("request params is :" + jsonObject.toString());
 		return new StringEntity(jsonObject.toString(), "UTF-8");

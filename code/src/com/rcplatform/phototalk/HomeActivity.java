@@ -23,15 +23,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -39,10 +34,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -88,7 +81,6 @@ import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
-import com.rcplatform.phototalk.views.PageIndicator;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
 import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
@@ -293,26 +285,26 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void searchFriend(Friend friend, final int type) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
 
 			@Override
 			public void onSuccess(Friend friend) {
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				startFriendDetailActivity(friend, type);
 			}
 
 			@Override
 			public void onError(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				dissmissLoadingDialog();
+				showConfirmDialog(content);
 			}
 		}, false);
 	}
 
 	private void startFriendDetailActivity(Friend friend, int type) {
 		if (type == PhotoInformationType.TYPE_DRIFT) {
-			Intent intent = new Intent(this, FriendDetailActivity.class);
+			Intent intent = new Intent(this, StrangerDetailActivity.class);
 			intent.putExtra(StrangerDetailActivity.PARAM_FRIEND, friend);
 			startActivity(intent);
 			return;

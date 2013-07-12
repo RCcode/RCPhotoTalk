@@ -4,6 +4,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
+import android.util.SparseArray;
+import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +41,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 	private int mPressedPosition = -1;
 	private LayoutInflater mInflater;
 	private UserInfo currentUser;
+	private SparseIntArray sendedDriftShowTimes = new SparseIntArray();
 
 	public DriftInformationAdapter(Context context, List<DriftInformation> data, ImageLoader imageLoader) {
 		this.data.addAll(data);
@@ -134,7 +137,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 			holder.ivCountry.setImageBitmap(Utils.getAssetCountryFlag(context, record.getSender().getCountry()));
 		else
 			holder.ivCountry.setImageBitmap(null);
-			
+
 		return convertView;
 	}
 
@@ -198,7 +201,11 @@ public class DriftInformationAdapter extends BaseAdapter {
 		// 状态为1 表示已经发送到服务器
 		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statu.setText(getTimeText(R.string.send_sended, record.getReceiveTime()));
+			int showTime = sendedDriftShowTimes.get(record.getPicId());
+			if (showTime == 0)
+				holder.statu.setText(getTimeText(R.string.send_sended, record.getReceiveTime()));
+			else
+				holder.statu.setText(context.getString(R.string.drift_show_time, showTime));
 			// 状态为2表示对方已经下载
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			holder.bar.setVisibility(View.GONE);
@@ -296,5 +303,12 @@ public class DriftInformationAdapter extends BaseAdapter {
 
 	public int getPressedPosition() {
 		return mPressedPosition;
+	}
+
+	public void addShowTimes(SparseIntArray times) {
+		for (int i = 0; i < times.size(); i++) {
+			int key = times.keyAt(i);
+			sendedDriftShowTimes.put(key, times.get(key));
+		}
 	}
 }

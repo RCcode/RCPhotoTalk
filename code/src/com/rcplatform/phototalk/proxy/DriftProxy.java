@@ -7,10 +7,12 @@ import org.json.JSONArray;
 
 import android.content.Context;
 
+import com.google.gson.Gson;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
@@ -51,12 +53,9 @@ public class DriftProxy {
 	}
 
 	public static void getDriftInformationShowTime(Context context, RCPlatformResponseHandler responseHandler, List<Integer> picIds) {
-		JSONArray jsonArray = new JSONArray();
-		for (int picId : picIds) {
-			jsonArray.put(picId);
-		}
-		Request request = new Request(context, "", responseHandler);
-		request.putParam(PhotoTalkParams.DriftShowTime.PARAM_KEY_PICIDS, jsonArray.toString());
+		String pids = new Gson().toJson(picIds);
+		Request request = new Request(context, PhotoTalkApiUrl.DRIFT_SHOW_TIME_URL, responseHandler);
+		request.putParam(PhotoTalkParams.DriftShowTime.PARAM_KEY_PICIDS, pids);
 		request.excuteAsync();
 	}
 
