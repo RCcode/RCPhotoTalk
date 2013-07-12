@@ -29,6 +29,7 @@ public class Information {
 	private boolean hasVoice;
 
 	private boolean hasGraf;
+	
 
 	public boolean isHasGraf() {
 		return hasGraf;

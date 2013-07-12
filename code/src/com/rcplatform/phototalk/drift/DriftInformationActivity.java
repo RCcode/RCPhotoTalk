@@ -225,6 +225,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		friend.setHeadUrl(information.getSender().getHeadUrl());
 		friend.setCountry(information.getSender().getCountry());
 		friend.setGender(information.getSender().getGender());
+		friend.setFriend(information.getSender().isFriend());
 		Intent intent = new Intent(this, StrangerDetailActivity.class);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		intent.putExtra("isFromStangerPage", true);
