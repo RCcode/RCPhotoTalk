@@ -8,6 +8,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.drift.DriftSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
 
 public interface PhotoTalkDatabase {
@@ -89,4 +90,5 @@ public interface PhotoTalkDatabase {
 	public void updateDriftTempInformationFail();
 	public void resendDriftInformation(long flag,String rcId);
 	public void updateDriftInformationSendFail(long flag);
+	public void updateDriftInformationSenderInfo(int picId,Friend sender);
 }

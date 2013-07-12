@@ -259,7 +259,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundResource(R.drawable.send_failed);
 		}
 		if (record.getPhotoType() == PhotoInformationType.TYPE_DRIFT)
-			holder.ivDrift.setImageResource(R.drawable.ic_launcher);
+			holder.ivDrift.setImageResource(R.drawable.drift_item_icon);
 	}
 
 	private void initPhotoInformationSenderView(Information record, ViewHolder holder) {

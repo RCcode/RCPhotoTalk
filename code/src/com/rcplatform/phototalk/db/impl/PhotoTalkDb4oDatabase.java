@@ -26,6 +26,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.DatabaseUtils;
 import com.rcplatform.phototalk.db.PhotoTalkDatabase;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.drift.DriftSender;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.thirdpart.bean.ThirdPartUser;
@@ -792,6 +793,34 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		if (queryResult.size() > 0) {
 			for (DriftInformation info : queryResult) {
 				info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+				db.store(info);
+			}
+			db.commit();
+		}
+	}
+
+	@Override
+	public void updateDriftInformationSenderInfo(final int picId, Friend sender) {
+		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return arg0.getPicId() == picId;
+			}
+		}, null);
+		if (queryResult.size() > 0) {
+			for (DriftInformation info : queryResult) {
+				DriftSender sder = new DriftSender();
+				sder.setAppId(sender.getAppId());
+				sder.setCountry(sender.getCountry());
+				sder.setGender(sender.getGender());
+				sder.setHeadUrl(sender.getHeadUrl());
+				sder.setIsFriend(sender.getAdded());
+				sder.setNick(sender.getNickName());
+				sder.setRcId(sender.getRcId());
+				sder.setTigaseId(sender.getTigaseId());
+				info.setSender(sder);
 				db.store(info);
 			}
 			db.commit();
