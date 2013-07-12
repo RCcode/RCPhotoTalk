@@ -8,4 +8,5 @@ public class FriendType {
 	public static final int GOOGLE_PLUS = -4;
 	public static final int DEFAULT = 10;
 	public static final int EMAIL=101;
+	public static final int SKY_POOL=1000;
 }
