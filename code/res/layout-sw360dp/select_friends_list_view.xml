@@ -46,24 +46,28 @@
         <RelativeLayout
             android:id="@+id/rela_stranges"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="wrap_content"
+            android:background="@drawable/know_strangers_bg" >
 
             <ImageView
                 android:id="@+id/strange_icon"
-                android:layout_width="@dimen/friend_head_side"
-                android:layout_height="@dimen/friend_head_side"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/friend_head_left"
-                android:src="@drawable/ic_launcher" />
+                android:src="@drawable/know_strangers_icon" />
 
             <TextView
                 style="@style/text_base"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/select_friend_text_name"
                 android:layout_toLeftOf="@+id/cb_strange"
                 android:layout_toRightOf="@+id/strange_icon"
-                android:text="@string/send_to_stranges" />
+                android:text="@string/send_to_stranges"
+                android:textColor="@color/black" />
 
             <CheckBox
                 android:id="@+id/cb_strange"
@@ -98,30 +102,6 @@
             android:layout_marginLeft="@dimen/default_gap"
             android:layout_toLeftOf="@+id/btn_sfl_send"
             android:scrollbars="none" />
-
-        <!--
-        <FrameLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent" >
-
-                <LinearLayout
-                    android:id="@+id/gridview_layout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal" >
-
-                    <GridView
-                        android:id="@+id/g_sfl_added_friends"
-                        android:layout_width="fill_parent"
-                        android:layout_height="60dp"
-                        android:columnWidth="60dp"
-                        android:horizontalSpacing="0dp"
-                        android:numColumns="auto_fit"
-                        android:scrollbars="none"
-                        android:stretchMode="none" />
-                </LinearLayout>
-            </FrameLayout>
-        </HorizontalScrollView> -->
 
         <Button
             android:id="@+id/btn_sfl_send"

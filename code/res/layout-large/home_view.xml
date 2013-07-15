@@ -12,28 +12,42 @@
 
         <include layout="@layout/base_top_navigate" />
 
-        <LinearLayout
+      <RelativeLayout
             android:id="@+id/linear_new_friends"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:background="@drawable/know_strangers_item_bg"
             android:padding="@dimen/friend_head_left" >
 
             <ImageView
+                android:id="@+id/iv_to_stranges"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_launcher" />
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/friend_head_left"
+                android:src="@drawable/know_strangers_icon" />
 
             <TextView
                 style="@style/text_base"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
+                android:layout_toLeftOf="@+id/iv_to_right"
+                android:layout_toRightOf="@+id/iv_to_stranges"
                 android:text="@string/know_strangers"
-                android:textColor="@color/black" />
-        </LinearLayout>
+                android:textColor="@color/home_know_stranges_text"
+                android:textSize="@dimen/information_item_text_name" />
 
-        <include layout="@layout/line" />
+            <ImageView
+                android:id="@+id/iv_to_right"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/to_right" />
+        </RelativeLayout>
 
         <com.rcplatform.phototalk.views.SnapListView
             android:id="@+id/lv_home"

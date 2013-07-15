@@ -33,8 +33,7 @@ import com.flurry.android.FlurryAgent;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.rcplatform.clientlog.ClientLogUtil;
-import com.rcplatform.phototalk.FriendDetailActivity;
-import com.rcplatform.phototalk.InitPageActivity;
+import com.rcplatform.phototalk.EditPictureActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.StrangerDetailActivity;
 import com.rcplatform.phototalk.TakePhotoActivity;
@@ -47,16 +46,13 @@ import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
-import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.DriftShowTimeResponseHandler;
-import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
 import com.rcplatform.phototalk.request.handler.DriftShowTimeResponseHandler.OnDriftShowTimeListener;
+import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler;
 import com.rcplatform.phototalk.request.handler.FishDriftResponseHandler.OnFishListener;
 import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
-import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
-import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
@@ -146,31 +142,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		super.onResume();
 	}
 
-	@Override
-	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		String action = intent.getAction();
-		if (Action.ACTION_LOGOUT.equals(action)) {
-			logout();
-			return;
-		} else if (Action.ACTION_RELOGIN.equals(action)) {
-			relogin();
-			return;
-		}
-	}
-
-	private void logout() {
-		startActivity(InitPageActivity.class);
-		finish();
-	}
-
-	private void relogin() {
-		Intent loginIntent = new Intent(this, InitPageActivity.class);
-		loginIntent.putExtra(InitPageActivity.REQUEST_PARAM_RELOGIN, true);
-		startActivity(loginIntent);
-		finish();
-	}
-
 	private void sendDataLoadedMessage(List<DriftInformation> infos, int what) {
 		Message msg = myHandler.obtainMessage();
 		msg.what = what;
@@ -187,13 +158,15 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				finish();
 			}
 		});
-		initForwordButton(R.drawable.more_btn, new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				showFilterMenu(v);
-			}
-		});
+		initMenuButton();
+		// initForwordButton(R.drawable.btn_drift_filter, new OnClickListener()
+		// {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// showFilterMenu(v);
+		// }
+		// });
 		mInformationList = (SnapListView) findViewById(R.id.lv_drift);
 		mInformationList.setSnapListener(this);
 		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -296,6 +269,29 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		});
 	}
 
+	private TextView tvMenu;
+
+	private void initMenuButton() {
+		tvMenu = (TextView) findViewById(R.id.tv_filter_menu);
+		tvMenu.setVisibility(View.VISIBLE);
+		tvMenu.setOnClickListener(this);
+		setMenuText();
+	}
+
+	private void setMenuText() {
+		switch (mShowMode) {
+		case ALL:
+			tvMenu.setText(R.string.show_all_drift);
+			break;
+		case RECEIVE:
+			tvMenu.setText(R.string.show_receive_drift);
+			break;
+		case SEND:
+			tvMenu.setText(R.string.show_send_drift);
+			break;
+		}
+	}
+
 	private void showFriendDetail(DriftInformation information) {
 		Friend friend = new Friend();
 		friend.setRcId(information.getSender().getRcId());
@@ -319,6 +315,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		intent.putExtra(PARAM_FRIEND, friend);
 		intent.putExtra(PARAM_INFORMATION, information);
 		intent.putExtra(PARAM_FROM_PAGE, true);
+		intent.putExtra(StrangerDetailActivity.PARAM_BACK_PAGE, DriftInformationActivity.class);
 		startActivity(intent);
 	}
 
@@ -745,6 +742,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				changeShowMode(DriftShowMode.SEND);
 			}
 			break;
+		case R.id.tv_filter_menu:
+			showFilterMenu(v);
+			break;
 		}
 	}
 
@@ -752,6 +752,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		mShowMode = mode;
 		reset();
 		loadLocalInformation();
+		setMenuText();
 	}
 
 	private void reset() {
@@ -795,6 +796,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void throwInformation() {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", PhotoTalkUtils.getDriftFriend());
+		intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE, DriftInformationActivity.class);
 		startActivity(intent);
 	}
 

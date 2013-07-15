@@ -142,60 +142,57 @@ public class DriftInformationAdapter extends BaseAdapter {
 	}
 
 	private void initPhotoInformationReceiverView(final DriftInformation record, String statuTag, String buttonTag, ViewHolder holder) {
-		holder.statuButton.setBackgroundDrawable(null);
 		holder.statuButton.setText(null);
 		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			RCPlatformImageLoader.loadPictureForDriftList(context, record);
 			holder.statuButton.stopDriftTask();
+			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
+			RCPlatformImageLoader.loadPictureForDriftList(context, record);
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			if (RCPlatformImageLoader.isFileExist(context, record.getUrl())) {
 				// 如果缓存文件存在
 				holder.bar.setVisibility(View.GONE);
-				holder.statuButton.stopDriftTask();
 				holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
 			} else {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.receive_downloading);
 				RCPlatformImageLoader.loadPictureForDriftList(context, record);
-				holder.statuButton.stopDriftTask();
 			}
+			holder.statuButton.stopDriftTask();
+			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			// 状态为4.表示正在查看
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 			holder.bar.setVisibility(View.GONE);
-			holder.statuButton.setVisibility(View.VISIBLE);
-			holder.statuButton.setBackgroundResource(R.drawable.item_time_bg);
-			holder.statuButton.scheuleTask(record);
 			holder.statu.setText(getTimeText(R.string.receive_loaded, record.getReceiveTime()));
+			holder.statuButton.scheuleTask(record);
+			holder.statuButton.setBackgroundResource(R.drawable.item_time_bg);
 			// 状态为3 表示 已经查看，
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statuButton.stopDriftTask();
 			holder.statu.setText(getTimeText(R.string.receive_looked, record.getReceiveTime()));
-
+			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			// 状态为5 表示正在下载
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
 			holder.statuButton.stopDriftTask();
+			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			// 7 下载失败
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
 			holder.statu.setText(R.string.receive_fail);
 			holder.statuButton.stopDriftTask();
-			holder.statuButton.setVisibility(View.VISIBLE);
 			holder.statuButton.setBackgroundResource(R.drawable.send_failed);
 		}
-
 	}
 
 	private void initPhotoInformationSenderView(DriftInformation record, ViewHolder holder) {
 		// 如果当前用户是发送者
-		holder.statuButton.setVisibility(View.VISIBLE);
-		holder.statuButton.setBackgroundResource(R.drawable.send_arrows);
+		holder.statuButton.setBackgroundResource(R.drawable.throw_icon);
 		holder.statuButton.setText(null);
 		holder.statuButton.stopDriftTask();
 		// 状态为1 表示已经发送到服务器
@@ -205,7 +202,8 @@ public class DriftInformationAdapter extends BaseAdapter {
 			if (showTime == 0)
 				holder.statu.setText(getTimeText(R.string.send_sended, record.getReceiveTime()));
 			else
-				holder.statu.setText(context.getString(R.string.drift_show_time, showTime));
+				holder.statu.setText(RCPlatformTextUtil.getTextFromTimeToNow(context, record.getReceiveTime()) + "-"
+						+ context.getString(R.string.drift_show_time, showTime));
 			// 状态为2表示对方已经下载
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
 			holder.bar.setVisibility(View.GONE);
