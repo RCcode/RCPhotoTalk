@@ -106,5 +106,7 @@
     <dimen name="invite_text">14sp</dimen>
     <dimen name="drift_filter_menu_width">150dp</dimen>
     <dimen name="information_country_marginleft">5dp</dimen>
+    <dimen name="information_item_text_name">18sp</dimen>
+    <dimen name="select_friend_text_name">20sp</dimen>
 
 </resources>

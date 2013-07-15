@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -33,7 +32,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.task.SkyPoolAddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -45,6 +43,7 @@ public class StrangerDetailActivity extends BaseActivity {
 	public static final String PARAM_INFORMATION = "information";
 	public static final String PARAM_FROM_PAGE = "isFromStangerPage";
 	public static final String RESULT_PARAM_FRIEND = "friend";
+	public static final String PARAM_BACK_PAGE = "backpage";
 	// private String mAction;
 	private ImageView ivHead;
 	private ImageView ivBackground;
@@ -70,18 +69,15 @@ public class StrangerDetailActivity extends BaseActivity {
 	}
 
 	private void setFriendInfo() {
-		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead,
-				ImageOptionsFactory.getFriendHeadImageOptions());
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground,
-				ImageOptionsFactory.getFriendBackImageOptions());
+		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead, ImageOptionsFactory.getFriendHeadImageOptions());
+		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getFriendBackImageOptions());
 		setFriendName();
 	}
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
 		isFromStangerPage = getIntent().getBooleanExtra(PARAM_FROM_PAGE, false);
-		information = (DriftInformation) getIntent().getSerializableExtra(
-				PARAM_INFORMATION);
+		information = (DriftInformation) getIntent().getSerializableExtra(PARAM_INFORMATION);
 		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		// mAction = getIntent().getAction();
@@ -98,56 +94,56 @@ public class StrangerDetailActivity extends BaseActivity {
 			public void onClick(View v) {
 				if (!isFromStangerPage) {
 					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-					new AddFriendTask(StrangerDetailActivity.this,
-							getPhotoTalkApplication().getCurrentUser(),
-							new AddFriendTask.AddFriendListener() {
-
-								@Override
-								public void onFriendAddSuccess(Friend friend,
-										int addType) {
-									friendAddSuccess();
-									dismissLoadingDialog();
-								}
-
-								@Override
-								public void onFriendAddFail(int statusCode,
-										String content) {
-									showErrorConfirmDialog(content);
-									dismissLoadingDialog();
-								}
-
-								@Override
-								public void onAlreadyAdded() {
-									friendAddSuccess();
-									dismissLoadingDialog();
-								}
-							}, mFriend).execute();
-				} else {
-					if(information!=null){
-						showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
-					new SkyPoolAddFriendTask(StrangerDetailActivity.this,userInfo,new SkyPoolAddFriendTask.SkyPoolAddFriendListener() {
-						
+					new AddFriendTask(StrangerDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 						@Override
 						public void onFriendAddSuccess(Friend friend, int addType) {
-							// TODO Auto-generated method stub
 							friendAddSuccess();
 							dismissLoadingDialog();
 						}
-						
+
 						@Override
 						public void onFriendAddFail(int statusCode, String content) {
-							// TODO Auto-generated method stub
 							showErrorConfirmDialog(content);
 							dismissLoadingDialog();
 						}
-						
+
 						@Override
 						public void onAlreadyAdded() {
-							// TODO Auto-generated method stub
 							friendAddSuccess();
 							dismissLoadingDialog();
 						}
-					},information,mFriend).execute();
+					}, mFriend).execute();
+				} else {
+					if (information != null) {
+						showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+						new SkyPoolAddFriendTask(
+								StrangerDetailActivity.this,
+								userInfo,
+								new SkyPoolAddFriendTask.SkyPoolAddFriendListener() {
+
+									@Override
+									public void onFriendAddSuccess(
+											Friend friend, int addType) {
+										// TODO Auto-generated method stub
+										friendAddSuccess();
+										dismissLoadingDialog();
+									}
+
+									@Override
+									public void onFriendAddFail(int statusCode,
+											String content) {
+										// TODO Auto-generated method stub
+										showErrorConfirmDialog(content);
+										dismissLoadingDialog();
+									}
+
+									@Override
+									public void onAlreadyAdded() {
+										// TODO Auto-generated method stub
+										friendAddSuccess();
+										dismissLoadingDialog();
+									}
+								}, information, mFriend).execute();
 					}
 				}
 			}
@@ -156,18 +152,15 @@ public class StrangerDetailActivity extends BaseActivity {
 
 	private void friendAddSuccess() {
 		mFriend.setFriend(true);
-		PhotoTalkDatabaseFactory.getDatabase()
-				.updateDriftInformationSenderInfo(mFriend);
+		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSenderInfo(mFriend);
 		coverToFriendView();
 	}
 
 	private void coverToFriendView() {
 		// 是好友 且列表不为空显示applist
-		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0
-				&& !mFriend.getRcId().equals(getCurrentUser().getRcId())) {
+		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0 && !mFriend.getRcId().equals(getCurrentUser().getRcId())) {
 			linearApps.setVisibility(View.VISIBLE);
-			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(),
-					mImageLoader);
+			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(), mImageLoader);
 		} else {
 			linearApps.setVisibility(View.GONE);
 		}
@@ -195,24 +188,20 @@ public class StrangerDetailActivity extends BaseActivity {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				if (information != null) {
-					DriftProxy.reportPic(StrangerDetailActivity.this,
-							new RCPlatformResponseHandler() {
+					DriftProxy.reportPic(StrangerDetailActivity.this, new RCPlatformResponseHandler() {
 
-								@Override
-								public void onSuccess(int statusCode,
-										String content) {
-									// TODO Auto-generated method stub
-									Toast.makeText(StrangerDetailActivity.this,
-											"举报成功", Toast.LENGTH_LONG).show();
-								}
+						@Override
+						public void onSuccess(int statusCode, String content) {
+							// TODO Auto-generated method stub
+							Toast.makeText(StrangerDetailActivity.this, "举报成功", Toast.LENGTH_LONG).show();
+						}
 
-								@Override
-								public void onFailure(int errorCode,
-										String content) {
-									// TODO Auto-generated method stub
-									showErrorConfirmDialog(content);
-								}
-							}, information);
+						@Override
+						public void onFailure(int errorCode, String content) {
+							// TODO Auto-generated method stub
+							showErrorConfirmDialog(content);
+						}
+					}, information);
 				}
 			}
 		});
@@ -237,8 +226,7 @@ public class StrangerDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				EventUtil.Friends_Addfriends
-						.rcpt_profile_takephotobutton(baseContext);
+				EventUtil.Friends_Addfriends.rcpt_profile_takephotobutton(baseContext);
 				sendBackToStranges();
 			}
 		});
@@ -248,33 +236,53 @@ public class StrangerDetailActivity extends BaseActivity {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", mFriend);
 		intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
+		if (getIntent().hasExtra(PARAM_BACK_PAGE))
+			intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE, getIntent().getSerializableExtra(PARAM_BACK_PAGE));
 		startActivity(intent);
 	}
 
 	private void setFriendName() {
 		switch (mFriend.getGender()) {
 		case 0:
-			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-					.getLocalName() : mFriend.getNickName() + ", "
-					+ mFriend.getAge());
+			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge());
+			} else {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName());
+
+			}
 			break;
 		case 1:
-			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-					.getLocalName() : mFriend.getNickName() + ", "
-					+ mFriend.getAge() + ", " + getString(R.string.male));
+			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge() + ", " + getString(R.string.male));
+			} else {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ getString(R.string.male));
+
+			}
 			break;
 		case 2:
-			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-					.getLocalName() : mFriend.getNickName() + ", "
-					+ mFriend.getAge() + ", " + getString(R.string.famale));
+			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge() + ", " + getString(R.string.famale));
+			} else {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName()+", " + getString(R.string.famale));
+
+			}
 			break;
 		}
 		// tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
 		// .getLocalName() : mFriend.getNickName());
 
 		if (mFriend.getCountry() != null && !mFriend.getCountry().equals("")) {
-			Bitmap bitmapFlag = Utils.getAssetCountryFlag(this,
-					mFriend.getCountry());
+			Bitmap bitmapFlag = Utils.getAssetCountryFlag(this, mFriend.getCountry());
 			if (bitmapFlag != null) {
 				ivCountryFlag.setImageBitmap(bitmapFlag);
 			}
@@ -313,12 +321,9 @@ public class StrangerDetailActivity extends BaseActivity {
 
 	private void showRemaikWindow(View v) {
 		if (mRemarkEditWindow == null) {
-			View editView = getLayoutInflater().inflate(
-					R.layout.my_friend_details_layout_edit, null, false);
-			Button btnConfirm = (Button) editView
-					.findViewById(R.id.btn_remark_confirm);
-			final EditText etRemark = (EditText) editView
-					.findViewById(R.id.et_remark);
+			View editView = getLayoutInflater().inflate(R.layout.my_friend_details_layout_edit, null, false);
+			Button btnConfirm = (Button) editView.findViewById(R.id.btn_remark_confirm);
+			final EditText etRemark = (EditText) editView.findViewById(R.id.et_remark);
 			etRemark.setText(mFriend.getLocalName());
 			btnConfirm.setOnClickListener(new OnClickListener() {
 
@@ -328,9 +333,7 @@ public class StrangerDetailActivity extends BaseActivity {
 					updateRemark(remark);
 				}
 			});
-			mRemarkEditWindow = new PopupWindow(editView,
-					WindowManager.LayoutParams.MATCH_PARENT,
-					WindowManager.LayoutParams.WRAP_CONTENT);
+			mRemarkEditWindow = new PopupWindow(editView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
 
 			mRemarkEditWindow.setFocusable(true);
 			mRemarkEditWindow.setOutsideTouchable(true);

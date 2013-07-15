@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -118,19 +119,36 @@ public class SettingsActivity extends ImagePickActivity implements
 
 		switch (userInfo.getGender()) {
 		case 0:
-			mNickView.setText("" + userInfo.getNickName() + ", "
-					+ userInfo.getAge());
+			if (!TextUtils.isEmpty(userInfo.getBirthday())) {
+				mNickView.setText("" + userInfo.getNickName() + ", "
+						+ userInfo.getAge());
+			} else {
+				mNickView.setText("" + userInfo.getNickName());
+			}
 			tv_sex.setVisibility(View.GONE);
 			break;
 		case 1:
-			mNickView.setText(userInfo.getNickName() + ", " + userInfo.getAge()+ ", "
-					+ getString(R.string.male) );
+			if (!TextUtils.isEmpty(userInfo.getBirthday())) {
+				mNickView.setText(userInfo.getNickName() + ", "
+						+ userInfo.getAge() + ", " + getString(R.string.male));
+			} else {
+				mNickView.setText(userInfo.getNickName() + ", "
+						+ getString(R.string.male));
+			}
 			tv_sex.setVisibility(View.VISIBLE);
 			tv_sex.setBackgroundResource(R.drawable.boy_icon);
 			break;
 		case 2:
-			mNickView.setText(userInfo.getNickName()  + ", " + userInfo.getAge()+ ", "
-					+ getString(R.string.famale));
+			if (!TextUtils.isEmpty(userInfo.getBirthday())) {
+				mNickView
+						.setText(userInfo.getNickName() + ", "
+								+ userInfo.getAge() + ", "
+								+ getString(R.string.famale));
+			} else {
+				mNickView
+				.setText(userInfo.getNickName() + ", "
+						+getString(R.string.famale));
+			}
 			tv_sex.setVisibility(View.VISIBLE);
 			tv_sex.setBackgroundResource(R.drawable.girl_icon);
 			break;

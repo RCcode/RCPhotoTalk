@@ -78,7 +78,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private ImageButton mBtBack;
 
 	private RelativeLayout send_layout;
-	private List<Friend> listData;
+	private List<Friend> listData=new ArrayList<Friend>();
 	private List<Friend> resultData = new ArrayList<Friend>();
 	private List<Friend> sendData = new ArrayList<Friend>();
 	private Button seach_delete_btn;
@@ -107,21 +107,22 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	}
 
 	private void getFriends() {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		FriendsProxy.getFriends(this, new LoadFriendsListener() {
 
 			@Override
 			public void onLoadedFail(String reason) {
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				if (!PrefsUtils.User.hasLoadedFriends(SelectFriendsActivity.this, getCurrentUser().getRcId())) {
-					showErrorConfirmDialog(reason);
+					showConfirmDialog(reason);
 				}
+				initFriendListAdapter();
 			}
 
 			@Override
 			public void onFriendsLoaded(List<Friend> friends, List<Friend> recommends) {
 				mHandler.obtainMessage(MSG_CACHE_FINISH, friends).sendToTarget();
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 			}
 		});
 	}
@@ -160,10 +161,6 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 		mBtBack.setVisibility(View.VISIBLE);
 		mBtBack.setOnClickListener(this);
-		// View view=findViewById(R.id.choosebutton);
-		// view.setBackgroundResource(R.drawable.select_add);
-		// view.setOnClickListener(this);
-		// view.setVisibility(View.VISIBLE);
 		etSearch = (EditText) findViewById(R.id.et_search);
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
 		seach_delete_btn.setVisibility(View.GONE);
@@ -254,7 +251,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		((SelectedFriendsListAdapter) mFriendListView.getAdapter()).notifyDataSetChanged();
 	}
 
-	private void initFriendListAdapter(List<Friend> list) {
+	private void initFriendListAdapter() {
 		SelectedFriendsListAdapter adapter = new SelectedFriendsListAdapter(SelectFriendsActivity.this, listData, sendData);
 		mFriendListView.setAdapter(adapter);
 		adapter.setOnCheckBoxChangedListener(new OnCheckBoxChangedListener() {
@@ -302,9 +299,9 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				break;
 
 			case MSG_CACHE_FINISH:
-				listData = (List<Friend>) msg.obj;
+				listData .addAll( (List<Friend>) msg.obj);
 				setResultData();
-				initFriendListAdapter(listData);
+				initFriendListAdapter();
 				progressBar.setVisibility(View.GONE);
 				break;
 			case MSG_CHANGE:

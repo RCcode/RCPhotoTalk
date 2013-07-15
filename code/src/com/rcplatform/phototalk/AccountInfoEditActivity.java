@@ -147,7 +147,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 
 	private void loadHeadPicture() {
 		mImageLoader.displayImage(userDetailInfo.getHeadUrl(), mMyHeadView,
-				ImageOptionsFactory.getFriendHeadImageOptions());
+				ImageOptionsFactory.getSettingHeadImageOption());
 	}
 
 	private void setNick() {

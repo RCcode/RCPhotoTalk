@@ -42,7 +42,40 @@
                 android:layout_marginRight="10dp"
                 android:background="@drawable/seach_text_delete_btn" />
         </RelativeLayout>
+  <RelativeLayout
+            android:id="@+id/rela_stranges"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/know_strangers_bg" >
 
+            <ImageView
+                android:id="@+id/strange_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/friend_head_left"
+                android:src="@drawable/know_strangers_icon" />
+
+            <TextView
+                style="@style/text_base"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:textSize="@dimen/select_friend_text_name"
+                android:layout_toLeftOf="@+id/cb_strange"
+                android:layout_toRightOf="@+id/strange_icon"
+                android:text="@string/send_to_stranges"
+                android:textColor="@color/black" />
+
+            <CheckBox
+                android:id="@+id/cb_strange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp" />
+        </RelativeLayout>
         <ListView
             android:id="@+id/lv_sfl_friends"
             android:layout_width="fill_parent"

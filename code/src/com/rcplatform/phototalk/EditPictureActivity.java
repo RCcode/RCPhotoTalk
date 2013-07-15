@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
@@ -44,10 +45,8 @@ import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.drift.DriftInformationActivity;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
@@ -84,6 +83,8 @@ public class EditPictureActivity extends BaseActivity {
 	private static final int NO_SDC = 300;
 
 	private static final int SET_LIMIT = 400;
+
+	public static final String PARAM_KEY_BACK_PAGE = "backpage";
 
 	private EditPictureView mEditePicView;
 
@@ -447,12 +448,12 @@ public class EditPictureActivity extends BaseActivity {
 				if (friend == null) {
 					startSelectFriendActivity();
 				} else {
-					Intent intent = null;
-					if (friend.equals(PhotoTalkUtils.getDriftFriend())) {
-						intent = new Intent(EditPictureActivity.this, DriftInformationActivity.class);
-					} else {
-						intent = new Intent(EditPictureActivity.this, HomeActivity.class);
-					}
+					Class<? extends Activity> targetClass = null;
+					if (getIntent().hasExtra(PARAM_KEY_BACK_PAGE))
+						targetClass = (Class<? extends Activity>) getIntent().getSerializableExtra(PARAM_KEY_BACK_PAGE);
+					else
+						targetClass = HomeActivity.class;
+					Intent intent = new Intent(EditPictureActivity.this, targetClass);
 					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 					startActivity(intent);
 				}
@@ -629,7 +630,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	public void saveEditedPictrue(final Bitmap bitmap, final String path) {
 		// showDialog();
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		new Thread(new Runnable() {
 
 			@Override
@@ -659,7 +660,7 @@ public class EditPictureActivity extends BaseActivity {
 
 		@Override
 		public void handleMessage(android.os.Message msg) {
-			dismissLoadingDialog();
+			dissmissLoadingDialog();
 			switch (msg.what) {
 			case SAVE_SUCCESS:
 				// setSaveable(false);
