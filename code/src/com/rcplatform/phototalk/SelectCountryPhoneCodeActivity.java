@@ -118,6 +118,7 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 	private void initView() {
 		listView = (ListView) findViewById(R.id.country_list);
 		seach_delete_btn = (Button) findViewById(R.id.seach_delete_btn);
+		seach_delete_btn.setVisibility(View.INVISIBLE);
 		seachEdit = (EditText) findViewById(R.id.search_country);
 		seachEdit.addTextChangedListener(new TextWatcher() {
 
@@ -140,7 +141,7 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 				// TODO Auto-generated method stub
 				String keyWords = s.toString().trim();
 				if (TextUtils.isEmpty(keyWords)) {
-					seach_delete_btn.setVisibility(View.GONE);
+					seach_delete_btn.setVisibility(View.INVISIBLE);
 					getOldList();
 					listData = oldData;
 					// initData();

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+     android:background="@drawable/country_list_item_bg"
     android:descendantFocusability="blocksDescendants" >
 
     <ImageView
@@ -20,6 +21,7 @@
         android:layout_centerVertical="true"
          android:layout_marginLeft="@dimen/default_gap_2x"
          android:textSize="18sp"
+         android:textColor="@color/black"
         android:layout_toRightOf="@+id/country_flag_view" >
     </TextView>
 
