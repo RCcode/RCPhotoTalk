@@ -16,12 +16,6 @@
             android:scaleType="centerCrop"
             android:src="@drawable/user_detail_bg" />
 
-        <Button
-            android:id="@+id/report_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/base_back_btn" />
 
         <ImageView
             android:layout_width="fill_parent"
@@ -96,6 +90,15 @@
             </LinearLayout>
 
         </LinearLayout>
+         <Button
+            android:id="@+id/report_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="7dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignBottom="@id/strange_rela_userinfo"
+            android:background="@drawable/report_btn" />
     </RelativeLayout>
 
     <LinearLayout
