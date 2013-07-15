@@ -67,21 +67,19 @@ public class TigaseManager {
 	private final int INIT_CONNECT_MAX_COUNT = 4;
 
 	private final int CONNECT_INTERVAL = 1000;
-	
+
 	private final int CONNECT_MAX_INTERVAL = 300000;
 
 	private final int RESET_PASSWORD_MAX_COUNT = 5;
 
 	private final int RESET_PASSWORD_INTERVAL = 10000;
-	
+
 	private final int RESET_PASSWORD_MAX_INTERVAL = 300000;
 
 	private int resetPasswordCount = 0;
 
 	private final String RESET_PASSWORD_URL = "http://rc.rcplatformhk.net/rcboss/user/syncTigasePwd.do";
 
-	// private final String RESET_PASSWORD_URL =
-	// "http://192.168.0.86:8083/rcboss/user/syncTigasePwd.do";
 
 	private Timer initConnectTimer = null;
 
@@ -91,6 +89,8 @@ public class TigaseManager {
 
 	private Context ctx = null;
 
+	private boolean isConnecting = false; //
+
 	class ResetTigasePasswordTask extends TimerTask {
 
 		@Override
@@ -98,13 +98,11 @@ public class TigaseManager {
 			resetPasswordTimer = new Timer();
 			ResetTigasePasswordTask task = new ResetTigasePasswordTask();
 			if (resetPasswordCount < RESET_PASSWORD_MAX_COUNT) {
-//				int delay = (int) Math.pow(2, resetPasswordCount) * RESET_PASSWORD_INTERVAL;
 				long delay = Utils.exponentialBackOff(resetPasswordCount, RESET_PASSWORD_INTERVAL, RESET_PASSWORD_MAX_INTERVAL);
 				resetPasswordTimer.schedule(task, delay);
 			}
 			resetPasswordCount++;
 
-//			boolean updateFlag = false;
 
 			UserInfo userInfo = ((PhotoTalkApplication) ctx.getApplicationContext()).getCurrentUser();
 			JSONObject json = new JSONObject();
@@ -174,7 +172,6 @@ public class TigaseManager {
 						userInfo.setTigasePwd(pwd);
 						PrefsUtils.User.saveUserInfo(ctx, userInfo.getRcId(), userInfo);
 						password = pwd;
-//						updateFlag = true;
 						resetPasswordTimer.cancel();
 						disConnect();
 						initConnect();
@@ -203,7 +200,7 @@ public class TigaseManager {
 		public void connectionClosedOnError(Exception e) {
 			// TODO Auto-generated method stub
 			disConnect();
-			initConnect();
+			retryConnect();
 		}
 
 		@Override
@@ -230,6 +227,7 @@ public class TigaseManager {
 		public void connectionCreated(Connection connection) {
 			// TODO Auto-generated method stub
 			initConnectTimer.cancel();
+			isConnecting = false;
 			// login
 
 			if (null != user && null != password) {
@@ -245,6 +243,8 @@ public class TigaseManager {
 						resetPasswordTimer = new Timer();
 						ResetTigasePasswordTask task = new ResetTigasePasswordTask();
 						resetPasswordTimer.schedule(task, 0);
+					}else{
+						retryConnect();
 					}
 				}
 			}
@@ -269,14 +269,6 @@ public class TigaseManager {
 	class ConnectTimerTask extends TimerTask {
 
 		public void run() {
-			initConnectTimer = new Timer();
-			ConnectTimerTask task = new ConnectTimerTask();
-			// 改为长连接，所以不用限制初始化连接次数
-			// if (retryConnectCount < INIT_CONNECT_MAX_COUNT) {
-			long delay = Utils.exponentialBackOff(retryConnectCount, CONNECT_INTERVAL, CONNECT_MAX_INTERVAL);
-			initConnectTimer.schedule(task, delay);
-			// }
-			retryConnectCount++;
 			connect();
 		}
 
@@ -297,6 +289,10 @@ public class TigaseManager {
 	}
 
 	synchronized private void connect() {
+		if (isConnecting) {
+			return;
+		}
+		isConnecting = true;
 		node = TigaseNodeManager.getInstance(ctx).getNode();
 		try {
 			ConnectionConfiguration connConfig = new ConnectionConfiguration(node.getIp(), node.getPort(), node.getDomain());
@@ -309,23 +305,40 @@ public class TigaseManager {
 			connection.addConnectionListener(connectListenter);
 		}
 		catch (Exception xe) {
+			isConnecting = false;
 			xe.printStackTrace();
 			if (null != connection) {
 				if (!connection.isConnected()) {
 					disConnect();
 				}
 			}
+			retryConnect();
 		}
 	}
 
 	public void initConnect() {
+
 		retryConnectCount = 0;
 		initConnectTimer = new Timer();
 		ConnectTimerTask task = new ConnectTimerTask();
 		initConnectTimer.schedule(task, 0);
+		
+	}
+	
+	private void retryConnect(){
+		retryConnectCount++;
+		if(null!= initConnectTimer){
+			initConnectTimer.cancel();
+			initConnectTimer = null;
+		}
+		initConnectTimer = new Timer();
+		ConnectTimerTask task = new ConnectTimerTask();
+		long delay = Utils.exponentialBackOff(retryConnectCount, CONNECT_INTERVAL, CONNECT_MAX_INTERVAL);
+		initConnectTimer.schedule(task, delay);
 	}
 
 	public void disConnect() {
+		isConnecting = false;
 		if (null != connection) {
 			try {
 				connection.removeConnectionCreationListener(createListener);
