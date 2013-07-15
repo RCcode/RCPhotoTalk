@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 
@@ -40,16 +41,20 @@ public final class ServerUtilities {
 
 	public static final String SENDER_ID = "302738588217";
 
-	 private static String serverUrl =  "http://pt.rcplatformhk.net/phototalk/user/syncUserkey.do";
-    // private static String serverLogUrl = "http://pt.rcplatformhk.net/phototalk/push/receivePushStatus.do";
+	private static String serverUrl = "http://pt.rcplatformhk.net/phototalk/user/syncUserkey.do";
 
-//	private static String serverUrl = "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
+	// private static String serverLogUrl =
+	// "http://pt.rcplatformhk.net/phototalk/push/receivePushStatus.do";
 
-//	private static String serverLogUrl = "http://192.168.0.86:8083/phototalk/push/receivePushStatus.do";
-	
+	// private static String serverUrl =
+	// "http://192.168.0.86:8083/phototalk/user/syncUserkey.do";
+
+	// private static String serverLogUrl =
+	// "http://192.168.0.86:8083/phototalk/push/receivePushStatus.do";
+
 	private static String pushServerUrl = "http://push.rcplatformhk.com/gcm/boss/createUserInfo.do";
+
 	private static String pushServerLogUrl = "http://push.rcplatformhk.com/gcm/boss/receivePushStatus.do";
-	
 
 	private final static String status = "status";
 
@@ -143,107 +148,64 @@ public final class ServerUtilities {
 		mreceivePushStatusTask.execute(null, null, null);
 	}
 
-	
-//	private static void logPushResultService(final Context context, final String pushId, final String pushFlag) {
-//		
-//		
-//		Request request=new Request(context, serverLogUrl, null);
-//		request.putParam("pushID", pushId);
-//		request.putParam("appID", Constants.APP_ID);
-//		request.putParam("packageName", MetaHelper.getAppName(context));
-//		request.putParam("status", pushFlag);
-//		
-//		request.putParam("deviceID", MetaHelper.getImsi(context));
-//		request.putParam("clientMac", MetaHelper.getMACAddress(context));
-//		request.putParam("osVersion", MetaHelper.getOsVersion(context));
-//		request.putParam("language", MetaHelper.getLanguage(context));
-//		request.putParam("timeZone", MetaHelper.getTimeZone(context));
-//		request.putParam("timeZoneID", String.format("%d",  MetaHelper.getTimeZoneId(context)));
-//		request.putParam("pushResult", pushFlag);
-//		request.excuteAsync();
-		
-		/*
-		JSONObject json = new JSONObject();
-		try {
-			json.put("pushID", pushId);
-			json.put("appID", Constants.APP_ID);
-			json.put("packageName", MetaHelper.getAppName(context));
-			json.put("status", pushFlag);
-			json.put("deviceID", MetaHelper.getImsi(context));
-			json.put("clientMac", MetaHelper.getMACAddress(context));
-			json.put("osVersion", MetaHelper.getOsVersion(context));
-			json.put("language", MetaHelper.getLanguage(context));
-			json.put("timeZone", MetaHelper.getTimeZone(context));
-			json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
-			json.put("pushResult", pushFlag);
-			PhotoTalkApplication app = (PhotoTalkApplication) context.getApplicationContext();
-			UserInfo user = app.getCurrentUser();
-			if(user!=null){
-				json.put("token", user.getToken());
-			}else{
-				json.put("token", "000000");
-			}
-		}
-		catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	// private static void logPushResultService(final Context context, final
+	// String pushId, final String pushFlag) {
+	//
+	//
+	// Request request=new Request(context, serverLogUrl, null);
+	// request.putParam("pushID", pushId);
+	// request.putParam("appID", Constants.APP_ID);
+	// request.putParam("packageName", MetaHelper.getAppName(context));
+	// request.putParam("status", pushFlag);
+	//
+	// request.putParam("deviceID", MetaHelper.getImsi(context));
+	// request.putParam("clientMac", MetaHelper.getMACAddress(context));
+	// request.putParam("osVersion", MetaHelper.getOsVersion(context));
+	// request.putParam("language", MetaHelper.getLanguage(context));
+	// request.putParam("timeZone", MetaHelper.getTimeZone(context));
+	// request.putParam("timeZoneID", String.format("%d",
+	// MetaHelper.getTimeZoneId(context)));
+	// request.putParam("pushResult", pushFlag);
+	// request.excuteAsync();
 
-		OutputStream output = null;
-		InputStream is = null;
-		HttpURLConnection conn = null;
-		String content = null;
-		try {
-			conn = (HttpURLConnection) new URL(serverLogUrl).openConnection();
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			conn.setDoOutput(true);
-			conn.setRequestMethod("POST");
-			byte[] bodyBytes = json.toString().getBytes(HTTP.UTF_8);
-			output = conn.getOutputStream();
-			output.write(bodyBytes);
-			is = conn.getInputStream();
-			InputStreamReader reader = new InputStreamReader(is, "UTF-8");
-			StringBuilder builder = new StringBuilder();
-			char[] readChars = new char[1024];
-			String temp = null;
-			int result = -1;
-			while ((result = reader.read(readChars, 0, 1024)) != -1) {
-				temp = new String(readChars, 0, result);
-				builder.append(temp);
-			}
-			reader.close();
-			content = builder.toString();
-		}
-		catch (ConnectException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				output.close();
-			}
-			catch (Exception e) {
-			}
-			try {
-				is.close();
-			}
-			catch (Exception e) {
-			}
-			if (conn != null)
-				conn.disconnect();
+	/*
+	 * JSONObject json = new JSONObject(); try { json.put("pushID", pushId);
+	 * json.put("appID", Constants.APP_ID); json.put("packageName",
+	 * MetaHelper.getAppName(context)); json.put("status", pushFlag);
+	 * json.put("deviceID", MetaHelper.getImsi(context)); json.put("clientMac",
+	 * MetaHelper.getMACAddress(context)); json.put("osVersion",
+	 * MetaHelper.getOsVersion(context)); json.put("language",
+	 * MetaHelper.getLanguage(context)); json.put("timeZone",
+	 * MetaHelper.getTimeZone(context)); json.put("timeZoneID",
+	 * MetaHelper.getTimeZoneId(context)); json.put("pushResult", pushFlag);
+	 * PhotoTalkApplication app = (PhotoTalkApplication)
+	 * context.getApplicationContext(); UserInfo user = app.getCurrentUser();
+	 * if(user!=null){ json.put("token", user.getToken()); }else{
+	 * json.put("token", "000000"); } } catch (JSONException e1) { // TODO
+	 * Auto-generated catch block e1.printStackTrace(); } OutputStream output =
+	 * null; InputStream is = null; HttpURLConnection conn = null; String
+	 * content = null; try { conn = (HttpURLConnection) new
+	 * URL(serverLogUrl).openConnection(); conn.setConnectTimeout(5000);
+	 * conn.setReadTimeout(5000); conn.setDoOutput(true);
+	 * conn.setRequestMethod("POST"); byte[] bodyBytes =
+	 * json.toString().getBytes(HTTP.UTF_8); output = conn.getOutputStream();
+	 * output.write(bodyBytes); is = conn.getInputStream(); InputStreamReader
+	 * reader = new InputStreamReader(is, "UTF-8"); StringBuilder builder = new
+	 * StringBuilder(); char[] readChars = new char[1024]; String temp = null;
+	 * int result = -1; while ((result = reader.read(readChars, 0, 1024)) != -1)
+	 * { temp = new String(readChars, 0, result); builder.append(temp); }
+	 * reader.close(); content = builder.toString(); } catch (ConnectException
+	 * e) { // TODO Auto-generated catch block e.printStackTrace(); } catch
+	 * (IOException e) { // TODO Auto-generated catch block e.printStackTrace();
+	 * } finally { try { output.close(); } catch (Exception e) { } try {
+	 * is.close(); } catch (Exception e) { } if (conn != null)
+	 * conn.disconnect(); }
+	 */
+	// }
 
-		}
-	*/
-//	}
-	
 	private static void registerToService(final Context context, final String regId, final String rcId) {
-		
-		registerToPushService(context,  regId , Constants.APP_ID);
+
+		registerToPushService(context, regId, Constants.APP_ID);
 
 		JSONObject json = new JSONObject();
 		try {
@@ -253,6 +215,8 @@ public final class ServerUtilities {
 			// TODO 设置真是token
 			json.put("token", USER_TOKEN);
 			json.put("deviceId", MetaHelper.getMACAddress(context));
+
+			json.put("appVer", String.format("%d", MetaHelper.getAppVersionCode(context)));
 			/*
 			 * json.put("packageName", MetaHelper.getAppName(context));
 			 * json.put("status", STATUS_CREATE_USERINFO); json.put("deviceID",
@@ -339,13 +303,14 @@ public final class ServerUtilities {
 			GCMRegistrar.setRegisteredOnServer(context, false, RC_ID);
 		}
 	}
-	
+
 	private static void logPushResultService(final Context context, final String pushId, final String pushFlag) {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("pushID", pushId);
 			json.put("appID", Constants.APP_ID);
 			json.put("packageName", MetaHelper.getAppName(context));
+			json.put("appVer", String.format("%d", MetaHelper.getAppVersionCode(context)));
 			json.put("status", pushFlag);
 			json.put("deviceID", MetaHelper.getImsi(context));
 			json.put("clientMac", MetaHelper.getMACAddress(context));
@@ -412,20 +377,21 @@ public final class ServerUtilities {
 
 	}
 
-	private static void registerToPushService(final Context context, final String regId , final String appID) {
+	private static void registerToPushService(final Context context, final String regId, final String appID) {
 
 		JSONObject json = new JSONObject();
 		try {
 			json.put("userKey", regId);
 			json.put("appID", appID);
 			json.put("packageName", MetaHelper.getAppName(context));
-			json.put("status", STATUS_CREATE_USERINFO );
+			json.put("status", STATUS_CREATE_USERINFO);
 			json.put("deviceID", MetaHelper.getImsi(context));
 			json.put("clientMac", MetaHelper.getMACAddress(context));
 			json.put("osVersion", MetaHelper.getOsVersion(context));
 			json.put("language", MetaHelper.getLanguage(context));
 			json.put("timeZone", MetaHelper.getTimeZone(context));
 			json.put("timeZoneID", MetaHelper.getTimeZoneId(context));
+			json.put("appVer", String.format("%d", MetaHelper.getAppVersionCode(context)));
 		}
 		catch (JSONException e1) {
 			// TODO Auto-generated catch block

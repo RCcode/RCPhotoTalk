@@ -182,19 +182,36 @@ public class FriendDetailActivity extends BaseActivity {
 	private void setFriendName() {
 		switch (mFriend.getGender()) {
 		case 0:
-			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-					.getLocalName() : mFriend.getNickName() + ", "
-					+ mFriend.getAge());
+			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge());
+			} else {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName());
+			}
 			break;
 		case 1:
-			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-					.getLocalName() : mFriend.getNickName() + ", "
-					+ mFriend.getAge() + ", " + getString(R.string.male));
+			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge() + ", " + getString(R.string.male));
+			} else {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ getString(R.string.male));
+			}
 			break;
 		case 2:
-			tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-					.getLocalName() : mFriend.getNickName() + ", "
-					+ mFriend.getAge() + ", " + getString(R.string.famale));
+			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge() + ", " + getString(R.string.famale));
+			} else {
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", " + getString(R.string.famale));
+
+			}
 			break;
 		}
 		// tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
