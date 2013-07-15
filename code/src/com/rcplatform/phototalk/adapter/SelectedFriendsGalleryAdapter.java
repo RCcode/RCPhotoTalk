@@ -64,7 +64,7 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		if (friend.equals(PhotoTalkUtils.getDriftFriend()))
-			holder.head.setImageResource(R.drawable.ic_launcher);
+			holder.head.setImageResource(R.drawable.send_to_strangers);
 		else
 			mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
 		return convertView;

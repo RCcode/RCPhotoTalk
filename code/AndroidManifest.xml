@@ -46,7 +46,7 @@
      Creates a custom permission so only this app can receive its messages.
 
      NOTE: the permission *must* be called PACKAGE.permission.C2D_MESSAGE,
-           where PACKAGE is the application's package name.
+           where PACKAGE is the application's package name.
     -->
     <permission
         android:name="com.rcplatform.phototalk.permission.C2D_MESSAGE"
@@ -69,6 +69,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name="com.rcplatform.phototalk.PhotoTalkApplication"
@@ -336,8 +337,8 @@
         <activity
             android:name="com.rcplatform.phototalk.drift.DriftInformationActivity"
             android:configChanges="orientation"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
@@ -359,7 +360,7 @@
           services and handle them to the custom IntentService.
 
           The com.google.android.c2dm.permission.SEND permission is necessary
-          so only GCM services can send data messages for the app.
+          so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.google.android.gcm.GCMBroadcastReceiver"
@@ -372,6 +373,13 @@
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
 
                 <category android:name="com.rcplatform.phototalk.gcm.push" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name="com.rcplatform.phototalk.BroadcastReceiver.BootCompletedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
 

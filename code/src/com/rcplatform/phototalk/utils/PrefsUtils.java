@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.UserInfo;
 
 public class PrefsUtils {
@@ -119,6 +120,8 @@ public class PrefsUtils {
 		private static final String PREF_KEY_LAST_THROW_TIME = "lastthrowtime";
 
 		private static final String PFEF_KEY_FISH_LEAVE_TIME = "fishleavetime";
+		private static final String PREF_KEY_USED_DRIFT = "hasuseddrift";
+		private static final String PREF_KEY_LAST_USED_VERSION = "lastusedversion";
 
 		public static class ThirdPart {
 
@@ -453,6 +456,26 @@ public class PrefsUtils {
 
 		public static synchronized void setFishLeaveTime(Context context, String pref, int time) {
 			getPreference(context, pref).edit().putInt(PFEF_KEY_FISH_LEAVE_TIME, time).commit();
+		}
+
+		public static boolean hasUsedDrift(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_USED_DRIFT, false);
+		}
+
+		public static void setDriftUsed(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_USED_DRIFT, true).commit();
+		}
+
+		public static String getLastUsedVersion(Context context, String pref) {
+			return getPreference(context, pref).getString(PREF_KEY_LAST_USED_VERSION, null);
+		}
+
+		public static boolean hasCurrentVersionUsed(Context context, String pref) {
+			return context.getString(R.string.version).equals(getLastUsedVersion(context, pref));
+		}
+
+		public static void setCurrentVersionUsed(Context context, String pref) {
+			getPreference(context, pref).edit().putString(PREF_KEY_LAST_USED_VERSION, context.getString(R.string.version)).commit();
 		}
 	}
 }

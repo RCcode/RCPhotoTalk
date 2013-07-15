@@ -60,7 +60,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// 获取url中图片的文件名与后缀
 		// 图片保存路径地址
 		File sdDir = null;
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
+		boolean sdCardExist = Environment.getExternalStorageState().equals(
+				android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
 			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
@@ -83,8 +84,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		try {
 			String url = imageSaveUri(context, fileName);
 			file = new File(url);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 		}
 		return file;
 	}
@@ -122,8 +122,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 					file.delete();
 					return null;
 				}
-			}
-			catch (IOException e) {
+			} catch (IOException e) {
 				return null;
 			}
 		} else {
@@ -157,7 +156,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 		String typeStr = intent.getStringExtra("type");
 		String msg = intent.getStringExtra("extra");
 		String rcID = intent.getStringExtra("rc_id");
-		PhotoTalkApplication app = (PhotoTalkApplication) context.getApplicationContext();
+		PhotoTalkApplication app = (PhotoTalkApplication) context
+				.getApplicationContext();
 		UserInfo user = app.getCurrentUser();
 		boolean isCurrentUserMsg = false;
 		if (null != user && rcID != null) {
@@ -172,29 +172,38 @@ public class GCMIntentService extends GCMBaseIntentService {
 			}
 		}
 
-		if (Constants.Message.MESSAGE_ACTION_FRIEND_INT == type || Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT == type
-		        || Constants.Message.MESSAGE_ACTION_MSG_INT == type) {
+		if (Constants.Message.MESSAGE_ACTION_FRIEND_INT == type
+				|| Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT == type
+				|| Constants.Message.MESSAGE_ACTION_MSG_INT == type) {
 
 			Intent it = new Intent();
 			it.setAction(Constants.Action.ACTION_GCM_MESSAGE);
-			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY, Constants.Message.MESSAGE_TYPE_NEW_INFORMATIONS);
+			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY,
+					Constants.Message.MESSAGE_TYPE_NEW_INFORMATIONS);
 			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, msg);
 			context.sendBroadcast(it);
 
 		}
 
-		boolean isRunning = Utils.isRunningForeground(context);
-		if (type == Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT) {
-			if (!isRunning) {
-				count = ServerUtilities.getGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE) + 1;
-				ServerUtilities.setGcmMessageCount(context, ServerUtilities.GCM_MSG_USER_MESSAGE, count);
-				generateMessageNotification(context, context.getString(R.string.gcm_message, count).toString(),type);
-			}
-		} else if (type == Constants.Message.MESSAGE_ACTION_FRIEND_INT) {
-			if (!isRunning) {
-				generateMessageNotification(context, context.getText(R.string.gcm_friend).toString(),type);
-			}
+		// 修改gcm为任何时候都通知
+		// boolean isRunning = Utils.isRunningForeground(context);
 
+		if (type == Constants.Message.MESSAGE_ACTION_SEND_MESSAGE_INT) {
+			// if (!isRunning) {
+			count = ServerUtilities.getGcmMessageCount(context,
+					ServerUtilities.GCM_MSG_USER_MESSAGE) + 1;
+			ServerUtilities.setGcmMessageCount(context,
+					ServerUtilities.GCM_MSG_USER_MESSAGE, count);
+			generateMessageNotification(context,
+					context.getString(R.string.gcm_message, count).toString(),
+					type);
+			// }
+		} else if (type == Constants.Message.MESSAGE_ACTION_FRIEND_INT) {
+			// if (!isRunning) {
+			generateMessageNotification(context,
+					context.getText(R.string.gcm_friend).toString(), type);
+			// }
+			// 修改gcm为任何时候都通知 end
 		} else if (type == Constants.Message.MESSAGE_NEW_USER_MESSAGE_INT) {
 			String userStr = intent.getStringExtra("new_user_info");
 			// if (!isRunning) {
@@ -204,7 +213,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Intent it = new Intent();
 			it.setAction(Constants.Action.ACTION_GCM_MESSAGE);
 			it.putExtra(Constants.Message.MESSAGE_CONTENT_KEY, userStr);
-			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY, Constants.Message.MESSAGE_TYPE_NEW_RECOMMENDS);
+			it.putExtra(Constants.Message.MESSAGE_TYPE_KEY,
+					Constants.Message.MESSAGE_TYPE_NEW_RECOMMENDS);
 			context.sendBroadcast(it);
 
 		} else if (type == Constants.Message.MESSAGE_APP_PUSH_MESSAGE_INT) {
@@ -219,7 +229,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 			if (!Utils.checkApkExist(context, packageName)) {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
-				generateNotification(context, iconUrl, titleStr, descStr, downloadUrl,type);
+				generateNotification(context, iconUrl, titleStr, descStr,
+						downloadUrl, type);
 			} else {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
 			}
@@ -249,7 +260,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	private static void generateNotification(Context context, String iconUrl, String titleStr, String descStr, String downloadUrl, int id) {
+	private static void generateNotification(Context context, String iconUrl,
+			String titleStr, String descStr, String downloadUrl, int id) {
 		try {
 			downloadUrl.trim();
 			Bitmap bp = loadImageFromUrl(context, iconUrl);
@@ -258,7 +270,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 			Notification notification = new Notification();
 			notification.icon = R.drawable.ic_launcher;
 
-			notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
+			notification.contentView = new RemoteViews(
+					context.getPackageName(), R.layout.gcm_notification);
 
 			notification.contentView.setImageViewBitmap(R.id.gcm_image, bp);
 			notification.contentView.setTextViewText(R.id.gcm_title, titleStr);
@@ -266,15 +279,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 			notification.when = System.currentTimeMillis();
 			notification.defaults |= Notification.DEFAULT_SOUND;
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			NotificationManager notificationManager = (NotificationManager) context
+					.getSystemService(Context.NOTIFICATION_SERVICE);
 			Uri uri = Uri.parse(downloadUrl);
 			Intent notificationIntent = new Intent(Intent.ACTION_VIEW, uri);
 			// set intent so it does not start a new activity
-			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+			PendingIntent intent = PendingIntent.getActivity(context, 0,
+					notificationIntent, 0);
 			notification.contentIntent = intent;
 			notificationManager.notify(0, notification);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 
 		}
 
@@ -283,29 +297,35 @@ public class GCMIntentService extends GCMBaseIntentService {
 	/**
 	 * Issues a notification to inform the user that server has sent a message.
 	 */
-	public static void generateMessageNotification(Context context, String msg ,int id) {
+	public static void generateMessageNotification(Context context, String msg,
+			int id) {
 		try {
 
 			// Notification notification = new Notification();
 			Notification notification = new Notification();
 			notification.icon = R.drawable.ic_launcher;
 
-			notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
-			notification.contentView.setImageViewResource(R.id.gcm_image, R.drawable.ic_launcher);
-			notification.contentView.setTextViewText(R.id.gcm_title, context.getText(R.string.app_name));
+			notification.contentView = new RemoteViews(
+					context.getPackageName(), R.layout.gcm_notification);
+			notification.contentView.setImageViewResource(R.id.gcm_image,
+					R.drawable.ic_launcher);
+			notification.contentView.setTextViewText(R.id.gcm_title,
+					context.getText(R.string.app_name));
 			notification.contentView.setTextViewText(R.id.gcm_decs, msg);
 			notification.when = System.currentTimeMillis();
 			notification.defaults |= Notification.DEFAULT_SOUND;
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+			NotificationManager notificationManager = (NotificationManager) context
+					.getSystemService(Context.NOTIFICATION_SERVICE);
 			;
-			Intent notificationIntent = new Intent(context, WelcomeActivity.class);
+			Intent notificationIntent = new Intent(context,
+					WelcomeActivity.class);
 			// set intent so it does not start a new activity
-			PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+			PendingIntent intent = PendingIntent.getActivity(context, 0,
+					notificationIntent, 0);
 			notification.contentIntent = intent;
 			notificationManager.notify(id, notification);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 
 		}
 

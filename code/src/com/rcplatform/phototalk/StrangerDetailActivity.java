@@ -36,7 +36,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.task.SkyPoolAddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -48,6 +47,7 @@ public class StrangerDetailActivity extends BaseActivity {
 	public static final String PARAM_INFORMATION = "information";
 	public static final String PARAM_FROM_PAGE = "isFromStangerPage";
 	public static final String RESULT_PARAM_FRIEND = "friend";
+	public static final String PARAM_BACK_PAGE = "backpage";
 	// private String mAction;
 	private ImageView ivHead;
 	private ImageView ivBackground;
@@ -147,7 +147,6 @@ public class StrangerDetailActivity extends BaseActivity {
 					new AddFriendTask(StrangerDetailActivity.this,
 							getPhotoTalkApplication().getCurrentUser(),
 							new AddFriendTask.AddFriendListener() {
-
 								@Override
 								public void onFriendAddSuccess(Friend friend,
 										int addType) {
@@ -280,6 +279,9 @@ public class StrangerDetailActivity extends BaseActivity {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", mFriend);
 		intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
+		if (getIntent().hasExtra(PARAM_BACK_PAGE))
+			intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE,
+					getIntent().getSerializableExtra(PARAM_BACK_PAGE));
 		startActivity(intent);
 	}
 

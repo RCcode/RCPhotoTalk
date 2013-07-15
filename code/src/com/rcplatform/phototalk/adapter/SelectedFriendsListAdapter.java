@@ -147,7 +147,6 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 	public List<Friend> getData() {
 		return listData;
 	}
-
 	private void setFriendSourceInfo(View convertView, Friend friend) {
 		View sourceView = convertView.findViewById(R.id.linear_friend_source);
 		FriendSourse source = friend.getSource();
