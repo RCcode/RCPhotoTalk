@@ -1,6 +1,9 @@
 package com.rcplatform.phototalk;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -67,6 +70,49 @@ public class StrangerDetailActivity extends BaseActivity {
 		mImageLoader = ImageLoader.getInstance();
 		initData();
 		initView();
+	}
+
+	protected void showDialog() {
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setMessage("是否举报")
+				.setPositiveButton("举报", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						if (information != null) {
+							DriftProxy.reportPic(StrangerDetailActivity.this,
+									new RCPlatformResponseHandler() {
+
+										@Override
+										public void onSuccess(int statusCode,
+												String content) {
+											// TODO Auto-generated method stub
+											Toast.makeText(
+													StrangerDetailActivity.this,
+													"举报成功", Toast.LENGTH_LONG)
+													.show();
+										}
+
+										@Override
+										public void onFailure(int errorCode,
+												String content) {
+											// TODO Auto-generated method stub
+											showErrorConfirmDialog(content);
+										}
+									}, information);
+						}
+					}
+				})
+				.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						dialog.dismiss();
+					}
+				}).create();
+		dialog.show();
 	}
 
 	private void setFriendInfo() {
@@ -199,26 +245,7 @@ public class StrangerDetailActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				if (information != null) {
-					DriftProxy.reportPic(StrangerDetailActivity.this,
-							new RCPlatformResponseHandler() {
-
-								@Override
-								public void onSuccess(int statusCode,
-										String content) {
-									// TODO Auto-generated method stub
-									Toast.makeText(StrangerDetailActivity.this,
-											"举报成功", Toast.LENGTH_LONG).show();
-								}
-
-								@Override
-								public void onFailure(int errorCode,
-										String content) {
-									// TODO Auto-generated method stub
-									showErrorConfirmDialog(content);
-								}
-							}, information);
-				}
+				showDialog();
 			}
 		});
 		ivHead = (ImageView) findViewById(R.id.strange_iv_head);
@@ -288,7 +315,8 @@ public class StrangerDetailActivity extends BaseActivity {
 						+ mFriend.getAge() + ", " + getString(R.string.famale));
 			} else {
 				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
-						.getLocalName() : mFriend.getNickName()+", " + getString(R.string.famale));
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ getString(R.string.famale));
 
 			}
 			break;
