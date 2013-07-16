@@ -104,6 +104,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 
 	protected static final int MSG_TIGASE_NEW_INFORMATION = 3;
+	private static final String FRISTUSED="fristUsedVersion";
 
 	private SnapListView mInformationList;
 
@@ -440,12 +441,20 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	 */
 	private void initViewPager() {
 		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
+		boolean isShow =PrefsUtils.User.hasCurrentVersionUsed(this, FRISTUSED);
+		//打开注释 以后只显示一次引导页
+//		if(!isShow){
+//			vPager.setVisibility(View.VISIBLE);
+//		}else{
+//			vPager.setVisibility(View.GONE);
+//		}
 		vPager.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				vPager.setVisibility(View.GONE);
+				PrefsUtils.User.setCurrentVersionUsed(HomeActivity.this, FRISTUSED);
 			}
 		});
 	}
