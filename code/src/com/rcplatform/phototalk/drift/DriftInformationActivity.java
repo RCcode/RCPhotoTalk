@@ -329,6 +329,7 @@ public class DriftInformationActivity extends BaseActivity implements
 			friend.setNickName(information.getSender().getNick());
 			friend.setBackground(information.getSender().getBackUrl());
 			friend.setBirthday(information.getSender().getBirthday());
+			friend.setTigaseId(information.getSender().getTigaseId());
 		}
 		searchFriend(friend, information);
 	}
