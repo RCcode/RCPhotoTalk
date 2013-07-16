@@ -138,4 +138,5 @@ public class PhotoTalkApiUrl {
 	public static final String DRIFT_SHOW_TIME_URL=BASE_URL_FOR_POOL+"getViewTimes.do";
 	public static final String SKY_POOL_ADD_FRIEND=BASE_URL_FOR_POOL+"addFriend.do";
 	public static final String MAX_FISH_TIMES_URL=BASE_URL_FOR_POOL+"loadConfig.do";
+	public static final String DRIFT_BACK_URL=BASE_URL_FOR_POOL+"messageLog.do";
 }

@@ -204,26 +204,45 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_TIMEZONE = "timeZone";
 		public static final String PARAM_KEY_OS_NAME = "os_name";
 		public static final String PARAM_KEY_OS_VERSION = "os_version";
-		public static final String PARAM_KEY_NICK="nick";
-		public static final String PARAM_KEY_COUNTRY="country";
-		public static final String PARAM_KEY_GENDER="gender";
-		public static final String PARAM_KEY_TIMESNAMP="timeStamp";
+		public static final String PARAM_KEY_NICK = "nick";
+		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_GENDER = "gender";
+		public static final String PARAM_KEY_TIMESNAMP = "timeStamp";
 	}
-	public static class DriftShowTime{
-		public static final String PARAM_KEY_PICIDS="picIds";
+
+	public static class DriftShowTime {
+		public static final String PARAM_KEY_PICIDS = "picIds";
 	}
-	public static class ThrowDriftInformation{
-		public static final String PARAM_KEY_GENDER="gender";
-		public static final String PARAM_KEY_NICK="nick";
-		public static final String PARAM_KEY_BACKGROUND="backUrl";
-		public static final String PARAM_KEY_PICURL="picUrl";
-		public static final String PARAM_KEY_COUNTRY="country";
-		public static final String PARAM_KEY_TIMEZONE="timeZone";
-		public static final String PARAM_KEY_SHOW_LENGTH="totalLength";
-		public static final String PARAM_KEY_OSNAME="osName";
-		public static final String PARAM_KEY_FLAG="flag";
-		public static final String PARAM_KEY_OSVERSION="osVersion";
-		public static final String PARAM_KEY_FILE="file";
-		public static final String PARAM_KEY_BIRTHDAY="birthday";
+
+	public static class ThrowDriftInformation {
+		public static final String PARAM_KEY_GENDER = "gender";
+		public static final String PARAM_KEY_NICK = "nick";
+		public static final String PARAM_KEY_BACKGROUND = "backUrl";
+		public static final String PARAM_KEY_PICURL = "picUrl";
+		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_TIMEZONE = "timeZone";
+		public static final String PARAM_KEY_SHOW_LENGTH = "totalLength";
+		public static final String PARAM_KEY_OSNAME = "osName";
+		public static final String PARAM_KEY_FLAG = "flag";
+		public static final String PARAM_KEY_OSVERSION = "osVersion";
+		public static final String PARAM_KEY_FILE = "file";
+		public static final String PARAM_KEY_BIRTHDAY = "birthday";
+	}
+
+	public static class DriftBackLog {
+		public static final String PARAM_KEY_GENDER = "gender";
+		public static final String PARAM_KEY_COUNTRY = "country";
+		public static final String PARAM_KEY_PIC_URL = "picUrl";
+		public static final String PARAM_KEY_PIC_ID = "picId";
+		public static final String PARAM_KEY_HAS_VOICE = "record";
+		public static final String PARAM_KEY_HAS_GRAF = "graf";
+		public static final String PARAM_VALUE_HAS_VOICE = "1";
+		public static final String PARAM_VALUE_NO_VOICE = "0";
+		public static final String PARAM_VALUE_HAS_GRAF = "1";
+		public static final String PARAM_VALUE_NO_GRAF = "0";
+		public static final String PARAM_VALUE_TOTAL_LENGTH = "totalLength";
+		public static final String PARAM_KEY_RECEIVER_GENDER = "repGender";
+		public static final String PARAM_KEY_RECEIVER_COUNTRY = "repCountry";
+		public static final String PARAM_KEY_RECEIVER_RCID = "repRcId";
 	}
 }

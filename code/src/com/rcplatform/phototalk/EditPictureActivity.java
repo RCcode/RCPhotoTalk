@@ -45,7 +45,9 @@ import android.widget.Toast;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
@@ -59,6 +61,9 @@ import com.rcplatform.phototalk.views.wheel.WheelView;
 import com.rcplatform.phototalk.views.wheel.adapter.AbstractWheelTextAdapter;
 
 public class EditPictureActivity extends BaseActivity {
+
+	public static final String PARAM_KEY_PIC_ID = "picId";
+	public static final String PARAM_KEY_PIC_URL = "picUrl";
 
 	private static final int UNDO_ON_CLICK = 0;
 
@@ -742,7 +747,12 @@ public class EditPictureActivity extends BaseActivity {
 		File file = new File(imagePath);
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.add(friend);
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), getIntent().getIntExtra("photoType", 0));
+		int photoType = getIntent().getIntExtra("photoType", 0);
+		if (photoType == PhotoInformationType.TYPE_DRIFT) {
+			DriftProxy.serviceLog(this, getIntent().getStringExtra(PARAM_KEY_PIC_URL), getIntent().getIntExtra(PARAM_KEY_PIC_ID, 0), mEditePicView.hasDrawed(),
+					voicePath != null, getCurrentUser(), friend);
+		}
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), photoType);
 	}
 
 }
