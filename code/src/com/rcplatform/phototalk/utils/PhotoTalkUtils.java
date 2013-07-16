@@ -64,7 +64,7 @@ public class PhotoTalkUtils {
 	public static Friend userToFriend(UserInfo userInfo) {
 		Friend friend = new Friend();
 		friend.setRcId(userInfo.getRcId());
-		friend.setBackground(userInfo.getBirthday());
+		friend.setBirthday(userInfo.getBirthday());
 		friend.setGender(userInfo.getGender());
 		friend.setAppList(new ArrayList<AppInfo>(Constants.userApps.keySet()));
 		friend.setCellPhone(userInfo.getCellPhone());
