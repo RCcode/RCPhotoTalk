@@ -54,6 +54,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 
 	public static final String PARAM_USER = "user";
 	public static final String PARAM_USER_APPS = "userapps";
+	public static final String PARAM_FROM_PLATFORM_EDIT="fromplatformedit";
 	private ImageView ivHead;
 	private EditText etNick;
 	private HorizontalListView vpUsers;
@@ -328,7 +329,7 @@ public class PlatformEditActivity extends ImagePickActivity {
 		task.setLogin();
 		task.startUpload();
 		Intent intent = new Intent(this, InitPageActivity.class);
-		intent.putExtra(PARAM_USER, userInfo);
+		intent.putExtra(PARAM_FROM_PLATFORM_EDIT, true);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		startActivity(intent);
 	}

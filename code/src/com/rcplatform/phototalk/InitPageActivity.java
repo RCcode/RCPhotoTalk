@@ -137,8 +137,10 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
-		startActivity(InviteActivity.class);
-		finish();
+		if (intent.hasExtra(PlatformEditActivity.PARAM_FROM_PLATFORM_EDIT)) {
+			startActivity(InviteActivity.class);
+			finish();
+		}
 	}
 
 	@Override
