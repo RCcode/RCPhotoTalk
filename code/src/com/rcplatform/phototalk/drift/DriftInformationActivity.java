@@ -293,16 +293,21 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void showFriendDetail(DriftInformation information) {
-		Friend friend = new Friend();
-		friend.setRcId(information.getSender().getRcId());
-		friend.setAppId(information.getSender().getAppId());
-		friend.setAdded(information.getSender().getIsFriend());
-		friend.setGender(information.getSender().getGender());
-		friend.setHeadUrl(information.getSender().getHeadUrl());
-		friend.setCountry(information.getSender().getCountry());
-		friend.setNickName(information.getSender().getNick());
-		friend.setBackground(information.getSender().getBackUrl());
-		friend.setBirthday(information.getSender().getBirthday());
+		Friend friend = null;
+		if (information.getSender().getRcId().equals(getCurrentUser().getRcId())) {
+			friend = PhotoTalkUtils.userToFriend(getCurrentUser());
+		} else {
+			friend = new Friend();
+			friend.setRcId(information.getSender().getRcId());
+			friend.setAppId(information.getSender().getAppId());
+			friend.setAdded(information.getSender().getIsFriend());
+			friend.setGender(information.getSender().getGender());
+			friend.setHeadUrl(information.getSender().getHeadUrl());
+			friend.setCountry(information.getSender().getCountry());
+			friend.setNickName(information.getSender().getNick());
+			friend.setBackground(information.getSender().getBackUrl());
+			friend.setBirthday(information.getSender().getBirthday());
+		}
 		searchFriend(friend, information);
 	}
 

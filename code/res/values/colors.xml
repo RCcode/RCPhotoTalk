@@ -20,5 +20,6 @@
  	<color name="cut_image_boarder">#FF7F7F7F</color>
  	<color name="attention_text_gray">#ff908983</color>
  	<color name="login_otherapp_text">#ff827e7a</color>
- 	<color name="home_know_stranges_text">#ffc75555</color>	
+ 	<color name="home_know_stranges_text">#ffc75555</color>
+ 	<color name="filter_text_press">#ffb22408</color>	
 </resources> 
