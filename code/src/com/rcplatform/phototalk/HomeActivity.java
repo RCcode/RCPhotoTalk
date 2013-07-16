@@ -62,10 +62,12 @@ import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
+import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
+import com.rcplatform.phototalk.request.handler.MaxFishTimeResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
@@ -177,6 +179,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		// Log 用户信息
 		ClientLogUtil.log(this);
 		showRcAd();
+		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
 	}
 
 	private void showRcAd() {

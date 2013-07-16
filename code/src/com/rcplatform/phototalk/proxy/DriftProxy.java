@@ -47,7 +47,7 @@ public class DriftProxy {
 	}
 
 	public static void getMaxFishTime(Context context, RCPlatformResponseHandler handler) {
-		Request request = new Request(context, "", handler);
+		Request request = new Request(context, PhotoTalkApiUrl.MAX_FISH_TIMES_URL, handler);
 		request.excuteAsync();
 	}
 
