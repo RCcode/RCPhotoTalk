@@ -78,7 +78,7 @@ public class FriendDynamicActivity extends BaseActivity {
 		setContentView(R.layout.friend_dynamic);
 		
 		if(null == db){
-			db = new FriendDynamicDatabase();
+			db = FriendDynamicDatabase.getInstance();
 		}
 		back_btn = (ImageButton) findViewById(R.id.back);
 		back_btn.setVisibility(View.VISIBLE);

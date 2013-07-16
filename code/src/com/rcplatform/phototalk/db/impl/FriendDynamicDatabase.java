@@ -14,11 +14,20 @@ import com.rcplatform.phototalk.db.DatabaseUtils;
 public class FriendDynamicDatabase {
 
 	private static ObjectContainer db;
-
-	public FriendDynamicDatabase() {
+	
+	private static FriendDynamicDatabase instance;
+	
+	private FriendDynamicDatabase() {
 		EmbeddedConfiguration config = Db4oEmbedded.newConfiguration();
 		config.common().add(new AndroidSupport());
 		db = Db4oEmbedded.openFile(config, DatabaseUtils.getFriendDynamicDatabasePath());
+	}
+	
+	static public FriendDynamicDatabase getInstance(){
+		if(null == instance){
+			instance = new FriendDynamicDatabase();
+		}
+		return instance;
 	}
 
 	public void saveFriendDynamics(List<FriendDynamic> list) {
