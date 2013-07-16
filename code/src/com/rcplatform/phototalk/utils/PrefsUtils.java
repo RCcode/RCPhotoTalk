@@ -457,11 +457,20 @@ public class PrefsUtils {
 		public static synchronized void setFishLeaveTime(Context context, String pref, int time) {
 			getPreference(context, pref).edit().putInt(PFEF_KEY_FISH_LEAVE_TIME, time).commit();
 		}
-
+		/**
+		 * 获取漂流瓶功能是否用过
+		 * @param context
+		 * @param pref
+		 * @return
+		 */
 		public static boolean hasUsedDrift(Context context, String pref) {
 			return getPreference(context, pref).getBoolean(PREF_KEY_USED_DRIFT, false);
 		}
-
+		/**
+		 * 设置漂流瓶功能被使用
+		 * @param context
+		 * @param pref
+		 */
 		public static void setDriftUsed(Context context, String pref) {
 			getPreference(context, pref).edit().putBoolean(PREF_KEY_USED_DRIFT, true).commit();
 		}
@@ -469,11 +478,20 @@ public class PrefsUtils {
 		public static String getLastUsedVersion(Context context, String pref) {
 			return getPreference(context, pref).getString(PREF_KEY_LAST_USED_VERSION, null);
 		}
-
+		/**
+		 * 获取当前版本是否使用过
+		 * @param context
+		 * @param pref
+		 * @return
+		 */
 		public static boolean hasCurrentVersionUsed(Context context, String pref) {
 			return context.getString(R.string.version).equals(getLastUsedVersion(context, pref));
 		}
-
+		/**
+		 * 设置当前版本已经被使用
+		 * @param context
+		 * @param pref
+		 */
 		public static void setCurrentVersionUsed(Context context, String pref) {
 			getPreference(context, pref).edit().putString(PREF_KEY_LAST_USED_VERSION, context.getString(R.string.version)).commit();
 		}
