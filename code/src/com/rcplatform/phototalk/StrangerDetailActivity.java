@@ -278,7 +278,11 @@ public class StrangerDetailActivity extends BaseActivity {
 	private void sendBackToStranges() {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", mFriend);
-		intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
+		if (!mFriend.isFriend()) {
+			intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
+		}else{
+			intent.putExtra("photoType", PhotoInformationType.TYPE_NORMAL);
+		}
 		if (getIntent().hasExtra(PARAM_BACK_PAGE))
 			intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE,
 					getIntent().getSerializableExtra(PARAM_BACK_PAGE));
