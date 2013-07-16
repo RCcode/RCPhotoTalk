@@ -6,8 +6,9 @@
 
     <com.rcplatform.phototalk.views.EditableViewGroup
         android:id="@+id/edit_group"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true" >
     </com.rcplatform.phototalk.views.EditableViewGroup>
 
     <RelativeLayout

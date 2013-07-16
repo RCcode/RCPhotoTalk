@@ -46,7 +46,7 @@ public class EditPictureView extends View {
 	private Paint mPaint;// 真实的画笔
 
 	private float mX, mY;// 临时点坐标
-
+	private EditPictureListener listener;
 	private static final float TOUCH_TOLERANCE = 4;
 
 	// 保存Path路径的集合,用List集合来模拟栈，用于后退步骤
@@ -105,7 +105,8 @@ public class EditPictureView extends View {
 		screenWidth = w;
 		screenHeight = h;
 		app = (PhotoTalkApplication) getContext().getApplicationContext();
-		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
+				Bitmap.Config.ARGB_8888);
 		// 保存一次一次绘制出来的图形
 		mCanvas = new Canvas(mBitmap);
 		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -144,7 +145,8 @@ public class EditPictureView extends View {
 		super(context, attrs, defStyle);
 		// TODO Auto-generated constructor stub
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay()
+				.getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -153,7 +155,8 @@ public class EditPictureView extends View {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay()
+				.getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -161,7 +164,8 @@ public class EditPictureView extends View {
 	public EditPictureView(Context context, int w, int h) {
 		super(context);
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay()
+				.getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -169,7 +173,8 @@ public class EditPictureView extends View {
 	public EditPictureView(Context context) {
 		super(context);
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay()
+				.getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -177,7 +182,8 @@ public class EditPictureView extends View {
 	public EditPictureView(Context context, String tempfilePath) {
 		super(context);
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay()
+				.getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -224,7 +230,8 @@ public class EditPictureView extends View {
 	 */
 	public int undo() {
 
-		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
+				Bitmap.Config.ARGB_8888);
 		mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
 		drawBg(mCanvas);
 		// 清空画布，但是如果图片有背景的话，则使用上面的重新初始化的方法，用该方法会将背景清空掉…
@@ -257,7 +264,8 @@ public class EditPictureView extends View {
 		if (canclePath.size() < 1)
 			return canclePath.size();
 
-		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
+				Bitmap.Config.ARGB_8888);
 		mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
 		// 清空画布，但是如果图片有背景的话，则使用上面的重新初始化的方法，用该方法会将背景清空掉…
 		drawBg(mCanvas);
@@ -368,12 +376,14 @@ public class EditPictureView extends View {
 			// } else {
 			bg = app.getEditeBitmap();
 			// }
+			//确保竖屏 
 			if (bg != null || !bg.isRecycled()) {
 				if (bg.getWidth() > bg.getHeight()) {
 					Matrix matrix = new Matrix();
 					matrix.reset();
 					matrix.setRotate(90);
-					tempBitmap = Bitmap.createBitmap(bg, 0, 0, bg.getWidth(), bg.getHeight(), matrix, true);
+					tempBitmap = Bitmap.createBitmap(bg, 0, 0, bg.getWidth(),
+							bg.getHeight(), matrix, true);
 					bg.recycle();
 				} else {
 					tempBitmap = bg;
@@ -386,32 +396,84 @@ public class EditPictureView extends View {
 		float bgHeight = tempBitmap.getHeight();
 		int left, top, right, bottom;
 		int showWidth, showHeight;
-
-		if (bgWidth > Constants.SCREEN_WIDTH || bgHeight > Constants.SCREEN_HEIGHT) {
+//需要缩小
+		if (bgWidth > Constants.SCREEN_WIDTH
+				|| bgHeight > Constants.SCREEN_HEIGHT) {
 			float widthScale = (bgWidth - Constants.SCREEN_WIDTH) / bgWidth;
 			float heightScale = (bgHeight - Constants.SCREEN_HEIGHT) / bgHeight;
 			if (widthScale > heightScale) {
 				showWidth = Constants.SCREEN_WIDTH;
 				showHeight = (int) (bgHeight - (bgHeight * widthScale));
-			} else {
-				showHeight = Constants.SCREEN_HEIGHT ;
+				left = 0;
+				right = showWidth;
+				top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
+				bottom = Constants.SCREEN_HEIGHT - top;
+			} else if(widthScale < heightScale){
+				showHeight = Constants.SCREEN_HEIGHT;
 				showWidth = (int) (bgWidth - (bgWidth * heightScale));
+				
+				left = (Constants.SCREEN_WIDTH - showWidth) / 2;;
+				right = Constants.SCREEN_WIDTH - left;
+				top = 0;
+				bottom = Constants.SCREEN_HEIGHT;
+			}else{
+				left = 0;
+				right = Constants.SCREEN_WIDTH;
+				top = 0;
+				bottom = Constants.SCREEN_HEIGHT;
 			}
-			left = (Constants.SCREEN_WIDTH - showWidth) / 2;
-			right = Constants.SCREEN_WIDTH - left;
-			top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
-			bottom = Constants.SCREEN_HEIGHT - top;
-		} else {
-			left = (int) ((Constants.SCREEN_WIDTH - bgWidth) / 2);
-			right = Constants.SCREEN_WIDTH - left;
-			top = (int) ((Constants.SCREEN_HEIGHT - bgHeight) / 2);
-			bottom = Constants.SCREEN_HEIGHT - top;
+//			left = (Constants.SCREEN_WIDTH - showWidth) / 2;
+//			right = Constants.SCREEN_WIDTH - left;
+//			top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
+//			bottom = Constants.SCREEN_HEIGHT - top;
+		} else if(bgWidth == Constants.SCREEN_WIDTH&&bgHeight==Constants.SCREEN_HEIGHT){
+//			刚刚好的情况
+			left = 0;
+			right = Constants.SCREEN_WIDTH;
+			top = 0;
+			bottom = Constants.SCREEN_HEIGHT;
+//			left = (int) ((Constants.SCREEN_WIDTH - bgWidth) / 2);
+//			right = Constants.SCREEN_WIDTH - left;
+//			top = (int) ((Constants.SCREEN_HEIGHT - bgHeight) / 2);
+//			bottom = Constants.SCREEN_HEIGHT - top;
+		}else{
+			float widthScale = (Constants.SCREEN_WIDTH-bgWidth) / bgWidth;
+			float heightScale = (Constants.SCREEN_HEIGHT-bgHeight) / bgHeight;
+			if(widthScale<heightScale){
+				showWidth = Constants.SCREEN_WIDTH;
+				showHeight = (int) (Constants.SCREEN_HEIGHT - (bgHeight * widthScale));
+				left = 0;
+				right = showWidth;
+				top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
+				bottom = Constants.SCREEN_HEIGHT - top;
+			}else if(widthScale>heightScale){
+				showHeight = Constants.SCREEN_HEIGHT;
+				showWidth = (int) (Constants.SCREEN_WIDTH - (bgWidth * heightScale));
+				
+				left = (Constants.SCREEN_WIDTH - showWidth) / 2;;
+				right = Constants.SCREEN_WIDTH - left;
+				top = 0;
+				bottom = Constants.SCREEN_HEIGHT;
+			}else{
+				left = 0;
+				right = Constants.SCREEN_WIDTH;
+				top = 0;
+				bottom = Constants.SCREEN_HEIGHT;
+			}
+			
 		}
 		RectF dst = new RectF(left, top, right, bottom);
+		if(listener!=null){
+			listener.setViewLayout(left, top, right, bottom);
+		}
 		canvas.drawBitmap(tempBitmap, null, dst, mBitmapPaint);
 
 		// tempBitmap.recycle();
 		// tempBitmap = null;
+	}
+
+	public interface EditPictureListener {
+		public void setViewLayout(int left, int top, int right, int bottom);
 	}
 
 	public boolean openOrCloseTuya() {
