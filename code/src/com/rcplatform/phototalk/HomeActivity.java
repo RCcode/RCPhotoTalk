@@ -306,6 +306,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private void startFriendDetailActivity(Friend friend, int type) {
 		if (type == PhotoInformationType.TYPE_DRIFT) {
 			Intent intent = new Intent(this, StrangerDetailActivity.class);
+			System.out.println("friend --->"+friend.isFriend());
 			intent.putExtra(StrangerDetailActivity.PARAM_FRIEND, friend);
 			startActivity(intent);
 			return;
