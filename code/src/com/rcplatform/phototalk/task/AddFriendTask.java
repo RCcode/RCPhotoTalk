@@ -42,6 +42,7 @@ public class AddFriendTask {
 						friend.setLetter(RCPlatformTextUtil.getLetter(friend.getNickName()));
 						mListener.onFriendAddSuccess(friend, addType);
 						PhotoTalkDatabaseFactory.getDatabase().addFriend(friend);
+						PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSenderInfo(friend);
 						LogicUtils.friendAdded(mContext, friend, addType);
 					} catch (JSONException e) {
 						e.printStackTrace();

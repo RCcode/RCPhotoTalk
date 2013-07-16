@@ -62,9 +62,9 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 	private EditText etSearch;
 
-	private List<Friend> mFriends;
+	private List<Friend> mFriends=new ArrayList<Friend>();
 
-	private List<Friend> mRecommends;
+	private List<Friend> mRecommends=new ArrayList<Friend>();
 
 	private ImageLoader mImageLoader;
 
@@ -491,6 +491,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 			@Override
 			public void run() {
+				friend.setFriend(false);
 				mFriends.remove(friend);
 				mRecommends.remove(friend);
 				PhotoTalkDatabaseFactory.getDatabase().deleteFriend(friend);
