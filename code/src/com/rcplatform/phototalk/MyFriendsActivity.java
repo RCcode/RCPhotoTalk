@@ -491,6 +491,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 			@Override
 			public void run() {
+				friend.setFriend(false);
 				mFriends.remove(friend);
 				mRecommends.remove(friend);
 				PhotoTalkDatabaseFactory.getDatabase().deleteFriend(friend);

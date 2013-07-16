@@ -142,13 +142,14 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	}
 
 	private void showFriendDetail(Friend friend) {
+		friendShowDetail=friend;
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
 
 			@Override
-			public void onSuccess(Friend friend) {
+			public void onSuccess(Friend f) {
 				dismissLoadingDialog();
-				startFriendDetailActivity(friend);
+				startFriendDetailActivity(f);
 			}
 
 			@Override
@@ -255,7 +256,6 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 		intent.setAction(action);
 		intent.putExtra(FriendDetailActivity.PARAM_FRIEND, friend);
 		startActivityForResult(intent, REQUEST_CODE_DETAIL);
-		friendShowDetail = friend;
 	}
 
 	class SearchFriendsAdapter extends BaseAdapter {
