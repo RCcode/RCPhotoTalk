@@ -218,7 +218,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 	}
 
 	private void showSexChooseDialog() {
-		int selectedSex = userDetailInfo.getGender();
+		int selectedSex = userDetailInfo.getGender()-1;
 		DialogUtil
 				.getAlertDialogBuilder(this)
 				.setTitle(
