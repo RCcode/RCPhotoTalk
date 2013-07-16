@@ -93,19 +93,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="35dp"
             android:text="结识陌生人"
             android:textColor="@color/red"
-            android:textSize="26sp"
+            android:textSize="22sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
-            android:layout_marginTop="60dp"
-            android:text="v2.0新功能"
-            android:textSize="26sp"
+            android:layout_marginTop="30dp"
+            android:text="v2.0新功能\n结识来自全世界有趣的朋友"
+            android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
