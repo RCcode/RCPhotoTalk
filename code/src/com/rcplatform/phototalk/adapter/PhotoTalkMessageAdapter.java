@@ -103,7 +103,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				return false;
 			}
 		});
-		holder.ivDrift.setImageBitmap(null);
 		String tagBase = PhotoTalkUtils.getInformationTagBase(record);
 		String buttonTag = tagBase + Button.class.getName();
 		holder.statuButton.setTag(buttonTag);
@@ -165,6 +164,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		} else {
 			holder.name.getPaint().setFakeBoldText(false);
 		}
+		if (record.getPhotoType() == PhotoInformationType.TYPE_DRIFT)
+			holder.ivDrift.setImageResource(R.drawable.drift_item_icon);
+		else
+			holder.ivDrift.setImageBitmap(null);
 		return convertView;
 	}
 
@@ -258,8 +261,6 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setVisibility(View.VISIBLE);
 			holder.statuButton.setBackgroundResource(R.drawable.send_failed);
 		}
-		if (record.getPhotoType() == PhotoInformationType.TYPE_DRIFT)
-			holder.ivDrift.setImageResource(R.drawable.drift_item_icon);
 	}
 
 	private void initPhotoInformationSenderView(Information record, ViewHolder holder) {

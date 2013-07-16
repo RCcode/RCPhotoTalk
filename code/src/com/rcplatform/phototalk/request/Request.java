@@ -26,6 +26,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
@@ -238,13 +239,15 @@ public class Request implements Serializable {
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
 									Integer.parseInt(timeLimit), hasVoice);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
-							listener.onSendSuccess(flag,informationUrl);
+							listener.onSendSuccess(flag, informationUrl);
 							RCThreadPool.getInstance().addTask(new Runnable() {
 
 								@Override
 								public void run() {
-									int count = PhotoTalkDatabaseFactory.getDatabase().getUnSendInformationCountByUrl(file.getAbsolutePath());
-									if (count == 0) {
+									int count = PhotoTalkDatabaseFactory.getDatabase().getUnSendInformationCountByUrl(file.getPath());
+									int driftCount = PhotoTalkDatabaseFactory.getDatabase().getUnSendDriftInformationCountByUrl(file.getPath());
+									if (count == 0 && driftCount == 0) {
+										LogUtil.e("delete temp files");
 										file.delete();
 									}
 								}
