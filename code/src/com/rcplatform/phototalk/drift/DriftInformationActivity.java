@@ -75,7 +75,7 @@ import com.rcplatform.phototalk.views.SnapShowListener;
 public class DriftInformationActivity extends BaseActivity implements SnapShowListener, OnClickListener {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
-
+private static final String USERDRIFT = "userDrift";
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 	public static final String PARAM_FRIEND = "friend";
 	public static final String PARAM_INFORMATION = "information";
@@ -202,6 +202,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		btnFish.setOnClickListener(this);
 		btnThrow.setOnClickListener(this);
 		pager = (ViewFlipper) findViewById(R.id.drift_view_pager);
+	//判断是否第一次进入漂流瓶
+		boolean isShow =PrefsUtils.User.hasUsedDrift(this, USERDRIFT);
+//		if(!isShow){
+//			pager.setVisibility(View.VISIBLE);
+//		}else{
+//			pager.setVisibility(View.GONE);
+//		}
 		pager.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -214,6 +221,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 			@Override
 			public boolean onSingleTapUp(MotionEvent e) {
+				if(numView ==pager.getChildCount()-1){
+					pager.setVisibility(View.GONE);
+					PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
+				}
 				return false;
 			}
 
@@ -241,6 +252,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 					if (numView < pager.getChildCount() - 1) {
 						numView++;
 						pager.setDisplayedChild(numView);
+					}else{
+						pager.setVisibility(View.GONE);
+						PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 					}
 				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.rigth_out);
@@ -259,14 +273,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			}
 		});
 		mGestureDetector.setIsLongpressEnabled(true);
-		ImageView image = (ImageView) findViewById(R.id.drift_page);
-		image.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				pager.setVisibility(View.GONE);
-			}
-		});
 	}
 
 	private TextView tvMenu;
