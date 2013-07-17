@@ -27,6 +27,7 @@ import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.CensusService;
 import com.rcplatform.phototalk.clienservice.InviteFriendUploadService;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
+import com.rcplatform.phototalk.db.impl.FriendDynamicDatabase;
 import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.drift.DriftSender;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
@@ -216,6 +217,8 @@ public class LogicUtils {
 	}
 
 	public static void logout(Context context) {
+		//清空好友动态
+		FriendDynamicDatabase.getInstance().clearAll();
 		// 本机注销gcm user key
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(context.getApplicationContext());
 
