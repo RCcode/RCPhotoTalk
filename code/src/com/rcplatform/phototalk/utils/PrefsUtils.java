@@ -451,7 +451,7 @@ public class PrefsUtils {
 		}
 
 		public static synchronized int getFishLeaveTime(Context context, String pref) {
-			return getPreference(context, pref).getInt(PFEF_KEY_FISH_LEAVE_TIME, Constants.MAX_FISH_DRIFT_TIME);
+			return getPreference(context, pref).getInt(PFEF_KEY_FISH_LEAVE_TIME,AppInfo.getMaxFishTime(context));
 		}
 
 		public static synchronized void setFishLeaveTime(Context context, String pref, int time) {

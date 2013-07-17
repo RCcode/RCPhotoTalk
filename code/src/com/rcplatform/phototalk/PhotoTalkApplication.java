@@ -7,9 +7,6 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.app.Application;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +17,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.view.WindowManager;
-import android.widget.RemoteViews;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -42,8 +38,6 @@ import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
-import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
-import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
@@ -51,8 +45,6 @@ import com.rcplatform.tigase.TigaseMessageReceiver;
 public class PhotoTalkApplication extends Application {
 
 	private WindowManager.LayoutParams wmParams;
-
-	private static final String CACHE_FILE_PATH = "phototalk/cache";
 
 	protected static final int NEW_INFORMATION = 4321;
 
@@ -69,7 +61,6 @@ public class PhotoTalkApplication extends Application {
 		super.onCreate();
 		startService(new Intent(this, PhotoTalkWebService.class));
 		startService(new Intent(this, PTBackgroundService.class));
-
 		PhotoInformationCountDownService.getInstance().setApplication(this);
 		ImageLoaderConfiguration.Builder builder = new ImageLoaderConfiguration.Builder(getApplicationContext()).threadPriority(Thread.NORM_PRIORITY - 2)
 				.defaultDisplayImageOptions(ImageOptionsFactory.getDefaultImageOptions()).tasksProcessingOrder(QueueProcessingType.LIFO)
@@ -77,19 +68,7 @@ public class PhotoTalkApplication extends Application {
 		ImageLoaderConfiguration config = builder.build();
 		ImageLoader.getInstance().init(config);
 		wmParams = new WindowManager.LayoutParams();
-		Constants.initDatabase(this);
-	}
-
-	private boolean createImageCacheDir() {
-		if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-			cacheDir = new File(Environment.getExternalStorageDirectory(), CACHE_FILE_PATH);
-			if (!cacheDir.exists()) {
-				return cacheDir.mkdirs();
-			}
-			return true;
-		}
-		return false;
-
+		Constants.init(this);
 	}
 
 	private PTBackgroundService mService;
@@ -190,10 +169,8 @@ public class PhotoTalkApplication extends Application {
 
 	public String getCameraPath() {
 		String imagePath = "";
-		File sdDir = null;
 		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
 		if (sdCardExist) {
-			sdDir = Environment.getExternalStorageDirectory();
 			// 获取根目录
 			imagePath = "/sdcard/DCIM/Camera/photoTalk_" + System.currentTimeMillis() + ".jpg";
 		} else {
@@ -273,6 +250,7 @@ public class PhotoTalkApplication extends Application {
 
 		@Override
 		public void onServiceConnected(ComponentName name, IBinder service) {
+			LogUtil.e("tigase service bind ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			LocalBinder binder = (LocalBinder) service;
 			binder.getService().setOnMessageReciver(new TigaseMessageReceiver() {
 
@@ -294,7 +272,7 @@ public class PhotoTalkApplication extends Application {
 			public void run() {
 				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
 				List<Information> newInformations = result.get(PhotoTalkDatabase.NEW_INFORMATION);
-				if (newInformations != null && newInformations.size() > 0 ) {
+				if (newInformations != null && newInformations.size() > 0) {
 					Message msg = newInformationHandler.obtainMessage();
 					msg.what = NEW_INFORMATION;
 					msg.obj = newInformations.size();

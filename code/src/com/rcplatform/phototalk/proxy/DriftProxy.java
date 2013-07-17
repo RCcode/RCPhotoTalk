@@ -3,16 +3,14 @@ package com.rcplatform.phototalk.proxy;
 import java.io.File;
 import java.util.List;
 
-import org.json.JSONArray;
-
 import android.content.Context;
 
 import com.google.gson.Gson;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.drift.DriftInformation;
-import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
@@ -33,21 +31,24 @@ public class DriftProxy {
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, information.getSender().getRcId());
 		request.excuteAsync();
 	}
+
 	public static void AddFriend(Context context, RCPlatformResponseHandler handler, DriftInformation information) {
 		Request request = new Request(context, PhotoTalkApiUrl.SKY_POOL_ADD_FRIEND, handler);
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_COUNTRY, userInfo.getCountry());
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_GENDER, userInfo.getGender() + "");
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICID, information.getPicId() + "");
-//		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICURL, information.getUrl());
+		// request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICURL,
+		// information.getUrl());
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_COUNTRY, information.getSender().getCountry());
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_GENDER, information.getSender().getGender() + "");
-//		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, information.getSender().getRcId());
+		// request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID,
+		// information.getSender().getRcId());
 		request.excuteAsync();
 	}
 
 	public static void getMaxFishTime(Context context, RCPlatformResponseHandler handler) {
-		Request request = new Request(context, "", handler);
+		Request request = new Request(context, PhotoTalkApiUrl.MAX_FISH_TIMES_URL, handler);
 		request.excuteAsync();
 	}
 
@@ -97,5 +98,25 @@ public class DriftProxy {
 		else
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_VOICE, PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_VOICE);
 		request.executePostNameValuePairAsync();
+	}
+
+	public static void serviceLog(Context context, String picUrl, int picId, boolean hasGraf, boolean hasVoice, UserInfo currentUser, Friend receiver) {
+		Request request = new Request(context, PhotoTalkApiUrl.DRIFT_BACK_URL, null);
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_COUNTRY, currentUser.getCountry());
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_GENDER, currentUser.getGender() + "");
+		if (hasGraf)
+			request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_HAS_GRAF, PhotoTalkParams.DriftBackLog.PARAM_VALUE_HAS_GRAF);
+		else
+			request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_HAS_GRAF, PhotoTalkParams.DriftBackLog.PARAM_VALUE_NO_GRAF);
+		if (hasVoice)
+			request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_HAS_VOICE, PhotoTalkParams.DriftBackLog.PARAM_VALUE_HAS_VOICE);
+		else
+			request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_HAS_VOICE, PhotoTalkParams.DriftBackLog.PARAM_VALUE_NO_VOICE);
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_PIC_ID, picId + "");
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_PIC_URL, picUrl);
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_RECEIVER_COUNTRY, receiver.getCountry());
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_RECEIVER_GENDER, receiver.getGender() + "");
+		request.putParam(PhotoTalkParams.DriftBackLog.PARAM_KEY_RECEIVER_RCID, receiver.getRcId());
+		request.excuteAsync();
 	}
 }

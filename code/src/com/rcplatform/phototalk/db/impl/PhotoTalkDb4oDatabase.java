@@ -800,7 +800,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 	}
 
 	@Override
-	public void updateDriftInformationSenderInfo( final Friend sender) {
+	public void updateDriftInformationSenderInfo(final Friend sender) {
 		ObjectSet<DriftInformation> queryResult = getData(new Predicate<DriftInformation>() {
 			private static final long serialVersionUID = 1L;
 
@@ -825,6 +825,21 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			}
 			db.commit();
 		}
+	}
+
+	@Override
+	public int getUnSendDriftInformationCountByUrl(final String path) {
+		ObjectSet<DriftInformation> result = db.query(new Predicate<DriftInformation>() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return path.equals(arg0.getUrl())
+						&& (arg0.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING || arg0.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+			}
+		});
+		return result.size();
 	}
 
 }
