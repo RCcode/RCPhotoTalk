@@ -73,7 +73,7 @@ public class StrangerDetailActivity extends BaseActivity {
 	}
 
 	protected void showDialog() {
-		AlertDialog dialog = new AlertDialog.Builder(this).setMessage("是否举报").setPositiveButton("举报", new DialogInterface.OnClickListener() {
+		AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.change_report_message)).setPositiveButton("举报", new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -84,18 +84,19 @@ public class StrangerDetailActivity extends BaseActivity {
 						@Override
 						public void onSuccess(int statusCode, String content) {
 							// TODO Auto-generated method stub
-							Toast.makeText(StrangerDetailActivity.this, "举报成功", Toast.LENGTH_LONG).show();
+							Toast.makeText(StrangerDetailActivity.this, getString(R.string.report_success), Toast.LENGTH_LONG).show();
 						}
 
 						@Override
 						public void onFailure(int errorCode, String content) {
 							// TODO Auto-generated method stub
+							Toast.makeText(StrangerDetailActivity.this, getString(R.string.net_error), Toast.LENGTH_LONG).show();
 							showErrorConfirmDialog(content);
 						}
 					}, information);
 				}
 			}
-		}).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+		}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

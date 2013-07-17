@@ -43,7 +43,7 @@ public class SkyPoolAddFriendTask {
 						if (mListener != null) {
 							try {
 								JSONObject jsonObject = new JSONObject(content);
-//								int addType = jsonObject.getInt("added");
+//								int addType = jsonObject.getInt("isFriend");
 								Friend friend = JSONConver.jsonToObject(
 										jsonObject.toString(),
 										Friend.class);

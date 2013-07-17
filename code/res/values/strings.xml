@@ -387,4 +387,7 @@
     <string name="show_receive_drift">显示收到的消息</string>
     <string name="show_send_drift">显示发送的消息</string>
     <string name="drift_show_time">已被%1$d人查看</string>
+    <!-- 漂流瓶对话框 -->
+    <string name="change_report_message">是否举报</string>
+    <string name="report_success">举报成功</string>
 </resources>
