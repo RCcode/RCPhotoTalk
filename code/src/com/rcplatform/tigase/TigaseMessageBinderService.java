@@ -12,6 +12,7 @@ import org.jivesoftware.smack.packet.Message;
 
 import com.google.android.gcm.RCGcmUtil;
 import com.rcplatform.phototalk.HomeActivity;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Constants;
 
 import android.app.Service;
@@ -46,6 +47,7 @@ public class TigaseMessageBinderService extends Service {
 
 				@Override
 				public void processMessage(Chat chat, Message message) {
+					LogUtil.e("process message receive~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 
 					String str = message.getBody();
 					int typeEnd = str.indexOf(MESSAGE_SPLIT);
