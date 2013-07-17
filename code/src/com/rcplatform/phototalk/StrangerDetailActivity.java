@@ -1,21 +1,15 @@
 package com.rcplatform.phototalk;
 
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -57,7 +51,6 @@ public class StrangerDetailActivity extends BaseActivity {
 	private Button reportBtn;
 	private PopupWindow mRemarkEditWindow;
 	private TextView tv_rcid;
-	private String mLastRemark;
 	private LinearLayout linearApps;
 	private boolean isFromStangerPage;
 	private DriftInformation information;
@@ -77,20 +70,17 @@ public class StrangerDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				if (information != null) {
 					DriftProxy.reportPic(StrangerDetailActivity.this, new RCPlatformResponseHandler() {
 
 						@Override
 						public void onSuccess(int statusCode, String content) {
-							// TODO Auto-generated method stub
 							Toast.makeText(StrangerDetailActivity.this, "举报成功", Toast.LENGTH_LONG).show();
 						}
 
 						@Override
 						public void onFailure(int errorCode, String content) {
-							// TODO Auto-generated method stub
-							showErrorConfirmDialog(content);
+							showConfirmDialog(content);
 						}
 					}, information);
 				}
@@ -99,7 +89,6 @@ public class StrangerDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				// TODO Auto-generated method stub
 				dialog.dismiss();
 			}
 		}).create();
@@ -116,7 +105,6 @@ public class StrangerDetailActivity extends BaseActivity {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
 		isFromStangerPage = getIntent().getBooleanExtra(PARAM_FROM_PAGE, false);
 		information = (DriftInformation) getIntent().getSerializableExtra(PARAM_INFORMATION);
-		mLastRemark = mFriend.getLocalName();
 		mImageLoader = ImageLoader.getInstance();
 		// mAction = getIntent().getAction();
 		userInfo = getCurrentUser();
@@ -131,50 +119,47 @@ public class StrangerDetailActivity extends BaseActivity {
 			@Override
 			public void onClick(View v) {
 				if (!isFromStangerPage) {
-					showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+					showLoadingDialog(false);
 					new AddFriendTask(StrangerDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 						@Override
 						public void onFriendAddSuccess(Friend friend, int addType) {
 							friendAddSuccess();
-							dismissLoadingDialog();
+							dissmissLoadingDialog();
 						}
 
 						@Override
 						public void onFriendAddFail(int statusCode, String content) {
-							showErrorConfirmDialog(content);
-							dismissLoadingDialog();
+							showConfirmDialog(content);
+							dissmissLoadingDialog();
 						}
 
 						@Override
 						public void onAlreadyAdded() {
 							friendAddSuccess();
-							dismissLoadingDialog();
+							dissmissLoadingDialog();
 						}
 					}, mFriend).execute();
 				} else {
 					if (information != null) {
-						showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+						showLoadingDialog(false);
 						new SkyPoolAddFriendTask(StrangerDetailActivity.this, userInfo, new SkyPoolAddFriendTask.SkyPoolAddFriendListener() {
 
 							@Override
 							public void onFriendAddSuccess(Friend friend, int addType) {
-								// TODO Auto-generated method stub
 								friendAddSuccess();
-								dismissLoadingDialog();
+								dissmissLoadingDialog();
 							}
 
 							@Override
 							public void onFriendAddFail(int statusCode, String content) {
-								// TODO Auto-generated method stub
-								showErrorConfirmDialog(content);
-								dismissLoadingDialog();
+								showConfirmDialog(content);
+								dissmissLoadingDialog();
 							}
 
 							@Override
 							public void onAlreadyAdded() {
-								// TODO Auto-generated method stub
 								friendAddSuccess();
-								dismissLoadingDialog();
+								dissmissLoadingDialog();
 							}
 						}, information, mFriend).execute();
 					}
@@ -201,12 +186,6 @@ public class StrangerDetailActivity extends BaseActivity {
 		strangePerformBtn.setText(R.string.friend_detail_send_photo_hint_text);
 	}
 
-	private void startTakePhotoActivity() {
-		Intent intent = new Intent(this, TakePhotoActivity.class);
-		intent.putExtra(RESULT_PARAM_FRIEND, mFriend);
-		startActivity(intent);
-	}
-
 	private void initView() {
 		addFriendBtn = (Button) findViewById(R.id.stranger_add_friend_btn);
 		reportBtn = (Button) findViewById(R.id.report_btn);
@@ -219,7 +198,6 @@ public class StrangerDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				showDialog();
 			}
 		});
@@ -337,32 +315,8 @@ public class StrangerDetailActivity extends BaseActivity {
 	// return false;
 	// }
 
-	private void showRemaikWindow(View v) {
-		if (mRemarkEditWindow == null) {
-			View editView = getLayoutInflater().inflate(R.layout.my_friend_details_layout_edit, null, false);
-			Button btnConfirm = (Button) editView.findViewById(R.id.btn_remark_confirm);
-			final EditText etRemark = (EditText) editView.findViewById(R.id.et_remark);
-			etRemark.setText(mFriend.getLocalName());
-			btnConfirm.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					String remark = etRemark.getText().toString();
-					updateRemark(remark);
-				}
-			});
-			mRemarkEditWindow = new PopupWindow(editView, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
-
-			mRemarkEditWindow.setFocusable(true);
-			mRemarkEditWindow.setOutsideTouchable(true);
-			mRemarkEditWindow.setBackgroundDrawable(new BitmapDrawable());
-
-		}
-		mRemarkEditWindow.showAtLocation(v, Gravity.BOTTOM, 0, 0);
-	}
-
 	public void updateRemark(final String remark) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		FriendsProxy.updateFriendRemark(this, new RCPlatformResponseHandler() {
 
 			@Override
@@ -370,13 +324,13 @@ public class StrangerDetailActivity extends BaseActivity {
 				mFriend.setLocalName(remark);
 				setFriendName();
 				mRemarkEditWindow.dismiss();
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 			}
 
 			@Override
 			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				dissmissLoadingDialog();
+				showConfirmDialog(content);
 			}
 		}, mFriend.getRcId(), remark);
 	}
