@@ -36,6 +36,7 @@ import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.bean.TigaseMassage;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.impl.TigaseDb4oDatabase;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
@@ -80,7 +81,6 @@ public class TigaseManager {
 
 	private final String RESET_PASSWORD_URL = "http://rc.rcplatformhk.net/rcboss/user/syncTigasePwd.do";
 
-
 	private Timer initConnectTimer = null;
 
 	private Timer resetPasswordTimer = null;
@@ -103,7 +103,6 @@ public class TigaseManager {
 			}
 			resetPasswordCount++;
 
-
 			UserInfo userInfo = ((PhotoTalkApplication) ctx.getApplicationContext()).getCurrentUser();
 			JSONObject json = new JSONObject();
 			try {
@@ -111,8 +110,7 @@ public class TigaseManager {
 				// TODO 设置真是token
 				json.put("token", userInfo.getToken());
 				json.put("appId", Constants.APP_ID);
-			}
-			catch (JSONException e1) {
+			} catch (JSONException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
@@ -144,17 +142,14 @@ public class TigaseManager {
 				}
 				reader.close();
 				content = builder.toString();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-			}
-			finally {
+			} finally {
 				try {
 					output.close();
 					is.close();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 				if (conn != null) {
 					conn.disconnect();
@@ -179,8 +174,7 @@ public class TigaseManager {
 				} else {
 
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 
 				e.printStackTrace();
 
@@ -229,21 +223,24 @@ public class TigaseManager {
 			initConnectTimer.cancel();
 			isConnecting = false;
 			// login
-
+			LogUtil.e("connection created success~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			if (null != user && null != password) {
 				try {
+
 					if (!connection.isAuthenticated()) {
+						LogUtil.e("connection created login~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 						connection.login(user + "@" + node.getDomain().trim(), password);
 					}
-				}
-				catch (XMPPException e) {
+				} catch (XMPPException e) {
 					// TODO Auto-generated catch block
+					LogUtil.e("login error~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+					e.printStackTrace();
 					String message = e.getMessage().trim();
 					if (message.equals("SASL authentication failed using mechanism PLAIN")) {
 						resetPasswordTimer = new Timer();
 						ResetTigasePasswordTask task = new ResetTigasePasswordTask();
 						resetPasswordTimer.schedule(task, 0);
-					}else{
+					} else {
 						retryConnect();
 					}
 				}
@@ -303,8 +300,10 @@ public class TigaseManager {
 
 			connectListenter = new TigaseListenter();
 			connection.addConnectionListener(connectListenter);
+			LogUtil.e("tigase connect success ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		}
 		catch (Exception xe) {
+			LogUtil.e("tigase connect fail ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			isConnecting = false;
 			xe.printStackTrace();
 			if (null != connection) {
@@ -322,12 +321,12 @@ public class TigaseManager {
 		initConnectTimer = new Timer();
 		ConnectTimerTask task = new ConnectTimerTask();
 		initConnectTimer.schedule(task, 0);
-		
+
 	}
-	
-	private void retryConnect(){
+
+	private void retryConnect() {
 		retryConnectCount++;
-		if(null!= initConnectTimer){
+		if (null != initConnectTimer) {
 			initConnectTimer.cancel();
 			initConnectTimer = null;
 		}
@@ -360,8 +359,7 @@ public class TigaseManager {
 				});
 				thread.start();
 
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 
 			}
 		}
@@ -401,8 +399,7 @@ public class TigaseManager {
 			Chat newchat = chatManager.createChat(toUser, null);
 			newchat.sendMessage(msg);
 			flag = true;
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			flag = false;
 		}
