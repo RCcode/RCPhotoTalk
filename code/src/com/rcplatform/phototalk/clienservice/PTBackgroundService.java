@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -67,7 +68,7 @@ import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class PTBackgroundService extends Service {
-
+	private PTServiceBinder mBinder = new PTServiceBinder();
 	private static final int MSG_WHAT_NEWINFOS = 20000;
 	private static final int MSG_WHAT_NEW_RECOMMENDS = 20001;
 
@@ -128,6 +129,8 @@ public class PTBackgroundService extends Service {
 
 		if (isUserNeedToBindPhone(mCurrentUser)) {
 			// 如果号码没有绑定，而且绑定短信发送成功过
+			LogUtil.e(getApplicationContext() + "");
+			LogUtil.e(mCurrentUser + "");
 			boolean willTryToBind = PrefsUtils.User.MobilePhoneBind.willTryToBindPhone(getApplicationContext(), mCurrentUser.getRcId());
 			long lastBindTime = PrefsUtils.User.MobilePhoneBind.getLastBindPhoneTryTime(getApplicationContext(), mCurrentUser.getRcId());
 			if (lastBindTime == 0) {
@@ -199,9 +202,15 @@ public class PTBackgroundService extends Service {
 		LogUtil.e("destroy service ~~~~~~~~~~~~~~~~phototalk background service");
 	}
 
+	public class PTServiceBinder extends Binder {
+		public PTBackgroundService getService() {
+			return PTBackgroundService.this;
+		}
+	}
+
 	@Override
 	public IBinder onBind(Intent intent) {
-		return null;
+		return mBinder;
 	}
 
 	private void bindSuidByPhone(String number, UserInfo userInfo) {

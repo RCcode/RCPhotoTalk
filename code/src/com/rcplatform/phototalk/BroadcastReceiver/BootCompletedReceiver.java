@@ -9,7 +9,6 @@ import android.content.Intent;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.clienservice.PTBackgroundService;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 

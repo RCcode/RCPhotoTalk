@@ -747,12 +747,15 @@ public class EditPictureActivity extends BaseActivity {
 		File file = new File(imagePath);
 		List<Friend> friends = new ArrayList<Friend>();
 		friends.add(friend);
-		int photoType = getIntent().getIntExtra("photoType", 0);
-		if (photoType == PhotoInformationType.TYPE_DRIFT) {
+		if (isNeedToLogOnService()) {
 			DriftProxy.serviceLog(this, getIntent().getStringExtra(PARAM_KEY_PIC_URL), getIntent().getIntExtra(PARAM_KEY_PIC_ID, 0), mEditePicView.hasDrawed(),
 					voicePath != null, getCurrentUser(), friend);
 		}
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), photoType);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), getIntent().getIntExtra("photoType", 0));
 	}
 
+	private boolean isNeedToLogOnService() {
+		return getIntent().getIntExtra("photoType", 0) == PhotoInformationType.TYPE_DRIFT && getIntent().hasExtra(PARAM_KEY_PIC_ID)
+				&& getIntent().hasExtra(PARAM_KEY_PIC_URL);
+	}
 }
