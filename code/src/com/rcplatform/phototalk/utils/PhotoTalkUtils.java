@@ -76,13 +76,6 @@ public class PhotoTalkUtils {
 		return friend;
 	}
 
-	public static File getUserHead(UserInfo userInfo) {
-		return new File(Constants.USER_IMAGE_DIR, userInfo.getRcId() + "/" + "head");
-	}
-
-	public static File getUserBackground(UserInfo userInfo) {
-		return new File(Constants.USER_IMAGE_DIR, userInfo.getRcId() + "/" + "background");
-	}
 
 	public static void buildAppList(Context context, LinearLayout linearApps, List<AppInfo> apps, ImageLoader loader) {
 		for (AppInfo info : apps) {

@@ -51,8 +51,6 @@ public class Constants {
 
 	// -----------------------------------------------------------
 
-	public static File USER_IMAGE_DIR;
-
 	public static final int INFORMATION_PAGE_SIZE = 20;
 
 	public static final int MAX_SELF_BINDPHONE_TIME = 5;
@@ -64,8 +62,6 @@ public class Constants {
 	public static final String OS_VERSION = android.os.Build.MODEL + "," + android.os.Build.VERSION.SDK_INT + "," + android.os.Build.VERSION.RELEASE;
 
 	private static final String DB_DIR = "db";
-
-	private static final String USER_DIR_NAME = "user";
 
 	public static final String INVITE_URL = "http://rctalk.me";
 
@@ -82,21 +78,40 @@ public class Constants {
 	public static final String INVITE_JOIN_IMAGE_URL = "http://img1.ph.126.net/HvcVzHANbBP4eKGcGKd4TQ==/3789216136578905707.png";
 
 	public static final String GOOGLE_PLUS_INVITE_IMAGE_URL = "http://img0.ph.126.net/2E44P8D2t01fZnotAzx5sw==/1652258113391767956.jpg";
-	// public static final String INVITE_JOIN_IMAGE_URL =
-	// "http://img.hb.aicdn.com/48bb7e63918158fb7524c28adcaf8bf4833629854a35b-v0Gv9F_fw580";
 
 	public static final String OFFICIAL_RCID = "1000000";
 	public static final int MAX_FISH_DRIFT_TIME = 50;
 
-	public static void initUI(Activity context) {
+	public static void init(Context context) {
+		initBaseParamsValue(context);
+		initTempFileDir(context);
+		initDatabase(context);
+	}
+
+	public static void initUIData(Activity context) {
+		initAppUsers(context);
+		initScreenWidthHeight(context);
+		initCountryDatabase(context);
+	}
+
+	private static void initAppUsers(Context context) {
+		userApps.clear();
+		userApps.putAll(Utils.getRCPlatformAppUsers(context));
+	}
+
+	private static void initTempFileDir(Context context) {
+		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
+	}
+
+	private static void initScreenWidthHeight(Activity context) {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
 		SCREEN_HEIGHT = dm.heightPixels;
 		SCREEN_WIDTH = dm.widthPixels;
 		HEAD_IMAGE_WIDTH = SCREEN_WIDTH / 4;
-		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
-		userApps.clear();
-		userApps.putAll(Utils.getRCPlatformAppUsers(context));
+	}
+
+	private static void initBaseParamsValue(Context context) {
 		COUNTRY = Locale.getDefault().getCountry();
 		String language = Locale.getDefault().getLanguage();
 		if (language.equals(Locale.CHINESE.toString())) {
@@ -107,10 +122,9 @@ public class Constants {
 		}
 		LANGUAGE = language;
 		DEVICE_ID = ((WifiManager) context.getSystemService(Context.WIFI_SERVICE)).getConnectionInfo().getMacAddress();
-		USER_IMAGE_DIR = context.getDir(USER_DIR_NAME, Context.MODE_PRIVATE);
 	}
 
-	public static void initDatabase(Context context) {
+	private static void initDatabase(Context context) {
 		if (Database.DB_DIR == null) {
 			Database.DB_DIR = context.getDir(DB_DIR, Context.MODE_PRIVATE);
 			Database.BASE_DATABASE_PATH = Database.DB_DIR.getAbsolutePath();
@@ -121,7 +135,7 @@ public class Constants {
 		}
 	}
 
-	public static void initCountryDatabase(Context context) {
+	private static void initCountryDatabase(Context context) {
 		File temp = new File(DatabaseUtils.getCountryCodeDatabasePath());
 		if (!temp.exists()) {
 			try {
@@ -351,19 +365,18 @@ public class Constants {
 	public static final String KEY_TIGASE_ID = "tigaseid";
 
 	public static final String KEY_TIGASE_PASSWORD = "tigasepassword";
-	
-	public static final String KEY_COUNTRY="country";
+
+	public static final String KEY_COUNTRY = "country";
 
 	public static final String KEY_APP_ID = "appId";
-	//国家码 小写 后加.png为asset目录下对应的国家国旗
-	public static final String[] COUNTRY_CODE = new String[] { "CN", "US", "JP", "RU", "KR", "IT", "MX", "DE", "GB", "ES", "BR", "FR", "PL", "UA", "AR",
-	        "CA", "IL", "CZ", "PT", "SE", "NL", "DK", "IN", "IR", "PH", "ID", "MY", "AU", "CF", "CL", "TD", "VN", "NZ", "GR", "TV", "TT", "TO", "LK",
-	        "KN", "ST", "SA", "CY", "SV", "CH", "NO", "NG", "ZA", "RO", "LR", "TC", "GN", "GF", "CU", "CR", "CO", "CD", "FK", "FI", "MC", "VA", "TP",
-	        "GQ", "KP", "BT", "BA", "BH", "AG", "AE", "EG", "IE", "EE", "AT", "BS", "PK", "PS", "BG", "BJ", "BE", "IS", "BO", "BW", "TL", "TG", "GD",
-	        "KI", "KG", "GW", "GH", "GA", "ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM",
-	        "MD", "MA", "MZ", "NE", "PW", "WS", "SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM",
-	        "YE", "IQ", "JO", "DZ", "AF", "ET", "AD", "AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH",
-	        "QA", "KM", "CI", "HR", "KE", "LV", "LS", "LU", "RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE",
-	        "UY", "UZ", "TJ", "EH", "AM", "ZM" };
+	// 国家码 小写 后加.png为asset目录下对应的国家国旗
+	public static final String[] COUNTRY_CODE = new String[] { "CN", "US", "JP", "RU", "KR", "IT", "MX", "DE", "GB", "ES", "BR", "FR", "PL", "UA", "AR", "CA",
+			"IL", "CZ", "PT", "SE", "NL", "DK", "IN", "IR", "PH", "ID", "MY", "AU", "CF", "CL", "TD", "VN", "NZ", "GR", "TV", "TT", "TO", "LK", "KN", "ST",
+			"SA", "CY", "SV", "CH", "NO", "NG", "ZA", "RO", "LR", "TC", "GN", "GF", "CU", "CR", "CO", "CD", "FK", "FI", "MC", "VA", "TP", "GQ", "KP", "BT",
+			"BA", "BH", "AG", "AE", "EG", "IE", "EE", "AT", "BS", "PK", "PS", "BG", "BJ", "BE", "IS", "BO", "BW", "TL", "TG", "GD", "KI", "KG", "GW", "GH",
+			"GA", "ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM", "MD", "MA", "MZ", "NE", "PW",
+			"WS", "SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM", "YE", "IQ", "JO", "DZ", "AF", "ET",
+			"AD", "AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH", "QA", "KM", "CI", "HR", "KE", "LV", "LS",
+			"LU", "RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM" };
 
 }

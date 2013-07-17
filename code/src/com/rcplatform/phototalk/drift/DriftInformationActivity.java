@@ -572,7 +572,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		String newTag = tagBase + ImageView.class.getName();
 		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
-			timerLimitView.setVisibility(View.GONE);
+			timerLimitView.setText(null);
+			timerLimitView.setBackgroundResource(R.drawable.fish_icon);
 		}
 		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {

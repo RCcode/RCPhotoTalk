@@ -221,11 +221,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		startService(new Intent(this, PTBackgroundService.class));
-		startService(new Intent(this, PhotoTalkWebService.class));
-		Constants.initUI(this);
-		Constants.initDatabase(this);
-		Constants.initCountryDatabase(this);
+		Constants.initUIData(this);
 		if (needRelogin) {
 			UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
 			getPhotoTalkApplication().setCurrentUser(userInfo);

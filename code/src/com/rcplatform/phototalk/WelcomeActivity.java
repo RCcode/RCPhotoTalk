@@ -68,7 +68,7 @@ public class WelcomeActivity extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		printHashKey();
+		// printHashKey();
 		setContentView(R.layout.loading);
 		startBackgroundService();
 		cancelRelogin();
@@ -77,8 +77,7 @@ public class WelcomeActivity extends BaseActivity {
 
 			public void run() {
 				LogUtil.e("welcome thread start");
-				Constants.initUI(WelcomeActivity.this);
-				Constants.initCountryDatabase(WelcomeActivity.this);
+				Constants.initUIData(WelcomeActivity.this);
 				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS, WAITING_TIME);
 			};
 		};
