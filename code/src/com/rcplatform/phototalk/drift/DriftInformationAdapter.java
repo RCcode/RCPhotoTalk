@@ -11,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -85,7 +86,9 @@ public class DriftInformationAdapter extends BaseAdapter {
 			holder.bar = (ProgressBar) convertView.findViewById(R.id.progress_home_record);
 			holder.statuButton = (RecordTimerLimitView) convertView.findViewById(R.id.btn_record_item_statu_button);
 			holder.ivCountry = (ImageView) convertView.findViewById(R.id.iv_country);
-			holder.ivCountry.setVisibility(View.VISIBLE);
+			holder.ivCountry.setVisibility(View.GONE);
+			holder.ivCountryFlag = (ImageView) convertView.findViewById(R.id.iv_country_flag);
+			holder.ivCountryFlag.setVisibility(View.VISIBLE);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -110,6 +113,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 		holder.statu.setTag(statuTag);
 		holder.bar.setTag(tagBase + ProgressBar.class.getName());
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
+		holder.ivCountryFlag.setTag(tagBase+ImageView.class.getName()+"country");
 		if (record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED && !isSender(record)) {
 			if (record.hasVoice()) {
 				holder.item_new.setImageResource(R.drawable.new_item_voice);
@@ -133,21 +137,27 @@ public class DriftInformationAdapter extends BaseAdapter {
 			holder.name.getPaint().setFakeBoldText(false);
 		}
 		holder.name.setText(record.getSender().getNick());
-		if (record.getSender().getCountry() != null)
-			holder.ivCountry.setImageBitmap(Utils.getAssetCountryFlag(context, record.getSender().getCountry()));
-		else
-			holder.ivCountry.setImageBitmap(null);
+		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
+			holder.ivCountryFlag.setVisibility(View.GONE);
+		} else {
+			holder.ivCountryFlag.setVisibility(View.VISIBLE);
+			if (record.getSender().getCountry() != null)
+				holder.ivCountryFlag.setImageBitmap(Utils.getAssetCountryFlag(context, record.getSender().getCountry()));
+			else
+				holder.ivCountryFlag.setImageBitmap(null);
+		}
 
 		return convertView;
 	}
 
 	private void initPhotoInformationReceiverView(final DriftInformation record, String statuTag, String buttonTag, ViewHolder holder) {
 		holder.statuButton.setText(null);
+		holder.statuButton.setBackgroundDrawable(null);
 		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
 			holder.statuButton.stopDriftTask();
-			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
+			// holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			RCPlatformImageLoader.loadPictureForDriftList(context, record);
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
@@ -162,7 +172,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 				RCPlatformImageLoader.loadPictureForDriftList(context, record);
 			}
 			holder.statuButton.stopDriftTask();
-			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
+			// holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			// 状态为4.表示正在查看
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 			holder.bar.setVisibility(View.GONE);
@@ -174,13 +184,13 @@ public class DriftInformationAdapter extends BaseAdapter {
 			holder.bar.setVisibility(View.GONE);
 			holder.statuButton.stopDriftTask();
 			holder.statu.setText(getTimeText(R.string.receive_looked, record.getReceiveTime()));
-			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
+			// holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			// 状态为5 表示正在下载
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
 			holder.statuButton.stopDriftTask();
-			holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
+			// holder.statuButton.setBackgroundResource(R.drawable.fish_icon);
 			// 7 下载失败
 		} else if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
 			holder.bar.setVisibility(View.GONE);
@@ -192,7 +202,8 @@ public class DriftInformationAdapter extends BaseAdapter {
 
 	private void initPhotoInformationSenderView(DriftInformation record, ViewHolder holder) {
 		// 如果当前用户是发送者
-		holder.statuButton.setBackgroundResource(R.drawable.throw_icon);
+//		holder.statuButton.setBackgroundResource(R.drawable.throw_icon);
+		holder.statuButton.setBackgroundDrawable(null);
 		holder.statuButton.setText(null);
 		holder.statuButton.stopDriftTask();
 		// 状态为1 表示已经发送到服务器
@@ -270,6 +281,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 		RelativeLayout timerLayout;
 		ProgressBar bar;
 		ImageView ivCountry;
+		ImageView ivCountryFlag;
 	}
 
 	public List<DriftInformation> getData() {

@@ -87,4 +87,13 @@
         android:textColor="#ff0000"
         android:textSize="16sp" />
 
+    <ImageView
+        android:id="@+id/iv_country_flag"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="11dp"
+        android:visibility="gone" />
+
 </RelativeLayout>

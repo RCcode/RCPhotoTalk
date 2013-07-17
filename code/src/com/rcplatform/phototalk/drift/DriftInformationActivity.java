@@ -43,6 +43,7 @@ import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.DriftInformationCountDownService;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
@@ -58,6 +59,7 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.RCThreadPool;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
@@ -411,6 +413,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 					mShowDialog = builder.create();
 				}
 				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getPicId() + Button.class.getName());
+				ImageView ivCountry = (ImageView) mInformationList.findViewWithTag(infoRecord.getPicId() + ImageView.class.getName() + "country");
+				ivCountry.setVisibility(View.GONE);
 				limitView.setVisibility(View.VISIBLE);
 				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
@@ -534,7 +538,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	@Override
 	protected void onDestroy() {
-		ImageLoader.getInstance().stop();
+		DriftInformationCountDownService.getInstance().finishAllShowingMessage();
 		DriftInformationPageController.getInstance().destroy();
 		if (mShowDialog != null && mShowDialog.isShowing())
 			mShowDialog.dismiss();
@@ -570,10 +574,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		String buttonTag = tagBase + Button.class.getName();
 		String statuTag = tagBase + TextView.class.getName();
 		String newTag = tagBase + ImageView.class.getName();
+		String countryTag = tagBase + ImageView.class.getName() + "country";
 		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
 			timerLimitView.setText(null);
-			timerLimitView.setBackgroundResource(R.drawable.fish_icon);
+			timerLimitView.setBackgroundDrawable(null);
 		}
 		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {
@@ -582,6 +587,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		View newView = mInformationList.findViewWithTag(newTag);
 		if (newView != null)
 			newView.setVisibility(View.GONE);
+		ImageView ivCountry = (ImageView) mInformationList.findViewWithTag(countryTag);
+		if (ivCountry != null) {
+			ivCountry.setImageBitmap(Utils.getAssetCountryFlag(this, information.getSender().getCountry()));
+			ivCountry.setVisibility(View.VISIBLE);
+		}
 	}
 
 	public void clearInformation() {

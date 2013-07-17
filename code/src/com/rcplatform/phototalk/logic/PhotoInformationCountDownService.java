@@ -58,6 +58,7 @@ public class PhotoInformationCountDownService {
 	private Handler mCountDownHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			Information info = (Information) msg.obj;
+			mShowingInformations.remove(PhotoTalkUtils.getInformationTagBase(info));
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
 			if (!info.getReceiver().getRcId().equals(info.getSender().getRcId())) {
 				MessageSender.getInstance().sendInformation(mApplication, info.getSender().getTigaseId(), info.getSender().getRcId(), info);
