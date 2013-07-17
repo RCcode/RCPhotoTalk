@@ -255,8 +255,10 @@ public class StrangerDetailActivity extends BaseActivity {
 		intent.putExtra("friend", mFriend);
 		if (!mFriend.isFriend()) {
 			intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
+			if(information!=null){
 			intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_ID, information.getPicId());
 			intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_URL, information.getUrl());
+			}
 		} else {
 			intent.putExtra("photoType", PhotoInformationType.TYPE_NORMAL);
 		}
