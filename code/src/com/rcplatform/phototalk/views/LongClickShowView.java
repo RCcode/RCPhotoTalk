@@ -26,7 +26,6 @@ import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
-import com.rcplatform.phototalk.views.PlayVidoeView.OnStartPlayListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
 
 public class LongClickShowView extends Dialog {
@@ -62,8 +61,6 @@ public class LongClickShowView extends Dialog {
 
 		private static ImageView mImageView;
 
-		private static PlayVidoeView mPlayVidoeView;
-
 		private static MediaPlayer mAudioPlayer;
 
 		private int layoutResId;
@@ -92,7 +89,6 @@ public class LongClickShowView extends Dialog {
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);
 				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
-				mPlayVidoeView = (PlayVidoeView) dialog.contentView.findViewById(R.id.pv_rts_video);
 				dialog.setContentView(dialog.contentView);
 			} else {
 //				dialog.setContentView(dialog.contentView);
@@ -154,7 +150,6 @@ public class LongClickShowView extends Dialog {
 			}
 		}
 		glTimer.setVisibility(View.VISIBLE);
-		Builder.mPlayVidoeView.setVisibility(View.GONE);
 		Builder.mImageView.setVisibility(View.VISIBLE);
 	}
 	private void showZipContent(File[] fileList, DriftInformation info) throws Exception {
@@ -166,7 +161,6 @@ public class LongClickShowView extends Dialog {
 			}
 		}
 		glTimer.setVisibility(View.VISIBLE);
-		Builder.mPlayVidoeView.setVisibility(View.GONE);
 		Builder.mImageView.setVisibility(View.VISIBLE);
 	}
 
@@ -224,7 +218,6 @@ public class LongClickShowView extends Dialog {
 		try {
 			currentBitmap = BitmapFactory.decodeFile(file.getPath());
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 
 		Builder.mImageView.setImageBitmap(currentBitmap);
@@ -268,13 +261,6 @@ public class LongClickShowView extends Dialog {
 				hideDialog();
 			}
 		}, null, null);
-		Builder.mPlayVidoeView.setOnStartPlayListener(new OnStartPlayListener() {
-
-			@Override
-			public void onStart() {
-				glTimer.setVisibility(View.VISIBLE);
-			}
-		});
 		contentView.addView(glTimer, params);
 	}
 }
