@@ -25,6 +25,8 @@ public class Constants {
 		public static long A_DAY = 1000 * 60 * 60 * 24;
 	}
 
+	public static final int ATTENTION_COMMENT_TIME = 10;
+
 	public static int SCREEN_WIDTH;
 
 	public static int SCREEN_HEIGHT;

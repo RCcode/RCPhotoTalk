@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -76,7 +78,6 @@ public class PhotoTalkUtils {
 		return friend;
 	}
 
-
 	public static void buildAppList(Context context, LinearLayout linearApps, List<AppInfo> apps, ImageLoader loader) {
 		for (AppInfo info : apps) {
 			if (info.getAppPackage().equals("com.rcplatform.phototalk"))
@@ -138,7 +139,7 @@ public class PhotoTalkUtils {
 		notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
 		notification.contentView.setImageViewResource(R.id.gcm_image, R.drawable.ic_launcher);
 		notification.contentView.setTextViewText(R.id.gcm_title, context.getString(R.string.app_name));
-		notification.contentView.setTextViewText(R.id.gcm_decs, context.getString(R.string.gcm_message, count ));
+		notification.contentView.setTextViewText(R.id.gcm_decs, context.getString(R.string.gcm_message, count));
 		notification.when = System.currentTimeMillis();
 		notification.defaults |= Notification.DEFAULT_SOUND;
 		notification.flags |= Notification.FLAG_AUTO_CANCEL;
@@ -148,9 +149,21 @@ public class PhotoTalkUtils {
 		notification.contentIntent = intent;
 		notificationManager.notify(0, notification);
 	}
-	public static Friend getDriftFriend(){
-		Friend friend=new Friend();
+
+	public static Friend getDriftFriend() {
+		Friend friend = new Friend();
 		friend.setRcId("-1");
 		return friend;
+	}
+
+	public static void showCommentAttentionDialog(final Context context) {
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(context).setPositiveButton(R.string.go_to_comment, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Utils.searchAppInGooglePlay(context, context.getPackageName());
+			}
+		}).setNegativeButton(R.string.cancel, null).setMessage(R.string.comment_message).create();
+		dialog.show();
 	}
 }

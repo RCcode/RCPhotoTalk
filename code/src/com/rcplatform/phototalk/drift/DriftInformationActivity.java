@@ -3,6 +3,8 @@ package com.rcplatform.phototalk.drift;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -208,11 +210,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		pager = (ViewFlipper) findViewById(R.id.drift_view_pager);
 		// 判断是否第一次进入漂流瓶
 		boolean isShow = PrefsUtils.User.hasUsedDrift(this, USERDRIFT);
-		// if(!isShow){
-		// pager.setVisibility(View.VISIBLE);
-		// }else{
-		// pager.setVisibility(View.GONE);
-		// }
+		 if(!isShow){
+		 pager.setVisibility(View.VISIBLE);
+		 }else{
+		 pager.setVisibility(View.GONE);
+		 }
 		pager.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -227,7 +229,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			public boolean onSingleTapUp(MotionEvent e) {
 				if (numView == pager.getChildCount() - 1) {
 					closePaper();
-					PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 				}else {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
@@ -257,7 +258,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
 					if (numView < pager.getChildCount() - 1) {
@@ -265,7 +265,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 						pager.setDisplayedChild(numView);
 					} else {
 						closePaper();
-						PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 					}
 				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.rigth_out);
@@ -291,6 +290,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		animation.setDuration(500);
 		pager.setAnimation(animation);
 		pager.setVisibility(View.GONE);
+		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 	}
 	private TextView tvMenu;
 
@@ -811,28 +811,32 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		String currentRcId = getCurrentUser().getRcId();
 		int fishLeaveTime = PrefsUtils.User.getFishLeaveTime(this, currentRcId);
 		if (PrefsUtils.User.isThrowToday(this, currentRcId) && fishLeaveTime > 0) {
-			showLoadingDialog(false);
-			DriftProxy.fishDrift(this, new FishDriftResponseHandler(this, new OnFishListener() {
-
-				@Override
-				public void onFishSuccess(DriftInformation information) {
-					if (mShowMode == DriftShowMode.SEND)
-						return;
-					List<DriftInformation> infos = new ArrayList<DriftInformation>();
-					infos.add(information);
-					sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
-				}
-
-				@Override
-				public void onFishFail(String failReason) {
-					showConfirmDialog(failReason);
-				}
-			}));
+			executeFishDriftInformation();
 		} else if (fishLeaveTime == 0) {
 			showConfirmDialog(R.string.fish_over);
 		} else {
-			showConfirmDialog(R.string.havenot_throw_today);
+			showThrowDriftDialog();
 		}
+	}
+
+	private void executeFishDriftInformation() {
+		showLoadingDialog(false);
+		DriftProxy.fishDrift(this, new FishDriftResponseHandler(this, new OnFishListener() {
+
+			@Override
+			public void onFishSuccess(DriftInformation information) {
+				if (mShowMode == DriftShowMode.SEND)
+					return;
+				List<DriftInformation> infos = new ArrayList<DriftInformation>();
+				infos.add(information);
+				sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
+			}
+
+			@Override
+			public void onFishFail(String failReason) {
+				showConfirmDialog(failReason);
+			}
+		}));
 	}
 
 	private void throwInformation() {
@@ -865,6 +869,20 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			filterMenu.dismiss();
 		else
 			filterMenu.showAsDropDown(v, 0, 0);
+	}
+
+	private AlertDialog throwDialog;
+
+	private void showThrowDriftDialog() {
+		if (throwDialog == null)
+			throwDialog = DialogUtil.getAlertDialogBuilder(this).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					throwInformation();
+				}
+			}).setNegativeButton(R.string.cancel, null).setMessage(R.string.throw_dialog_msg).setTitle(R.string.throw_dialog_title).create();
+		throwDialog.show();
 	}
 
 	private static final int FLING_MIN_DISTANCE = 100;
