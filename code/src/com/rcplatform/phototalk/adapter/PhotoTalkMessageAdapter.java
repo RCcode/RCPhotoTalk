@@ -298,61 +298,28 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private void addAsFriend(final Information record) {
 		final BaseActivity activity = (BaseActivity) context;
-		activity.showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
+		activity.showLoadingDialog(false);
 		Friend friend = new Friend();
 		friend.setRcId(record.getSender().getRcId());
 		new AddFriendTask(activity, activity.getCurrentUser(), new AddFriendListener() {
 
 			@Override
 			public void onFriendAddSuccess(Friend friend, int addType) {
-				activity.dismissLoadingDialog();
+				activity.dissmissLoadingDialog();
 			}
 
 			@Override
 			public void onFriendAddFail(int statusCode, String content) {
-				activity.dismissLoadingDialog();
-				activity.showErrorConfirmDialog(content);
+				activity.dissmissLoadingDialog();
+				activity.showConfirmDialog(content);
 			}
 
 			@Override
 			public void onAlreadyAdded() {
 				LogicUtils.friendAlreadyAdded(record);
-				activity.dismissLoadingDialog();
+				activity.dissmissLoadingDialog();
 			}
 		}, friend).execute();
-	}
-
-	public String getStatuTime(String prefix, String postfix, long time) {
-		long currentTime = System.currentTimeMillis();
-		long durring = currentTime - time;
-		StringBuffer sb = new StringBuffer();
-		sb.append(prefix + " ");
-		int s = (int) (durring / 1000);
-		int m = 0;
-		int h = 0;
-		int d = 0;
-
-		if (s > 60) {
-			m = s / 60;
-		}
-		if (m > 60) {
-			h = m / 60;
-		}
-		if (h > 24) {
-			d = h / 24;
-		}
-		if (d > 0) {
-			sb.append(d + "d");
-		} else if (h > 0) {
-			sb.append(h + "h");
-		} else if (m > 0) {
-			sb.append(m + "m");
-		} else if (s > 0) {
-			sb.append(s + "s");
-		}
-		sb.append(" ago " + postfix);
-		return sb.toString();
-
 	}
 
 	class ViewHolder {

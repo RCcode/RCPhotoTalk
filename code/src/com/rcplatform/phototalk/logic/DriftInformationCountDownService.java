@@ -56,6 +56,7 @@ public class DriftInformationCountDownService {
 	private Handler mCountDownHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			DriftInformation info = (DriftInformation) msg.obj;
+			mShowingInformations.remove(info.getPicId());
 			info.setState(InformationState.PhotoInformationState.STATU_NOTICE_OPENED);
 			DriftInformationPageController.getInstance().onDriftShowEnd(info);
 			mPool.execute(new ClearPhotoInformationCacheTask(info));
