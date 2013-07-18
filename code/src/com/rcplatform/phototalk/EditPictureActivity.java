@@ -49,6 +49,7 @@ import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
@@ -750,6 +751,7 @@ public class EditPictureActivity extends BaseActivity {
 		if (isNeedToLogOnService()) {
 			DriftProxy.serviceLog(this, getIntent().getStringExtra(PARAM_KEY_PIC_URL), getIntent().getIntExtra(PARAM_KEY_PIC_ID, 0), mEditePicView.hasDrawed(),
 					voicePath != null, getCurrentUser(), friend);
+			DialogUtil.showToast(getApplicationContext(), R.string.send_back_success, Toast.LENGTH_SHORT);
 		}
 		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), getIntent().getIntExtra("photoType", 0));
 	}

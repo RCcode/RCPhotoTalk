@@ -16,6 +16,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -224,8 +226,15 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			@Override
 			public boolean onSingleTapUp(MotionEvent e) {
 				if (numView == pager.getChildCount() - 1) {
-					pager.setVisibility(View.GONE);
+					closePaper();
 					PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
+				}else {
+					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
+					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
+					if (numView < pager.getChildCount() - 1) {
+						numView++;
+						pager.setDisplayedChild(numView);
+					} 
 				}
 				return false;
 			}
@@ -255,7 +264,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 						numView++;
 						pager.setDisplayedChild(numView);
 					} else {
-						pager.setVisibility(View.GONE);
+						closePaper();
 						PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 					}
 				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
@@ -277,6 +286,12 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		mGestureDetector.setIsLongpressEnabled(true);
 	}
 
+	private void closePaper(){
+		AlphaAnimation animation = new AlphaAnimation(1.0f,0.0f);
+		animation.setDuration(500);
+		pager.setAnimation(animation);
+		pager.setVisibility(View.GONE);
+	}
 	private TextView tvMenu;
 
 	private void initMenuButton() {
@@ -482,6 +497,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		case MotionEvent.ACTION_UP:
 			if (isShow) {
 				mShowDialog.hideDialog();
+				if(mShowDialog!=null){
+					mShowDialog.dismiss();
+					mShowDialog = null;
+				}
 				isShow = false;
 			}
 			break;
@@ -810,9 +829,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				}
 			}));
 		} else if (fishLeaveTime == 0) {
-			DialogUtil.showToast(this, "今天的瓶子捞完啦", Toast.LENGTH_SHORT);
+			showConfirmDialog(R.string.fish_over);
 		} else {
-			DialogUtil.showToast(this, "今天还没扔瓶子", Toast.LENGTH_SHORT);
+			showConfirmDialog(R.string.havenot_throw_today);
 		}
 	}
 

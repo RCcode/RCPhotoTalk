@@ -635,6 +635,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		case MotionEvent.ACTION_UP:
 			if (isShow) {
 				mShowDialog.hideDialog();
+				if(mShowDialog!=null){
+					mShowDialog.dismiss();
+					mShowDialog = null;
+				}
 				isShow = false;
 			}
 			break;

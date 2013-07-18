@@ -387,7 +387,15 @@
     <string name="show_receive_drift">显示收到的消息</string>
     <string name="show_send_drift">显示发送的消息</string>
     <string name="drift_show_time">已被%1$d人查看</string>
+    <string name="new_init_message">v2.0新功能\n结识来自全世界有趣的朋友</string>
+    <!-- 漂流瓶内引导页提示语 -->
+    <string name="show_init_message_1">发布自己或有趣的照片来结识新的朋友</string>
+    <string name="show_init_message_2">随机获取别人的照片，与全世界有趣的人沟通并分享乐趣</string>
     <!-- 漂流瓶对话框 -->
     <string name="change_report_message">是否举报</string>
     <string name="report_success">举报成功</string>
+    <string name="send_back_success">回复成功</string>
+    <string name="havenot_throw_today">今天还没有扔瓶子</string>
+    <string name="fish_over">今天不能再捞啦</string>
+    <string name="report">举报</string>
 </resources>

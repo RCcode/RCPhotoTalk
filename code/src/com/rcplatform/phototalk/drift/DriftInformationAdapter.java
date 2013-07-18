@@ -4,18 +4,15 @@ import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
-import android.util.SparseArray;
 import android.util.SparseIntArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.webkit.WebView.FindListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -28,6 +25,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
+import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.RecordTimerLimitView;
@@ -113,7 +111,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 		holder.statu.setTag(statuTag);
 		holder.bar.setTag(tagBase + ProgressBar.class.getName());
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
-		holder.ivCountryFlag.setTag(tagBase+ImageView.class.getName()+"country");
+		holder.ivCountryFlag.setTag(tagBase + ImageView.class.getName() + "country");
 		if (record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED && !isSender(record)) {
 			if (record.hasVoice()) {
 				holder.item_new.setImageResource(R.drawable.new_item_voice);
@@ -137,7 +135,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 			holder.name.getPaint().setFakeBoldText(false);
 		}
 		holder.name.setText(record.getSender().getNick());
-		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
+		if (record.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING || LogicUtils.isSender(context, record)) {
 			holder.ivCountryFlag.setVisibility(View.GONE);
 		} else {
 			holder.ivCountryFlag.setVisibility(View.VISIBLE);
@@ -202,7 +200,7 @@ public class DriftInformationAdapter extends BaseAdapter {
 
 	private void initPhotoInformationSenderView(DriftInformation record, ViewHolder holder) {
 		// 如果当前用户是发送者
-//		holder.statuButton.setBackgroundResource(R.drawable.throw_icon);
+		// holder.statuButton.setBackgroundResource(R.drawable.throw_icon);
 		holder.statuButton.setBackgroundDrawable(null);
 		holder.statuButton.setText(null);
 		holder.statuButton.stopDriftTask();
@@ -236,39 +234,6 @@ public class DriftInformationAdapter extends BaseAdapter {
 
 	private String getTimeText(int baseResId, long time) {
 		return context.getString(baseResId, RCPlatformTextUtil.getTextFromTimeToNow(context, time));
-	}
-
-	public String getStatuTime(String prefix, String postfix, long time) {
-		long currentTime = System.currentTimeMillis();
-		long durring = currentTime - time;
-		StringBuffer sb = new StringBuffer();
-		sb.append(prefix + " ");
-		int s = (int) (durring / 1000);
-		int m = 0;
-		int h = 0;
-		int d = 0;
-
-		if (s > 60) {
-			m = s / 60;
-		}
-		if (m > 60) {
-			h = m / 60;
-		}
-		if (h > 24) {
-			d = h / 24;
-		}
-		if (d > 0) {
-			sb.append(d + "d");
-		} else if (h > 0) {
-			sb.append(h + "h");
-		} else if (m > 0) {
-			sb.append(m + "m");
-		} else if (s > 0) {
-			sb.append(s + "s");
-		}
-		sb.append(" ago " + postfix);
-		return sb.toString();
-
 	}
 
 	class ViewHolder {
