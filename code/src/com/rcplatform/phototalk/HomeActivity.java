@@ -27,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -447,16 +448,19 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
 		boolean isShow =PrefsUtils.User.hasCurrentVersionUsed(this, FRISTUSED);
 		//打开注释 以后只显示一次引导页
-//		if(!isShow){
-//			vPager.setVisibility(View.VISIBLE);
-//		}else{
-//			vPager.setVisibility(View.GONE);
-//		}
+		if(!isShow){
+			vPager.setVisibility(View.VISIBLE);
+		}else{
+			vPager.setVisibility(View.GONE);
+		}
 		vPager.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				AlphaAnimation animation = new AlphaAnimation(1.0f,0.0f);
+				animation.setDuration(500);
+				vPager.setAnimation(animation);
 				vPager.setVisibility(View.GONE);
 				PrefsUtils.User.setCurrentVersionUsed(HomeActivity.this, FRISTUSED);
 			}
@@ -636,6 +640,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		case MotionEvent.ACTION_UP:
 			if (isShow) {
 				mShowDialog.hideDialog();
+				if(mShowDialog!=null){
+					mShowDialog.dismiss();
+					mShowDialog = null;
+				}
 				isShow = false;
 			}
 			break;

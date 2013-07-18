@@ -94,7 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
             android:layout_marginTop="35dp"
-            android:text="结识陌生人"
+            android:text="@string/know_strangers"
             android:textColor="@color/red"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
             android:layout_marginTop="30dp"
-            android:text="v2.0新功能\n结识来自全世界有趣的朋友"
+            android:text="@string/new_init_message"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>

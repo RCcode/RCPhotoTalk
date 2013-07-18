@@ -165,6 +165,8 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 				phone = listData.get(position).getText();
 				reSetListData();
 				myAdapter.notifyDataSetChanged();
+				
+				activityFinish();
 			}
 		});
 		listView.setAdapter(myAdapter);
@@ -212,16 +214,20 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 		}
 		return num;
 	}
+	
+	public void activityFinish(){
+		Intent intent = new Intent();
+		intent.putExtra("text", phone);
+		intent.putExtra("size", getNum());
+		setResult(Activity.RESULT_OK, intent);
+		this.finish();
+	}
 	@Override
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.back:
-			Intent intent = new Intent();
-			intent.putExtra("text", phone);
-			intent.putExtra("size", getNum());
-			setResult(Activity.RESULT_OK, intent);
-			this.finish();
+			activityFinish();
 			break;
 		case R.id.seach_delete_btn:
 			seachEdit.setText("");
@@ -238,10 +244,7 @@ public class SelectCountryPhoneCodeActivity extends BaseActivity implements
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			Intent intent = new Intent();
-			intent.putExtra("text", phone);
-			intent.putExtra("size", getNum());
-			setResult(Activity.RESULT_OK, intent);
+			activityFinish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}

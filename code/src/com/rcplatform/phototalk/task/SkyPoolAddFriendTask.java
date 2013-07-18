@@ -43,18 +43,22 @@ public class SkyPoolAddFriendTask {
 						if (mListener != null) {
 							try {
 								JSONObject jsonObject = new JSONObject(content);
-//								int addType = jsonObject.getInt("isFriend");
+								int addType = jsonObject.getInt("isFriend");
+								JSONObject friendJson = jsonObject
+										.getJSONObject("userInfo");
 								Friend friend = JSONConver.jsonToObject(
-										jsonObject.toString(),
-										Friend.class);
+										friendJson.toString(), Friend.class);
 								friend.setFriend(true);
 								friend.setLetter(RCPlatformTextUtil
 										.getLetter(friend.getNickName()));
-								mListener.onFriendAddSuccess(friend, friend.getAdded());
+								mListener.onFriendAddSuccess(friend, addType);
 								PhotoTalkDatabaseFactory.getDatabase()
 										.addFriend(friend);
+								PhotoTalkDatabaseFactory.getDatabase()
+										.updateDriftInformationSenderInfo(
+												friend);
 								LogicUtils.friendAdded(mContext, friend,
-										friend.getAdded());
+										addType);
 							} catch (JSONException e) {
 								e.printStackTrace();
 								onFailure(
@@ -91,7 +95,6 @@ public class SkyPoolAddFriendTask {
 				userInfo.getRcId());
 		buildFriends(mFriend);
 	}
-
 
 	private void buildFriends(Friend... friends) {
 		JSONArray array = new JSONArray();

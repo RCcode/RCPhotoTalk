@@ -95,7 +95,7 @@ public class LongClickShowView extends Dialog {
 				mPlayVidoeView = (PlayVidoeView) dialog.contentView.findViewById(R.id.pv_rts_video);
 				dialog.setContentView(dialog.contentView);
 			} else {
-				dialog.setContentView(dialog.contentView);
+//				dialog.setContentView(dialog.contentView);
 			}
 			Log.i("ABC", "DIALOG = " + dialog.toString());
 			/*
@@ -221,7 +221,11 @@ public class LongClickShowView extends Dialog {
 	}
 
 	private void showImage(File file) {
-		currentBitmap = BitmapFactory.decodeFile(file.getPath());
+		try {
+			currentBitmap = BitmapFactory.decodeFile(file.getPath());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 		Builder.mImageView.setImageBitmap(currentBitmap);
 	}
@@ -236,11 +240,17 @@ public class LongClickShowView extends Dialog {
 
 	public void hideDialog() {
 		hide();
+//		Builder.mImageView = null;
 		Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
 		}
+//		contentView.removeAllViews();
+//		contentView = null;
+//		if(Builder.dialog!=null&&Builder.dialog.isShowing()){
+//		Builder.dialog.dismiss();
+//		}
 	}
 
 	public void initTimer() {

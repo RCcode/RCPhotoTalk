@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -208,11 +210,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		pager = (ViewFlipper) findViewById(R.id.drift_view_pager);
 		// 判断是否第一次进入漂流瓶
 		boolean isShow = PrefsUtils.User.hasUsedDrift(this, USERDRIFT);
-		// if(!isShow){
-		// pager.setVisibility(View.VISIBLE);
-		// }else{
-		// pager.setVisibility(View.GONE);
-		// }
+		 if(!isShow){
+		 pager.setVisibility(View.VISIBLE);
+		 }else{
+		 pager.setVisibility(View.GONE);
+		 }
 		pager.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -226,8 +228,14 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			@Override
 			public boolean onSingleTapUp(MotionEvent e) {
 				if (numView == pager.getChildCount() - 1) {
-					pager.setVisibility(View.GONE);
-					PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
+					closePaper();
+				}else {
+					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
+					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
+					if (numView < pager.getChildCount() - 1) {
+						numView++;
+						pager.setDisplayedChild(numView);
+					} 
 				}
 				return false;
 			}
@@ -250,15 +258,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
 					if (numView < pager.getChildCount() - 1) {
 						numView++;
 						pager.setDisplayedChild(numView);
 					} else {
-						pager.setVisibility(View.GONE);
-						PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
+						closePaper();
 					}
 				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.rigth_out);
@@ -279,6 +285,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		mGestureDetector.setIsLongpressEnabled(true);
 	}
 
+	private void closePaper(){
+		AlphaAnimation animation = new AlphaAnimation(1.0f,0.0f);
+		animation.setDuration(500);
+		pager.setAnimation(animation);
+		pager.setVisibility(View.GONE);
+		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
+	}
 	private TextView tvMenu;
 
 	private void initMenuButton() {
@@ -484,6 +497,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		case MotionEvent.ACTION_UP:
 			if (isShow) {
 				mShowDialog.hideDialog();
+				if(mShowDialog!=null){
+					mShowDialog.dismiss();
+					mShowDialog = null;
+				}
 				isShow = false;
 			}
 			break;
