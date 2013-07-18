@@ -877,7 +877,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void showThrowDriftDialog() {
 		if (throwDialog == null)
-			throwDialog = DialogUtil.getAlertDialogBuilder(this).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			throwDialog = DialogUtil.getAlertDialogBuilder(this).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
