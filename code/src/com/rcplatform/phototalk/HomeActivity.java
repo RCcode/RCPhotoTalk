@@ -27,6 +27,7 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -456,6 +457,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
+				AlphaAnimation animation = new AlphaAnimation(1.0f,0.0f);
+				animation.setDuration(500);
+				vPager.setAnimation(animation);
 				vPager.setVisibility(View.GONE);
 				PrefsUtils.User.setCurrentVersionUsed(HomeActivity.this, FRISTUSED);
 			}
