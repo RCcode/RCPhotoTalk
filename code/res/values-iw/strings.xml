@@ -210,4 +210,21 @@
    	<string name="join_message">התחבר איתי באתר #PhotoTalk ‏, יישום מסרים מיידיים פרטי המאפשר שילוב תמונות ושמע. מס\' הזיהוי שלי:%1$s. תוכל לקבל אותו כאן http://rctalk.me</string>
     <string name="invite_message">הי! אני מבקש לשלוח לך תמונה פרטית דרך #PhotoTalk. קבל אותה כאן http://rctalk.me והוסף את מס\' הזיהוי שלי %1$s</string>
     <string name="invite_your_friends">האם להזמין את חבריך להצטרף ל-PhotoTalk?</string>
+    <!-- v2.0 -->
+    <string name="know_strangers">עשה לך חברים חדשים</string>
+    <string name="new_init_message">חדש בגרסה 2.0 - כעת תוכל לעשות לך חברים מכל רחבי העולם!</string>
+    <string name="show_init_message_1">העלה תמונות דיוקן עצמי ותמונות טובות אחרות כדי ליצור קשר עם חברים חדשים!</string>
+    <string name="show_init_message_2">צפה בתמונות אקראיות של אחרים, שתף הודעות ותמונות עם אנשים משעשעים בכל פינה בעולם!</string>
+    <string name="drift_show_time">%1$d צפיות</string>
+    <string name="country">לאומיות</string>
+    <string name="throw_dialog_title">נא לעלות תמונה תחילה.</string>
+    <string name="throw_dialog_msg">ככל שתעלה תמונות מעניינות יותר, כך תעשה לך יותר חברים חדשים!</string>
+    <string name="fish_over">אין עדיין תמונות, אנא העלה תמונות נוספות משלך!</string>
+    <string name="reply">השב</string>
+    <string name="report">דווח</string>
+    <string name="report_success">הדיווח הצליח.</string>
+    <string name="send_back_success">התשובה הצליחה.</string>
+    <string name="show_all_drift">הכל</string>
+    <string name="show_send_drift">הועלה</string>
+    <string name="show_receive_drift">התקבל</string>
 </resources>

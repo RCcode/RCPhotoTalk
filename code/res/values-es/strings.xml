@@ -213,4 +213,21 @@
     <string name="invite_your_friends">¿Desea invitar a sus amigos a unirse a PhotoTalk?</string>
     
     
+    <!-- v2.0 -->
+    <string name="know_strangers">Haz nuevos amigos</string>
+    <string name="new_init_message">Novedades de la versión 2.0: ¡Ahora puedes hacer amigos de todas las partes del mundo!</string>
+    <string name="show_init_message_1">Sube tus mejores autorretratos e imágenes para hacer nuevos amigos.</string>
+    <string name="show_init_message_2">Mira las imágenes aleatorias de los demás y comparte mensajes e imágenes con personas divertidas de todas las partes del mundo.</string>
+    <string name="drift_show_time">Vistas %1$d</string>
+    <string name="country">Nacionalidad</string>
+    <string name="throw_dialog_title">Sube primero una imagen.</string>
+    <string name="throw_dialog_msg">Cuanto más interesantes sean las imágenes que subas, ¡más amigos harás!</string>
+    <string name="fish_over">Todavía no hay ninguna imagen. Sube algunas imágenes tuyas.</string>
+    <string name="reply">Responder</string>
+    <string name="report">Informar</string>
+    <string name="report_success">Informe enviado con éxito</string>
+    <string name="send_back_success">Respuesta enviada con éxito</string>
+    <string name="show_all_drift">Todos</string>
+    <string name="show_send_drift">Subidos</string>
+    <string name="show_receive_drift">Recibidos</string>
 </resources>

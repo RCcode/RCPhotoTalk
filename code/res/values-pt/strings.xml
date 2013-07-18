@@ -208,4 +208,21 @@
     <string name="invite_message">Ei, eu gostaria de enviar a você uma foto particular pelo #PhotoTalk. Tenha o seu aqui http://rctalk.me e adicione minha ID %1$s</string>
     <string name="invite_your_friends">Quer convidar seus amigos para entrar no PhotoTalk?</string>
 
+    <!-- v2.0 -->
+    <string name="know_strangers">Faça novos amigos.</string>
+    <string name="new_init_message">Novo na versão 2.0 - Agora você pode fazer amigos em toda parte do mundo!</string>
+    <string name="show_init_message_1">Publique suas melhores fotos e faça novos amigos!</string>
+    <string name="show_init_message_2">Veja fotos de outros amigos, compartilhe mensagens e imagens com gente divertida de todo o mundo!</string>
+    <string name="drift_show_time">%1$d visualizações</string>
+    <string name="country">Nacionalidade</string>
+    <string name="throw_dialog_title">Por favor, primeiro publique uma foto.</string>
+    <string name="throw_dialog_msg">Quanto mais interessante a foto, mais amigos você fará!       </string>
+    <string name="fish_over">Você ainda não tem fotos?  Por favor, publique-as. </string>
+    <string name="reply">Responder</string>
+    <string name="report">Relatório</string>
+    <string name="report_success">Relatório bem-sucessedido</string>
+    <string name="send_back_success">Respondido com sucesso</string>
+    <string name="show_all_drift">Todos</string>
+    <string name="show_send_drift">Publicado</string>
+    <string name="show_receive_drift">Recebido</string>
 </resources>

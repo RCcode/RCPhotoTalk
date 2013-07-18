@@ -211,4 +211,21 @@
    	<string name="join_message">Mari berteman di #PhotoTalk, aplikasi pesan pribadi dilengkapi foto dan audio. ID saya:%1$s. Dapatkan di sini http://rctalk.me</string>
     <string name="invite_message">Hai! Saya ingin mengirim foto pribadi di #PhotoTalk. Dapatkan di sini http://rctalk.me dan tambahkan ID saya %1$s</string>
     <string name="invite_your_friends">Undang teman Anda untuk bergabung di PhotoTalk?</string>
+    <!-- v2.0 -->
+    <string name="know_strangers">Menjalin teman baru</string>
+    <string name="new_init_message">Baru dalam versi 2.0 – kini Anda dapat menjalin teman dari seluruh dunia!</string>
+    <string name="show_init_message_1">Unggah potret dan foto terbaik Anda untuk menjalin teman baru!</string>
+    <string name="show_init_message_2">Melihat foto secara acak dari orang lain，berbagi pesan dan foto dengan orang dari seluruh dunia!</string>
+    <string name="drift_show_time">%1$d melihat</string>
+    <string name="country">Kebangsaan</string>
+    <string name="throw_dialog_title">Unggah foto lebih dahulu.</string>
+    <string name="throw_dialog_msg">Semakin menarik foto yang Anda unggah, semakin banyak teman baru yang akan terjalin!</string>
+    <string name="fish_over">Belum ada foto, unggah foto Anda!</string>
+    <string name="reply">Balas</string>
+    <string name="report">Laporan</string>
+    <string name="report_success">Laporan berhasil</string>
+    <string name="send_back_success">Balasan berhasil</string>
+    <string name="show_all_drift">Semua</string>
+    <string name="show_send_drift">Diunggah</string>
+    <string name="show_receive_drift">Diterima</string>
 </resources>

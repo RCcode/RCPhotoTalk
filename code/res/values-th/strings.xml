@@ -216,4 +216,21 @@
     <string name="invite_message">สวัสดี ฉันต้องการส่งภาพถ่ายส่วนตัวให้กับคุณบน #PhotoTalk รับแอปได้ที่ http://rctalk.me แล้วเพิ่ม ID ของฉัน %1$s</string>
     <string name="invite_your_friends">เชิญเพื่อน ๆ ของคุณให้เข้าร่วม PhotoTalk?</string>
     
+    <!-- v2.0 -->
+    <string name="know_strangers">ผูกมิตรกับเพื่อนใหม่</string>
+    <string name="new_init_message">คุณลักษณะใหม่ในเวอร์ชัน 2.0 - ตอนนี้คุณสามารถผูกมิตรกับเพื่อนใหม่ได้จากทั่วโลก!</string>
+    <string name="show_init_message_1">อัปโหลดภาพถ่ายตัวเองที่ดีที่สุดและภาพต่าง ๆ ของคุณ เพื่อผูกมิตรกับเพื่อนใหม่!</string>
+    <string name="show_init_message_2">ดูภาพถ่ายแบบสุ่มจากคนอื่น ๆ แชร์ข้อความและภาพกับผู้คนสนุก ๆ ทั่วโลก!</string>
+    <string name="drift_show_time">ดู %1$d ครั้ง</string>
+    <string name="country">สัญชาติ</string>
+    <string name="throw_dialog_title">กรุณาอัปโหลดภาพถ่ายก่อน</string>
+    <string name="throw_dialog_msg">ยิ่งภาพถ่ายที่คุณอัปโหลดน่าสนใจมากเท่าไร คุณก็ยิ่งผูกมิตรกับเพื่อนใหม่ได้มากขึ้นเท่านั้น!</string>
+    <string name="fish_over">ยังไม่มีภาพถ่าย กรุณาอัปโหลดภาพถ่ายของคุณเพิ่มเติม!</string>
+    <string name="reply">ตอบกลับ</string>
+    <string name="report">รายงาน</string>
+    <string name="report_success">รายงานสำเร็จแล้ว</string>
+    <string name="send_back_success">ตอบกลับสำเร็จแล้ว</string>
+    <string name="show_all_drift">ทั้งหมด</string>
+    <string name="show_send_drift">อัปโหลดแล้ว</string>
+    <string name="show_receive_drift">รับแล้ว</string>
 </resources>

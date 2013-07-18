@@ -147,7 +147,6 @@
     <string name="nick">Nickname</string>
     <string name="sex">Gender</string>
     <string name="birthday">Birthday</string>
-    <string name="country">Country</string>
     <string name="settings_update_name_title">Nickname</string>
     <string name="settings_select_sex">Gender</string>
     <string name="male">Male</string>
@@ -209,4 +208,20 @@
     <string name="join_message">Friend me on #PhotoTalk, a private messaging app with photo and audio. My ID:%1$s. Get it here http://rctalk.me</string>
     <string name="invite_message">Hey! I\'d like to send you a private photo on #PhotoTalk. Get it here http://rctalk.me and add my ID %1$s</string>
 
+    <!-- v2.0 -->
+    <string name="know_strangers">Make new friends</string>
+    <string name="new_init_message">New to version 2.0 - now you can make friends from all over the world!</string>
+    <string name="show_init_message_1">Upload your best self-portraits and pictures to make new friends!</string>
+    <string name="show_init_message_2">See random photos from others，share messages and pictures with fun people around the world!</string>
+    <string name="drift_show_time">%1$d views</string>
+    <string name="country">Nationality</string>
+    <string name="throw_dialog_title">Please upload a photo first.</string>
+    <string name="fish_over">No photos yet, please upload more of your own!</string>
+    <string name="reply">Reply</string>
+    <string name="report">Report</string>
+    <string name="report_success">Report successful</string>
+    <string name="send_back_success">Reply successful</string>
+    <string name="show_all_drift">All</string>
+    <string name="show_send_drift">Uploaded</string>
+    <string name="show_receive_drift">Received</string>
 </resources>
