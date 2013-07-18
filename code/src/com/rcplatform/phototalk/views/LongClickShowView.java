@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -66,8 +65,6 @@ public class LongClickShowView extends Dialog {
 		private int layoutResId;
 
 		private LongClickShowView dialog;
-
-		private static SoundPool soundPool = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
 
 		public Builder(Context context, int layoutResId) {
 			this.context = context;
