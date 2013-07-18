@@ -393,4 +393,5 @@
     <string name="send_back_success">回复成功</string>
     <string name="havenot_throw_today">今天还没有扔瓶子</string>
     <string name="fish_over">今天不能再捞啦</string>
+    <string name="report">举报</string>
 </resources>
