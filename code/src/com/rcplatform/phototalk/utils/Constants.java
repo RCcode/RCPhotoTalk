@@ -26,6 +26,8 @@ public class Constants {
 	}
 
 	public static final int ATTENTION_COMMENT_TIME = 10;
+	
+	public static final int UNTHROW_FISH_ALLOW_TIME=3;
 
 	public static int SCREEN_WIDTH;
 

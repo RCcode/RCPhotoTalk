@@ -452,11 +452,7 @@ public class PrefsUtils {
 		}
 
 		public static synchronized int getFishLeaveTime(Context context, String pref) {
-			return getPreference(context, pref).getInt(PFEF_KEY_FISH_LEAVE_TIME, AppInfo.getMaxFishTime(context));
-		}
-
-		public static synchronized void setFishLeaveTime(Context context, String pref, int time) {
-			getPreference(context, pref).edit().putInt(PFEF_KEY_FISH_LEAVE_TIME, time).commit();
+			return AppInfo.getMaxFishTime(context) - getTodayFishTime(context, pref);
 		}
 
 		/**
@@ -505,12 +501,16 @@ public class PrefsUtils {
 			getPreference(context, pref).edit().putString(PREF_KEY_LAST_USED_VERSION, context.getString(R.string.version)).commit();
 		}
 
-		public static void setTodayFishTime(Context context, String pref, int time) {
+		public synchronized static void setTodayFishTime(Context context, String pref, int time) {
 			getPreference(context, pref).edit().putInt(PREF_KEY_TODAY_FISH_TIME, time).commit();
 		}
 
-		public static int getTodayFishTime(Context context, String pref) {
+		public static synchronized int getTodayFishTime(Context context, String pref) {
 			return getPreference(context, pref).getInt(PREF_KEY_TODAY_FISH_TIME, 0);
+		}
+
+		public static synchronized void addTodayFishTime(Context context, String pref) {
+			setTodayFishTime(context, pref, getTodayFishTime(context, pref) + 1);
 		}
 	}
 }
