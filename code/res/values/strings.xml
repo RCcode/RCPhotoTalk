@@ -390,4 +390,7 @@
     <!-- 漂流瓶对话框 -->
     <string name="change_report_message">是否举报</string>
     <string name="report_success">举报成功</string>
+    <string name="send_back_success">回复成功</string>
+    <string name="havenot_throw_today">今天还没有扔瓶子</string>
+    <string name="fish_over">今天不能再捞啦</string>
 </resources>

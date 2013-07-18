@@ -810,9 +810,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				}
 			}));
 		} else if (fishLeaveTime == 0) {
-			DialogUtil.showToast(this, "今天的瓶子捞完啦", Toast.LENGTH_SHORT);
+			showConfirmDialog(R.string.fish_over);
 		} else {
-			DialogUtil.showToast(this, "今天还没扔瓶子", Toast.LENGTH_SHORT);
+			showConfirmDialog(R.string.havenot_throw_today);
 		}
 	}
 

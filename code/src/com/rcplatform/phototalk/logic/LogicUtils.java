@@ -20,7 +20,6 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
 import com.rcplatform.phototalk.bean.ServiceCensus;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -131,9 +130,7 @@ public class LogicUtils {
 
 	public static boolean isSender(Context context, DriftInformation record) {
 
-		if (((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId()))
-			return true;
-		return false;
+		return ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser().getRcId().equals(record.getSender().getRcId());
 	}
 
 	public static void informationFriendAdded(Context context, Information information, Friend friend) {
@@ -217,7 +214,7 @@ public class LogicUtils {
 	}
 
 	public static void logout(Context context) {
-		//清空好友动态
+		// 清空好友动态
 		FriendDynamicDatabase.getInstance().clearAll();
 		// 本机注销gcm user key
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(context.getApplicationContext());
