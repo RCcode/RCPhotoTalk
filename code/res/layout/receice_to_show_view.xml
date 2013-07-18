@@ -11,12 +11,5 @@
         android:layout_height="fill_parent"
         android:scaleType="fitCenter" />
 
-    <com.rcplatform.phototalk.views.PlayVidoeView
-        android:id="@+id/pv_rts_video"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_centerVertical="true"
-        android:background="#ff000000"
-        android:visibility="gone" />
 
 </RelativeLayout>
