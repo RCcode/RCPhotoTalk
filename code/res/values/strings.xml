@@ -394,4 +394,8 @@
     <string name="havenot_throw_today">今天还没有扔瓶子</string>
     <string name="fish_over">今天不能再捞啦</string>
     <string name="report">举报</string>
+    <string name="go_to_comment">去评价</string>
+    <string name="comment_message">喜欢我们的产品？去评一个呗</string>
+    <string name="throw_dialog_msg">发些自拍或有趣的照片能吸引更多人的回复并容易结识新朋友。</string>
+    <string name="throw_dialog_title">请先发一张自己的照片</string>
 </resources>

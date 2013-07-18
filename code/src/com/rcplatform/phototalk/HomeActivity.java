@@ -180,6 +180,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		ClientLogUtil.log(this);
 		showRcAd();
 		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
+		PhotoTalkUtils.showCommentAttentionDialog(this);
 	}
 
 	private void showRcAd() {

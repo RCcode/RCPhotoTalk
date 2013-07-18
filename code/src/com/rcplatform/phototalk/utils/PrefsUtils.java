@@ -122,6 +122,7 @@ public class PrefsUtils {
 		private static final String PFEF_KEY_FISH_LEAVE_TIME = "fishleavetime";
 		private static final String PREF_KEY_USED_DRIFT = "hasuseddrift";
 		private static final String PREF_KEY_LAST_USED_VERSION = "lastusedversion";
+		private static final String PREF_KEY_TODAY_FISH_TIME = "todayfishtime";
 
 		public static class ThirdPart {
 
@@ -451,14 +452,16 @@ public class PrefsUtils {
 		}
 
 		public static synchronized int getFishLeaveTime(Context context, String pref) {
-			return getPreference(context, pref).getInt(PFEF_KEY_FISH_LEAVE_TIME,AppInfo.getMaxFishTime(context));
+			return getPreference(context, pref).getInt(PFEF_KEY_FISH_LEAVE_TIME, AppInfo.getMaxFishTime(context));
 		}
 
 		public static synchronized void setFishLeaveTime(Context context, String pref, int time) {
 			getPreference(context, pref).edit().putInt(PFEF_KEY_FISH_LEAVE_TIME, time).commit();
 		}
+
 		/**
 		 * 获取漂流瓶功能是否用过
+		 * 
 		 * @param context
 		 * @param pref
 		 * @return
@@ -466,8 +469,10 @@ public class PrefsUtils {
 		public static boolean hasUsedDrift(Context context, String pref) {
 			return getPreference(context, pref).getBoolean(PREF_KEY_USED_DRIFT, false);
 		}
+
 		/**
 		 * 设置漂流瓶功能被使用
+		 * 
 		 * @param context
 		 * @param pref
 		 */
@@ -478,8 +483,10 @@ public class PrefsUtils {
 		public static String getLastUsedVersion(Context context, String pref) {
 			return getPreference(context, pref).getString(PREF_KEY_LAST_USED_VERSION, null);
 		}
+
 		/**
 		 * 获取当前版本是否使用过
+		 * 
 		 * @param context
 		 * @param pref
 		 * @return
@@ -487,13 +494,23 @@ public class PrefsUtils {
 		public static boolean hasCurrentVersionUsed(Context context, String pref) {
 			return context.getString(R.string.version).equals(getLastUsedVersion(context, pref));
 		}
+
 		/**
 		 * 设置当前版本已经被使用
+		 * 
 		 * @param context
 		 * @param pref
 		 */
 		public static void setCurrentVersionUsed(Context context, String pref) {
 			getPreference(context, pref).edit().putString(PREF_KEY_LAST_USED_VERSION, context.getString(R.string.version)).commit();
+		}
+
+		public static void setTodayFishTime(Context context, String pref, int time) {
+			getPreference(context, pref).edit().putInt(PREF_KEY_TODAY_FISH_TIME, time).commit();
+		}
+
+		public static int getTodayFishTime(Context context, String pref) {
+			return getPreference(context, pref).getInt(PREF_KEY_TODAY_FISH_TIME, 0);
 		}
 	}
 }

@@ -3,6 +3,8 @@ package com.rcplatform.phototalk.drift;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -792,28 +794,32 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		String currentRcId = getCurrentUser().getRcId();
 		int fishLeaveTime = PrefsUtils.User.getFishLeaveTime(this, currentRcId);
 		if (PrefsUtils.User.isThrowToday(this, currentRcId) && fishLeaveTime > 0) {
-			showLoadingDialog(false);
-			DriftProxy.fishDrift(this, new FishDriftResponseHandler(this, new OnFishListener() {
-
-				@Override
-				public void onFishSuccess(DriftInformation information) {
-					if (mShowMode == DriftShowMode.SEND)
-						return;
-					List<DriftInformation> infos = new ArrayList<DriftInformation>();
-					infos.add(information);
-					sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
-				}
-
-				@Override
-				public void onFishFail(String failReason) {
-					showConfirmDialog(failReason);
-				}
-			}));
+			executeFishDriftInformation();
 		} else if (fishLeaveTime == 0) {
 			showConfirmDialog(R.string.fish_over);
 		} else {
-			showConfirmDialog(R.string.havenot_throw_today);
+			showThrowDriftDialog();
 		}
+	}
+
+	private void executeFishDriftInformation() {
+		showLoadingDialog(false);
+		DriftProxy.fishDrift(this, new FishDriftResponseHandler(this, new OnFishListener() {
+
+			@Override
+			public void onFishSuccess(DriftInformation information) {
+				if (mShowMode == DriftShowMode.SEND)
+					return;
+				List<DriftInformation> infos = new ArrayList<DriftInformation>();
+				infos.add(information);
+				sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
+			}
+
+			@Override
+			public void onFishFail(String failReason) {
+				showConfirmDialog(failReason);
+			}
+		}));
 	}
 
 	private void throwInformation() {
@@ -846,6 +852,20 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			filterMenu.dismiss();
 		else
 			filterMenu.showAsDropDown(v, 0, 0);
+	}
+
+	private AlertDialog throwDialog;
+
+	private void showThrowDriftDialog() {
+		if (throwDialog == null)
+			throwDialog = DialogUtil.getAlertDialogBuilder(this).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					throwInformation();
+				}
+			}).setNegativeButton(R.string.cancel, null).setMessage(R.string.throw_dialog_msg).setTitle(R.string.throw_dialog_title).create();
+		throwDialog.show();
 	}
 
 	private static final int FLING_MIN_DISTANCE = 100;
