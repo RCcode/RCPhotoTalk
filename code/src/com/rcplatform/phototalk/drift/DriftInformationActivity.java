@@ -208,11 +208,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		pager = (ViewFlipper) findViewById(R.id.drift_view_pager);
 		// 判断是否第一次进入漂流瓶
 		boolean isShow = PrefsUtils.User.hasUsedDrift(this, USERDRIFT);
-		// if(!isShow){
-		// pager.setVisibility(View.VISIBLE);
-		// }else{
-		// pager.setVisibility(View.GONE);
-		// }
+		 if(!isShow){
+		 pager.setVisibility(View.VISIBLE);
+		 }else{
+		 pager.setVisibility(View.GONE);
+		 }
 		pager.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -227,7 +227,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			public boolean onSingleTapUp(MotionEvent e) {
 				if (numView == pager.getChildCount() - 1) {
 					closePaper();
-					PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 				}else {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
@@ -257,7 +256,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			@Override
 			public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 				if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
-
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
 					if (numView < pager.getChildCount() - 1) {
@@ -265,7 +263,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 						pager.setDisplayedChild(numView);
 					} else {
 						closePaper();
-						PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 					}
 				} else if (e2.getX() - e1.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.rigth_out);
@@ -291,6 +288,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		animation.setDuration(500);
 		pager.setAnimation(animation);
 		pager.setVisibility(View.GONE);
+		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 	}
 	private TextView tvMenu;
 

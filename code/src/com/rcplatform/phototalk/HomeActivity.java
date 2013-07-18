@@ -446,11 +446,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
 		boolean isShow =PrefsUtils.User.hasCurrentVersionUsed(this, FRISTUSED);
 		//打开注释 以后只显示一次引导页
-//		if(!isShow){
-//			vPager.setVisibility(View.VISIBLE);
-//		}else{
-//			vPager.setVisibility(View.GONE);
-//		}
+		if(!isShow){
+			vPager.setVisibility(View.VISIBLE);
+		}else{
+			vPager.setVisibility(View.GONE);
+		}
 		vPager.setOnClickListener(new OnClickListener() {
 
 			@Override
