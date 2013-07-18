@@ -19,7 +19,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -30,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ViewFlipper;
 
 import com.flurry.android.FlurryAgent;
@@ -210,11 +208,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		pager = (ViewFlipper) findViewById(R.id.drift_view_pager);
 		// 判断是否第一次进入漂流瓶
 		boolean isShow = PrefsUtils.User.hasUsedDrift(this, USERDRIFT);
-		 if(!isShow){
-		 pager.setVisibility(View.VISIBLE);
-		 }else{
-		 pager.setVisibility(View.GONE);
-		 }
+		if (!isShow) {
+			pager.setVisibility(View.VISIBLE);
+		} else {
+			pager.setVisibility(View.GONE);
+		}
 		pager.setOnTouchListener(new OnTouchListener() {
 
 			@Override
@@ -229,13 +227,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			public boolean onSingleTapUp(MotionEvent e) {
 				if (numView == pager.getChildCount() - 1) {
 					closePaper();
-				}else {
+				} else {
 					pager.setInAnimation(DriftInformationActivity.this, R.anim.left_in);
 					pager.setOutAnimation(DriftInformationActivity.this, R.anim.left_out);
 					if (numView < pager.getChildCount() - 1) {
 						numView++;
 						pager.setDisplayedChild(numView);
-					} 
+					}
 				}
 				return false;
 			}
@@ -285,13 +283,14 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		mGestureDetector.setIsLongpressEnabled(true);
 	}
 
-	private void closePaper(){
-		AlphaAnimation animation = new AlphaAnimation(1.0f,0.0f);
+	private void closePaper() {
+		AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
 		animation.setDuration(500);
 		pager.setAnimation(animation);
 		pager.setVisibility(View.GONE);
 		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 	}
+
 	private TextView tvMenu;
 
 	private void initMenuButton() {
@@ -497,7 +496,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		case MotionEvent.ACTION_UP:
 			if (isShow) {
 				mShowDialog.hideDialog();
-				if(mShowDialog!=null){
+				if (mShowDialog != null) {
 					mShowDialog.dismiss();
 					mShowDialog = null;
 				}
@@ -810,12 +809,14 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void fishInformation() {
 		String currentRcId = getCurrentUser().getRcId();
 		int fishLeaveTime = PrefsUtils.User.getFishLeaveTime(this, currentRcId);
-		if (PrefsUtils.User.isThrowToday(this, currentRcId) && fishLeaveTime > 0) {
+		if (!PrefsUtils.User.isThrowToday(this, currentRcId) && PrefsUtils.User.getTodayFishTime(this, currentRcId) >= Constants.UNTHROW_FISH_ALLOW_TIME) {
+			showThrowDriftDialog();
+			return;
+		}
+		if (fishLeaveTime > 0) {
 			executeFishDriftInformation();
 		} else if (fishLeaveTime == 0) {
 			showConfirmDialog(R.string.fish_over);
-		} else {
-			showThrowDriftDialog();
 		}
 	}
 
@@ -830,6 +831,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				List<DriftInformation> infos = new ArrayList<DriftInformation>();
 				infos.add(information);
 				sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
+
 			}
 
 			@Override
@@ -875,7 +877,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void showThrowDriftDialog() {
 		if (throwDialog == null)
-			throwDialog = DialogUtil.getAlertDialogBuilder(this).setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+			throwDialog = DialogUtil.getAlertDialogBuilder(this).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
 
 				@Override
 				public void onClick(DialogInterface dialog, int which) {

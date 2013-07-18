@@ -43,7 +43,7 @@ public class FishDriftResponseHandler implements RCPlatformResponseHandler {
 		} else {
 			String rcId = mFunction.getCurrentUser().getRcId();
 			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(driftInformation);
-			PrefsUtils.User.setFishLeaveTime(mFunction.getContext(), rcId, PrefsUtils.User.getFishLeaveTime(mFunction.getContext(), rcId) - 1);
+			PrefsUtils.User.addTodayFishTime(mFunction.getContext(), rcId);
 			mFunction.dissmissLoadingDialog();
 			if (mListener != null)
 				mListener.onFishSuccess(driftInformation);

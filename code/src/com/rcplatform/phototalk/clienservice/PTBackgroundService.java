@@ -523,7 +523,7 @@ public class PTBackgroundService extends Service {
 		int hour = calendar.get(Calendar.HOUR_OF_DAY);
 		int minute = calendar.get(Calendar.MINUTE);
 		if (hour == 0 && minute == 0) {
-			PrefsUtils.User.setFishLeaveTime(getApplicationContext(), mCurrentUser.getRcId(), PrefsUtils.AppInfo.getMaxFishTime(getApplicationContext()));
+			PrefsUtils.User.setTodayFishTime(getApplicationContext(), mCurrentUser.getRcId(), 0);
 		}
 	}
 
