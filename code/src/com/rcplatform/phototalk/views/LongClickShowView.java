@@ -95,7 +95,7 @@ public class LongClickShowView extends Dialog {
 				mPlayVidoeView = (PlayVidoeView) dialog.contentView.findViewById(R.id.pv_rts_video);
 				dialog.setContentView(dialog.contentView);
 			} else {
-				dialog.setContentView(dialog.contentView);
+//				dialog.setContentView(dialog.contentView);
 			}
 			Log.i("ABC", "DIALOG = " + dialog.toString());
 			/*
@@ -119,7 +119,6 @@ public class LongClickShowView extends Dialog {
 				showZipContent(files, info);
 			}
 			catch (Exception e) {
-				System.out.println("-e-->"+e.getMessage());
 				e.printStackTrace();
 			}
 		} else if (info.getType() == InformationType.TYPE_SYSTEM_NOTICE) { // 系统消息
@@ -247,6 +246,8 @@ public class LongClickShowView extends Dialog {
 			currentBitmap.recycle();
 			currentBitmap = null;
 		}
+//		contentView.removeAllViews();
+//		contentView = null;
 //		if(Builder.dialog!=null&&Builder.dialog.isShowing()){
 //		Builder.dialog.dismiss();
 //		}
