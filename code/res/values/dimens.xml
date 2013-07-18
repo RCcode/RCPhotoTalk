@@ -109,4 +109,7 @@
     <dimen name="information_item_text_name">18sp</dimen>
     <dimen name="select_friend_text_name">20sp</dimen>
 
+    <!-- v2.0 陌生人引导页的布局 -->
+    <dimen name="stranger_init_padding">65dp</dimen>
+    <dimen name="stranger_init_padding_bottom">160dp</dimen>
 </resources>

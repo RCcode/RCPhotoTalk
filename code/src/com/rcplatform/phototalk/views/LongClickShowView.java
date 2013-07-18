@@ -119,6 +119,7 @@ public class LongClickShowView extends Dialog {
 				showZipContent(files, info);
 			}
 			catch (Exception e) {
+				System.out.println("-e-->"+e.getMessage());
 				e.printStackTrace();
 			}
 		} else if (info.getType() == InformationType.TYPE_SYSTEM_NOTICE) { // 系统消息
@@ -221,7 +222,11 @@ public class LongClickShowView extends Dialog {
 	}
 
 	private void showImage(File file) {
-		currentBitmap = BitmapFactory.decodeFile(file.getPath());
+		try {
+			currentBitmap = BitmapFactory.decodeFile(file.getPath());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 		Builder.mImageView.setImageBitmap(currentBitmap);
 	}
@@ -236,11 +241,15 @@ public class LongClickShowView extends Dialog {
 
 	public void hideDialog() {
 		hide();
+//		Builder.mImageView = null;
 		Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
 		}
+//		if(Builder.dialog!=null&&Builder.dialog.isShowing()){
+//		Builder.dialog.dismiss();
+//		}
 	}
 
 	public void initTimer() {
