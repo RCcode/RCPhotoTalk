@@ -211,4 +211,21 @@
     <string name="invite_message">Привет! Я хочу отправить тебе личную фотографию через #PhotoTalk. Загрузи приложение с сайта http://rctalk.me и добавь мой идентификатор %1$s</string>
     <string name="invite_your_friends">Пригласить ваших друзей в PhotoTalk?</string>
     
+    <!-- v2.0 -->
+    <string name="know_strangers">Заводите новых друзей</string>
+    <string name="new_init_message">Новое в версии 2.0 - теперь вы можете заводить новых друзей по всему миру!</string>
+    <string name="show_init_message_1">Выгружайте свои самые удачные автопортреты и фотографии, чтобы завести новых друзей!</string>
+    <string name="show_init_message_2">Смотрите фотографии других пользователей, обменивайтесь сообщениями и смешными картинками с людьми по всему миру!</string>
+    <string name="drift_show_time">Просмотров: %1$d</string>
+    <string name="country">Гражданство</string>
+    <string name="throw_dialog_title">Сначала выгрузите фотографию.</string>
+    <string name="throw_dialog_msg">Чем интереснее фотографии вы выгружаете, тем больше шансов завести новых друзей!</string>
+    <string name="fish_over">Пока у вас нет фотографий. Дайте людям возможность узнать о вас больше!</string>
+    <string name="reply">Ответить</string>
+    <string name="report">Сообщить</string>
+    <string name="report_success">Сообщение отправлено</string>
+    <string name="send_back_success">Ответ отправлен</string>
+    <string name="show_all_drift">Все</string>
+    <string name="show_send_drift">Выгружено</string>
+    <string name="show_receive_drift">Получено</string>
 </resources>

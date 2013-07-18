@@ -147,7 +147,6 @@
     <string name="nick">昵称</string>
     <string name="sex">性別</string>
     <string name="birthday">生日</string>
-    <string name="country">国家</string>
     <string name="settings_update_name_title">昵称</string>
     <string name="settings_select_sex">性别</string>
     <string name="male">男</string>
@@ -202,7 +201,6 @@
     <string name="twitter">Twitter</string>
     <string name="googleplus">Google+</string>
     <string name="gmail">Gmail</string>
-    <string name="reply">回复</string>
     <string name="share_title">分享至Twitter</string>
     <string name="search_friend_from_contacts">从通讯录中寻找朋友</string>
     <string name="search_friend_from_local">从%1$s中寻找朋友</string>
@@ -212,4 +210,21 @@
     <string name="invite_message">我想和你在 #PhotoTalk 上发私密照片，下载地址 http://rctalk.me 安装后加我ID：%1$s</string>
     <string name="invite_your_friends">是否想要邀请你的朋友加入PhotoTalk？</string>
 
+    <!-- v2.0 -->
+    <string name="know_strangers">结交新朋友</string>
+    <string name="new_init_message">v2.0新功能-现在你可以结识来自全世界的朋友！</string>
+    <string name="show_init_message_1">发布自己或有趣的照片来结识新的朋友。</string>
+    <string name="show_init_message_2">随机获取别人的照片，与全世界有趣的人沟通与分享乐趣</string>
+    <string name="drift_show_time">%1$d人已看过</string>
+    <string name="country">国家</string>
+    <string name="throw_dialog_title">请先发一张自己的照片。</string>
+    <string name="throw_dialog_msg">发些自拍或有趣的照片能吸引更多人的回复并容易结识新朋友。</string>
+    <string name="fish_over">暂时没有照片可以获取，先发张照片吧。</string>
+    <string name="reply">回复</string>
+    <string name="report">举报</string>
+    <string name="report_success">举报成功</string>
+    <string name="send_back_success">回复成功</string>
+    <string name="show_all_drift">所有</string>
+    <string name="show_send_drift">发出的</string>
+    <string name="show_receive_drift">收到的</string>
 </resources>

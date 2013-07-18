@@ -210,4 +210,21 @@
    	<string name="join_message">मुझसे #PhotoTalk पर मित्रता करें, जो फ़ोटो और ऑडियो के साथ निजी संदेश ऐप है। मेरी ID:%1$s. यहाँ प्राप्त करेंhttp://rctalk.me</string>
     <string name="invite_message">अरे! मैं आपको #PhotoTalk पर निजी फ़ोटो भेजना चाहूँगा। इसे यहाँ प्राप्त करें http://rctalk.me और मेरी ID %1$s जोड़ें</string>
     <string name="invite_your_friends">अपने मित्रों को PhotoTalk में शामिल होने के लिए आमंत्रित करें?</string>
+    <!-- v2.0 -->
+    <string name="know_strangers">नए मित्र बनाएँ</string>
+    <string name="new_init_message">संस्करण 2.0 में नया - अब आप दुनिया भर से मित्र बना सकते हैं!</string>
+    <string name="show_init_message_1">नए मित्र बनाने के लिए अपने सबसे अच्छे खुद के पोर्ट्रेट और चित्र अपलोड करें!</string>
+    <string name="show_init_message_2">दूसरों से यादृच्छिक चित्र देखें, दुनिया भर से मज़ेदार लोगों के साथ संदेश और चित्र साझा करें!</string>
+    <string name="drift_show_time">%1$d दृश्य</string>
+    <string name="country">राष्ट्रीयता</string>
+    <string name="throw_dialog_title">कृपया पहले फ़ोटो अपलोड करें।</string>
+    <string name="throw_dialog_msg">आप जितनी ज़्यादा रोचक फ़ोटो अपलोड करेंगे, उतने ही ज़्यादा नए मित्र बनाएँगे!</string>
+    <string name="fish_over">अभी तक कोई फ़ोटो नहीं है, कृपया अपने खुद के और ज़्यादा अपलोड करें!</string>
+    <string name="reply">उत्तर दें</string>
+    <string name="report">रिपोर्ट करें</string>
+    <string name="report_success">रिपोर्ट करना सफल।</string>
+    <string name="send_back_success">उत्तर देना सफल।</string>
+    <string name="show_all_drift">सभी</string>
+    <string name="show_send_drift">अपलोड किया गया</string>
+    <string name="show_receive_drift">प्राप्त</string>
 </resources>

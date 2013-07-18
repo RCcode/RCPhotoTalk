@@ -209,4 +209,21 @@
    	<string name="join_message">사진과 오디오를 지원하는 개인 메시징 앱인 #PhotoTalk 에서 나와 친구를 맺어주세요. 나의 ID:%1$s. http://rctalk.me 에서 확인해 보세요.</string>
     <string name="invite_message">안녕하세요! #PhotoTalk 에서 개인 사진을 보내려고 합니다. http://rctalk.me 에서 내 ID %1$s를 추가해 주세요.</string>
     <string name="invite_your_friends">친구에게 PhotoTalk 가입 초대를 보내시겠습니까?</string>
+    <!-- v2.0 -->
+    <string name="know_strangers">새로운 친구 만들기</string>
+    <string name="new_init_message">버전 2.0의 새로운 기능 - 이제 전세계 사용자들과 친구를 맺을 수 있습니다!</string>
+    <string name="show_init_message_1">최고의 셀프촬영 사진과 그 밖의 사진을 업로드하고 새로운 친구를 만나 보세요!</string>
+    <string name="show_init_message_2">무작위로 다른 사람의 사진을 보고, 전세계 재미있는 사람들과 메시지 또는 사진을 공유해 보세요!</string>
+    <string name="drift_show_time">%1$d개 뷰</string>
+    <string name="country">국적</string>
+    <string name="throw_dialog_title">먼저 사진을 업로드하십시오.</string>
+    <string name="throw_dialog_msg">재미있는 사진을 업로드할수록 새로운 친구를 만날 기회가 더 많아집니다!</string>
+    <string name="fish_over">아직 사진을 업로드하지 않았습니다. 자신의 사진을 더 많이 업로드하세요!</string>
+    <string name="reply">회신</string>
+    <string name="report">신고</string>
+    <string name="report_success">신고 성공</string>
+    <string name="send_back_success">회신 성공</string>
+    <string name="show_all_drift">전체</string>
+    <string name="show_send_drift">업로드 완료</string>
+    <string name="show_receive_drift">수신 완료</string>
 </resources>

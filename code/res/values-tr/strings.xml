@@ -215,4 +215,20 @@
     <string name="invite_message">Hey! #PhotoTalk üzerinden sana özel bir fotoğraf göndermek istiyorum. Buradan ulaş; http://rctalk.me ve Kimliğimi %1$s ekle</string>
     <string name="invite_your_friends">Arkadaşlarınız PhotoTalk\'a katılmaya davet edilsin mi?</string>
     
+    <!-- v2.0 -->
+    <string name="know_strangers">Yeni arkadaşlar edinin</string>
+    <string name="show_init_message_1">Yeni arkadaşlar edinmek için en iyi kendi portrelerinizi ve fotoğraflarınızı karşıya yükleyin!</string>
+    <string name="show_init_message_2">Başkalarından gelen rastgele fotoğraflara bakın, dünyadaki eğlenceli insanlarla mesajları ve fotoğrafları paylaşın!</string>
+    <string name="drift_show_time">%1$d görüntü</string>
+    <string name="country">Milliyet</string>
+    <string name="throw_dialog_title">Lütfen önce bir fotoğrafı karşıya yükleyin.</string>
+    <string name="throw_dialog_msg">Daha fazla ilginç fotoğraf karşıya yükleyin, daha fazla yeni arkadaş kazanacaksınız!</string>
+    <string name="fish_over">Henüz fotoğraf yok, lütfen daha fazla kendi fotoğrafınızı karşıya yükleyin!</string>
+    <string name="reply">Yanıtla</string>
+    <string name="report">Rapor Et </string>
+    <string name="report_success">Rapor başarılı</string>
+    <string name="send_back_success">Yanıt başarılı</string>
+    <string name="show_all_drift">Tümü</string>
+    <string name="show_send_drift">Karşıya yüklendi</string>
+    <string name="show_receive_drift">Alındı</string>
 </resources>

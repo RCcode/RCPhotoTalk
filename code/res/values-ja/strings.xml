@@ -212,4 +212,21 @@
     <string name="invite_your_friends">PhotoTalkに友達を招待しませんか？</string>
     
     
+    <!-- v2.0 -->
+    <string name="know_strangers">新しい友達を作る</string>
+    <string name="new_init_message">バージョン2.0新機能 - 世界中の人と友達になれる！</string>
+    <string name="show_init_message_1">お気に入りのプロフィール画像をアップロードして新しい友達を作ろう！</string>
+    <string name="show_init_message_2">他の人の写真をランダムに見て、世界中の人とメッセージや写真を共有しよう！</string>
+    <string name="drift_show_time">%1$d 回閲覧</string>
+    <string name="country">国籍</string>
+    <string name="throw_dialog_title">最初に写真をアップロードしてください。</string>
+    <string name="throw_dialog_msg">楽しい写真を沢山アップロードすれば、友達も増える！</string>
+    <string name="fish_over">写真がありません。自分の写真を沢山アップロードしよう！</string>
+    <string name="reply">返信</string>
+    <string name="report">レポート</string>
+    <string name="report_success">レポート完了</string>
+    <string name="send_back_success">返信完了</string>
+    <string name="show_all_drift">すべて</string>
+    <string name="show_send_drift">アップロード済み</string>
+    <string name="show_receive_drift">受信済み</string>
 </resources>

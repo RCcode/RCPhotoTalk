@@ -209,4 +209,21 @@
     <string name="invite_message">مرحبًا! أرغب في إرسال صورة خاصة لك على #PhotoTalk. احصل عليه من هنا http://rctalk.me وأضف المعرف الخاص بي %1$s</string>
     
 
+    <!-- v2.0 -->
+    <string name="know_strangers">اكتسب أصدقاء جديد</string>
+    <string name="new_init_message">قم بالتحديث إلى الإصدار 2.0 - الآن يمكنك التعرف على أصدقاء من جميع أنحاء العالم!</string>
+    <string name="show_init_message_1">قم بتحميل أفضل صورك الشخصية لاكتساب أصدقاء جدد!</string>
+    <string name="show_init_message_2">شاهد الصور العشوائية للآخرين، وشارك الرسائل والصور مع أشخاص مرحين من جميع أنحاء العالم!</string>
+    <string name="drift_show_time">%1$d مشاهدة</string>
+    <string name="country">الجنسية</string>
+    <string name="throw_dialog_title">يرجى إيداع صورة أولاً. كلما كانت الصور التي تقوم </string>
+    <string name="throw_dialog_msg">بإيداعها أكثر تشويقًا، أمكنك اكتساب المزيد من الأصدقاء الجدد!</string>
+    <string name="fish_over">لا توجد صور بعد، يرجى إيداع المزيد من صورك!</string>
+    <string name="reply">رد </string>
+    <string name="report">تقرير</string>
+    <string name="report_success">تم إرسال التقرير بنجاح.</string>
+    <string name="send_back_success"> تم الرد بنجاح.</string>
+    <string name="show_all_drift">الكل</string>
+    <string name="show_send_drift">المودع</string>
+    <string name="show_receive_drift">المستلم</string>
 </resources>

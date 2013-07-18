@@ -148,7 +148,6 @@
     <string name="nick">昵稱</string>
     <string name="sex">性別</string>
     <string name="birthday">生日</string>
-     <string name="country">國家</string>
     <string name="settings_update_name_title">昵稱</string>
     <string name="settings_select_sex">性別</string>
     <string name="male">男</string>
@@ -214,4 +213,21 @@
     <string name="invite_message">我想和你在 #PhotoTalk 上發私密照片，下載地址 http://rctalk.me 安裝後加我ID：%1$s</string>
     <string name="invite_your_friends">是否想要邀請你的朋友加入PhotoTalk？</string>
     
+    <!-- v2.0 -->
+    <string name="know_strangers">結交新朋友</string>
+    <string name="new_init_message">新功能V2.0 - 現在你可以結識來自全世界的朋友！</string>
+    <string name="show_init_message_1">發布自己或有趣的照片來結識新的朋友。</string>
+    <string name="show_init_message_2">隨機獲取別人的照片，與全世界有趣的人溝通與分享樂趣</string>
+    <string name="drift_show_time">%1$d人已看過</string>
+    <string name="country">國家</string>
+    <string name="throw_dialog_title">請先發一張自己的照片。</string>
+    <string name="throw_dialog_msg">發些自拍或有趣的照片能吸引更多人的回复並容易結識新朋友。</string>
+    <string name="fish_over">暫時沒有照片可以獲取，先發張照片吧。</string>
+    <string name="reply">回复</string>
+    <string name="report">舉報</string>
+    <string name="report_success">舉報成功</string>
+    <string name="send_back_success">回复成功</string>
+    <string name="show_all_drift">所有</string>
+    <string name="show_send_drift">發出的</string>
+    <string name="show_receive_drift">收到的</string>
 </resources>

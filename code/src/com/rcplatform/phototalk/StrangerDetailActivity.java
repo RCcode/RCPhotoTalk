@@ -66,7 +66,7 @@ public class StrangerDetailActivity extends BaseActivity {
 	}
 
 	protected void showDialog() {
-		AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.change_report_message)).setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
+		AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.report)).setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

@@ -141,14 +141,13 @@
     <string name="resend_sms_number">Get verification code again(%1$d)</string>
     <string name="resend_sms_second">Get verification code again(%1$d)</string>
     <string name="phone_number_validate">Phone Number Verification</string>
+    <string name="country_code">(+%1$s)%2$s</string>
 
     <!-- profile -->
     <string name="settings_update_person_info_title">Profile</string>
     <string name="nick">Nickname</string>
     <string name="sex">Gender</string>
     <string name="birthday">Birthday</string>
-    <string name="country">Country</string>
-    
     <string name="settings_update_name_title">Nickname</string>
     <string name="settings_select_sex">Gender</string>
     <string name="male">Male</string>
@@ -318,7 +317,6 @@
     <!-- bind phone number -->
     <string name="input_mobile_phone">输入要绑定的手机号</string>
     <string name="input_your_number">输入您的电话号码</string>
-    <string name="country_code">(+%1$s)%2$s</string>
     <string name="change_phone_number">修改手机号</string>
     <string name="resend_sms">重新发送短信</string>
     <string name="input_correct_validate">请输入正确验证码</string>
@@ -377,29 +375,30 @@
     <string name="phototalk_url">Get it here, http://rctalk.me</string>
 
     <!-- 2.0 NEW TEXT -->
-     <string name="reply">回复</string>
     <string name="drift_information">漂流瓶</string>
-    <string name="know_strangers">结识陌生人</string>
     <string name="fish_information">捞</string>
     <string name="throw_information">扔</string>
     <string name="send_to_stranges">发送到陌生人</string>
-    <string name="show_all_drift">显示所有消息</string>
-    <string name="show_receive_drift">显示收到的消息</string>
-    <string name="show_send_drift">显示发送的消息</string>
-    <string name="drift_show_time">已被%1$d人查看</string>
-    <string name="new_init_message">v2.0新功能\n结识来自全世界有趣的朋友</string>
     <!-- 漂流瓶内引导页提示语 -->
-    <string name="show_init_message_1">发布自己或有趣的照片来结识新的朋友</string>
-    <string name="show_init_message_2">随机获取别人的照片，与全世界有趣的人沟通并分享乐趣</string>
     <!-- 漂流瓶对话框 -->
-    <string name="change_report_message">是否举报</string>
-    <string name="report_success">举报成功</string>
-    <string name="send_back_success">回复成功</string>
     <string name="havenot_throw_today">今天还没有扔瓶子</string>
-    <string name="fish_over">今天不能再捞啦</string>
-    <string name="report">举报</string>
     <string name="go_to_comment">去评价</string>
     <string name="comment_message">喜欢我们的产品？去评一个呗</string>
-    <string name="throw_dialog_msg">发些自拍或有趣的照片能吸引更多人的回复并容易结识新朋友。</string>
-    <string name="throw_dialog_title">请先发一张自己的照片</string>
+    <!-- v2.0 -->
+    <string name="know_strangers">Make new friends</string>
+    <string name="new_init_message">New to version 2.0 - now you can make friends from all over the world!</string>
+    <string name="show_init_message_1">Upload your best self-portraits and pictures to make new friends!</string>
+    <string name="show_init_message_2">See random photos from others，share messages and pictures with fun people around the world!</string>
+    <string name="drift_show_time">%1$d views</string>
+    <string name="country">Nationality</string>
+    <string name="throw_dialog_title">Please upload a photo first.</string>
+    <string name="fish_over">No photos yet, please upload more of your own!</string>
+    <string name="reply">Reply</string>
+    <string name="report">Report</string>
+    <string name="report_success">Report successful</string>
+    <string name="send_back_success">Reply successful</string>
+    <string name="show_all_drift">All</string>
+    <string name="show_send_drift">Uploaded</string>
+    <string name="show_receive_drift">Received</string>
+
 </resources>

@@ -212,4 +212,21 @@
     <string name="invite_your_friends">Möchten Sie Ihre Freunde zu PhotoTalk einladen?</string>
  
     
+    <!-- v2.0 -->
+    <string name="know_strangers">Neue Freunde finden</string>
+    <string name="new_init_message">Neu in Version 2.0 - Lernen Sie jetzt Freunde aus aller Welt kennen!</string>
+    <string name="show_init_message_1">Laden Sie Ihr schönstes Selbstporträt und Bilder hoch, um neue Freunde zu finden!</string>
+    <string name="show_init_message_2">Sehen Sie sich zufällige Fotos anderer an und teilen Sie Nachrichten und Bilder  mit lustigen Menschen aus aller Welt!</string>
+    <string name="drift_show_time">%1$d Aufrufe </string>
+    <string name="country">Nationalität</string>
+    <string name="throw_dialog_title">Bitte laden Sie zuerst ein Foto hoch. </string>
+    <string name="throw_dialog_msg">Je interessanter Ihre hochgeladenen Fotos sind, desto mehr Freunde werden Sie kennen lernen!</string>
+    <string name="fish_over">Noch keine Fotos vorhanden, bitte laden Sie mehr eigene Fotos hoch!</string>
+    <string name="reply">Antworten</string>
+    <string name="report">Bericht</string>
+    <string name="report_success">Bericht erfolgreich</string>
+    <string name="send_back_success">Antwort erfolgreich</string>
+    <string name="show_all_drift">Alle</string>
+    <string name="show_send_drift">Hochgeladen</string>
+    <string name="show_receive_drift">Erhalten</string>
 </resources>
