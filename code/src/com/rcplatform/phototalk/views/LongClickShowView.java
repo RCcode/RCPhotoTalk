@@ -26,7 +26,6 @@ import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
-import com.rcplatform.phototalk.views.PlayVidoeView.OnStartPlayListener;
 import com.rcplatform.phototalk.views.RecordTimerLimitView.OnTimeEndListener;
 
 public class LongClickShowView extends Dialog {
