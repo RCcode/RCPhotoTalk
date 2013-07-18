@@ -151,36 +151,44 @@ public class EditUserCountryActivity extends BaseActivity implements
 					int position, long id) {
 				// TODO Auto-generated method stub
 				userCountryCode = countryList.get(position).getCode();
-				
-//				userDetailInfo.setCountry(userCountryCode);
-//				PrefsUtils.User.saveUserInfo(
-//						getApplicationContext(),
-//						userDetailInfo.getRcId(), userDetailInfo);
-//				getPhotoTalkApplication().setCurrentUser(
-//						userDetailInfo);
+
+				// userDetailInfo.setCountry(userCountryCode);
+				// PrefsUtils.User.saveUserInfo(
+				// getApplicationContext(),
+				// userDetailInfo.getRcId(), userDetailInfo);
+				// getPhotoTalkApplication().setCurrentUser(
+				// userDetailInfo);
 				initCountryListData(position);
 				adapter.notifyDataSetChanged();
+				activityFinish();
 			}
 		});
 	}
 
-	private void post(String countryCode){
+	public void activityFinish() {
+		Intent intent = new Intent();
+		intent.putExtra("countryCode", userCountryCode);
+		setResult(Activity.RESULT_OK, intent);
+		this.finish();
+	}
+
+	private void post(String countryCode) {
 		FriendsProxy.postCountryCode(this, new RCPlatformResponseHandler() {
-			
+
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onFailure(int errorCode, String content) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		}, countryCode);
 	}
-	
+
 	private void search(String keyWords) {
 		if (keyWords != null) {
 			keyWords = keyWords.toLowerCase();
@@ -209,15 +217,13 @@ public class EditUserCountryActivity extends BaseActivity implements
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.back:
-			Intent intent = new Intent();
-			intent.putExtra("countryCode", userCountryCode);
-			setResult(Activity.RESULT_OK,intent);
-			this.finish();
+			activityFinish();
 			break;
 		case R.id.seach_delete_btn:
 			seachEdit.setText("");
 			initData();
-			adapter = new SeachCountryAdapter(EditUserCountryActivity.this, countryList);
+			adapter = new SeachCountryAdapter(EditUserCountryActivity.this,
+					countryList);
 			listView.setAdapter(adapter);
 			break;
 		default:
@@ -255,13 +261,12 @@ public class EditUserCountryActivity extends BaseActivity implements
 		}
 
 	}
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		// TODO Auto-generated method stub
-		if(keyCode == KeyEvent.KEYCODE_BACK){
-			Intent intent = new Intent();
-			intent.putExtra("countryCode", userCountryCode);
-			setResult(Activity.RESULT_OK,intent);
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			activityFinish();
 		}
 		return super.onKeyDown(keyCode, event);
 	}
