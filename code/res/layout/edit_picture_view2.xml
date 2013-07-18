@@ -132,6 +132,7 @@
             android:layout_centerHorizontal="true"
             android:background="@drawable/btn_record"
             android:maxWidth="177dp"
+            android:gravity="center"
             android:text="@string/voice_record"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/edit_photo_voice_text_size" />
