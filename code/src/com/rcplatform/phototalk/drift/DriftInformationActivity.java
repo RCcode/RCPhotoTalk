@@ -552,6 +552,17 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void addInformationAtFirst(List<DriftInformation> data) {
 		adapter.addData(data);
 		adapter.notifyDataSetChanged();
+		if (isShowReceivedDrift()) {
+			moveToListFirst();
+		}
+	}
+
+	private void moveToListFirst() {
+		mInformationList.setSelection(0);
+	}
+
+	private boolean isShowReceivedDrift() {
+		return mShowMode == DriftShowMode.ALL || mShowMode == DriftShowMode.RECEIVE;
 	}
 
 	@Override
