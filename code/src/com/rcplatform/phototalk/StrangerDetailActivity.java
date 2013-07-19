@@ -55,7 +55,8 @@ public class StrangerDetailActivity extends BaseActivity {
 	private boolean isFromStangerPage;
 	private DriftInformation information;
 	private UserInfo userInfo;
-private ImageView report_line;
+	private ImageView report_line;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,47 +67,69 @@ private ImageView report_line;
 	}
 
 	protected void showDialog() {
-		AlertDialog dialog = new AlertDialog.Builder(this).setMessage(getString(R.string.report)).setPositiveButton(R.string.report, new DialogInterface.OnClickListener() {
+		AlertDialog dialog = new AlertDialog.Builder(this)
+				.setMessage(getString(R.string.report))
+				.setPositiveButton(R.string.report,
+						new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				if (information != null) {
-					DriftProxy.reportPic(StrangerDetailActivity.this, new RCPlatformResponseHandler() {
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								if (information != null) {
+									DriftProxy.reportPic(
+											StrangerDetailActivity.this,
+											new RCPlatformResponseHandler() {
 
-						@Override
-						public void onSuccess(int statusCode, String content) {
-							// TODO Auto-generated method stub
-							Toast.makeText(StrangerDetailActivity.this, getString(R.string.report_success), Toast.LENGTH_LONG).show();
-						}
+												@Override
+												public void onSuccess(
+														int statusCode,
+														String content) {
+													// TODO Auto-generated
+													// method stub
+													Toast.makeText(
+															StrangerDetailActivity.this,
+															getString(R.string.report_success),
+															Toast.LENGTH_LONG)
+															.show();
+												}
 
-						@Override
-						public void onFailure(int errorCode, String content) {
-							// TODO Auto-generated method stub
-							showConfirmDialog(content);
-						}
-					}, information);
-				}
-			}
-		}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+												@Override
+												public void onFailure(
+														int errorCode,
+														String content) {
+													// TODO Auto-generated
+													// method stub
+													showConfirmDialog(content);
+												}
+											}, information);
+								}
+							}
+						})
+				.setNegativeButton(getString(R.string.cancel),
+						new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		}).create();
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								dialog.dismiss();
+							}
+						}).create();
 		dialog.show();
 	}
 
 	private void setFriendInfo() {
-		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead, ImageOptionsFactory.getFriendHeadImageOptions());
-		mImageLoader.displayImage(mFriend.getBackground(), ivBackground, ImageOptionsFactory.getFriendBackImageOptions());
+		mImageLoader.displayImage(mFriend.getHeadUrl(), ivHead,
+				ImageOptionsFactory.getFriendHeadImageOptions());
+		mImageLoader.displayImage(mFriend.getBackground(), ivBackground,
+				ImageOptionsFactory.getFriendBackImageOptions());
 		setFriendName();
 	}
 
 	private void initData() {
 		mFriend = (Friend) getIntent().getSerializableExtra(PARAM_FRIEND);
 		isFromStangerPage = getIntent().getBooleanExtra(PARAM_FROM_PAGE, false);
-		information = (DriftInformation) getIntent().getSerializableExtra(PARAM_INFORMATION);
+		information = (DriftInformation) getIntent().getSerializableExtra(
+				PARAM_INFORMATION);
 		mImageLoader = ImageLoader.getInstance();
 		// mAction = getIntent().getAction();
 		userInfo = getCurrentUser();
@@ -122,65 +145,87 @@ private ImageView report_line;
 			public void onClick(View v) {
 				if (!isFromStangerPage) {
 					showLoadingDialog(false);
-					new AddFriendTask(StrangerDetailActivity.this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
-						@Override
-						public void onFriendAddSuccess(Friend friend, int addType) {
-							friendAddSuccess();
-							dissmissLoadingDialog();
-						}
+					new AddFriendTask(StrangerDetailActivity.this,
+							getPhotoTalkApplication().getCurrentUser(),
+							new AddFriendTask.AddFriendListener() {
+								@Override
+								public void onFriendAddSuccess(Friend friend,
+										int addType) {
+									friendAddSuccess();
+									dissmissLoadingDialog();
+									showToast(R.string.add_friend_success);
+								}
 
-						@Override
-						public void onFriendAddFail(int statusCode, String content) {
-							showConfirmDialog(content);
-							dissmissLoadingDialog();
-						}
+								@Override
+								public void onFriendAddFail(int statusCode,
+										String content) {
+									showConfirmDialog(content);
+									dissmissLoadingDialog();
+									showToast(R.string.add_friend_failed);
+								}
 
-						@Override
-						public void onAlreadyAdded() {
-							friendAddSuccess();
-							dissmissLoadingDialog();
-						}
-					}, mFriend).execute();
+								@Override
+								public void onAlreadyAdded() {
+									friendAddSuccess();
+									dissmissLoadingDialog();
+									showToast(R.string.add_friend_success);
+								}
+							}, mFriend).execute();
 				} else {
 					if (information != null) {
 						showLoadingDialog(false);
-						new SkyPoolAddFriendTask(StrangerDetailActivity.this, userInfo, new SkyPoolAddFriendTask.SkyPoolAddFriendListener() {
+						new SkyPoolAddFriendTask(
+								StrangerDetailActivity.this,
+								userInfo,
+								new SkyPoolAddFriendTask.SkyPoolAddFriendListener() {
 
-							@Override
-							public void onFriendAddSuccess(Friend friend, int addType) {
-								friendAddSuccess();
-								dissmissLoadingDialog();
-							}
+									@Override
+									public void onFriendAddSuccess(
+											Friend friend, int addType) {
+										friendAddSuccess();
+										dissmissLoadingDialog();
+										showToast(R.string.add_friend_success);
+									}
 
-							@Override
-							public void onFriendAddFail(int statusCode, String content) {
-								showConfirmDialog(content);
-								dissmissLoadingDialog();
-							}
+									@Override
+									public void onFriendAddFail(int statusCode,
+											String content) {
+										showConfirmDialog(content);
+										dissmissLoadingDialog();
+										showToast(R.string.add_friend_failed);
+									}
 
-							@Override
-							public void onAlreadyAdded() {
-								friendAddSuccess();
-								dissmissLoadingDialog();
-							}
-						}, information, mFriend).execute();
+									@Override
+									public void onAlreadyAdded() {
+										friendAddSuccess();
+										dissmissLoadingDialog();
+										showToast(R.string.add_friend_success);
+									}
+								}, information, mFriend).execute();
 					}
 				}
 			}
 		});
 	}
 
+	private void showToast(int id) {
+		Toast.makeText(this, getString(id), Toast.LENGTH_LONG).show();
+	}
+
 	private void friendAddSuccess() {
 		mFriend.setFriend(true);
-		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSenderInfo(mFriend);
+		PhotoTalkDatabaseFactory.getDatabase()
+				.updateDriftInformationSenderInfo(mFriend);
 		coverToFriendView();
 	}
 
 	private void coverToFriendView() {
 		// 是好友 且列表不为空显示applist
-		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0 && !mFriend.getRcId().equals(getCurrentUser().getRcId())) {
+		if (mFriend.getAppList() != null && mFriend.getAppList().size() > 0
+				&& !mFriend.getRcId().equals(getCurrentUser().getRcId())) {
 			linearApps.setVisibility(View.VISIBLE);
-			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(), mImageLoader);
+			PhotoTalkUtils.buildAppList(this, linearApps, mFriend.getAppList(),
+					mImageLoader);
 		} else {
 			linearApps.setVisibility(View.GONE);
 		}
@@ -191,7 +236,7 @@ private ImageView report_line;
 	private void initView() {
 		addFriendBtn = (Button) findViewById(R.id.stranger_add_friend_btn);
 		reportBtn = (Button) findViewById(R.id.report_btn);
-		report_line = (ImageView)findViewById(R.id.report_line);
+		report_line = (ImageView) findViewById(R.id.report_line);
 		if (isFromStangerPage) {
 			reportBtn.setVisibility(View.VISIBLE);
 			report_line.setVisibility(View.VISIBLE);
@@ -206,7 +251,7 @@ private ImageView report_line;
 				showDialog();
 			}
 		});
-		
+
 		ivHead = (ImageView) findViewById(R.id.strange_iv_head);
 		ivBackground = (ImageView) findViewById(R.id.stranger_iv_bg);
 		tv_rcid = (TextView) findViewById(R.id.strange_rcid);
@@ -228,7 +273,8 @@ private ImageView report_line;
 
 			@Override
 			public void onClick(View v) {
-				EventUtil.Friends_Addfriends.rcpt_profile_takephotobutton(baseContext);
+				EventUtil.Friends_Addfriends
+						.rcpt_profile_takephotobutton(baseContext);
 				sendBackToStranges();
 			}
 		});
@@ -240,14 +286,17 @@ private ImageView report_line;
 		if (!mFriend.isFriend()) {
 			intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
 			if (information != null) {
-				intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_ID, information.getPicId());
-				intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_URL, information.getUrl());
+				intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_ID,
+						information.getPicId());
+				intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_URL,
+						information.getUrl());
 			}
 		} else {
 			intent.putExtra("photoType", PhotoInformationType.TYPE_NORMAL);
 		}
 		if (getIntent().hasExtra(PARAM_BACK_PAGE))
-			intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE, getIntent().getSerializableExtra(PARAM_BACK_PAGE));
+			intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE,
+					getIntent().getSerializableExtra(PARAM_BACK_PAGE));
 		startActivity(intent);
 	}
 
@@ -255,27 +304,36 @@ private ImageView report_line;
 		switch (mFriend.getGender()) {
 		case 0:
 			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
-				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName() + ", " + mFriend.getAge());
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge());
 			} else {
-				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName());
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName());
 
 			}
 			break;
 		case 1:
 			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
-				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName() + ", " + mFriend.getAge() + ", "
-						+ getString(R.string.male));
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge() + ", " + getString(R.string.male));
 			} else {
-				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName() + ", " + getString(R.string.male));
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ getString(R.string.male));
 
 			}
 			break;
 		case 2:
 			if (!TextUtils.isEmpty(mFriend.getBirthday())) {
-				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName() + ", " + mFriend.getAge() + ", "
-						+ getString(R.string.famale));
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ mFriend.getAge() + ", " + getString(R.string.famale));
 			} else {
-				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend.getLocalName() : mFriend.getNickName() + ", " + getString(R.string.famale));
+				tvName.setText(!TextUtils.isEmpty(mFriend.getLocalName()) ? mFriend
+						.getLocalName() : mFriend.getNickName() + ", "
+						+ getString(R.string.famale));
 
 			}
 			break;
@@ -284,7 +342,8 @@ private ImageView report_line;
 		// .getLocalName() : mFriend.getNickName());
 
 		if (mFriend.getCountry() != null && !mFriend.getCountry().equals("")) {
-			Bitmap bitmapFlag = Utils.getAssetCountryFlag(this, mFriend.getCountry());
+			Bitmap bitmapFlag = Utils.getAssetCountryFlag(this,
+					mFriend.getCountry());
 			if (bitmapFlag != null) {
 				ivCountryFlag.setImageBitmap(bitmapFlag);
 			}
