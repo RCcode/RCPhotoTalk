@@ -461,7 +461,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				requestLayout();
 				isShowCamera = true;
 			}
-			catch (IOException exception) {
+			catch (Exception exception) {
 				// 释放手机摄像头
 				releaseCamera();
 			}
