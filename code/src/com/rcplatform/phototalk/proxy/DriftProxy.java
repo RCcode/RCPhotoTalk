@@ -19,16 +19,16 @@ import com.rcplatform.phototalk.utils.Utils;
 
 public class DriftProxy {
 
-	public static void reportPic(Context context, RCPlatformResponseHandler handler, DriftInformation information) {
+	public static void reportPic(Context context, RCPlatformResponseHandler handler, DriftInformation information,Friend friend) {
 		Request request = new Request(context, PhotoTalkApiUrl.REPORT_URL, handler);
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_COUNTRY, userInfo.getCountry());
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_GENDER, userInfo.getGender() + "");
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICID, information.getPicId() + "");
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICURL, information.getUrl());
-		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_COUNTRY, information.getSender().getCountry());
-		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_GENDER, information.getSender().getGender() + "");
-		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, information.getSender().getRcId());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_COUNTRY, friend.getCountry());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_GENDER, friend.getGender() + "");
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, friend.getRcId());
 		request.excuteAsync();
 	}
 
@@ -81,6 +81,7 @@ public class DriftProxy {
 			request.setFile(new File(filePath));
 		else
 			request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_PICURL, picUrl);
+		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_HEAD_URL, currentUser.getHeadUrl());
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_FLAG, flag + "");
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_GENDER, currentUser.getGender() + "");
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_NICK, currentUser.getNickName());

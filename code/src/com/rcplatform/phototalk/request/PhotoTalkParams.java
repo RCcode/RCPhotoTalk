@@ -215,6 +215,7 @@ public class PhotoTalkParams {
 	}
 
 	public static class ThrowDriftInformation {
+		public static final String PARAM_KEY_HEAD_URL="headUrl";
 		public static final String PARAM_KEY_GENDER = "gender";
 		public static final String PARAM_KEY_NICK = "nick";
 		public static final String PARAM_KEY_BACKGROUND = "backUrl";

@@ -16,7 +16,7 @@
         <item>France</item>
         <item>Poland</item>
         <item>Ukraine</item>
-        <item>Argentina</item>3
+        <item>Argentina</item>
         <item>Canada</item>
         <item>Israel</item>
         <item>Czech</item>
@@ -157,9 +157,7 @@
         <item>Cambodia</item>
         <item>Qatar</item>
         <item>Comoros</item>
-
         <item>Coted lvoire</item>
-
         <item>Croatia</item>
         <item>Kenya</item>
         <item>Latvia</item>
@@ -186,6 +184,7 @@
         <item>Western Sahara</item>
         <item>Armenia</item>
         <item>Zambia</item>
+        <item>Hong Kong</item>
     </string-array>
 
 </resources>
