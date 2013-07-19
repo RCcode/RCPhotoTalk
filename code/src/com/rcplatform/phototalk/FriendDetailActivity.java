@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
@@ -85,7 +86,9 @@ public class FriendDetailActivity extends BaseActivity {
 		mImageLoader = ImageLoader.getInstance();
 		mAction = getIntent().getAction();
 	}
-
+	private void showToast(int id) {
+		Toast.makeText(this, getString(id), Toast.LENGTH_LONG).show();
+	}
 	private void coverToRecommendView() {
 		linearApps.setVisibility(View.GONE);
 		btnPerform.setText(R.string.add_to_friend);
@@ -104,6 +107,7 @@ public class FriendDetailActivity extends BaseActivity {
 								mFriend.setFriend(true);
 								coverToFriendView();
 								dismissLoadingDialog();
+								showToast(R.string.add_friend_success);
 							}
 
 							@Override
@@ -111,6 +115,7 @@ public class FriendDetailActivity extends BaseActivity {
 									String content) {
 								showErrorConfirmDialog(content);
 								dismissLoadingDialog();
+								showToast(R.string.add_friend_failed);
 							}
 
 							@Override
@@ -118,6 +123,7 @@ public class FriendDetailActivity extends BaseActivity {
 								mFriend.setFriend(true);
 								coverToFriendView();
 								dismissLoadingDialog();
+								showToast(R.string.add_friend_success);
 							}
 						}, mFriend).execute();
 			}
