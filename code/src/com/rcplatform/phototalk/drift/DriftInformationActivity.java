@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -417,7 +418,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
-		DriftInformation infoRecord = (DriftInformation) adapter.getItem(position);
+		final DriftInformation infoRecord = (DriftInformation) adapter.getItem(position);
 		if (!LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getState() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
@@ -426,21 +427,28 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 					LongClickShowView.Builder builder = new LongClickShowView.Builder(DriftInformationActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getPicId() + Button.class.getName());
+				final RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(infoRecord.getPicId() + Button.class.getName());
 				ImageView ivCountry = (ImageView) mInformationList.findViewWithTag(infoRecord.getPicId() + ImageView.class.getName() + "country");
 				ivCountry.setVisibility(View.GONE);
 				limitView.setVisibility(View.VISIBLE);
 				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
+				mShowDialog.setOnShowListener(new OnShowListener() {
+
+					@Override
+					public void onShow(DialogInterface dialog) {
+						LogicUtils.startShowPhotoInformation(infoRecord);
+						limitView.scheuleTask(infoRecord);
+					}
+				});
 				mShowDialog.ShowDialog(infoRecord);
-				(limitView).scheuleTask(infoRecord);
-				LogicUtils.startShowPhotoInformation(infoRecord);
+
 				isShow = true;
 				// 把数据里面的状态更改为3，已查看
 			}
 		}
 	}
-
+	
 	public int getPostionFromTouch(MotionEvent ev, ListView listview) {
 		float eY = ev.getRawY();
 		Rect firstR = new Rect();

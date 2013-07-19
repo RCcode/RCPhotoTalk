@@ -15,6 +15,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -602,7 +603,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener,
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
-		Information infoRecord = (Information) adapter.getItem(position);
+		final Information infoRecord = (Information) adapter.getItem(position);
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
 				&& !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
@@ -613,16 +614,22 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener,
 							HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList
+				final RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList
 						.findViewWithTag(PhotoTalkUtils
 								.getInformationTagBase(infoRecord)
 								+ Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
 				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
+				mShowDialog.setOnShowListener(new OnShowListener() {
+					
+					@Override
+					public void onShow(DialogInterface dialog) {
+						LogicUtils.startShowPhotoInformation(infoRecord);
+						limitView.scheuleTask(infoRecord);
+					}
+				});
 				mShowDialog.ShowDialog(infoRecord);
-				(limitView).scheuleTask(infoRecord);
-				LogicUtils.startShowPhotoInformation(infoRecord);
 				isShow = true;
 				// 把数据里面的状态更改为3，已查看
 			}

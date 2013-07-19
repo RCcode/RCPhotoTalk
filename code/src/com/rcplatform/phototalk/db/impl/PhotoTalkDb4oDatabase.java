@@ -17,7 +17,6 @@ import com.db4o.query.Predicate;
 import com.db4o.query.Query;
 import com.db4o.query.QueryComparator;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
@@ -410,17 +409,16 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		});
 		LogUtil.e(result.size() + " is result size");
 		boolean isHiden = true;
-		boolean isFriend = false;
-		FriendSourse source = null;
-		for (Friend f : result) {
-			isHiden = f.isHiden();
-			isFriend = f.isFriend();
-			source = f.getSource();
-			db.delete(f);
+		if (result.size() > 0) {
+			boolean isFriend = false;
+			for (Friend f : result) {
+				isHiden = f.isHiden();
+				isFriend = f.isFriend();
+				db.delete(f);
+			}
+			friend.setFriend(isFriend);
 		}
-		friend.setSource(source);
 		friend.setHiden(isHiden);
-		friend.setFriend(isFriend);
 		db.store(friend);
 		db.commit();
 	}
