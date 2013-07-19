@@ -94,5 +94,7 @@
     <dimen name="send_image_head_width">59dp</dimen>
     <dimen name="invite_text">16sp</dimen>
     <dimen name="app_icon_width_invite">40dp</dimen>
-
+ <!-- v2.0 陌生人引导页的布局 -->
+    <dimen name="stranger_init_padding">55dp</dimen>
+    <dimen name="stranger_init_padding_bottom">180dp</dimen>
 </resources>

@@ -96,17 +96,16 @@
             android:layout_marginTop="72dp"
             android:text="@string/know_strangers"
             android:textColor="@color/red"
-            android:textSize="26sp"
-            android:textStyle="bold" />
+            android:textSize="22sp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="70dp"
+            android:layout_marginRight="70dp"
             android:layout_marginTop="40dp"
             android:text="@string/new_init_message"
-            android:textSize="22sp"
-            android:textStyle="bold" />
+            android:textSize="18sp" />
     </LinearLayout>
 
 </RelativeLayout>
