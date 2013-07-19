@@ -1,6 +1,13 @@
 package com.rcplatform.phototalk.bean;
 
-public class RecordUser {
+import java.io.Serializable;
+
+public class RecordUser implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private String rcId;
 

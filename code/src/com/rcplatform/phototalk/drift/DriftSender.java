@@ -5,7 +5,11 @@ import java.io.Serializable;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.RecordUser;
 
-public class DriftSender extends RecordUser implements Serializable{
+public class DriftSender extends RecordUser {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String country;
 	private int gender;
 	private int appId;
