@@ -26,11 +26,14 @@ import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
 import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
+import com.rcplatform.phototalk.proxy.UserSettingProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.task.AddFriendTask;
 import com.rcplatform.phototalk.task.SkyPoolAddFriendTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
 
 //漂流瓶 好友和陌生人 详细信息页面
@@ -66,9 +69,9 @@ public class StrangerDetailActivity extends BaseActivity {
 	}
 
 	protected void showDialog() {
-		AlertDialog dialog = new AlertDialog.Builder(this)
-				.setMessage(getString(R.string.report))
-				.setPositiveButton(R.string.report,
+		AlertDialog.Builder dialog = DialogUtil.getAlertDialogBuilder(this);
+		dialog.setTitle(getString(R.string.report));
+		dialog.setPositiveButton(R.string.report,
 						new DialogInterface.OnClickListener() {
 
 							@Override
@@ -103,8 +106,8 @@ public class StrangerDetailActivity extends BaseActivity {
 											}, information);
 								}
 							}
-						})
-				.setNegativeButton(getString(R.string.cancel),
+						});
+		dialog.setNegativeButton(getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 
 							@Override
@@ -112,8 +115,9 @@ public class StrangerDetailActivity extends BaseActivity {
 									int which) {
 								dialog.dismiss();
 							}
-						}).create();
-		dialog.show();
+						});
+		dialog.create().show();
+//		dialog.show();
 	}
 
 	private void setFriendInfo() {
