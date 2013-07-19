@@ -864,6 +864,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private PopupWindow filterMenu;
 
 	private void showFilterMenu(View v) {
+		int xoff = v.getWidth() - getResources().getDimensionPixelSize(R.dimen.drift_filter_menu_width);
+		if (xoff <= 0)
+			xoff = 0;
 		if (filterMenu == null) {
 			filterMenu = new PopupWindow(this);
 			View view = getLayoutInflater().inflate(R.layout.driftinformation_filter_menu, null);
@@ -883,9 +886,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		if (filterMenu.isShowing()) {
 			filterMenu.dismiss();
 		} else {
-			filterMenu.showAsDropDown(v, 0, 0);
+			filterMenu.showAsDropDown(v, xoff, 0);
 		}
-
 	}
 
 	private AlertDialog throwDialog;

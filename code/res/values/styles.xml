@@ -262,5 +262,9 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/filter_menu_bg</item>
     </style>
+    <style name="filter_menu_item" parent="filter_menu">
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">5dp</item>
+    </style>
 
 </resources>
