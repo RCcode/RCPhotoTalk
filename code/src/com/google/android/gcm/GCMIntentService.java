@@ -30,7 +30,6 @@ import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.google.android.gcm.GCMBaseIntentService;
-import com.rcplatform.message.UserMessageService;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;

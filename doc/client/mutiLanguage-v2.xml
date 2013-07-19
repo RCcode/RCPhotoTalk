@@ -1,0 +1,491 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+  <Created>2006-09-16T00:00:00Z</Created>
+  <LastSaved>2013-07-18T08:22:30Z</LastSaved>
+  <Version>14.0</Version>
+ </DocumentProperties>
+ <OfficeDocumentSettings xmlns="urn:schemas-microsoft-com:office:office">
+  <AllowPNG/>
+  <RemovePersonalInformation/>
+ </OfficeDocumentSettings>
+ <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+  <WindowHeight>8160</WindowHeight>
+  <WindowWidth>14800</WindowWidth>
+  <WindowTopX>10000</WindowTopX>
+  <WindowTopY>5120</WindowTopY>
+  <TabRatio>600</TabRatio>
+  <ProtectStructure>False</ProtectStructure>
+  <ProtectWindows>False</ProtectWindows>
+ </ExcelWorkbook>
+ <Styles>
+  <Style ss:ID="Default" ss:Name="Normal">
+   <Alignment ss:Vertical="Bottom"/>
+   <Borders/>
+   <Font ss:FontName="Calibri" x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+   <Protection/>
+  </Style>
+  <Style ss:ID="s99">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Hei" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s100">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders/>
+   <Font x:Family="Swiss" ss:Size="11" ss:Color="#000000"/>
+  </Style>
+  <Style ss:ID="s101">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Hei" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+  </Style>
+  <Style ss:ID="s102">
+   <Alignment ss:Horizontal="Left" ss:Vertical="Bottom" ss:WrapText="1"/>
+   <Borders/>
+   <Font ss:FontName="Hei" x:CharSet="134" ss:Size="11" ss:Color="#000000"/>
+   <Interior/>
+   <NumberFormat/>
+  </Style>
+ </Styles>
+ <Worksheet ss:Name="Sheet1">
+  <Table ss:ExpandedColumnCount="20" ss:ExpandedRowCount="17" x:FullColumns="1"
+   x:FullRows="1" ss:StyleID="s100" ss:DefaultColumnWidth="404">
+   <Row>
+    <Cell ss:StyleID="s99"/>
+    <Cell ss:StyleID="s101"/>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">zh</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">ar</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">de</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">en</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">es</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">fr</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">hi</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">in</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">it</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">iw</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">ja</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">ko</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">pt</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">ru</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">th</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">tr</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">zh-rHK</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">zh-rTW</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">know_strangers</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Make new friends</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">结交新朋友</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">اكتسب أصدقاء جديد</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Neue Freunde finden</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Make new friends</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Haz nuevos amigos</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Faites-vous de nouveaux amis</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">नए मित्र बनाएँ</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Menjalin teman baru</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Trova nuovi amici</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">עשה לך חברים חדשים</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">新しい友達を作る</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">새로운 친구 만들기</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Faça novos amigos.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Заводите новых друзей</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">ผูกมิตรกับเพื่อนใหม่</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Yeni arkadaşlar edinin</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">結交新朋友</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">結交新朋友</Data></Cell>
+   </Row>
+   <Row ss:Height="24">
+    <Cell ss:StyleID="s99"><Data ss:Type="String">new_init_message</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">New to version 2.0 - now you can make friends from all over the world!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">v2.0新功能-现在你可以结识来自全世界的朋友！</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">قم بالتحديث إلى الإصدار 2.0 - الآن يمكنك التعرف على أصدقاء من جميع أنحاء العالم!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Neu in Version 2.0 - Lernen Sie jetzt Freunde aus aller Welt kennen!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">New to version 2.0 - now you can make friends from all over the world!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Novedades de la versión 2.0: ¡Ahora puedes hacer amigos de todas las partes del mundo!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Nouveauté de la version 2.0 - Vous pouvez vous faire des amis dans le mode entier !</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">संस्करण 2.0 में नया - अब आप दुनिया भर से मित्र बना सकते हैं!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Baru dalam versi 2.0 – kini Anda dapat menjalin teman dari seluruh dunia!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Novità della versione 2.0 - ora potrai avere amici in tutto il mondo!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">חדש בגרסה 2.0 - כעת תוכל לעשות לך חברים מכל רחבי העולם!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">バージョン2.0新機能 - 世界中の人と友達になれる！</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">버전 2.0의 새로운 기능 - 이제 전세계 사용자들과 친구를 맺을 수 있습니다!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Novo na versão 2.0 - Agora você pode fazer amigos em toda parte do mundo!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Новое в версии 2.0 - теперь вы можете заводить новых друзей по всему миру!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">คุณลักษณะใหม่ในเวอร์ชัน 2.0 - ตอนนี้คุณสามารถผูกมิตรกับเพื่อนใหม่ได้จากทั่วโลก!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Sürüm 2.0'da yeni olarak - artık tüm dünyadan arkadaşlar edinebilirsiniz!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">新功能V2.0 - 現在你可以結識來自全世界的朋友！</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">新功能V2.0 - 現在你可以結識來自全世界的朋友！</Data></Cell>
+   </Row>
+   <Row ss:Height="36">
+    <Cell ss:StyleID="s99"><Data ss:Type="String">show_init_message_1</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Upload your best self-portraits and pictures to make new friends!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">发布自己或有趣的照片来结识新的朋友。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">قم بتحميل أفضل صورك الشخصية لاكتساب أصدقاء جدد!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Laden Sie Ihr schönstes Selbstporträt und Bilder hoch, um neue Freunde zu finden!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Upload your best self-portraits and pictures to make new friends!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Sube tus mejores autorretratos e imágenes para hacer nuevos amigos.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Chargez vos meilleurs autoportraits et images pour vous faire de nouveaux amis !</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">नए मित्र बनाने के लिए अपने सबसे अच्छे खुद के पोर्ट्रेट और चित्र अपलोड करें!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Unggah potret dan foto terbaik Anda untuk menjalin teman baru!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Carica le tue foto e autoritratti più belli per attirare nuovi amici!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">העלה תמונות דיוקן עצמי ותמונות טובות אחרות כדי ליצור קשר עם חברים חדשים!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">お気に入りのプロフィール画像をアップロードして新しい友達を作ろう！</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">최고의 셀프촬영 사진과 그 밖의 사진을 업로드하고 새로운 친구를 만나 보세요!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Publique suas melhores fotos e faça novos amigos!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Выгружайте свои самые удачные автопортреты и фотографии, чтобы завести новых друзей!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">อัปโหลดภาพถ่ายตัวเองที่ดีที่สุดและภาพต่าง ๆ ของคุณ เพื่อผูกมิตรกับเพื่อนใหม่!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Yeni arkadaşlar edinmek için en iyi kendi portrelerinizi ve fotoğraflarınızı karşıya yükleyin!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">發布自己或有趣的照片來結識新的朋友。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">發布自己或有趣的照片來結識新的朋友。</Data></Cell>
+   </Row>
+   <Row ss:Height="48">
+    <Cell ss:StyleID="s99"><Data ss:Type="String">show_init_message_2</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">See random photos from others，share messages and pictures with fun people around the world!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">随机获取别人的照片，与全世界有趣的人沟通与分享乐趣</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">شاهد الصور العشوائية للآخرين، وشارك الرسائل والصور مع أشخاص مرحين من جميع أنحاء العالم!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Sehen Sie sich zufällige Fotos anderer an und teilen Sie Nachrichten und Bilder  mit lustigen Menschen aus aller Welt!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">See random photos from others，share messages and pictures with fun people around the world!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Mira las imágenes aleatorias de los demás y comparte mensajes e imágenes con personas divertidas de todas las partes del mundo.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Découvrez des photos aléatoires d'autres personnes, partagez des messages et des images avec des personnes amusantes du monde entier !</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">दूसरों से यादृच्छिक चित्र देखें, दुनिया भर से मज़ेदार लोगों के साथ संदेश और चित्र साझा करें!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Melihat foto secara acak dari orang lain，berbagi pesan dan foto dengan orang dari seluruh dunia!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Sfoglia a caso le foto degli altri, condividi i messaggi e le foto divertendoti con persone di tutto il mondo!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">צפה בתמונות אקראיות של אחרים, שתף הודעות ותמונות עם אנשים משעשעים בכל פינה בעולם!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">他の人の写真をランダムに見て、世界中の人とメッセージや写真を共有しよう！</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">무작위로 다른 사람의 사진을 보고, 전세계 재미있는 사람들과 메시지 또는 사진을 공유해 보세요!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Veja fotos de outros amigos, compartilhe mensagens e imagens com gente divertida de todo o mundo!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Смотрите фотографии других пользователей, обменивайтесь сообщениями и смешными картинками с людьми по всему миру!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ดูภาพถ่ายแบบสุ่มจากคนอื่น ๆ แชร์ข้อความและภาพกับผู้คนสนุก ๆ ทั่วโลก!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Başkalarından gelen rastgele fotoğraflara bakın, dünyadaki eğlenceli insanlarla mesajları ve fotoğrafları paylaşın!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">隨機獲取別人的照片，與全世界有趣的人溝通與分享樂趣</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">隨機獲取別人的照片，與全世界有趣的人溝通與分享樂趣</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">drift_show_time</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d views</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d人已看过</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d مشاهدة</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d Aufrufe </Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d views</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Vistas %1$d</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d vues</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d दृश्य</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d melihat</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d visualizzazioni</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d צפיות</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d 回閲覧</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d개 뷰</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d visualizações</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Просмотров: %1$d</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ดู %1$d ครั้ง</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">%1$d görüntü</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d人已看過</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">%1$d人已看過</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">country</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Nationality</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">国家</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">الجنسية</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Nationalität</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Nationality</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Nacionalidad</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Nationalité</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">राष्ट्रीयता</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Kebangsaan</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Nazionalità</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">לאומיות</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">国籍</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">국적</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Nacionalidade</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Гражданство</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">สัญชาติ</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Milliyet</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">國家</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">國家</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">throw_dialog_title</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Please upload a photo first.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">请先发一张自己的照片。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">يرجى إيداع صورة أولاً. كلما كانت الصور التي تقوم </Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Bitte laden Sie zuerst ein Foto hoch. </Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Please upload a photo first.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Sube primero una imagen.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Veuillez d'abord charger une photo.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">कृपया पहले फ़ोटो अपलोड करें।</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Unggah foto lebih dahulu.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Per prima cosa carica una foto.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">נא לעלות תמונה תחילה.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">最初に写真をアップロードしてください。</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">먼저 사진을 업로드하십시오.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Por favor, primeiro publique uma foto.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Сначала выгрузите фотографию.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">กรุณาอัปโหลดภาพถ่ายก่อน</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Lütfen önce bir fotoğrafı karşıya yükleyin.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">請先發一張自己的照片。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">請先發一張自己的照片。</Data></Cell>
+   </Row>
+   <Row ss:Height="36">
+    <Cell ss:StyleID="s99"><Data ss:Type="String">throw_dialog_msg</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">The more interesting photos you upload, the more new friends you'll make!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">发些自拍或有趣的照片能吸引更多人的回复并容易结识新朋友。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">بإيداعها أكثر تشويقًا، أمكنك اكتساب المزيد من الأصدقاء الجدد!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Je interessanter Ihre hochgeladenen Fotos sind, desto mehr Freunde werden Sie kennen lernen!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">The more interesting photos you upload, the more new friends you'll make!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Cuanto más interesantes sean las imágenes que subas, ¡más amigos harás!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Plus les photos que vous chargez sont intéressantes, plus vous vous ferez de nouveaux amis !</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">आप जितनी ज़्यादा रोचक फ़ोटो अपलोड करेंगे, उतने ही ज़्यादा नए मित्र बनाएँगे!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Semakin menarik foto yang Anda unggah, semakin banyak teman baru yang akan terjalin!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Caricando foto interessanti avrai la possibilità di attirare nuovi amici!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ככל שתעלה תמונות מעניינות יותר, כך תעשה לך יותר חברים חדשים!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">楽しい写真を沢山アップロードすれば、友達も増える！</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">재미있는 사진을 업로드할수록 새로운 친구를 만날 기회가 더 많아집니다!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Quanto mais interessante a foto, mais amigos você fará!       </Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Чем интереснее фотографии вы выгружаете, тем больше шансов завести новых друзей!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ยิ่งภาพถ่ายที่คุณอัปโหลดน่าสนใจมากเท่าไร คุณก็ยิ่งผูกมิตรกับเพื่อนใหม่ได้มากขึ้นเท่านั้น!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Daha fazla ilginç fotoğraf karşıya yükleyin, daha fazla yeni arkadaş kazanacaksınız!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">發些自拍或有趣的照片能吸引更多人的回复並容易結識新朋友。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">發些自拍或有趣的照片能吸引更多人的回复並容易結識新朋友。</Data></Cell>
+   </Row>
+   <Row ss:Height="24">
+    <Cell ss:StyleID="s99"><Data ss:Type="String">fish_over</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">No photos yet, please upload more of your own!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">暂时没有照片可以获取，先发张照片吧。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">لا توجد صور بعد، يرجى إيداع المزيد من صورك!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Noch keine Fotos vorhanden, bitte laden Sie mehr eigene Fotos hoch!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">No photos yet, please upload more of your own!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Todavía no hay ninguna imagen. Sube algunas imágenes tuyas.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Pas encore de photos ; chargez-en davantage de votre crû !</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">अभी तक कोई फ़ोटो नहीं है, कृपया अपने खुद के और ज़्यादा अपलोड करें!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Belum ada foto, unggah foto Anda!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Nessuna foto presente. Carica per primo le tue foto!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">אין עדיין תמונות, אנא העלה תמונות נוספות משלך!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">写真がありません。自分の写真を沢山アップロードしよう！</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">아직 사진을 업로드하지 않았습니다. 자신의 사진을 더 많이 업로드하세요!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Você ainda não tem fotos?  Por favor, publique-as. </Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Пока у вас нет фотографий. Дайте людям возможность узнать о вас больше!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ยังไม่มีภาพถ่าย กรุณาอัปโหลดภาพถ่ายของคุณเพิ่มเติม!</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Henüz fotoğraf yok, lütfen daha fazla kendi fotoğrafınızı karşıya yükleyin!</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">暫時沒有照片可以獲取，先發張照片吧。</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">暫時沒有照片可以獲取，先發張照片吧。</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">reply</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Reply</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">回复</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">رد </Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Antworten</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Reply</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Responder</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Répondre</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">उत्तर दें</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Balas</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Rispondi</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">השב</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">返信</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">회신</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Responder</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Ответить</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ตอบกลับ</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Yanıtla</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">回复</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">回复</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">report</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Report</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">举报</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">تقرير</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Bericht</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Report</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Informar</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Rapport</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">रिपोर्ट करें</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Laporan</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Segnala</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">דווח</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">レポート</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">신고</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Relatório</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Сообщить</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">รายงาน</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Rapor Et </Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">舉報</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">舉報</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">report_success</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Report successful</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">举报成功</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">تم إرسال التقرير بنجاح.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Bericht erfolgreich</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Report successful</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Informe enviado con éxito</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Rapport réussi</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">रिपोर्ट करना सफल।</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Laporan berhasil</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Segnalazione inserita</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">הדיווח הצליח.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">レポート完了</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">신고 성공</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Relatório bem-sucessedido</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Сообщение отправлено</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">รายงานสำเร็จแล้ว</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Rapor başarılı</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">舉報成功</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">舉報成功</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">send_back_success</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Reply successful</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">回复成功</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String"> تم الرد بنجاح.</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Antwort erfolgreich</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Reply successful</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Respuesta enviada con éxito</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Réponse réussie</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">उत्तर देना सफल।</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Balasan berhasil</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Risposta inserita</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">התשובה הצליחה.</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">返信完了</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">회신 성공</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Respondido com sucesso</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Ответ отправлен</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ตอบกลับสำเร็จแล้ว</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Yanıt başarılı</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">回复成功</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">回复成功</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">show_all_drift</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">All</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">所有</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">الكل</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Alle</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">All</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Todos</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Tout</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">सभी</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Semua</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Tutto</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">הכל</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">すべて</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">전체</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Todos</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Все</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">ทั้งหมด</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Tümü</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">所有</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">所有</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">show_send_drift</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Uploaded</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">发出的</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">المودع</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Hochgeladen</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Uploaded</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Subidos</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Chargé</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">अपलोड किया गया</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Diunggah</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Caricate</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">הועלה</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">アップロード済み</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">업로드 완료</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Publicado</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Выгружено</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">อัปโหลดแล้ว</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Karşıya yüklendi</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">發出的</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">發出的</Data></Cell>
+   </Row>
+   <Row>
+    <Cell ss:StyleID="s99"><Data ss:Type="String">show_receive_drift</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Received</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">收到的</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">المستلم</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">Erhalten</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Received</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Recibidos</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Reçu</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">प्राप्त</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Diterima</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Ricevute</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">התקבל</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">受信済み</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">수신 완료</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Recebido</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Получено</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">รับแล้ว</Data></Cell>
+    <Cell ss:StyleID="s102"><Data ss:Type="String">Alındı</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">收到的</Data></Cell>
+    <Cell ss:StyleID="s101"><Data ss:Type="String">收到的</Data></Cell>
+   </Row>
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <Print>
+    <ValidPrinterInfo/>
+    <PaperSizeIndex>9</PaperSizeIndex>
+    <HorizontalResolution>-4</HorizontalResolution>
+    <VerticalResolution>-4</VerticalResolution>
+   </Print>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <Selected/>
+   <Panes>
+    <Pane>
+     <Number>3</Number>
+     <ActiveRow>31</ActiveRow>
+     <ActiveCol>1</ActiveCol>
+    </Pane>
+   </Panes>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet2">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="53" ss:DefaultRowHeight="14">
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+ <Worksheet ss:Name="Sheet3">
+  <Table ss:ExpandedColumnCount="1" ss:ExpandedRowCount="1" x:FullColumns="1"
+   x:FullRows="1" ss:DefaultColumnWidth="53" ss:DefaultRowHeight="14">
+  </Table>
+  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+   <PageSetup>
+    <Header x:Margin="0.3"/>
+    <Footer x:Margin="0.3"/>
+    <PageMargins x:Bottom="0.75" x:Left="0.7" x:Right="0.7" x:Top="0.75"/>
+   </PageSetup>
+   <PageLayoutZoom>0</PageLayoutZoom>
+   <ProtectObjects>False</ProtectObjects>
+   <ProtectScenarios>False</ProtectScenarios>
+  </WorksheetOptions>
+ </Worksheet>
+</Workbook>

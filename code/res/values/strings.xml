@@ -392,6 +392,7 @@
     <string name="drift_show_time">%1$d views</string>
     <string name="country">Nationality</string>
     <string name="throw_dialog_title">Please upload a photo first.</string>
+    <string name="throw_dialog_msg">The more interesting photos you upload, the more new friends you\'ll make!</string>
     <string name="fish_over">No photos yet, please upload more of your own!</string>
     <string name="reply">Reply</string>
     <string name="report">Report</string>

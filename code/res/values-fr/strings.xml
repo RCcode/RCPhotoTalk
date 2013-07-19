@@ -218,6 +218,7 @@
     <string name="show_init_message_1">Chargez vos meilleurs autoportraits et images pour vous faire de nouveaux amis !</string>
     <string name="drift_show_time">%1$d vues</string>
     <string name="country">Nationalité</string>
+    <string name="throw_dialog_title">Veuillez d\'abord charger une photo.</string>
     <string name="throw_dialog_msg">Plus les photos que vous chargez sont intéressantes, plus vous vous ferez de nouveaux amis !</string>
     <string name="fish_over">Pas encore de photos ; chargez-en davantage de votre crû !</string>
     <string name="reply">Répondre</string>
