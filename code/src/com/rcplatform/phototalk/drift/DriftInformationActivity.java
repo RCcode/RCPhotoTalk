@@ -497,7 +497,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			if (isShow) {
 				mShowDialog.hideDialog();
 				if (mShowDialog != null) {
-					mShowDialog.dismiss();
+					if (mShowDialog.isShowing()) {
+						mShowDialog.dismiss();
+					}
 					mShowDialog = null;
 				}
 				isShow = false;

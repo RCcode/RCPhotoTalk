@@ -95,10 +95,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="7dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginRight="10dp"
             android:layout_alignBottom="@id/strange_rela_userinfo"
-            android:background="@drawable/report_btn" />
+            android:background="@drawable/report_btn"
+            />
     </RelativeLayout>
 
     <LinearLayout

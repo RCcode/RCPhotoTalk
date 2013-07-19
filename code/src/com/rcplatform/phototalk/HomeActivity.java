@@ -100,14 +100,15 @@ import com.rcplatform.tigase.TigaseMessageReceiver;
  * 
  * @version 1.0.0
  */
-public class HomeActivity extends MenuBaseActivity implements SnapShowListener, TigaseMessageReceiver {
+public class HomeActivity extends MenuBaseActivity implements SnapShowListener,
+		TigaseMessageReceiver {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
 
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 
 	protected static final int MSG_TIGASE_NEW_INFORMATION = 3;
-	private static final String FRISTUSED="fristUsedVersion";
+	private static final String FRISTUSED = "fristUsedVersion";
 
 	private SnapListView mInformationList;
 
@@ -171,7 +172,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		UserInfo userInfo = getCurrentUser();
 		if (userInfo != null) {
 			try {
-				ServerUtilities.register(this, userInfo.getRcId(), userInfo.getToken());
+				ServerUtilities.register(this, userInfo.getRcId(),
+						userInfo.getToken());
 			} catch (Exception e) {
 
 			}
@@ -189,7 +191,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void checkStartMode() {
-		int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
+		int startMode = getIntent().getIntExtra(
+				ApplicationStartMode.APPLICATION_START_KEY, -1);
 		if (startMode == ApplicationStartMode.APPLICATION_START_RECOMMENDS) {
 			startActivity(MyFriendsActivity.class);
 		}
@@ -215,8 +218,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void checkBindPhone() {
 		String rcId = getCurrentUser().getRcId();
-		if (PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, rcId) && RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone())
-				&& Constants.DEVICE_ID.equals(getCurrentUser().getDeviceId()) && !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
+		if (PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, rcId)
+				&& RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone())
+				&& Constants.DEVICE_ID.equals(getCurrentUser().getDeviceId())
+				&& !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(
+						this, rcId)) {
 			PrefsUtils.User.MobilePhoneBind.setAttentionToBindPhone(this, rcId);
 			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
@@ -224,7 +230,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				public void onClick(DialogInterface dialog, int which) {
 					switch (which) {
 					case DialogInterface.BUTTON_POSITIVE:
-						EventUtil.Main_Photo.rcpt_phonepop_register(baseContext);
+						EventUtil.Main_Photo
+								.rcpt_phonepop_register(baseContext);
 						startActivity(RequestSMSActivity.class);
 						break;
 					case DialogInterface.BUTTON_NEGATIVE:
@@ -234,8 +241,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 					}
 				}
 			};
-			AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.bind_phone_attention)
-					.setNegativeButton(R.string.attention_later, listener).setPositiveButton(R.string.bind_now, listener).create();
+			AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this)
+					.setMessage(R.string.bind_phone_attention)
+					.setNegativeButton(R.string.attention_later, listener)
+					.setPositiveButton(R.string.bind_now, listener).create();
 			dialog.show();
 		}
 	}
@@ -251,8 +260,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 					@Override
 					public void run() {
 						try {
-							List<AppInfo> apps = JSONConver.jsonToAppInfos(new JSONObject(content).getJSONArray("allApps").toString());
-							PhotoTalkDatabaseFactory.getGlobalDatabase().savePlatformAppInfos(apps);
+							List<AppInfo> apps = JSONConver
+									.jsonToAppInfos(new JSONObject(content)
+											.getJSONArray("allApps").toString());
+							PhotoTalkDatabaseFactory.getGlobalDatabase()
+									.savePlatformAppInfos(apps);
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
@@ -268,44 +280,51 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void checkTrends() {
-		checkTrendRequest = UserSettingProxy.checkTrends(this, new RCPlatformResponseHandler() {
+		checkTrendRequest = UserSettingProxy.checkTrends(this,
+				new RCPlatformResponseHandler() {
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				try {
-					JSONObject jsonObject = new JSONObject(content);
-					String url = jsonObject.getString("headUrl");
-					int trendId = jsonObject.getInt("trendId");
-					PrefsUtils.User.saveMaxTrendsId(getApplicationContext(), getCurrentUser().getRcId(), trendId);
-					PrefsUtils.User.saveMaxTrendUrl(getApplicationContext(), getCurrentUser().getRcId(), url);
-					onNewTrends();
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			}
+					@Override
+					public void onSuccess(int statusCode, String content) {
+						try {
+							JSONObject jsonObject = new JSONObject(content);
+							String url = jsonObject.getString("headUrl");
+							int trendId = jsonObject.getInt("trendId");
+							PrefsUtils.User.saveMaxTrendsId(
+									getApplicationContext(), getCurrentUser()
+											.getRcId(), trendId);
+							PrefsUtils.User.saveMaxTrendUrl(
+									getApplicationContext(), getCurrentUser()
+											.getRcId(), url);
+							onNewTrends();
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+					}
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-			}
-		}, PrefsUtils.User.getShowedMaxTrendsId(this, getCurrentUser().getRcId()));
+					@Override
+					public void onFailure(int errorCode, String content) {
+					}
+				}, PrefsUtils.User.getShowedMaxTrendsId(this, getCurrentUser()
+						.getRcId()));
 	}
 
 	private void searchFriend(Friend friend, final int type) {
 		showLoadingDialog(false);
-		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
+		Request.executeGetFriendDetailAsync(this, friend,
+				new FriendDetailListener() {
 
-			@Override
-			public void onSuccess(Friend friend) {
-				dissmissLoadingDialog();
-				startFriendDetailActivity(friend, type);
-			}
+					@Override
+					public void onSuccess(Friend friend) {
+						dissmissLoadingDialog();
+						startFriendDetailActivity(friend, type);
+					}
 
-			@Override
-			public void onError(int errorCode, String content) {
-				dissmissLoadingDialog();
-				showConfirmDialog(content);
-			}
-		}, false);
+					@Override
+					public void onError(int errorCode, String content) {
+						dissmissLoadingDialog();
+						showConfirmDialog(content);
+					}
+				}, false);
 	}
 
 	private void startFriendDetailActivity(Friend friend, int type) {
@@ -385,7 +404,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			@Override
 			public void onClick(View v) {
 				EventUtil.Main_Photo.rcpt_friends(baseContext);
-				startActivity(new Intent(HomeActivity.this, MyFriendsActivity.class));
+				startActivity(new Intent(HomeActivity.this,
+						MyFriendsActivity.class));
 			}
 		});
 		initForwordButton(R.drawable.more_btn, new OnClickListener() {
@@ -393,7 +413,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			@Override
 			public void onClick(View v) {
 				EventUtil.Main_Photo.rcpt_more(baseContext);
-				startActivity(new Intent(HomeActivity.this, SettingsActivity.class));
+				startActivity(new Intent(HomeActivity.this,
+						SettingsActivity.class));
 			}
 		});
 		mTakePhoto.setOnClickListener(new OnClickListener() {
@@ -401,22 +422,26 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			@Override
 			public void onClick(View v) {
 				EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
-				startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
+				startActivity(new Intent(HomeActivity.this,
+						TakePhotoActivity.class));
 			}
 		});
-		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
+		mInformationList
+				.setOnItemLongClickListener(new OnItemLongClickListener() {
 
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				EventUtil.Main_Photo.rcpt_main_longpress(baseContext);
-				showLongClickDialog(arg2);
-				return false;
-			}
-		});
+					@Override
+					public boolean onItemLongClick(AdapterView<?> arg0,
+							View arg1, int arg2, long arg3) {
+						EventUtil.Main_Photo.rcpt_main_longpress(baseContext);
+						showLongClickDialog(arg2);
+						return false;
+					}
+				});
 		mInformationList.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
 				Information information = (Information) adapter.getItem(arg2);
 				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
 						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
@@ -446,11 +471,11 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	 */
 	private void initViewPager() {
 		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
-		boolean isShow =PrefsUtils.User.hasCurrentVersionUsed(this, FRISTUSED);
-		//打开注释 以后只显示一次引导页
-		if(!isShow){
+		boolean isShow = PrefsUtils.User.hasCurrentVersionUsed(this, FRISTUSED);
+		// 打开注释 以后只显示一次引导页
+		if (!isShow) {
 			vPager.setVisibility(View.VISIBLE);
-		}else{
+		} else {
 			vPager.setVisibility(View.GONE);
 		}
 		vPager.setOnClickListener(new OnClickListener() {
@@ -458,17 +483,19 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				AlphaAnimation animation = new AlphaAnimation(1.0f,0.0f);
+				AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
 				animation.setDuration(500);
 				vPager.setAnimation(animation);
 				vPager.setVisibility(View.GONE);
-				PrefsUtils.User.setCurrentVersionUsed(HomeActivity.this, FRISTUSED);
+				PrefsUtils.User.setCurrentVersionUsed(HomeActivity.this,
+						FRISTUSED);
 			}
 		});
 	}
 
 	private void showFriendDetail(Information information) {
-		if (information.getSender().getRcId().equals(information.getReceiver().getRcId())) {
+		if (information.getSender().getRcId()
+				.equals(information.getReceiver().getRcId())) {
 			Friend friend = PhotoTalkUtils.userToFriend(getCurrentUser());
 			startFriendDetailActivity(friend, information.getPhotoType());
 			return;
@@ -487,34 +514,40 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			Information record = adapter.getData().get(position);
 			if (record != null) {
 				if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING || record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)) {
+						&& (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING || record
+								.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)) {
 					return;
 				} else {
 					if (mLongPressDialog == null) {
-						mLongPressDialog = new LongPressDialog(this, new String[] { getString(R.string.resend), getString(R.string.reload),
-								getString(R.string.delete) }, new OnLongPressItemClickListener() {
+						mLongPressDialog = new LongPressDialog(this,
+								new String[] { getString(R.string.resend),
+										getString(R.string.reload),
+										getString(R.string.delete) },
+								new OnLongPressItemClickListener() {
 
-							@Override
-							public void onClick(int listPostion, int itemIndex) {
-								Information record = adapter.getData().get(listPostion);
-								switch (itemIndex) {
-								case 0:
-									reSendPhoto(record);
-									mLongPressDialog.hide();
-									break;
-								// 重新下载
-								case 1:
-									reLoadPictrue(record);
-									mLongPressDialog.hide();
-									break;
+									@Override
+									public void onClick(int listPostion,
+											int itemIndex) {
+										Information record = adapter.getData()
+												.get(listPostion);
+										switch (itemIndex) {
+										case 0:
+											reSendPhoto(record);
+											mLongPressDialog.hide();
+											break;
+										// 重新下载
+										case 1:
+											reLoadPictrue(record);
+											mLongPressDialog.hide();
+											break;
 
-								case 2:
-									deleteInformation(record);
-									mLongPressDialog.hide();
-									break;
-								}
-							}
-						});
+										case 2:
+											deleteInformation(record);
+											mLongPressDialog.hide();
+											break;
+										}
+									}
+								});
 					}
 
 					if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
@@ -533,21 +566,27 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private void reSendPhoto(final Information information) {
 		List<String> friendIds = new ArrayList<String>();
 		friendIds.add(information.getReceiver().getRcId());
-		information.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
-		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
+		information
+				.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
+		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(
+				information);
 		adapter.notifyDataSetChanged();
-		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
+		Request.sendPhoto(this, information.getCreatetime(), new File(
+				information.getUrl()), information.getTotleLength() + "",
+				new PhotoSendListener() {
 
-			@Override
-			public void onSendSuccess(long flag, String url) {
-				InformationPageController.getInstance().onPhotoResendSuccess(information);
-			}
+					@Override
+					public void onSendSuccess(long flag, String url) {
+						InformationPageController.getInstance()
+								.onPhotoResendSuccess(information);
+					}
 
-			@Override
-			public void onFail(long flag, int errorCode, String content) {
-				InformationPageController.getInstance().onPhotoResendFail(information);
-			}
-		}, friendIds, information.isHasVoice(), information.isHasGraf());
+					@Override
+					public void onFail(long flag, int errorCode, String content) {
+						InformationPageController.getInstance()
+								.onPhotoResendFail(information);
+					}
+				}, friendIds, information.isHasVoice(), information.isHasGraf());
 	}
 
 	private void deleteInformation(Information information) {
@@ -557,22 +596,27 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	protected void reLoadPictrue(Information record) {
-		RCPlatformImageLoader.LoadPictureForList(this, mInformationList, record);
+		RCPlatformImageLoader
+				.LoadPictureForList(this, mInformationList, record);
 	}
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
 		Information infoRecord = (Information) adapter.getItem(position);
-		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
+		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+				&& !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
 			if (infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED
 					|| infoRecord.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING) {
 				if (mShowDialog == null) {
-					LongClickShowView.Builder builder = new LongClickShowView.Builder(HomeActivity.this, R.layout.receice_to_show_view);
+					LongClickShowView.Builder builder = new LongClickShowView.Builder(
+							HomeActivity.this, R.layout.receice_to_show_view);
 					mShowDialog = builder.create();
 				}
-				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList.findViewWithTag(PhotoTalkUtils.getInformationTagBase(infoRecord)
-						+ Button.class.getName());
+				RecordTimerLimitView limitView = (RecordTimerLimitView) mInformationList
+						.findViewWithTag(PhotoTalkUtils
+								.getInformationTagBase(infoRecord)
+								+ Button.class.getName());
 				limitView.setVisibility(View.VISIBLE);
 				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
@@ -612,7 +656,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (0 == first) {
 			if (eY > firstR.bottom) {
 				/* 触摸不在listview header上，根据触摸的Y坐标和listitem的高度计算索引 */
-				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
+				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0)
+						.getHeight());
 				count++;
 				index_in_adapter += count;
 			} else {
@@ -624,7 +669,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		else {
 			if (eY > firstR.bottom) {
 				/* 用触摸点坐标和item高度相除来计算索引 */
-				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0).getHeight());
+				count = (int) ((eY - firstR.bottom) / listview.getChildAt(0)
+						.getHeight());
 				count++;
 				index_in_adapter += count;
 			} else {
@@ -640,8 +686,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		case MotionEvent.ACTION_UP:
 			if (isShow) {
 				mShowDialog.hideDialog();
-				if(mShowDialog!=null){
-					mShowDialog.dismiss();
+				if (mShowDialog != null) {
+					if (mShowDialog.isShowing()) {
+						mShowDialog.dismiss();
+					}
 					mShowDialog = null;
 				}
 				isShow = false;
@@ -664,7 +712,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				initOrRefreshListView((List<Information>) msg.obj);
 				break;
 			case MSG_TIGASE_NEW_INFORMATION:
-				InformationPageController.getInstance().onNewInformation((Map<Integer, List<Information>>) msg.obj);
+				InformationPageController.getInstance().onNewInformation(
+						(Map<Integer, List<Information>>) msg.obj);
 				break;
 			case MSG_WHAT_LOCAL_INFORMATION_LOADED:
 				addListData((List<Information>) msg.obj);
@@ -675,8 +724,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void addListData(List<Information> localInformations) {
 		if (adapter == null) {
-			adapter = new PhotoTalkMessageAdapter(this, localInformations, mInformationList, mImageLoader);
-			loadingFooter = getLayoutInflater().inflate(R.layout.information_loading_item, null);
+			adapter = new PhotoTalkMessageAdapter(this, localInformations,
+					mInformationList, mImageLoader);
+			loadingFooter = getLayoutInflater().inflate(
+					R.layout.information_loading_item, null);
 			mInformationList.addFooterView(loadingFooter);
 			mInformationList.setAdapter(adapter);
 			mInformationList.setOnScrollListener(mScrollListener);
@@ -693,7 +744,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void initOrRefreshListView(List<Information> data) {
 		if (adapter == null) {
-			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList, mImageLoader);
+			adapter = new PhotoTalkMessageAdapter(this, data, mInformationList,
+					mImageLoader);
 			mInformationList.setAdapter(adapter);
 		} else {
 			adapter.addData(data);
@@ -704,7 +756,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	@Override
 	protected void onDestroy() {
 		// unBindTigaseService();
-		PhotoInformationCountDownService.getInstance().finishAllShowingMessage();
+		PhotoInformationCountDownService.getInstance()
+				.finishAllShowingMessage();
 		// unregisterReceiver(mTigaseStateChangeReceiver);
 		InformationPageController.getInstance().destroy();
 		if (mCheckUpdateTask != null)
@@ -754,13 +807,17 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		String buttonTag = tagBase + Button.class.getName();
 		String statuTag = tagBase + TextView.class.getName();
 		String newTag = tagBase + ImageView.class.getName();
-		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList.findViewWithTag(buttonTag);
+		RecordTimerLimitView timerLimitView = (RecordTimerLimitView) mInformationList
+				.findViewWithTag(buttonTag);
 		if (timerLimitView != null) {
 			timerLimitView.setVisibility(View.GONE);
 		}
 		TextView statu = ((TextView) mInformationList.findViewWithTag(statuTag));
 		if (statu != null) {
-			statu.setText(getString(R.string.receive_looked, RCPlatformTextUtil.getTextFromTimeToNow(this, information.getReceiveTime())));
+			statu.setText(getString(
+					R.string.receive_looked,
+					RCPlatformTextUtil.getTextFromTimeToNow(this,
+							information.getReceiveTime())));
 		}
 		View newView = mInformationList.findViewWithTag(newTag);
 		if (newView != null)
@@ -773,8 +830,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			if (infos != null && infos.size() > 0) {
 				for (Information information : infos) {
 					if (information.getType() == InformationType.TYPE_FRIEND_REQUEST_NOTICE
-							&& information.getSender().getRcId().equals(friend.getSender().getRcId())) {
-						information.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
+							&& information.getSender().getRcId()
+									.equals(friend.getSender().getRcId())) {
+						information
+								.setStatu(InformationState.FriendRequestInformationState.STATU_QEQUEST_ADD_CONFIRM);
 					}
 				}
 				adapter.notifyDataSetChanged();
@@ -803,7 +862,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (localInfos != null) {
 			for (Information info : localInfos) {
 				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING && info.getCreatetime() == flag) {
+						&& info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING
+						&& info.getCreatetime() == flag) {
 					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 				}
 			}
@@ -816,7 +876,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
 			if (index != -1) {
-				localInfos.get(index).setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
+				localInfos
+						.get(index)
+						.setStatu(
+								InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD);
 				adapter.notifyDataSetChanged();
 			}
 		}
@@ -827,7 +890,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (localInfos != null) {
 			for (Information info : localInfos) {
 				if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING && info.getCreatetime() == flag) {
+						&& info.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING
+						&& info.getCreatetime() == flag) {
 					info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 				}
 			}
@@ -840,7 +904,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
 			if (index != -1) {
-				localInfos.get(index).setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
+				localInfos
+						.get(index)
+						.setStatu(
+								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL);
 				adapter.notifyDataSetChanged();
 			}
 		}
@@ -850,7 +917,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		Thread th = new Thread() {
 
 			public void run() {
-				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory.getDatabase().filterNewInformations(infos, getCurrentUser());
+				Map<Integer, List<Information>> result = PhotoTalkDatabaseFactory
+						.getDatabase().filterNewInformations(infos,
+								getCurrentUser());
 				Message msg = myHandler.obtainMessage();
 				msg.what = MSG_TIGASE_NEW_INFORMATION;
 				msg.obj = result;
@@ -860,22 +929,27 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		th.start();
 	}
 
-	public void onNewInformation(List<Information> infosNeedUpdate, List<Information> infosNew) {
+	public void onNewInformation(List<Information> infosNeedUpdate,
+			List<Information> infosNew) {
 		List<Information> localInformation = getAdapterData();
 		for (Information info : infosNeedUpdate) {
 			if (localInformation != null && localInformation.contains(info)) {
-				localInformation.get(localInformation.indexOf(info)).setStatu(info.getStatu());
+				localInformation.get(localInformation.indexOf(info)).setStatu(
+						info.getStatu());
 			}
 		}
 		sendDataLoadedMessage(infosNew, MSG_WHAT_INFORMATION_LOADED);
 	}
 
 	public void onNewTrends() {
-		int maxTrendId = PrefsUtils.User.getMaxTrendsId(this, getCurrentUser().getRcId());
-		int showedMaxTrendId = PrefsUtils.User.getShowedMaxTrendsId(this, getCurrentUser().getRcId());
+		int maxTrendId = PrefsUtils.User.getMaxTrendsId(this, getCurrentUser()
+				.getRcId());
+		int showedMaxTrendId = PrefsUtils.User.getShowedMaxTrendsId(this,
+				getCurrentUser().getRcId());
 		if (showedMaxTrendId < maxTrendId) {
 			iconTrendNew.setVisibility(View.VISIBLE);
-			String url = PrefsUtils.User.getMaxTrendUrl(this, getCurrentUser().getRcId());
+			String url = PrefsUtils.User.getMaxTrendUrl(this, getCurrentUser()
+					.getRcId());
 			SettingPageController.getInstance().onNewTrends(true, url);
 		} else {
 			iconTrendNew.setVisibility(View.GONE);
@@ -883,15 +957,18 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		}
 	}
 
-	private OnScrollListener mScrollListener = new PauseOnScrollListener(mImageLoader, false, true) {
+	private OnScrollListener mScrollListener = new PauseOnScrollListener(
+			mImageLoader, false, true) {
 
 		@Override
 		public void onScrollStateChanged(AbsListView view, int scrollState) {
 		}
 
 		@Override
-		public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-			if (mInformationList.getAdapter().getCount() - view.getLastVisiblePosition() <= 2) {
+		public void onScroll(AbsListView view, int firstVisibleItem,
+				int visibleItemCount, int totalItemCount) {
+			if (mInformationList.getAdapter().getCount()
+					- view.getLastVisiblePosition() <= 2) {
 				loadLocalInformation();
 			}
 		}
@@ -911,7 +988,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				int start = 0;
 				if (mInformationList.getAdapter() != null)
 					start = mInformationList.getAdapter().getCount();
-				List<Information> informations = PhotoTalkDatabaseFactory.getDatabase().getInformationByPage(start, Constants.INFORMATION_PAGE_SIZE);
+				List<Information> informations = PhotoTalkDatabaseFactory
+						.getDatabase().getInformationByPage(start,
+								Constants.INFORMATION_PAGE_SIZE);
 				Message msg = myHandler.obtainMessage();
 				msg.what = MSG_WHAT_LOCAL_INFORMATION_LOADED;
 				msg.obj = informations;
@@ -922,7 +1001,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void registeTigaseStateChangeReceiver() {
-		IntentFilter filter = new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
+		IntentFilter filter = new IntentFilter(
+				Action.ACTION_TIGASE_STATE_CHANGE);
 		registerReceiver(mTigaseStateChangeReceiver, filter);
 	}
 
@@ -964,7 +1044,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		public void onServiceConnected(ComponentName name, IBinder service) {
 			LocalBinder binder = (LocalBinder) service;
 			binder.getService().setOnMessageReciver(HomeActivity.this);
-			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(), getCurrentUser().getTigasePwd());
+			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(),
+					getCurrentUser().getTigasePwd());
 			MessageSender.getInstance().setTigaseService(binder.getService());
 		}
 	};
@@ -974,7 +1055,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			if (!willQuit) {
 				willQuit = true;
-				Toast.makeText(getApplicationContext(), getResources().getString(R.string.will_quit), Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(),
+						getResources().getString(R.string.will_quit),
+						Toast.LENGTH_SHORT).show();
 				Timer quitTimer = new Timer();
 				TimerTask task = new TimerTask() {
 
