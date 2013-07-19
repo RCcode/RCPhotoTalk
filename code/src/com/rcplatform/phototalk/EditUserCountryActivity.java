@@ -1,6 +1,8 @@
 package com.rcplatform.phototalk;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.json.JSONException;
@@ -77,6 +79,7 @@ public class EditUserCountryActivity extends BaseActivity implements
 
 	private void initData() {
 		int size = Constants.COUNTRY_CODE.length;
+
 		for (int i = 0; i < size; i++) {
 			CountryHolder hodler = new CountryHolder();
 			hodler.code = Constants.COUNTRY_CODE[i];
@@ -89,6 +92,7 @@ public class EditUserCountryActivity extends BaseActivity implements
 			}
 			oldCountry.add(hodler);
 		}
+		 Collections.sort(oldCountry,new ReverseSort());   
 		countryList = oldCountry;
 
 	}
@@ -231,7 +235,7 @@ public class EditUserCountryActivity extends BaseActivity implements
 		}
 	}
 
-	public class CountryHolder {
+	public class CountryHolder implements Comparable {
 		String code;
 		String name;
 		boolean isSelect = false;
@@ -260,6 +264,21 @@ public class EditUserCountryActivity extends BaseActivity implements
 			this.name = name;
 		}
 
+		@Override
+		public int compareTo(Object another) {
+			// TODO Auto-generated method stub
+			CountryHolder user = (CountryHolder) another;
+			return this.name.compareTo(user.name);
+		}
+
+	}
+
+	class ReverseSort implements Comparator {
+		public int compare(Object obj1, Object obj2) {
+			CountryHolder user1 = (CountryHolder) obj1;
+			CountryHolder user2 = (CountryHolder) obj2;
+			return user1.name.compareTo(user2.name);
+		}
 	}
 
 	@Override
