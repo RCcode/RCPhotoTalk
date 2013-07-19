@@ -6,21 +6,21 @@
 
     <Button
         android:id="@+id/btn_show_all"
-        style="@style/filter_menu"
+        style="@style/filter_menu_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/show_all_drift" />
 
     <Button
         android:id="@+id/btn_show_send"
-        style="@style/filter_menu"
+        style="@style/filter_menu_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/show_send_drift" />
 
     <Button
         android:id="@+id/btn_show_receive"
-        style="@style/filter_menu"
+        style="@style/filter_menu_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/show_receive_drift" />
