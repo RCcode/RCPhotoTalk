@@ -81,6 +81,7 @@ public class DriftProxy {
 			request.setFile(new File(filePath));
 		else
 			request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_PICURL, picUrl);
+		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_HEAD_URL, currentUser.getHeadUrl());
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_FLAG, flag + "");
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_GENDER, currentUser.getGender() + "");
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_NICK, currentUser.getNickName());

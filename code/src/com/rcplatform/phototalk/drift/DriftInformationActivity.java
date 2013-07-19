@@ -880,10 +880,12 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			filterMenu.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
 			filterMenu.setContentView(view);
 		}
-		if (filterMenu.isShowing())
+		if (filterMenu.isShowing()) {
 			filterMenu.dismiss();
-		else
+		} else {
 			filterMenu.showAsDropDown(v, 0, 0);
+		}
+
 	}
 
 	private AlertDialog throwDialog;

@@ -66,7 +66,7 @@
                 android:textSize="@dimen/select_friend_text_name"
                 android:layout_toLeftOf="@+id/cb_strange"
                 android:layout_toRightOf="@+id/strange_icon"
-                android:text="@string/send_to_stranges"
+                android:text="@string/know_strangers"
                 android:textColor="@color/black" />
 
             <CheckBox
