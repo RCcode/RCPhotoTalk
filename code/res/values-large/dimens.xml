@@ -31,11 +31,12 @@
     <dimen name="init_indicator_bottom">25dp</dimen>
     <dimen name="init_btn_padding">32dp</dimen>
     <dimen name="init_btn_bottom">57dp</dimen>
+    <dimen name="default_login">11dp</dimen> 
     <dimen name="default_gap">7dp</dimen>
     <dimen name="default_gap_2x">15dp</dimen>
     <dimen name="default_gap_3x">23dp</dimen>
     <dimen name="default_gap_half">3dp</dimen>
-    <dimen name="ui_element_unit">47dp</dimen>
+    <dimen name="ui_element_unit">38dp</dimen>
     <dimen name="login_margin_top">19dp</dimen>
     <dimen name="color_picker_width">19dp</dimen>
     <dimen name="color_picker_height">99dp</dimen>
