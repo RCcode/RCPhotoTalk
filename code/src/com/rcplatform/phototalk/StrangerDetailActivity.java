@@ -55,7 +55,6 @@ public class StrangerDetailActivity extends BaseActivity {
 	private boolean isFromStangerPage;
 	private DriftInformation information;
 	private UserInfo userInfo;
-	private ImageView report_line;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -236,13 +235,10 @@ public class StrangerDetailActivity extends BaseActivity {
 	private void initView() {
 		addFriendBtn = (Button) findViewById(R.id.stranger_add_friend_btn);
 		reportBtn = (Button) findViewById(R.id.report_btn);
-		report_line = (ImageView) findViewById(R.id.report_line);
 		if (isFromStangerPage) {
 			reportBtn.setVisibility(View.VISIBLE);
-			report_line.setVisibility(View.VISIBLE);
 		} else {
 			reportBtn.setVisibility(View.INVISIBLE);
-			report_line.setVisibility(View.INVISIBLE);
 		}
 		reportBtn.setOnClickListener(new OnClickListener() {
 
