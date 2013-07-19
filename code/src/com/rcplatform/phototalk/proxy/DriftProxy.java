@@ -19,16 +19,16 @@ import com.rcplatform.phototalk.utils.Utils;
 
 public class DriftProxy {
 
-	public static void reportPic(Context context, RCPlatformResponseHandler handler, DriftInformation information,Friend friend) {
+	public static void reportPic(Context context, RCPlatformResponseHandler handler, DriftInformation information) {
 		Request request = new Request(context, PhotoTalkApiUrl.REPORT_URL, handler);
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_COUNTRY, userInfo.getCountry());
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_GENDER, userInfo.getGender() + "");
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICID, information.getPicId() + "");
 		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_PICURL, information.getUrl());
-		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_COUNTRY, friend.getCountry());
-		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_GENDER, friend.getGender() + "");
-		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, friend.getRcId());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_COUNTRY, information.getSender().getCountry());
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_GENDER, information.getSender().getGender() + "");
+		request.putParam(PhotoTalkParams.ReportPicture.PARAM_KEY_REP_RCID, information.getSender().getRcId());
 		request.excuteAsync();
 	}
 

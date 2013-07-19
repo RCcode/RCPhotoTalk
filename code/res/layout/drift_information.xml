@@ -59,7 +59,7 @@
                 android:layout_marginBottom="@dimen/stranger_init_padding_bottom"
                 android:text="@string/show_init_message_1"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -77,7 +77,7 @@
                 android:layout_marginBottom="@dimen/stranger_init_padding_bottom"
                 android:text="@string/show_init_message_2"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="18sp" />
         </RelativeLayout>
     </ViewFlipper>
 
