@@ -103,7 +103,7 @@ public class StrangerDetailActivity extends BaseActivity {
 													// method stub
 													showConfirmDialog(content);
 												}
-											}, information,mFriend);
+											}, information);
 								}
 							}
 						});
