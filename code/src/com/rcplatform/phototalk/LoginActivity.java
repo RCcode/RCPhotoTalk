@@ -729,6 +729,7 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 					userInfo.setRcId(jsonObject.getString("rcId"));
 					userInfo.setDeviceId(Constants.DEVICE_ID);
 					userInfo.setAppId(Constants.APP_ID);
+					userInfo.setCountry(Constants.COUNTRY);
 					getPhotoTalkApplication().setCurrentUser(userInfo);
 					JSONArray arrayRecommends = jsonObject.getJSONArray("recommendUsers");
 					List<Friend> recommends = JSONConver.jsonToFriends(arrayRecommends.toString());
