@@ -688,6 +688,14 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		ContactUploadTask task = ContactUploadTask.createNewTask(this);
 		task.setLogin();
 		task.startUpload();
+		if(getCurrentFocus()!=null)
+		{
+			((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+			.hideSoftInputFromWindow(getCurrentFocus()
+					.getWindowToken(),
+					InputMethodManager.HIDE_NOT_ALWAYS); 
+		}
+
 		// if (userInfo.getShowRecommends() == UserInfo.FIRST_TIME &&
 		// !PrefsUtils.AppInfo.hasUploadContacts(LoginActivity.this)) {
 		// ContactUploadTask task =
