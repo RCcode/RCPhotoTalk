@@ -137,7 +137,7 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 			super.onPostExecute(result);
 			dismissLoadingDialog();
 			if (result == null) {
-				DialogUtil.showToast(getApplicationContext(), R.string.image_unsupport, Toast.LENGTH_SHORT);
+				DialogUtil.showToast(getApplicationContext(), R.string.net_error, Toast.LENGTH_SHORT);
 				finish();
 			} else {
 				mHighLight.setBitmap(result);
