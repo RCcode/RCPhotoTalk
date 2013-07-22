@@ -230,4 +230,5 @@
     <string name="show_all_drift">所有</string>
     <string name="show_send_drift">發出的</string>
     <string name="show_receive_drift">收到的</string>
+    <string name="add_friend_success">已添加</string>
 </resources>

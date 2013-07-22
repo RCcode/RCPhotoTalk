@@ -229,4 +229,5 @@
     <string name="show_all_drift">すべて</string>
     <string name="show_send_drift">アップロード済み</string>
     <string name="show_receive_drift">受信済み</string>
+    <string name="add_friend_success">追加完了</string>
 </resources>

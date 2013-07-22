@@ -227,4 +227,5 @@
     <string name="show_all_drift">הכל</string>
     <string name="show_send_drift">הועלה</string>
     <string name="show_receive_drift">התקבל</string>
+    <string name="add_friend_success">נוסף.</string>
 </resources>

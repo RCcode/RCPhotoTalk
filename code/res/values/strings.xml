@@ -401,7 +401,6 @@
     <string name="show_all_drift">All</string>
     <string name="show_send_drift">Uploaded</string>
     <string name="show_receive_drift">Received</string>
-    <string name="add_friend_success">添加好友成功</string>
-    <string name="add_friend_failed">添加失败，稍后请重试！</string>
 
+    <string name="add_friend_success">Added</string>
 </resources>

@@ -233,4 +233,5 @@
     <string name="show_all_drift">ทั้งหมด</string>
     <string name="show_send_drift">อัปโหลดแล้ว</string>
     <string name="show_receive_drift">รับแล้ว</string>
+    <string name="add_friend_success">เพิ่มแล้ว</string>
 </resources>

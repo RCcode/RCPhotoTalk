@@ -229,4 +229,5 @@
     <string name="show_all_drift">Alle</string>
     <string name="show_send_drift">Hochgeladen</string>
     <string name="show_receive_drift">Erhalten</string>
+    <string name="add_friend_success">Hinzugefügt</string>
 </resources>

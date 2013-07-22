@@ -227,4 +227,5 @@
     <string name="show_all_drift">सभी</string>
     <string name="show_send_drift">अपलोड किया गया</string>
     <string name="show_receive_drift">प्राप्त</string>
+    <string name="add_friend_success">जोड़ा गया।</string>
 </resources>

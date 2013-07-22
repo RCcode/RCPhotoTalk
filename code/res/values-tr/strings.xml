@@ -231,4 +231,5 @@
     <string name="show_all_drift">Tümü</string>
     <string name="show_send_drift">Karşıya yüklendi</string>
     <string name="show_receive_drift">Alındı</string>
+    <string name="add_friend_success">Eklendi</string>
 </resources>

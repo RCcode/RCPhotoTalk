@@ -230,4 +230,5 @@
     <string name="show_all_drift">Todos</string>
     <string name="show_send_drift">Subidos</string>
     <string name="show_receive_drift">Recibidos</string>
+    <string name="add_friend_success">Agregado</string>
 </resources>

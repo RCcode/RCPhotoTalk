@@ -115,7 +115,7 @@ public class FriendDetailActivity extends BaseActivity {
 									String content) {
 								showErrorConfirmDialog(content);
 								dismissLoadingDialog();
-								showToast(R.string.add_friend_failed);
+								showToast(R.string.net_error);
 							}
 
 							@Override

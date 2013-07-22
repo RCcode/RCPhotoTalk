@@ -228,4 +228,5 @@
     <string name="show_all_drift">Tout</string>
     <string name="show_send_drift">Chargé</string>
     <string name="show_receive_drift">Reçu</string>
+    <string name="add_friend_success">Ajouté</string>
 </resources>

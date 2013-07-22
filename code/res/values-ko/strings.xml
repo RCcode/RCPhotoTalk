@@ -226,4 +226,5 @@
     <string name="show_all_drift">전체</string>
     <string name="show_send_drift">업로드 완료</string>
     <string name="show_receive_drift">수신 완료</string>
+    <string name="add_friend_success">추가 완료</string>
 </resources>

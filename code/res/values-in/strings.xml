@@ -228,4 +228,5 @@
     <string name="show_all_drift">Semua</string>
     <string name="show_send_drift">Diunggah</string>
     <string name="show_receive_drift">Diterima</string>
+    <string name="add_friend_success">Ditambahkan</string>
 </resources>

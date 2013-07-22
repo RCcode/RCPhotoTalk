@@ -226,4 +226,5 @@
     <string name="show_all_drift">الكل</string>
     <string name="show_send_drift">المودع</string>
     <string name="show_receive_drift">المستلم</string>
+    <string name="add_friend_success">تمت الإضافة.</string>
 </resources>

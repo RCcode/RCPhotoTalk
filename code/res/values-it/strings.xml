@@ -229,4 +229,5 @@
     <string name="show_all_drift">Tutto</string>
     <string name="show_send_drift">Caricate</string>
     <string name="show_receive_drift">Ricevute</string>
+    <string name="add_friend_success">Aggiunto</string>
 </resources>

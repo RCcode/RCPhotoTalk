@@ -164,7 +164,7 @@ public class StrangerDetailActivity extends BaseActivity {
 										String content) {
 									showConfirmDialog(content);
 									dissmissLoadingDialog();
-									showToast(R.string.add_friend_failed);
+									showToast(R.string.net_error);
 								}
 
 								@Override
@@ -195,7 +195,7 @@ public class StrangerDetailActivity extends BaseActivity {
 											String content) {
 										showConfirmDialog(content);
 										dissmissLoadingDialog();
-										showToast(R.string.add_friend_failed);
+										showToast(R.string.net_error);
 									}
 
 									@Override
@@ -239,11 +239,20 @@ public class StrangerDetailActivity extends BaseActivity {
 	private void initView() {
 		addFriendBtn = (Button) findViewById(R.id.stranger_add_friend_btn);
 		reportBtn = (Button) findViewById(R.id.report_btn);
+		
+
+		
 		if (isFromStangerPage) {
 			reportBtn.setVisibility(View.VISIBLE);
 		} else {
 			reportBtn.setVisibility(View.INVISIBLE);
 		}
+		
+		//不举报自己
+		if(mFriend.getRcId().equals(userInfo.getRcId())){
+			reportBtn.setVisibility(View.INVISIBLE);
+		}
+		
 		reportBtn.setOnClickListener(new OnClickListener() {
 
 			@Override
