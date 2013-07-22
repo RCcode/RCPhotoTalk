@@ -642,13 +642,16 @@ public class EditPictureActivity extends BaseActivity {
 			@Override
 			public void run() {
 				File file = new File(path);
+				BufferedOutputStream os = null;
 				try {
 					if (file.exists()) {
 						file.delete();
 					}
-					if (!file.exists())
-						file.createNewFile();
-					BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file)); //
+					if (!file.exists()){
+						file.createNewFile();}
+					
+					os = new BufferedOutputStream(new FileOutputStream(file));
+					 //
 					// b.compress(Bitmap.CompressFormat.JPEG, 100, os);
 					bitmap.compress(Bitmap.CompressFormat.JPEG, 60, os);
 					os.flush();
@@ -656,12 +659,30 @@ public class EditPictureActivity extends BaseActivity {
 					handler.sendEmptyMessage(SAVE_SUCCESS);
 				} catch (Exception e) {
 					handler.sendEmptyMessage(NO_SDC);
+					try {
+						os.flush();
+						os.close();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 					e.printStackTrace();
+				}finally{
+					recycleBitmap(bitmap);
 				}
 			}
 		}).start();
 	}
 
+	public void recycleBitmap(Bitmap bitmap){
+		if(bitmap!=null){
+			if(!bitmap.isRecycled()){
+				bitmap.recycle();
+			}
+			bitmap =null;
+		}
+	}
+	
 	Handler handler = new Handler() {
 
 		@Override
@@ -691,7 +712,7 @@ public class EditPictureActivity extends BaseActivity {
 				// if (waitDialog != null && waitDialog.isShowing())
 				// waitDialog.hide();
 				mEditableViewGroup.setDrawingCacheEnabled(false);
-				Toast.makeText(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditPictureActivity.this, R.string.operation_fail, Toast.LENGTH_SHORT).show();
 				break;
 			case SET_LIMIT:
 

@@ -231,7 +231,7 @@
     <!-- 头像 背景 设置弹出按钮 -->
     <string name="camera">相机</string>
     <string name="photo">相册</string>
-    <string name="no_sdc">没有找到SD卡</string>
+    <string name="no_sdc">失败，请重试!</string>
 
     <!-- 编辑图片页面 -->
     <string name="saving">正在保存...</string>
