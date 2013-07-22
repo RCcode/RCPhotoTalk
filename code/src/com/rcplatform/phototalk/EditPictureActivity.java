@@ -132,7 +132,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private String voicePath;
 
-	private boolean isSave = false;
+	private boolean isSend = false;
 
 	private Friend friend = null;
 
@@ -449,7 +449,7 @@ public class EditPictureActivity extends BaseActivity {
 				EventUtil.Main_Photo.rcpt_sendbutton(baseContext);
 				mEditableViewGroup.setDrawingCacheEnabled(true);
 				mEditableViewGroup.buildDrawingCache();
-				isSave = true;
+				isSend = true;
 				saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getSendFileCachePath() + "/Photochat.jpg");
 				if (friend == null) {
 					startSelectFriendActivity();
@@ -691,13 +691,13 @@ public class EditPictureActivity extends BaseActivity {
 			switch (msg.what) {
 			case SAVE_SUCCESS:
 				// setSaveable(false);
-				if (isSave) {
+				mEditableViewGroup.setDrawingCacheEnabled(false);
+				if (isSend) {
 					if (friend != null) {
 						send();
 					}
 				} else {
 					// 保存成功后 刷新本地相册
-					mEditableViewGroup.setDrawingCacheEnabled(false);
 					EditPictureActivity.this.getBaseContext().sendBroadcast(
 							new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
 					Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
