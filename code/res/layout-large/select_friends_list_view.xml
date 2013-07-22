@@ -64,6 +64,7 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="@dimen/select_friend_text_name"
                 android:layout_toLeftOf="@+id/cb_strange"
+                  android:textStyle="bold"
                 android:layout_toRightOf="@+id/strange_icon"
                 android:text="@string/know_strangers"
                 android:textColor="@color/black" />

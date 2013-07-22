@@ -19,13 +19,27 @@
             android:background="@drawable/know_strangers_item_bg"
             android:padding="@dimen/friend_head_left" >
 
-            <ImageView
+            <RelativeLayout
                 android:id="@+id/iv_to_stranges"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/friend_head_left"
-                android:src="@drawable/know_strangers_icon" />
+                android:layout_marginLeft="@dimen/friend_head_left" >
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/know_strangers_icon" />
+
+                <ImageView
+                    android:id="@+id/iv_drift_new"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                     android:layout_marginTop="5dp"
+                    android:layout_marginLeft="-3dp"
+                    android:src="@drawable/item_new_bg"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <TextView
                 style="@style/text_base"
@@ -96,7 +110,7 @@
             android:layout_marginTop="72dp"
             android:text="@string/know_strangers"
             android:textColor="@color/red"
-            android:textSize="22sp"/>
+            android:textSize="22sp" />
 
         <TextView
             android:layout_width="wrap_content"

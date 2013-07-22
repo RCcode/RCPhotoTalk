@@ -362,7 +362,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void initViewAndListener() {
-		ivDriftAttention = (ImageView) findViewById(R.id.iv_to_right);
+		ivDriftAttention = (ImageView) findViewById(R.id.iv_drift_new);
 		knowStrangerView = findViewById(R.id.linear_new_friends);
 		knowStrangerView.setOnClickListener(new OnClickListener() {
 
@@ -1028,10 +1028,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	public void onDriftThrowed() {
-		ivDriftAttention.setImageResource(R.drawable.icon_success);
+		ivDriftAttention.setVisibility(View.VISIBLE);
 	}
 
 	private void resetDriftState() {
-		ivDriftAttention.setImageResource(R.drawable.to_right);
+		ivDriftAttention.setVisibility(View.GONE);
 	}
 }
