@@ -225,13 +225,24 @@ public class GCMIntentService extends GCMBaseIntentService {
 			String packageName = intent.getStringExtra("package");
 			String pushIdStr = intent.getStringExtra("pushID");
 			String pushResult = "";
-
+			String pushVersionStr = intent.getStringExtra("version");
+			int pushVersion = 0;
+			if(null!=pushVersionStr){
+				pushVersion = Integer.valueOf(pushVersionStr);
+			}
 			if (!Utils.checkApkExist(context, packageName)) {
 				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_APP;
 				generateNotification(context, iconUrl, titleStr, descStr,
 						downloadUrl, type);
 			} else {
-				pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
+				int currentVersion = MetaHelper.getAppVersionCode(context);
+				if (currentVersion >= pushVersion) {
+					pushResult = ServerUtilities.STATUS_RECIVIE_MSG_INSTALLED;
+				} else {
+					pushResult = ServerUtilities.STATUS_RECIVIE_MSG_NEW_VERSION;
+					generateNotification(context, iconUrl, titleStr, descStr,
+							downloadUrl, type);
+				}
 			}
 			ServerUtilities.logPushResult(context, pushIdStr, pushResult);
 		}

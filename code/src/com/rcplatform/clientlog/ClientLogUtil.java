@@ -34,20 +34,24 @@ public class ClientLogUtil {
 			@Override
 			public void run() {
 				try {
-					PhotoTalkApplication app = (PhotoTalkApplication) context.getApplicationContext();
+					PhotoTalkApplication app = (PhotoTalkApplication) context
+							.getApplicationContext();
 					UserInfo user = app.getCurrentUser();
 
 					// 获取位置管理服务
 					LocationManager locationManager;
 					String serviceName = Context.LOCATION_SERVICE;
-					locationManager = (LocationManager) context.getSystemService(serviceName);
+					locationManager = (LocationManager) context
+							.getSystemService(serviceName);
 
-					if (locationManager.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
+					if (locationManager
+							.isProviderEnabled(android.location.LocationManager.GPS_PROVIDER)) {
 						Log.d("gps", "open");
 					}
 
 					String provider = LocationManager.GPS_PROVIDER; // 获取GPS信息
-					Location location = locationManager.getLastKnownLocation(provider); // 通过GPS获取位置
+					Location location = locationManager
+							.getLastKnownLocation(provider); // 通过GPS获取位置
 					String latLongInfo = "";
 					int count = 0;
 					while (null == location) {
@@ -62,29 +66,36 @@ public class ClientLogUtil {
 						}
 						try {
 							Thread.sleep(2000);
-						}
-						catch (InterruptedException e) {
+						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						location = locationManager.getLastKnownLocation(provider);
+						location = locationManager
+								.getLastKnownLocation(provider);
 					}
 
-					Request request = new Request(context, PhotoTalkApiUrl.CLIENT_LOG_URL, null);
+					Request request = new Request(context,
+							PhotoTalkApiUrl.CLIENT_LOG_URL, null);
 					request.putParam("rcId", user.getRcId());
 					request.putParam("appId", Constants.APP_ID);
-					request.putParam("deviceId", MetaHelper.getMACAddress(context));
+					request.putParam("deviceId",
+							MetaHelper.getMACAddress(context));
 					request.putParam("brand", MetaHelper.getPhoneBrand());
 					request.putParam("model", MetaHelper.getPhoneModel());
 
 					request.putParam("gps", latLongInfo);
-					request.putParam("timezoneId", MetaHelper.getTimeZoneId(context) + "");
+					request.putParam("timezoneId",
+							MetaHelper.getTimeZoneId(context) + "");
 					request.putParam("token", user.getToken());
 					request.putParam("platform", "1");
-					request.putParam("language", MetaHelper.getLanguage(context));
+					request.putParam(
+							"version",
+							String.format("%d",
+									MetaHelper.getAppVersionCode(context)));
+					request.putParam("language",
+							MetaHelper.getLanguage(context));
 					request.excuteAsync();
-				}
-				catch (Exception e1) {
+				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}

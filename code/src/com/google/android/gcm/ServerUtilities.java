@@ -63,6 +63,8 @@ public final class ServerUtilities {
 	public final static String STATUS_RECIVIE_MSG_INSTALLED = "1001";
 
 	public final static String STATUS_RECIVIE_MSG_NEW_APP = "1002";
+	
+	public final static String STATUS_RECIVIE_MSG_NEW_VERSION = "1003";
 
 	public final static String GCM_MSG_USER_MESSAGE = "user_message";
 
