@@ -63,11 +63,12 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
-                android:textSize="@dimen/select_friend_text_name"
                 android:layout_toLeftOf="@+id/cb_strange"
                 android:layout_toRightOf="@+id/strange_icon"
                 android:text="@string/know_strangers"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:textSize="@dimen/select_friend_text_name"
+                android:textStyle="bold" />
 
             <CheckBox
                 android:id="@+id/cb_strange"
@@ -75,8 +76,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:button="@drawable/btn_check"
-                android:layout_marginRight="10dp" />
+                android:layout_marginRight="10dp"
+                android:button="@drawable/btn_check" />
         </RelativeLayout>
 
         <ListView
