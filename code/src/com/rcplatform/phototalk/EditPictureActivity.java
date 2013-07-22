@@ -712,7 +712,7 @@ public class EditPictureActivity extends BaseActivity {
 				// if (waitDialog != null && waitDialog.isShowing())
 				// waitDialog.hide();
 				mEditableViewGroup.setDrawingCacheEnabled(false);
-				Toast.makeText(EditPictureActivity.this, R.string.operation_fail, Toast.LENGTH_SHORT).show();
+				Toast.makeText(EditPictureActivity.this, R.string.net_error, Toast.LENGTH_SHORT).show();
 				break;
 			case SET_LIMIT:
 

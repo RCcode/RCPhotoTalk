@@ -1,7 +1,7 @@
 package com.rcplatform.phototalk.api;
 
 public class PhotoTalkApiUrl {
-	private static final String BASE_URL = "http://tpt.rcplatformhk.net/";
+	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
 //	private static final String BASE_URL = "http://192.168.0.86:8083/";
 //	 private static final String BASE_URL = "http://192.168.0.114/";
 
@@ -89,7 +89,7 @@ public class PhotoTalkApiUrl {
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	private static final String RCBOSS_BASE_URL = "http://trc.rcplatformhk.net/";
+	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
 //	private static final String RCBOSS_BASE_URL = "http://192.168.0.86:8083/";
 //	private static final String RCBOSS_BASE_URL = "http://192.168.0.114/";
 

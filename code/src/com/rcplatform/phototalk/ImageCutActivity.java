@@ -92,7 +92,7 @@ public class ImageCutActivity extends BaseActivity implements OnClickListener {
 				data.setData(Uri.parse(result.getPath()));
 				setResult(Activity.RESULT_OK, data);
 			} else {
-				DialogUtil.showToast(ImageCutActivity.this, R.string.operation_fail, Toast.LENGTH_SHORT);
+				DialogUtil.showToast(ImageCutActivity.this, R.string.net_error, Toast.LENGTH_SHORT);
 			}
 			finish();
 		}

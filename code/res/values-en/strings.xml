@@ -56,8 +56,8 @@
     <string name="send_looked">%1$s-Read</string>
     <string name="send_fail">Failed to send, tap to try again</string>
     <string name="receive_downloading">Loading</string>
-    <string name="receive_loaded">%1$s-Press to read</string>
-    <string name="receive_looked">%1$s-Read</string>
+    <string name="receive_loaded">%1$s-Hold to view</string>
+    <string name="receive_looked">%1$s-Viewed</string>
     <string name="receive_fail">Failed to load, tap to try again</string>
     <string name="added_by_friend">%1$s added me as a friend</string>
     <string name="added_friend_back">I add %1$s as a friend</string>
@@ -82,7 +82,7 @@
     <string name="bind_phone_attention">Register your phone number to let your friends find you more easily</string>
     <string name="bind_now">Register now</string>
     <string name="share_complete">SUCCESS！</string>
-    <string name="save_success">SUCCESS！</string>
+    <string name="save_success">Saved to Album！</string>
 
     <!-- 图像编辑 -->
     <string name="voice_too_short">Recording is too short</string>
