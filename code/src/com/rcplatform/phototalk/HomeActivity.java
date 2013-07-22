@@ -370,6 +370,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			public void onClick(View v) {
 				startActivity(DriftInformationActivity.class);
 				resetDriftState();
+				EventUtil.Main_Photo.rcpt_makenewfriends(baseContext);
 			}
 		});
 		ivNewRecommends = (ImageView) findViewById(R.id.iv_recommends_new);

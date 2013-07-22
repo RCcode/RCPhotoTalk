@@ -125,6 +125,10 @@ public class EventUtil {
 		static public void rcpt_photoview(Context ctx) {
 			onEvent(ctx, "rcpt_photoview");
 		}
+		
+		static public void rcpt_makenewfriends(Context ctx) {
+			onEvent(ctx, "rcpt_makenewfriends");
+		}
 
 		static public void rcpt_main_profileview(Context ctx) {
 			onEvent(ctx, "rcpt_main_profileview");
