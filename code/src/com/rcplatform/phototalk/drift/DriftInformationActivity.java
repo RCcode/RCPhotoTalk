@@ -448,7 +448,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			}
 		}
 	}
-	
+
 	public int getPostionFromTouch(MotionEvent ev, ListView listview) {
 		float eY = ev.getRawY();
 		Rect firstR = new Rect();
@@ -829,11 +829,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void fishInformation() {
 		String currentRcId = getCurrentUser().getRcId();
-		int fishLeaveTime = PrefsUtils.User.getFishLeaveTime(this, currentRcId);
-		if (!PrefsUtils.User.isThrowToday(this, currentRcId) && PrefsUtils.User.getTodayFishTime(this, currentRcId) >= Constants.UNTHROW_FISH_ALLOW_TIME) {
+		if (LogicUtils.isAttentionThrowDrift(this, currentRcId)) {
 			showThrowDriftDialog();
 			return;
 		}
+		int fishLeaveTime = PrefsUtils.User.getFishLeaveTime(this, currentRcId);
 		if (fishLeaveTime > 0) {
 			executeFishDriftInformation();
 		} else if (fishLeaveTime == 0) {
@@ -847,12 +847,12 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 			@Override
 			public void onFishSuccess(DriftInformation information) {
+				PrefsUtils.User.setLastFishTime(getApplicationContext(), getCurrentUser().getRcId());
 				if (mShowMode == DriftShowMode.SEND)
 					return;
 				List<DriftInformation> infos = new ArrayList<DriftInformation>();
 				infos.add(information);
 				sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
-
 			}
 
 			@Override

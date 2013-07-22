@@ -41,6 +41,7 @@ import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 
 public class LogicUtils {
 
@@ -248,6 +249,7 @@ public class LogicUtils {
 		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
 		if (sendToStranges) {
+			InformationPageController.getInstance().onDriftThrowed();
 			DriftInformation tempDriftInformation = buildDriftTempInformation(currentUser, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
 			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(tempDriftInformation);
 			DriftInformationPageController.getInstance().onDriftInformationSending(Arrays.asList(new DriftInformation[] { tempDriftInformation }));
@@ -367,4 +369,13 @@ public class LogicUtils {
 		return friendIds;
 	}
 
+	public static boolean isAttentionThrowDrift(Context context, String rcId) {
+		long lastFishTime = PrefsUtils.User.getLastFishTime(context, rcId);
+		long currentTime = System.currentTimeMillis();
+		if (!Utils.isSameDay(currentTime, lastFishTime)) {
+			PrefsUtils.User.setTodayFishTime(context, rcId, 0);
+			return false;
+		}
+		return !PrefsUtils.User.isThrowToday(context, rcId) && PrefsUtils.User.getTodayFishTime(context, rcId) >= Constants.UNTHROW_FISH_ALLOW_TIME;
+	}
 }

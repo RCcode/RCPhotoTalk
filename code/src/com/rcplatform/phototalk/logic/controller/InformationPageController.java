@@ -3,7 +3,6 @@ package com.rcplatform.phototalk.logic.controller;
 import java.util.List;
 import java.util.Map;
 
-import android.os.Handler;
 import android.widget.ListView;
 
 import com.rcplatform.phototalk.HomeActivity;
@@ -96,5 +95,10 @@ public class InformationPageController {
 		if (mActivity != null)
 			return mActivity.getInformationList();
 		return null;
+	}
+
+	public void onDriftThrowed() {
+		if (mActivity != null)
+			mActivity.onDriftThrowed();
 	}
 }
