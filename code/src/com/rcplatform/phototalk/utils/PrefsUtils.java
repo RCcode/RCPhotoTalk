@@ -119,10 +119,10 @@ public class PrefsUtils {
 
 		private static final String PREF_KEY_LAST_THROW_TIME = "lastthrowtime";
 
-		private static final String PFEF_KEY_FISH_LEAVE_TIME = "fishleavetime";
 		private static final String PREF_KEY_USED_DRIFT = "hasuseddrift";
 		private static final String PREF_KEY_LAST_USED_VERSION = "lastusedversion";
 		private static final String PREF_KEY_TODAY_FISH_TIME = "todayfishtime";
+		private static final String PREF_KEY_LAST_FISH_TIME = "lastfishtime";
 
 		public static class ThirdPart {
 
@@ -511,6 +511,14 @@ public class PrefsUtils {
 
 		public static synchronized void addTodayFishTime(Context context, String pref) {
 			setTodayFishTime(context, pref, getTodayFishTime(context, pref) + 1);
+		}
+
+		public static synchronized void setLastFishTime(Context context, String pref) {
+			getPreference(context, pref).edit().putLong(PREF_KEY_LAST_FISH_TIME, System.currentTimeMillis()).commit();
+		}
+
+		public static synchronized long getLastFishTime(Context context, String pref) {
+			return getPreference(context, pref).getLong(PREF_KEY_LAST_FISH_TIME, 0);
 		}
 	}
 }

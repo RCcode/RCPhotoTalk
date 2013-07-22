@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,14 +44,12 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 
 	private Information mPressedInformation;
 	private int mPressedPosition = -1;
-	private ListView mList;
 	private LayoutInflater mInflater;
 
-	public PhotoTalkMessageAdapter(Context context, List<Information> data, ListView list, ImageLoader imageLoader) {
+	public PhotoTalkMessageAdapter(Context context, List<Information> data, ImageLoader imageLoader) {
 		this.data.addAll(data);
 		this.context = context;
 		this.mImageLoader = imageLoader;
-		this.mList = list;
 		mInflater = LayoutInflater.from(context);
 	}
 
@@ -219,7 +216,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD) {
 			holder.bar.setVisibility(View.VISIBLE);
 			holder.statu.setText(R.string.receive_downloading);
-			RCPlatformImageLoader.LoadPictureForList(context, mList, record);
+			RCPlatformImageLoader.LoadPictureForList(context, record);
 			holder.statuButton.stopTask();
 			// 状态为2，表示已经下载了，但是未查看，
 		} else if (record.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_DELIVERED_OR_LOADED) {
@@ -232,7 +229,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 				// 如果缓存文件不存在
 				holder.bar.setVisibility(View.VISIBLE);
 				holder.statu.setText(R.string.receive_downloading);
-				RCPlatformImageLoader.LoadPictureForList(context, mList, record);
+				RCPlatformImageLoader.LoadPictureForList(context, record);
 				holder.statuButton.stopTask();
 			}
 			// 状态为4.表示正在查看

@@ -80,13 +80,10 @@ public class PTBackgroundService extends Service {
 
 	private static final long RETRY_SEND_SMS_WATTING_TIME = 1000 * 60 * 5;
 
-	private static final String INTENT_PARAM_KEY_THIRD_PART = "thirdparttype";
-
 	private static final String ACTION_CHECK_BIND_PHONE = "com.androidlord.phototalk.phonebindstate";
 	private static final String ACTION_SMS_SEND = "com.rcplatform.sms.bind.send";
 
 	private BroadcastReceiver mSMSSendReceiver;
-	private BroadcastReceiver mConnectivityReceiver;
 	private BroadcastReceiver mBindPhoneStateReceiver;
 
 	private PendingIntent mCheckBindStatePI;
@@ -156,12 +153,6 @@ public class PTBackgroundService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		uploadContact();
 		return super.onStartCommand(intent, flags, startId);
-	}
-
-	private void registeNetConnectionReceiver() {
-		IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-		mConnectivityReceiver = new ConnectivityReceiver();
-		registerReceiver(mConnectivityReceiver, filter);
 	}
 
 	private void registeGCMReceiver() {
@@ -478,7 +469,7 @@ public class PTBackgroundService extends Service {
 					LogUtil.e("need to update facebook info");
 					uploadFacebookInfo();
 				}
-				tryToResetDriftFishTime();
+//				tryToResetDriftFishTime();
 			}
 		}
 	};
@@ -516,7 +507,7 @@ public class PTBackgroundService extends Service {
 		}.start();
 	}
 
-	protected void tryToResetDriftFishTime() {
+	private void tryToResetDriftFishTime() {
 		long currentTime = System.currentTimeMillis();
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(currentTime);

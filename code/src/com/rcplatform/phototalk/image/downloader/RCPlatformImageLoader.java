@@ -14,9 +14,9 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 
 public class RCPlatformImageLoader {
 
-	public static synchronized void LoadPictureForList(final Context context, ListView listView, final Information record) {
+	public static synchronized void LoadPictureForList(final Context context, final Information record) {
 		String url = record.getUrl();
-		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(url), new HomeRecordLoadPicListener(listView, context, record));
+		FileDownloader.getInstance().loadFile(url, PhotoTalkUtils.getFilePath(url), new HomeRecordLoadPicListener(context, record));
 	}
 
 	public static synchronized void loadPictureForDriftList(final Context context, final DriftInformation record) {
