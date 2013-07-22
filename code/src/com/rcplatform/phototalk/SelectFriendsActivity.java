@@ -37,6 +37,7 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxCha
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.logic.LogicUtils;
+import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.inf.LoadFriendsListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
@@ -78,7 +79,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private ImageButton mBtBack;
 
 	private RelativeLayout send_layout;
-	private List<Friend> listData=new ArrayList<Friend>();
+	private List<Friend> listData = new ArrayList<Friend>();
 	private List<Friend> resultData = new ArrayList<Friend>();
 	private List<Friend> sendData = new ArrayList<Friend>();
 	private Button seach_delete_btn;
@@ -299,7 +300,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				break;
 
 			case MSG_CACHE_FINISH:
-				listData .addAll( (List<Friend>) msg.obj);
+				listData.addAll((List<Friend>) msg.obj);
 				setResultData();
 				initFriendListAdapter();
 				progressBar.setVisibility(View.GONE);
@@ -322,6 +323,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		final File file = new File(imagePath);
 		if (sendToStrange) {
 			friends.add(PhotoTalkUtils.getDriftFriend());
+			InformationPageController.getInstance().onDriftThrowed();
 		}
 		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf, PhotoInformationType.TYPE_NORMAL);
 	}

@@ -249,7 +249,6 @@ public class LogicUtils {
 		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
 		if (sendToStranges) {
-			InformationPageController.getInstance().onDriftThrowed();
 			DriftInformation tempDriftInformation = buildDriftTempInformation(currentUser, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
 			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(tempDriftInformation);
 			DriftInformationPageController.getInstance().onDriftInformationSending(Arrays.asList(new DriftInformation[] { tempDriftInformation }));
