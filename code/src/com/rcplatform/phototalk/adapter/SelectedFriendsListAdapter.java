@@ -19,6 +19,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 
 public class SelectedFriendsListAdapter extends BaseAdapter {
 
@@ -105,7 +106,8 @@ public class SelectedFriendsListAdapter extends BaseAdapter {
 		} else {
 			holder.checkBox.setChecked(false);
 		}
-		mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
+//		mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
+		RCPlatformImageLoader.loadImage(context, mImageLoader, friend.getHeadUrl(), holder.head);
 		if (friend.getRcId().equals(currentUser.getRcId())) {
 			holder.name.setText(context.getString(R.string.list_me, friend.getNickName()));
 		} else {

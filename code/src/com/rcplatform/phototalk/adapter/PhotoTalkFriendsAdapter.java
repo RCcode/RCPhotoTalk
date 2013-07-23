@@ -30,6 +30,7 @@ import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.image.downloader.ImageOptionsFactory;
+import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.listener.RCPlatformOnClickListener;
 
 public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
@@ -254,7 +255,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 		final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
 		setFriendSourceInfo(convertView, friend);
-		mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
+//		mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
+		RCPlatformImageLoader.loadImage(mContext, mImageLoader,friend.getHeadUrl(), portraitImage);
 //		portraitImage.setOnClickListener(new View.OnClickListener() {
 //
 //			@Override
@@ -295,7 +297,8 @@ public class PhotoTalkFriendsAdapter extends BaseExpandableListAdapter {
 		setFriendSourceInfo(convertView, friend);
 		ImageView ivHead = (ImageView) convertView.findViewById(R.id.iv_head);
 		TextView tvNick = (TextView) convertView.findViewById(R.id.tv_nick);
-		mImageLoader.displayImage(friend.getHeadUrl(), ivHead);
+//		mImageLoader.displayImage(friend.getHeadUrl(), ivHead);
+		RCPlatformImageLoader.loadImage(mContext, mImageLoader,friend.getHeadUrl(), ivHead);
 		if (friend.getRcId().equals(currentUser.getRcId())) {
 			tvNick.setText(mContext.getString(R.string.list_me, friend.getNickName()));
 		} else {

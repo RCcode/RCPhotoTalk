@@ -13,7 +13,6 @@ import android.provider.ContactsContract.CommonDataKinds.Phone;
 
 import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.utils.ContactQuery.OnContactsQueryCompleteListener;
 
 public class ContactUtil {
@@ -29,14 +28,16 @@ public class ContactUtil {
 		String[] projections = new String[] { Phone.NUMBER, Phone.DISPLAY_NAME };
 		Cursor cursor = resolver.query(Phone.CONTENT_URI, projections, null, null, null);
 		List<Contacts> contacts = new ArrayList<Contacts>();
-		while (cursor.moveToNext()) {
-			Contacts c = new Contacts();
-			c.setMobilePhoneNumber(cursor.getString(cursor.getColumnIndex(Phone.NUMBER)));
-			c.setName(cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME)));
-			if (!contacts.contains(c))
-				contacts.add(c);
+		if (cursor != null) {
+			while (cursor.moveToNext()) {
+				Contacts c = new Contacts();
+				c.setMobilePhoneNumber(cursor.getString(cursor.getColumnIndex(Phone.NUMBER)));
+				c.setName(cursor.getString(cursor.getColumnIndex(Phone.DISPLAY_NAME)));
+				if (!contacts.contains(c))
+					contacts.add(c);
+			}
+			cursor.close();
 		}
-		cursor.close();
 		return contacts;
 	}
 

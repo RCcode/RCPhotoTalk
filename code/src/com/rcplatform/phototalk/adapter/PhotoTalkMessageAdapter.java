@@ -143,10 +143,15 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
+//		if (LogicUtils.isSender(context, record)) {
+//			mImageLoader.displayImage(record.getReceiver().getHeadUrl(), holder.head);
+//		} else {
+//			mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
+//		}
 		if (LogicUtils.isSender(context, record)) {
-			mImageLoader.displayImage(record.getReceiver().getHeadUrl(), holder.head);
+			RCPlatformImageLoader.loadImage(context, mImageLoader, record.getReceiver().getHeadUrl(), holder.head);
 		} else {
-			mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
+			RCPlatformImageLoader.loadImage(context, mImageLoader, record.getSender().getHeadUrl(), holder.head);
 		}
 		if (record.getType() != InformationType.TYPE_FRIEND_REQUEST_NOTICE) {
 			if (!LogicUtils.isSender(context, record)) {
