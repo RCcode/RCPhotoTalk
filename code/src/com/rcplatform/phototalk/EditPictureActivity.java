@@ -779,7 +779,6 @@ public class EditPictureActivity extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		mEditePicView.recyle();
-		colorPickerDialog.dismiss();
 		super.onDestroy();
 	}
 
