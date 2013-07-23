@@ -239,11 +239,12 @@ public class StrangerDetailActivity extends BaseActivity {
 	private void initView() {
 		addFriendBtn = (Button) findViewById(R.id.stranger_add_friend_btn);
 		reportBtn = (Button) findViewById(R.id.report_btn);
-		
-
-		
 		if (isFromStangerPage) {
-			reportBtn.setVisibility(View.VISIBLE);
+			if(mFriend.getRcId().equals(getCurrentUser().getRcId())){
+				reportBtn.setVisibility(View.INVISIBLE);
+			}else{
+				reportBtn.setVisibility(View.VISIBLE);
+			}
 		} else {
 			reportBtn.setVisibility(View.INVISIBLE);
 		}
