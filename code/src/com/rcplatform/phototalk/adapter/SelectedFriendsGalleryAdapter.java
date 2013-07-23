@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
+import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.views.HeadImageView;
 
@@ -66,7 +67,8 @@ public class SelectedFriendsGalleryAdapter extends BaseAdapter {
 		if (friend.equals(PhotoTalkUtils.getDriftFriend()))
 			holder.head.setImageResource(R.drawable.send_to_strangers);
 		else
-			mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
+//			mImageLoader.displayImage(friend.getHeadUrl(), holder.head);
+		RCPlatformImageLoader.loadImage(context, mImageLoader, friend.getHeadUrl(), holder.head);
 		return convertView;
 	}
 

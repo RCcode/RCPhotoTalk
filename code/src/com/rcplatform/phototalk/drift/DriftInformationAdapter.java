@@ -128,7 +128,8 @@ public class DriftInformationAdapter extends BaseAdapter {
 		} else {
 			initPhotoInformationSenderView(record, holder);
 		}
-		mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
+//		mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
+		RCPlatformImageLoader.loadImage(context, mImageLoader, record.getSender().getHeadUrl(), holder.head);
 		if (!isSender(record) && record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.name.getPaint().setFakeBoldText(true);
 		} else {

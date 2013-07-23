@@ -85,7 +85,8 @@ public class FriendDynamicListAdpter extends BaseAdapter {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		// 设置头像 昵称
-		ImageLoader.getInstance().displayImage(list.get(position).getfRcHead(), viewHolder.headView);
+		RCPlatformImageLoader.loadImage(context, ImageLoader.getInstance(),list.get(position).getfRcHead(), viewHolder.headView);
+//		ImageLoader.getInstance().displayImage(list.get(position).getfRcHead(), viewHolder.headView);
 		// viewHolder.headView
 		// 为加为好友 根据状态进行设置不同的信息内容
 		viewHolder.headView.setOnClickListener(new OnClickListener() {

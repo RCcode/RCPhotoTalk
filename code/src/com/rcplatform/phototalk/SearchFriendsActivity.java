@@ -31,6 +31,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendSourse;
 import com.rcplatform.phototalk.bean.FriendType;
+import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.JSONConver;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
@@ -142,7 +143,7 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 	}
 
 	private void showFriendDetail(Friend friend) {
-		friendShowDetail=friend;
+		friendShowDetail = friend;
 		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
 		Request.executeGetFriendDetailAsync(this, friend, new FriendDetailListener() {
 
@@ -272,7 +273,8 @@ public class SearchFriendsActivity extends BaseActivity implements View.OnClickL
 			TextView nickTextView = (TextView) convertView.findViewById(R.id.add_friend_list_item_name);
 			final Button addFriendBtn = (Button) convertView.findViewById(R.id.add_friend_button);
 			setFriendSourceInfo(convertView, friend);
-			mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
+			// mImageLoader.displayImage(friend.getHeadUrl(), portraitImage);
+			RCPlatformImageLoader.loadImage(SearchFriendsActivity.this, mImageLoader, friend.getHeadUrl(), portraitImage);
 			// view friend detail.
 			portraitImage.setOnClickListener(new View.OnClickListener() {
 
