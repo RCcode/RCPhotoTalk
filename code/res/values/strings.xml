@@ -53,7 +53,7 @@
     <string name="send_sending">Sending</string>
     <string name="send_sended">%1$s-Sent</string>
     <string name="send_received">%1$s-Delivered</string>
-    <string name="send_looked">%1$s-Read</string>
+    <string name="send_looked">%1$s-View</string>
     <string name="send_fail">Failed to send, tap to try again</string>
     <string name="receive_downloading">Loading</string>
     <string name="receive_loaded">%1$s-Hold to view</string>
