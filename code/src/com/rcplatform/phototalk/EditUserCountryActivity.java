@@ -136,7 +136,9 @@ public class EditUserCountryActivity extends BaseActivity implements
 				String keyWords = s.toString().trim();
 				if (TextUtils.isEmpty(keyWords)) {
 					seach_delete_btn.setVisibility(View.INVISIBLE);
-					initData();
+//					initData();
+//					countryList.clear();
+					countryList = oldCountry;
 					adapter = new SeachCountryAdapter(
 							EditUserCountryActivity.this, countryList);
 					listView.setAdapter(adapter);
@@ -225,7 +227,8 @@ public class EditUserCountryActivity extends BaseActivity implements
 			break;
 		case R.id.seach_delete_btn:
 			seachEdit.setText("");
-			initData();
+//			initData();
+			countryList = oldCountry;
 			adapter = new SeachCountryAdapter(EditUserCountryActivity.this,
 					countryList);
 			listView.setAdapter(adapter);
