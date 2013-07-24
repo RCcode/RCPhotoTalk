@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.facebook.FacebookException;
@@ -150,14 +149,10 @@ public class FacebookClient {
 				if (error == null) {
 					final String postId = values.getString("post_id");
 					if (postId != null) {
-						mContext.showErrorConfirmDialog(R.string.share_complete);
+						mContext.showConfirmDialog(R.string.share_complete);
 					} else {
-						// mContext.showErrorConfirmDialog(R.string.share_cancel);
 					}
 				} else {
-					// mContext.showErrorConfirmDialog(TextUtils.isEmpty(error.getMessage())
-					// ? mContext.getString(R.string.share_cancel) :
-					// error.getMessage());
 				}
 			}
 		}).build();
@@ -175,7 +170,7 @@ public class FacebookClient {
 	protected void onSessionStateChange(Session session, SessionState state, Exception exception) {
 		LogUtil.e("go into facebook status call back");
 		if (exception != null) {
-			mContext.showErrorConfirmDialog(exception.getMessage());
+			mContext.showConfirmDialog(exception.getMessage());
 			return;
 		}
 		if (state == SessionState.OPENED)
@@ -262,7 +257,7 @@ public class FacebookClient {
 
 	public void deAuthorize(OnDeAuthorizeListener listener) {
 		this.mDeAuthorizeListener = listener;
-		mContext.showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
+		mContext.showLoadingDialog( false);
 		Request request = new Request(Session.getActiveSession(), "me/permissions");
 		request.setHttpMethod(HttpMethod.DELETE);
 		request.setCallback(new Callback() {
@@ -297,7 +292,7 @@ public class FacebookClient {
 	private Handler mHandler = new Handler() {
 
 		public void handleMessage(android.os.Message msg) {
-			mContext.dismissLoadingDialog();
+			mContext.dissmissLoadingDialog();
 			switch (msg.what) {
 			case MSG_DEAUTHORIZE_SUCCESS:
 				mDeAuthorizeListener.onDeAuthorizeSuccess();
@@ -305,11 +300,11 @@ public class FacebookClient {
 			case MSG_DEAUTHORIZE_ERROR:
 				mDeAuthorizeListener.onDeAuthorizeFail();
 				String message = (String) msg.obj;
-				mContext.showErrorConfirmDialog(message);
+				mContext.showConfirmDialog(message);
 				break;
 			case MSG_NET_ERROR:
 				mDeAuthorizeListener.onDeAuthorizeFail();
-				mContext.showErrorConfirmDialog(R.string.net_error);
+				mContext.showConfirmDialog(R.string.net_error);
 				break;
 			}
 		};

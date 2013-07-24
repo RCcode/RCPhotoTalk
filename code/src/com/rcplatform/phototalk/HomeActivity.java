@@ -217,28 +217,30 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void checkBindPhone() {
 		String rcId = getCurrentUser().getRcId();
-		if (PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, rcId) && RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone())
-				&& Constants.DEVICE_ID.equals(getCurrentUser().getDeviceId()) && !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
-			PrefsUtils.User.MobilePhoneBind.setAttentionToBindPhone(this, rcId);
-			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+		if (Constants.DEVICE_ID != null) {
+			if (PrefsUtils.User.MobilePhoneBind.isUserBindPhoneTimeOut(this, rcId) && RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone())
+					&& Constants.DEVICE_ID.equals(getCurrentUser().getDeviceId()) && !PrefsUtils.User.MobilePhoneBind.hasAttentionToBindPhone(this, rcId)) {
+				PrefsUtils.User.MobilePhoneBind.setAttentionToBindPhone(this, rcId);
+				DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					switch (which) {
-					case DialogInterface.BUTTON_POSITIVE:
-						EventUtil.Main_Photo.rcpt_phonepop_register(baseContext);
-						startActivity(RequestSMSActivity.class);
-						break;
-					case DialogInterface.BUTTON_NEGATIVE:
-						EventUtil.Main_Photo.rcpt_phonepop_later(baseContext);
-						dialog.dismiss();
-						break;
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						switch (which) {
+						case DialogInterface.BUTTON_POSITIVE:
+							EventUtil.Main_Photo.rcpt_phonepop_register(baseContext);
+							startActivity(RequestSMSActivity.class);
+							break;
+						case DialogInterface.BUTTON_NEGATIVE:
+							EventUtil.Main_Photo.rcpt_phonepop_later(baseContext);
+							dialog.dismiss();
+							break;
+						}
 					}
-				}
-			};
-			AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.bind_phone_attention)
-					.setNegativeButton(R.string.attention_later, listener).setPositiveButton(R.string.bind_now, listener).create();
-			dialog.show();
+				};
+				AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.bind_phone_attention)
+						.setNegativeButton(R.string.attention_later, listener).setPositiveButton(R.string.bind_now, listener).create();
+				dialog.show();
+			}
 		}
 	}
 

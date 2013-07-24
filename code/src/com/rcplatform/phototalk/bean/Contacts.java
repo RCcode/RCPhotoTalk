@@ -39,7 +39,9 @@ public class Contacts implements Serializable {
 	@Override
 	public boolean equals(Object o) {
 		// TODO Auto-generated method stub
+		if (o == null || mobilePhoneNumber == null)
+			return false;
 		return mobilePhoneNumber.equals(((Contacts) o).getMobilePhoneNumber());
 	}
-	
+
 }

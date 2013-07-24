@@ -50,7 +50,16 @@ public class InviteActivity extends BaseActivity {
 
 	private List<ThirdPartClient> thirdPartClients = new ArrayList<ThirdPartClient>();
 
-	private static TreeSet<Friend> friendsAdded;
+	private static TreeSet<Friend> friendsAdded = new TreeSet<Friend>(new Comparator<Friend>() {
+
+		@Override
+		public int compare(Friend lhs, Friend rhs) {
+			if (lhs.getRcId().equals(rhs.getRcId())) {
+				return 0;
+			}
+			return 1;
+		}
+	});;
 
 	public static final String RESULT_PARAM_KEY_NEW_ADD_FRIENDS = "new_friends";
 
@@ -90,16 +99,6 @@ public class InviteActivity extends BaseActivity {
 
 	private void initData() {
 		initBasicInviteActions();
-		friendsAdded = new TreeSet<Friend>(new Comparator<Friend>() {
-
-			@Override
-			public int compare(Friend lhs, Friend rhs) {
-				if (lhs.getRcId().equals(rhs.getRcId())) {
-					return 0;
-				}
-				return 1;
-			}
-		});
 		new AsyncTask<Void, Void, List<InviteAction>>() {
 
 			@Override

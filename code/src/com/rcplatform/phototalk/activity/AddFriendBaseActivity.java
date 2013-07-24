@@ -184,11 +184,11 @@ private Button seach_delete_btn;
 	};
 
 	private void doFriendAdd(final Friend friend) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendListener() {
 			@Override
 			public void onFriendAddSuccess(Friend f, int addType) {
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();
 				InviteActivity.addFriend(f);
@@ -196,13 +196,13 @@ private Button seach_delete_btn;
 
 			@Override
 			public void onFriendAddFail(int statusCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				dissmissLoadingDialog();
+				showConfirmDialog(content);
 			}
 
 			@Override
 			public void onAlreadyAdded() {
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				friend.setFriend(true);
 				refreshList();
 				InviteActivity.addFriend(friend);
@@ -313,20 +313,20 @@ private Button seach_delete_btn;
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 			Friend friend = (Friend) parent.getExpandableListAdapter().getChild(groupPosition, childPosition);
 			if (friend.getSource() != null) {
-				showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+				showLoadingDialog(false);
 				mFriendShowDetail = friend;
 				Request.executeGetFriendDetailAsync(AddFriendBaseActivity.this, friend, new FriendDetailListener() {
 
 					@Override
 					public void onSuccess(Friend friend) {
-						dismissLoadingDialog();
+						dissmissLoadingDialog();
 						startFriendDetail(friend);
 					}
 
 					@Override
 					public void onError(int errorCode, String content) {
-						dismissLoadingDialog();
-						showErrorConfirmDialog(content);
+						dissmissLoadingDialog();
+						showConfirmDialog(content);
 					}
 				}, false);
 			} else if (mItemType == PhotoTalkFriendsAdapter.TYPE_FACEBOOK) {
