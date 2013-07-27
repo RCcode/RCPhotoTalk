@@ -229,6 +229,11 @@ public class EditPictureView extends View {
 	 * 撤销的核心思想就是将画布清空， 将保存下来的Path路径最后一个移除掉， 重新将路径画在画布上面。
 	 */
 	public int undo() {
+		
+		if (mBitmap != null && !mBitmap.isRecycled()) {
+			mBitmap.recycle();
+			mBitmap = null;
+		}
 
 		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
 				Bitmap.Config.ARGB_8888);
@@ -264,6 +269,11 @@ public class EditPictureView extends View {
 		if (canclePath.size() < 1)
 			return canclePath.size();
 
+		if (mBitmap != null && !mBitmap.isRecycled()) {
+			mBitmap.recycle();
+			mBitmap = null;
+		}
+		
 		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
 				Bitmap.Config.ARGB_8888);
 		mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
