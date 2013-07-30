@@ -12,8 +12,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
-public class EditableViewGroup extends ViewGroup {
+public class EditableViewGroup extends RelativeLayout {
 
 	private int specSize_Heigth;
 
@@ -227,5 +228,4 @@ public class EditableViewGroup extends ViewGroup {
 			}
 		}
 	}
-
 }

@@ -53,7 +53,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.PhotoInformationType;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformationActivity;
@@ -313,7 +313,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void startFriendDetailActivity(Friend friend, int type) {
-		if (type == PhotoInformationType.TYPE_DRIFT) {
+		if (type == InformationClassification.TYPE_DRIFT) {
 			Intent intent = new Intent(this, StrangerDetailActivity.class);
 			intent.putExtra(StrangerDetailActivity.PARAM_FRIEND, friend);
 			startActivity(intent);

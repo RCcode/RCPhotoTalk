@@ -1,8 +1,8 @@
 package com.rcplatform.phototalk.api;
 
 public class PhotoTalkApiUrl {
-	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
-//	private static final String BASE_URL = "http://192.168.0.86:8083/";
+//	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
+	private static final String BASE_URL = "http://192.168.0.86:8083/";
 //	 private static final String BASE_URL = "http://192.168.0.114/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "phototalk/";
@@ -89,8 +89,8 @@ public class PhotoTalkApiUrl {
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
-//	private static final String RCBOSS_BASE_URL = "http://192.168.0.86:8083/";
+//	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
+	private static final String RCBOSS_BASE_URL = "http://192.168.0.86:8083/";
 //	private static final String RCBOSS_BASE_URL = "http://192.168.0.114/";
 
 	private static final String BASE_URL_FOR_RCBOSS = RCBOSS_BASE_URL + "rcboss/";
@@ -130,8 +130,8 @@ public class PhotoTalkApiUrl {
 
 
 	// --------------------------------------------------------------------------------------------
-//	public static final String SKY_POOL_BASE_URL = "http://192.168.0.86:8083/skypool/";
-	public static final String SKY_POOL_BASE_URL = "http://sky.rcplatformhk.net/skypool/";
+	public static final String SKY_POOL_BASE_URL = "http://192.168.0.86:8083/skypool/";
+//	public static final String SKY_POOL_BASE_URL = "http://sky.rcplatformhk.net/skypool/";
 	public static final String BASE_URL_FOR_POOL = SKY_POOL_BASE_URL + "pool/";
 	public static final String REPORT_URL = BASE_URL_FOR_POOL + "reportPic.do";
 	public static final String THROW_DRIFT_URL=BASE_URL_FOR_POOL+"throwBottle.do";

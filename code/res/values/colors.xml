@@ -22,4 +22,5 @@
  	<color name="login_otherapp_text">#ff827e7a</color>
  	<color name="home_know_stranges_text">#ffc75555</color>
  	<color name="filter_text_press">#ffb22408</color>	
+ 	<color name="transparent">#ffffffff</color>	
 </resources> 

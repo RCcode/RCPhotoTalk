@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.PhotoInformationType;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
@@ -294,7 +294,7 @@ public class StrangerDetailActivity extends BaseActivity {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", mFriend);
 		if (!mFriend.isFriend()) {
-			intent.putExtra("photoType", PhotoInformationType.TYPE_DRIFT);
+			intent.putExtra("photoType", InformationClassification.TYPE_DRIFT);
 			if (information != null) {
 				intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_ID,
 						information.getPicId());
@@ -302,7 +302,7 @@ public class StrangerDetailActivity extends BaseActivity {
 						information.getUrl());
 			}
 		} else {
-			intent.putExtra("photoType", PhotoInformationType.TYPE_NORMAL);
+			intent.putExtra("photoType", InformationClassification.TYPE_NORMAL);
 		}
 		if (getIntent().hasExtra(PARAM_BACK_PAGE))
 			intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE,

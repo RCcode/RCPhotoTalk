@@ -24,7 +24,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.PhotoInformationType;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
@@ -166,7 +166,7 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		} else {
 			holder.name.getPaint().setFakeBoldText(false);
 		}
-		if (record.getPhotoType() == PhotoInformationType.TYPE_DRIFT)
+		if (record.getPhotoType() == InformationClassification.TYPE_DRIFT)
 			holder.ivDrift.setImageResource(R.drawable.drift_item_icon);
 		else
 			holder.ivDrift.setImageBitmap(null);

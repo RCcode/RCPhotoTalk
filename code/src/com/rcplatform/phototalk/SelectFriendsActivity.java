@@ -35,7 +35,8 @@ import com.rcplatform.phototalk.adapter.SelectedFriendsGalleryAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter;
 import com.rcplatform.phototalk.adapter.SelectedFriendsListAdapter.OnCheckBoxChangedListener;
 import com.rcplatform.phototalk.bean.Friend;
-import com.rcplatform.phototalk.bean.PhotoInformationType;
+import com.rcplatform.phototalk.bean.InformationCategory;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.FriendsProxy;
@@ -51,6 +52,8 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	public static final String PARAM_KEY_HASVOICE = "hasvoice";
 	public static final String PARAM_KEY_HASGRAF = "hasgraf";
+	public static final String PARAM_KEY_INFORMATION_CATE = "informationcate";
+	public static final String PARAM_KEY_VIDEO_PATH = "videopath";
 
 	private ListView mFriendListView;
 
@@ -102,9 +105,18 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		hasGraf = getIntent().getBooleanExtra(PARAM_KEY_HASGRAF, false);
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
+		initData();
 		initViewOrListener();
 		getFriends();
 
+	}
+
+	private String videoPath;
+	private int informationCate;
+
+	private void initData() {
+		videoPath = getIntent().getStringExtra(PARAM_KEY_VIDEO_PATH);
+		informationCate = getIntent().getIntExtra(PARAM_KEY_INFORMATION_CATE, InformationCategory.PHOTO);
 	}
 
 	private void getFriends() {
@@ -325,7 +337,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			friends.add(PhotoTalkUtils.getDriftFriend());
 			InformationPageController.getInstance().onDriftThrowed();
 		}
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf, PhotoInformationType.TYPE_NORMAL);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf, InformationClassification.TYPE_NORMAL, informationCate);
 	}
 
 	@Override
@@ -337,7 +349,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 				return;
 			} else {
 				EventUtil.Main_Photo.rcpt_success_send(baseContext);
-				catchBitampOnSDC();
+				sendInformation();
 				Intent intent = new Intent(SelectFriendsActivity.this, HomeActivity.class);
 				intent.putExtra("from", this.getClass().getName());
 				intent.putExtra("time", timeSnap);
@@ -353,6 +365,10 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			startActivity(new Intent(SelectFriendsActivity.this, InviteActivity.class));
 			break;
 		}
+	}
+
+	private void sendInformation() {
+		catchBitampOnSDC();
 	}
 
 	public void measureView(View child, ViewGroup.LayoutParams params) {

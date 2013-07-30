@@ -15,8 +15,11 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
 
+import com.rcplatform.phototalk.bean.InformationCategory;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.views.CameraView;
+import com.rcplatform.phototalk.views.CameraView.OnVideoRecordListener;
 import com.rcplatform.phototalk.views.CameraView.TakeOnSuccess;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
 
@@ -47,7 +50,8 @@ public class TakePhotoActivity extends Activity {
 	private Intent intent;
 
 	private Context ctx;
-	
+
+	private Button btnVPChange;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public class TakePhotoActivity extends Activity {
 		mButtonClose = (Button) findViewById(R.id.btn_close_take_photo);
 		mCameraView = (CameraView) findViewById(R.id.sf_camera_view);
 		mCameraView.setTakeOnSuccess(takeOnSuccess);
-		
+
 		if (Camera.getNumberOfCameras() == 1) {
 			mButtonChangeCamera.setVisibility(View.GONE);
 		}
@@ -76,13 +80,38 @@ public class TakePhotoActivity extends Activity {
 		mButtonOpenFlashLight.setTag(OPEN_FLASHLIGHT_ON_CLICK);
 		mButtonTake.setOnClickListener(clickListener);
 		mButtonTake.setTag(TAKE_ON_CLICK);
+		btnVPChange = (Button) findViewById(R.id.btn_take_video);
+		btnVPChange.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				mCameraView.setOnVideoRecordListener(new OnVideoRecordListener() {
+
+					@Override
+					public void onRecordStart(String cacheFilePath) {
+
+					}
+
+					@Override
+					public void onRecordFail() {
+
+					}
+
+					@Override
+					public void onRecordEnd(String cacheFilePath) {
+						startVideoEditActivity(cacheFilePath);
+					}
+				});
+				mCameraView.startVideoRecord();
+			}
+		});
 
 	}
+
 	private TakeOnSuccess takeOnSuccess = new TakeOnSuccess() {
-		
+
 		@Override
 		public void successMethod() {
-			// TODO Auto-generated method stub
 			startOtherActivity();
 		}
 	};
@@ -92,36 +121,36 @@ public class TakePhotoActivity extends Activity {
 		public void onClick(View v) {
 			int tag = (Integer) v.getTag();
 			switch (tag) {
-				case TAKE_ON_CLICK:
-					EventUtil.Main_Photo.rcpt_takephoto(ctx);
-					mCameraView.takePhoto();
-					break;
-				case CHANGE_CAMERA_ON_CLICK:
-					mCameraView.changeCamera();
-					if (mFromDegrees == 0) {
-						mFromDegrees = 180;
-						mToDegrees = 0;
-						mButtonOpenFlashLight.setVisibility(View.GONE);
-					} else {
-						mFromDegrees = 0;
-						mToDegrees = 180;
-						mButtonOpenFlashLight.setVisibility(View.VISIBLE);
-					}
-					Animation animation = new Rotate3dAnimation(mFromDegrees, mToDegrees, mButtonChangeCamera.getWidth() / 2,
-					        mButtonChangeCamera.getHeight() / 2, 200.0f, true);
-					animation.setDuration(500);
-					animation.setInterpolator(new AccelerateInterpolator());
-					mButtonChangeCamera.startAnimation(animation);
-					break;
-				case OPEN_FLASHLIGHT_ON_CLICK:
-					if (mCameraView.setLightStatu()) {
-						mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_press);
-					} else
-						mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_normal);
-					break;
-				case CLOSE_ON_CLICK:
-					finish();
-					break;
+			case TAKE_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_takephoto(ctx);
+				mCameraView.takePhoto();
+				break;
+			case CHANGE_CAMERA_ON_CLICK:
+				mCameraView.changeCamera();
+				if (mFromDegrees == 0) {
+					mFromDegrees = 180;
+					mToDegrees = 0;
+					mButtonOpenFlashLight.setVisibility(View.GONE);
+				} else {
+					mFromDegrees = 0;
+					mToDegrees = 180;
+					mButtonOpenFlashLight.setVisibility(View.VISIBLE);
+				}
+				Animation animation = new Rotate3dAnimation(mFromDegrees, mToDegrees, mButtonChangeCamera.getWidth() / 2, mButtonChangeCamera.getHeight() / 2,
+						200.0f, true);
+				animation.setDuration(500);
+				animation.setInterpolator(new AccelerateInterpolator());
+				mButtonChangeCamera.startAnimation(animation);
+				break;
+			case OPEN_FLASHLIGHT_ON_CLICK:
+				if (mCameraView.setLightStatu()) {
+					mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_press);
+				} else
+					mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_normal);
+				break;
+			case CLOSE_ON_CLICK:
+				finish();
+				break;
 
 			}
 
@@ -130,6 +159,13 @@ public class TakePhotoActivity extends Activity {
 
 	public void startOtherActivity() {
 		intent.setClass(this, EditPictureActivity.class);
+		startActivity(intent);
+	}
+
+	public void startVideoEditActivity(String path) {
+		intent.setClass(this, EditPictureActivity.class);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_PATH, path);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_RECORD_CATE, InformationCategory.VIDEO);
 		startActivity(intent);
 	}
 

@@ -244,12 +244,13 @@ public class LogicUtils {
 	}
 
 	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice,
-			final boolean hasGraf, int photoType) {
+			final boolean hasGraf, int photoType, int informationCate) {
 		long flag = System.currentTimeMillis();
 		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
 		if (sendToStranges) {
-			DriftInformation tempDriftInformation = buildDriftTempInformation(currentUser, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf);
+			DriftInformation tempDriftInformation = buildDriftTempInformation(currentUser, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf,
+					informationCate);
 			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(tempDriftInformation);
 			DriftInformationPageController.getInstance().onDriftInformationSending(Arrays.asList(new DriftInformation[] { tempDriftInformation }));
 		}
@@ -261,7 +262,8 @@ public class LogicUtils {
 		}
 		// 发送给好友并扔漂流瓶
 		try {
-			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf, photoType);
+			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf,
+					photoType, informationCate);
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
@@ -295,7 +297,8 @@ public class LogicUtils {
 		}
 	}
 
-	private static DriftInformation buildDriftTempInformation(UserInfo currentUser, long flag, int timeLimit, File file, boolean hasVoice, boolean hasGraf) {
+	private static DriftInformation buildDriftTempInformation(UserInfo currentUser, long flag, int timeLimit, File file, boolean hasVoice, boolean hasGraf,
+			int informationCate) {
 		DriftInformation tempDriftInformation = new DriftInformation();
 		tempDriftInformation.setFlag(flag);
 		if (hasVoice) {
@@ -326,7 +329,7 @@ public class LogicUtils {
 	}
 
 	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file,
-			boolean hasVoice, boolean hasGraf, int photoType) throws JSONException {
+			boolean hasVoice, boolean hasGraf, int photoType, int informationCate) throws JSONException {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {

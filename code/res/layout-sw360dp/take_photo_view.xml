@@ -14,7 +14,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_alignParentLeft="true"
-       android:layout_marginLeft="@dimen/take_photo_left"
+        android:layout_marginLeft="@dimen/take_photo_left"
         android:layout_marginTop="@dimen/take_photo_bottom"
         android:background="@drawable/close_edit_button_selector" />
 
@@ -48,5 +48,13 @@
             android:layout_centerInParent="true"
             android:background="@drawable/take_photo_btn" />
     </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_take_video"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/take_photo_left"
+        android:background="@drawable/change_camera_button_selector" />
 
 </RelativeLayout>

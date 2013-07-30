@@ -1,7 +1,9 @@
 package com.rcplatform.phototalk.views;
 
-import java.io.IOException;
+import java.io.File;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.content.Context;
@@ -15,7 +17,11 @@ import android.hardware.Camera.AutoFocusCallback;
 import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.media.AudioManager;
+import android.media.CamcorderProfile;
+import android.media.CameraProfile;
+import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Environment;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -25,8 +31,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
-import com.rcplatform.phototalk.TakePhotoActivity;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
@@ -53,19 +59,25 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private Context mContext;
 
-	private Bitmap mBitmap;
-
 	private boolean isOpenLight = false;
 
 	private boolean isBackFace = true;
 
 	private boolean isShowCamera = false;
 
-	private boolean isAutoFocus;
-
 	private static int round;
 
 	private TakeOnSuccess takeOnSuccess;
+
+	private OnVideoRecordListener videoRecordListener;
+
+	public static interface OnVideoRecordListener {
+		public void onRecordStart(String cacheFilePath);
+
+		public void onRecordEnd(String cacheFilePath);
+
+		public void onRecordFail();
+	}
 
 	public void setTakeOnSuccess(TakeOnSuccess takeOnSuccess) {
 		this.takeOnSuccess = takeOnSuccess;
@@ -206,7 +218,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
-			// TODO Auto-generated method stub
 
 			if (camera != null) {
 				int rotateAngel = 0;
@@ -256,18 +267,18 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();
 		int degrees = 0;
 		switch (rotation) {
-			case Surface.ROTATION_0:
-				degrees = 0;
-				break;
-			case Surface.ROTATION_90:
-				degrees = 90;
-				break;
-			case Surface.ROTATION_180:
-				degrees = 180;
-				break;
-			case Surface.ROTATION_270:
-				degrees = 270;
-				break;
+		case Surface.ROTATION_0:
+			degrees = 0;
+			break;
+		case Surface.ROTATION_90:
+			degrees = 90;
+			break;
+		case Surface.ROTATION_180:
+			degrees = 180;
+			break;
+		case Surface.ROTATION_270:
+			degrees = 270;
+			break;
 		}
 		int result;
 		if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
@@ -299,8 +310,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					// }
 				}
 			});
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -344,8 +354,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 						Thread.sleep(3000);
 						manager.setStreamVolume(AudioManager.STREAM_MUSIC, musicVolumnBeforeTaken, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 						manager.setStreamVolume(AudioManager.STREAM_SYSTEM, systemVolumnBeforeTaken, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						// Log.e(TAG, "静音计时线程被中断。", e);
 					}
 
@@ -405,16 +414,10 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					}
 				}
 
-//				if (mCurrentCameraNum == mFrontCameraNum) {
-//					parameters.setRotation(270);
-//				} else {
-//					parameters.setRotation(90);
-//				}
-
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
+				mVideoSize = previewSize;
 				if (previewSize != null) {
 					parameters.setPreviewSize(previewSize.width, previewSize.height);
-
 				}
 
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
@@ -423,9 +426,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				List<String> focusModes = parameters.getSupportedFocusModes();
 				if (focusModes.contains(Camera.Parameters.FOCUS_MODE_AUTO)) {
 					parameters.setFocusMode(Parameters.FOCUS_MODE_AUTO);
-					isAutoFocus = true;
 				} else {
-					isAutoFocus = false;
 				}
 				mCamera.setParameters(parameters);
 
@@ -460,8 +461,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				mCamera.startPreview();
 				requestLayout();
 				isShowCamera = true;
-			}
-			catch (Exception exception) {
+			} catch (Exception exception) {
 				// 释放手机摄像头
 				releaseCamera();
 			}
@@ -501,5 +501,110 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	public boolean onTouchEvent(MotionEvent event) {
 		takeFocuse();
 		return super.onTouchEvent(event);
+	}
+
+	private MediaRecorder mMediaRecorder;
+	private File tempFile;
+	private Size mVideoSize;
+
+	public void startVideoRecord() {
+		CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CameraProfile.QUALITY_LOW);
+		mCamera.stopPreview();
+		mCamera.unlock();
+		if (mMediaRecorder == null)
+			mMediaRecorder = new MediaRecorder();
+		else
+			mMediaRecorder.reset();
+		try {
+			this.mMediaRecorder.setCamera(mCamera);
+			this.mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+			this.mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+			this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
+			// this.mMediaRecorder.setProfile(paramCamcorderProfile);
+			if (mVideoSize != null)
+				this.mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
+			else
+				this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth, paramCamcorderProfile.videoFrameHeight);
+			this.mMediaRecorder.setVideoFrameRate(30);
+			this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
+			this.mMediaRecorder.setVideoEncodingBitRate(2000000);
+			this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
+			this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
+			this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
+			this.mMediaRecorder.setAudioEncoder(paramCamcorderProfile.audioCodec);
+			this.mMediaRecorder.setOrientationHint(round);
+			tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
+			if (tempFile.exists())
+				tempFile.delete();
+			mMediaRecorder.setOutputFile(tempFile.getPath());
+			mMediaRecorder.prepare();
+			mMediaRecorder.start();
+			processVideoListener(VideoRecordState.START);
+			startTimerTask();
+		} catch (Exception e) {
+			e.printStackTrace();
+			processVideoListener(VideoRecordState.FAIL);
+		}
+	}
+
+	private Timer mTimer;
+
+	private void startTimerTask() {
+		if (mTimer == null)
+			mTimer = new Timer();
+		mTimer.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				stopRecord();
+			}
+		}, Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
+	}
+
+	public void stopRecord() {
+		try {
+			mMediaRecorder.stop();
+			// mCamera.stopPreview();
+			// mCamera.release();
+			mTimer.cancel();
+			// initCamera();
+			processVideoListener(VideoRecordState.END);
+		} catch (Exception e) {
+			e.printStackTrace();
+			mMediaRecorder.release();
+			processVideoListener(VideoRecordState.FAIL);
+		}
+	}
+
+	private void processVideoListener(VideoRecordState state) {
+		if (videoRecordListener != null) {
+			switch (state) {
+			case START:
+				videoRecordListener.onRecordStart(tempFile.getPath());
+				break;
+			case FAIL:
+				RCThreadPool.getInstance().addTask(new Runnable() {
+
+					@Override
+					public void run() {
+						if (tempFile != null && tempFile.exists())
+							tempFile.delete();
+					}
+				});
+				videoRecordListener.onRecordFail();
+				break;
+			case END:
+				videoRecordListener.onRecordEnd(tempFile.getPath());
+				break;
+			}
+		}
+	}
+
+	public void setOnVideoRecordListener(OnVideoRecordListener listener) {
+		this.videoRecordListener = listener;
+	}
+
+	enum VideoRecordState {
+		START, FAIL, END;
 	}
 }

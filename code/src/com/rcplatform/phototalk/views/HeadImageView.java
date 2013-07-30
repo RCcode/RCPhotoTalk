@@ -17,7 +17,6 @@ public class HeadImageView extends ImageView {
 
 	public HeadImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -28,14 +27,12 @@ public class HeadImageView extends ImageView {
 
 	@Override
 	public void setBackgroundResource(int resid) {
-		// TODO Auto-generated method stub
 		super.setBackgroundResource(resid);
 		System.out.println("--setBackgroundResource-");
 	}
 
 	@Override
 	public void setImageResource(int resId) {
-		// TODO Auto-generated method stub
 		super.setBackgroundResource(resId);
 		super.setImageResource(R.drawable.gallery_head_bg);
 	}
