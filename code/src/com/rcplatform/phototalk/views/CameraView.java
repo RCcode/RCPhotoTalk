@@ -71,6 +71,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private OnVideoRecordListener videoRecordListener;
 
+	private VideoRecordState recordState;
+
 	public static interface OnVideoRecordListener {
 		public void onRecordStart(String cacheFilePath);
 
@@ -209,8 +211,17 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	@Override
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// 释放手机摄像头
+		releaseMediaRecorder();
 		releaseCamera();
+	}
+
+	private void releaseMediaRecorder() {
+		if (mMediaRecorder != null && recordState != VideoRecordState.END) {
+			mTimer.cancel();
+			mMediaRecorder.stop();
+		}
+		mMediaRecorder.release();
+		mMediaRecorder = null;
 	}
 
 	// 准备一个保存图片的pictureCallback对象
@@ -519,19 +530,19 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			this.mMediaRecorder.setCamera(mCamera);
 			this.mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 			this.mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-			this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
-			// this.mMediaRecorder.setProfile(paramCamcorderProfile);
+			// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
+			this.mMediaRecorder.setProfile(paramCamcorderProfile);
 			if (mVideoSize != null)
 				this.mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
 			else
 				this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth, paramCamcorderProfile.videoFrameHeight);
 			this.mMediaRecorder.setVideoFrameRate(30);
-			this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
-			this.mMediaRecorder.setVideoEncodingBitRate(2000000);
-			this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
-			this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
-			this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
-			this.mMediaRecorder.setAudioEncoder(paramCamcorderProfile.audioCodec);
+			// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
+			this.mMediaRecorder.setVideoEncodingBitRate(300000);
+			// this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
+			// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
+			// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
+			// this.mMediaRecorder.setAudioEncoder(paramCamcorderProfile.audioCodec);
 			this.mMediaRecorder.setOrientationHint(round);
 			tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
 			if (tempFile.exists())
@@ -577,6 +588,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	private void processVideoListener(VideoRecordState state) {
+		recordState = state;
 		if (videoRecordListener != null) {
 			switch (state) {
 			case START:
