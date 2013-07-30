@@ -220,8 +220,10 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			mTimer.cancel();
 			mMediaRecorder.stop();
 		}
-		mMediaRecorder.release();
-		mMediaRecorder = null;
+		if (mMediaRecorder != null) {
+			mMediaRecorder.release();
+			mMediaRecorder = null;
+		}
 	}
 
 	// 准备一个保存图片的pictureCallback对象
@@ -519,7 +521,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	private Size mVideoSize;
 
 	public void startVideoRecord() {
-		CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CameraProfile.QUALITY_LOW);
+		CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 		mCamera.stopPreview();
 		mCamera.unlock();
 		if (mMediaRecorder == null)
@@ -532,13 +534,15 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			this.mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 			// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
 			this.mMediaRecorder.setProfile(paramCamcorderProfile);
-			if (mVideoSize != null)
-				this.mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
-			else
-				this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth, paramCamcorderProfile.videoFrameHeight);
+			// if (mVideoSize != null)
+			// this.mMediaRecorder.setVideoSize(mVideoSize.width,
+			// mVideoSize.height);
+			// else
+			// this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
+			// paramCamcorderProfile.videoFrameHeight);
 			this.mMediaRecorder.setVideoFrameRate(30);
 			// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
-			this.mMediaRecorder.setVideoEncodingBitRate(300000);
+			this.mMediaRecorder.setVideoEncodingBitRate(1000000);
 			// this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
 			// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
 			// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
