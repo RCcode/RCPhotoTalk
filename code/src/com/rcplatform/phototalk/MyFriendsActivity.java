@@ -29,7 +29,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 
-import com.google.ads.m;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.MenuBaseActivity;
 import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
@@ -84,14 +83,14 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private void getFriends() {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		FriendsProxy.getFriendsAndRecommends(this, new LoadFriendsListener() {
 
 			@Override
 			public void onLoadedFail(String reason) {
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				if (!PrefsUtils.User.hasLoadedFriends(MyFriendsActivity.this, getCurrentUser().getRcId())) {
-					showErrorConfirmDialog(reason);
+					showConfirmDialog(reason);
 				}
 			}
 
@@ -104,7 +103,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 				}
 				if (intoFriendsListTime <= 1)
 					PrefsUtils.User.setIntoFriendsListTime(MyFriendsActivity.this, rcId, (intoFriendsListTime + 1));
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				sendFriendLoadedMessage(friends, recommends);
 			}
 		});
@@ -279,21 +278,21 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 		@Override
 		public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
 			EventUtil.Friends_Addfriends.rcpt_friends_profileview(baseContext);
-			showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+			showLoadingDialog( false);
 			final Friend friend = (Friend) ((PhotoTalkFriendsAdapter) parent.getExpandableListAdapter()).getChild(groupPosition, childPosition);
 			mFriendShowDetail = friend;
 			com.rcplatform.phototalk.request.Request.executeGetFriendDetailAsync(MyFriendsActivity.this, friend, new FriendDetailListener() {
 
 				@Override
 				public void onSuccess(Friend f) {
-					dismissLoadingDialog();
+					dissmissLoadingDialog();
 					showDetail(f);
 				}
 
 				@Override
 				public void onError(int errorCode, String content) {
-					dismissLoadingDialog();
-					showErrorConfirmDialog(content);
+					dissmissLoadingDialog();
+					showConfirmDialog(content);
 				}
 			}, false);
 			return false;
@@ -316,7 +315,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 		public void handleMessage(android.os.Message msg) {
 			switch (msg.what) {
 			case MSG_WHAT_FRIEND_LOADED:
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				setListData(mFriends, mRecommends, mList);
 				etSearch.setText(null);
 				break;
@@ -365,34 +364,33 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	};
 
 	private void doAddFriend(final Friend friend) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		new AddFriendTask(this, getPhotoTalkApplication().getCurrentUser(), new AddFriendTask.AddFriendListener() {
 
 			@Override
 			public void onFriendAddSuccess(Friend f, int addType) {
 				friend.setFriend(true);
 				refreshList();
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 			}
 
 			@Override
 			public void onFriendAddFail(int statusCode, String content) {
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 				if (Constants.STATUS_AREADY_FRIENDS == statusCode) {
 					friend.setFriend(true);
 					refreshList();
 
 				} else {
-					showErrorConfirmDialog(content);
+					showConfirmDialog(content);
 				}
 			}
 
 			@Override
 			public void onAlreadyAdded() {
-				// TODO Auto-generated method stub
 				friend.setFriend(true);
 				refreshList();
-				dismissLoadingDialog();
+				dissmissLoadingDialog();
 			}
 		}, friend).execute();
 	}
@@ -443,7 +441,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private void handlerAddResult(final List<Friend> newFriends) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		Thread thread = new Thread() {
 
 			@Override
@@ -486,7 +484,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private void handlerDeleteResult(final Friend friend) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog( false);
 		Thread thread = new Thread() {
 
 			@Override
@@ -504,7 +502,7 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 	}
 
 	private void deleteFriend(final Friend friend) {
-		showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+		showLoadingDialog(false);
 		RCPlatformResponseHandler handler = new RCPlatformResponseHandler() {
 
 			@Override
@@ -514,8 +512,8 @@ public class MyFriendsActivity extends MenuBaseActivity implements OnClickListen
 
 			@Override
 			public void onFailure(int errorCode, String content) {
-				dismissLoadingDialog();
-				showErrorConfirmDialog(content);
+				dissmissLoadingDialog();
+				showConfirmDialog(content);
 			}
 		};
 		if (friend.isFriend()) {
