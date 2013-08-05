@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.views;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.lang.ref.SoftReference;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -88,11 +89,12 @@ public class LongClickShowView extends Dialog {
 				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
 				dialog.setContentView(dialog.contentView);
 			} else {
-//				dialog.setContentView(dialog.contentView);
+				// dialog.setContentView(dialog.contentView);
 			}
 			Log.i("ABC", "DIALOG = " + dialog.toString());
 			/*
 			 * contentView.setOnClickListener(new View.OnClickListener(){
+			 * 
 			 * @Override public void onClick(View view) { dialog.hide(); } });
 			 */
 			return dialog;
@@ -110,8 +112,7 @@ public class LongClickShowView extends Dialog {
 			try {
 				File[] files = unZipFile(info.getUrl());
 				showZipContent(files, info);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else if (info.getType() == InformationType.TYPE_SYSTEM_NOTICE) { // 系统消息
@@ -121,19 +122,19 @@ public class LongClickShowView extends Dialog {
 		glTimer.scheuleTask(info);
 		show();
 	}
+
 	public void ShowDialog(DriftInformation info) {
 		if (info.getUrl() == null)
 			return;
 		if (glTimer == null) {
 			initTimer();
 		}
-			try {
-				File[] files = unZipFile(info.getUrl());
-				showZipContent(files, info);
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-			}
+		try {
+			File[] files = unZipFile(info.getUrl());
+			showZipContent(files, info);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		glTimer.scheuleTask(info);
 		show();
 	}
@@ -149,6 +150,7 @@ public class LongClickShowView extends Dialog {
 		glTimer.setVisibility(View.VISIBLE);
 		Builder.mImageView.setVisibility(View.VISIBLE);
 	}
+
 	private void showZipContent(File[] fileList, DriftInformation info) throws Exception {
 		for (File file : fileList) {
 			if (isImage(file.getName())) {
@@ -184,7 +186,7 @@ public class LongClickShowView extends Dialog {
 
 		FileInputStream fis = new FileInputStream(file.getAbsolutePath());
 		Builder.mAudioPlayer.reset();
-//		Builder.mAudioPlayer.setVolume(arg0, arg1)
+		// Builder.mAudioPlayer.setVolume(arg0, arg1)
 		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 		Builder.mAudioPlayer.setDataSource(fis.getFD());
 		Builder.mAudioPlayer.prepare();
@@ -195,28 +197,28 @@ public class LongClickShowView extends Dialog {
 			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
 
 	}
+
 	private void playAudio(final File file, final DriftInformation info) throws Exception {
-		
+
 		FileInputStream fis = new FileInputStream(file.getAbsolutePath());
 		Builder.mAudioPlayer.reset();
-//		Builder.mAudioPlayer.setVolume(arg0, arg1)
+		// Builder.mAudioPlayer.setVolume(arg0, arg1)
 		Builder.mAudioPlayer.setAudioStreamType(AudioManager.STREAM_RING);
 		Builder.mAudioPlayer.setDataSource(fis.getFD());
 		Builder.mAudioPlayer.prepare();
 		Builder.mAudioPlayer.start();
 		fis.close();
-		
+
 		if (info.getTotleLength() != info.getLimitTime())
 			Builder.mAudioPlayer.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
-		
+
 	}
 
 	private void showImage(File file) {
 		try {
-			currentBitmap = BitmapFactory.decodeFile(file.getPath());
-		} catch (Exception e) {
+			currentBitmap = new SoftReference<Bitmap>(BitmapFactory.decodeFile(file.getPath())).get();
+		} catch (Throwable e) {
 		}
-
 		Builder.mImageView.setImageBitmap(currentBitmap);
 	}
 
@@ -230,17 +232,17 @@ public class LongClickShowView extends Dialog {
 
 	public void hideDialog() {
 		hide();
-//		Builder.mImageView = null;
+		// Builder.mImageView = null;
 		Builder.mAudioPlayer.stop();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
 		}
-//		contentView.removeAllViews();
-//		contentView = null;
-//		if(Builder.dialog!=null&&Builder.dialog.isShowing()){
-//		Builder.dialog.dismiss();
-//		}
+		// contentView.removeAllViews();
+		// contentView = null;
+		// if(Builder.dialog!=null&&Builder.dialog.isShowing()){
+		// Builder.dialog.dismiss();
+		// }
 	}
 
 	public void initTimer() {

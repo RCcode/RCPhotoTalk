@@ -11,18 +11,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -60,7 +54,6 @@ import com.rcplatform.phototalk.drift.DriftInformationActivity;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
@@ -90,8 +83,6 @@ import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
 import com.rcplatform.rcad.RcAd;
 import com.rcplatform.rcad.constants.AdType;
-import com.rcplatform.tigase.TigaseMessageBinderService;
-import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
 
 /**
@@ -118,8 +109,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private boolean isShow;
 
-	private TextView mTvContentTitle;
-
 	private TextView mBtFriendList;
 
 	private LongPressDialog mLongPressDialog;
@@ -139,8 +128,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private View loadingFooter;
 
 	public static final String INTENT_KEY_STATE = "state";
-
-	private TextView tvTigaseState;
 
 	private boolean isLoading = false;
 
@@ -420,33 +407,35 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				return false;
 			}
 		});
-		mInformationList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Information information = (Information) adapter.getItem(arg2);
-				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
-					return;
-				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
-					if (LogicUtils.isSender(HomeActivity.this, information)) {
-						reSendPhoto(information);
-					} else {
-						reLoadPictrue(information);
-					}
-				} else {
-					EventUtil.Main_Photo.rcpt_main_profileview(baseContext);
-					showFriendDetail(information);
-				}
-			}
-		});
+		mInformationList.setOnItemClickListener(informationItemClickListener);
 		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUser().getRcId()))
 			InformationPageController.getInstance().onNewRecommends();
 
 		initViewPager();
 
 	}
+
+	private OnItemClickListener informationItemClickListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			Information information = (Information) adapter.getItem(position);
+			if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+					&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
+				return;
+			if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+					&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
+				if (LogicUtils.isSender(HomeActivity.this, information)) {
+					reSendPhoto(information);
+				} else {
+					reLoadPictrue(information);
+				}
+			} else {
+				EventUtil.Main_Photo.rcpt_main_profileview(baseContext);
+				showFriendDetail(information);
+			}
+		}
+	};
 
 	/**
 	 * 初始化ViewPager
@@ -593,6 +582,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				});
 				mShowDialog.ShowDialog(infoRecord);
 				isShow = true;
+				mInformationList.setOnItemClickListener(null);
 				// 把数据里面的状态更改为3，已查看
 			}
 		}
@@ -660,11 +650,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 					mShowDialog = null;
 				}
 				isShow = false;
+				mInformationList.setOnItemClickListener(informationItemClickListener);
+				return true;
 			}
 			break;
-		}
-		if (isShow) {
-			return true;
 		}
 		return super.dispatchTouchEvent(event);
 	}
@@ -936,30 +925,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		thread.start();
 	}
 
-	private void registeTigaseStateChangeReceiver() {
-		IntentFilter filter = new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
-		registerReceiver(mTigaseStateChangeReceiver, filter);
-	}
-
-	private BroadcastReceiver mTigaseStateChangeReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String newState = intent.getStringExtra(INTENT_KEY_STATE);
-			tvTigaseState.setText(newState + "");
-		}
-	};
-
-	private void bindTigaseService() {
-		Intent service = new Intent(this, TigaseMessageBinderService.class);
-		bindService(service, tigaseServiceConnection, Context.BIND_AUTO_CREATE);
-	}
-
-	private void unBindTigaseService() {
-		MessageSender.getInstance().stop();
-		unbindService(tigaseServiceConnection);
-	}
-
 	@Override
 	public boolean onMessageHandle(String msg, String from) {
 		LogUtil.e("tigase receive informations...");
@@ -967,22 +932,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		filteInformations(informations);
 		return false;
 	}
-
-	private ServiceConnection tigaseServiceConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-
-		}
-
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			LocalBinder binder = (LocalBinder) service;
-			binder.getService().setOnMessageReciver(HomeActivity.this);
-			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(), getCurrentUser().getTigasePwd());
-			MessageSender.getInstance().setTigaseService(binder.getService());
-		}
-	};
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
