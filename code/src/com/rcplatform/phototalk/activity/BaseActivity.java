@@ -222,7 +222,8 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		Constants.initUIData(this);
 		if (needRelogin) {
 			UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
-			getPhotoTalkApplication().setCurrentUser(userInfo);
+			if (userInfo != null)
+				getPhotoTalkApplication().setCurrentUser(userInfo);
 		}
 	}
 }
