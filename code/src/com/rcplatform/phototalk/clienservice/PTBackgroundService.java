@@ -604,7 +604,6 @@ public class PTBackgroundService extends Service {
 			notification.defaults |= Notification.DEFAULT_SOUND;
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			;
 			Intent notificationIntent = new Intent(context, WelcomeActivity.class);
 			notificationIntent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, ApplicationStartMode.APPLICATION_START_RECOMMENDS);
 			// set intent so it does not start a new activity

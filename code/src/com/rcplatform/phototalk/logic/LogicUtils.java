@@ -296,7 +296,7 @@ public class LogicUtils {
 				DriftInformationPageController.getInstance().onDriftInformationSendFail(flag);
 		}
 	}
-
+	
 	private static DriftInformation buildDriftTempInformation(UserInfo currentUser, long flag, int timeLimit, File file, boolean hasVoice, boolean hasGraf,
 			int informationCate) {
 		DriftInformation tempDriftInformation = new DriftInformation();

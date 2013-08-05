@@ -14,12 +14,11 @@ import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RemoteViews;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
 import com.rcplatform.phototalk.bean.AppInfo;
@@ -27,9 +26,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 
 public class PhotoTalkUtils {
 
@@ -177,5 +174,11 @@ public class PhotoTalkUtils {
 			}
 		}).setNegativeButton(R.string.cancel, null).setMessage(R.string.comment_message).create();
 		dialog.show();
+	}
+
+	public static Intent getNotificationTakePhotoIntent(Context context) {
+		Intent intent = new Intent(context, WelcomeActivity.class);
+		intent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLICATION_START_TAKE_PHOTO);
+		return intent;
 	}
 }

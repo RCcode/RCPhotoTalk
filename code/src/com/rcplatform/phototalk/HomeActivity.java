@@ -11,18 +11,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -51,16 +45,15 @@ import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformationActivity;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.image.downloader.RCPlatformImageLoader;
 import com.rcplatform.phototalk.logic.LogicUtils;
-import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.logic.PhotoInformationCountDownService;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.logic.controller.SettingPageController;
@@ -82,6 +75,7 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.RCThreadPool;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
@@ -90,8 +84,6 @@ import com.rcplatform.phototalk.views.SnapListView;
 import com.rcplatform.phototalk.views.SnapShowListener;
 import com.rcplatform.rcad.RcAd;
 import com.rcplatform.rcad.constants.AdType;
-import com.rcplatform.tigase.TigaseMessageBinderService;
-import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
 
 /**
@@ -118,8 +110,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private boolean isShow;
 
-	private TextView mTvContentTitle;
-
 	private TextView mBtFriendList;
 
 	private LongPressDialog mLongPressDialog;
@@ -140,8 +130,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	public static final String INTENT_KEY_STATE = "state";
 
-	private TextView tvTigaseState;
-
 	private boolean isLoading = false;
 
 	private boolean willQuit = false;
@@ -156,6 +144,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
+		Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.ic_launcher);
 		checkStartMode();
 		// registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
@@ -166,10 +155,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
-		// tvTigaseState = (TextView) findViewById(R.id.tv_test);
-		// bindTigaseService();
 		checkBindPhone();
-		// 注册GCM
 		UserInfo userInfo = getCurrentUser();
 		if (userInfo != null) {
 			try {
@@ -178,12 +164,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			}
 		}
-
-		// Log 用户信息
 		ClientLogUtil.log(this);
 		showRcAd();
 		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
-		// PhotoTalkUtils.showCommentAttentionDialog(this);
 	}
 
 	private void showRcAd() {
@@ -191,9 +174,12 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void checkStartMode() {
-		int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
+		int startMode = getStartMode();
 		if (startMode == ApplicationStartMode.APPLICATION_START_RECOMMENDS) {
 			startActivity(MyFriendsActivity.class);
+		} else if (startMode == ApplicationStartMode.APPLICATION_START_TAKE_PHOTO) {
+			EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
+			startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
 		}
 	}
 
@@ -420,33 +406,35 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				return false;
 			}
 		});
-		mInformationList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				Information information = (Information) adapter.getItem(arg2);
-				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
-					return;
-				if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
-						&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
-					if (LogicUtils.isSender(HomeActivity.this, information)) {
-						reSendPhoto(information);
-					} else {
-						reLoadPictrue(information);
-					}
-				} else {
-					EventUtil.Main_Photo.rcpt_main_profileview(baseContext);
-					showFriendDetail(information);
-				}
-			}
-		});
+		mInformationList.setOnItemClickListener(informationListItemClickListener);
 		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUser().getRcId()))
 			InformationPageController.getInstance().onNewRecommends();
 
 		initViewPager();
 
 	}
+
+	private OnItemClickListener informationListItemClickListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			Information information = (Information) adapter.getItem(arg2);
+			if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+					&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
+				return;
+			if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
+					&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
+				if (LogicUtils.isSender(HomeActivity.this, information)) {
+					reSendPhoto(information);
+				} else {
+					reLoadPictrue(information);
+				}
+			} else {
+				EventUtil.Main_Photo.rcpt_main_profileview(baseContext);
+				showFriendDetail(information);
+			}
+		}
+	};
 
 	/**
 	 * 初始化ViewPager
@@ -464,7 +452,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
 				animation.setDuration(500);
 				vPager.setAnimation(animation);
@@ -569,6 +556,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
+
 		final Information infoRecord = (Information) adapter.getItem(position);
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
@@ -593,6 +581,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				});
 				mShowDialog.ShowDialog(infoRecord);
 				isShow = true;
+				mInformationList.setOnItemClickListener(null);
 				// 把数据里面的状态更改为3，已查看
 			}
 		}
@@ -660,11 +649,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 					mShowDialog = null;
 				}
 				isShow = false;
+				mInformationList.setOnItemClickListener(informationListItemClickListener);
+				return true;
 			}
 			break;
-		}
-		if (isShow) {
-			return true;
 		}
 		return super.dispatchTouchEvent(event);
 	}
@@ -936,30 +924,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		thread.start();
 	}
 
-	private void registeTigaseStateChangeReceiver() {
-		IntentFilter filter = new IntentFilter(Action.ACTION_TIGASE_STATE_CHANGE);
-		registerReceiver(mTigaseStateChangeReceiver, filter);
-	}
-
-	private BroadcastReceiver mTigaseStateChangeReceiver = new BroadcastReceiver() {
-
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String newState = intent.getStringExtra(INTENT_KEY_STATE);
-			tvTigaseState.setText(newState + "");
-		}
-	};
-
-	private void bindTigaseService() {
-		Intent service = new Intent(this, TigaseMessageBinderService.class);
-		bindService(service, tigaseServiceConnection, Context.BIND_AUTO_CREATE);
-	}
-
-	private void unBindTigaseService() {
-		MessageSender.getInstance().stop();
-		unbindService(tigaseServiceConnection);
-	}
-
 	@Override
 	public boolean onMessageHandle(String msg, String from) {
 		LogUtil.e("tigase receive informations...");
@@ -967,22 +931,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		filteInformations(informations);
 		return false;
 	}
-
-	private ServiceConnection tigaseServiceConnection = new ServiceConnection() {
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-
-		}
-
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			LocalBinder binder = (LocalBinder) service;
-			binder.getService().setOnMessageReciver(HomeActivity.this);
-			binder.getService().tigaseLogin(getCurrentUser().getTigaseId(), getCurrentUser().getTigasePwd());
-			MessageSender.getInstance().setTigaseService(binder.getService());
-		}
-	};
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {

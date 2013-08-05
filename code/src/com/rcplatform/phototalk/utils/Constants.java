@@ -315,7 +315,11 @@ public class Constants {
 	public static class ApplicationStartMode {
 		public static final int APPLICATION_START_RECOMMENDS = 1;
 
+		public static final int APPLICATION_START_TAKE_PHOTO = 2;
+
 		public static final String APPLICATION_START_KEY = "app_start";
+
+		public static final int APPLCATION_START_NORMAL = -1;
 	}
 
 	public static final String PREFS_FILE_USER_INFO = "com.phototalk.login.info.prefs";

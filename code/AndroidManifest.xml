@@ -419,5 +419,7 @@
             android:name="com.inmobi.androidsdk.IMBrowserActivity"
             android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize" />
     </application>
+<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
 
+    
 </manifest>

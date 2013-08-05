@@ -47,6 +47,10 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		functionImpl = new ActivityFunctionBasic(this);
 	}
 
+	public int getStartMode() {
+		return getIntent().getIntExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLCATION_START_NORMAL);
+	}
+
 	@Override
 	public void setContentView(View view) {
 		super.setContentView(view);
