@@ -16,6 +16,7 @@ import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformation;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 
 public class DriftInformationCountDownService {
 
@@ -36,9 +37,16 @@ public class DriftInformationCountDownService {
 
 	public void addInformation(DriftInformation info) {
 		if (mShowingInformations.get(info.getPicId()) == null) {
+			final int picId = info.getPicId();
 			info.setState(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
-			PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationState(info.getPicId(), InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
-			mShowingInformations.put(info.getPicId(), info);
+			RCThreadPool.getInstance().addTask(new Runnable() {
+
+				@Override
+				public void run() {
+					PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationState(picId, InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
+				}
+			});
+			mShowingInformations.put(picId, info);
 			startCountDown(info);
 		}
 	}

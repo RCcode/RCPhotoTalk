@@ -17,6 +17,7 @@ import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
+import com.rcplatform.phototalk.utils.RCThreadPool;
 
 public class PhotoInformationCountDownService {
 
@@ -36,10 +37,16 @@ public class PhotoInformationCountDownService {
 		mPool = (ThreadPoolExecutor) Executors.newScheduledThreadPool(5);
 	}
 
-	public void addInformation(Information info) {
+	public void addInformation(final Information info) {
 		if (!mShowingInformations.containsKey(PhotoTalkUtils.getInformationTagBase(info))) {
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
-			PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
+			RCThreadPool.getInstance().addTask(new Runnable() {
+
+				@Override
+				public void run() {
+					PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
+				}
+			});
 			mShowingInformations.put(PhotoTalkUtils.getInformationTagBase(info), info);
 			startCountDown(info);
 		}

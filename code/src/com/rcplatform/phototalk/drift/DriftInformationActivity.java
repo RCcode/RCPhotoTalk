@@ -183,25 +183,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				return false;
 			}
 		});
-		mInformationList.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-				DriftInformation information = (DriftInformation) adapter.getItem(arg2);
-				if (information.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
-					return;
-				if (information.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
-					if (LogicUtils.isSender(DriftInformationActivity.this, information)) {
-						reSendPicture(information);
-					} else {
-						reLoadPictrue(information);
-					}
-				} else {
-					EventUtil.Main_Photo.rcpt_main_profileview(baseContext);
-					showFriendDetail(information);
-				}
-			}
-		});
+		mInformationList.setOnItemClickListener(driftListItemClickListener);
 		btnFish = (Button) findViewById(R.id.btn_get_drift);
 		btnThrow = (Button) findViewById(R.id.btn_throw_drift);
 		btnFish.setOnClickListener(this);
@@ -283,6 +265,26 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		});
 		mGestureDetector.setIsLongpressEnabled(true);
 	}
+
+	private OnItemClickListener driftListItemClickListener = new OnItemClickListener() {
+
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			DriftInformation information = (DriftInformation) adapter.getItem(position);
+			if (information.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
+				return;
+			if (information.getState() == InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL) {
+				if (LogicUtils.isSender(DriftInformationActivity.this, information)) {
+					reSendPicture(information);
+				} else {
+					reLoadPictrue(information);
+				}
+			} else {
+				EventUtil.Main_Photo.rcpt_main_profileview(baseContext);
+				showFriendDetail(information);
+			}
+		}
+	};
 
 	private void closePaper() {
 		AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
@@ -431,7 +433,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				ImageView ivCountry = (ImageView) mInformationList.findViewWithTag(infoRecord.getPicId() + ImageView.class.getName() + "country");
 				ivCountry.setVisibility(View.GONE);
 				limitView.setVisibility(View.VISIBLE);
-				// limitView.setBackgroundDrawable(null);
 				limitView.setBackgroundResource(R.drawable.item_time_bg);
 				mShowDialog.setOnShowListener(new OnShowListener() {
 
@@ -442,9 +443,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 					}
 				});
 				mShowDialog.ShowDialog(infoRecord);
-
+				mInformationList.setOnItemClickListener(null);
 				isShow = true;
-				// 把数据里面的状态更改为3，已查看
 			}
 		}
 	}
@@ -511,11 +511,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 					mShowDialog = null;
 				}
 				isShow = false;
+				mInformationList.setOnItemClickListener(driftListItemClickListener);
+				return true;
 			}
 			break;
-		}
-		if (isShow) {
-			return true;
 		}
 		return super.dispatchTouchEvent(event);
 	}
