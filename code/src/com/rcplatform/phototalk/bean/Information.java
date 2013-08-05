@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk.bean;
 
-import android.content.Context;
 
 public class Information {
 

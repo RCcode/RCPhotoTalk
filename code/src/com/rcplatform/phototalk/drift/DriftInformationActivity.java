@@ -399,8 +399,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		record.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		PhotoTalkDatabaseFactory.getDatabase().resendDriftInformation(record.getFlag(), getCurrentUser().getRcId());
 		adapter.notifyDataSetChanged();
-		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(this, record.getFlag(), record.getUrl()), getCurrentUser(), null,
-				record.getTotleLength() + "", record.hasGraf(), record.hasVoice(), record.getUrl(), record.getFlag());
+		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(this, record.getFlag(), record.getUrl(), record.getInformationCate()),
+				getCurrentUser(), null, record.getTotleLength() + "", record.hasGraf(), record.hasVoice(), record.getUrl(), record.getFlag());
 	}
 
 	private void deleteInformation(DriftInformation information) {

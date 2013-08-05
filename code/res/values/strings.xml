@@ -401,6 +401,11 @@
     <string name="show_all_drift">All</string>
     <string name="show_send_drift">Uploaded</string>
     <string name="show_receive_drift">Received</string>
-
     <string name="add_friend_success">Added</string>
+
+    <!-- friendMe New Text -->
+
+    <string name="sending_to_stranger">发送视频到结识陌生人</string>
+    <string name="sending_video_to">发送视频给%1$s</string>
+
 </resources>

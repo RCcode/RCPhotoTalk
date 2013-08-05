@@ -146,7 +146,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		setContentView(R.layout.home_view);
 		Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.ic_launcher);
 		checkStartMode();
-		// registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
 		initViewAndListener();

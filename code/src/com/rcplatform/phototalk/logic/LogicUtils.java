@@ -18,6 +18,7 @@ import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.RecordUser;
@@ -39,6 +40,7 @@ import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.Constants.Action;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.NotificationSender;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
@@ -243,8 +245,13 @@ public class LogicUtils {
 		context.startActivity(intent);
 	}
 
+	private static void showInformationStateNofitication(Context context, String notifyTitle, String notifyText, long flag, int notificationId) {
+		SendingInformationManager.getInstance().addSendingInformation(flag, notificationId);
+		NotificationSender.sendNotification(context, notifyTitle, notifyText, R.drawable.ic_launcher, null, notificationId);
+	}
+
 	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice,
-			final boolean hasGraf, int photoType, int informationCate) {
+			final boolean hasGraf, int photoType, final int informationCate) {
 		long flag = System.currentTimeMillis();
 		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
@@ -253,25 +260,42 @@ public class LogicUtils {
 					informationCate);
 			PhotoTalkDatabaseFactory.getDatabase().saveDriftInformation(tempDriftInformation);
 			DriftInformationPageController.getInstance().onDriftInformationSending(Arrays.asList(new DriftInformation[] { tempDriftInformation }));
+			if (informationCate == InformationCategory.VIDEO)
+				showInformationStateNofitication(context, context.getString(R.string.sending_to_stranger), context.getString(R.string.send_sending), flag,
+						SendingInformationManager.getInstance().getDriftNotificationId());
 		}
 		if (friends.size() == 1 && sendToStranges) {
 			// 只是扔漂流瓶
-			DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath()), currentUser, null, timeLimit, hasGraf,
+			DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath(),informationCate), currentUser, null, timeLimit, hasGraf,
 					hasVoice, file.getPath(), flag);
 			return;
 		}
+		final StringBuilder sbNotifyTitle = new StringBuilder();
+		for (Friend friend : friends) {
+			sbNotifyTitle.append(friend.getNickName()).append(",");
+		}
 		// 发送给好友并扔漂流瓶
+		final String notificationTitle = context.getString(R.string.sending_video_to, sbNotifyTitle.substring(0, sbNotifyTitle.length() - 1));
 		try {
 			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf,
 					photoType, informationCate);
+			int notificationId = 0;
+			if (informationCate == InformationCategory.VIDEO) {
+				notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
+				showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_sending), flag, notificationId);
+			}
 			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
 
 				@Override
 				public void onSendSuccess(long flag, String url) {
+					if (informationCate == InformationCategory.VIDEO) {
+						int notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
+						showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_success), flag, notificationId);
+					}
 					InformationPageController.getInstance().onPhotoSendSuccess(flag);
 					if (sendToStranges) {
 						// 发送给好友后判断是否需要扔漂流瓶
-						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath()),
+						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath(),informationCate),
 								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(),
 								flag);
 					}
@@ -280,9 +304,13 @@ public class LogicUtils {
 				@Override
 				public void onFail(long flag, int errorCode, String content) {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
+					if (informationCate == InformationCategory.VIDEO) {
+						int notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
+						showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_fail), flag, notificationId);
+					}
 					if (sendToStranges) {
 						// 发送给好友失败后判断是否需要扔漂流瓶，如果需要扔，也尝试下
-						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath()),
+						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath(),informationCate),
 								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(),
 								flag);
 					}
@@ -296,7 +324,7 @@ public class LogicUtils {
 				DriftInformationPageController.getInstance().onDriftInformationSendFail(flag);
 		}
 	}
-	
+
 	private static DriftInformation buildDriftTempInformation(UserInfo currentUser, long flag, int timeLimit, File file, boolean hasVoice, boolean hasGraf,
 			int informationCate) {
 		DriftInformation tempDriftInformation = new DriftInformation();

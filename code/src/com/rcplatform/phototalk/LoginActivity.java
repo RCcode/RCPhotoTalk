@@ -55,8 +55,6 @@ import com.rcplatform.phototalk.request.RCPlatformServiceError;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.task.ContactUploadTask;
-import com.rcplatform.phototalk.task.ContactUploadTask.OnUploadOverListener;
-import com.rcplatform.phototalk.task.ContactUploadTask.Status;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
@@ -210,7 +208,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 		mLoginButton.setVisibility(View.GONE);
 		mSignupButton.setVisibility(View.VISIBLE);
 		init_regist_agreement_text.setVisibility(View.VISIBLE);
-		// TODO 修改为正式地址
 		String agreement = getString(R.string.init_regist_agreement);
 		SpannableString msp = new SpannableString(agreement);
 		msp.setSpan(new URLSpan(""), 0, agreement.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -220,7 +217,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				RCWebview.startWebview(ctx, "http://rctalk.me/priser.html", R.string.null_str);
 			}
 		});
@@ -240,13 +236,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -260,13 +254,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				mNickEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -280,13 +272,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -328,13 +318,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				mLoginIdEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -348,13 +336,11 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				mPswEditText.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
 
 			}
 
@@ -787,7 +773,6 @@ public class LoginActivity extends ImagePickActivity implements View.OnClickList
 				dismissLoadingDialog();
 				startPlatformUserEditActivity(userInfos);
 			}
-
 		}, account, password);
 	}
 

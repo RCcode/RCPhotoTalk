@@ -1,7 +1,5 @@
 package com.rcplatform.phototalk.bean;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class InformationState {
 

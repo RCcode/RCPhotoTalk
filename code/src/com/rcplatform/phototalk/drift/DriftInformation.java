@@ -21,6 +21,14 @@ public class DriftInformation implements Serializable{
 	private String url;
 	private int state = 1;
 	private long flag;
+	private int informationCate;
+	public int getInformationCate() {
+		return informationCate;
+	}
+
+	public void setInformationCate(int informationCate) {
+		this.informationCate = informationCate;
+	}
 
 	public long getFlag() {
 		return flag;

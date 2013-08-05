@@ -123,6 +123,9 @@ public class PrefsUtils {
 		private static final String PREF_KEY_LAST_USED_VERSION = "lastusedversion";
 		private static final String PREF_KEY_TODAY_FISH_TIME = "todayfishtime";
 		private static final String PREF_KEY_LAST_FISH_TIME = "lastfishtime";
+		private static final String PREF_KEY_HAS_ATTENTION_AUTO_BIND = "hasattentionautobind";
+
+		private static final String PREF_KEY_AUTO_BIND = "autobind";
 
 		public static class ThirdPart {
 
@@ -519,6 +522,22 @@ public class PrefsUtils {
 
 		public static synchronized long getLastFishTime(Context context, String pref) {
 			return getPreference(context, pref).getLong(PREF_KEY_LAST_FISH_TIME, 0);
+		}
+
+		public static synchronized void setAutoBindAttentioned(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_ATTENTION_AUTO_BIND, true).commit();
+		}
+
+		public static synchronized boolean hasAttentionAutoBind(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_HAS_ATTENTION_AUTO_BIND, false);
+		}
+
+		public static synchronized void setAutoBind(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_AUTO_BIND, true).commit();
+		}
+
+		public static synchronized boolean isAutoBind(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_AUTO_BIND, false);
 		}
 	}
 }

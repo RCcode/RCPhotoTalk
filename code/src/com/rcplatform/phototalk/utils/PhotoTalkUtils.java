@@ -175,7 +175,7 @@ public class PhotoTalkUtils {
 		}).setNegativeButton(R.string.cancel, null).setMessage(R.string.comment_message).create();
 		dialog.show();
 	}
-
+	
 	public static Intent getNotificationTakePhotoIntent(Context context) {
 		Intent intent = new Intent(context, WelcomeActivity.class);
 		intent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLICATION_START_TAKE_PHOTO);

@@ -100,12 +100,15 @@ public class PTBackgroundService extends Service {
 		if (mCurrentUser == null || (!currentUser.getRcId().equals(mCurrentUser.getRcId()))) {
 			cancelCurrentBindCheckTask();
 			this.mCurrentUser = currentUser;
-			checkPhoneBindState();
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
 			PhotoTalkDatabaseFactory.getDatabase().updateDriftTempInformationFail();
 		} else {
 			this.mCurrentUser = currentUser;
 		}
+	}
+
+	public void startBindPhone() {
+		checkPhoneBindState();
 	}
 
 	@Override
@@ -469,7 +472,7 @@ public class PTBackgroundService extends Service {
 					LogUtil.e("need to update facebook info");
 					uploadFacebookInfo();
 				}
-//				tryToResetDriftFishTime();
+				// tryToResetDriftFishTime();
 			}
 		}
 	};
