@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,6 +20,7 @@ import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.phototalk.HomeActivity;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
@@ -169,5 +171,19 @@ public class PhotoTalkUtils {
 			}
 		}).setNegativeButton(R.string.cancel, null).setMessage(R.string.comment_message).create();
 		dialog.show();
+	}
+
+	public static void showMustUpdateDialog(final Context context) {
+		 AlertDialog mUpdateDialog =  DialogUtil.getAlertDialogBuilder(context).setMessage(PrefsUtils.AppInfo.getUpdateDesc(context))
+				.setTitle(context.getString(R.string.update_dialog_title)).setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						Utils.setDialogNotAutoDismiss(dialog);
+						Utils.searchAppInGooglePlay(context, context.getPackageName());
+					}
+				}).create();
+		mUpdateDialog.setCancelable(false);
+		mUpdateDialog.show();
 	}
 }

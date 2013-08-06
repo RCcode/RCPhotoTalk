@@ -52,9 +52,8 @@ public class PrefsUtils {
 			getPreference(context, PREF_APP_INFO).edit().putInt(MAX_FISH_TIME, maxTime).commit();
 		}
 
-		public static synchronized void setMustUpdate(Context context, int versionCode) {
-			getPreference(context, PREF_APP_INFO).edit().putBoolean(MUST_UPDATE, true).commit();
-			getPreference(context, PREF_APP_INFO).edit().putInt(MUST_UPDATE_VERSION, versionCode).commit();
+		public static synchronized void setMustUpdate(Context context, int versionCode,String updateContent) {
+			getPreference(context, PREF_APP_INFO).edit().putBoolean(MUST_UPDATE, true).putInt(MUST_UPDATE_VERSION, versionCode).putString(UPDATE_DESC, updateContent).commit();
 		}
 
 		public static synchronized boolean isMustUpdate(Context context) {
@@ -67,10 +66,6 @@ public class PrefsUtils {
 
 		public static synchronized void setUpdateSuccess(Context context) {
 			getPreference(context, PREF_APP_INFO).edit().remove(MUST_UPDATE_VERSION).remove(MUST_UPDATE).commit();
-		}
-
-		public static synchronized void setUpdateDesc(Context context, String updateDesc) {
-			getPreference(context, PREF_APP_INFO).edit().putString(UPDATE_DESC, updateDesc).commit();
 		}
 
 		public static synchronized String getUpdateDesc(Context context) {

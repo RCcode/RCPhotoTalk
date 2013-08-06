@@ -750,22 +750,12 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void checkUpdate() {
 		if (PrefsUtils.AppInfo.isMustUpdate(this)) {
-			AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(PrefsUtils.AppInfo.getUpdateDesc(this))
-					.setTitle(getString(R.string.update_dialog_title)).setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							Utils.searchAppInGooglePlay(HomeActivity.this, getPackageName());
-						}
-					}).create();
-			mUpdateDialog.setCancelable(false);
-			mUpdateDialog.show();
+			PhotoTalkUtils.showMustUpdateDialog(this);
 			return;
 		}
 		mCheckUpdateTask = new CheckUpdateTask(this, true);
 		mCheckUpdateTask.start();
 	}
-
 	public void onInformationShowEnd(Information information) {
 		String tagBase = PhotoTalkUtils.getInformationTagBase(information);
 		String buttonTag = tagBase + Button.class.getName();

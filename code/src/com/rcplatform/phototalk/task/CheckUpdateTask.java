@@ -2,7 +2,6 @@ package com.rcplatform.phototalk.task;
 
 import org.json.JSONObject;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 
@@ -14,6 +13,7 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class CheckUpdateTask {
@@ -27,18 +27,24 @@ public class CheckUpdateTask {
 		mClient = new RCPlatformAsyncHttpClient();
 		mRequest = new Request(context, PhotoTalkApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
 
-			@SuppressLint("NewApi")
 			@Override
 			public void onSuccess(int statusCode, String content) {
 				try {
 					JSONObject jsonObject = new JSONObject(content).getJSONObject("appConfig");
-					String version = jsonObject.getString("serverVersion");
-					if (!mContext.getString(R.string.version).equals(version)) {
-						String newVersion = jsonObject.getString("clientVersion");
+					String newVersion = jsonObject.getString("serverVersion");
+					if (!mContext.getString(R.string.version).equals(newVersion)) {
+						String updateContent = jsonObject.getString("verText");
+						int versionCode = jsonObject.getInt("versionCode");
+						boolean isMust = jsonObject.getInt("isUpdate") == 1;
+						if(isMust){
+							PrefsUtils.AppInfo.setMustUpdate(mContext, versionCode,updateContent);
+							PhotoTalkUtils.showMustUpdateDialog(mContext);
+							return;
+						}
 						if (isAutoRequest && newVersion.equals(PrefsUtils.AppInfo.getNeverAttentionVersion(mContext))) {
 							return;
 						}
-						String updateContent = jsonObject.getString("verText");
+						
 						String updateUrl = jsonObject.getString("appUrl");
 						if (mOnUpdateCheckListener != null) {
 							mOnUpdateCheckListener.onHasUpdate(newVersion, updateContent, updateUrl);
@@ -46,8 +52,8 @@ public class CheckUpdateTask {
 						}
 						UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
 						AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(mContext).setMessage(updateContent)
-								.setTitle(mContext.getString(R.string.update_dialog_title))
-								.setNegativeButton(R.string.attention_later, mUpdateListener).setPositiveButton(R.string.update_now, mUpdateListener).create();
+								.setTitle(mContext.getString(R.string.update_dialog_title)).setNegativeButton(R.string.attention_later, mUpdateListener)
+								.setPositiveButton(R.string.update_now, mUpdateListener).create();
 						mUpdateDialog.setCancelable(false);
 						mUpdateDialog.show();
 					} else {
