@@ -35,6 +35,11 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	protected Context baseContext;
 	private boolean needRelogin = true;
 	private ActivityFunction functionImpl;
+	private String rcId;
+
+	public String getCurrentUserRcId() {
+		return rcId;
+	}
 
 	protected void cancelRelogin() {
 		needRelogin = false;
@@ -45,6 +50,8 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		super.onCreate(savedInstanceState);
 		baseContext = this;
 		functionImpl = new ActivityFunctionBasic(this);
+		if (getCurrentUser() != null)
+			rcId = getCurrentUser().getRcId();
 	}
 
 	public int getStartMode() {

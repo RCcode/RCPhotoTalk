@@ -154,6 +154,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
+		checkAutoBindPhone();
 		checkBindPhone();
 		UserInfo userInfo = getCurrentUser();
 		if (userInfo != null) {
@@ -166,6 +167,29 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		ClientLogUtil.log(this);
 		showRcAd();
 		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
+	}
+
+	private void checkAutoBindPhone() {
+		if (RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone()) && !PrefsUtils.User.hasAttentionAutoBind(this, getCurrentUserRcId())) {
+			showAutoBindAttentionDialog();
+		}
+	}
+
+	private void showAutoBindAttentionDialog() {
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == DialogInterface.BUTTON_POSITIVE) {
+					PrefsUtils.User.setAutoBind(HomeActivity.this, getCurrentUserRcId());
+					getPhotoTalkApplication().getService().startBindPhone();
+				}
+			}
+		};
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.auto_bind_dialog_msg).setNegativeButton(R.string.cancel, listener)
+				.setPositiveButton(R.string.ok, listener).create();
+		dialog.show();
+		PrefsUtils.User.setAutoBindAttentioned(this, getCurrentUserRcId());
 	}
 
 	private void showRcAd() {

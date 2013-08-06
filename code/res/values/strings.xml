@@ -407,5 +407,6 @@
 
     <string name="sending_to_stranger">发送视频到结识陌生人</string>
     <string name="sending_video_to">发送视频给%1$s</string>
+    <string name="auto_bind_dialog_msg">我们将使用你的手机号发送一条短信来确认您的手机号码，这样你的朋友会更方便的找到你。这可能会产生一些费用，如果你不愿意发送，请点击取消。</string>
 
 </resources>

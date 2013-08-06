@@ -539,5 +539,6 @@ public class PrefsUtils {
 		public static synchronized boolean isAutoBind(Context context, String pref) {
 			return getPreference(context, pref).getBoolean(PREF_KEY_AUTO_BIND, false);
 		}
+		
 	}
 }
