@@ -3,6 +3,7 @@ package com.rcplatform.phototalk.views;
 import java.io.File;
 import java.io.FileInputStream;
 import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -216,7 +217,7 @@ public class LongClickShowView extends Dialog {
 
 	private void showImage(File file) {
 		try {
-			currentBitmap = new SoftReference<Bitmap>(BitmapFactory.decodeFile(file.getPath())).get();
+			currentBitmap = new WeakReference<Bitmap>(BitmapFactory.decodeFile(file.getPath())).get();
 		} catch (Throwable e) {
 		}
 		Builder.mImageView.setImageBitmap(currentBitmap);
