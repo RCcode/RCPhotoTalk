@@ -18,7 +18,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
@@ -305,10 +304,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void setMenuText() {
 		switch (mShowMode) {
 		case ALL:
-			tvMenu.setText(R.string.show_all_drift);
+			tvMenu.setText(R.string.all_world);
 			break;
 		case MY_COUNTRY:
-			tvMenu.setText(R.string.show_receive_drift);
+			tvMenu.setText(R.string.my_country);
 			break;
 		}
 	}
@@ -839,28 +838,22 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private PopupWindow filterMenu;
 
 	private void showFilterMenu(View v) {
-		int xoff = v.getWidth() - getResources().getDimensionPixelSize(R.dimen.drift_filter_menu_width);
-		if (xoff <= 0)
-			xoff = 0;
-		if (filterMenu == null) {
-			filterMenu = new PopupWindow(this);
-			View view = getLayoutInflater().inflate(R.layout.driftinformation_filter_menu, null);
-			Button btnMyCountry = (Button) view.findViewById(R.id.btn_show_my_country);
-			Button btnAll = (Button) view.findViewById(R.id.btn_show_all);
-			btnMyCountry.setOnClickListener(this);
-			btnAll.setOnClickListener(this);
-			filterMenu.setTouchable(true);
-			filterMenu.setFocusable(true);
-			filterMenu.setOutsideTouchable(true);
-			filterMenu.setWidth(getResources().getDimensionPixelSize(R.dimen.drift_filter_menu_width));
-			filterMenu.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-			filterMenu.setContentView(view);
-		}
-		if (filterMenu.isShowing()) {
-			filterMenu.dismiss();
-		} else {
-			filterMenu.showAsDropDown(v, xoff, 0);
-		}
+		String[] items = new String[] { getString(R.string.all_world), getString(R.string.my_country) };
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.set_drift_range).setItems(items, new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				switch (which) {
+				case 0:
+					changeShowMode(DriftShowMode.ALL);
+					break;
+				case 1:
+					changeShowMode(DriftShowMode.MY_COUNTRY);
+					break;
+				}
+			}
+		}).create();
+		dialog.show();
 	}
 
 	private AlertDialog throwDialog;

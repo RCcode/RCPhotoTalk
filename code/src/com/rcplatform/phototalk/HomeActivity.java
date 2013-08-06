@@ -144,10 +144,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.ic_launcher);
-		checkStartMode();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
+		addShortCutIcon();
+		checkStartMode();
 		initViewAndListener();
 		loadLocalInformation();
 		getAllPlatformApps();
@@ -156,6 +156,13 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		checkTrends();
 		checkAutoBindPhone();
 		checkBindPhone();
+		registeGCM();
+		ClientLogUtil.log(this);
+		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
+		showRcAd();
+	}
+
+	private void registeGCM() {
 		UserInfo userInfo = getCurrentUser();
 		if (userInfo != null) {
 			try {
@@ -164,14 +171,18 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			}
 		}
-		ClientLogUtil.log(this);
-		showRcAd();
-		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
 	}
 
 	private void checkAutoBindPhone() {
 		if (RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone()) && !PrefsUtils.User.hasAttentionAutoBind(this, getCurrentUserRcId())) {
 			showAutoBindAttentionDialog();
+		}
+	}
+
+	private void addShortCutIcon() {
+		if (!PrefsUtils.AppInfo.hasAddShortCutIcon(this)) {
+			PrefsUtils.AppInfo.setAddedShortCutIcon(this);
+			Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.ic_launcher);
 		}
 	}
 

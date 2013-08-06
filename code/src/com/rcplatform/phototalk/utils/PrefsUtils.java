@@ -22,6 +22,7 @@ public class PrefsUtils {
 		public static final String NEVER_ATTENTION_VERSION = "never_attention";
 		public static final String LAST_UPDATE_TIME = "last_update_time";
 		public static final String MAX_FISH_TIME = "maxfishtime";
+		public static final String HAS_ADD_SHORTCUT = "hasaddshortcut";
 
 		public static void setNeverAttentionVersion(Context context, String version) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
@@ -47,6 +48,14 @@ public class PrefsUtils {
 
 		public static synchronized void setMaxFishTime(Context context, int maxTime) {
 			getPreference(context, PREF_APP_INFO).edit().putInt(MAX_FISH_TIME, maxTime).commit();
+		}
+
+		public static synchronized boolean hasAddShortCutIcon(Context context) {
+			return getPreference(context, PREF_APP_INFO).getBoolean(HAS_ADD_SHORTCUT, false);
+		}
+
+		public static synchronized void setAddedShortCutIcon(Context context) {
+			getPreference(context, PREF_APP_INFO).edit().putBoolean(HAS_ADD_SHORTCUT, true).commit();
 		}
 	}
 
@@ -124,6 +133,8 @@ public class PrefsUtils {
 		private static final String PREF_KEY_TODAY_FISH_TIME = "todayfishtime";
 		private static final String PREF_KEY_LAST_FISH_TIME = "lastfishtime";
 		private static final String PREF_KEY_HAS_ATTENTION_AUTO_BIND = "hasattentionautobind";
+
+		private static final String PREF_KEY_IS_FIRSTTIME_CHOOSE_MY_COUNTRY = "isfirsttimechoosemycountry";
 
 		private static final String PREF_KEY_AUTO_BIND = "autobind";
 
@@ -539,6 +550,13 @@ public class PrefsUtils {
 		public static synchronized boolean isAutoBind(Context context, String pref) {
 			return getPreference(context, pref).getBoolean(PREF_KEY_AUTO_BIND, false);
 		}
-		
+
+		public static synchronized boolean isFirstTimeChooseDriftRange(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_IS_FIRSTTIME_CHOOSE_MY_COUNTRY, true);
+		}
+
+		public static synchronized void setDriftRangeCheese(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_IS_FIRSTTIME_CHOOSE_MY_COUNTRY, false).commit();
+		}
 	}
 }
