@@ -844,4 +844,27 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 		return result.size();
 	}
 
+	@Override
+	public List<DriftInformation> getDriftInformationByCountry(int start, int pageSize, final String country) {
+		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return country.equals(arg0.getSender().getCountry());
+			}
+		}, new QueryComparator<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(DriftInformation arg0, DriftInformation arg1) {
+				if (arg0.getReceiveTime() > arg1.getReceiveTime())
+					return -1;
+				else
+					return 1;
+			}
+		});
+		return slipDataByPage(start, pageSize, result);
+	}
+
 }

@@ -112,7 +112,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private static DriftShowMode mShowMode = DriftShowMode.ALL;
 
 	static enum DriftShowMode {
-		ALL, SEND, RECEIVE;
+		ALL, MY_COUNTRY;
 	}
 
 	public static void setDriftShowMode(DriftShowMode mode) {
@@ -307,11 +307,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		case ALL:
 			tvMenu.setText(R.string.show_all_drift);
 			break;
-		case RECEIVE:
+		case MY_COUNTRY:
 			tvMenu.setText(R.string.show_receive_drift);
-			break;
-		case SEND:
-			tvMenu.setText(R.string.show_send_drift);
 			break;
 		}
 	}
@@ -562,17 +559,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private void addInformationAtFirst(List<DriftInformation> data) {
 		adapter.addData(data);
 		adapter.notifyDataSetChanged();
-		if (isShowReceivedDrift()) {
-			moveToListFirst();
-		}
+		moveToListFirst();
 	}
 
 	private void moveToListFirst() {
 		mInformationList.setSelection(0);
-	}
-
-	private boolean isShowReceivedDrift() {
-		return mShowMode == DriftShowMode.ALL || mShowMode == DriftShowMode.RECEIVE;
 	}
 
 	@Override
@@ -607,8 +598,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onInformationShowEnd(DriftInformation information) {
-		if (mShowMode == DriftShowMode.SEND)
-			return;
 		String tagBase = information.getPicId() + "";
 		String buttonTag = tagBase + Button.class.getName();
 		String statuTag = tagBase + TextView.class.getName();
@@ -641,14 +630,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoSending(List<DriftInformation> informations) {
-		if (mShowMode == DriftShowMode.RECEIVE)
-			return;
 		sendDataLoadedMessage(informations, MSG_WHAT_INFORMATION_LOADED);
 	}
 
 	public void onPhotoSendSuccess(long flag, int picId) {
-		if (mShowMode == DriftShowMode.RECEIVE)
-			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (DriftInformation info : localInfos) {
@@ -662,8 +647,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoResendSuccess(Information information) {
-		if (mShowMode == DriftShowMode.RECEIVE)
-			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
@@ -675,8 +658,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoSendFail(long flag) {
-		if (mShowMode == DriftShowMode.RECEIVE)
-			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			for (DriftInformation info : localInfos) {
@@ -689,8 +670,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	public void onPhotoResendFail(Information information) {
-		if (mShowMode == DriftShowMode.RECEIVE)
-			return;
 		List<DriftInformation> localInfos = getAdapterData();
 		if (localInfos != null) {
 			int index = localInfos.indexOf(information);
@@ -736,13 +715,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				case ALL:
 					informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformations(start, Constants.INFORMATION_PAGE_SIZE);
 					break;
-				case SEND:
-					informations = PhotoTalkDatabaseFactory.getDatabase().getSendedDriftInformations(start, Constants.INFORMATION_PAGE_SIZE,
-							getCurrentUser().getRcId());
-					break;
-				case RECEIVE:
-					informations = PhotoTalkDatabaseFactory.getDatabase().getReceiveDriftInformations(start, Constants.INFORMATION_PAGE_SIZE,
-							getCurrentUser().getRcId());
+				case MY_COUNTRY:
+					informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformationByCountry(start, Constants.INFORMATION_PAGE_SIZE,
+							getCurrentUser().getCountry());
 					break;
 				}
 				List<Integer> picIds = new ArrayList<Integer>();
@@ -792,16 +767,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				changeShowMode(DriftShowMode.ALL);
 			}
 			break;
-		case R.id.btn_show_receive:
+		case R.id.btn_show_my_country:
 			filterMenu.dismiss();
-			if (mShowMode != DriftShowMode.RECEIVE) {
-				changeShowMode(DriftShowMode.RECEIVE);
-			}
-			break;
-		case R.id.btn_show_send:
-			filterMenu.dismiss();
-			if (mShowMode != DriftShowMode.SEND) {
-				changeShowMode(DriftShowMode.SEND);
+			if (mShowMode != DriftShowMode.MY_COUNTRY) {
+				changeShowMode(DriftShowMode.MY_COUNTRY);
 			}
 			break;
 		case R.id.tv_filter_menu:
@@ -848,8 +817,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			@Override
 			public void onFishSuccess(DriftInformation information) {
 				PrefsUtils.User.setLastFishTime(getApplicationContext(), getCurrentUser().getRcId());
-				if (mShowMode == DriftShowMode.SEND)
-					return;
 				List<DriftInformation> infos = new ArrayList<DriftInformation>();
 				infos.add(information);
 				sendDataLoadedMessage(infos, MSG_WHAT_INFORMATION_LOADED);
@@ -878,11 +845,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		if (filterMenu == null) {
 			filterMenu = new PopupWindow(this);
 			View view = getLayoutInflater().inflate(R.layout.driftinformation_filter_menu, null);
-			Button btnSend = (Button) view.findViewById(R.id.btn_show_send);
-			Button btnReceive = (Button) view.findViewById(R.id.btn_show_receive);
+			Button btnMyCountry = (Button) view.findViewById(R.id.btn_show_my_country);
 			Button btnAll = (Button) view.findViewById(R.id.btn_show_all);
-			btnSend.setOnClickListener(this);
-			btnReceive.setOnClickListener(this);
+			btnMyCountry.setOnClickListener(this);
 			btnAll.setOnClickListener(this);
 			filterMenu.setTouchable(true);
 			filterMenu.setFocusable(true);
