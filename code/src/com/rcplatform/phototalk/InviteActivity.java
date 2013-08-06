@@ -21,7 +21,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -40,7 +39,6 @@ import com.rcplatform.phototalk.thirdpart.utils.OnAuthorizeSuccessListener;
 import com.rcplatform.phototalk.thirdpart.utils.ThirdPartClient;
 import com.rcplatform.phototalk.thirdpart.utils.TwitterClient;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Constants;
 
 public class InviteActivity extends BaseActivity {
 
@@ -472,7 +470,6 @@ public class InviteActivity extends BaseActivity {
 		for (ThirdPartClient client : thirdPartClients)
 			client.destroy();
 		friendsAdded.clear();
-		friendsAdded = null;
 		instagramAction = null;
 	}
 
