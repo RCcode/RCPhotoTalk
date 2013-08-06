@@ -22,6 +22,9 @@ public class PrefsUtils {
 		public static final String NEVER_ATTENTION_VERSION = "never_attention";
 		public static final String LAST_UPDATE_TIME = "last_update_time";
 		public static final String MAX_FISH_TIME = "maxfishtime";
+		public static final String MUST_UPDATE = "mustupdate";
+		public static final String MUST_UPDATE_VERSION = "mustupdateversion";
+		public static final String UPDATE_DESC = "updatedesc";
 
 		public static void setNeverAttentionVersion(Context context, String version) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
@@ -47,6 +50,31 @@ public class PrefsUtils {
 
 		public static synchronized void setMaxFishTime(Context context, int maxTime) {
 			getPreference(context, PREF_APP_INFO).edit().putInt(MAX_FISH_TIME, maxTime).commit();
+		}
+
+		public static synchronized void setMustUpdate(Context context, int versionCode) {
+			getPreference(context, PREF_APP_INFO).edit().putBoolean(MUST_UPDATE, true).commit();
+			getPreference(context, PREF_APP_INFO).edit().putInt(MUST_UPDATE_VERSION, versionCode).commit();
+		}
+
+		public static synchronized boolean isMustUpdate(Context context) {
+			return getPreference(context, PREF_APP_INFO).getBoolean(MUST_UPDATE, false);
+		}
+
+		public static synchronized int getMustUpdateVersion(Context context) {
+			return getPreference(context, PREF_APP_INFO).getInt(MUST_UPDATE_VERSION, -1);
+		}
+
+		public static synchronized void setUpdateSuccess(Context context) {
+			getPreference(context, PREF_APP_INFO).edit().remove(MUST_UPDATE_VERSION).remove(MUST_UPDATE).commit();
+		}
+
+		public static synchronized void setUpdateDesc(Context context, String updateDesc) {
+			getPreference(context, PREF_APP_INFO).edit().putString(UPDATE_DESC, updateDesc).commit();
+		}
+
+		public static synchronized String getUpdateDesc(Context context) {
+			return getPreference(context, PREF_APP_INFO).getString(UPDATE_DESC, null);
 		}
 	}
 

@@ -75,6 +75,7 @@ import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.RCThreadPool;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.LongClickShowView;
 import com.rcplatform.phototalk.views.LongPressDialog;
 import com.rcplatform.phototalk.views.LongPressDialog.OnLongPressItemClickListener;
@@ -453,7 +454,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
 				animation.setDuration(500);
 				vPager.setAnimation(animation);
@@ -749,6 +749,19 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void checkUpdate() {
+		if (PrefsUtils.AppInfo.isMustUpdate(this)) {
+			AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(PrefsUtils.AppInfo.getUpdateDesc(this))
+					.setTitle(getString(R.string.update_dialog_title)).setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Utils.searchAppInGooglePlay(HomeActivity.this, getPackageName());
+						}
+					}).create();
+			mUpdateDialog.setCancelable(false);
+			mUpdateDialog.show();
+			return;
+		}
 		mCheckUpdateTask = new CheckUpdateTask(this, true);
 		mCheckUpdateTask.start();
 	}

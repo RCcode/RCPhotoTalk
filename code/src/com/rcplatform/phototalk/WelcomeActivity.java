@@ -12,20 +12,18 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Base64;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gcm.ServerUtilities;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.clienservice.PTBackgroundService;
-import com.rcplatform.phototalk.clienservice.PhotoTalkWebService;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
-import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 
 public class WelcomeActivity extends BaseActivity {
 
@@ -50,8 +48,6 @@ public class WelcomeActivity extends BaseActivity {
 				MessageDigest md = MessageDigest.getInstance("SHA");
 				md.update(signature.toByteArray());
 				LogUtil.d("TEMPTAGHASH KEY:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-				// LogUtil.d(Base64.encodeToString(md.digest(),
-				// Base64.DEFAULT));
 			}
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
@@ -65,10 +61,24 @@ public class WelcomeActivity extends BaseActivity {
 		startService(new Intent(this, PTBackgroundService.class));
 	}
 
+	private void checkUpdateState() {
+		if (PrefsUtils.AppInfo.isMustUpdate(this)) {
+			try {
+				PackageManager pm = getPackageManager();
+				PackageInfo pinfo = pm.getPackageInfo(getPackageName(), PackageManager.GET_CONFIGURATIONS);
+				int versionCode = pinfo.versionCode;
+				if (versionCode >= PrefsUtils.AppInfo.getMustUpdateVersion(this)) {
+					PrefsUtils.AppInfo.setUpdateSuccess(this);
+				}
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// printHashKey();
 		setContentView(R.layout.loading);
 		startBackgroundService();
 		cancelRelogin();
@@ -76,13 +86,12 @@ public class WelcomeActivity extends BaseActivity {
 		Thread th = new Thread() {
 
 			public void run() {
-				LogUtil.e("welcome thread start");
+				checkUpdateState();
 				Constants.initUIData(WelcomeActivity.this);
 				mHandler.sendEmptyMessageDelayed(INIT_SUCCESS, WAITING_TIME);
 			};
 		};
 		th.start();
-		LogUtil.e("welcome oncreate over");
 	}
 
 	private void checkNetwork() {
@@ -108,7 +117,6 @@ public class WelcomeActivity extends BaseActivity {
 
 	private void executeAutoLogin() {
 		UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(getApplicationContext());
-		// 用户已登录过，自动登录主页。
 		if (userInfo != null) {
 			getPhotoTalkApplication().setCurrentUser(userInfo);
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
