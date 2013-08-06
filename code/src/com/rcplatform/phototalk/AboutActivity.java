@@ -18,6 +18,7 @@ import com.rcplatform.phototalk.task.CheckUpdateTask.OnUpdateCheckListener;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.SystemMessageUtil;
 import com.rcplatform.phototalk.utils.Utils;
 
@@ -57,32 +58,31 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-			case R.id.check_update_btn:
-				EventUtil.More_Setting.rcpt_checkupdate(baseContext);
-				checkUpdate();
-				break;
-			case R.id.back:
-				finish();
-				break;
-			case R.id.contact_us_btn:
-				EventUtil.More_Setting.rcpt_feedback(baseContext);
-				Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
-				String emailSubject = "\n\n\n\n\n\n" + SystemMessageUtil.getAppName(baseContext) + "\n" + MetaHelper.getAppVersionName(baseContext)
-				        + "\n" + SystemMessageUtil.getPhoneBrand() + "\n" + SystemMessageUtil.getPhoneModel() + "\n"
-				        + SystemMessageUtil.getOsVersion(baseContext) + "\n\n";
-				email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
+		case R.id.check_update_btn:
+			EventUtil.More_Setting.rcpt_checkupdate(baseContext);
+			checkUpdate();
+			break;
+		case R.id.back:
+			finish();
+			break;
+		case R.id.contact_us_btn:
+			EventUtil.More_Setting.rcpt_feedback(baseContext);
+			Intent email = new Intent(android.content.Intent.ACTION_SENDTO, Uri.fromParts("mailto", Constants.FEEDBACK_EMAIL, null));
+			String emailSubject = "\n\n\n\n\n\n" + SystemMessageUtil.getAppName(baseContext) + "\n" + MetaHelper.getAppVersionName(baseContext) + "\n"
+					+ SystemMessageUtil.getPhoneBrand() + "\n" + SystemMessageUtil.getPhoneModel() + "\n" + SystemMessageUtil.getOsVersion(baseContext)
+					+ "\n\n";
+			email.putExtra(android.content.Intent.EXTRA_TEXT, emailSubject);
 
-				email.putExtra(Intent.EXTRA_SUBJECT,
-				               "[" + SystemMessageUtil.getAppName(baseContext) + "-" + MetaHelper.getAppVersionName(baseContext) + "]");// 邮件标题
-				startActivity(email);
+			email.putExtra(Intent.EXTRA_SUBJECT, "[" + SystemMessageUtil.getAppName(baseContext) + "-" + MetaHelper.getAppVersionName(baseContext) + "]");// 邮件标题
+			startActivity(email);
 
-				break;
-			case R.id.term_service_btn:
-				RCWebview.startWebview(this, "http://rctalk.me/service.html",R.string.term_service);
-				break;
-			case R.id.compact_btn:
-				RCWebview.startWebview(this, "http://rctalk.me/privacy.html",R.string.compact);
-				break;
+			break;
+		case R.id.term_service_btn:
+			RCWebview.startWebview(this, "http://rctalk.me/service.html", R.string.term_service);
+			break;
+		case R.id.compact_btn:
+			RCWebview.startWebview(this, "http://rctalk.me/privacy.html", R.string.compact);
+			break;
 		}
 	}
 
@@ -92,9 +92,12 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 		task.setOnUpdateCheckListener(new OnUpdateCheckListener() {
 
 			@Override
-			public void onHasUpdate(String versionCode, String updateContent, String updateUrl) {
+			public void onHasUpdate(String versionCode, String updateContent, String updateUrl, boolean isMust) {
 				dismissLoadingDialog();
-				showUpdateDialog(versionCode, updateContent, updateUrl);
+				if (isMust)
+					PhotoTalkUtils.showMustUpdateDialog(AboutActivity.this, false);
+				else
+					showUpdateDialog(versionCode, updateContent, updateUrl);
 			}
 
 			@Override
@@ -117,7 +120,7 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 		this.updateUrl = updateUrl;
 		if (mUpdateDialog == null) {
 			mUpdateDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(updateContent).setTitle(getString(R.string.update_dialog_title))
-			        .setNegativeButton(R.string.attention_later, this).setPositiveButton(R.string.update_now, this).create();
+					.setNegativeButton(R.string.attention_later, this).setPositiveButton(R.string.update_now, this).create();
 		}
 		mUpdateDialog.show();
 	}
@@ -125,9 +128,9 @@ public class AboutActivity extends BaseActivity implements OnClickListener, Dial
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
-			case DialogInterface.BUTTON_POSITIVE:
-				Utils.searchAppInGooglePlay(this, Constants.PAGEAGE);
-				break;
+		case DialogInterface.BUTTON_POSITIVE:
+			Utils.searchAppInGooglePlay(this, Constants.PAGEAGE);
+			break;
 		}
 	}
 }

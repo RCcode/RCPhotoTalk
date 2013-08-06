@@ -750,7 +750,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void checkUpdate() {
 		if (PrefsUtils.AppInfo.isMustUpdate(this)) {
-			PhotoTalkUtils.showMustUpdateDialog(this);
+			PhotoTalkUtils.showMustUpdateDialog(this,true);
 			return;
 		}
 		mCheckUpdateTask = new CheckUpdateTask(this, true);

@@ -1,27 +1,26 @@
 package com.rcplatform.phototalk.utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnKeyListener;
 import android.content.Intent;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RemoteViews;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.RemoteViews;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.HomeActivity;
-import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.WelcomeActivity;
 import com.rcplatform.phototalk.bean.AppInfo;
@@ -29,9 +28,7 @@ import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.MD5;
-import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Constants.ApplicationStartMode;
 
 public class PhotoTalkUtils {
 
@@ -173,8 +170,8 @@ public class PhotoTalkUtils {
 		dialog.show();
 	}
 
-	public static void showMustUpdateDialog(final Context context) {
-		 AlertDialog mUpdateDialog =  DialogUtil.getAlertDialogBuilder(context).setMessage(PrefsUtils.AppInfo.getUpdateDesc(context))
+	public static void showMustUpdateDialog(final Activity context, boolean isQuit) {
+		AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(context).setMessage(PrefsUtils.AppInfo.getUpdateDesc(context))
 				.setTitle(context.getString(R.string.update_dialog_title)).setPositiveButton(R.string.update_now, new DialogInterface.OnClickListener() {
 
 					@Override
@@ -184,6 +181,18 @@ public class PhotoTalkUtils {
 					}
 				}).create();
 		mUpdateDialog.setCancelable(false);
+		if (isQuit)
+			mUpdateDialog.setOnKeyListener(new OnKeyListener() {
+
+				@Override
+				public boolean onKey(DialogInterface dialog, int keyCode, KeyEvent event) {
+					if (keyCode == KeyEvent.KEYCODE_BACK) {
+						context.finish();
+						return true;
+					}
+					return false;
+				}
+			});
 		mUpdateDialog.show();
 	}
 }

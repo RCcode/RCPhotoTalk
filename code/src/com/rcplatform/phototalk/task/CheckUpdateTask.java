@@ -2,8 +2,8 @@ package com.rcplatform.phototalk.task;
 
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
@@ -18,12 +18,12 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 
 public class CheckUpdateTask {
 	private RCPlatformAsyncHttpClient mClient;
-	private Context mContext;
+	private Activity mContext;
 	private boolean isAutoRequest = true;
 	private OnUpdateCheckListener mOnUpdateCheckListener;
 	private Request mRequest;
 
-	public CheckUpdateTask(Context context, boolean isAuto) {
+	public CheckUpdateTask(Activity context, boolean isAuto) {
 		mClient = new RCPlatformAsyncHttpClient();
 		mRequest = new Request(context, PhotoTalkApiUrl.CHECK_UPATE_URL, new RCPlatformResponseHandler() {
 
@@ -33,29 +33,31 @@ public class CheckUpdateTask {
 					JSONObject jsonObject = new JSONObject(content).getJSONObject("appConfig");
 					String newVersion = jsonObject.getString("serverVersion");
 					if (!mContext.getString(R.string.version).equals(newVersion)) {
-						String updateContent = jsonObject.getString("verText");
-						int versionCode = jsonObject.getInt("versionCode");
-						boolean isMust = jsonObject.getInt("isUpdate") == 1;
-						if(isMust){
-							PrefsUtils.AppInfo.setMustUpdate(mContext, versionCode,updateContent);
-							PhotoTalkUtils.showMustUpdateDialog(mContext);
-							return;
-						}
 						if (isAutoRequest && newVersion.equals(PrefsUtils.AppInfo.getNeverAttentionVersion(mContext))) {
 							return;
 						}
-						
 						String updateUrl = jsonObject.getString("appUrl");
+						String updateContent = jsonObject.getString("verText");
+						int versionCode = jsonObject.getInt("versionCode");
+						boolean isMust = jsonObject.getInt("isUpdate") == 1;
+						if (isMust) {
+							PrefsUtils.AppInfo.setMustUpdate(mContext, versionCode, updateContent);
+						}
 						if (mOnUpdateCheckListener != null) {
-							mOnUpdateCheckListener.onHasUpdate(newVersion, updateContent, updateUrl);
+							mOnUpdateCheckListener.onHasUpdate(newVersion, updateContent, updateUrl, isMust);
 							return;
 						}
-						UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
-						AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(mContext).setMessage(updateContent)
-								.setTitle(mContext.getString(R.string.update_dialog_title)).setNegativeButton(R.string.attention_later, mUpdateListener)
-								.setPositiveButton(R.string.update_now, mUpdateListener).create();
-						mUpdateDialog.setCancelable(false);
-						mUpdateDialog.show();
+						if (isMust) {
+							PhotoTalkUtils.showMustUpdateDialog(mContext,true);
+						} else {
+							UpdateDialogClickListener mUpdateListener = new UpdateDialogClickListener(mContext, updateUrl, newVersion);
+							AlertDialog mUpdateDialog = DialogUtil.getAlertDialogBuilder(mContext).setMessage(updateContent)
+									.setTitle(mContext.getString(R.string.update_dialog_title)).setNegativeButton(R.string.attention_later, mUpdateListener)
+									.setPositiveButton(R.string.update_now, mUpdateListener).create();
+							mUpdateDialog.setCancelable(false);
+							mUpdateDialog.show();
+						}
+
 					} else {
 						if (mOnUpdateCheckListener != null) {
 							mOnUpdateCheckListener.onNoNewVersion();
@@ -91,7 +93,7 @@ public class CheckUpdateTask {
 	}
 
 	public static interface OnUpdateCheckListener {
-		public void onHasUpdate(String versionCode, String updateContent, String updateUrl);
+		public void onHasUpdate(String versionCode, String updateContent, String updateUrl, boolean isMust);
 
 		public void onNoNewVersion();
 
