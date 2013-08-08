@@ -21,6 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.galhttprequest.LogUtil;
@@ -113,10 +114,14 @@ public class DriftInformationAdapter extends BaseAdapter {
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
 		holder.ivCountryFlag.setTag(tagBase + ImageView.class.getName() + "country");
 		if (record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED && !isSender(record)) {
-			if (record.hasVoice()) {
-				holder.item_new.setImageResource(R.drawable.new_item_voice);
+			if (record.getInformationCate() == InformationCategory.PHOTO) {
+				if (record.hasVoice()) {
+					holder.item_new.setImageResource(R.drawable.new_item_voice);
+				} else {
+					holder.item_new.setImageResource(R.drawable.item_new_bg);
+				}
 			} else {
-				holder.item_new.setImageResource(R.drawable.item_new_bg);
+				holder.item_new.setImageResource(R.drawable.new_item_video);
 			}
 			holder.item_new.setVisibility(View.VISIBLE);
 		} else {
@@ -128,7 +133,8 @@ public class DriftInformationAdapter extends BaseAdapter {
 		} else {
 			initPhotoInformationSenderView(record, holder);
 		}
-//		mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
+		// mImageLoader.displayImage(record.getSender().getHeadUrl(),
+		// holder.head);
 		RCPlatformImageLoader.loadImage(context, mImageLoader, record.getSender().getHeadUrl(), holder.head);
 		if (!isSender(record) && record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED) {
 			holder.name.getPaint().setFakeBoldText(true);

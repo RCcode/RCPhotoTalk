@@ -287,6 +287,8 @@ public class EditPictureView extends View {
 			float y = event.getY();
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+				if (mListener != null)
+					mListener.onGrafStart();
 				initPaint();
 				// 重置下一步操作
 				canclePath = new ArrayList<DrawPath>();
@@ -306,6 +308,8 @@ public class EditPictureView extends View {
 			case MotionEvent.ACTION_UP:
 				touch_up();
 				invalidate();
+				if (mListener != null)
+					mListener.onGrafEnd();
 				break;
 			}
 			return true;
@@ -424,7 +428,6 @@ public class EditPictureView extends View {
 		return false;
 	}
 
-
 	public int getTimeLimit() {
 		return timeLimit;
 	}
@@ -450,5 +453,17 @@ public class EditPictureView extends View {
 
 	public boolean hasDrawed() {
 		return savePath != null && !savePath.isEmpty();
+	}
+
+	private OnGrafListener mListener;
+
+	public void setOnGrafListener(OnGrafListener mListener) {
+		this.mListener = mListener;
+	}
+
+	public static interface OnGrafListener {
+		public void onGrafStart();
+
+		public void onGrafEnd();
 	}
 }

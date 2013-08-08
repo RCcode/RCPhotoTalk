@@ -15,7 +15,6 @@ import android.content.res.AssetFileDescriptor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -26,15 +25,16 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -53,12 +53,14 @@ import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
 import com.rcplatform.phototalk.views.AudioRecordButton.OnRecordingListener;
 import com.rcplatform.phototalk.views.ColorPicker.OnColorChangeListener;
 import com.rcplatform.phototalk.views.ColorPickerDialog;
 import com.rcplatform.phototalk.views.EditPictureView;
+import com.rcplatform.phototalk.views.EditPictureView.OnGrafListener;
 import com.rcplatform.phototalk.views.EditableViewGroup;
 import com.rcplatform.phototalk.views.wheel.OnWheelClickedListener;
 import com.rcplatform.phototalk.views.wheel.WheelView;
@@ -66,6 +68,7 @@ import com.rcplatform.phototalk.views.wheel.adapter.AbstractWheelTextAdapter;
 
 public class EditPictureActivity extends BaseActivity {
 
+	private List<View> showedButtons = new ArrayList<View>();
 	public static final String PARAM_KEY_VIDEO_PATH = "videopath";
 
 	public static final String PARAM_KEY_PIC_ID = "picId";
@@ -130,8 +133,6 @@ public class EditPictureActivity extends BaseActivity {
 
 	private ColorPickerDialog colorPickerDialog;
 
-	private int softInputHight;
-
 	private boolean enableSave = true;
 
 	private WheelView mWheel;
@@ -170,6 +171,7 @@ public class EditPictureActivity extends BaseActivity {
 	private VideoView videoView;
 
 	private int informationCate;
+
 	private Handler voiceRecordHandler = new Handler() {
 
 		private boolean isRecording = false;
@@ -327,32 +329,46 @@ public class EditPictureActivity extends BaseActivity {
 		mButtonSave.setOnClickListener(clickListener);
 		mButtonSend.setOnClickListener(clickListener);
 		mButtonClose.setOnClickListener(clickListener);
-		mEditableViewGroup.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-			@Override
-			public void onGlobalLayout() {
-				Rect r = new Rect();
-				mEditableViewGroup.getWindowVisibleDisplayFrame(r);
-
-				int screenHeight = mEditableViewGroup.getRootView().getHeight();
-				softInputHight = screenHeight - (r.bottom - r.top);
-				if (softInputHight != 0) {
-
-					mEditableViewGroup.setPopupSoftInput(true);
-					mEditableViewGroup.updateTextViewLoation(screenHeight - softInputHight);
-				} else {
-					mEditableViewGroup.setPopupSoftInput(false);
-					if (mEditText != null && (mEditText.getVisibility() == View.VISIBLE)) {
-						mEditText.getChildAt(0).setFocusableInTouchMode(false);
-						mEditText.getChildAt(0).setFocusable(false);
-						mEditText.getChildAt(0).clearFocus();
-					}
-				}
-			}
-		});
 		initData();
+		setEditMode();
 		initRecordPreviewViews();
+		showInputAttention();
 
+	}
+
+	private void showInputAttention() {
+		Toast toast = Toast.makeText(this, R.string.press_input_text, Toast.LENGTH_SHORT);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		toast.show();
+	}
+
+	private void setEditMode() {
+		switch (informationCate) {
+		case InformationCategory.PHOTO:
+			changeToPhotoEdit();
+			break;
+		case InformationCategory.VIDEO:
+			changeToVideoEdit();
+			break;
+		}
+	}
+
+	private void changeToVideoEdit() {
+		audioBtn.setVisibility(View.GONE);
+		mButtonTimeLimit.setVisibility(View.GONE);
+		showedButtons.add(mButtonClose);
+		showedButtons.add(mButtonSave);
+		showedButtons.add(mButtonSend);
+		showedButtons.add(mButtonUndo);
+	}
+
+	private void changeToPhotoEdit() {
+		showedButtons.add(mButtonClose);
+		showedButtons.add(mButtonUndo);
+		showedButtons.add(mButtonTimeLimit);
+		showedButtons.add(mButtonSave);
+		showedButtons.add(mButtonSend);
+		showedButtons.add(audioBtn);
 	}
 
 	private String videoPath;
@@ -369,7 +385,20 @@ public class EditPictureActivity extends BaseActivity {
 	}
 
 	private void initRecordPreviewViews() {
+		mEditePicView = new EditPictureView(this);
+		mEditableViewGroup.addView(mEditePicView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		mEditePicView.setOnGrafListener(new OnGrafListener() {
 
+			@Override
+			public void onGrafStart() {
+				showButtonsAnimation(false);
+			}
+
+			@Override
+			public void onGrafEnd() {
+				showButtonsAnimation(true);
+			}
+		});
 		switch (informationCate) {
 		case InformationCategory.VIDEO:
 			initVideoPreviewViews();
@@ -377,6 +406,18 @@ public class EditPictureActivity extends BaseActivity {
 		default:
 			initPhotoPreviewViews();
 			break;
+		}
+	}
+
+	private void showButtonsAnimation(boolean isShow) {
+		Animation animation = null;
+		if (isShow) {
+			animation = AnimationUtils.loadAnimation(this, R.anim.zoomin);
+		} else {
+			animation = AnimationUtils.loadAnimation(this, R.anim.zoomout);
+		}
+		for (View view : showedButtons) {
+			view.startAnimation(animation);
 		}
 	}
 
@@ -388,8 +429,6 @@ public class EditPictureActivity extends BaseActivity {
 	}
 
 	private void initPhotoPreviewViews() {
-		mEditePicView = new EditPictureView(this);
-		mEditableViewGroup.addView(mEditePicView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	}
 
 	private void initVideoPreviewViews() {
@@ -402,8 +441,6 @@ public class EditPictureActivity extends BaseActivity {
 			}
 		});
 		videoView.setVideoPath(videoPath);
-		mEditePicView = new EditPictureView(this);
-		mEditableViewGroup.addView(mEditePicView, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 	}
 
 	@Override
@@ -539,12 +576,6 @@ public class EditPictureActivity extends BaseActivity {
 		}
 	};
 
-	private boolean needToCacheImage() {
-		return informationCate != InformationCategory.VIDEO
-				|| (informationCate == InformationCategory.VIDEO && (mEditePicView.hasDrawed() || (editText != null && !RCPlatformTextUtil.isEmpty(editText
-						.getText().toString()))));
-	}
-
 	private void playEndMusic() {
 		MediaPlayer endplayer = new MediaPlayer();
 		try {
@@ -617,19 +648,6 @@ public class EditPictureActivity extends BaseActivity {
 				editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
 				final Paint paint = editText.getPaint();
 				editText.setFocusable(true);
-				editText.setOnFocusChangeListener(new OnFocusChangeListener() {
-
-					@Override
-					public void onFocusChange(View v, boolean hasFocus) {
-						// editText.setFocusable(true);
-						if (!hasFocus) {
-							if (editText.getText() == null || editText.getText().length() == 0) {
-								mEditText.setVisibility(View.GONE);
-								mEditText = null;
-							}
-						}
-					}
-				});
 				editText.addTextChangedListener(new TextWatcher() {
 
 					@Override
@@ -655,8 +673,23 @@ public class EditPictureActivity extends BaseActivity {
 						}
 					}
 				});
-				mEditableViewGroup.addEditeTextView(mEditText);
+				mEditableViewGroup.addEditeTextView(mEditText, (int) event.getY());
+				editText.requestFocus();
+				editText.setCursorVisible(true);
+				Utils.showSoftInputBoard(this, getCurrentFocus());
 				setSaveable(true);
+			} else {
+				int[] location = new int[2];
+				mEditText.getLocationInWindow(location);
+				if ((event.getY() < location[1] || event.getY() > location[1] + mEditText.getHeight())) {
+					hideSoftKeyboard(getCurrentFocus());
+					if (editText.getText().length() == 0) {
+						mEditText.setVisibility(View.GONE);
+						mEditText = null;
+					} else {
+						editText.clearFocus();
+					}
+				}
 			}
 			break;
 
@@ -702,7 +735,6 @@ public class EditPictureActivity extends BaseActivity {
 		mWheel.setCurrentItem(timeLimit - 1);
 		select_layout.setVisibility(View.VISIBLE);
 		isShowSelectLayout = true;
-
 	}
 
 	private class TimeChooseAdapter extends AbstractWheelTextAdapter {

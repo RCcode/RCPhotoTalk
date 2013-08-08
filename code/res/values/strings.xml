@@ -383,7 +383,7 @@
     <!-- 漂流瓶对话框 -->
     <string name="havenot_throw_today">今天还没有扔瓶子</string>
     <string name="go_to_comment">去评价</string>
-    <string name="comment_message">喜欢我们的产品？去评一个呗</string>
+    <string name="comment_message">喜欢FriendMe，马上给我们进行评分。</string>
     <!-- v2.0 -->
     <string name="know_strangers">Make new friends</string>
     <string name="new_init_message">New to version 2.0 - now you can make friends from all over the world!</string>
@@ -411,5 +411,9 @@
     <string name="set_drift_range">设置捞取范围</string>
     <string name="all_world">全世界</string>
     <string name="my_country">我的国家</string>
+    <string name="confirm_user_country">确认所在国家</string>
+    <string name="change_country">去修改</string>
+    <string name="confirm_user_country_attention">提示：你以后可以在个人资料中修改自己的国家</string>
+    <string name="press_input_text">点击输入文字</string>
 
 </resources>

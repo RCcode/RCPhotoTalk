@@ -5,10 +5,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,28 +18,23 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.rcplatform.phototalk.activity.BaseActivity;
-import com.rcplatform.phototalk.adapter.PhotoTalkFriendsAdapter;
 import com.rcplatform.phototalk.adapter.SeachCountryAdapter;
-import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.logic.controller.SettingPageController;
-import com.rcplatform.phototalk.proxy.FriendsProxy;
-import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
-import com.rcplatform.phototalk.request.RCPlatformServiceError;
+import com.rcplatform.phototalk.drift.DriftInformationActivity;
+import com.rcplatform.phototalk.proxy.UserSettingProxy;
+import com.rcplatform.phototalk.request.handler.UpdateUserInfoResponseHandler;
+import com.rcplatform.phototalk.request.handler.UpdateUserInfoResponseHandler.UpdateUserInfoListener;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
-import com.rcplatform.phototalk.utils.PrefsUtils;
 
-public class EditUserCountryActivity extends BaseActivity implements
-		OnClickListener {
+public class EditUserCountryActivity extends BaseActivity implements OnClickListener {
 	private View mBack;
 	private TextView mTitleTextView;
 	private EditText seachEdit;
@@ -52,14 +46,15 @@ public class EditUserCountryActivity extends BaseActivity implements
 	private String[] countryNameList;
 	private List<CountryHolder> oldCountry = new ArrayList<CountryHolder>();
 	private List<CountryHolder> countryList = new ArrayList<CountryHolder>();
+	public static final String RESULT_KEY_COUNTRY = "countryCode";
+
+	public static final String PARAM_KEY_PAGE_FROM = "pagefrom";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.edit_user_country);
-		userDetailInfo = PhotoTalkUtils.copyUserInfo(getPhotoTalkApplication()
-				.getCurrentUser());
+		userDetailInfo = PhotoTalkUtils.copyUserInfo(getPhotoTalkApplication().getCurrentUser());
 		userCountryCode = userDetailInfo.getCountry();
 		countryNameList = getResources().getStringArray(R.array.countrys);
 		initData();
@@ -84,15 +79,14 @@ public class EditUserCountryActivity extends BaseActivity implements
 			CountryHolder hodler = new CountryHolder();
 			hodler.code = Constants.COUNTRY_CODE[i];
 			hodler.name = countryNameList[i];
-			if (userCountryCode != null
-					&& userCountryCode.equals(Constants.COUNTRY_CODE[i])) {
+			if (userCountryCode != null && userCountryCode.equals(Constants.COUNTRY_CODE[i])) {
 				hodler.isSelect = true;
 			} else {
 				hodler.isSelect = false;
 			}
 			oldCountry.add(hodler);
 		}
-		 Collections.sort(oldCountry,new ReverseSort());   
+		Collections.sort(oldCountry, new ReverseSort());
 		countryList = oldCountry;
 
 	}
@@ -117,30 +111,22 @@ public class EditUserCountryActivity extends BaseActivity implements
 		seachEdit.addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// TODO Auto-generated method stub
-
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-				// TODO Auto-generated method stub
-
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 			}
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				String keyWords = s.toString().trim();
 				if (TextUtils.isEmpty(keyWords)) {
 					seach_delete_btn.setVisibility(View.INVISIBLE);
-//					initData();
-//					countryList.clear();
+					// initData();
+					// countryList.clear();
 					countryList = oldCountry;
-					adapter = new SeachCountryAdapter(
-							EditUserCountryActivity.this, countryList);
+					adapter = new SeachCountryAdapter(EditUserCountryActivity.this, countryList);
 					listView.setAdapter(adapter);
 				} else {
 					search(keyWords);
@@ -153,17 +139,8 @@ public class EditUserCountryActivity extends BaseActivity implements
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				// TODO Auto-generated method stub
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				userCountryCode = countryList.get(position).getCode();
-
-				// userDetailInfo.setCountry(userCountryCode);
-				// PrefsUtils.User.saveUserInfo(
-				// getApplicationContext(),
-				// userDetailInfo.getRcId(), userDetailInfo);
-				// getPhotoTalkApplication().setCurrentUser(
-				// userDetailInfo);
 				initCountryListData(position);
 				adapter.notifyDataSetChanged();
 				activityFinish();
@@ -172,27 +149,58 @@ public class EditUserCountryActivity extends BaseActivity implements
 	}
 
 	public void activityFinish() {
+		if (DriftInformationActivity.class.getName().equals(getIntent().getStringExtra(PARAM_KEY_PAGE_FROM))) {
+			showLoadingDialog(false);
+			UserSettingProxy.updateUserInfo(this, userCountryCode, userDetailInfo.getNickName(), userDetailInfo.getBirthday(), userDetailInfo.getGender() + "",
+					new UpdateUserInfoResponseHandler(this, new UpdateUserInfoListener() {
+
+						@Override
+						public void onUpdateSucess(String headUrl) {
+							dissmissLoadingDialog();
+							Intent intent = new Intent();
+							intent.putExtra(RESULT_KEY_COUNTRY, userCountryCode);
+							setResult(Activity.RESULT_OK, intent);
+							finish();
+						}
+
+						@Override
+						public void onUpdateFail(String failReason) {
+							dissmissLoadingDialog();
+							showUpdateUserCountryFailDialog();
+						}
+					}));
+			return;
+		}
 		Intent intent = new Intent();
-		intent.putExtra("countryCode", userCountryCode);
+		intent.putExtra(RESULT_KEY_COUNTRY, userCountryCode);
 		setResult(Activity.RESULT_OK, intent);
 		this.finish();
 	}
 
-	private void post(String countryCode) {
-		FriendsProxy.postCountryCode(this, new RCPlatformResponseHandler() {
+	private AlertDialog updateFailDialog;
 
-			@Override
-			public void onSuccess(int statusCode, String content) {
-				// TODO Auto-generated method stub
+	private void showUpdateUserCountryFailDialog() {
+		if (updateFailDialog == null) {
+			DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
-			}
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
 
-			@Override
-			public void onFailure(int errorCode, String content) {
-				// TODO Auto-generated method stub
-
-			}
-		}, countryCode);
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						activityFinish();
+						break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						finish();
+						break;
+					}
+					dialog.dismiss();
+				}
+			};
+			updateFailDialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.net_error).setPositiveButton(R.string.ok, listener)
+					.setNegativeButton(R.string.cancel, listener).setCancelable(false).create();
+		}
+		updateFailDialog.show();
 	}
 
 	private void search(String keyWords) {
@@ -202,10 +210,8 @@ public class EditUserCountryActivity extends BaseActivity implements
 		List<CountryHolder> seachListCountry = new ArrayList<CountryHolder>();
 		for (int i = 0; i < oldCountry.size(); i++) {
 			CountryHolder country = oldCountry.get(i);
-			if (country.getName() != null
-					&& country.getName().toLowerCase().contains(keyWords)) {
-				if (country.getCode() != null
-						&& country.getCode().equals(userCountryCode)) {
+			if (country.getName() != null && country.getName().toLowerCase().contains(keyWords)) {
+				if (country.getCode() != null && country.getCode().equals(userCountryCode)) {
 					country.setSelect(true);
 				} else {
 					country.setSelect(false);
@@ -220,17 +226,15 @@ public class EditUserCountryActivity extends BaseActivity implements
 
 	@Override
 	public void onClick(View v) {
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.back:
 			activityFinish();
 			break;
 		case R.id.seach_delete_btn:
 			seachEdit.setText("");
-//			initData();
+			// initData();
 			countryList = oldCountry;
-			adapter = new SeachCountryAdapter(EditUserCountryActivity.this,
-					countryList);
+			adapter = new SeachCountryAdapter(EditUserCountryActivity.this, countryList);
 			listView.setAdapter(adapter);
 			break;
 		default:
@@ -269,7 +273,6 @@ public class EditUserCountryActivity extends BaseActivity implements
 
 		@Override
 		public int compareTo(Object another) {
-			// TODO Auto-generated method stub
 			CountryHolder user = (CountryHolder) another;
 			return this.name.compareTo(user.name);
 		}
@@ -286,7 +289,6 @@ public class EditUserCountryActivity extends BaseActivity implements
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		// TODO Auto-generated method stub
 		if (keyCode == KeyEvent.KEYCODE_BACK) {
 			activityFinish();
 		}

@@ -159,7 +159,18 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		registeGCM();
 		ClientLogUtil.log(this);
 		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
+		addApplicationStartTime();
 		showRcAd();
+	}
+
+	private void addApplicationStartTime() {
+		int startTime = PrefsUtils.AppInfo.getApplicationStartTime(this);
+		if (startTime <= Constants.COMMENT_ATTENTION_WAIT_MAX_TIME) {
+			PrefsUtils.AppInfo.addApplicationStartTime(this);
+		}
+		if (startTime == Constants.COMMENT_ATTENTION_WAIT_MAX_TIME) {
+			PhotoTalkUtils.showCommentAttentionDialog(this);
+		}
 	}
 
 	private void registeGCM() {
@@ -441,7 +452,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			}
 		});
 		mInformationList.setOnItemClickListener(informationListItemClickListener);
-		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUser().getRcId()))
+		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUserRcId()))
 			InformationPageController.getInstance().onNewRecommends();
 
 		initViewPager();
@@ -559,23 +570,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void reSendPhoto(final Information information) {
-		List<String> friendIds = new ArrayList<String>();
-		friendIds.add(information.getReceiver().getRcId());
 		information.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
 		adapter.notifyDataSetChanged();
-		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
-
-			@Override
-			public void onSendSuccess(long flag, String url) {
-				InformationPageController.getInstance().onPhotoResendSuccess(information);
-			}
-
-			@Override
-			public void onFail(long flag, int errorCode, String content) {
-				InformationPageController.getInstance().onPhotoResendFail(information);
-			}
-		}, friendIds, information.isHasVoice(), information.isHasGraf());
+		LogicUtils.resendInformation(this,information);
 	}
 
 	private void deleteInformation(Information information) {

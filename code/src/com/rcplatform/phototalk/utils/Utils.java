@@ -743,4 +743,9 @@ public class Utils {
 		shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
 		context.sendBroadcast(shortcut);
 	}
+
+	public static void showSoftInputBoard(Context context, View focusView) {
+		InputMethodManager keyboard = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+	    keyboard.showSoftInput(focusView, 0);
+	}
 }

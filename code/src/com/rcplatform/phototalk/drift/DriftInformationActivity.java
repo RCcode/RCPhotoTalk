@@ -3,6 +3,7 @@ package com.rcplatform.phototalk.drift;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
@@ -36,6 +37,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.PauseOnScrollListener;
 import com.rcplatform.clientlog.ClientLogUtil;
 import com.rcplatform.phototalk.EditPictureActivity;
+import com.rcplatform.phototalk.EditUserCountryActivity;
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.StrangerDetailActivity;
 import com.rcplatform.phototalk.TakePhotoActivity;
@@ -84,6 +86,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	public static final String PARAM_FRIEND = "friend";
 	public static final String PARAM_INFORMATION = "information";
 	public static final String PARAM_FROM_PAGE = "isFromStangerPage";
+
+	private static final int REQUEST_KEY_COUNTRY_CHOOSE_FISH_RANGE = 100000;
+	private static final int REQUEST_KEY_COUNTRY_CHOOSE_THROW = 100001;
+
 	private SnapListView mInformationList;
 
 	protected LongClickShowView mShowDialog;
@@ -162,15 +168,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				finish();
 			}
 		});
-		initMenuButton();
-		// initForwordButton(R.drawable.btn_drift_filter, new OnClickListener()
-		// {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// showFilterMenu(v);
-		// }
-		// });
+		initForwordButton(R.drawable.btn_drift_filter, new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showFilterMenu();				
+			}
+		});
 		mInformationList = (SnapListView) findViewById(R.id.lv_drift);
 		mInformationList.setSnapListener(this);
 		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -292,24 +296,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			}
 		}
 	};
-	private TextView tvMenu;
-
 	private void initMenuButton() {
-		tvMenu = (TextView) findViewById(R.id.tv_filter_menu);
-		tvMenu.setVisibility(View.VISIBLE);
-		tvMenu.setOnClickListener(this);
-		setMenuText();
-	}
-
-	private void setMenuText() {
-		switch (mShowMode) {
-		case ALL:
-			tvMenu.setText(R.string.all_world);
-			break;
-		case MY_COUNTRY:
-			tvMenu.setText(R.string.my_country);
-			break;
-		}
+		//TODO
 	}
 
 	private void showFriendDetail(DriftInformation information) {
@@ -758,7 +746,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			fishInformation();
 			break;
 		case R.id.btn_throw_drift:
-			throwInformation();
+			if (PrefsUtils.User.isFirstTimeChooseDriftRange(this, getCurrentUserRcId())) {
+				showCountryConfirmDialog(REQUEST_KEY_COUNTRY_CHOOSE_THROW);
+			} else
+				throwInformation();
 			break;
 		case R.id.btn_show_all:
 			filterMenu.dismiss();
@@ -772,9 +763,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				changeShowMode(DriftShowMode.MY_COUNTRY);
 			}
 			break;
-		case R.id.tv_filter_menu:
-			showFilterMenu(v);
-			break;
 		}
 	}
 
@@ -782,7 +770,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		mShowMode = mode;
 		reset();
 		loadLocalInformation();
-		setMenuText();
 	}
 
 	private void reset() {
@@ -837,7 +824,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private PopupWindow filterMenu;
 
-	private void showFilterMenu(View v) {
+	private void showFilterMenu() {
 		String[] items = new String[] { getString(R.string.all_world), getString(R.string.my_country) };
 		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.set_drift_range).setItems(items, new DialogInterface.OnClickListener() {
 
@@ -848,12 +835,21 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 					changeShowMode(DriftShowMode.ALL);
 					break;
 				case 1:
-					changeShowMode(DriftShowMode.MY_COUNTRY);
+					chooseMyCountry();
 					break;
 				}
 			}
 		}).create();
 		dialog.show();
+	}
+
+	private void chooseMyCountry() {
+		if (PrefsUtils.User.isFirstTimeChooseDriftRange(this, getCurrentUserRcId())) {
+			showCountryConfirmDialog(REQUEST_KEY_COUNTRY_CHOOSE_FISH_RANGE);
+		} else {
+			changeShowMode(DriftShowMode.MY_COUNTRY);
+		}
+
 	}
 
 	private AlertDialog throwDialog;
@@ -870,8 +866,62 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		throwDialog.show();
 	}
 
-	private static final int FLING_MIN_DISTANCE = 100;
+	private void showCountryConfirmDialog(final int requestCode) {
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				PrefsUtils.User.setDriftRangeCheese(DriftInformationActivity.this, getCurrentUserRcId());
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					if (requestCode == REQUEST_KEY_COUNTRY_CHOOSE_FISH_RANGE)
+						changeShowMode(DriftShowMode.MY_COUNTRY);
+					else
+						throwInformation();
+					break;
+				case DialogInterface.BUTTON_NEGATIVE:
+					startCountryChooseActivity(requestCode);
+					break;
+				}
+			}
+		};
+		View dialogView = getLayoutInflater().inflate(R.layout.confirm_country_dialog, null);
+		ImageView ivCountry = (ImageView) dialogView.findViewById(R.id.iv_country);
+		ivCountry.setImageBitmap(Utils.getAssetCountryFlag(this, getCurrentUser().getCountry()));
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.confirm_user_country).setPositiveButton(R.string.ok, listener)
+				.setNegativeButton(R.string.change_country, listener).setView(dialogView).create();
+		dialog.show();
+	}
+
+	private static final int FLING_MIN_DISTANCE = 100;
 	private static final int FLING_MIN_VELOCITY = 200;
 	private int numView = 0;
+
+	private void startCountryChooseActivity(int requestCode) {
+		Intent intent = new Intent(this, EditUserCountryActivity.class);
+		intent.putExtra(EditUserCountryActivity.PARAM_KEY_PAGE_FROM, DriftInformationActivity.class.getName());
+		startActivityForResult(intent, requestCode);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == Activity.RESULT_OK) {
+			getCurrentUser().setCountry(data.getStringExtra(EditUserCountryActivity.RESULT_KEY_COUNTRY));
+			RCThreadPool.getInstance().addTask(new Runnable() {
+
+				@Override
+				public void run() {
+					PrefsUtils.User.saveUserInfo(getApplicationContext(), getCurrentUserRcId(), getCurrentUser());
+					PhotoTalkDatabaseFactory.getDatabase().addFriend(PhotoTalkUtils.userToFriend(getCurrentUser()));
+				}
+			});
+			if (requestCode == REQUEST_KEY_COUNTRY_CHOOSE_FISH_RANGE) {
+				changeShowMode(DriftShowMode.MY_COUNTRY);
+			} else if (requestCode == REQUEST_KEY_COUNTRY_CHOOSE_THROW) {
+				throwInformation();
+			}
+
+		}
+	}
 }

@@ -34,7 +34,7 @@ public interface PhotoTalkDatabase {
 	public void updateFriendRequestInformationByFriend(Friend friend);
 
 	public Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime, List<String> receivableUserIds,
-			final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice);
+			final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice,int informationCate);
 
 	public void saveFriends(List<Friend> friends);
 

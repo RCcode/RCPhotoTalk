@@ -22,6 +22,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.bean.InformationClassification;
@@ -109,10 +110,14 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED
 				&& !LogicUtils.isSender(context, record)) {
-			if (record.isHasVoice()) {
-				holder.item_new.setImageResource(R.drawable.new_item_voice);
+			if (record.getInformationCate() == InformationCategory.PHOTO) {
+				if (record.isHasVoice()) {
+					holder.item_new.setImageResource(R.drawable.new_item_voice);
+				} else {
+					holder.item_new.setImageResource(R.drawable.item_new_bg);
+				}
 			} else {
-				holder.item_new.setImageResource(R.drawable.item_new_bg);
+				holder.item_new.setImageResource(R.drawable.new_item_video);
 			}
 			holder.item_new.setVisibility(View.VISIBLE);
 		} else {
@@ -143,11 +148,13 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			holder.statuButton.setBackgroundDrawable(null);
 			holder.statu.setText("system notice");
 		}
-//		if (LogicUtils.isSender(context, record)) {
-//			mImageLoader.displayImage(record.getReceiver().getHeadUrl(), holder.head);
-//		} else {
-//			mImageLoader.displayImage(record.getSender().getHeadUrl(), holder.head);
-//		}
+		// if (LogicUtils.isSender(context, record)) {
+		// mImageLoader.displayImage(record.getReceiver().getHeadUrl(),
+		// holder.head);
+		// } else {
+		// mImageLoader.displayImage(record.getSender().getHeadUrl(),
+		// holder.head);
+		// }
 		if (LogicUtils.isSender(context, record)) {
 			RCPlatformImageLoader.loadImage(context, mImageLoader, record.getReceiver().getHeadUrl(), holder.head);
 		} else {

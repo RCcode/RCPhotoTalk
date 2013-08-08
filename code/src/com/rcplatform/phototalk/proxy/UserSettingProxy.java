@@ -47,10 +47,19 @@ public class UserSettingProxy {
 		request.excuteAsync();
 	}
 
-	public static void bindPhone(Context context, RCPlatformResponseHandler responseHandler, String validate,String phoneNumber) {
+	public static void bindPhone(Context context, RCPlatformResponseHandler responseHandler, String validate, String phoneNumber) {
 		Request request = new Request(context, PhotoTalkApiUrl.BIND_PHONE_URL, responseHandler);
 		request.putParam(PhotoTalkParams.BindPhone.PARAM_KEY_NUMBER, phoneNumber);
 		request.putParam(PhotoTalkParams.BindPhone.PARAM_KEY_CODE, validate);
 		request.excuteAsync();
+	}
+
+	public static void updateUserInfo(Context context, String country, String nick, String birthday, String sex, RCPlatformResponseHandler handler) {
+		Request request = new Request(context, PhotoTalkApiUrl.CHANGE_COUNTRY_CODE, handler);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_COUNTRY, country);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_NICK, nick);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_BIRTHDAY, birthday);
+		request.putParam(PhotoTalkParams.ChangeUserInfo.PARAM_KEY_GENDER, sex);
+		request.executePostNameValuePairAsync();
 	}
 }

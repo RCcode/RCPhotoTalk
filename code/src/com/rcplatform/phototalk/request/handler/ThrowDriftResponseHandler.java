@@ -16,6 +16,7 @@ import com.rcplatform.phototalk.logic.SendingInformationManager;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.RCPlatformServiceError;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.NotificationSender;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCThreadPool;
@@ -38,7 +39,7 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendFail(mFlag);
 		DriftInformationPageController.getInstance().onDriftInformationSendFail(mFlag);
 		int notificationId = SendingInformationManager.getInstance().getDriftNotificationId();
-		NotificationSender.sendNotification(mContext, mContext.getString(R.string.sending_to_stranger), mContext.getString(R.string.send_fail),
+		NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger), mContext.getString(R.string.send_fail),
 				R.drawable.ic_launcher, null, notificationId);
 	}
 
@@ -51,8 +52,9 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 			int picId = jsonObject.getInt("picId");
 			if (informationCate == InformationCategory.VIDEO) {
 				int notificationId = SendingInformationManager.getInstance().getDriftNotificationId();
-				NotificationSender.sendNotification(mContext, mContext.getString(R.string.sending_to_stranger), mContext.getString(R.string.send_success),
-						R.drawable.ic_launcher, null, notificationId);
+				NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger),
+						mContext.getString(R.string.send_success), R.drawable.ic_launcher, null, notificationId);
+				NotificationSender.getInstance(mContext).cancelNotification(notificationId, Constants.TimeMillins.SEND_SUCCESS_NOTIFICATION_SHOW_TIME);
 			}
 			PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendSuccess(flag, picId);
 			DriftInformationPageController.getInstance().onDriftInformationSendSuccess(flag, picId);

@@ -26,6 +26,8 @@ public class Constants {
 		public static long A_DAY = 1000 * 60 * 60 * 24;
 
 		public static long MAX_VIDEO_RECORD_TIME = 10 * 1000;
+
+		public static long SEND_SUCCESS_NOTIFICATION_SHOW_TIME = 3 * 1000;
 	}
 
 	public static final int ATTENTION_COMMENT_TIME = 10;
@@ -90,6 +92,8 @@ public class Constants {
 
 	public static final String OFFICIAL_RCID = "1000000";
 	public static final int MAX_FISH_DRIFT_TIME = 50;
+
+	public static final int COMMENT_ATTENTION_WAIT_MAX_TIME = 4;
 
 	public static void init(Context context) {
 		initBaseParamsValue(context);

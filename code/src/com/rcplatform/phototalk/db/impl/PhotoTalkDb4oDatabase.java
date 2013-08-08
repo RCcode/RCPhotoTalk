@@ -177,7 +177,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime,
-			List<String> receivableUserIds, final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice) {
+			List<String> receivableUserIds, final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice,int informationCate) {
 		ObjectSet<Information> infoLocals = db.query(new Predicate<Information>() {
 
 			private static final long serialVersionUID = 1L;
@@ -207,6 +207,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			information.setLimitTime(totleLength);
 			information.setUrl(picUrl);
 			information.setHasVoice(hasVoice);
+			information.setInformationCate(informationCate);
 			result.put(user.getRcId(), information);
 		}
 		db.commit();

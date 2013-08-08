@@ -26,7 +26,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.flurry.org.apache.avro.util.Utf8;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.rcplatform.phototalk.activity.ImagePickActivity;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -36,12 +35,10 @@ import com.rcplatform.phototalk.proxy.FriendsProxy;
 import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.RCPlatformServiceError;
 import com.rcplatform.phototalk.umeng.EventUtil;
-import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.Utils;
-import com.rcplatform.rcad.view.constants.Constant;
 
 public class AccountInfoEditActivity extends ImagePickActivity implements
 		View.OnClickListener {
@@ -383,8 +380,7 @@ public class AccountInfoEditActivity extends ImagePickActivity implements
 							PrefsUtils.User.saveUserInfo(
 									getApplicationContext(),
 									userDetailInfo.getRcId(), userDetailInfo);
-							getPhotoTalkApplication().setCurrentUser(
-									userDetailInfo);
+					getPhotoTalkApplication().setCurrentUser(userDetailInfo);
 							PhotoTalkDatabaseFactory.getDatabase().addFriend(
 									PhotoTalkUtils
 											.userToFriend(getCurrentUser()));

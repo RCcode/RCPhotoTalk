@@ -39,26 +39,26 @@ public class EditableViewGroup extends RelativeLayout {
 	private boolean isPopupSoftInput;
 
 	private boolean isTuyaMode;
-	
-	private int layoutY =0;
-	private int layoutH =0;
+
+	private int layoutY = 0;
+	private int layoutH = 0;
 
 	public EditableViewGroup(Context context) {
 		super(context);
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay(); 
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		screenHeight = display.getHeight();
 	}
 
 	public EditableViewGroup(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		 Display display = ((Activity) context).getWindowManager().getDefaultDisplay(); 
-		screenHeight = display.getHeight(); 
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
+		screenHeight = display.getHeight();
 	}
 
 	public EditableViewGroup(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
-		Display display = ((Activity) context).getWindowManager().getDefaultDisplay(); 
+		Display display = ((Activity) context).getWindowManager().getDefaultDisplay();
 		screenHeight = display.getHeight();
 	}
 
@@ -77,37 +77,29 @@ public class EditableViewGroup extends RelativeLayout {
 		setMeasuredDimension(specSize_Widht, specSize_Heigth);
 
 		View v = getChildAt(0);
-		v.measure(MeasureSpec.makeMeasureSpec(specSize_Widht,
-				MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(
-				specSize_Heigth, MeasureSpec.EXACTLY));
+		v.measure(MeasureSpec.makeMeasureSpec(specSize_Widht, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(specSize_Heigth, MeasureSpec.EXACTLY));
 	}
 
-	public void addEditeTextView(LinearLayout view) {
+	public void addEditeTextView(LinearLayout view, int location) {
 		editTextView = view;
 		measureChild(editTextView);
 		addView(editTextView);
-		editTextView.layout(0, specSize_Heigth / 2,
-				editTextView.getMeasuredWidth(), specSize_Heigth / 2
-						+ editTextView.getMeasuredHeight());
-		layoutY = specSize_Heigth / 2;
-		layoutH = specSize_Heigth / 2
-				+ editTextView.getMeasuredHeight();
-//		editTextView.setFocusable(true);
+		editTextView.layout(0, location, editTextView.getMeasuredWidth(), location + editTextView.getMeasuredHeight());
+		layoutY = location;
+		layoutH = location + editTextView.getMeasuredHeight();
+		// editTextView.setFocusable(true);
 		showInputMethod(((Activity) getContext()));
 	}
 
 	public void updateTextViewLoation(int buttom) {
 		if (editTextView != null)
-			getChildAt(1).layout(0, buttom - editTextView.getMeasuredHeight(),
-					editTextView.getMeasuredWidth(), buttom);
+			getChildAt(1).layout(0, buttom - editTextView.getMeasuredHeight(), editTextView.getMeasuredWidth(), buttom);
 	}
 
 	public void measureChild(View v) {
 		ViewGroup.LayoutParams params = v.getLayoutParams();
 		if (params == null)
-			params = new ViewGroup.LayoutParams(
-					ViewGroup.LayoutParams.FILL_PARENT,
-					ViewGroup.LayoutParams.WRAP_CONTENT);
+			params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 		int height = params.height;
 		if (height > 0) {
@@ -115,13 +107,12 @@ public class EditableViewGroup extends RelativeLayout {
 		} else {
 			height = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
 		}
-		v.measure(MeasureSpec.makeMeasureSpec(specSize_Widht,
-				MeasureSpec.EXACTLY), height);
+		v.measure(MeasureSpec.makeMeasureSpec(specSize_Widht, MeasureSpec.EXACTLY), height);
 	}
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent event) {
-		if (isPopupSoftInput || isTuyaMode) {
+		if ( isTuyaMode) {
 			return super.dispatchTouchEvent(event);
 		}
 		x = (int) event.getX();
@@ -140,14 +131,14 @@ public class EditableViewGroup extends RelativeLayout {
 				stat = false;
 			}
 			if (isMove) {
-				if(y<120){
-					y=120;
-				}else if(y>screenHeight-190){
-					y= screenHeight-190;
+				if (y < 120) {
+					y = 120;
+				} else if (y > screenHeight - 190) {
+					y = screenHeight - 190;
 				}
 				layoutY = y;
 				layoutH = y + getChildAt(1).getMeasuredHeight();
-				editTextView.layout(0, layoutY, getChildAt(1).getMeasuredWidth(),layoutH);
+				editTextView.layout(0, layoutY, getChildAt(1).getMeasuredWidth(), layoutH);
 			}
 			break;
 		case MotionEvent.ACTION_UP:
@@ -163,12 +154,12 @@ public class EditableViewGroup extends RelativeLayout {
 		return super.dispatchTouchEvent(event);
 	}
 
-	public void setLastLayout(){
-		if(null!=editTextView){
-			editTextView.layout(0, layoutY, getChildAt(1).getMeasuredWidth(),layoutH);
+	public void setLastLayout() {
+		if (null != editTextView) {
+			editTextView.layout(0, layoutY, getChildAt(1).getMeasuredWidth(), layoutH);
 		}
 	}
-	
+
 	private boolean isMoveView(View v, int downX, int downY) {
 		if (v == null)
 			return false;
@@ -190,8 +181,7 @@ public class EditableViewGroup extends RelativeLayout {
 
 	public static void showInputMethod(Activity activity) {
 		final View view = activity.getWindow().peekDecorView();
-		InputMethodManager imm = (InputMethodManager) activity
-				.getSystemService(Context.INPUT_METHOD_SERVICE);
+		InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS);
 		imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
 	}
@@ -211,16 +201,14 @@ public class EditableViewGroup extends RelativeLayout {
 	public void setPopupSoftInput(boolean isPopupSoftInput) {
 		this.isPopupSoftInput = isPopupSoftInput;
 		if (isPopupSoftInput) {
-			if (editTextView != null
-					&& (editTextView.getVisibility() == View.VISIBLE)) {
+			if (editTextView != null && (editTextView.getVisibility() == View.VISIBLE)) {
 				editTextView.getChildAt(0).setFocusableInTouchMode(true);
 				editTextView.getChildAt(0).setFocusable(true);
 				editTextView.getChildAt(0).requestFocus();
 				((EditText) editTextView.getChildAt(0)).setCursorVisible(true);
 			}
 		} else {
-			if (editTextView != null
-					&& (editTextView.getVisibility() == View.VISIBLE)) {
+			if (editTextView != null && (editTextView.getVisibility() == View.VISIBLE)) {
 				editTextView.getChildAt(0).setFocusableInTouchMode(false);
 				editTextView.getChildAt(0).setFocusable(false);
 				editTextView.getChildAt(0).clearFocus();

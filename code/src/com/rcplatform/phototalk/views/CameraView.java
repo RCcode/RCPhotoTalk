@@ -18,10 +18,10 @@ import android.hardware.Camera.Parameters;
 import android.hardware.Camera.Size;
 import android.media.AudioManager;
 import android.media.CamcorderProfile;
-import android.media.CameraProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -65,13 +65,23 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private boolean isShowCamera = false;
 
-	private static int round;
+	private int round;
 
 	private TakeOnSuccess takeOnSuccess;
 
 	private OnVideoRecordListener videoRecordListener;
 
 	private VideoRecordState recordState;
+
+	private long maxVideoRecordTime;
+
+	public long getMaxVideoRecordTime() {
+		return maxVideoRecordTime;
+	}
+
+	public void setMaxVideoRecordTime(long maxVideoRecordTime) {
+		this.maxVideoRecordTime = maxVideoRecordTime;
+	}
 
 	public static interface OnVideoRecordListener {
 		public void onRecordStart(String cacheFilePath);
@@ -426,11 +436,19 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 						w = 800;
 					}
 				}
-
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
 				mVideoSize = previewSize;
 				if (previewSize != null) {
-					parameters.setPreviewSize(previewSize.width, previewSize.height);
+					if (isBackFace) {
+						parameters.setPreviewSize(previewSize.width, previewSize.height);
+					} else {
+						int width = previewSize.width;
+						int height = previewSize.height;
+						if (width < height)
+							parameters.setPreviewSize(width, height);
+						else
+							parameters.setPreviewSize(height, width);
+					}
 				}
 
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
@@ -521,8 +539,12 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	private Size mVideoSize;
 
 	public void startVideoRecord() {
+		tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
+		// tempFile = new File(Environment.getExternalStorageDirectory(),
+		// "video.3gp");
+		if (tempFile.exists())
+			tempFile.delete();
 		CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-		mCamera.stopPreview();
 		mCamera.unlock();
 		if (mMediaRecorder == null)
 			mMediaRecorder = new MediaRecorder();
@@ -547,10 +569,11 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
 			// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
 			// this.mMediaRecorder.setAudioEncoder(paramCamcorderProfile.audioCodec);
-			this.mMediaRecorder.setOrientationHint(round);
-			tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
-			if (tempFile.exists())
-				tempFile.delete();
+			if (isBackFace) {
+				this.mMediaRecorder.setOrientationHint(round);
+			} else {
+				this.mMediaRecorder.setOrientationHint(270);
+			}
 			mMediaRecorder.setOutputFile(tempFile.getPath());
 			mMediaRecorder.prepare();
 			mMediaRecorder.start();
@@ -571,10 +594,23 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 			@Override
 			public void run() {
-				stopRecord();
+				mHandler.sendEmptyMessage(MSG_WHAT_STOP_RECORD);
 			}
-		}, Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
+		}, maxVideoRecordTime);
 	}
+
+	private static final int MSG_WHAT_STOP_RECORD = 20;
+	private Handler mHandler = new Handler() {
+		public void handleMessage(android.os.Message msg) {
+			switch (msg.what) {
+			case MSG_WHAT_STOP_RECORD:
+				stopRecord();
+				break;
+			default:
+				break;
+			}
+		};
+	};
 
 	public void stopRecord() {
 		try {
@@ -582,6 +618,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			// mCamera.stopPreview();
 			// mCamera.release();
 			mTimer.cancel();
+			mTimer = null;
 			// initCamera();
 			processVideoListener(VideoRecordState.END);
 		} catch (Exception e) {

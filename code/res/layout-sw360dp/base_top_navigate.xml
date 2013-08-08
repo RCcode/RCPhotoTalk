@@ -111,16 +111,4 @@
         android:src="@drawable/item_new_bg"
         android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/tv_filter_menu"
-        style="@style/filter_menu"
-        android:layout_toRightOf="@+id/title_linear_back"
-        android:gravity="right|center_vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:background="@null"
-        android:drawableRight="@drawable/btn_drift_filter"
-        android:visibility="gone" />
-
 </RelativeLayout>

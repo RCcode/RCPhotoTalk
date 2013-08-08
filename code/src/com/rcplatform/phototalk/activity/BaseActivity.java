@@ -36,6 +36,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	private boolean needRelogin = true;
 	private ActivityFunction functionImpl;
 	private String rcId;
+	private UserInfo currentUser;
 
 	public String getCurrentUserRcId() {
 		return rcId;
@@ -50,8 +51,9 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		super.onCreate(savedInstanceState);
 		baseContext = this;
 		functionImpl = new ActivityFunctionBasic(this);
-		if (getCurrentUser() != null)
-			rcId = getCurrentUser().getRcId();
+		currentUser = functionImpl.getCurrentUser();
+		if (currentUser != null)
+			rcId = currentUser.getRcId();
 	}
 
 	public int getStartMode() {
@@ -67,7 +69,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			dismissLoadingDialog();
+			dissmissLoadingDialog();
 			showReLoginDialog();
 		}
 	};
@@ -122,7 +124,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		hideSoftKeyboard(getCurrentFocus());
+//		hideSoftKeyboard(getCurrentFocus());
 		return super.onTouchEvent(event);
 	}
 
@@ -145,7 +147,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	}
 
 	public UserInfo getCurrentUser() {
-		return functionImpl.getCurrentUser();
+		return currentUser;
 	}
 
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
@@ -176,7 +178,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		dismissLoadingDialog();
+		dissmissLoadingDialog();
 	}
 
 	protected void deleteTemp() {
@@ -234,6 +236,8 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		if (needRelogin) {
 			UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
 			getPhotoTalkApplication().setCurrentUser(userInfo);
+			currentUser = userInfo;
+			rcId = currentUser.getRcId();
 		}
 	}
 }

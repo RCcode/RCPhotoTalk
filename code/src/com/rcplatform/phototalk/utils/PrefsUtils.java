@@ -23,6 +23,15 @@ public class PrefsUtils {
 		public static final String LAST_UPDATE_TIME = "last_update_time";
 		public static final String MAX_FISH_TIME = "maxfishtime";
 		public static final String HAS_ADD_SHORTCUT = "hasaddshortcut";
+		private static final String APPLICATION_START_TIME = "applicationstarttime";
+
+		public static void addApplicationStartTime(Context context) {
+			getPreference(context, PREF_APP_INFO).edit().putInt(APPLICATION_START_TIME, (getApplicationStartTime(context) + 1)).commit();
+		}
+
+		public static int getApplicationStartTime(Context context) {
+			return getPreference(context, PREF_APP_INFO).getInt(APPLICATION_START_TIME, 0);
+		}
 
 		public static void setNeverAttentionVersion(Context context, String version) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
