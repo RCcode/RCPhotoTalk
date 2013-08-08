@@ -20,7 +20,6 @@ import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -75,6 +74,10 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private long maxVideoRecordTime;
 
+	private long videoRecordStartTime;
+
+	private int videoLength;
+
 	public long getMaxVideoRecordTime() {
 		return maxVideoRecordTime;
 	}
@@ -86,7 +89,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	public static interface OnVideoRecordListener {
 		public void onRecordStart(String cacheFilePath);
 
-		public void onRecordEnd(String cacheFilePath);
+		public void onRecordEnd(String cacheFilePath,int videoLength);
 
 		public void onRecordFail();
 	}
@@ -122,6 +125,11 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		this.mContext = context;
 		app = (PhotoTalkApplication) context.getApplicationContext();
 		initCamera();
+	}
+
+	public void clearVideoTempFile() {
+		if (tempFile != null && tempFile.exists())
+			tempFile.delete();
 	}
 
 	@Override
@@ -542,8 +550,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
 		// tempFile = new File(Environment.getExternalStorageDirectory(),
 		// "video.3gp");
-		if (tempFile.exists())
-			tempFile.delete();
+		clearVideoTempFile();
 		CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 		mCamera.unlock();
 		if (mMediaRecorder == null)
@@ -579,6 +586,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			mMediaRecorder.start();
 			processVideoListener(VideoRecordState.START);
 			startTimerTask();
+			videoRecordStartTime = System.currentTimeMillis();
 		} catch (Exception e) {
 			e.printStackTrace();
 			processVideoListener(VideoRecordState.FAIL);
@@ -615,6 +623,12 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	public void stopRecord() {
 		try {
 			mMediaRecorder.stop();
+			long videoRecordTime = System.currentTimeMillis() - videoRecordStartTime;
+			if (videoRecordTime > Constants.TimeMillins.MAX_VIDEO_RECORD_TIME)
+				videoRecordTime = Constants.TimeMillins.MAX_VIDEO_RECORD_TIME;
+			videoLength = (int) (videoRecordTime / 1000);
+			if (videoLength == 0)
+				videoLength = 1;
 			// mCamera.stopPreview();
 			// mCamera.release();
 			mTimer.cancel();
@@ -647,7 +661,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				videoRecordListener.onRecordFail();
 				break;
 			case END:
-				videoRecordListener.onRecordEnd(tempFile.getPath());
+				videoRecordListener.onRecordEnd(tempFile.getPath(),videoLength);
 				break;
 			}
 		}

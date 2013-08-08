@@ -114,13 +114,13 @@ public class DriftInformationAdapter extends BaseAdapter {
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
 		holder.ivCountryFlag.setTag(tagBase + ImageView.class.getName() + "country");
 		if (record.getState() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED && !isSender(record)) {
-			if (record.getInformationCate() == InformationCategory.PHOTO) {
+			if (record.getType() == InformationCategory.PHOTO || record.getType() == InformationCategory.DEFAULT) {
 				if (record.hasVoice()) {
 					holder.item_new.setImageResource(R.drawable.new_item_voice);
 				} else {
 					holder.item_new.setImageResource(R.drawable.item_new_bg);
 				}
-			} else {
+			} else if (record.getType() == InformationCategory.VIDEO) {
 				holder.item_new.setImageResource(R.drawable.new_item_video);
 			}
 			holder.item_new.setVisibility(View.VISIBLE);

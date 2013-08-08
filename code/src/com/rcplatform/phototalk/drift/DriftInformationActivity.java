@@ -120,10 +120,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		ALL, MY_COUNTRY;
 	}
 
-	public static void setDriftShowMode(DriftShowMode mode) {
-		mShowMode = mode;
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -169,10 +165,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			}
 		});
 		initForwordButton(R.drawable.btn_drift_filter, new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				showFilterMenu();				
+				showFilterMenu();
 			}
 		});
 		mInformationList = (SnapListView) findViewById(R.id.lv_drift);
@@ -296,8 +292,9 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			}
 		}
 	};
+
 	private void initMenuButton() {
-		//TODO
+		// TODO
 	}
 
 	private void showFriendDetail(DriftInformation information) {
@@ -383,8 +380,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		record.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		PhotoTalkDatabaseFactory.getDatabase().resendDriftInformation(record.getFlag(), getCurrentUser().getRcId());
 		adapter.notifyDataSetChanged();
-		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(this, record.getFlag(), record.getUrl(), record.getInformationCate()),
-				getCurrentUser(), null, record.getTotleLength() + "", record.hasGraf(), record.hasVoice(), record.getUrl(), record.getFlag());
+		DriftProxy.throwDriftInformation(this, new ThrowDriftResponseHandler(this, record.getFlag(), record.getUrl(), record.getType()), getCurrentUser(),
+				null, record.getTotleLength() + "", record.hasGraf(), record.hasVoice(), record.getUrl(), record.getFlag(), record.getType());
 	}
 
 	private void deleteInformation(DriftInformation information) {
@@ -812,7 +809,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			public void onFishFail(String failReason) {
 				showConfirmDialog(failReason);
 			}
-		}));
+		}), mShowMode == DriftShowMode.MY_COUNTRY, false);
 	}
 
 	private void throwInformation() {

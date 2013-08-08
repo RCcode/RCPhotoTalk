@@ -51,8 +51,8 @@ import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
-import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
@@ -70,6 +70,8 @@ public class EditPictureActivity extends BaseActivity {
 
 	private List<View> showedButtons = new ArrayList<View>();
 	public static final String PARAM_KEY_VIDEO_PATH = "videopath";
+
+	public static final String PARAM_KEY_VIDEO_LENGTH = "videolength";
 
 	public static final String PARAM_KEY_PIC_ID = "picId";
 
@@ -378,6 +380,7 @@ public class EditPictureActivity extends BaseActivity {
 		switch (informationCate) {
 		case InformationCategory.VIDEO:
 			videoPath = getIntent().getStringExtra(PARAM_KEY_VIDEO_PATH);
+			timeLimit = getIntent().getIntExtra(PARAM_KEY_VIDEO_LENGTH, (int) Constants.TimeMillins.MAX_VIDEO_RECORD_TIME / 1000);
 			break;
 		default:
 			break;

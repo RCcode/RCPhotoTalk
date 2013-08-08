@@ -110,10 +110,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 		holder.item_new.setTag(tagBase + ImageView.class.getName());
 		if (record.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && record.getStatu() != InformationState.PhotoInformationState.STATU_NOTICE_OPENED
 				&& !LogicUtils.isSender(context, record)) {
-			if (record.getInformationCate() == InformationCategory.PHOTO) {
+			if (record.getInformationCate() == InformationCategory.PHOTO || record.getInformationCate() == InformationCategory.DEFAULT) {
 				if (record.isHasVoice()) {
 					holder.item_new.setImageResource(R.drawable.new_item_voice);
-				} else {
+				} else if (record.getInformationCate() == InformationCategory.VIDEO) {
 					holder.item_new.setImageResource(R.drawable.item_new_bg);
 				}
 			} else {

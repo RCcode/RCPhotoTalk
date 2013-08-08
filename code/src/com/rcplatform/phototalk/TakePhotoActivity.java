@@ -141,9 +141,9 @@ public class TakePhotoActivity extends Activity {
 			}
 
 			@Override
-			public void onRecordEnd(String cacheFilePath) {
+			public void onRecordEnd(String cacheFilePath,int videoLength) {
 				endVideoRecord();
-				startEditActivity(cacheFilePath);
+				startEditActivity(cacheFilePath,videoLength);
 			}
 		});
 	}
@@ -165,7 +165,7 @@ public class TakePhotoActivity extends Activity {
 
 		@Override
 		public void successMethod() {
-			startEditActivity(null);
+			startEditActivity(null,0);
 		}
 	};
 	private final OnClickListener clickListener = new OnClickListener() {
@@ -210,10 +210,10 @@ public class TakePhotoActivity extends Activity {
 		}
 	};
 
-	private void startEditActivity(String cachePath) {
+	private void startEditActivity(String cachePath,int videoLength) {
 		switch (mMode) {
 		case VIDEO:
-			startVideoEditActivity(cachePath);
+			startVideoEditActivity(cachePath,videoLength);
 			break;
 		case CAMERA:
 			startPhotoEditActivity();
@@ -223,12 +223,14 @@ public class TakePhotoActivity extends Activity {
 
 	public void startPhotoEditActivity() {
 		intent.setClass(this, EditPictureActivity.class);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_RECORD_CATE, InformationCategory.PHOTO);
 		startActivity(intent);
 	}
 
-	public void startVideoEditActivity(String path) {
+	public void startVideoEditActivity(String path,int videoLength) {
 		intent.setClass(this, EditPictureActivity.class);
 		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_PATH, path);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_LENGTH, videoLength);
 		intent.putExtra(EditPictureActivity.PARAM_KEY_RECORD_CATE, InformationCategory.VIDEO);
 		startActivity(intent);
 	}
@@ -268,14 +270,13 @@ public class TakePhotoActivity extends Activity {
 	}
 
 	private void changeToTakeCamera() {
-		// TODO
 		mButtonOpenFlashLight.setVisibility(View.VISIBLE);
 		mButtonTake.setVisibility(View.VISIBLE);
 		btnTakeVideo.setVisibility(View.GONE);
+		mCameraView.clearVideoTempFile();
 	}
 
 	private void changeToTakeVideo() {
-		// TODO
 		mButtonOpenFlashLight.setVisibility(View.GONE);
 		mButtonTake.setVisibility(View.GONE);
 		btnTakeVideo.setVisibility(View.VISIBLE);

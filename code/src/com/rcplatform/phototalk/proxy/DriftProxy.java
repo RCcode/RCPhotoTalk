@@ -52,7 +52,7 @@ public class DriftProxy {
 		request.excuteAsync();
 	}
 
-	public static void fishDrift(Context context, RCPlatformResponseHandler handler) {
+	public static void fishDrift(Context context, RCPlatformResponseHandler handler, boolean isCountry, boolean isGender) {
 		Request request = new Request(context, PhotoTalkApiUrl.FISH_DRIFT, handler);
 		UserInfo userInfo = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_COUNTRY, userInfo.getCountry());
@@ -61,6 +61,15 @@ public class DriftProxy {
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_OS_NAME, Constants.OS_NAME);
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_OS_VERSION, Constants.OS_VERSION);
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
+		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_TIMESNAMP, System.currentTimeMillis() + "");
+		if (isCountry)
+			request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_IS_COUNTRY, PhotoTalkParams.PARAM_VALUE_CONFIRM);
+		else
+			request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_IS_COUNTRY, PhotoTalkParams.PARAM_VALUE_NEGATE);
+		if (isGender)
+			request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_IS_GENDER, PhotoTalkParams.PARAM_VALUE_CONFIRM);
+		else
+			request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_IS_GENDER, PhotoTalkParams.PARAM_VALUE_NEGATE);
 		request.putParam(PhotoTalkParams.FishDrift.PARAM_KEY_TIMESNAMP, System.currentTimeMillis() + "");
 		request.excuteAsync();
 	}
@@ -73,7 +82,7 @@ public class DriftProxy {
 	}
 
 	public static void throwDriftInformation(Context context, RCPlatformResponseHandler responseHandler, UserInfo currentUser, String picUrl,
-			String totalLength, boolean hasGraf, boolean hasVoice, String filePath, long flag) {
+			String totalLength, boolean hasGraf, boolean hasVoice, String filePath, long flag, int informationCate) {
 		Request request = new Request(context, PhotoTalkApiUrl.THROW_DRIFT_URL, responseHandler);
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_BACKGROUND, currentUser.getBackground());
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_COUNTRY, currentUser.getCountry());
@@ -90,6 +99,7 @@ public class DriftProxy {
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_SHOW_LENGTH, totalLength);
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_BIRTHDAY, currentUser.getBirthday());
 		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_TIMEZONE, Utils.getTimeZoneId(context) + "");
+		request.putParam(PhotoTalkParams.ThrowDriftInformation.PARAM_KEY_TYPE, informationCate + "");
 		if (hasGraf)
 			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_GRAF, PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);
 		else

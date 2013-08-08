@@ -267,7 +267,7 @@ public class LogicUtils {
 		if (friends.size() == 1 && sendToStranges) {
 			// 只是扔漂流瓶
 			DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath(), informationCate), currentUser, null,
-					timeLimit, hasGraf, hasVoice, file.getPath(), flag);
+					timeLimit, hasGraf, hasVoice, file.getPath(), flag, informationCate);
 			return;
 		}
 		final StringBuilder sbNotifyTitle = new StringBuilder();
@@ -297,7 +297,7 @@ public class LogicUtils {
 						// 发送给好友后判断是否需要扔漂流瓶
 						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath(), informationCate),
 								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(),
-								flag);
+								flag, informationCate);
 					}
 				}
 
@@ -312,7 +312,7 @@ public class LogicUtils {
 						// 发送给好友失败后判断是否需要扔漂流瓶，如果需要扔，也尝试下
 						DriftProxy.throwDriftInformation(context, new ThrowDriftResponseHandler(context, flag, file.getPath(), informationCate),
 								((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser(), null, timeLimit, hasGraf, hasVoice, file.getPath(),
-								flag);
+								flag, informationCate);
 					}
 				}
 
@@ -353,7 +353,7 @@ public class LogicUtils {
 		tempDriftInformation.setReceiveTime(flag);
 		tempDriftInformation.setState(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		tempDriftInformation.setUrl(file.getPath());
-		tempDriftInformation.setInformationCate(informationCate);
+		tempDriftInformation.setType(informationCate);
 		return tempDriftInformation;
 	}
 

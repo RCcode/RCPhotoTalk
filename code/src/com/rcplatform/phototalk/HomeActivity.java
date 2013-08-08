@@ -193,7 +193,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private void addShortCutIcon() {
 		if (!PrefsUtils.AppInfo.hasAddShortCutIcon(this)) {
 			PrefsUtils.AppInfo.setAddedShortCutIcon(this);
-			Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.ic_launcher);
+			Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.take_photo);
 		}
 	}
 
