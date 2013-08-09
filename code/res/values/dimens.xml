@@ -113,7 +113,7 @@
     <!-- v2.0 陌生人引导页的布局 -->
     <dimen name="stranger_init_padding">65dp</dimen>
     <dimen name="stranger_init_padding_bottom">160dp</dimen>
-    <dimen name="vc_change_width">59dp</dimen>
-    <dimen name="vc_change_height">16dp</dimen>
+    <dimen name="take_photo_widget_width">48dp</dimen>
+    <dimen name="take_widget_icon_width">48dp</dimen>
 
 </resources>

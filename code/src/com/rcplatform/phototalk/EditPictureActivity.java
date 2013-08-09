@@ -26,6 +26,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -465,6 +466,7 @@ public class EditPictureActivity extends BaseActivity {
 
 		@Override
 		public void onClick(View v) {
+			hideSoftKeyboard(v);
 			int tag = (Integer) v.getTag();
 			switch (tag) {
 			case UNDO_ON_CLICK:
@@ -620,6 +622,21 @@ public class EditPictureActivity extends BaseActivity {
 
 	}
 
+	private boolean isEditTextNeedHide() {
+		return mEditText != null && mEditText.getVisibility() == View.VISIBLE && editText.getText().length() == 0;
+	}
+
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		if(event.getKeyCode()==KeyEvent.KEYCODE_BACK){
+			if (isEditTextNeedHide()) {
+				mEditText.setVisibility(View.GONE);
+				mEditText = null;
+			}
+		}
+		return super.dispatchKeyEvent(event);
+	}
+
 	private void startSelectFriendActivityPhoto() {
 		Intent intent = new Intent(this, SelectFriendsActivity.class);
 		intent.putExtra("timeLimit", timeLimit + "");
@@ -699,7 +716,6 @@ public class EditPictureActivity extends BaseActivity {
 		default:
 			break;
 		}
-
 		return super.onTouchEvent(event);
 	};
 
