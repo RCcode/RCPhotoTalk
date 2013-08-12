@@ -5,6 +5,7 @@ import java.io.File;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.View;
@@ -14,9 +15,10 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Switch;
+import android.widget.ImageView;
 
 import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.umeng.EventUtil;
@@ -59,13 +61,15 @@ public class TakePhotoActivity extends Activity {
 
 	private View btnTakeVideo;
 
-	private Switch vcChange;
+	private CheckBox vcChange;
 
 	private VideoRecordProgressView videoProgressView;
 
 	private TakeMode mMode;
 
 	private boolean isRecordingVideo = false;
+
+	private ImageView ivTakeVideoAttention;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +109,7 @@ public class TakePhotoActivity extends Activity {
 				}
 			}
 		});
-		vcChange = (Switch) findViewById(R.id.switch_vc);
+		vcChange = (CheckBox) findViewById(R.id.switch_vc);
 		vcChange.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
@@ -122,6 +126,17 @@ public class TakePhotoActivity extends Activity {
 		vcChange.setChecked(true);
 		videoProgressView = (VideoRecordProgressView) findViewById(R.id.video_progress);
 		linearVCChange = findViewById(R.id.linear_vc_change);
+		ivTakeVideoAttention = (ImageView) findViewById(R.id.iv_video_record_atttention);
+		ivTakeVideoAttention.setBackgroundResource(R.anim.video_record_animation);
+		animFrame = (AnimationDrawable) ivTakeVideoAttention.getBackground();
+	}
+
+	private void startVideoRecordFrameAnimation() {
+		animFrame.start();
+	}
+
+	private void stopVideoRecordFrameAnimation() {
+		animFrame.stop();
 	}
 
 	private void initCamera() {
@@ -141,20 +156,22 @@ public class TakePhotoActivity extends Activity {
 			}
 
 			@Override
-			public void onRecordEnd(String cacheFilePath,int videoLength) {
+			public void onRecordEnd(String cacheFilePath, int videoLength) {
 				endVideoRecord();
-				startEditActivity(cacheFilePath,videoLength);
+				startEditActivity(cacheFilePath, videoLength);
 			}
 		});
 	}
 
 	private void startVideoRecord() {
+		startVideoRecordFrameAnimation();
 		videoProgressView.startAnimation(0, 360, Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
 		linearVCChange.setVisibility(View.GONE);
 		mButtonChangeCamera.setVisibility(View.GONE);
 	}
 
 	private void endVideoRecord() {
+		stopVideoRecordFrameAnimation();
 		isRecordingVideo = false;
 		videoProgressView.resetAnimation();
 		linearVCChange.setVisibility(View.VISIBLE);
@@ -165,7 +182,7 @@ public class TakePhotoActivity extends Activity {
 
 		@Override
 		public void successMethod() {
-			startEditActivity(null,0);
+			startEditActivity(null, 0);
 		}
 	};
 	private final OnClickListener clickListener = new OnClickListener() {
@@ -210,10 +227,12 @@ public class TakePhotoActivity extends Activity {
 		}
 	};
 
-	private void startEditActivity(String cachePath,int videoLength) {
+	private AnimationDrawable animFrame;
+
+	private void startEditActivity(String cachePath, int videoLength) {
 		switch (mMode) {
 		case VIDEO:
-			startVideoEditActivity(cachePath,videoLength);
+			startVideoEditActivity(cachePath, videoLength);
 			break;
 		case CAMERA:
 			startPhotoEditActivity();
@@ -227,7 +246,7 @@ public class TakePhotoActivity extends Activity {
 		startActivity(intent);
 	}
 
-	public void startVideoEditActivity(String path,int videoLength) {
+	public void startVideoEditActivity(String path, int videoLength) {
 		intent.setClass(this, EditPictureActivity.class);
 		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_PATH, path);
 		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_LENGTH, videoLength);

@@ -24,10 +24,10 @@
             android:background="@drawable/close_edit_button_selector" />
 
         <LinearLayout
+            android:id="@+id/linear_vc_change"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:id="@+id/linear_vc_change"
             android:gravity="center_vertical" >
 
             <ImageView
@@ -36,11 +36,13 @@
                 android:layout_marginRight="5dp"
                 android:src="@drawable/take_camera" />
 
-            <Switch
+            <CheckBox
                 android:id="@+id/switch_vc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="5dp" />
+                android:layout_width="65dp"
+                android:layout_height="16dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/vc_change"
+                android:button="@null" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -83,9 +85,9 @@
             android:id="@+id/btn_take_video"
             android:layout_width="69dp"
             android:layout_height="69dp"
-            android:clickable="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/take_video_bg" >
+            android:background="@drawable/take_video_bg"
+            android:clickable="true" >
 
             <com.rcplatform.phototalk.views.VideoRecordProgressView
                 android:id="@+id/video_progress"
@@ -93,10 +95,10 @@
                 android:layout_height="match_parent" />
 
             <ImageView
+                android:id="@+id/iv_video_record_atttention"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:src="@drawable/red_point_record_video" />
+                android:layout_centerInParent="true" />
         </RelativeLayout>
     </RelativeLayout>
 

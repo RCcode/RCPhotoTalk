@@ -49,6 +49,7 @@ import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.bean.InformationClassification;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.logic.LogicUtils;
 import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
@@ -381,6 +382,8 @@ public class EditPictureActivity extends BaseActivity {
 		switch (informationCate) {
 		case InformationCategory.VIDEO:
 			videoPath = getIntent().getStringExtra(PARAM_KEY_VIDEO_PATH);
+			File file=new File(videoPath);
+			LogUtil.e(file.exists()+"..."+file.getTotalSpace());
 			timeLimit = getIntent().getIntExtra(PARAM_KEY_VIDEO_LENGTH, (int) Constants.TimeMillins.MAX_VIDEO_RECORD_TIME / 1000);
 			break;
 		default:
@@ -444,7 +447,9 @@ public class EditPictureActivity extends BaseActivity {
 				mp.start();
 			}
 		});
-		videoView.setVideoPath(videoPath);
+		videoView.setVideoURI(Uri.parse(videoPath));
+//		videoView.setVideoPath(videoPath);
+		LogUtil.e(videoPath);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -163,8 +165,9 @@ public class LongClickShowView extends Dialog {
 	}
 
 	private void playVideo(File file, Information info) {
+		LogUtil.e(file.getTotalSpace()+"~~~~~~~~~~~~~~~~~"+file.getPath());
 		Builder.mVideoView.setVisibility(View.VISIBLE);
-		Builder.mVideoView.setVideoPath(file.getPath());
+		Builder.mVideoView.setVideoURI(Uri.fromFile(file));
 		Builder.mVideoView.start();
 		if (info.getTotleLength() != info.getLimitTime())
 			Builder.mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);

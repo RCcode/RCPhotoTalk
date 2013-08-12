@@ -38,6 +38,7 @@ import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.FacebookUtil;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.PrefsUtils;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.tigase.TigaseMessageBinderService;
 import com.rcplatform.tigase.TigaseMessageBinderService.LocalBinder;
 import com.rcplatform.tigase.TigaseMessageReceiver;
@@ -133,38 +134,33 @@ public class PhotoTalkApplication extends Application {
 	}
 
 	public String getSendFileCachePath() {
-		String imagePath = "";
-		String sdUrl = getCacheDir() + "/temp";
-		File file = new File(sdUrl);
-		if (!file.exists()) {
-			file.mkdir();
+//		String imagePath = "";
+//		String sdUrl =getFilesDir().getPath()+"/temp";
+//		File file = new File(sdUrl);
+//		if (!file.exists()) {
+//			file.mkdir();
+//		}
+//		imagePath = file.getAbsolutePath();
+//		return imagePath;
+		if (Utils.isExternalStorageUsable()) {
+			return Constants.PhotoInformationCache.SEND_CACHE.getPath();
 		}
-		imagePath = file.getAbsolutePath();
-		// }
-		return imagePath;
-	}
-
-	public String getCameraFileCachePath() {
-		String imagePath = "";
-		String sdUrl = getCacheDir() + "/RcCamera";
-		File file = new File(sdUrl);
-		if (!file.exists()) {
-			file.mkdir();
-		}
-		imagePath = file.getAbsolutePath();
-		// }
-		return imagePath;
+		return null;
 	}
 
 	public String getSendZipFileCachePath() {
-		String imagePath = "";
-		String sdUrl = getCacheDir() + "/zip";
-		File file = new File(sdUrl);
-		if (!file.exists()) {
-			file.mkdir();
+//		String imagePath = "";
+//		String sdUrl = getFilesDir().getPath()+"/zip";
+//		File file = new File(sdUrl);
+//		if (!file.exists()) {
+//			file.mkdir();
+//		}
+//		imagePath = file.getPath();
+//		return imagePath;
+		if (Utils.isExternalStorageUsable()) {
+			return Constants.PhotoInformationCache.ZIP_CACHE.getPath();
 		}
-		imagePath = file.getPath();
-		return imagePath;
+		return null;
 	}
 
 	public String getCameraPath() {
@@ -176,16 +172,6 @@ public class PhotoTalkApplication extends Application {
 		} else {
 			imagePath = "/stystem/DCIM/Camera/photoTalk_" + System.currentTimeMillis() + ".jpg";
 		}
-		return imagePath;
-	}
-
-	public String getBackgroundCachePath() {
-		String imagePath = "";
-		String sdUrl = getCacheDir().toString() + "/PhotoTalk";
-		File file = new File(sdUrl);
-		if (!file.exists())
-			file.mkdir();
-		imagePath = file.getAbsolutePath();
 		return imagePath;
 	}
 

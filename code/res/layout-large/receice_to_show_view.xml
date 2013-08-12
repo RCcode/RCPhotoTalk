@@ -2,13 +2,19 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background ="#ff000000"
+    android:background="#ff000000"
     android:orientation="vertical" >
-    	
-    <ImageView 
+
+    <com.rcplatform.phototalk.views.RCVideoView
+        android:id="@+id/vv_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <ImageView
         android:id="@+id/iv_rts_pic"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:scaleType="fitCenter"
-        />
+        android:scaleType="fitCenter" />
+
 </RelativeLayout>

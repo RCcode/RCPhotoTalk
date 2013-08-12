@@ -52,14 +52,6 @@ public class PhotoTalkUtils {
 		return sbPath.toString();
 	}
 
-	public static File getInformationSendCacheDir() {
-		File file = new File(Constants.PhotoInformationCache.SEND_CACHE, System.currentTimeMillis() + "");
-		if (file.exists())
-			file.delete();
-		file.mkdirs();
-		return file;
-	}
-
 	public static String getUnZipDirPath(String url) {
 		return getFilePath(url) + Constants.PhotoInformationCache.UNZIP_SUFFIX;
 	}

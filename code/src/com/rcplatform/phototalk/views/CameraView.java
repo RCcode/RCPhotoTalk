@@ -6,6 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -20,6 +21,7 @@ import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -89,7 +91,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	public static interface OnVideoRecordListener {
 		public void onRecordStart(String cacheFilePath);
 
-		public void onRecordEnd(String cacheFilePath,int videoLength);
+		public void onRecordEnd(String cacheFilePath, int videoLength);
 
 		public void onRecordFail();
 	}
@@ -547,50 +549,57 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	private Size mVideoSize;
 
 	public void startVideoRecord() {
-		tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
-		// tempFile = new File(Environment.getExternalStorageDirectory(),
-		// "video.3gp");
-		clearVideoTempFile();
-		CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
-		mCamera.unlock();
-		if (mMediaRecorder == null)
-			mMediaRecorder = new MediaRecorder();
-		else
-			mMediaRecorder.reset();
-		try {
-			this.mMediaRecorder.setCamera(mCamera);
-			this.mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-			this.mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
-			// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
-			this.mMediaRecorder.setProfile(paramCamcorderProfile);
-			// if (mVideoSize != null)
-			// this.mMediaRecorder.setVideoSize(mVideoSize.width,
-			// mVideoSize.height);
-			// else
-			// this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
-			// paramCamcorderProfile.videoFrameHeight);
-			this.mMediaRecorder.setVideoFrameRate(30);
-			// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
-			this.mMediaRecorder.setVideoEncodingBitRate(1000000);
-			// this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
-			// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
-			// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
-			// this.mMediaRecorder.setAudioEncoder(paramCamcorderProfile.audioCodec);
-			if (isBackFace) {
-				this.mMediaRecorder.setOrientationHint(round);
-			} else {
-				this.mMediaRecorder.setOrientationHint(270);
-			}
-			mMediaRecorder.setOutputFile(tempFile.getPath());
-			mMediaRecorder.prepare();
-			mMediaRecorder.start();
-			processVideoListener(VideoRecordState.START);
-			startTimerTask();
-			videoRecordStartTime = System.currentTimeMillis();
-		} catch (Exception e) {
-			e.printStackTrace();
-			processVideoListener(VideoRecordState.FAIL);
-		}
+		showLoadingDialog();
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
+					// tempFile = new
+					// File(Environment.getExternalStorageDirectory(),
+					// "video.3gp");
+					clearVideoTempFile();
+					CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
+					mCamera.unlock();
+					if (mMediaRecorder == null)
+						mMediaRecorder = new MediaRecorder();
+					else
+						mMediaRecorder.reset();
+
+					mMediaRecorder.setCamera(mCamera);
+					mMediaRecorder.setPreviewDisplay(mHolder.getSurface());
+					mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+					mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
+					// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
+					mMediaRecorder.setProfile(paramCamcorderProfile);
+					// if (mVideoSize != null)
+					// this.mMediaRecorder.setVideoSize(mVideoSize.width,
+					// mVideoSize.height);
+					// else
+					// this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
+					// paramCamcorderProfile.videoFrameHeight);
+					// this.mMediaRecorder.setVideoFrameRate(30);
+					// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
+					mMediaRecorder.setVideoEncodingBitRate(1000000);
+					// this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
+					// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
+					// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
+					// this.mMediaRecorder.setAudioEncoder(paramCamcorderProfile.audioCodec);
+					if (isBackFace) {
+						mMediaRecorder.setOrientationHint(round);
+					} else {
+						mMediaRecorder.setOrientationHint(270);
+					}
+					mMediaRecorder.setOutputFile(tempFile.getPath());
+					mMediaRecorder.prepare();
+					mMediaRecorder.start();
+					mHandler.sendEmptyMessage(MSG_WHAT_VIDEO_RECORD_STARTED);
+				} catch (Exception e) {
+					e.printStackTrace();
+					mHandler.sendEmptyMessage(MSG_WHAT_VIDEO_RECORD_FAIL);
+				}
+			};
+		};
+		thread.start();
 	}
 
 	private Timer mTimer;
@@ -608,11 +617,24 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	private static final int MSG_WHAT_STOP_RECORD = 20;
+
+	protected static final int MSG_WHAT_VIDEO_RECORD_STARTED = 21;
+
+	protected static final int MSG_WHAT_VIDEO_RECORD_FAIL = 0;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
+			dismissLoadingDialog();
 			switch (msg.what) {
 			case MSG_WHAT_STOP_RECORD:
 				stopRecord();
+				break;
+			case MSG_WHAT_VIDEO_RECORD_STARTED:
+				processVideoListener(VideoRecordState.START);
+				startTimerTask();
+				videoRecordStartTime = System.currentTimeMillis();
+				break;
+			case MSG_WHAT_VIDEO_RECORD_FAIL:
+				processVideoListener(VideoRecordState.FAIL);
 				break;
 			default:
 				break;
@@ -642,6 +664,25 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		}
 	}
 
+	private ProgressDialog loadingDialog;
+
+	private void showLoadingDialog() {
+		if (loadingDialog == null) {
+			loadingDialog = new ProgressDialog(getContext());
+			loadingDialog.setCancelable(false);
+		}
+		loadingDialog.show();
+	}
+
+	private void dismissLoadingDialog() {
+		try {
+			if (loadingDialog != null && loadingDialog.isShowing())
+				loadingDialog.dismiss();
+		} catch (Exception e) {
+
+		}
+	}
+
 	private void processVideoListener(VideoRecordState state) {
 		recordState = state;
 		if (videoRecordListener != null) {
@@ -661,7 +702,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				videoRecordListener.onRecordFail();
 				break;
 			case END:
-				videoRecordListener.onRecordEnd(tempFile.getPath(),videoLength);
+				videoRecordListener.onRecordEnd(tempFile.getPath(), videoLength);
 				break;
 			}
 		}

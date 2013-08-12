@@ -113,11 +113,17 @@ public class Constants {
 	}
 
 	private static void initTempFileDir(Context context) {
-		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
+
 		if (Utils.isExternalStorageUsable()) {
+			File unZipDir = new File(Environment.getExternalStorageDirectory(), ".rcplatform/unzip_cache");
+			PhotoInformationCache.FILE_PATH = unZipDir.getPath();
 			PhotoInformationCache.SEND_CACHE = new File(Environment.getExternalStorageDirectory(), ".rcplatform/send_cache");
 			if (!PhotoInformationCache.SEND_CACHE.exists()) {
 				PhotoInformationCache.SEND_CACHE.mkdirs();
+			}
+			PhotoInformationCache.ZIP_CACHE = new File(Environment.getExternalStorageDirectory(), ".rcplatform/zip_cache");
+			if (!PhotoInformationCache.ZIP_CACHE.exists()) {
+				PhotoInformationCache.ZIP_CACHE.mkdirs();
 			}
 		}
 	}
@@ -305,7 +311,7 @@ public class Constants {
 		public static String FILE_PATH;
 
 		public static File SEND_CACHE;
-
+		public static File ZIP_CACHE;
 		public static final String UNZIP_SUFFIX = "_unzip";
 	}
 
