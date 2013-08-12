@@ -236,11 +236,13 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	private void releaseMediaRecorder() {
-		if (mMediaRecorder != null && recordState != VideoRecordState.END) {
+		if (mTimer != null) {
 			mTimer.cancel();
-			mMediaRecorder.stop();
+			mTimer = null;
 		}
 		if (mMediaRecorder != null) {
+			if (VideoRecordState.START == recordState)
+				mMediaRecorder.stop();
 			mMediaRecorder.release();
 			mMediaRecorder = null;
 		}
@@ -449,16 +451,18 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
 				mVideoSize = previewSize;
 				if (previewSize != null) {
-					if (isBackFace) {
-						parameters.setPreviewSize(previewSize.width, previewSize.height);
-					} else {
-						int width = previewSize.width;
-						int height = previewSize.height;
-						if (width < height)
-							parameters.setPreviewSize(width, height);
-						else
-							parameters.setPreviewSize(height, width);
-					}
+					// if (isBackFace) {
+					// parameters.setPreviewSize(previewSize.width,
+					// previewSize.height);
+					// } else {
+					// int width = previewSize.width;
+					// int height = previewSize.height;
+					// if (getResources().getConfiguration().orientation ==
+					// Configuration.ORIENTATION_PORTRAIT)
+					// parameters.setPreviewSize(width, height);
+					// else
+					// parameters.setPreviewSize(height, width);
+					// }
 				}
 
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
@@ -579,7 +583,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					// paramCamcorderProfile.videoFrameHeight);
 					// this.mMediaRecorder.setVideoFrameRate(30);
 					// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
-					mMediaRecorder.setVideoEncodingBitRate(1000000);
+//					if (isBackFace)
+						mMediaRecorder.setVideoEncodingBitRate(1000000);
 					// this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
 					// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
 					// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);

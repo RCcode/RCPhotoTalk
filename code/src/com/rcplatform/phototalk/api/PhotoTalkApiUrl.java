@@ -1,9 +1,9 @@
 package com.rcplatform.phototalk.api;
 
 public class PhotoTalkApiUrl {
-//	private static final String BASE_URL = "http://pt.rcplatformhk.net/";
+	// private static final String BASE_URL = "http://pt.rcplatformhk.net/";
 	private static final String BASE_URL = "http://192.168.0.86:8083/";
-//	 private static final String BASE_URL = "http://192.168.0.114/";
+	// private static final String BASE_URL = "http://192.168.0.114/";
 
 	private static final String BASE_URL_FOR_PHOTOTALK = BASE_URL + "phototalk/";
 
@@ -89,9 +89,10 @@ public class PhotoTalkApiUrl {
 
 	// -----------------------------------------------------------------------------------------------------------------------------------
 
-//	private static final String RCBOSS_BASE_URL = "http://rc.rcplatformhk.net/";
+	// private static final String RCBOSS_BASE_URL =
+	// "http://rc.rcplatformhk.net/";
 	private static final String RCBOSS_BASE_URL = "http://192.168.0.86:8083/";
-//	private static final String RCBOSS_BASE_URL = "http://192.168.0.114/";
+	// private static final String RCBOSS_BASE_URL = "http://192.168.0.114/";
 
 	private static final String BASE_URL_FOR_RCBOSS = RCBOSS_BASE_URL + "rcboss/";
 
@@ -126,19 +127,20 @@ public class PhotoTalkApiUrl {
 	public static final String LOGOUT_URL = RCBOSS_USER_URL + "userLogout.do";
 	public static final String RCPLATFORM_ACCTION_CREATE_USERINFO = RCBOSS_USER_URL + "createUserInfo.do";
 	public static final String CLIENT_LOG_URL = BASE_URL_FOR_RCBOSS + "config/insClientLog.do";
-//	public static final String CHANGE_COUNTRY_CODE= "http://192.168.0.114/skypool/pool/editProfile.do";
-
+	// public static final String CHANGE_COUNTRY_CODE=
+	// "http://192.168.0.114/skypool/pool/editProfile.do";
 
 	// --------------------------------------------------------------------------------------------
 	public static final String SKY_POOL_BASE_URL = "http://192.168.0.86:8083/skypool/";
-//	public static final String SKY_POOL_BASE_URL = "http://sky.rcplatformhk.net/skypool/";
+	// public static final String SKY_POOL_BASE_URL =
+	// "http://sky.rcplatformhk.net/skypool/";
 	public static final String BASE_URL_FOR_POOL = SKY_POOL_BASE_URL + "pool/";
 	public static final String REPORT_URL = BASE_URL_FOR_POOL + "reportPic.do";
-	public static final String THROW_DRIFT_URL=BASE_URL_FOR_POOL+"throwBottle.do";
-	public static final String FISH_DRIFT = BASE_URL_FOR_POOL+"getBottle.do";
-	public static final String DRIFT_SHOW_TIME_URL=BASE_URL_FOR_POOL+"getViewTimes.do";
-	public static final String SKY_POOL_ADD_FRIEND=BASE_URL_FOR_POOL+"addFriend.do";
-	public static final String MAX_FISH_TIMES_URL=BASE_URL_FOR_POOL+"loadConfig.do";
-	public static final String DRIFT_BACK_URL=BASE_URL_FOR_POOL+"messageLog.do";
-	public static final String CHANGE_COUNTRY_CODE= BASE_URL_FOR_POOL+"editProfile.do";
+	public static final String THROW_DRIFT_URL = BASE_URL_FOR_POOL + "throwBottle.do";
+	public static final String FISH_DRIFT = BASE_URL_FOR_POOL + "getBottle.do";
+	public static final String DRIFT_SHOW_TIME_URL = BASE_URL_FOR_POOL + "getViewTimes.do";
+	public static final String SKY_POOL_ADD_FRIEND = BASE_URL_FOR_POOL + "addFriend.do";
+	public static final String MAX_FISH_TIMES_URL = BASE_URL_FOR_POOL + "loadConfig.do";
+	public static final String DRIFT_BACK_URL = BASE_URL_FOR_POOL + "messageLog.do";
+	public static final String CHANGE_COUNTRY_CODE = BASE_URL_FOR_POOL + "editProfile.do";
 }
