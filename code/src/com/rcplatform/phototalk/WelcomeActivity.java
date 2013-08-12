@@ -120,8 +120,8 @@ public class WelcomeActivity extends BaseActivity {
 		if (userInfo != null) {
 			getPhotoTalkApplication().setCurrentUser(userInfo);
 			Intent intent = new Intent(WelcomeActivity.this, HomeActivity.class);
-			int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
-			if (startMode != -1) {
+			int startMode = getStartMode();
+			if (startMode != Constants.ApplicationStartMode.APPLCATION_START_NORMAL) {
 				intent.putExtra(ApplicationStartMode.APPLICATION_START_KEY, startMode);
 			}
 			startActivity(intent);

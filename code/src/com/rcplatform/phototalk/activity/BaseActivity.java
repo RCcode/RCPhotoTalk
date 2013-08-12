@@ -35,6 +35,12 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	protected Context baseContext;
 	private boolean needRelogin = true;
 	private ActivityFunction functionImpl;
+	private String rcId;
+	private UserInfo currentUser;
+
+	public String getCurrentUserRcId() {
+		return rcId;
+	}
 
 	protected void cancelRelogin() {
 		needRelogin = false;
@@ -45,6 +51,13 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		super.onCreate(savedInstanceState);
 		baseContext = this;
 		functionImpl = new ActivityFunctionBasic(this);
+		currentUser = functionImpl.getCurrentUser();
+		if (currentUser != null)
+			rcId = currentUser.getRcId();
+	}
+
+	public int getStartMode() {
+		return getIntent().getIntExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLCATION_START_NORMAL);
 	}
 
 	@Override
@@ -56,7 +69,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			dismissLoadingDialog();
+			dissmissLoadingDialog();
 			showReLoginDialog();
 		}
 	};
@@ -111,7 +124,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		hideSoftKeyboard(getCurrentFocus());
+		// hideSoftKeyboard(getCurrentFocus());
 		return super.onTouchEvent(event);
 	}
 
@@ -134,7 +147,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	}
 
 	public UserInfo getCurrentUser() {
-		return functionImpl.getCurrentUser();
+		return currentUser;
 	}
 
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
@@ -165,7 +178,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		dismissLoadingDialog();
+		dissmissLoadingDialog();
 	}
 
 	protected void deleteTemp() {
@@ -222,8 +235,11 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		Constants.initUIData(this);
 		if (needRelogin) {
 			UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
-			if (userInfo != null)
+			if (userInfo != null) {
 				getPhotoTalkApplication().setCurrentUser(userInfo);
+				currentUser = userInfo;
+				rcId = currentUser.getRcId();
+			}
 		}
 	}
 }

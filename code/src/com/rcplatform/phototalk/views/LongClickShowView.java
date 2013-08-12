@@ -2,8 +2,9 @@ package com.rcplatform.phototalk.views;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,17 +14,20 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.VideoView;
 
 import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.bean.InformationType;
 import com.rcplatform.phototalk.drift.DriftInformation;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -64,6 +68,8 @@ public class LongClickShowView extends Dialog {
 
 		private static MediaPlayer mAudioPlayer;
 
+		private static VideoView mVideoView;
+
 		private int layoutResId;
 
 		private LongClickShowView dialog;
@@ -88,6 +94,7 @@ public class LongClickShowView extends Dialog {
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);
 				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
+				mVideoView = (VideoView) dialog.contentView.findViewById(R.id.vv_show);
 				dialog.setContentView(dialog.contentView);
 			} else {
 				// dialog.setContentView(dialog.contentView);
@@ -104,6 +111,7 @@ public class LongClickShowView extends Dialog {
 	}
 
 	public void ShowDialog(Information info) {
+		resetViews();
 		if (info.getUrl() == null)
 			return;
 		if (glTimer == null) {
@@ -111,7 +119,7 @@ public class LongClickShowView extends Dialog {
 		}
 		if (info.getType() == InformationType.TYPE_PICTURE_OR_VIDEO) {// 图片
 			try {
-				File[] files = unZipFile(info.getUrl());
+				List<File> files = unZipFile(info.getUrl());
 				showZipContent(files, info);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -125,13 +133,14 @@ public class LongClickShowView extends Dialog {
 	}
 
 	public void ShowDialog(DriftInformation info) {
+		resetViews();
 		if (info.getUrl() == null)
 			return;
 		if (glTimer == null) {
 			initTimer();
 		}
 		try {
-			File[] files = unZipFile(info.getUrl());
+			List<File> files = unZipFile(info.getUrl());
 			showZipContent(files, info);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -139,44 +148,82 @@ public class LongClickShowView extends Dialog {
 		glTimer.scheuleTask(info);
 		show();
 	}
-
-	private void showZipContent(File[] fileList, Information info) throws Exception {
+	private void resetViews(){
+		Builder.mImageView.setImageBitmap(null);
+	}
+	private void showZipContent(List<File> fileList, Information info) throws Exception {
 		for (File file : fileList) {
 			if (isImage(file.getName())) {
 				showImage(file);
 			} else if (isAudio(file.getName())) {
 				playAudio(file, info);
+			} else if (isVideo(file.getName())) {
+				playVideo(file, info);
 			}
 		}
 		glTimer.setVisibility(View.VISIBLE);
 		Builder.mImageView.setVisibility(View.VISIBLE);
 	}
 
-	private void showZipContent(File[] fileList, DriftInformation info) throws Exception {
+	private void playVideo(File file, Information info) {
+		LogUtil.e(file.getTotalSpace()+"~~~~~~~~~~~~~~~~~"+file.getPath());
+		Builder.mVideoView.setVisibility(View.VISIBLE);
+		Builder.mVideoView.setVideoURI(Uri.fromFile(file));
+		Builder.mVideoView.start();
+		if (info.getTotleLength() != info.getLimitTime())
+			Builder.mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
+	}
+	private void playVideo(File file, DriftInformation info) {
+		Builder.mVideoView.setVisibility(View.VISIBLE);
+		Builder.mVideoView.setVideoPath(file.getPath());
+		Builder.mVideoView.start();
+		if (info.getTotleLength() != info.getLimitTime())
+			Builder.mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
+	}
+
+	private void showZipContent(List<File> fileList, DriftInformation info) throws Exception {
 		for (File file : fileList) {
 			if (isImage(file.getName())) {
 				showImage(file);
 			} else if (isAudio(file.getName())) {
 				playAudio(file, info);
+			}else if(isVideo(file.getName())){
+				playVideo(file, info);
 			}
 		}
 		glTimer.setVisibility(View.VISIBLE);
 		Builder.mImageView.setVisibility(View.VISIBLE);
 	}
 
-	private File[] unZipFile(String url) throws Exception {
+	private List<File> unZipFile(String url) throws Exception {
+		resultFiles.clear();
 		String unZipPath = getUnZipPath(url);
 		File file = new File(unZipPath);
-		if (file.exists())
-			return file.listFiles()[0].listFiles();
-		else {
+		if (file.exists()) {
+			listFiles(file);
+			return resultFiles;
+		} else {
 			if (file.mkdirs()) {
 				String filePath = PhotoTalkUtils.getFilePath(url);
 				ZipUtil.UnZipFolder(filePath, unZipPath);
-				return file.listFiles()[0].listFiles();
+				listFiles(file);
+				return resultFiles;
 			}
 		}
 		return null;
+	}
+
+	private List<File> resultFiles = new ArrayList<File>();
+
+	private void listFiles(File file) {
+
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				listFiles(f);
+			}
+		} else {
+			resultFiles.add(file);
+		}
 	}
 
 	private String getUnZipPath(String url) {
@@ -231,10 +278,17 @@ public class LongClickShowView extends Dialog {
 		return fileName.endsWith(Constants.AUDIO_FORMAT);
 	}
 
+	private boolean isVideo(String fileName) {
+		return fileName.endsWith(Constants.VIDEO_FORMAT);
+	}
+
 	public void hideDialog() {
 		hide();
 		// Builder.mImageView = null;
 		Builder.mAudioPlayer.stop();
+		if (Builder.mVideoView.getVisibility() == View.VISIBLE && Builder.mVideoView.isPlaying())
+			Builder.mVideoView.pause();
+		Builder.mVideoView.setVisibility(View.GONE);
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;

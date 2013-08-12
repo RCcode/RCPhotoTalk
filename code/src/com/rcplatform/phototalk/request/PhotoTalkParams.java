@@ -1,12 +1,10 @@
 package com.rcplatform.phototalk.request;
 
-import java.util.Locale;
-
 import android.content.Context;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.bean.UserInfo;
-import com.rcplatform.phototalk.galhttprequest.GalHttpRequest;
 import com.rcplatform.phototalk.utils.Constants;
 
 public class PhotoTalkParams {
@@ -20,7 +18,9 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = UserInfo.DEFAULT_TOKEN;
-
+	
+	public static final String PARAM_VALUE_CONFIRM = "1";
+	public static final String PARAM_VALUE_NEGATE = "0";
 	public static class ChangePassword {
 		public static final String PARAM_KEY_CHECK_PASSWORD = "pwd";
 		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
@@ -208,14 +208,18 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_COUNTRY = "country";
 		public static final String PARAM_KEY_GENDER = "gender";
 		public static final String PARAM_KEY_TIMESNAMP = "timeStamp";
+		public static final String PARAM_KEY_IS_COUNTRY = "iscountry";
+		public static final String PARAM_KEY_IS_GENDER = "isGender";
 	}
+
+	
 
 	public static class DriftShowTime {
 		public static final String PARAM_KEY_PICIDS = "picIds";
 	}
 
 	public static class ThrowDriftInformation {
-		public static final String PARAM_KEY_HEAD_URL="headUrl";
+		public static final String PARAM_KEY_HEAD_URL = "headUrl";
 		public static final String PARAM_KEY_GENDER = "gender";
 		public static final String PARAM_KEY_NICK = "nick";
 		public static final String PARAM_KEY_BACKGROUND = "backUrl";
@@ -228,6 +232,10 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_OSVERSION = "osVersion";
 		public static final String PARAM_KEY_FILE = "file";
 		public static final String PARAM_KEY_BIRTHDAY = "birthday";
+		public static final String PARAM_KEY_TYPE = "type";
+
+		public static final String PARAM_VALUE_TYPE_PHOTO = InformationCategory.PHOTO + "";
+		public static final String PARAM_VALUE_TYPE_VIDEO = InformationCategory.VIDEO + "";
 	}
 
 	public static class DriftBackLog {

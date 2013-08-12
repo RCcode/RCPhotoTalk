@@ -11,15 +11,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.Context;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
 import com.rcplatform.phototalk.R;
-import com.rcplatform.phototalk.activity.BaseActivity;
 import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
-import com.rcplatform.phototalk.bean.Contacts;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
 import com.rcplatform.phototalk.bean.Information;
@@ -30,12 +27,9 @@ import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
 import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
-import com.rcplatform.phototalk.request.inf.OnFriendsLoadedListener;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
 import com.rcplatform.phototalk.request.inf.PhotoSendListener;
-import com.rcplatform.phototalk.thirdpart.utils.ThirdPartUtils;
 import com.rcplatform.phototalk.utils.Constants;
-import com.rcplatform.phototalk.utils.ContactUtil;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.RCThreadPool;
@@ -215,7 +209,7 @@ public class Request implements Serializable {
 	}
 
 	public static void sendPhoto(final Context context, final long flag, final File file, final String timeLimit, final PhotoSendListener listener,
-			final List<String> friendIds, final boolean hasVoice, final boolean hasDraw) {
+			final List<String> friendIds, final boolean hasVoice, final boolean hasDraw, final int informationCate) {
 		final UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		try {
 			JSONArray jsonArray = new JSONArray();
@@ -237,7 +231,7 @@ public class Request implements Serializable {
 							long flag = jsonObject.getLong("time");
 							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
 									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
-									Integer.parseInt(timeLimit), hasVoice);
+									Integer.parseInt(timeLimit), hasVoice, informationCate);
 							MessageSender.getInstance().sendInformation(context, informations, userIds);
 							listener.onSendSuccess(flag, informationUrl);
 							RCThreadPool.getInstance().addTask(new Runnable() {
@@ -263,7 +257,7 @@ public class Request implements Serializable {
 						listener.onFail(flag, errorCode, content);
 						UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice);
+								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice, informationCate);
 					}
 				};
 			}
@@ -287,7 +281,7 @@ public class Request implements Serializable {
 			e.printStackTrace();
 			listener.onFail(flag, RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice);
+					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice, informationCate);
 		}
 	}
 

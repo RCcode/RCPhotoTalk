@@ -41,12 +41,13 @@ public class PhotoInformationCountDownService {
 		if (!mShowingInformations.containsKey(PhotoTalkUtils.getInformationTagBase(info))) {
 			info.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
 			RCThreadPool.getInstance().addTask(new Runnable() {
-
+				
 				@Override
 				public void run() {
-					PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);
+					PhotoTalkDatabaseFactory.getDatabase().updateInformationState(info);					
 				}
 			});
+		
 			mShowingInformations.put(PhotoTalkUtils.getInformationTagBase(info), info);
 			startCountDown(info);
 		}

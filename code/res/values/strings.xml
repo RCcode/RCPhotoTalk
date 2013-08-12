@@ -383,7 +383,7 @@
     <!-- 漂流瓶对话框 -->
     <string name="havenot_throw_today">今天还没有扔瓶子</string>
     <string name="go_to_comment">去评价</string>
-    <string name="comment_message">喜欢我们的产品？去评一个呗</string>
+    <string name="comment_message">喜欢FriendMe，马上给我们进行评分。</string>
     <!-- v2.0 -->
     <string name="know_strangers">Make new friends</string>
     <string name="new_init_message">New to version 2.0 - now you can make friends from all over the world!</string>
@@ -401,6 +401,19 @@
     <string name="show_all_drift">All</string>
     <string name="show_send_drift">Uploaded</string>
     <string name="show_receive_drift">Received</string>
-
     <string name="add_friend_success">Added</string>
+
+    <!-- friendMe New Text -->
+
+    <string name="sending_to_stranger">发送视频到结识陌生人</string>
+    <string name="sending_video_to">发送视频给%1$s</string>
+    <string name="auto_bind_dialog_msg">我们将使用你的手机号发送一条短信来确认您的手机号码，这样你的朋友会更方便的找到你。这可能会产生一些费用，如果你不愿意发送，请点击取消。</string>
+    <string name="set_drift_range">设置捞取范围</string>
+    <string name="all_world">全世界</string>
+    <string name="my_country">我的国家</string>
+    <string name="confirm_user_country">确认所在国家</string>
+    <string name="change_country">去修改</string>
+    <string name="confirm_user_country_attention">提示：你以后可以在个人资料中修改自己的国家</string>
+    <string name="press_input_text">点击输入文字</string>
+
 </resources>

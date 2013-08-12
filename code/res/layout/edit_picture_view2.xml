@@ -4,6 +4,11 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+    <com.rcplatform.phototalk.views.RCVideoView
+        android:id="@+id/vv_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <com.rcplatform.phototalk.views.EditableViewGroup
         android:id="@+id/edit_group"
         android:layout_width="wrap_content"
@@ -131,8 +136,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:background="@drawable/btn_record"
-            android:maxWidth="177dp"
             android:gravity="center"
+            android:maxWidth="177dp"
             android:text="@string/voice_record"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/edit_photo_voice_text_size" />

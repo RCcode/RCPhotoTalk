@@ -100,12 +100,15 @@ public class PTBackgroundService extends Service {
 		if (mCurrentUser == null || (!currentUser.getRcId().equals(mCurrentUser.getRcId()))) {
 			cancelCurrentBindCheckTask();
 			this.mCurrentUser = currentUser;
-			checkPhoneBindState();
 			PhotoTalkDatabaseFactory.getDatabase().updateTempInformationFail();
 			PhotoTalkDatabaseFactory.getDatabase().updateDriftTempInformationFail();
 		} else {
 			this.mCurrentUser = currentUser;
 		}
+	}
+
+	public void startBindPhone() {
+		checkPhoneBindState();
 	}
 
 	@Override
@@ -469,7 +472,7 @@ public class PTBackgroundService extends Service {
 					LogUtil.e("need to update facebook info");
 					uploadFacebookInfo();
 				}
-//				tryToResetDriftFishTime();
+				// tryToResetDriftFishTime();
 			}
 		}
 	};
@@ -604,7 +607,6 @@ public class PTBackgroundService extends Service {
 			notification.defaults |= Notification.DEFAULT_SOUND;
 			notification.flags |= Notification.FLAG_AUTO_CANCEL;
 			NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-			;
 			Intent notificationIntent = new Intent(context, WelcomeActivity.class);
 			notificationIntent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, ApplicationStartMode.APPLICATION_START_RECOMMENDS);
 			// set intent so it does not start a new activity

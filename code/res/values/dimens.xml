@@ -31,7 +31,7 @@
     <dimen name="init_indicator_bottom">23dp</dimen>
     <dimen name="init_btn_padding">29dp</dimen>
     <dimen name="init_btn_bottom">51dp</dimen>
-    <dimen name="default_login">11dp</dimen> 
+    <dimen name="default_login">11dp</dimen>
     <dimen name="default_gap">7dp</dimen>
     <dimen name="default_gap_2x">14dp</dimen>
     <dimen name="default_gap_3x">21dp</dimen>
@@ -113,4 +113,7 @@
     <!-- v2.0 陌生人引导页的布局 -->
     <dimen name="stranger_init_padding">65dp</dimen>
     <dimen name="stranger_init_padding_bottom">160dp</dimen>
+    <dimen name="take_photo_widget_width">48dp</dimen>
+    <dimen name="take_widget_icon_width">48dp</dimen>
+
 </resources>

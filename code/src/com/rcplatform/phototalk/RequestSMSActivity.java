@@ -1,10 +1,10 @@
 package com.rcplatform.phototalk;
 
 import java.util.List;
-import java.util.Locale;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +31,9 @@ import com.rcplatform.phototalk.utils.PrefsUtils;
 public class RequestSMSActivity extends BaseActivity implements OnClickListener {
 
 	private static final int REQUEST_CODE_BIND = 100;
+	
 	private static final int REQUEST_CODE_COUNTRY = 101;
+	
 	private EditText etNumber;
 
 	private Button btnCountryCode;
@@ -45,7 +47,6 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 	private CountryCodeDatabase mCountryCodeDatabase;
 
 	private Button btnCommit;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,20 +86,14 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				// TODO Auto-generated method stub
 				etNumber.setHintTextColor(getResources().getColor(R.color.register_input_hint));
 			}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-				// TODO Auto-generated method stub
-
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 		});
 
 		btnCommit.setOnClickListener(this);
@@ -141,7 +136,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 		if (number.equals("")) {
 			etNumber.setHintTextColor(getResources().getColor(R.color.register_input_hint_error));
 			etNumber.requestFocus();
-			InputMethodManager imm = (InputMethodManager) getSystemService(this.INPUT_METHOD_SERVICE);
+			InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.showSoftInput(etNumber, 0);
 			return;
 		}
@@ -159,20 +154,20 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 
 				        @Override
 				        public void onClick(DialogInterface dialog, int which) {
-					        showLoadingDialog(LOADING_NO_MSG, LOADING_NO_MSG, false);
+					        showLoadingDialog(false);
 					        UserSettingProxy.requestSMS(RequestSMSActivity.this, new RCPlatformResponseHandler() {
 
 						        @Override
 						        public void onSuccess(int statusCode, String content) {
-							        dismissLoadingDialog();
+							        dissmissLoadingDialog();
 							        PrefsUtils.User.addSelfBindPhoneTime(RequestSMSActivity.this, getCurrentUser().getRcId());
 							        startBindPhoneActivity(number);
 						        }
 
 						        @Override
 						        public void onFailure(int errorCode, String content) {
-							        dismissLoadingDialog();
-							        showErrorConfirmDialog(content);
+							        dissmissLoadingDialog();
+							        showConfirmDialog(content);
 						        }
 					        }, phoneNumber);
 
@@ -192,7 +187,7 @@ public class RequestSMSActivity extends BaseActivity implements OnClickListener 
 
 	private boolean isNumberEnable(String number) {
 		if (TextUtils.isEmpty(number)) {
-			showErrorConfirmDialog(R.string.input_correct_phonenumber);
+			showConfirmDialog(R.string.input_correct_phonenumber);
 			return false;
 		}
 		return true;

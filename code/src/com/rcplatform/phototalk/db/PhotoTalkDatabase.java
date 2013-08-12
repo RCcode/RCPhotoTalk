@@ -34,7 +34,7 @@ public interface PhotoTalkDatabase {
 	public void updateFriendRequestInformationByFriend(Friend friend);
 
 	public Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime, List<String> receivableUserIds,
-			final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice);
+			final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice,int informationCate);
 
 	public void saveFriends(List<Friend> friends);
 
@@ -79,6 +79,8 @@ public interface PhotoTalkDatabase {
 	public List<DriftInformation> getSendedDriftInformations(int start, int pageSize, String currentRcid);
 
 	public List<DriftInformation> getReceiveDriftInformations(int start, int pageSize, String currentRcid);
+	
+	public List<DriftInformation> getDriftInformationByCountry(int start,int pageSize,String country);
 
 	public void setDriftInformationSendSuccess(long flag, int picId,String rcId);
 	
@@ -92,4 +94,6 @@ public interface PhotoTalkDatabase {
 	public void updateDriftInformationSendFail(long flag);
 	public void updateDriftInformationSenderInfo(Friend sender);
 	public int getUnSendDriftInformationCountByUrl(String path);
+	
+	
 }

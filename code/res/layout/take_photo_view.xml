@@ -9,14 +9,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
-        android:id="@+id/btn_close_take_photo"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/take_photo_left"
-        android:layout_marginTop="@dimen/take_photo_bottom"
-        android:background="@drawable/close_edit_button_selector" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/take_photo_bottom" >
+
+        <Button
+            android:id="@+id/btn_close_take_photo"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/take_photo_left"
+            android:background="@drawable/close_edit_button_selector" />
+
+        <LinearLayout
+            android:id="@+id/linear_vc_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_vertical" >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5dp"
+                android:src="@drawable/take_camera" />
+
+            <CheckBox
+                android:id="@+id/switch_vc"
+                android:layout_width="58dp"
+                android:layout_height="13dp"
+                android:background="@drawable/vc_change"
+                android:button="@null"
+                android:layout_marginRight="5dp" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/take_video" />
+        </LinearLayout>
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -47,6 +79,26 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:background="@drawable/take_photo_btn" />
+
+        <RelativeLayout
+            android:id="@+id/btn_take_video"
+            android:layout_width="69dp"
+            android:layout_height="69dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/take_video_bg"
+            android:clickable="true" >
+
+            <com.rcplatform.phototalk.views.VideoRecordProgressView
+                android:id="@+id/video_progress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/iv_video_record_atttention"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
     </RelativeLayout>
 
 </RelativeLayout>

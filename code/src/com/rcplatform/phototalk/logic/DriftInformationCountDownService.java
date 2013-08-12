@@ -43,10 +43,11 @@ public class DriftInformationCountDownService {
 
 				@Override
 				public void run() {
-					PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationState(picId, InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
+					PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationState(picId,
+							InformationState.PhotoInformationState.STATU_NOTICE_SHOWING);
 				}
 			});
-			mShowingInformations.put(picId, info);
+			mShowingInformations.put(info.getPicId(), info);
 			startCountDown(info);
 		}
 	}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <ImageButton
+        android:id="@+id/ib_take_widget"
+        android:layout_width="@dimen/take_widget_icon_width"
+        android:layout_height="@dimen/take_widget_icon_width"
+        android:background="@null"
+        android:scaleType="fitXY"
+        android:src="@drawable/take_photo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:shadowColor="@android:color/black"
+        android:shadowDx="5"
+        android:shadowDy="5"
+        android:shadowRadius="5"
+        android:text="@string/app_name"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+</LinearLayout>

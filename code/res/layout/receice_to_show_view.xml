@@ -5,11 +5,16 @@
     android:background="#ff000000"
     android:orientation="vertical" >
 
+    <com.rcplatform.phototalk.views.RCVideoView
+        android:id="@+id/vv_show"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/iv_rts_pic"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:scaleType="fitCenter" />
-
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ import java.util.Map;
 import android.app.Activity;
 import android.content.Context;
 import android.net.wifi.WifiManager;
+import android.os.Environment;
 import android.util.DisplayMetrics;
 
 import com.rcplatform.phototalk.R;
@@ -23,11 +24,15 @@ public class Constants {
 
 	public static class TimeMillins {
 		public static long A_DAY = 1000 * 60 * 60 * 24;
+
+		public static long MAX_VIDEO_RECORD_TIME = 10 * 1000;
+
+		public static long SEND_SUCCESS_NOTIFICATION_SHOW_TIME = 3 * 1000;
 	}
 
 	public static final int ATTENTION_COMMENT_TIME = 10;
-	
-	public static final int UNTHROW_FISH_ALLOW_TIME=3;
+
+	public static final int UNTHROW_FISH_ALLOW_TIME = 3;
 
 	public static int SCREEN_WIDTH;
 
@@ -38,6 +43,8 @@ public class Constants {
 	public static final String IMAGE_FORMAT = ".jpg";
 
 	public static final String AUDIO_FORMAT = ".amr";
+
+	public static final String VIDEO_FORMAT = ".3gp";
 
 	public static final String TEMP_INFORMATION_ID = "temp_information";
 
@@ -86,6 +93,8 @@ public class Constants {
 	public static final String OFFICIAL_RCID = "1000000";
 	public static final int MAX_FISH_DRIFT_TIME = 50;
 
+	public static final int COMMENT_ATTENTION_WAIT_MAX_TIME = 4;
+
 	public static void init(Context context) {
 		initBaseParamsValue(context);
 		initTempFileDir(context);
@@ -104,7 +113,19 @@ public class Constants {
 	}
 
 	private static void initTempFileDir(Context context) {
-		PhotoInformationCache.FILE_PATH = context.getFilesDir() + "/" + ".rcplatform/phototalk";
+
+		if (Utils.isExternalStorageUsable()) {
+			File unZipDir = new File(Environment.getExternalStorageDirectory(), ".rcplatform/unzip_cache");
+			PhotoInformationCache.FILE_PATH = unZipDir.getPath();
+			PhotoInformationCache.SEND_CACHE = new File(Environment.getExternalStorageDirectory(), ".rcplatform/send_cache");
+			if (!PhotoInformationCache.SEND_CACHE.exists()) {
+				PhotoInformationCache.SEND_CACHE.mkdirs();
+			}
+			PhotoInformationCache.ZIP_CACHE = new File(Environment.getExternalStorageDirectory(), ".rcplatform/zip_cache");
+			if (!PhotoInformationCache.ZIP_CACHE.exists()) {
+				PhotoInformationCache.ZIP_CACHE.mkdirs();
+			}
+		}
 	}
 
 	private static void initScreenWidthHeight(Activity context) {
@@ -289,6 +310,8 @@ public class Constants {
 
 		public static String FILE_PATH;
 
+		public static File SEND_CACHE;
+		public static File ZIP_CACHE;
 		public static final String UNZIP_SUFFIX = "_unzip";
 	}
 
@@ -302,7 +325,11 @@ public class Constants {
 	public static class ApplicationStartMode {
 		public static final int APPLICATION_START_RECOMMENDS = 1;
 
+		public static final int APPLICATION_START_TAKE_PHOTO = 2;
+
 		public static final String APPLICATION_START_KEY = "app_start";
+
+		public static final int APPLCATION_START_NORMAL = -1;
 	}
 
 	public static final String PREFS_FILE_USER_INFO = "com.phototalk.login.info.prefs";
@@ -376,11 +403,11 @@ public class Constants {
 	// 国家码 小写 后加.png为asset目录下对应的国家国旗
 	public static final String[] COUNTRY_CODE = new String[] { "CN", "US", "JP", "RU", "KR", "IT", "MX", "DE", "GB", "ES", "BR", "FR", "PL", "UA", "AR", "CA",
 			"IL", "CZ", "PT", "SE", "NL", "DK", "IN", "IR", "PH", "ID", "MY", "AU", "CF", "CL", "TD", "VN", "NZ", "GR", "TV", "TT", "TO", "LK", "KN", "ST",
-			"SA", "CY", "SV", "CH", "NO", "NG", "ZA", "RO", "LR", "TC", "GN", "GF", "CU", "CR", "CO", "CD", "FK", "FI", "MC", "VA", "GQ", "KP", "BT",
-			"BA", "BH", "AG", "AE", "EG", "IE", "EE", "AT", "BS", "PK", "PS", "BG", "BJ", "BE", "IS", "BO", "BW", "TL", "TG", "GD", "KI", "KG", "GW", "GH",
-			"GA", "ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM", "MD", "MA", "MZ", "NE", "PW",
-			"WS", "SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM", "YE", "IQ", "JO", "DZ", "AF", "ET",
-			"AD", "AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH", "QA", "KM", "CI", "HR", "KE", "LV", "LS",
-			"LU", "RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM","HK"};
+			"SA", "CY", "SV", "CH", "NO", "NG", "ZA", "RO", "LR", "TC", "GN", "GF", "CU", "CR", "CO", "CD", "FK", "FI", "MC", "VA", "GQ", "KP", "BT", "BA",
+			"BH", "AG", "AE", "EG", "IE", "EE", "AT", "BS", "PK", "PS", "BG", "BJ", "BE", "IS", "BO", "BW", "TL", "TG", "GD", "KI", "KG", "GW", "GH", "GA",
+			"ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM", "MD", "MA", "MZ", "NE", "PW", "WS",
+			"SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM", "YE", "IQ", "JO", "DZ", "AF", "ET", "AD",
+			"AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH", "QA", "KM", "CI", "HR", "KE", "LV", "LS", "LU",
+			"RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM", "HK" };
 
 }

@@ -5,4 +5,6 @@
         <item>com.example.appa</item>
         <item>com.example.appb</item>
     </array>
+    <string-array name="drift_range">
+    </string-array>
 </resources>

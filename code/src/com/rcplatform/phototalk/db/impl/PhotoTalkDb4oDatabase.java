@@ -177,7 +177,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 
 	@Override
 	public synchronized Map<String, Information> updateTempInformations(final UserInfo senderInfo, String picUrl, final long createTime,
-			List<String> receivableUserIds, final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice) {
+			List<String> receivableUserIds, final List<String> allReceiverIds, int state, int totleLength, boolean hasVoice,int informationCate) {
 		ObjectSet<Information> infoLocals = db.query(new Predicate<Information>() {
 
 			private static final long serialVersionUID = 1L;
@@ -207,6 +207,7 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			information.setLimitTime(totleLength);
 			information.setUrl(picUrl);
 			information.setHasVoice(hasVoice);
+			information.setInformationCate(informationCate);
 			result.put(user.getRcId(), information);
 		}
 		db.commit();
@@ -842,6 +843,29 @@ public class PhotoTalkDb4oDatabase implements PhotoTalkDatabase {
 			}
 		});
 		return result.size();
+	}
+
+	@Override
+	public List<DriftInformation> getDriftInformationByCountry(int start, int pageSize, final String country) {
+		ObjectSet<DriftInformation> result = getData(new Predicate<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean match(DriftInformation arg0) {
+				return country.equals(arg0.getSender().getCountry());
+			}
+		}, new QueryComparator<DriftInformation>() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public int compare(DriftInformation arg0, DriftInformation arg1) {
+				if (arg0.getReceiveTime() > arg1.getReceiveTime())
+					return -1;
+				else
+					return 1;
+			}
+		});
+		return slipDataByPage(start, pageSize, result);
 	}
 
 }

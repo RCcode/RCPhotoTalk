@@ -14,7 +14,6 @@ public class Contacts implements Serializable {
 	}
 
 	public Contacts() {
-		// TODO Auto-generated constructor stub
 	}
 
 	private String name;

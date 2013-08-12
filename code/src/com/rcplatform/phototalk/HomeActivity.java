@@ -1,6 +1,5 @@
 package com.rcplatform.phototalk;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -45,9 +44,9 @@ import com.rcplatform.phototalk.adapter.PhotoTalkMessageAdapter;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.Information;
+import com.rcplatform.phototalk.bean.InformationClassification;
 import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.InformationType;
-import com.rcplatform.phototalk.bean.PhotoInformationType;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
 import com.rcplatform.phototalk.drift.DriftInformationActivity;
@@ -64,7 +63,6 @@ import com.rcplatform.phototalk.request.RCPlatformResponseHandler;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.MaxFishTimeResponseHandler;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
-import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.task.CheckUpdateTask;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
@@ -144,20 +142,36 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.home_view);
-		checkStartMode();
-		// registeTigaseStateChangeReceiver();
 		InformationPageController.getInstance().setupController(this);
 		mImageLoader = ImageLoader.getInstance();
+		addShortCutIcon();
+		checkStartMode();
 		initViewAndListener();
 		loadLocalInformation();
 		getAllPlatformApps();
 		onNewTrends();
 		checkUpdate();
 		checkTrends();
-		// tvTigaseState = (TextView) findViewById(R.id.tv_test);
-		// bindTigaseService();
+		checkAutoBindPhone();
 		checkBindPhone();
-		// 注册GCM
+		registeGCM();
+		ClientLogUtil.log(this);
+		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
+		addApplicationStartTime();
+		showRcAd();
+	}
+
+	private void addApplicationStartTime() {
+		int startTime = PrefsUtils.AppInfo.getApplicationStartTime(this);
+		if (startTime <= Constants.COMMENT_ATTENTION_WAIT_MAX_TIME) {
+			PrefsUtils.AppInfo.addApplicationStartTime(this);
+		}
+		if (startTime == Constants.COMMENT_ATTENTION_WAIT_MAX_TIME) {
+			PhotoTalkUtils.showCommentAttentionDialog(this);
+		}
+	}
+
+	private void registeGCM() {
 		UserInfo userInfo = getCurrentUser();
 		if (userInfo != null) {
 			try {
@@ -166,12 +180,36 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			}
 		}
+	}
 
-		// Log 用户信息
-		ClientLogUtil.log(this);
-		showRcAd();
-		DriftProxy.getMaxFishTime(this, new MaxFishTimeResponseHandler(this));
-		// PhotoTalkUtils.showCommentAttentionDialog(this);
+	private void checkAutoBindPhone() {
+		if (RCPlatformTextUtil.isEmpty(getCurrentUser().getCellPhone()) && !PrefsUtils.User.hasAttentionAutoBind(this, getCurrentUserRcId())) {
+			showAutoBindAttentionDialog();
+		}
+	}
+
+	private void addShortCutIcon() {
+		if (!PrefsUtils.AppInfo.hasAddShortCutIcon(this)) {
+			PrefsUtils.AppInfo.setAddedShortCutIcon(this);
+			Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.take_photo);
+		}
+	}
+
+	private void showAutoBindAttentionDialog() {
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				if (which == DialogInterface.BUTTON_POSITIVE) {
+					PrefsUtils.User.setAutoBind(HomeActivity.this, getCurrentUserRcId());
+					getPhotoTalkApplication().getService().startBindPhone();
+				}
+			}
+		};
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.auto_bind_dialog_msg).setNegativeButton(R.string.cancel, listener)
+				.setPositiveButton(R.string.ok, listener).create();
+		dialog.show();
+		PrefsUtils.User.setAutoBindAttentioned(this, getCurrentUserRcId());
 	}
 
 	private void showRcAd() {
@@ -179,9 +217,12 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void checkStartMode() {
-		int startMode = getIntent().getIntExtra(ApplicationStartMode.APPLICATION_START_KEY, -1);
+		int startMode = getStartMode();
 		if (startMode == ApplicationStartMode.APPLICATION_START_RECOMMENDS) {
 			startActivity(MyFriendsActivity.class);
+		} else if (startMode == ApplicationStartMode.APPLICATION_START_TAKE_PHOTO) {
+			EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
+			startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
 		}
 	}
 
@@ -301,7 +342,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void startFriendDetailActivity(Friend friend, int type) {
-		if (type == PhotoInformationType.TYPE_DRIFT) {
+		if (type == InformationClassification.TYPE_DRIFT) {
 			Intent intent = new Intent(this, StrangerDetailActivity.class);
 			intent.putExtra(StrangerDetailActivity.PARAM_FRIEND, friend);
 			startActivity(intent);
@@ -395,8 +436,12 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			@Override
 			public void onClick(View v) {
-				EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
-				startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
+				if (Utils.isExternalStorageUsable()) {
+					EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
+					startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
+				} else {
+					DialogUtil.showToast(HomeActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT);
+				}
 			}
 		});
 		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -408,19 +453,19 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				return false;
 			}
 		});
-		mInformationList.setOnItemClickListener(informationItemClickListener);
-		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUser().getRcId()))
+		mInformationList.setOnItemClickListener(informationListItemClickListener);
+		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUserRcId()))
 			InformationPageController.getInstance().onNewRecommends();
 
 		initViewPager();
 
 	}
 
-	private OnItemClickListener informationItemClickListener = new OnItemClickListener() {
+	private OnItemClickListener informationListItemClickListener = new OnItemClickListener() {
 
 		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Information information = (Information) adapter.getItem(position);
+		public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+			Information information = (Information) adapter.getItem(arg2);
 			if (information.getType() == InformationType.TYPE_PICTURE_OR_VIDEO
 					&& information.getStatu() == InformationState.PhotoInformationState.STATU_NOTICE_SHOWING)
 				return;
@@ -527,23 +572,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	}
 
 	private void reSendPhoto(final Information information) {
-		List<String> friendIds = new ArrayList<String>();
-		friendIds.add(information.getReceiver().getRcId());
 		information.setStatu(InformationState.PhotoInformationState.STATU_NOTICE_SENDING_OR_LOADING);
 		PhotoTalkDatabaseFactory.getDatabase().updateInformationState(information);
 		adapter.notifyDataSetChanged();
-		Request.sendPhoto(this, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
-
-			@Override
-			public void onSendSuccess(long flag, String url) {
-				InformationPageController.getInstance().onPhotoResendSuccess(information);
-			}
-
-			@Override
-			public void onFail(long flag, int errorCode, String content) {
-				InformationPageController.getInstance().onPhotoResendFail(information);
-			}
-		}, friendIds, information.isHasVoice(), information.isHasGraf());
+		LogicUtils.resendInformation(this, information);
 	}
 
 	private void deleteInformation(Information information) {
@@ -558,6 +590,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void show(int position) {
 		EventUtil.Main_Photo.rcpt_photoview(baseContext);
+
 		final Information infoRecord = (Information) adapter.getItem(position);
 		if (infoRecord.getType() == InformationType.TYPE_PICTURE_OR_VIDEO && !LogicUtils.isSender(this, infoRecord)) {
 			// 表示还未查看
@@ -650,7 +683,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 					mShowDialog = null;
 				}
 				isShow = false;
-				mInformationList.setOnItemClickListener(informationItemClickListener);
+				mInformationList.setOnItemClickListener(informationListItemClickListener);
 				return true;
 			}
 			break;
@@ -750,12 +783,13 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 	private void checkUpdate() {
 		if (PrefsUtils.AppInfo.isMustUpdate(this)) {
-			PhotoTalkUtils.showMustUpdateDialog(this,true);
+			PhotoTalkUtils.showMustUpdateDialog(this, true);
 			return;
 		}
 		mCheckUpdateTask = new CheckUpdateTask(this, true);
 		mCheckUpdateTask.start();
 	}
+
 	public void onInformationShowEnd(Information information) {
 		String tagBase = PhotoTalkUtils.getInformationTagBase(information);
 		String buttonTag = tagBase + Button.class.getName();

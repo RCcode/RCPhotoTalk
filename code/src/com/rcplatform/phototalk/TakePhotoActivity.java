@@ -5,6 +5,7 @@ import java.io.File;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.AnimationDrawable;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.view.View;
@@ -14,11 +15,19 @@ import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 
+import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.umeng.EventUtil;
+import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.views.CameraView;
+import com.rcplatform.phototalk.views.CameraView.OnVideoRecordListener;
 import com.rcplatform.phototalk.views.CameraView.TakeOnSuccess;
 import com.rcplatform.phototalk.views.Rotate3dAnimation;
+import com.rcplatform.phototalk.views.VideoRecordProgressView;
 
 public class TakePhotoActivity extends Activity {
 
@@ -40,6 +49,8 @@ public class TakePhotoActivity extends Activity {
 
 	private Button mButtonChangeCamera;
 
+	private View linearVCChange;
+
 	private float mFromDegrees = 0;
 
 	private float mToDegrees = 180;
@@ -47,7 +58,18 @@ public class TakePhotoActivity extends Activity {
 	private Intent intent;
 
 	private Context ctx;
-	
+
+	private View btnTakeVideo;
+
+	private CheckBox vcChange;
+
+	private VideoRecordProgressView videoProgressView;
+
+	private TakeMode mMode;
+
+	private boolean isRecordingVideo = false;
+
+	private ImageView ivTakeVideoAttention;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,13 +80,11 @@ public class TakePhotoActivity extends Activity {
 		setContentView(R.layout.take_photo_view);
 		// deleteTemp();
 		intent = getIntent();
+		initCamera();
 		mButtonTake = (Button) findViewById(R.id.btn_take_photo_take);
 		mButtonOpenFlashLight = (Button) findViewById(R.id.btn_take_photo_flashlight);
 		mButtonChangeCamera = (Button) findViewById(R.id.btn_take_photo_change_camera);
 		mButtonClose = (Button) findViewById(R.id.btn_close_take_photo);
-		mCameraView = (CameraView) findViewById(R.id.sf_camera_view);
-		mCameraView.setTakeOnSuccess(takeOnSuccess);
-		
 		if (Camera.getNumberOfCameras() == 1) {
 			mButtonChangeCamera.setVisibility(View.GONE);
 		}
@@ -76,14 +96,93 @@ public class TakePhotoActivity extends Activity {
 		mButtonOpenFlashLight.setTag(OPEN_FLASHLIGHT_ON_CLICK);
 		mButtonTake.setOnClickListener(clickListener);
 		mButtonTake.setTag(TAKE_ON_CLICK);
+		btnTakeVideo = findViewById(R.id.btn_take_video);
+		btnTakeVideo.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View v) {
+				isRecordingVideo = !isRecordingVideo;
+				if (isRecordingVideo) {
+					mCameraView.startVideoRecord();
+				} else {
+					mCameraView.stopRecord();
+				}
+			}
+		});
+		vcChange = (CheckBox) findViewById(R.id.switch_vc);
+		vcChange.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				TakeMode targetMode;
+				if (isChecked) {
+					targetMode = TakeMode.VIDEO;
+				} else {
+					targetMode = TakeMode.CAMERA;
+				}
+				changeTakeMode(targetMode);
+			}
+		});
+		vcChange.setChecked(true);
+		videoProgressView = (VideoRecordProgressView) findViewById(R.id.video_progress);
+		linearVCChange = findViewById(R.id.linear_vc_change);
+		ivTakeVideoAttention = (ImageView) findViewById(R.id.iv_video_record_atttention);
+		ivTakeVideoAttention.setBackgroundResource(R.anim.video_record_animation);
+		animFrame = (AnimationDrawable) ivTakeVideoAttention.getBackground();
 	}
+
+	private void startVideoRecordFrameAnimation() {
+		animFrame.start();
+	}
+
+	private void stopVideoRecordFrameAnimation() {
+		animFrame.stop();
+	}
+
+	private void initCamera() {
+		mCameraView = (CameraView) findViewById(R.id.sf_camera_view);
+		mCameraView.setMaxVideoRecordTime(Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
+		mCameraView.setTakeOnSuccess(takeOnSuccess);
+		mCameraView.setOnVideoRecordListener(new OnVideoRecordListener() {
+
+			@Override
+			public void onRecordStart(String cacheFilePath) {
+				startVideoRecord();
+			}
+
+			@Override
+			public void onRecordFail() {
+				endVideoRecord();
+			}
+
+			@Override
+			public void onRecordEnd(String cacheFilePath, int videoLength) {
+				endVideoRecord();
+				startEditActivity(cacheFilePath, videoLength);
+			}
+		});
+	}
+
+	private void startVideoRecord() {
+		startVideoRecordFrameAnimation();
+		videoProgressView.startAnimation(0, 360, Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
+		linearVCChange.setVisibility(View.GONE);
+		mButtonChangeCamera.setVisibility(View.GONE);
+	}
+
+	private void endVideoRecord() {
+		stopVideoRecordFrameAnimation();
+		isRecordingVideo = false;
+		videoProgressView.resetAnimation();
+		linearVCChange.setVisibility(View.VISIBLE);
+		mButtonChangeCamera.setVisibility(View.VISIBLE);
+	}
+
 	private TakeOnSuccess takeOnSuccess = new TakeOnSuccess() {
-		
+
 		@Override
 		public void successMethod() {
-			// TODO Auto-generated method stub
-			startOtherActivity();
+			startEditActivity(null, 0);
 		}
 	};
 	private final OnClickListener clickListener = new OnClickListener() {
@@ -92,44 +191,66 @@ public class TakePhotoActivity extends Activity {
 		public void onClick(View v) {
 			int tag = (Integer) v.getTag();
 			switch (tag) {
-				case TAKE_ON_CLICK:
-					EventUtil.Main_Photo.rcpt_takephoto(ctx);
-					mCameraView.takePhoto();
-					break;
-				case CHANGE_CAMERA_ON_CLICK:
-					mCameraView.changeCamera();
-					if (mFromDegrees == 0) {
-						mFromDegrees = 180;
-						mToDegrees = 0;
-						mButtonOpenFlashLight.setVisibility(View.GONE);
-					} else {
-						mFromDegrees = 0;
-						mToDegrees = 180;
-						mButtonOpenFlashLight.setVisibility(View.VISIBLE);
-					}
-					Animation animation = new Rotate3dAnimation(mFromDegrees, mToDegrees, mButtonChangeCamera.getWidth() / 2,
-					        mButtonChangeCamera.getHeight() / 2, 200.0f, true);
-					animation.setDuration(500);
-					animation.setInterpolator(new AccelerateInterpolator());
-					mButtonChangeCamera.startAnimation(animation);
-					break;
-				case OPEN_FLASHLIGHT_ON_CLICK:
-					if (mCameraView.setLightStatu()) {
-						mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_press);
-					} else
-						mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_normal);
-					break;
-				case CLOSE_ON_CLICK:
-					finish();
-					break;
+			case TAKE_ON_CLICK:
+				EventUtil.Main_Photo.rcpt_takephoto(ctx);
+				mCameraView.takePhoto();
+				break;
+			case CHANGE_CAMERA_ON_CLICK:
+				mCameraView.changeCamera();
+				if (mFromDegrees == 0) {
+					mFromDegrees = 180;
+					mToDegrees = 0;
+					mButtonOpenFlashLight.setVisibility(View.GONE);
+				} else {
+					mFromDegrees = 0;
+					mToDegrees = 180;
+					mButtonOpenFlashLight.setVisibility(View.VISIBLE);
+				}
+				Animation animation = new Rotate3dAnimation(mFromDegrees, mToDegrees, mButtonChangeCamera.getWidth() / 2, mButtonChangeCamera.getHeight() / 2,
+						200.0f, true);
+				animation.setDuration(500);
+				animation.setInterpolator(new AccelerateInterpolator());
+				mButtonChangeCamera.startAnimation(animation);
+				break;
+			case OPEN_FLASHLIGHT_ON_CLICK:
+				if (mCameraView.setLightStatu()) {
+					mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_press);
+				} else
+					mButtonOpenFlashLight.setBackgroundResource(R.drawable.flashlight_normal);
+				break;
+			case CLOSE_ON_CLICK:
+				finish();
+				break;
 
 			}
 
 		}
 	};
 
-	public void startOtherActivity() {
+	private AnimationDrawable animFrame;
+
+	private void startEditActivity(String cachePath, int videoLength) {
+		switch (mMode) {
+		case VIDEO:
+			startVideoEditActivity(cachePath, videoLength);
+			break;
+		case CAMERA:
+			startPhotoEditActivity();
+			break;
+		}
+	}
+
+	public void startPhotoEditActivity() {
 		intent.setClass(this, EditPictureActivity.class);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_RECORD_CATE, InformationCategory.PHOTO);
+		startActivity(intent);
+	}
+
+	public void startVideoEditActivity(String path, int videoLength) {
+		intent.setClass(this, EditPictureActivity.class);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_PATH, path);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_VIDEO_LENGTH, videoLength);
+		intent.putExtra(EditPictureActivity.PARAM_KEY_RECORD_CATE, InformationCategory.VIDEO);
 		startActivity(intent);
 	}
 
@@ -152,5 +273,35 @@ public class TakePhotoActivity extends Activity {
 			}
 		} else {
 		}
+	}
+
+	private void changeTakeMode(TakeMode mode) {
+		switch (mode) {
+		case VIDEO:
+			changeToTakeVideo();
+			break;
+		case CAMERA:
+			videoProgressView.resetAnimation();
+			changeToTakeCamera();
+			break;
+		}
+		this.mMode = mode;
+	}
+
+	private void changeToTakeCamera() {
+		mButtonOpenFlashLight.setVisibility(View.VISIBLE);
+		mButtonTake.setVisibility(View.VISIBLE);
+		btnTakeVideo.setVisibility(View.GONE);
+		mCameraView.clearVideoTempFile();
+	}
+
+	private void changeToTakeVideo() {
+		mButtonOpenFlashLight.setVisibility(View.GONE);
+		mButtonTake.setVisibility(View.GONE);
+		btnTakeVideo.setVisibility(View.VISIBLE);
+	}
+
+	private enum TakeMode {
+		CAMERA, VIDEO
 	}
 }

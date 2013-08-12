@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.http.conn.routing.RouteInfo.LayerType;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -19,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.rcplatform.phototalk.PhotoTalkApplication;
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.utils.Constants;
 
 public class EditPictureView extends View {
@@ -105,8 +110,7 @@ public class EditPictureView extends View {
 		screenWidth = w;
 		screenHeight = h;
 		app = (PhotoTalkApplication) getContext().getApplicationContext();
-		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
-				Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
 		// 保存一次一次绘制出来的图形
 		mCanvas = new Canvas(mBitmap);
 		mBitmapPaint = new Paint(Paint.DITHER_FLAG);
@@ -143,20 +147,16 @@ public class EditPictureView extends View {
 
 	public EditPictureView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay()
-				.getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
 
 	public EditPictureView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		// TODO Auto-generated constructor stub
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay()
-				.getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -164,8 +164,7 @@ public class EditPictureView extends View {
 	public EditPictureView(Context context, int w, int h) {
 		super(context);
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay()
-				.getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -173,8 +172,7 @@ public class EditPictureView extends View {
 	public EditPictureView(Context context) {
 		super(context);
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay()
-				.getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -182,8 +180,7 @@ public class EditPictureView extends View {
 	public EditPictureView(Context context, String tempfilePath) {
 		super(context);
 		DisplayMetrics dm = new DisplayMetrics();
-		((Activity) context).getWindowManager().getDefaultDisplay()
-				.getMetrics(dm);
+		((Activity) context).getWindowManager().getDefaultDisplay().getMetrics(dm);
 		init(dm.widthPixels, dm.heightPixels);
 		this.context = context;
 	}
@@ -235,8 +232,7 @@ public class EditPictureView extends View {
 			mBitmap = null;
 		}
 
-		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
-				Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
 		mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
 		drawBg(mCanvas);
 		// 清空画布，但是如果图片有背景的话，则使用上面的重新初始化的方法，用该方法会将背景清空掉…
@@ -276,6 +272,7 @@ public class EditPictureView extends View {
 		
 		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight,
 				Bitmap.Config.ARGB_8888);
+		mBitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
 		mCanvas.setBitmap(mBitmap);// 重新设置画布，相当于清空画布
 		// 清空画布，但是如果图片有背景的话，则使用上面的重新初始化的方法，用该方法会将背景清空掉…
 		drawBg(mCanvas);
@@ -295,41 +292,6 @@ public class EditPictureView extends View {
 		return canclePath.size();
 	}
 
-	// @Override
-	// public boolean dispatchTouchEvent(MotionEvent event) {
-	// // TODO Auto-generated method stub
-	// switch (event.getAction()) {
-	// case MotionEvent.ACTION_DOWN:
-	// Log.i("Futao", "editeview dispatchTouchEvent ACTION_DOWN");
-	// break;
-	// case MotionEvent.ACTION_MOVE:
-	// Log.i("Futao", "editeview dispatchTouchEvent ACTION_MOVE");
-	// break;
-	// case MotionEvent.ACTION_UP:
-	// Log.i("Futao", "editeview dispatchTouchEvent ACTION_UP");
-	// break;
-	// }
-	//
-	// return super.dispatchTouchEvent(event);
-	// }
-
-	// @Override
-	// public boolean onTouchEvent(MotionEvent event) {
-	// // TODO Auto-generated method stub
-	//
-	// switch (event.getAction()) {
-	// case MotionEvent.ACTION_DOWN:
-	// Log.i("Futao", "editeview onTouchEvent ACTION_DOWN");
-	// break;
-	// case MotionEvent.ACTION_MOVE:
-	// Log.i("Futao", "editeview onTouchEvent ACTION_MOVE");
-	// break;
-	// case MotionEvent.ACTION_UP:
-	// Log.i("Futao", "editeview onTouchEvent ACTION_UP");
-	// break;
-	// }
-	// return true;
-	// }
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (model == MODEl_TUYA) {
@@ -337,6 +299,8 @@ public class EditPictureView extends View {
 			float y = event.getY();
 			switch (event.getAction()) {
 			case MotionEvent.ACTION_DOWN:
+				if (mListener != null)
+					mListener.onGrafStart();
 				initPaint();
 				// 重置下一步操作
 				canclePath = new ArrayList<DrawPath>();
@@ -356,6 +320,8 @@ public class EditPictureView extends View {
 			case MotionEvent.ACTION_UP:
 				touch_up();
 				invalidate();
+				if (mListener != null)
+					mListener.onGrafEnd();
 				break;
 			}
 			return true;
@@ -364,122 +330,101 @@ public class EditPictureView extends View {
 	}
 
 	private void drawBg(Canvas canvas) {
+		canvas.drawColor(Color.TRANSPARENT);
 		if (tempBitmap == null || tempBitmap.isRecycled()) {
-
-			// if
-			// (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED))
-			// {
-			// File file = new File(tempFilePath);
-			// if (!file.exists()) {
-			// bg = app.getEditeBitmap();
-			// } else {
-			//
-			// try {
-			// BitmapFactory.Options options = new BitmapFactory.Options();
-			// options.inSampleSize = 2;
-			// bg = BitmapFactory.decodeFile(tempFilePath, options);
-			// }
-			// catch (Exception e) {
-			// e.printStackTrace();
-			// }
-			// }
-			// } else {
 			bg = app.getEditeBitmap();
-			// }
-			//确保竖屏 
-			if (bg != null || !bg.isRecycled()) {
+			// 确保竖屏
+			if (bg != null && !bg.isRecycled()) {
 				if (bg.getWidth() > bg.getHeight()) {
 					Matrix matrix = new Matrix();
 					matrix.reset();
 					matrix.setRotate(90);
-					tempBitmap = Bitmap.createBitmap(bg, 0, 0, bg.getWidth(),
-							bg.getHeight(), matrix, true);
+					tempBitmap = Bitmap.createBitmap(bg, 0, 0, bg.getWidth(), bg.getHeight(), matrix, true);
 					bg.recycle();
 				} else {
 					tempBitmap = bg;
 				}
-
 			}
 
 		}
-		float bgWidth = tempBitmap.getWidth();
-		float bgHeight = tempBitmap.getHeight();
-		int left, top, right, bottom;
-		int showWidth, showHeight;
-//需要缩小
-		if (bgWidth > Constants.SCREEN_WIDTH
-				|| bgHeight > Constants.SCREEN_HEIGHT) {
-			float widthScale = (bgWidth - Constants.SCREEN_WIDTH) / bgWidth;
-			float heightScale = (bgHeight - Constants.SCREEN_HEIGHT) / bgHeight;
-			if (widthScale > heightScale) {
-				showWidth = Constants.SCREEN_WIDTH;
-				showHeight = (int) (bgHeight - (bgHeight * widthScale));
-				left = 0;
-				right = showWidth;
-				top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
-				bottom = Constants.SCREEN_HEIGHT - top;
-			} else if(widthScale < heightScale){
-				showHeight = Constants.SCREEN_HEIGHT;
-				showWidth = (int) (bgWidth - (bgWidth * heightScale));
-				
-				left = (Constants.SCREEN_WIDTH - showWidth) / 2;;
-				right = Constants.SCREEN_WIDTH - left;
-				top = 0;
-				bottom = Constants.SCREEN_HEIGHT;
-			}else{
+		if (tempBitmap != null) {
+			float bgWidth = tempBitmap.getWidth();
+			float bgHeight = tempBitmap.getHeight();
+			int left, top, right, bottom;
+			int showWidth, showHeight;
+			// 需要缩小
+			if (bgWidth > Constants.SCREEN_WIDTH || bgHeight > Constants.SCREEN_HEIGHT) {
+				float widthScale = (bgWidth - Constants.SCREEN_WIDTH) / bgWidth;
+				float heightScale = (bgHeight - Constants.SCREEN_HEIGHT) / bgHeight;
+				if (widthScale > heightScale) {
+					showWidth = Constants.SCREEN_WIDTH;
+					showHeight = (int) (bgHeight - (bgHeight * widthScale));
+					left = 0;
+					right = showWidth;
+					top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
+					bottom = Constants.SCREEN_HEIGHT - top;
+				} else if (widthScale < heightScale) {
+					showHeight = Constants.SCREEN_HEIGHT;
+					showWidth = (int) (bgWidth - (bgWidth * heightScale));
+
+					left = (Constants.SCREEN_WIDTH - showWidth) / 2;
+					;
+					right = Constants.SCREEN_WIDTH - left;
+					top = 0;
+					bottom = Constants.SCREEN_HEIGHT;
+				} else {
+					left = 0;
+					right = Constants.SCREEN_WIDTH;
+					top = 0;
+					bottom = Constants.SCREEN_HEIGHT;
+				}
+				// left = (Constants.SCREEN_WIDTH - showWidth) / 2;
+				// right = Constants.SCREEN_WIDTH - left;
+				// top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
+				// bottom = Constants.SCREEN_HEIGHT - top;
+			} else if (bgWidth == Constants.SCREEN_WIDTH && bgHeight == Constants.SCREEN_HEIGHT) {
+				// 刚刚好的情况
 				left = 0;
 				right = Constants.SCREEN_WIDTH;
 				top = 0;
 				bottom = Constants.SCREEN_HEIGHT;
-			}
-//			left = (Constants.SCREEN_WIDTH - showWidth) / 2;
-//			right = Constants.SCREEN_WIDTH - left;
-//			top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
-//			bottom = Constants.SCREEN_HEIGHT - top;
-		} else if(bgWidth == Constants.SCREEN_WIDTH&&bgHeight==Constants.SCREEN_HEIGHT){
-//			刚刚好的情况
-			left = 0;
-			right = Constants.SCREEN_WIDTH;
-			top = 0;
-			bottom = Constants.SCREEN_HEIGHT;
-//			left = (int) ((Constants.SCREEN_WIDTH - bgWidth) / 2);
-//			right = Constants.SCREEN_WIDTH - left;
-//			top = (int) ((Constants.SCREEN_HEIGHT - bgHeight) / 2);
-//			bottom = Constants.SCREEN_HEIGHT - top;
-		}else{
-			float widthScale = (Constants.SCREEN_WIDTH-bgWidth) / bgWidth;
-			float heightScale = (Constants.SCREEN_HEIGHT-bgHeight) / bgHeight;
-			if(widthScale<heightScale){
-				showWidth = Constants.SCREEN_WIDTH;
-				showHeight = (int) (Constants.SCREEN_HEIGHT - (bgHeight * widthScale));
-				left = 0;
-				right = showWidth;
-				top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
-				bottom = Constants.SCREEN_HEIGHT - top;
-			}else if(widthScale>heightScale){
-				showHeight = Constants.SCREEN_HEIGHT;
-				showWidth = (int) (Constants.SCREEN_WIDTH - (bgWidth * heightScale));
-				
-				left = (Constants.SCREEN_WIDTH - showWidth) / 2;;
-				right = Constants.SCREEN_WIDTH - left;
-				top = 0;
-				bottom = Constants.SCREEN_HEIGHT;
-			}else{
-				left = 0;
-				right = Constants.SCREEN_WIDTH;
-				top = 0;
-				bottom = Constants.SCREEN_HEIGHT;
-			}
-			
-		}
-		RectF dst = new RectF(left, top, right, bottom);
-		if(listener!=null){
-			listener.setViewLayout(left, top, right, bottom);
-		}
-		canvas.drawBitmap(tempBitmap, null, dst, mBitmapPaint);
+				// left = (int) ((Constants.SCREEN_WIDTH - bgWidth) / 2);
+				// right = Constants.SCREEN_WIDTH - left;
+				// top = (int) ((Constants.SCREEN_HEIGHT - bgHeight) / 2);
+				// bottom = Constants.SCREEN_HEIGHT - top;
+			} else {
+				float widthScale = (Constants.SCREEN_WIDTH - bgWidth) / bgWidth;
+				float heightScale = (Constants.SCREEN_HEIGHT - bgHeight) / bgHeight;
+				if (widthScale < heightScale) {
+					showWidth = Constants.SCREEN_WIDTH;
+					showHeight = (int) (Constants.SCREEN_HEIGHT - (bgHeight * widthScale));
+					left = 0;
+					right = showWidth;
+					top = (Constants.SCREEN_HEIGHT - showHeight) / 2;
+					bottom = Constants.SCREEN_HEIGHT - top;
+				} else if (widthScale > heightScale) {
+					showHeight = Constants.SCREEN_HEIGHT;
+					showWidth = (int) (Constants.SCREEN_WIDTH - (bgWidth * heightScale));
 
-		// tempBitmap.recycle();
-		// tempBitmap = null;
+					left = (Constants.SCREEN_WIDTH - showWidth) / 2;
+					;
+					right = Constants.SCREEN_WIDTH - left;
+					top = 0;
+					bottom = Constants.SCREEN_HEIGHT;
+				} else {
+					left = 0;
+					right = Constants.SCREEN_WIDTH;
+					top = 0;
+					bottom = Constants.SCREEN_HEIGHT;
+				}
+
+			}
+			RectF dst = new RectF(left, top, right, bottom);
+			if (listener != null) {
+				listener.setViewLayout(left, top, right, bottom);
+			}
+			canvas.drawBitmap(tempBitmap, null, dst, mBitmapPaint);
+		}
 	}
 
 	public interface EditPictureListener {
@@ -494,34 +439,6 @@ public class EditPictureView extends View {
 			model = MODEL_NORMAL;
 		return false;
 	}
-
-	// public void cacheOnDisEditedPictrue(final Bitmap bitmap) {
-	// showDialog();
-	// new Thread(new Runnable() {
-	//
-	// @Override
-	// public void run() {
-	// File file = new File(tempFilePath);
-	// try {
-	//
-	// if (!file.exists())
-	// file.createNewFile();
-	// BufferedOutputStream os = new BufferedOutputStream(new
-	// FileOutputStream(file)); //
-	// // b.compress(Bitmap.CompressFormat.JPEG, 100, os);
-	// bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
-	// os.flush();
-	// os.close();
-	// handler.sendEmptyMessage(CACHE_SUCCESS);
-	// }
-	// catch (Exception e) {
-	// handler.sendEmptyMessage(NO_SDC);
-	// e.printStackTrace();
-	// }
-	// }
-	// }).start();
-	//
-	// }
 
 	public int getTimeLimit() {
 		return timeLimit;
@@ -548,5 +465,17 @@ public class EditPictureView extends View {
 
 	public boolean hasDrawed() {
 		return savePath != null && !savePath.isEmpty();
+	}
+
+	private OnGrafListener mListener;
+
+	public void setOnGrafListener(OnGrafListener mListener) {
+		this.mListener = mListener;
+	}
+
+	public static interface OnGrafListener {
+		public void onGrafStart();
+
+		public void onGrafEnd();
 	}
 }

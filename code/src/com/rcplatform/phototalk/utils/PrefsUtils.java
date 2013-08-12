@@ -25,6 +25,16 @@ public class PrefsUtils {
 		public static final String MUST_UPDATE = "mustupdate";
 		public static final String MUST_UPDATE_VERSION = "mustupdateversion";
 		public static final String UPDATE_DESC = "updatedesc";
+		public static final String HAS_ADD_SHORTCUT = "hasaddshortcut";
+		private static final String APPLICATION_START_TIME = "applicationstarttime";
+
+		public static void addApplicationStartTime(Context context) {
+			getPreference(context, PREF_APP_INFO).edit().putInt(APPLICATION_START_TIME, (getApplicationStartTime(context) + 1)).commit();
+		}
+
+		public static int getApplicationStartTime(Context context) {
+			return getPreference(context, PREF_APP_INFO).getInt(APPLICATION_START_TIME, 0);
+		}
 
 		public static void setNeverAttentionVersion(Context context, String version) {
 			SharedPreferences sh = getPreference(context, PREF_APP_INFO);
@@ -70,6 +80,13 @@ public class PrefsUtils {
 
 		public static synchronized String getUpdateDesc(Context context) {
 			return getPreference(context, PREF_APP_INFO).getString(UPDATE_DESC, null);
+		}
+		public static synchronized boolean hasAddShortCutIcon(Context context) {
+			return getPreference(context, PREF_APP_INFO).getBoolean(HAS_ADD_SHORTCUT, false);
+		}
+
+		public static synchronized void setAddedShortCutIcon(Context context) {
+			getPreference(context, PREF_APP_INFO).edit().putBoolean(HAS_ADD_SHORTCUT, true).commit();
 		}
 	}
 
@@ -146,6 +163,11 @@ public class PrefsUtils {
 		private static final String PREF_KEY_LAST_USED_VERSION = "lastusedversion";
 		private static final String PREF_KEY_TODAY_FISH_TIME = "todayfishtime";
 		private static final String PREF_KEY_LAST_FISH_TIME = "lastfishtime";
+		private static final String PREF_KEY_HAS_ATTENTION_AUTO_BIND = "hasattentionautobind";
+
+		private static final String PREF_KEY_IS_FIRSTTIME_CHOOSE_MY_COUNTRY = "isfirsttimechoosemycountry";
+
+		private static final String PREF_KEY_AUTO_BIND = "autobind";
 
 		public static class ThirdPart {
 
@@ -542,6 +564,30 @@ public class PrefsUtils {
 
 		public static synchronized long getLastFishTime(Context context, String pref) {
 			return getPreference(context, pref).getLong(PREF_KEY_LAST_FISH_TIME, 0);
+		}
+
+		public static synchronized void setAutoBindAttentioned(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_HAS_ATTENTION_AUTO_BIND, true).commit();
+		}
+
+		public static synchronized boolean hasAttentionAutoBind(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_HAS_ATTENTION_AUTO_BIND, false);
+		}
+
+		public static synchronized void setAutoBind(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_AUTO_BIND, true).commit();
+		}
+
+		public static synchronized boolean isAutoBind(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_AUTO_BIND, false);
+		}
+
+		public static synchronized boolean isFirstTimeChooseDriftRange(Context context, String pref) {
+			return getPreference(context, pref).getBoolean(PREF_KEY_IS_FIRSTTIME_CHOOSE_MY_COUNTRY, true);
+		}
+
+		public static synchronized void setDriftRangeCheese(Context context, String pref) {
+			getPreference(context, pref).edit().putBoolean(PREF_KEY_IS_FIRSTTIME_CHOOSE_MY_COUNTRY, false).commit();
 		}
 	}
 }

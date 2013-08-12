@@ -1,8 +1,7 @@
 package com.rcplatform.phototalk.bean;
 
-public class Information {
 
-	// protected String recordId;
+public class Information {
 
 	protected long createtime;
 
@@ -10,7 +9,7 @@ public class Information {
 
 	private long receiveTime;
 
-	protected int type; // 发送图片，接收图片，通知
+	protected int type;
 
 	protected int statu;
 
@@ -29,9 +28,20 @@ public class Information {
 	private boolean hasVoice;
 
 	private boolean hasGraf;
-	
+
 	private int photoType;
+
+	private int informationCate;
 	
+	
+	public int getInformationCate() {
+		return informationCate;
+	}
+
+	public void setInformationCate(int informationCate) {
+		this.informationCate = informationCate;
+	}
+
 	public int getPhotoType() {
 		return photoType;
 	}
@@ -164,5 +174,4 @@ public class Information {
 	public void setReceiveTime(long receiveTime) {
 		this.receiveTime = receiveTime;
 	}
-
 }

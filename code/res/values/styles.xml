@@ -2,13 +2,13 @@
 
     <!--
         Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
     -->
     <style name="AppBaseTheme" parent="android:Theme.Light">
         <!--
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
+            backward-compatibility can go here.
         -->
     </style>
 
@@ -62,7 +62,7 @@
         	       字体颜色为  白色
         	       字体样式为  加粗
         	       字体大小为  16sp
-        	       距离左边距  14dp
+        	       距离左边距  14dp
     -->
     <style name="titleTextStyle" parent="text_base">
         <item name="android:textColor">@android:color/white</item>
@@ -90,7 +90,7 @@
                                                字体颜色为   黑色
                                                字体大小为   12sp
     	                   距离左边距  14dp                                                                                        
-                                              字体垂直居中
+                                              字体垂直居中
     -->
     <style name="contentInfoTextStyle">
         <item name="android:textColor">@android:color/black</item>
@@ -106,7 +106,7 @@
 	    字体颜色   黑色   
 	    提示字体颜色    灰色 #a5a5a5
 	    字体大小  14sp
-	    字体垂直居中
+	    字体垂直居中
     -->
     <style name="editTextStlye">
         <item name="android:textColor">@android:color/black</item>
@@ -127,7 +127,7 @@
                                                字体颜色为   黑色
                                                字体大小为   14sp
     	                   距离左边距  14dp                                                                                        
-                                              字体垂直居中
+                                              字体垂直居中
     -->
     <style name="contentTextStyle">
         <item name="android:textColor">@android:color/black</item>
@@ -242,7 +242,7 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:backgroundDimEnabled">true</item>
-        <item name="android:backgroundDimAmount">0.6</item>
+        <item name="android:backgroundDimAmount">0.6</item>
         -->
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@drawable/translucent_background</item>
@@ -262,6 +262,7 @@
         <item name="android:gravity">center</item>
         <item name="android:background">@drawable/filter_menu_bg</item>
     </style>
+
     <style name="filter_menu_item" parent="filter_menu">
         <item name="android:textSize">20sp</item>
         <item name="android:padding">5dp</item>
