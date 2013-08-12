@@ -380,7 +380,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		if (AudioManager.RINGER_MODE_SILENT == mode) {
 			manager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
 			manager.setStreamVolume(AudioManager.STREAM_SYSTEM, 0, AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
-
 			new Thread(new Runnable() {
 
 				@Override
