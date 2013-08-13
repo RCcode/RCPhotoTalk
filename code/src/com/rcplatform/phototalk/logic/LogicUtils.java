@@ -33,6 +33,7 @@ import com.rcplatform.phototalk.drift.DriftSender;
 import com.rcplatform.phototalk.logic.controller.DriftInformationPageController;
 import com.rcplatform.phototalk.logic.controller.InformationPageController;
 import com.rcplatform.phototalk.proxy.DriftProxy;
+import com.rcplatform.phototalk.proxy.InformationProxy;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 import com.rcplatform.phototalk.request.Request;
 import com.rcplatform.phototalk.request.handler.ThrowDriftResponseHandler;
@@ -251,7 +252,7 @@ public class LogicUtils {
 	}
 
 	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice,
-			final boolean hasGraf, int photoType, final int informationCate) {
+			final boolean hasGraf, boolean hasText, int photoType, final int informationCate) {
 		long flag = System.currentTimeMillis();
 		UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
 		final boolean sendToStranges = friends.contains(PhotoTalkUtils.getDriftFriend());
@@ -277,14 +278,14 @@ public class LogicUtils {
 		// 发送给好友并扔漂流瓶
 		final String notificationTitle = context.getString(R.string.sending_video_to, sbNotifyTitle.substring(0, sbNotifyTitle.length() - 1));
 		try {
-			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf,
+			List<String> friendIds = buildSendPhotoTempInformations(currentUser, friends, flag, Integer.parseInt(timeLimit), file, hasVoice, hasGraf, hasText,
 					photoType, informationCate);
 			int notificationId = 0;
 			if (informationCate == InformationCategory.VIDEO) {
 				notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
 				showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_sending), flag, notificationId);
 			}
-			Request.sendPhoto(context, flag, file, timeLimit, new PhotoSendListener() {
+			InformationProxy.sendInformation(context, flag, file, timeLimit, friendIds, hasVoice, hasGraf, hasText, informationCate, new PhotoSendListener() {
 
 				@Override
 				public void onSendSuccess(long flag, String url) {
@@ -316,7 +317,7 @@ public class LogicUtils {
 					}
 				}
 
-			}, friendIds, hasVoice, hasGraf, informationCate);
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 			InformationPageController.getInstance().onPhotoSendFail(flag);
@@ -330,14 +331,14 @@ public class LogicUtils {
 		DriftInformation tempDriftInformation = new DriftInformation();
 		tempDriftInformation.setFlag(flag);
 		if (hasVoice) {
-			tempDriftInformation.setHasVoice(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE));
+			tempDriftInformation.setHasVoice(Integer.parseInt(PhotoTalkParams.PARAM_VALUE_CONFIRM));
 		} else {
-			tempDriftInformation.setHasVoice(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_VOICE));
+			tempDriftInformation.setHasVoice(Integer.parseInt(PhotoTalkParams.PARAM_VALUE_NEGATE));
 		}
 		if (hasGraf) {
-			tempDriftInformation.setHasGraf(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF));
+			tempDriftInformation.setHasGraf(Integer.parseInt(PhotoTalkParams.PARAM_VALUE_CONFIRM));
 		} else {
-			tempDriftInformation.setHasGraf(Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_GRAF));
+			tempDriftInformation.setHasGraf(Integer.parseInt(PhotoTalkParams.PARAM_VALUE_NEGATE));
 		}
 		tempDriftInformation.setLimitTime(timeLimit);
 		tempDriftInformation.setReceiveTime(flag);
@@ -358,7 +359,7 @@ public class LogicUtils {
 	}
 
 	private static List<String> buildSendPhotoTempInformations(UserInfo currentUser, List<Friend> friends, long flag, int timeLimit, File file,
-			boolean hasVoice, boolean hasGraf, int photoType, int informationCate) throws JSONException {
+			boolean hasVoice, boolean hasGraf, boolean hasText, int photoType, int informationCate) throws JSONException {
 		List<String> friendIds = new ArrayList<String>();
 		List<Information> infoRecords = new ArrayList<Information>();
 		for (Friend f : friends) {
@@ -393,6 +394,7 @@ public class LogicUtils {
 			record.setUrl(file.getPath());
 			record.setHasVoice(hasVoice);
 			record.setHasGraf(hasGraf);
+			record.setHasText(hasText);
 			record.setPhotoType(photoType);
 			infoRecords.add(record);
 		}
@@ -416,23 +418,24 @@ public class LogicUtils {
 		friendIds.add(information.getReceiver().getRcId());
 		final int informationCate = information.getInformationCate();
 		final String notificationTitle = context.getString(R.string.sending_video_to, information.getReceiver().getNick());
-		Request.sendPhoto(context, information.getCreatetime(), new File(information.getUrl()), information.getTotleLength() + "", new PhotoSendListener() {
+		InformationProxy.sendInformation(context, information.getCreatetime(), new File(information.getUrl()), Integer.toString(information.getTotleLength()),
+				friendIds, information.isHasVoice(), information.isHasGraf(), information.isHasText(), informationCate, new PhotoSendListener() {
 
-			@Override
-			public void onSendSuccess(long flag, String url) {
-				InformationPageController.getInstance().onPhotoResendSuccess(information);
-				videoInformationSendSuccess(context, notificationTitle, flag, SendingInformationManager.getInstance().getNotificationId(flag));
-			}
+					@Override
+					public void onSendSuccess(long flag, String url) {
+						InformationPageController.getInstance().onPhotoResendSuccess(information);
+						videoInformationSendSuccess(context, notificationTitle, flag, SendingInformationManager.getInstance().getNotificationId(flag));
+					}
 
-			@Override
-			public void onFail(long flag, int errorCode, String content) {
-				InformationPageController.getInstance().onPhotoResendFail(information);
-				if (informationCate == InformationCategory.VIDEO) {
-					int notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
-					showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_fail), flag, notificationId);
-				}
-			}
-		}, friendIds, information.isHasVoice(), information.isHasGraf(), informationCate);
+					@Override
+					public void onFail(long flag, int errorCode, String content) {
+						InformationPageController.getInstance().onPhotoResendFail(information);
+						if (informationCate == InformationCategory.VIDEO) {
+							int notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
+							showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_fail), flag, notificationId);
+						}
+					}
+				});
 		if (information.getInformationCate() == InformationCategory.VIDEO) {
 			showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_sending), information.getCreatetime(),
 					SendingInformationManager.getInstance().getNotificationId(information.getCreatetime()));

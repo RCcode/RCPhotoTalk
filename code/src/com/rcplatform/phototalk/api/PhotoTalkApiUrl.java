@@ -80,6 +80,8 @@ public class PhotoTalkApiUrl {
 	public static final String GET_FRIENDS_DYNAMIC_URL = SETTING_URL + "queryUserTrends.do";
 
 	public static final String SEND_PICTURE_URL = FILE_URL + "upload.do";
+	
+	public static final String SEND_VIDEO_URL=FILE_URL+"mvUpload.do";
 
 	public static final String GET_USER_INFO = USER_URL + "getUserSelfInfo.do";
 

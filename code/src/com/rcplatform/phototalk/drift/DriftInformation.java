@@ -5,8 +5,8 @@ import java.io.Serializable;
 import com.rcplatform.phototalk.bean.Information;
 import com.rcplatform.phototalk.request.PhotoTalkParams;
 
-public class DriftInformation implements Serializable{
-	
+public class DriftInformation implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -68,11 +68,11 @@ public class DriftInformation implements Serializable{
 	}
 
 	public boolean hasVoice() {
-		return hasVoice == Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
+		return hasVoice == Integer.parseInt(PhotoTalkParams.PARAM_VALUE_CONFIRM);
 	}
 
 	public boolean hasGraf() {
-		return hasGraf == Integer.parseInt(PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);
+		return hasGraf == Integer.parseInt(PhotoTalkParams.PARAM_VALUE_NEGATE);
 	}
 
 	public void setHasVoice(int hasVoice) {
@@ -128,5 +128,5 @@ public class DriftInformation implements Serializable{
 	public void setSender(DriftSender sender) {
 		this.sender = sender;
 	}
-	
+
 }

@@ -2,7 +2,6 @@ package com.rcplatform.phototalk.request;
 
 import java.io.File;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,20 +18,14 @@ import com.rcplatform.phototalk.api.PhotoTalkApiUrl;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.FriendType;
-import com.rcplatform.phototalk.bean.Information;
-import com.rcplatform.phototalk.bean.InformationState;
 import com.rcplatform.phototalk.bean.UserInfo;
 import com.rcplatform.phototalk.db.PhotoTalkDatabaseFactory;
-import com.rcplatform.phototalk.galhttprequest.LogUtil;
 import com.rcplatform.phototalk.galhttprequest.MD5;
-import com.rcplatform.phototalk.logic.MessageSender;
 import com.rcplatform.phototalk.request.inf.FriendDetailListener;
 import com.rcplatform.phototalk.request.inf.OnUserInfoLoadedListener;
-import com.rcplatform.phototalk.request.inf.PhotoSendListener;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.PrefsUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
-import com.rcplatform.phototalk.utils.RCThreadPool;
 import com.rcplatform.phototalk.utils.Utils;
 
 public class Request implements Serializable {
@@ -46,7 +39,7 @@ public class Request implements Serializable {
 	private String filePath;
 	private boolean cache = false;
 
-	private void census() {
+	public void census() {
 		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_COUNTRY, Constants.COUNTRY);
 		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_OS, Constants.OS_NAME);
 		putParam(PhotoTalkParams.ServiceCensus.PARAM_KEY_OS_VERSION, Constants.OS_VERSION);
@@ -208,82 +201,6 @@ public class Request implements Serializable {
 		request.excuteAsync();
 	}
 
-	public static void sendPhoto(final Context context, final long flag, final File file, final String timeLimit, final PhotoSendListener listener,
-			final List<String> friendIds, final boolean hasVoice, final boolean hasDraw, final int informationCate) {
-		final UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-		try {
-			JSONArray jsonArray = new JSONArray();
-			for (String rcId : friendIds) {
-				JSONObject jsonObject = new JSONObject();
-				jsonObject.put(PhotoTalkParams.SendPhoto.PARAM_KEY_RECEIVER_ID, rcId);
-				jsonArray.put(jsonObject);
-			}
-			RCPlatformResponseHandler responseHandler = null;
-			if (listener != null) {
-				responseHandler = new RCPlatformResponseHandler() {
-
-					@Override
-					public void onSuccess(int statusCode, String content) {
-						try {
-							JSONObject jsonObject = new JSONObject(content);
-							String informationUrl = jsonObject.getString("picUrl");
-							List<String> userIds = buildUserIds(jsonObject.getJSONArray("users"));
-							long flag = jsonObject.getLong("time");
-							Map<String, Information> informations = PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, informationUrl,
-									flag, userIds, friendIds, InformationState.PhotoInformationState.STATU_NOTICE_SENDED_OR_NEED_LOADD,
-									Integer.parseInt(timeLimit), hasVoice, informationCate);
-							MessageSender.getInstance().sendInformation(context, informations, userIds);
-							listener.onSendSuccess(flag, informationUrl);
-							RCThreadPool.getInstance().addTask(new Runnable() {
-
-								@Override
-								public void run() {
-									int count = PhotoTalkDatabaseFactory.getDatabase().getUnSendInformationCountByUrl(file.getPath());
-									int driftCount = PhotoTalkDatabaseFactory.getDatabase().getUnSendDriftInformationCountByUrl(file.getPath());
-									if (count == 0 && driftCount == 0) {
-										LogUtil.e("delete temp files");
-										file.delete();
-									}
-								}
-							});
-						} catch (JSONException e) {
-							e.printStackTrace();
-							onFailure(RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, content);
-						}
-					}
-
-					@Override
-					public void onFailure(int errorCode, String content) {
-						listener.onFail(flag, errorCode, content);
-						UserInfo currentUser = ((PhotoTalkApplication) context.getApplicationContext()).getCurrentUser();
-						PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-								InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice, informationCate);
-					}
-				};
-			}
-			Request request = new Request(context, PhotoTalkApiUrl.SEND_PICTURE_URL, responseHandler);
-			request.setCreateTime(flag);
-			request.setFile(file);
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_FLAG, flag + "");
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_TIME_LIMIT, timeLimit);
-			request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_USERS, jsonArray.toString());
-			if (hasVoice)
-				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_VOICE, PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_VOICE);
-			else
-				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_VOICE, PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_VOICE);
-			if (hasDraw)
-				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_GRAF, PhotoTalkParams.SendPhoto.PARAM_VALUE_HAS_GRAF);
-			else
-				request.putParam(PhotoTalkParams.SendPhoto.PARAM_KEY_HAS_GRAF, PhotoTalkParams.SendPhoto.PARAM_VALUE_NO_GRAF);
-			request.census();
-			request.excuteAsync();
-		} catch (Exception e) {
-			e.printStackTrace();
-			listener.onFail(flag, RCPlatformServiceError.ERROR_CODE_REQUEST_FAIL, context.getString(R.string.net_error));
-			PhotoTalkDatabaseFactory.getDatabase().updateTempInformations(currentUser, null, flag, null, friendIds,
-					InformationState.PhotoInformationState.STATU_NOTICE_SEND_OR_LOAD_FAIL, Integer.parseInt(timeLimit), hasVoice, informationCate);
-		}
-	}
 
 	public String getFilePath() {
 		return filePath;
@@ -305,16 +222,6 @@ public class Request implements Serializable {
 		this.cache = cache;
 	}
 
-	private static List<String> buildUserIds(JSONArray array) throws JSONException {
-		List<String> ids = new ArrayList<String>();
-		if (array.length() > 0) {
-			for (int i = 0; i < array.length(); i++) {
-				String tcId = array.getString(i);
-				ids.add(tcId);
-			}
-		}
-		return ids;
-	}
 
 	public static void executeGetMyInfo(final Context context, final OnUserInfoLoadedListener listener, final String rcId, String token) {
 		RCPlatformResponseHandler responseHandler = new RCPlatformResponseHandler() {

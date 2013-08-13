@@ -55,6 +55,7 @@ import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.utils.ZipUtil;
 import com.rcplatform.phototalk.views.AudioRecordButton;
@@ -382,8 +383,8 @@ public class EditPictureActivity extends BaseActivity {
 		switch (informationCate) {
 		case InformationCategory.VIDEO:
 			videoPath = getIntent().getStringExtra(PARAM_KEY_VIDEO_PATH);
-			File file=new File(videoPath);
-			LogUtil.e(file.exists()+"..."+file.getTotalSpace());
+			File file = new File(videoPath);
+			LogUtil.e(file.exists() + "..." + file.getTotalSpace());
 			timeLimit = getIntent().getIntExtra(PARAM_KEY_VIDEO_LENGTH, (int) Constants.TimeMillins.MAX_VIDEO_RECORD_TIME / 1000);
 			break;
 		default:
@@ -448,7 +449,7 @@ public class EditPictureActivity extends BaseActivity {
 			}
 		});
 		videoView.setVideoURI(Uri.parse(videoPath));
-//		videoView.setVideoPath(videoPath);
+		// videoView.setVideoPath(videoPath);
 		LogUtil.e(videoPath);
 	}
 
@@ -633,7 +634,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		if(event.getKeyCode()==KeyEvent.KEYCODE_BACK){
+		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
 			if (isEditTextNeedHide()) {
 				mEditText.setVisibility(View.GONE);
 				mEditText = null;
@@ -647,6 +648,7 @@ public class EditPictureActivity extends BaseActivity {
 		intent.putExtra("timeLimit", timeLimit + "");
 		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASGRAF, mEditePicView.hasDrawed());
 		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASVOICE, voicePath != null);
+		intent.putExtra(SelectFriendsActivity.PARAM_KEY_HASTEXT, hasText());
 		startActivity(intent);
 	}
 
@@ -925,8 +927,12 @@ public class EditPictureActivity extends BaseActivity {
 					voicePath != null, getCurrentUser(), friend);
 			DialogUtil.showToast(getApplicationContext(), R.string.send_back_success, Toast.LENGTH_SHORT);
 		}
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), getIntent().getIntExtra("photoType", 0),
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, voicePath != null, mEditePicView.hasDrawed(), hasText(), getIntent().getIntExtra("photoType", 0),
 				informationCate);
+	}
+
+	private boolean hasText() {
+		return editText != null && !RCPlatformTextUtil.isEmpty(editText.getText().toString());
 	}
 
 	private boolean isNeedToLogOnService() {

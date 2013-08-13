@@ -30,10 +30,21 @@ public class Information {
 	private boolean hasGraf;
 
 	private int photoType;
+	
+	private boolean hasText;
 
 	private int informationCate;
 	
 	
+	
+	public boolean isHasText() {
+		return hasText;
+	}
+
+	public void setHasText(boolean hasText) {
+		this.hasText = hasText;
+	}
+
 	public int getInformationCate() {
 		return informationCate;
 	}

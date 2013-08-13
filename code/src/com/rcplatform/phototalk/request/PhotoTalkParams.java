@@ -18,9 +18,10 @@ public class PhotoTalkParams {
 	public static String PARAM_KEY_APP_ID = "appId";
 
 	public static String PARAM_VALUE_TOKEN_DEFAULT = UserInfo.DEFAULT_TOKEN;
-	
+
 	public static final String PARAM_VALUE_CONFIRM = "1";
 	public static final String PARAM_VALUE_NEGATE = "0";
+
 	public static class ChangePassword {
 		public static final String PARAM_KEY_CHECK_PASSWORD = "pwd";
 		public static final String PARAM_KEY_NEW_PASSWORD = "newPwd";
@@ -41,10 +42,10 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_RECEIVER_ID = "rcId";
 		public static final String PARAM_KEY_HAS_VOICE = "record";
 		public static final String PARAM_KEY_HAS_GRAF = "graf";
-		public static final String PARAM_VALUE_HAS_VOICE = "1";
-		public static final String PARAM_VALUE_NO_VOICE = "0";
-		public static final String PARAM_VALUE_HAS_GRAF = "1";
-		public static final String PARAM_VALUE_NO_GRAF = "0";
+		public static final String PARAM_KEY_HAS_TEXT = "text";
+	}
+
+	public static class SendVideo extends SendPhoto {
 	}
 
 	public static class UserSetting {
@@ -211,8 +212,6 @@ public class PhotoTalkParams {
 		public static final String PARAM_KEY_IS_COUNTRY = "iscountry";
 		public static final String PARAM_KEY_IS_GENDER = "isGender";
 	}
-
-	
 
 	public static class DriftShowTime {
 		public static final String PARAM_KEY_PICIDS = "picIds";
