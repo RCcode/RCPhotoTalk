@@ -450,20 +450,12 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
 				mVideoSize = previewSize;
 				if (previewSize != null) {
-					// if (isBackFace) {
-					// parameters.setPreviewSize(previewSize.width,
-					// previewSize.height);
-					// } else {
-					// int width = previewSize.width;
-					// int height = previewSize.height;
-					// if (getResources().getConfiguration().orientation ==
-					// Configuration.ORIENTATION_PORTRAIT)
-					// parameters.setPreviewSize(width, height);
-					// else
-					// parameters.setPreviewSize(height, width);
-					// }
+					// parameters.getPreviewSize().width = previewSize.width;
+					// parameters.getPreviewSize().height = previewSize.height;
+					parameters.setPreviewSize(previewSize.width, previewSize.height);
+					// parameters.set("preview-size",
+					// previewSize.width+"x"+previewSize.height);
 				}
-
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
 				if (pictureSize != null)
 					parameters.setPictureSize(pictureSize.width, pictureSize.height);
@@ -567,23 +559,20 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 						mMediaRecorder = new MediaRecorder();
 					else
 						mMediaRecorder.reset();
-
 					mMediaRecorder.setCamera(mCamera);
 					mMediaRecorder.setPreviewDisplay(mHolder.getSurface());
 					mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
 					mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 					// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
 					mMediaRecorder.setProfile(paramCamcorderProfile);
-					// if (mVideoSize != null)
-					// this.mMediaRecorder.setVideoSize(mVideoSize.width,
-					// mVideoSize.height);
-					// else
-					// this.mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
-					// paramCamcorderProfile.videoFrameHeight);
+					if (mVideoSize != null)
+						mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
+					else
+						mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth, paramCamcorderProfile.videoFrameHeight);
 					// this.mMediaRecorder.setVideoFrameRate(30);
 					// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
-//					if (isBackFace)
-						mMediaRecorder.setVideoEncodingBitRate(1000000);
+					// if (isBackFace)
+					mMediaRecorder.setVideoEncodingBitRate(1000000);
 					// this.mMediaRecorder.setAudioEncodingBitRate(paramCamcorderProfile.audioBitRate);
 					// this.mMediaRecorder.setAudioChannels(paramCamcorderProfile.audioChannels);
 					// this.mMediaRecorder.setAudioSamplingRate(paramCamcorderProfile.audioSampleRate);
