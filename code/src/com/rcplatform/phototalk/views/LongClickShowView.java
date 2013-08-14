@@ -14,6 +14,7 @@ import android.graphics.Color;
 import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -169,6 +170,14 @@ public class LongClickShowView extends Dialog {
 		LogUtil.e(file.getTotalSpace()+"~~~~~~~~~~~~~~~~~"+file.getPath());
 		Builder.mVideoView.setVisibility(View.VISIBLE);
 		Builder.mVideoView.setVideoURI(Uri.fromFile(file));
+		Builder.mVideoView.setOnErrorListener(new OnErrorListener() {
+			
+			@Override
+			public boolean onError(MediaPlayer mp, int what, int extra) {
+				
+				return true;
+			}
+		});
 		Builder.mVideoView.start();
 		if (info.getTotleLength() != info.getLimitTime())
 			Builder.mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);

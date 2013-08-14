@@ -39,6 +39,9 @@ public class TakePhotoActivity extends Activity {
 
 	private static final int CLOSE_ON_CLICK = 3;
 
+	private static final int ICON_VIDEO = 4;
+	private static final int ICON_PHOTO = 5;
+
 	private Button mButtonTake;
 
 	private Button mButtonClose;
@@ -70,6 +73,9 @@ public class TakePhotoActivity extends Activity {
 	private boolean isRecordingVideo = false;
 
 	private ImageView ivTakeVideoAttention;
+
+	private View iconCamera;
+	private View iconVideo;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +135,13 @@ public class TakePhotoActivity extends Activity {
 		ivTakeVideoAttention = (ImageView) findViewById(R.id.iv_video_record_atttention);
 		ivTakeVideoAttention.setBackgroundResource(R.anim.video_record_animation);
 		animFrame = (AnimationDrawable) ivTakeVideoAttention.getBackground();
+		iconCamera = findViewById(R.id.iv_camera);
+		iconVideo = findViewById(R.id.iv_video);
+		iconCamera.setTag(ICON_PHOTO);
+		iconVideo.setTag(ICON_VIDEO);
+		iconCamera.setOnClickListener(clickListener);
+		iconVideo.setOnClickListener(clickListener);
+
 	}
 
 	private void startVideoRecordFrameAnimation() {
@@ -221,7 +234,12 @@ public class TakePhotoActivity extends Activity {
 			case CLOSE_ON_CLICK:
 				finish();
 				break;
-
+			case ICON_PHOTO:
+				vcChange.setChecked(false);
+				break;
+			case ICON_VIDEO:
+				vcChange.setChecked(true);
+				break;
 			}
 
 		}

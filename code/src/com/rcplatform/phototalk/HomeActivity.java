@@ -21,7 +21,6 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.animation.AlphaAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -29,7 +28,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,7 +96,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 
 	protected static final int MSG_TIGASE_NEW_INFORMATION = 3;
-	private static final String FRISTUSED = "fristUsedVersion";
 
 	private SnapListView mInformationList;
 
@@ -135,7 +132,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private ImageView ivNewRecommends;
 	private View knowStrangerView;
 	// 引导
-	private LinearLayout vPager;
 	private ImageView ivDriftAttention;
 
 	@Override
@@ -191,7 +187,7 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 	private void addShortCutIcon() {
 		if (!PrefsUtils.AppInfo.hasAddShortCutIcon(this)) {
 			PrefsUtils.AppInfo.setAddedShortCutIcon(this);
-			Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.take_photo);
+			Utils.createShortCutIcon(this, PhotoTalkUtils.getNotificationTakePhotoIntent(this), R.drawable.take_photo, R.string.icon_name);
 		}
 	}
 
@@ -456,9 +452,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		mInformationList.setOnItemClickListener(informationListItemClickListener);
 		if (PrefsUtils.User.hasNewRecommends(this, getCurrentUserRcId()))
 			InformationPageController.getInstance().onNewRecommends();
-
-		initViewPager();
-
 	}
 
 	private OnItemClickListener informationListItemClickListener = new OnItemClickListener() {
@@ -483,30 +476,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		}
 	};
 
-	/**
-	 * 初始化ViewPager
-	 */
-	private void initViewPager() {
-		vPager = (LinearLayout) findViewById(R.id.home_init_pager);
-		boolean isShow = PrefsUtils.User.hasCurrentVersionUsed(this, FRISTUSED);
-		// 打开注释 以后只显示一次引导页
-		if (!isShow) {
-			vPager.setVisibility(View.VISIBLE);
-		} else {
-			vPager.setVisibility(View.GONE);
-		}
-		vPager.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
-				animation.setDuration(500);
-				vPager.setAnimation(animation);
-				vPager.setVisibility(View.GONE);
-				PrefsUtils.User.setCurrentVersionUsed(HomeActivity.this, FRISTUSED);
-			}
-		});
-	}
 
 	private void showFriendDetail(Information information) {
 		if (information.getSender().getRcId().equals(information.getReceiver().getRcId())) {

@@ -544,7 +544,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	private Size mVideoSize;
 
 	public void startVideoRecord() {
-		showLoadingDialog();
 		Thread thread = new Thread() {
 			public void run() {
 				try {
@@ -616,7 +615,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	protected static final int MSG_WHAT_VIDEO_RECORD_FAIL = 0;
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
-			dismissLoadingDialog();
 			switch (msg.what) {
 			case MSG_WHAT_STOP_RECORD:
 				stopRecord();

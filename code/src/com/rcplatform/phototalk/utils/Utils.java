@@ -745,10 +745,10 @@ public class Utils {
 		}
 	}
 
-	public static void createShortCutIcon(Context context, Intent iconIntent, int drawableId) {
+	public static void createShortCutIcon(Context context, Intent iconIntent, int drawableId,int iconNameId) {
 		Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 		// 快捷方式的名称
-		shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(R.string.app_name));
+		shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(iconNameId));
 		shortcut.putExtra("duplicate", false); // 不允许重复创建
 		// 指定当前的Activity为快捷方式启动的对象: 如 //com.everest.video.VideoPlayer
 		// 注意: ComponentName的第二个参数必须加上点号(.)，否则快捷方式无法启动相应程序

@@ -1,26 +1,16 @@
 package com.rcplatform.phototalk;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.GestureDetector.OnGestureListener;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.ImageView.ScaleType;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
@@ -37,8 +27,6 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 	private PageIndicator mPageIndicator;
 
 	public static final int REQUEST_CODE_LOGIN = 100;
-
-	private final int GUIDE_PAGE_COUNT = 10;
 
 	private AlphaAnimation inAnimation_Alpha;
 
@@ -68,7 +56,6 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 	}
 
 	private void initView() {
-
 		mGestureDetector = new GestureDetector(this);
 		mGestureDetector.setIsLongpressEnabled(true);
 		inAnimation_Alpha = new AlphaAnimation(0.0f, 1.0f);
@@ -102,25 +89,8 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 		pager = (ViewFlipper) findViewById(R.id.intro_pager);
 		pager.setOnTouchListener(this);
 		pager.setLongClickable(true);
-		// pager.setAdapter(new IntroAdapter());
 		mPageIndicator = (PageIndicator) findViewById(R.id.page_indicator_other);
 		mPageIndicator.setDotCount(pager.getChildCount());
-		// pager.setCurrentItem(0);
-		// pager.setOnPageChangeListener(new OnPageChangeListener() {
-		//
-		// @Override
-		// public void onPageSelected(int arg0) {
-		// setPageIndicator(arg0);
-		// }
-		//
-		// @Override
-		// public void onPageScrolled(int arg0, float arg1, int arg2) {
-		// }
-		//
-		// @Override
-		// public void onPageScrollStateChanged(int arg0) {
-		// }
-		// });
 	}
 
 	private void startLoginActivity() {
@@ -159,19 +129,16 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
-		// TODO Auto-generated method stub
 		return mGestureDetector.onTouchEvent(event);
 	}
 
 	@Override
 	public boolean onDown(MotionEvent e) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-		// TODO Auto-generated method stub
 		if (e1.getX() - e2.getX() > FLING_MIN_DISTANCE && Math.abs(velocityX) > FLING_MIN_VELOCITY) {
 			pager.setInAnimation(inAnimation_Alpha);
 			pager.setOutAnimation(outAnimation_Alpha);
@@ -187,12 +154,6 @@ public class InitPageActivity extends BaseActivity implements OnGestureListener,
 				onCheckMain(numView);
 			}
 		}
-		// 上下滑动判断
-		// if (e1.getY() - e2.getY() > FLING_MIN_DISTANCE
-		// && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
-		// } else if (e2.getY() - e1.getY() > FLING_MIN_DISTANCE
-		// && Math.abs(velocityY) > FLING_MIN_VELOCITY) {
-		// }
 
 		return false;
 	}

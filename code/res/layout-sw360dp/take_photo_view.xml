@@ -31,6 +31,7 @@
             android:gravity="center_vertical" >
 
             <ImageView
+                android:id="@+id/iv_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
@@ -45,6 +46,7 @@
                 android:button="@null" />
 
             <ImageView
+                android:id="@+id/iv_video"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/take_video" />

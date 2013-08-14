@@ -195,7 +195,7 @@
     <string name="null_str"></string>
     <!-- 没有翻译的字符 -->
 
-    <string name="app_name">PhotoTalk</string>
+    <string name="app_name">FriendMe</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="version">v2.2</string>
@@ -415,5 +415,5 @@
     <string name="change_country">去修改</string>
     <string name="confirm_user_country_attention">提示：你以后可以在个人资料中修改自己的国家</string>
     <string name="press_input_text">点击输入文字</string>
-
+	<string name="icon_name">F.Me摄像</string>
 </resources>

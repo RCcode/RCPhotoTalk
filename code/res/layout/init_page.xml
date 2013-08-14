@@ -15,16 +15,6 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/init_page_one" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/init_page_two" />
-
-        <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:background="@drawable/init_page_three" />
     </ViewFlipper>
 
     <ImageView
@@ -67,6 +57,7 @@
         android:layout_above="@+id/btns"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/init_indicator_bottom"
+        android:visibility="invisible"
         app:dotSpacing="4dp" />
 
     <LinearLayout

@@ -35,11 +35,12 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	protected Context baseContext;
 	private boolean needRelogin = true;
 	private ActivityFunction functionImpl;
-	private String rcId;
-	private UserInfo currentUser;
 
 	public String getCurrentUserRcId() {
-		return rcId;
+		UserInfo userInfo=getCurrentUser();
+		if(userInfo!=null)
+			return userInfo.getRcId();
+		return null;
 	}
 
 	protected void cancelRelogin() {
@@ -51,9 +52,6 @@ public class BaseActivity extends Activity implements ActivityFunction {
 		super.onCreate(savedInstanceState);
 		baseContext = this;
 		functionImpl = new ActivityFunctionBasic(this);
-		currentUser = functionImpl.getCurrentUser();
-		if (currentUser != null)
-			rcId = currentUser.getRcId();
 	}
 
 	public int getStartMode() {
@@ -147,7 +145,7 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	}
 
 	public UserInfo getCurrentUser() {
-		return currentUser;
+		return functionImpl.getCurrentUser();
 	}
 
 	protected void initBackButton(int textResId, OnClickListener onClickListener) {
@@ -232,13 +230,13 @@ public class BaseActivity extends Activity implements ActivityFunction {
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
+		baseContext = this;
+		functionImpl = new ActivityFunctionBasic(this);
 		Constants.initUIData(this);
 		if (needRelogin) {
 			UserInfo userInfo = PrefsUtils.LoginState.getLoginUser(this);
 			if (userInfo != null) {
 				getPhotoTalkApplication().setCurrentUser(userInfo);
-				currentUser = userInfo;
-				rcId = currentUser.getRcId();
 			}
 		}
 	}

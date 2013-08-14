@@ -54,9 +54,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/stranger_init_padding_bottom"
                 android:layout_marginLeft="@dimen/stranger_init_padding"
                 android:layout_marginRight="@dimen/stranger_init_padding"
-                android:layout_marginBottom="@dimen/stranger_init_padding_bottom"
                 android:text="@string/show_init_message_1"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
@@ -72,9 +72,9 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/stranger_init_padding_bottom"
                 android:layout_marginLeft="@dimen/stranger_init_padding"
                 android:layout_marginRight="@dimen/stranger_init_padding"
-                android:layout_marginBottom="@dimen/stranger_init_padding_bottom"
                 android:text="@string/show_init_message_2"
                 android:textColor="@color/white"
                 android:textSize="18sp" />

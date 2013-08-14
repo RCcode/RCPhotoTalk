@@ -81,7 +81,6 @@ import com.rcplatform.phototalk.views.SnapShowListener;
 public class DriftInformationActivity extends BaseActivity implements SnapShowListener, OnClickListener {
 
 	private static final int MSG_WHAT_INFORMATION_LOADED = 1;
-	private static final String USERDRIFT = "userDrift";
 	private static final int MSG_WHAT_LOCAL_INFORMATION_LOADED = 4;
 	public static final String PARAM_FRIEND = "friend";
 	public static final String PARAM_INFORMATION = "information";
@@ -112,10 +111,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private Button btnFish;
 	private Button btnThrow;
+	private static DriftShowMode mShowMode = DriftShowMode.ALL;
 	private ViewFlipper pager;
 	private GestureDetector mGestureDetector;
-	private static DriftShowMode mShowMode = DriftShowMode.ALL;
-
+	private static final String USERDRIFT = "userDrift";
 	static enum DriftShowMode {
 		ALL, MY_COUNTRY;
 	}
@@ -155,7 +154,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		myHandler.sendMessage(msg);
 	}
 
-	@SuppressWarnings("deprecation")
 	private void initViewAndListener() {
 		initBackButton(R.string.know_strangers, new OnClickListener() {
 
@@ -264,7 +262,13 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		});
 		mGestureDetector.setIsLongpressEnabled(true);
 	}
-
+	private void closePaper() {
+		AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
+		animation.setDuration(500);
+		pager.setAnimation(animation);
+		pager.setVisibility(View.GONE);
+		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
+	}
 	private OnItemClickListener driftListItemClickListener = new OnItemClickListener() {
 
 		@Override
@@ -285,18 +289,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		}
 	};
 
-	private void closePaper() {
-		AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
-		animation.setDuration(500);
-		pager.setAnimation(animation);
-		pager.setVisibility(View.GONE);
-		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
-	}
-
-
-	private void initMenuButton() {
-		// TODO
-	}
 
 	private void showFriendDetail(DriftInformation information) {
 		Friend friend = null;
@@ -694,16 +686,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				int start = 0;
 				if (mInformationList.getAdapter() != null)
 					start = mInformationList.getAdapter().getCount() - 1;
-				List<DriftInformation> informations = null;
-				switch (mShowMode) {
-				case ALL:
-					informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformations(start, Constants.INFORMATION_PAGE_SIZE);
-					break;
-				case MY_COUNTRY:
-					informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformationByCountry(start, Constants.INFORMATION_PAGE_SIZE,
-							getCurrentUser().getCountry());
-					break;
-				}
+				List<DriftInformation> informations = PhotoTalkDatabaseFactory.getDatabase().getDriftInformations(start, Constants.INFORMATION_PAGE_SIZE);
 				List<Integer> picIds = new ArrayList<Integer>();
 				String currentRcId = getCurrentUser().getRcId();
 				for (DriftInformation information : informations) {
@@ -765,8 +748,8 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void changeShowMode(DriftShowMode mode) {
 		mShowMode = mode;
-		reset();
-		loadLocalInformation();
+		// reset();
+		// loadLocalInformation();
 	}
 
 	private void reset() {
@@ -823,20 +806,25 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 
 	private void showFilterMenu() {
 		String[] items = new String[] { getString(R.string.all_world), getString(R.string.my_country) };
-		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.set_drift_range).setItems(items, new DialogInterface.OnClickListener() {
+		int checkedItem = 0;
+		if (mShowMode == DriftShowMode.MY_COUNTRY)
+			checkedItem = 1;
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.set_drift_range)
+				.setSingleChoiceItems(items, checkedItem, new DialogInterface.OnClickListener() {
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				switch (which) {
-				case 0:
-					changeShowMode(DriftShowMode.ALL);
-					break;
-				case 1:
-					chooseMyCountry();
-					break;
-				}
-			}
-		}).create();
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						switch (which) {
+						case 0:
+							changeShowMode(DriftShowMode.ALL);
+							break;
+						case 1:
+							chooseMyCountry();
+							break;
+						}
+					}
+				}).create();
 		dialog.show();
 	}
 
