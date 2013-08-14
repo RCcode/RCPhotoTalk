@@ -35,7 +35,7 @@
             android:id="@+id/btn_get_drift"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
+            android:layout_marginLeft="60dp"
             android:background="@drawable/btn_fish" />
     </LinearLayout>
 

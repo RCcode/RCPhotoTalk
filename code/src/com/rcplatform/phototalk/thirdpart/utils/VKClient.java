@@ -40,7 +40,7 @@ public class VKClient {
 	private static final int MSG_WHAT_DEAUTHORIZE_SUCCESS = 201;
 
 	private static final int MSG_WHAT_DEAUTHORIZE_FAIL = 501;
-	
+
 	private static final int INVITE_SUCCESS = 600;
 
 	private OnAuthorizeSuccessListener mAuthorizeSuccessListener;
@@ -97,10 +97,9 @@ public class VKClient {
 					List<String> attachments = new ArrayList<String>();
 					attachments.add(Constants.INVITE_URL);
 					attachments.add(Constants.VK_INVITE_IMAGE);
-					mApi.createWallPost(mUid, mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()), attachments, null,
-					                    false, false, false, null, null, null, null);
-				}
-				catch (Exception e) {
+					mApi.createWallPost(mUid, mContext.getString(R.string.join_message, mContext.getCurrentUser().getRcId()), attachments, null, false, false,
+							false, null, null, null, null);
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			};
@@ -122,8 +121,7 @@ public class VKClient {
 					mUser = ThirdPartUtils.parserVKUserToThirdPartUser(userProfiles.get(0));
 					PrefsUtils.User.ThirdPart.refreshVKSyncTime(mContext.getApplicationContext(), mContext.getCurrentUser().getRcId());
 					mVKHandler.sendEmptyMessage(MSG_WHAT_GETINFO_SUCCESS);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 					mVKHandler.sendEmptyMessage(MSG_WHAT_GETINFO_ERROR);
 				}
@@ -137,25 +135,25 @@ public class VKClient {
 		public void handleMessage(android.os.Message msg) {
 			mContext.dismissLoadingDialog();
 			switch (msg.what) {
-				case MSG_WHAT_GETINFO_ERROR:
-					if (mGetListener != null)
-						mGetListener.onGetFail();
-					break;
-				case MSG_WHAT_GETINFO_SUCCESS:
-					if (mGetListener != null)
-						mGetListener.onGetInfoSuccess(mUser, mFriends);
-					break;
-				case MSG_WHAT_DEAUTHORIZE_FAIL:
-					if (mDeAuthorizeListener != null)
-						mDeAuthorizeListener.onDeAuthorizeFail();
-					break;
-				case MSG_WHAT_DEAUTHORIZE_SUCCESS:
-					if (mDeAuthorizeListener != null)
-						mDeAuthorizeListener.onDeAuthorizeSuccess();
-					break;
-				case INVITE_SUCCESS:
-					Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
-					break;
+			case MSG_WHAT_GETINFO_ERROR:
+				if (mGetListener != null)
+					mGetListener.onGetFail();
+				break;
+			case MSG_WHAT_GETINFO_SUCCESS:
+				if (mGetListener != null)
+					mGetListener.onGetInfoSuccess(mUser, mFriends);
+				break;
+			case MSG_WHAT_DEAUTHORIZE_FAIL:
+				if (mDeAuthorizeListener != null)
+					mDeAuthorizeListener.onDeAuthorizeFail();
+				break;
+			case MSG_WHAT_DEAUTHORIZE_SUCCESS:
+				if (mDeAuthorizeListener != null)
+					mDeAuthorizeListener.onDeAuthorizeSuccess();
+				break;
+			case INVITE_SUCCESS:
+				Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_SHORT).show();
+				break;
 			}
 		};
 	};
@@ -163,38 +161,36 @@ public class VKClient {
 	public void deAuthorize(OnDeAuthorizeListener listener) {
 		mDeAuthorizeListener = listener;
 		mContext.showLoadingDialog(BaseActivity.LOADING_NO_MSG, BaseActivity.LOADING_NO_MSG, false);
-		//Thread thread = new Thread() {
+		// Thread thread = new Thread() {
 
-			//public void run() {
-				PrefsUtils.User.ThirdPart.clearVKAccount(mContext, mContext.getCurrentUser().getRcId());
-				mVKHandler.sendEmptyMessage(MSG_WHAT_DEAUTHORIZE_SUCCESS);
-				Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_LONG).show();
-			//};
-		//};
-		//thread.start();
+		// public void run() {
+		PrefsUtils.User.ThirdPart.clearVKAccount(mContext, mContext.getCurrentUser().getRcId());
+		mVKHandler.sendEmptyMessage(MSG_WHAT_DEAUTHORIZE_SUCCESS);
+		Toast.makeText(mContext, mContext.getResources().getString(R.string.save_success), Toast.LENGTH_LONG).show();
+		// };
+		// };
+		// thread.start();
 	}
 
 	public void sendInviteMessage(final Collection<String> friendIds) {
 		Thread thread = new Thread() {
 
 			public void run() {
-
+				boolean flag = true;
 				for (String id : friendIds) {
-					boolean flag = true;
 					try {
 						List<String> attachments = new ArrayList<String>();
 						attachments.add(Constants.INVITE_URL);
 						attachments.add(Constants.VK_INVITE_IMAGE);
-						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()),
-						                    attachments, null, false, false, false, null, null, null, null);
-					}
-					catch (Exception e) {
+						mApi.createWallPost(Long.parseLong(id), mContext.getString(R.string.invite_message, mContext.getCurrentUser().getRcId()), attachments,
+								null, false, false, false, null, null, null, null);
+					} catch (Exception e) {
 						flag = false;
 						e.printStackTrace();
 					}
-					if(flag){
-						mVKHandler.sendEmptyMessage(INVITE_SUCCESS);
-					}
+				}
+				if (flag) {
+					mVKHandler.sendEmptyMessage(INVITE_SUCCESS);
 				}
 			};
 		};
