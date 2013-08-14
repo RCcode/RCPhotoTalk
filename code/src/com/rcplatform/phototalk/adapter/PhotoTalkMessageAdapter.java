@@ -113,10 +113,10 @@ public class PhotoTalkMessageAdapter extends BaseAdapter {
 			if (record.getInformationCate() == InformationCategory.PHOTO || record.getInformationCate() == InformationCategory.DEFAULT) {
 				if (record.isHasVoice()) {
 					holder.item_new.setImageResource(R.drawable.new_item_voice);
-				} else if (record.getInformationCate() == InformationCategory.VIDEO) {
+				} else {
 					holder.item_new.setImageResource(R.drawable.item_new_bg);
 				}
-			} else {
+			} else if (record.getInformationCate() == InformationCategory.VIDEO) {
 				holder.item_new.setImageResource(R.drawable.new_item_video);
 			}
 			holder.item_new.setVisibility(View.VISIBLE);

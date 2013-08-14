@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">ค้นหาเพื่อน</string>
     <string name="firend_list_invite_friend_title">เชิญเพื่อน</string>
-    <string name="firend_list_used_photochat_friend_title">เพื่อนใน PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">เพื่อนใน FriendMe</string>
     <string name="search_hint">ไม่พบผลลัพธ์สำหรับการค้นหานี้</string>
 
     <!-- 消息页面 -->
@@ -170,7 +170,7 @@
     <string name="contact_us">ติดต่อเรา</string>
     <string name="term_service">ข้อกำหนดการใช้บริการ</string>
     <string name="compact">นโยบายความเป็นส่วนตัว</string>
-    <string name="no_new_version">Phototalkเป็นเวอร์ชันล่าสุดแล้ว</string>
+    <string name="no_new_version">FriendMeเป็นเวอร์ชันล่าสุดแล้ว</string>
 
 	<!-- 登录个人信息页 -->
     <string name="use_info_below">เลือกโปรไฟล์</string>
@@ -212,9 +212,9 @@
     <string name="search_friend_from_local">ค้นหาเพื่อนบน %1$s</string>
     <string name="search_friend">ค้นหาเพื่อนโดยใช้ E-mail หรือ RCID</string>
     <string name="search_friend_from">เชิญเพื่อนทาง %1$s</string>
-   	<string name="join_message">เป็นเพื่อนกับฉันบน #PhotoTalk แอปการรับส่งข้อความส่วนตัวที่ใส่ภาพถ่ายและเสียงได้ ID ของฉันคือ:%1$s รับแอปได้ที่ http://rctalk.me</string>
-    <string name="invite_message">สวัสดี ฉันต้องการส่งภาพถ่ายส่วนตัวให้กับคุณบน #PhotoTalk รับแอปได้ที่ http://rctalk.me แล้วเพิ่ม ID ของฉัน %1$s</string>
-    <string name="invite_your_friends">เชิญเพื่อน ๆ ของคุณให้เข้าร่วม PhotoTalk?</string>
+   	<string name="join_message">เป็นเพื่อนกับฉันบน #FriendMe แอปการรับส่งข้อความส่วนตัวที่ใส่ภาพถ่ายและเสียงได้ ID ของฉันคือ:%1$s รับแอปได้ที่ http://rctalk.me</string>
+    <string name="invite_message">สวัสดี ฉันต้องการส่งภาพถ่ายส่วนตัวให้กับคุณบน #FriendMe รับแอปได้ที่ http://rctalk.me แล้วเพิ่ม ID ของฉัน %1$s</string>
+    <string name="invite_your_friends">เชิญเพื่อน ๆ ของคุณให้เข้าร่วม FriendMe?</string>
     
     <!-- v2.0 -->
     <string name="know_strangers">ผูกมิตรกับเพื่อนใหม่</string>

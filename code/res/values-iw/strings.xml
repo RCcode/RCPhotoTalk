@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">חפש חברים</string>
     <string name="firend_list_invite_friend_title">הזמן חברים</string>
-    <string name="firend_list_used_photochat_friend_title">PhotoTalk‏-‎חברים ב</string>
+    <string name="firend_list_used_photochat_friend_title">FriendMe‏-‎חברים ב</string>
     <string name="search_hint">חיפוש ללא תוצאות</string>
 
     <!-- 消息页面 -->
@@ -168,7 +168,7 @@
     <string name="contact_us">צור קשר</string>
     <string name="term_service">תנאי שירות</string>
     <string name="compact">מדיניות פרטיות</string>
-    <string name="no_new_version">Phototalkהיא הגרסה האחרונה</string>
+    <string name="no_new_version">FriendMeהיא הגרסה האחרונה</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">בחר פרופיל</string>
@@ -207,9 +207,9 @@
     <string name="search_friend_from_local">חיפש חברים באתר %1$s</string>
     <string name="search_friend">חיפש חברים באמצעות E-mail או RCID</string>
     <string name="search_friend_from">הזמנת חברים דרך %1$s</string>
-   	<string name="join_message">התחבר איתי באתר #PhotoTalk ‏, יישום מסרים מיידיים פרטי המאפשר שילוב תמונות ושמע. מס\' הזיהוי שלי:%1$s. תוכל לקבל אותו כאן http://rctalk.me</string>
-    <string name="invite_message">הי! אני מבקש לשלוח לך תמונה פרטית דרך #PhotoTalk. קבל אותה כאן http://rctalk.me והוסף את מס\' הזיהוי שלי %1$s</string>
-    <string name="invite_your_friends">האם להזמין את חבריך להצטרף ל-PhotoTalk?</string>
+   	<string name="join_message">התחבר איתי באתר #FriendMe ‏, יישום מסרים מיידיים פרטי המאפשר שילוב תמונות ושמע. מס\' הזיהוי שלי:%1$s. תוכל לקבל אותו כאן http://rctalk.me</string>
+    <string name="invite_message">הי! אני מבקש לשלוח לך תמונה פרטית דרך #FriendMe. קבל אותה כאן http://rctalk.me והוסף את מס\' הזיהוי שלי %1$s</string>
+    <string name="invite_your_friends">האם להזמין את חבריך להצטרף ל-FriendMe?</string>
     <!-- v2.0 -->
     <string name="know_strangers">עשה לך חברים חדשים</string>
     <string name="new_init_message">חדש בגרסה 2.0 - כעת תוכל לעשות לך חברים מכל רחבי העולם!</string>

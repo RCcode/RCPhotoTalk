@@ -41,7 +41,7 @@
     <!-- 查找好友頁面 -->
     <string name="find_friend_title">查找好友</string>
     <string name="firend_list_invite_friend_title">邀請好友</string>
-    <string name="firend_list_used_photochat_friend_title">使用PhotoTalk的好友</string>
+    <string name="firend_list_used_photochat_friend_title">使用FriendMe的好友</string>
     <string name="search_hint">未找到相關用戶</string>
 
     <!-- 消息頁面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">聯繫我們</string>
     <string name="term_service">服務條款</string>
     <string name="compact">隱私政策</string>
-    <string name="no_new_version">Phototalk是最新版本</string>
+    <string name="no_new_version">FriendMe是最新版本</string>
 
     <!-- 登錄個人資訊頁 -->
     <string name="use_info_below">選擇個人資料</string>
@@ -204,9 +204,9 @@
     <string name="search_friend_from_local">從%1$s中尋找朋友</string>
     <string name="search_friend">用E-mail或RCID尋找朋友</string>
     <string name="search_friend_from">用%1$s邀請朋友</string>
-    <string name="join_message">在 #PhotoTalk 上加我為好友，用有聲照片和我私密聊天，我的ID：%1$s。下載地址 http://rctalk.me</string>
-    <string name="invite_message">我想和你在 #PhotoTalk 上發私密照片，下載地址 http://rctalk.me 安裝後加我ID：%1$s</string>
-    <string name="invite_your_friends">是否想要邀請你的朋友加入PhotoTalk？</string>
+    <string name="join_message">在 #FriendMe 上加我為好友，用有聲照片和我私密聊天，我的ID：%1$s。下載地址 http://rctalk.me</string>
+    <string name="invite_message">我想和你在 #FriendMe 上發私密照片，下載地址 http://rctalk.me 安裝後加我ID：%1$s</string>
+    <string name="invite_your_friends">是否想要邀請你的朋友加入FriendMe？</string>
 
     <!-- v2.0 -->
     <string name="know_strangers">結交新朋友</string>

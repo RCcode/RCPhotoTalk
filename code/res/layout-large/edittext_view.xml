@@ -5,7 +5,7 @@
     android:orientation="horizontal"
     android:background="#a0000000"
      >
-    <EditText
+    <com.rcplatform.phototalk.views.RCEditText
         android:id="@+id/et_editText_view"
         android:layout_width="fill_parent"
         android:layout_height="35dp"

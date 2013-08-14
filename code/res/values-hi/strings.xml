@@ -41,7 +41,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">मित्र खोजें</string>
     <string name="firend_list_invite_friend_title">मित्रों को आमंत्रित करें</string>
-    <string name="firend_list_used_photochat_friend_title">PhotoTalk में मित्र</string>
+    <string name="firend_list_used_photochat_friend_title">FriendMe में मित्र</string>
     <string name="search_hint">इस खोज के कोई परिणाम नहीं हैं</string>
 
     <!-- 消息页面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">हमसे संपर्क करें</string>
     <string name="term_service">सेवा की शर्तें</string>
     <string name="compact">गोपनीयता नीतियाँ</string>
-    <string name="no_new_version">Phototalkनवीनतम संस्करण है</string>
+    <string name="no_new_version">FriendMeनवीनतम संस्करण है</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">प्रोफ़ाइल चुनें</string>
@@ -207,9 +207,9 @@
     <string name="search_friend_from_local">%1$s पर मित्र ढूँढ़ें</string>
     <string name="search_friend">E-mail या RCID द्वारा मित्र ढूँढ़ें</string>
     <string name="search_friend_from">%1$s के द्वारा मित्र आमंत्रित करें</string>
-   	<string name="join_message">मुझसे #PhotoTalk पर मित्रता करें, जो फ़ोटो और ऑडियो के साथ निजी संदेश ऐप है। मेरी ID:%1$s. यहाँ प्राप्त करेंhttp://rctalk.me</string>
-    <string name="invite_message">अरे! मैं आपको #PhotoTalk पर निजी फ़ोटो भेजना चाहूँगा। इसे यहाँ प्राप्त करें http://rctalk.me और मेरी ID %1$s जोड़ें</string>
-    <string name="invite_your_friends">अपने मित्रों को PhotoTalk में शामिल होने के लिए आमंत्रित करें?</string>
+   	<string name="join_message">मुझसे #FriendMe पर मित्रता करें, जो फ़ोटो और ऑडियो के साथ निजी संदेश ऐप है। मेरी ID:%1$s. यहाँ प्राप्त करेंhttp://rctalk.me</string>
+    <string name="invite_message">अरे! मैं आपको #FriendMe पर निजी फ़ोटो भेजना चाहूँगा। इसे यहाँ प्राप्त करें http://rctalk.me और मेरी ID %1$s जोड़ें</string>
+    <string name="invite_your_friends">अपने मित्रों को FriendMe में शामिल होने के लिए आमंत्रित करें?</string>
     <!-- v2.0 -->
     <string name="know_strangers">नए मित्र बनाएँ</string>
     <string name="new_init_message">संस्करण 2.0 में नया - अब आप दुनिया भर से मित्र बना सकते हैं!</string>

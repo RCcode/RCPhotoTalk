@@ -77,15 +77,15 @@
 
         <Button
             android:id="@+id/btn_take_photo_take"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/record_button_width"
+            android:layout_height="@dimen/record_button_width"
             android:layout_centerInParent="true"
             android:background="@drawable/take_photo_btn" />
 
         <RelativeLayout
             android:id="@+id/btn_take_video"
-            android:layout_width="69dp"
-            android:layout_height="69dp"
+            android:layout_width="@dimen/record_button_width"
+            android:layout_height="@dimen/record_button_width"
             android:layout_centerInParent="true"
             android:background="@drawable/take_video_bg"
             android:clickable="true" >

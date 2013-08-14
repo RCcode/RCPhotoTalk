@@ -115,5 +115,6 @@
     <dimen name="stranger_init_padding_bottom">160dp</dimen>
     <dimen name="take_photo_widget_width">48dp</dimen>
     <dimen name="take_widget_icon_width">48dp</dimen>
+    <dimen name="record_button_width">69dp</dimen>
 
 </resources>

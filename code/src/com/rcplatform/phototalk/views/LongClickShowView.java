@@ -4,7 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -15,6 +19,7 @@ import android.graphics.Rect;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnErrorListener;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -186,7 +191,6 @@ public class LongClickShowView extends Dialog {
 	private void playVideo(File file, Information info) {
 		LogUtil.e(file.getTotalSpace() + "~~~~~~~~~~~~~~~~~" + file.getPath());
 		VideoView mVideoView = addVideoView();
-		mVideoView.setVisibility(View.VISIBLE);
 		mVideoView.setVideoURI(Uri.fromFile(file));
 		mVideoView.setOnErrorListener(new OnErrorListener() {
 
@@ -202,7 +206,6 @@ public class LongClickShowView extends Dialog {
 
 	private void playVideo(File file, DriftInformation info) {
 		VideoView mVideoView = addVideoView();
-		mVideoView.setVisibility(View.VISIBLE);
 		mVideoView.setVideoPath(file.getPath());
 		mVideoView.start();
 		if (info.getTotleLength() != info.getLimitTime())
@@ -239,6 +242,35 @@ public class LongClickShowView extends Dialog {
 			}
 		}
 		return null;
+	}
+
+	private static final Map<String, Integer> fileLevels = new HashMap<String, Integer>();
+	static {
+		fileLevels.put(Constants.VIDEO_FORMAT, Integer.MAX_VALUE);
+		fileLevels.put(Constants.IMAGE_FORMAT, Integer.MAX_VALUE - 1);
+		fileLevels.put(Constants.AUDIO_FORMAT, Integer.MAX_VALUE - 2);
+
+	}
+
+	private List<File> sortFiles(List<File> files) {
+		Collections.sort(files, new Comparator<File>() {
+
+			@Override
+			public int compare(File lhs, File rhs) {
+				String lhsFileName = lhs.getName();
+				String lhsFormat = null;
+				if (lhsFileName.length() > 4)
+					lhsFormat = lhsFileName.substring(lhsFileName.length() - 4, lhsFileName.length());
+				String rhsFileName = rhs.getName();
+				String rhsFormat = null;
+				if (rhsFileName.length() > 4)
+					rhsFormat = rhsFileName.substring(rhsFileName.length() - 4, rhsFileName.length());
+				if (lhsFormat != null && rhsFormat != null)
+					return fileLevels.get(lhsFormat) - fileLevels.get(rhsFormat);
+				return 1;
+			}
+		});
+		return files;
 	}
 
 	private List<File> resultFiles = new ArrayList<File>();

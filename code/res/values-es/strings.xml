@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Buscar amigos</string>
     <string name="firend_list_invite_friend_title">Invitar a amigos</string>
-    <string name="firend_list_used_photochat_friend_title">Amigos en PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">Amigos en FriendMe</string>
     <string name="search_hint">Ningún resultado para esta búsqueda</string>
 
     <!-- 消息页面 -->
@@ -168,7 +168,7 @@
     <string name="contact_us">contáctenos</string>
     <string name="term_service">Condic servicio</string>
     <string name="compact">Polít privacidad</string>
-    <string name="no_new_version">Phototalk es la última versión</string>
+    <string name="no_new_version">FriendMe es la última versión</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Elegir perfil</string>
@@ -208,9 +208,9 @@
     <string name="search_friend_from_local">Buscar amigos en %1$s</string>
     <string name="search_friend">Buscar amigos por E-mail o RCID</string>
     <string name="search_friend_from">Invitar amigos mediante %1$s</string>
-   	<string name="join_message">Hazme amigo en #PhotoTalk, una aplicación de mensajería privada con foto y audio. Mi Id: %1$s. Obténgalo aquí http://rctalk.me</string>
-    <string name="invite_message">¡Oye! Me gustaría enviarte una foto privada en #PhotoTalk. Aquí la tienes http://rctalk.me y añade mi Id. %1$s</string>
-    <string name="invite_your_friends">¿Desea invitar a sus amigos a unirse a PhotoTalk?</string>
+   	<string name="join_message">Hazme amigo en #FriendMe, una aplicación de mensajería privada con foto y audio. Mi Id: %1$s. Obténgalo aquí http://rctalk.me</string>
+    <string name="invite_message">¡Oye! Me gustaría enviarte una foto privada en #FriendMe. Aquí la tienes http://rctalk.me y añade mi Id. %1$s</string>
+    <string name="invite_your_friends">¿Desea invitar a sus amigos a unirse a FriendMe?</string>
     
     
     <!-- v2.0 -->

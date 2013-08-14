@@ -41,7 +41,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Procurar amigos</string>
     <string name="firend_list_invite_friend_title">Convidar amigos</string>
-    <string name="firend_list_used_photochat_friend_title">Amigos no PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">Amigos no FriendMe</string>
     <string name="search_hint">Nenhum resultado para esta pesquisa</string>
 
     <!-- 消息页面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">Fale Conosco</string>
     <string name="term_service">Termos de serviços</string>
     <string name="compact">Políticas de privacidade</string>
-    <string name="no_new_version">Phototalk é a versão mais recente </string>
+    <string name="no_new_version">FriendMe é a versão mais recente </string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Escolha Perfil</string>
@@ -204,9 +204,9 @@
     <string name="search_friend_from_local">Encontrar amigos no %1$s</string>
     <string name="search_friend">Encontrar amigos por E-mail ou RCID</string>
     <string name="search_friend_from">Convidar amigos pelo %1$s</string>
-    <string name="join_message">Seja meu amigo no #PhotoTalk, um aplicativo de mensagens particulares com foto e áudio. Minha ID:%1$s. Tenha o seu aqui http://rctalk.me</string>
-    <string name="invite_message">Ei, eu gostaria de enviar a você uma foto particular pelo #PhotoTalk. Tenha o seu aqui http://rctalk.me e adicione minha ID %1$s</string>
-    <string name="invite_your_friends">Quer convidar seus amigos para entrar no PhotoTalk?</string>
+    <string name="join_message">Seja meu amigo no #FriendMe, um aplicativo de mensagens particulares com foto e áudio. Minha ID:%1$s. Tenha o seu aqui http://rctalk.me</string>
+    <string name="invite_message">Ei, eu gostaria de enviar a você uma foto particular pelo #FriendMe. Tenha o seu aqui http://rctalk.me e adicione minha ID %1$s</string>
+    <string name="invite_your_friends">Quer convidar seus amigos para entrar no FriendMe?</string>
 
     <!-- v2.0 -->
     <string name="know_strangers">Faça novos amigos.</string>

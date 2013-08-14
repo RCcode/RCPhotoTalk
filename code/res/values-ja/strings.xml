@@ -41,7 +41,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">友人を検索</string>
     <string name="firend_list_invite_friend_title">友人を招待する</string>
-    <string name="firend_list_used_photochat_friend_title">PhotoTalkの友人</string>
+    <string name="firend_list_used_photochat_friend_title">FriendMeの友人</string>
     <string name="search_hint">検索結果がありません</string>
 
     <!-- 消息页面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">お問い合わせ</string>
     <string name="term_service">サービス規約 </string>
     <string name="compact">プライバシー・ポリシー</string>
-    <string name="no_new_version">Phototalkは最新版です </string>
+    <string name="no_new_version">FriendMeは最新版です </string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">プロファイル選択</string>
@@ -207,9 +207,9 @@
     <string name="search_friend_from_local">%1$sの友達を検索</string>
     <string name="search_friend">E-mailまたはRCIDで友達を検索</string>
     <string name="search_friend_from">%1$sから友達を招待する</string>
-   	<string name="join_message">写真やオーディオが使えるプライベートなメッセージングアプリ #PhotoTalk で私を探してください。私のIDは%1$sです。ここから入手 http://rctalk.me</string>
-    <string name="invite_message">こんにちわ！#PhotoTalk の写真をあなたに送りたいと思います。ここから入手して http://rctalk.me、私のID %1$sを追加してください。</string>
-    <string name="invite_your_friends">PhotoTalkに友達を招待しませんか？</string>
+   	<string name="join_message">写真やオーディオが使えるプライベートなメッセージングアプリ #FriendMe で私を探してください。私のIDは%1$sです。ここから入手 http://rctalk.me</string>
+    <string name="invite_message">こんにちわ！#FriendMe の写真をあなたに送りたいと思います。ここから入手して http://rctalk.me、私のID %1$sを追加してください。</string>
+    <string name="invite_your_friends">FriendMeに友達を招待しませんか？</string>
     
     
     <!-- v2.0 -->

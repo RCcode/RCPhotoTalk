@@ -41,7 +41,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">بحث عن الأصدقاء</string>
     <string name="firend_list_invite_friend_title">دعوة أصدقاء</string>
-    <string name="firend_list_used_photochat_friend_title">PhotoTalk أصدقاء يستخدمون برنامج</string>
+    <string name="firend_list_used_photochat_friend_title">FriendMe أصدقاء يستخدمون برنامج</string>
     <string name="search_hint">لا توجد نتائج لهذا البحث</string>
 
     <!-- 消息页面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">اتصل بنا</string>
     <string name="term_service">بنود الخدمة</string>
     <string name="compact">سياسات الخصوصية</string>
-    <string name="no_new_version">Phototalk هو الإصدار الأخير</string>
+    <string name="no_new_version">FriendMe هو الإصدار الأخير</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">اختر الملف التعريفي</string>
@@ -204,9 +204,9 @@
     <string name="search_friend_from_local">العثور على أصدقاء في %1$s</string>
     <string name="search_friend_from_contacts">العثور على أصدقاء في جهات الاتصال</string>
     <string name="search_friend">العثور على أصدقاء عبر E-mail أو RCID</string>
-    <string name="invite_your_friends">دعوة أصدقائك للانضمام إلى PhotoTalk؟</string>
-    <string name="join_message">إرسال طلب صداقة لي على #PhotoTalk، تطبيق رسائل خاصة بالصوت والصورة. المعرف الخاص بي: %1$s. احصل عليه من هنا http://rctalk.me</string>
-    <string name="invite_message">مرحبًا! أرغب في إرسال صورة خاصة لك على #PhotoTalk. احصل عليه من هنا http://rctalk.me وأضف المعرف الخاص بي %1$s</string>
+    <string name="invite_your_friends">دعوة أصدقائك للانضمام إلى FriendMe؟</string>
+    <string name="join_message">إرسال طلب صداقة لي على #FriendMe، تطبيق رسائل خاصة بالصوت والصورة. المعرف الخاص بي: %1$s. احصل عليه من هنا http://rctalk.me</string>
+    <string name="invite_message">مرحبًا! أرغب في إرسال صورة خاصة لك على #FriendMe. احصل عليه من هنا http://rctalk.me وأضف المعرف الخاص بي %1$s</string>
     
 
     <!-- v2.0 -->

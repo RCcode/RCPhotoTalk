@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Cerca amici</string>
     <string name="firend_list_invite_friend_title">Invita amici</string>
-    <string name="firend_list_used_photochat_friend_title">Amici in PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">Amici in FriendMe</string>
     <string name="search_hint">La ricerca non ha dato risultati</string>
 
     <!-- 消息页面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">Contattaci</string>
     <string name="term_service">Termini di servizio</string>
     <string name="compact">Direttive sulla privacy</string>
-    <string name="no_new_version">Phototalk è la versione più recente</string>
+    <string name="no_new_version">FriendMe è la versione più recente</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Scegli un profilo</string>
@@ -208,9 +208,9 @@
     <string name="search_friend_from_local">Trova amici su %1$s</string>
     <string name="search_friend">Trova amici via E-mail o RCID</string>
     <string name="search_friend_from">Invita amici via %1$s</string>
-   	<string name="join_message">Dammi l\'amicizia su #PhotoTalk, un\'app di messaggistica privata con foto e audio. Il mio ID è:%1$s. Scaricala qui http://rctalk.me</string>
-    <string name="invite_message">Ciao! Vorrei inviarti una foto privata su #PhotoTalk. Scaricala qui http://rctalk.me e aggiungi il mio ID %1$s</string>
-    <string name="invite_your_friends">Vuoi invitare i tuoi amici a iscriversi su PhotoTalk?</string>
+   	<string name="join_message">Dammi l\'amicizia su #FriendMe, un\'app di messaggistica privata con foto e audio. Il mio ID è:%1$s. Scaricala qui http://rctalk.me</string>
+    <string name="invite_message">Ciao! Vorrei inviarti una foto privata su #FriendMe. Scaricala qui http://rctalk.me e aggiungi il mio ID %1$s</string>
+    <string name="invite_your_friends">Vuoi invitare i tuoi amici a iscriversi su FriendMe?</string>
     
     <!-- v2.0 -->
     <string name="know_strangers">Trova nuovi amici</string>

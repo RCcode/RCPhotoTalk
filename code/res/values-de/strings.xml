@@ -41,7 +41,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Freunde suchen</string>
     <string name="firend_list_invite_friend_title">Freunde einladen</string>
-    <string name="firend_list_used_photochat_friend_title">Freunde in PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">Freunde in FriendMe</string>
     <string name="search_hint">Keine Ergebnisse für diese Suche</string>
 
     <!-- 消息页面 -->
@@ -167,7 +167,7 @@
     <string name="contact_us">Kontaktieren Sie uns</string>
     <string name="term_service">Nutzungsbedingungen</string>
     <string name="compact">Datenschutzrichtlinien</string>
-    <string name="no_new_version">Phototalk ist die aktuelle Version</string>
+    <string name="no_new_version">FriendMe ist die aktuelle Version</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Wählen Sie Ihr Profil</string>
@@ -207,9 +207,9 @@
     <string name="search_friend_from_local">Freunde auf %1$s finden</string>
     <string name="search_friend">Freunde per E-Mail oder RCID finden</string>
     <string name="search_friend_from">Laden Sie Freunde über %1$s ein</string>
-   	<string name="join_message">Freunde dich mit mir auf #PhotoTalk an, einer privaten Messaging-App mit Foto und Audio. Meine ID: %1$s. Hier findest du die App: http://rctalk.me</string>
-    <string name="invite_message">Hallo! Ich möchte dir ein privates Foto auf #PhotoTalk schicken. Hier findest du die App: http://rctalk.me . Füge meine ID %1$s hinzu.</string>
-    <string name="invite_your_friends">Möchten Sie Ihre Freunde zu PhotoTalk einladen?</string>
+   	<string name="join_message">Freunde dich mit mir auf #FriendMe an, einer privaten Messaging-App mit Foto und Audio. Meine ID: %1$s. Hier findest du die App: http://rctalk.me</string>
+    <string name="invite_message">Hallo! Ich möchte dir ein privates Foto auf #FriendMe schicken. Hier findest du die App: http://rctalk.me . Füge meine ID %1$s hinzu.</string>
+    <string name="invite_your_friends">Möchten Sie Ihre Freunde zu FriendMe einladen?</string>
  
     
     <!-- v2.0 -->

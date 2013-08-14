@@ -2,19 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
     android:background="#a0000000"
-     >
-    <EditText
+    android:orientation="horizontal" >
+
+    <com.rcplatform.phototalk.views.RCEditText
         android:id="@+id/et_editText_view"
         android:layout_width="fill_parent"
         android:layout_height="35dp"
-        android:textSize="22sp"
-        android:gravity="center"
         android:layout_gravity="center_vertical"
-        android:textColor="#ffffffff"
-        android:singleLine="true"
+        android:background="@android:color/transparent"
         android:focusable="true"
-         android:background="@android:color/transparent"
-        />
+        android:gravity="center"
+        android:singleLine="true"
+        android:textColor="#ffffffff"
+        android:textSize="22sp" />
+
 </LinearLayout>

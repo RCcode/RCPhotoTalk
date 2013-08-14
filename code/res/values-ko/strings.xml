@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">친구 찾기</string>
     <string name="firend_list_invite_friend_title">친구 초대</string>
-    <string name="firend_list_used_photochat_friend_title">PhotoTalk 친구</string>
+    <string name="firend_list_used_photochat_friend_title">FriendMe 친구</string>
     <string name="search_hint">검색 결과 없음</string>
 
     <!-- 消息页面 -->
@@ -168,7 +168,7 @@
     <string name="contact_us">저희에게 연락하십시오</string>
     <string name="term_service">서비스 약관</string>
     <string name="compact">개인정보보호 정책</string>
-    <string name="no_new_version">Phototalk이 최신 버전입니다</string>
+    <string name="no_new_version">FriendMe이 최신 버전입니다</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">프로필 선택</string>
@@ -206,9 +206,9 @@
     <string name="search_friend_from_local">%1$s에서 친구 찾기</string>
     <string name="search_friend">E-mail 또는 RCID로 친구 찾기</string>
     <string name="search_friend_from">%1$s를 통해 친구 초대하기</string>
-   	<string name="join_message">사진과 오디오를 지원하는 개인 메시징 앱인 #PhotoTalk 에서 나와 친구를 맺어주세요. 나의 ID:%1$s. http://rctalk.me 에서 확인해 보세요.</string>
-    <string name="invite_message">안녕하세요! #PhotoTalk 에서 개인 사진을 보내려고 합니다. http://rctalk.me 에서 내 ID %1$s를 추가해 주세요.</string>
-    <string name="invite_your_friends">친구에게 PhotoTalk 가입 초대를 보내시겠습니까?</string>
+   	<string name="join_message">사진과 오디오를 지원하는 개인 메시징 앱인 #FriendMe 에서 나와 친구를 맺어주세요. 나의 ID:%1$s. http://rctalk.me 에서 확인해 보세요.</string>
+    <string name="invite_message">안녕하세요! #FriendMe 에서 개인 사진을 보내려고 합니다. http://rctalk.me 에서 내 ID %1$s를 추가해 주세요.</string>
+    <string name="invite_your_friends">친구에게 FriendMe 가입 초대를 보내시겠습니까?</string>
     <!-- v2.0 -->
     <string name="know_strangers">새로운 친구 만들기</string>
     <string name="new_init_message">버전 2.0의 새로운 기능 - 이제 전세계 사용자들과 친구를 맺을 수 있습니다!</string>

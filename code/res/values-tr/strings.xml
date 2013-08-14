@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Arkadaşları ara</string>
     <string name="firend_list_invite_friend_title">Arkadaşları davet et</string>
-    <string name="firend_list_used_photochat_friend_title">PhotoTalk’daki Arkadaşlar</string>
+    <string name="firend_list_used_photochat_friend_title">FriendMe’daki Arkadaşlar</string>
     <string name="search_hint">Bu arama için sonuç yok</string>
 
     <!-- 消息页面 -->
@@ -168,7 +168,7 @@
     <string name="contact_us">İletişim</string>
     <string name="term_service">Servis Koşulları</string>
     <string name="compact">Giz. politikaları</string>
-    <string name="no_new_version">Phototalk en son sürümdür</string>
+    <string name="no_new_version">FriendMe en son sürümdür</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Profil Seçin</string>
@@ -211,9 +211,9 @@
     <string name="search_friend_from_local">%1$s üzerinde Arkadaşlar bulun</string>
     <string name="search_friend">E-mail veya RCID ile Arkadaşlar bulun</string>
     <string name="search_friend_from">Arkadaşlarınızı %1$s üzerinden davet edin</string>
-   	<string name="join_message">Fotoğraflı ve sesli özel bir mesajlaşma uygulaması #PhotoTalk üzerinden benimle arkadaş ol. Kimliğim:%1$s. Buradan ulaş; http://rctalk.me</string>
-    <string name="invite_message">Hey! #PhotoTalk üzerinden sana özel bir fotoğraf göndermek istiyorum. Buradan ulaş; http://rctalk.me ve Kimliğimi %1$s ekle</string>
-    <string name="invite_your_friends">Arkadaşlarınız PhotoTalk\'a katılmaya davet edilsin mi?</string>
+   	<string name="join_message">Fotoğraflı ve sesli özel bir mesajlaşma uygulaması #FriendMe üzerinden benimle arkadaş ol. Kimliğim:%1$s. Buradan ulaş; http://rctalk.me</string>
+    <string name="invite_message">Hey! #FriendMe üzerinden sana özel bir fotoğraf göndermek istiyorum. Buradan ulaş; http://rctalk.me ve Kimliğimi %1$s ekle</string>
+    <string name="invite_your_friends">Arkadaşlarınız FriendMe\'a katılmaya davet edilsin mi?</string>
     
     <!-- v2.0 -->
     <string name="know_strangers">Yeni arkadaşlar edinin</string>

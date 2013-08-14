@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Rechercher des amis</string>
     <string name="firend_list_invite_friend_title">Inviter des amis</string>
-    <string name="firend_list_used_photochat_friend_title">Amis dans PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">Amis dans FriendMe</string>
     <string name="search_hint">Aucun résultat pour cette recherche</string>
 
     <!-- 消息页面 -->
@@ -168,7 +168,7 @@
     <string name="contact_us">Contactez-nous</string>
     <string name="term_service">Termes de service</string>
     <string name="compact">Confidentialité</string>
-    <string name="no_new_version">Phototalkest la dernière version</string>
+    <string name="no_new_version">FriendMeest la dernière version</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Choisir un profil</string>
@@ -209,9 +209,9 @@
     <string name="search_friend_from_local">Trouver des amis sur %1$s</string>
     <string name="search_friend">Trouver des amis par E-mail ou RCID</string>
     <string name="search_friend_from">Inviter des amis via %1$s</string>
-   	<string name="join_message">Me retrouver sur #PhotoTalk, une application de messagerie privée avec photo et son. Mon ID : %1$s. Obtenez-la ici http://rctalk.me</string>
-    <string name="invite_message">Hé ! J\'aimerais vous envoyer une photo privée sur #PhotoTalk. Obtenez-la ici http://rctalk.me et ajoutez mon ID %1$s</string>
-    <string name="invite_your_friends">Inviter vos amis à rejoindre PhotoTalk ?</string>
+   	<string name="join_message">Me retrouver sur #FriendMe, une application de messagerie privée avec photo et son. Mon ID : %1$s. Obtenez-la ici http://rctalk.me</string>
+    <string name="invite_message">Hé ! J\'aimerais vous envoyer une photo privée sur #FriendMe. Obtenez-la ici http://rctalk.me et ajoutez mon ID %1$s</string>
+    <string name="invite_your_friends">Inviter vos amis à rejoindre FriendMe ?</string>
     <!-- v2.0 -->
     <string name="know_strangers">Faites-vous de nouveaux amis</string>
     <string name="new_init_message">Nouveauté de la version 2.0 - Vous pouvez vous faire des amis dans le mode entier !</string>

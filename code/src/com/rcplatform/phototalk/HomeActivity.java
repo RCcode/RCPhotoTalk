@@ -651,6 +651,10 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				return true;
 			}
 			break;
+		case MotionEvent.ACTION_MOVE:
+			if (isShow)
+				return true;
+			break;
 		}
 		return super.dispatchTouchEvent(event);
 	}

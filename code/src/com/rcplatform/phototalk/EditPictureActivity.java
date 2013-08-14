@@ -37,7 +37,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -65,6 +64,8 @@ import com.rcplatform.phototalk.views.ColorPickerDialog;
 import com.rcplatform.phototalk.views.EditPictureView;
 import com.rcplatform.phototalk.views.EditPictureView.OnGrafListener;
 import com.rcplatform.phototalk.views.EditableViewGroup;
+import com.rcplatform.phototalk.views.RCEditText;
+import com.rcplatform.phototalk.views.RCEditText.OnBackButtonPressListener;
 import com.rcplatform.phototalk.views.wheel.OnWheelClickedListener;
 import com.rcplatform.phototalk.views.wheel.WheelView;
 import com.rcplatform.phototalk.views.wheel.adapter.AbstractWheelTextAdapter;
@@ -164,7 +165,7 @@ public class EditPictureActivity extends BaseActivity {
 
 	private TextView tvVoiceRecordSecond;
 
-	private EditText editText;
+	private RCEditText editText;
 
 	private ImageView voice_volume_bg;
 
@@ -266,8 +267,8 @@ public class EditPictureActivity extends BaseActivity {
 			@Override
 			public void endRecord(String savePath, int n) {
 				voicePath = savePath;
-				audioBtn.setVisibility(4);
-				make_voice.setVisibility(0);
+				audioBtn.setVisibility(View.GONE);
+				make_voice.setVisibility(View.VISIBLE);
 				// mButtonTimeLimit.setClickable(false);
 				// mButtonTimeLimit.setVisibility(View.GONE);
 				voice_size.setText(((n < timeLimit) ? n : timeLimit) + "s");
@@ -374,6 +375,7 @@ public class EditPictureActivity extends BaseActivity {
 		showedButtons.add(mButtonSave);
 		showedButtons.add(mButtonSend);
 		showedButtons.add(audioBtn);
+		showedButtons.add(make_voice);
 	}
 
 	private String videoPath;
@@ -421,11 +423,14 @@ public class EditPictureActivity extends BaseActivity {
 		Animation animation = null;
 		if (isShow) {
 			animation = AnimationUtils.loadAnimation(this, R.anim.zoomin);
+			animation.setFillAfter(false);
 		} else {
 			animation = AnimationUtils.loadAnimation(this, R.anim.zoomout);
 		}
 		for (View view : showedButtons) {
-			view.startAnimation(animation);
+			if (view.getVisibility() == View.VISIBLE) {
+				view.startAnimation(animation);
+			}
 		}
 	}
 
@@ -468,11 +473,19 @@ public class EditPictureActivity extends BaseActivity {
 		mEditableViewGroup.buildDrawingCache();
 	}
 
+	private void hideEditText() {
+		if (isEditTextNeedHide()) {
+			mEditText.setVisibility(View.GONE);
+			mEditText = null;
+		}
+	}
+
 	private final OnClickListener clickListener = new OnClickListener() {
 
 		@Override
 		public void onClick(View v) {
 			hideSoftKeyboard(v);
+			hideEditText();
 			int tag = (Integer) v.getTag();
 			switch (tag) {
 			case UNDO_ON_CLICK:
@@ -635,10 +648,7 @@ public class EditPictureActivity extends BaseActivity {
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
 		if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-			if (isEditTextNeedHide()) {
-				mEditText.setVisibility(View.GONE);
-				mEditText = null;
-			}
+			hideEditText();
 		}
 		return super.dispatchKeyEvent(event);
 	}
@@ -672,7 +682,14 @@ public class EditPictureActivity extends BaseActivity {
 			if (mEditText == null) {
 				EventUtil.Main_Photo.rcpt_text(baseContext);
 				mEditText = (LinearLayout) LayoutInflater.from(EditPictureActivity.this).inflate(R.layout.edittext_view, null);
-				editText = (EditText) mEditText.findViewById(R.id.et_editText_view);
+				editText = (RCEditText) mEditText.findViewById(R.id.et_editText_view);
+				editText.setOnBackButtonPressListener(new OnBackButtonPressListener() {
+
+					@Override
+					public void onBackButtonPressed() {
+						hideEditText();
+					}
+				});
 				final Paint paint = editText.getPaint();
 				editText.setFocusable(true);
 				editText.addTextChangedListener(new TextWatcher() {

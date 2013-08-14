@@ -42,7 +42,7 @@
     <!-- 查找好友页面 -->
     <string name="find_friend_title">Поиск друзей</string>
     <string name="firend_list_invite_friend_title">Пригласить друзей</string>
-    <string name="firend_list_used_photochat_friend_title">Друзья в PhotoTalk</string>
+    <string name="firend_list_used_photochat_friend_title">Друзья в FriendMe</string>
     <string name="search_hint">По данному запросу ничего не найдено</string>
 
     <!-- 消息页面 -->
@@ -168,7 +168,7 @@
     <string name="contact_us">Связаться с Нами</string>
     <string name="term_service">Условия обслуживания</string>
     <string name="compact">Политика конфиденциальности</string>
-    <string name="no_new_version">Phototalkはявляется последней версией</string>
+    <string name="no_new_version">FriendMeはявляется последней версией</string>
 
     <!-- 登录个人信息页 -->
     <string name="use_info_below">Выберите профиль</string>
@@ -207,9 +207,9 @@
     <string name="search_friend_from_local">Найти друзей на %1$s</string>
     <string name="search_friend">Найти друзей с помощью E-mail или RCID</string>
     <string name="search_friend_from">Пригласить друзей с помощью %1$s</string>
-    <string name="join_message">Подружись со мной на #PhotoTalk, приложении для обмена фото и аудио. Мой идентификатор:%1$s. Загрузить можно здесь http://rctalk.me</string>
-    <string name="invite_message">Привет! Я хочу отправить тебе личную фотографию через #PhotoTalk. Загрузи приложение с сайта http://rctalk.me и добавь мой идентификатор %1$s</string>
-    <string name="invite_your_friends">Пригласить ваших друзей в PhotoTalk?</string>
+    <string name="join_message">Подружись со мной на #FriendMe, приложении для обмена фото и аудио. Мой идентификатор:%1$s. Загрузить можно здесь http://rctalk.me</string>
+    <string name="invite_message">Привет! Я хочу отправить тебе личную фотографию через #FriendMe. Загрузи приложение с сайта http://rctalk.me и добавь мой идентификатор %1$s</string>
+    <string name="invite_your_friends">Пригласить ваших друзей в FriendMe?</string>
     
     <!-- v2.0 -->
     <string name="know_strangers">Заводите новых друзей</string>
