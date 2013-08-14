@@ -80,6 +80,9 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private int videoLength;
 
+	private static final int VIDEO_WIDTH = 640;
+	private static final int VIDEO_HEIGHT = 480;
+
 	public long getMaxVideoRecordTime() {
 		return maxVideoRecordTime;
 	}
@@ -448,14 +451,12 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					}
 				}
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
-				mVideoSize = previewSize;
-				if (previewSize != null) {
-					// parameters.getPreviewSize().width = previewSize.width;
-					// parameters.getPreviewSize().height = previewSize.height;
+				if(!isBackFace){
+					parameters.setPreviewSize(VIDEO_WIDTH, VIDEO_HEIGHT);
+				}else{
 					parameters.setPreviewSize(previewSize.width, previewSize.height);
-					// parameters.set("preview-size",
-					// previewSize.width+"x"+previewSize.height);
 				}
+			
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
 				if (pictureSize != null)
 					parameters.setPictureSize(pictureSize.width, pictureSize.height);
@@ -541,7 +542,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private MediaRecorder mMediaRecorder;
 	private File tempFile;
-	private Size mVideoSize;
 
 	public void startVideoRecord() {
 		Thread thread = new Thread() {
@@ -564,10 +564,11 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 					// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
 					mMediaRecorder.setProfile(paramCamcorderProfile);
-					if (mVideoSize != null)
-						mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
-					else
-						mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth, paramCamcorderProfile.videoFrameHeight);
+					// if (mVideoSize != null)
+					mMediaRecorder.setVideoSize(VIDEO_WIDTH, VIDEO_HEIGHT);
+					// else
+					// mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
+					// paramCamcorderProfile.videoFrameHeight);
 					// this.mMediaRecorder.setVideoFrameRate(30);
 					// this.mMediaRecorder.setVideoEncoder(paramCamcorderProfile.videoCodec);
 					// if (isBackFace)
@@ -656,23 +657,6 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	private ProgressDialog loadingDialog;
-
-	private void showLoadingDialog() {
-		if (loadingDialog == null) {
-			loadingDialog = new ProgressDialog(getContext());
-			loadingDialog.setCancelable(false);
-		}
-		loadingDialog.show();
-	}
-
-	private void dismissLoadingDialog() {
-		try {
-			if (loadingDialog != null && loadingDialog.isShowing())
-				loadingDialog.dismiss();
-		} catch (Exception e) {
-
-		}
-	}
 
 	private void processVideoListener(VideoRecordState state) {
 		recordState = state;

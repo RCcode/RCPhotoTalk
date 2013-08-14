@@ -18,7 +18,9 @@ import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -48,6 +50,13 @@ public class LongClickShowView extends Dialog {
 
 	private Bitmap currentBitmap;
 
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		if (event.getAction() == MotionEvent.ACTION_MOVE)
+			return true;
+		return super.onTouchEvent(event);
+	}
+
 	public LongClickShowView(Context context, int theme) {
 		super(context, theme);
 		this.getWindow().setWindowAnimations(R.style.ContentOverlay);
@@ -69,8 +78,7 @@ public class LongClickShowView extends Dialog {
 
 		private static MediaPlayer mAudioPlayer;
 
-		private static VideoView mVideoView;
-
+		private static FrameLayout frameVideo;
 		private int layoutResId;
 
 		private LongClickShowView dialog;
@@ -95,7 +103,7 @@ public class LongClickShowView extends Dialog {
 				LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 				dialog.contentView = (RelativeLayout) inflater.inflate(layoutResId, null);
 				mImageView = (ImageView) dialog.contentView.findViewById(R.id.iv_rts_pic);
-				mVideoView = (VideoView) dialog.contentView.findViewById(R.id.vv_show);
+				frameVideo = (FrameLayout) dialog.contentView.findViewById(R.id.frame_video);
 				dialog.setContentView(dialog.contentView);
 			} else {
 				// dialog.setContentView(dialog.contentView);
@@ -149,9 +157,11 @@ public class LongClickShowView extends Dialog {
 		glTimer.scheuleTask(info);
 		show();
 	}
-	private void resetViews(){
+
+	private void resetViews() {
 		Builder.mImageView.setImageBitmap(null);
 	}
+
 	private void showZipContent(List<File> fileList, Information info) throws Exception {
 		for (File file : fileList) {
 			if (isImage(file.getName())) {
@@ -166,28 +176,37 @@ public class LongClickShowView extends Dialog {
 		Builder.mImageView.setVisibility(View.VISIBLE);
 	}
 
+	private VideoView addVideoView() {
+		VideoView mVideoView = new RCVideoView(getContext());
+		mVideoView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
+		Builder.frameVideo.addView(mVideoView);
+		return mVideoView;
+	}
+
 	private void playVideo(File file, Information info) {
-		LogUtil.e(file.getTotalSpace()+"~~~~~~~~~~~~~~~~~"+file.getPath());
-		Builder.mVideoView.setVisibility(View.VISIBLE);
-		Builder.mVideoView.setVideoURI(Uri.fromFile(file));
-		Builder.mVideoView.setOnErrorListener(new OnErrorListener() {
-			
+		LogUtil.e(file.getTotalSpace() + "~~~~~~~~~~~~~~~~~" + file.getPath());
+		VideoView mVideoView = addVideoView();
+		mVideoView.setVisibility(View.VISIBLE);
+		mVideoView.setVideoURI(Uri.fromFile(file));
+		mVideoView.setOnErrorListener(new OnErrorListener() {
+
 			@Override
 			public boolean onError(MediaPlayer mp, int what, int extra) {
-				
 				return true;
 			}
 		});
-		Builder.mVideoView.start();
+		mVideoView.start();
 		if (info.getTotleLength() != info.getLimitTime())
-			Builder.mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
+			mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
 	}
+
 	private void playVideo(File file, DriftInformation info) {
-		Builder.mVideoView.setVisibility(View.VISIBLE);
-		Builder.mVideoView.setVideoPath(file.getPath());
-		Builder.mVideoView.start();
+		VideoView mVideoView = addVideoView();
+		mVideoView.setVisibility(View.VISIBLE);
+		mVideoView.setVideoPath(file.getPath());
+		mVideoView.start();
 		if (info.getTotleLength() != info.getLimitTime())
-			Builder.mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
+			mVideoView.seekTo(info.getTotleLength() * 1000 - info.getLimitTime() * 1000);
 	}
 
 	private void showZipContent(List<File> fileList, DriftInformation info) throws Exception {
@@ -196,7 +215,7 @@ public class LongClickShowView extends Dialog {
 				showImage(file);
 			} else if (isAudio(file.getName())) {
 				playAudio(file, info);
-			}else if(isVideo(file.getName())){
+			} else if (isVideo(file.getName())) {
 				playVideo(file, info);
 			}
 		}
@@ -291,26 +310,27 @@ public class LongClickShowView extends Dialog {
 		return fileName.endsWith(Constants.VIDEO_FORMAT);
 	}
 
+	private void removeVideoView() {
+		if (Builder.frameVideo.getChildCount() > 0) {
+			LogUtil.e(">0");
+			Builder.frameVideo.removeAllViews();
+		}
+	}
+
 	public void hideDialog() {
 		hide();
-		// Builder.mImageView = null;
-		Builder.mAudioPlayer.stop();
-		if (Builder.mVideoView.getVisibility() == View.VISIBLE && Builder.mVideoView.isPlaying())
-			Builder.mVideoView.pause();
-		Builder.mVideoView.setVisibility(View.GONE);
+		cancelTimerTask();
+		if (Builder.mAudioPlayer.isPlaying())
+			Builder.mAudioPlayer.stop();
+		removeVideoView();
 		if (currentBitmap != null && !currentBitmap.isRecycled()) {
 			currentBitmap.recycle();
 			currentBitmap = null;
 		}
-		// contentView.removeAllViews();
-		// contentView = null;
-		// if(Builder.dialog!=null&&Builder.dialog.isShowing()){
-		// Builder.dialog.dismiss();
-		// }
 	}
 
 	public void initTimer() {
-
+		LogUtil.e("new timer text view");
 		glTimer = new RecordTimerLimitView(getContext());
 		params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -325,5 +345,9 @@ public class LongClickShowView extends Dialog {
 			}
 		}, null, null);
 		contentView.addView(glTimer, params);
+	}
+
+	public void cancelTimerTask() {
+		glTimer.setOnTimeEndListener(null, null, null);
 	}
 }

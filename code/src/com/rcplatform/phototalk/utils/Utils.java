@@ -58,6 +58,7 @@ import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
+import com.rcplatform.phototalk.galhttprequest.LogUtil;
 
 public class Utils {
 
@@ -745,7 +746,7 @@ public class Utils {
 		}
 	}
 
-	public static void createShortCutIcon(Context context, Intent iconIntent, int drawableId,int iconNameId) {
+	public static void createShortCutIcon(Context context, Intent iconIntent, int drawableId, int iconNameId) {
 		Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 		// 快捷方式的名称
 		shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, context.getString(iconNameId));
@@ -762,5 +763,25 @@ public class Utils {
 	public static void showSoftInputBoard(Context context, View focusView) {
 		InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
 		keyboard.showSoftInput(focusView, 0);
+	}
+
+	public static int getStatusBarHeight(Context context) {
+		Class<?> c = null;
+		Object obj = null;
+		java.lang.reflect.Field field = null;
+		int x = 0;
+		int statusBarHeight = 0;
+		try {
+			c = Class.forName("com.android.internal.R$dimen");
+			obj = c.newInstance();
+			field = c.getField("status_bar_height");
+			x = Integer.parseInt(field.get(obj).toString());
+			statusBarHeight = context.getResources().getDimensionPixelSize(x);
+			LogUtil.e(statusBarHeight+"");
+			return statusBarHeight;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return statusBarHeight;
 	}
 }

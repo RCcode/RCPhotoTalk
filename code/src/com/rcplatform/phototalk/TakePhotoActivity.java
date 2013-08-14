@@ -17,12 +17,15 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 
 import com.rcplatform.phototalk.bean.InformationCategory;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
+import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.CameraView.OnVideoRecordListener;
 import com.rcplatform.phototalk.views.CameraView.TakeOnSuccess;
@@ -80,6 +83,11 @@ public class TakePhotoActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		if (!Utils.isExternalStorageUsable()) {
+			DialogUtil.showToast(this, R.string.no_sdc, Toast.LENGTH_SHORT);
+			finish();
+			return;
+		}
 		ctx = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);

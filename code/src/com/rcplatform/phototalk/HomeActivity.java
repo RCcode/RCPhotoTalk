@@ -432,12 +432,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 
 			@Override
 			public void onClick(View v) {
-				if (Utils.isExternalStorageUsable()) {
-					EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
-					startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
-				} else {
-					DialogUtil.showToast(HomeActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT);
-				}
+				EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
+				startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
 			}
 		});
 		mInformationList.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -475,7 +471,6 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 			}
 		}
 	};
-
 
 	private void showFriendDetail(Information information) {
 		if (information.getSender().getRcId().equals(information.getReceiver().getRcId())) {
