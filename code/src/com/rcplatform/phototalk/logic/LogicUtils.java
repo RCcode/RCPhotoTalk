@@ -308,7 +308,7 @@ public class LogicUtils {
 					InformationPageController.getInstance().onPhotoSendFail(flag);
 					if (informationCate == InformationCategory.VIDEO) {
 						int notificationId = SendingInformationManager.getInstance().getNotificationId(flag);
-						showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_fail), flag, notificationId,
+						showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_video_fail), flag, notificationId,
 								PhotoTalkUtils.getNotificationNormalIntent(context));
 					}
 					if (sendToStranges) {
