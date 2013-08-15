@@ -901,9 +901,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		};
 		View dialogView = getLayoutInflater().inflate(R.layout.confirm_country_dialog, null);
 		ImageView ivCountry = (ImageView) dialogView.findViewById(R.id.iv_country);
-		Bitmap countryBitmap=Utils.getAssetCountryFlag(this, getCurrentUser().getCountry());
-		if(countryBitmap==null)
-			countryBitmap=Utils.getAssetCountryFlag(this, getString(R.string.other_country));
+		Bitmap countryBitmap = Utils.getAssetCountryFlag(this, getCurrentUser().getCountry());
 		ivCountry.setImageBitmap(countryBitmap);
 		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.confirm_user_country).setPositiveButton(R.string.ok, listener)
 				.setNegativeButton(R.string.change_country, listener).setView(dialogView).create();

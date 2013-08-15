@@ -52,6 +52,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -703,6 +704,9 @@ public class Utils {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		if(bitmap==null){
+			return getAssetCountryFlag(context, context.getString(R.string.other_country));
 		}
 		return bitmap;
 	}
