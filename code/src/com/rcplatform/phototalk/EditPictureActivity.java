@@ -54,6 +54,7 @@ import com.rcplatform.phototalk.proxy.DriftProxy;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.RCPlatformTextUtil;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.utils.ZipUtil;
@@ -568,11 +569,22 @@ public class EditPictureActivity extends BaseActivity {
 				break;
 
 			case SAVE_PICTURE_ON_CLICK:
-				EventUtil.Main_Photo.rcpt_photosave(baseContext);
-				if (enableSave) {
-					createViewCache();
-					saveEditedPictrue(mEditableViewGroup.getDrawingCache(), app.getCameraPath());
+				if (Utils.isExternalStorageUsable()) {
+					EventUtil.Main_Photo.rcpt_photosave(baseContext);
+					if (enableSave) {
+						if (informationCate == InformationCategory.PHOTO) {
+							createViewCache();
+							saveEditedPictrue(mEditableViewGroup.getDrawingCache(), new File(PhotoTalkUtils.getSavedPhotoDir(), System.currentTimeMillis()
+									+ Constants.IMAGE_FORMAT).getPath());
+
+						} else {
+							saveVideo(videoPath);
+						}
+					}
+				} else {
+					DialogUtil.showToast(EditPictureActivity.this, R.string.no_sdc, Toast.LENGTH_SHORT);
 				}
+
 				break;
 			case SEND_ON_CLICK:
 				EventUtil.Main_Photo.rcpt_sendbutton(baseContext);
@@ -599,6 +611,23 @@ public class EditPictureActivity extends BaseActivity {
 			}
 		}
 	};
+
+	private void saveVideo(final String videoPath) {
+		showLoadingDialog(false);
+		Thread thread = new Thread() {
+			public void run() {
+				try {
+					Utils.copyFile(new File(videoPath), new File(PhotoTalkUtils.getSavedVideoDir(), System.currentTimeMillis() + Constants.VIDEO_FORMAT));
+					handler.sendEmptyMessage(SAVE_SUCCESS);
+				} catch (Exception e) {
+					handler.sendEmptyMessage(NO_SDC);
+					e.printStackTrace();
+				}
+
+			};
+		};
+		thread.start();
+	}
 
 	private void playEndMusic() {
 		MediaPlayer endplayer = new MediaPlayer();
@@ -867,8 +896,10 @@ public class EditPictureActivity extends BaseActivity {
 					}
 				} else {
 					// 保存成功后 刷新本地相册
-					EditPictureActivity.this.getBaseContext().sendBroadcast(
-							new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+					// EditPictureActivity.this.getBaseContext().sendBroadcast(
+					// new Intent(Intent.ACTION_MEDIA_MOUNTED,
+					// Uri.parse("file://" +
+					// Environment.getExternalStorageDirectory())));
 					Toast.makeText(EditPictureActivity.this, R.string.save_success, Toast.LENGTH_SHORT).show();
 				}
 				break;

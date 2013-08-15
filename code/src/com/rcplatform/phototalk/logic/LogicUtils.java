@@ -248,7 +248,7 @@ public class LogicUtils {
 
 	private static void showInformationStateNofitication(Context context, String notifyTitle, String notifyText, long flag, int notificationId) {
 		SendingInformationManager.getInstance().addSendingInformation(flag, notificationId);
-		NotificationSender.getInstance(context).sendNotification(notifyTitle, notifyText, R.drawable.ic_launcher, null, notificationId);
+		NotificationSender.getInstance(context).sendNotification(notifyTitle, notifyText, R.drawable.notification_icon, null, notificationId);
 	}
 
 	public static void sendPhoto(final Context context, final String timeLimit, List<Friend> friends, final File file, final boolean hasVoice,

@@ -2,6 +2,7 @@ package com.rcplatform.phototalk.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -634,29 +635,20 @@ public class Utils {
 			file.mkdirs();
 	}
 
-	public static void copyFile(final File source, final File copy) {
+	public static void copyFile(final File source, final File copy) throws IOException {
 		if (source.exists()) {
-			Thread thread = new Thread() {
-				public void run() {
-					try {
-						if (!copy.exists())
-							createNewFile(copy.getPath());
-						FileInputStream fis = new FileInputStream(source);
-						FileOutputStream fos = new FileOutputStream(copy);
-						byte[] buffer = new byte[1024];
-						int len = 0;
-						while ((len = fis.read(buffer)) != -1) {
-							fos.write(buffer, 0, len);
-						}
-						fos.flush();
-						fis.close();
-						fos.close();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				};
-			};
-			thread.start();
+			if (!copy.exists())
+				createNewFile(copy.getPath());
+			FileInputStream fis = new FileInputStream(source);
+			FileOutputStream fos = new FileOutputStream(copy);
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) != -1) {
+				fos.write(buffer, 0, len);
+			}
+			fos.flush();
+			fis.close();
+			fos.close();
 		}
 	}
 
@@ -777,7 +769,7 @@ public class Utils {
 			field = c.getField("status_bar_height");
 			x = Integer.parseInt(field.get(obj).toString());
 			statusBarHeight = context.getResources().getDimensionPixelSize(x);
-			LogUtil.e(statusBarHeight+"");
+			LogUtil.e(statusBarHeight + "");
 			return statusBarHeight;
 		} catch (Exception e) {
 			e.printStackTrace();

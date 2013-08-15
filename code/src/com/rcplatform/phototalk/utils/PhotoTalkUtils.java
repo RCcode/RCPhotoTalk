@@ -1,5 +1,6 @@
 package com.rcplatform.phototalk.utils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,9 +196,24 @@ public class PhotoTalkUtils {
 			});
 		mUpdateDialog.show();
 	}
+
 	public static Intent getNotificationTakePhotoIntent(Context context) {
 		Intent intent = new Intent(context, WelcomeActivity.class);
 		intent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLICATION_START_TAKE_PHOTO);
 		return intent;
+	}
+
+	public static File getSavedVideoDir() {
+		if (Constants.PhotoInformationCache.SAVED_VIDEO_DIR == null) {
+			Constants.initSavedDirs();
+		}
+		return Constants.PhotoInformationCache.SAVED_VIDEO_DIR;
+	}
+
+	public static File getSavedPhotoDir() {
+		if (Constants.PhotoInformationCache.SAVED_PHOTO_DIR == null) {
+			Constants.initSavedDirs();
+		}
+		return Constants.PhotoInformationCache.SAVED_PHOTO_DIR;
 	}
 }

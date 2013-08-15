@@ -20,6 +20,7 @@ import android.hardware.Camera.Size;
 import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
+import android.media.MediaRecorder.VideoSource;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
@@ -82,6 +83,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private static final int VIDEO_WIDTH = 640;
 	private static final int VIDEO_HEIGHT = 480;
+
+	private Size mVideoSize;
 
 	public long getMaxVideoRecordTime() {
 		return maxVideoRecordTime;
@@ -450,13 +453,17 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 						w = 800;
 					}
 				}
+				mVideoSize = getOptimalPreviewSize(parameters.getSupportedVideoSizes(), VIDEO_WIDTH, VIDEO_HEIGHT);
+
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
-				if(!isBackFace){
-					parameters.setPreviewSize(VIDEO_WIDTH, VIDEO_HEIGHT);
-				}else{
-					parameters.setPreviewSize(previewSize.width, previewSize.height);
+				if (!isBackFace) {
+					if (mVideoSize != null)
+						parameters.setPreviewSize(mVideoSize.width, mVideoSize.height);
+				} else {
+					if (previewSize != null)
+						parameters.setPreviewSize(previewSize.width, previewSize.height);
 				}
-			
+
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
 				if (pictureSize != null)
 					parameters.setPictureSize(pictureSize.width, pictureSize.height);
@@ -564,8 +571,10 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
 					// this.mMediaRecorder.setOutputFormat(paramCamcorderProfile.fileFormat);
 					mMediaRecorder.setProfile(paramCamcorderProfile);
-					// if (mVideoSize != null)
-					mMediaRecorder.setVideoSize(VIDEO_WIDTH, VIDEO_HEIGHT);
+					if (mVideoSize != null)
+						mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
+					else
+						mMediaRecorder.setVideoSize(VIDEO_WIDTH, VIDEO_HEIGHT);
 					// else
 					// mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
 					// paramCamcorderProfile.videoFrameHeight);

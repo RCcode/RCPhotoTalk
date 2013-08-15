@@ -31,7 +31,6 @@ public class Constants {
 		public static long SEND_SUCCESS_NOTIFICATION_SHOW_TIME = 3 * 1000;
 	}
 
-	
 	public static final int ATTENTION_COMMENT_TIME = 10;
 
 	public static final int UNTHROW_FISH_ALLOW_TIME = 3;
@@ -117,6 +116,7 @@ public class Constants {
 	private static void initTempFileDir(Context context) {
 
 		if (Utils.isExternalStorageUsable()) {
+			initSavedDirs();
 			File unZipDir = new File(Environment.getExternalStorageDirectory(), ".rcplatform/unzip_cache");
 			PhotoInformationCache.FILE_PATH = unZipDir.getPath();
 			PhotoInformationCache.SEND_CACHE = new File(Environment.getExternalStorageDirectory(), ".rcplatform/send_cache");
@@ -128,6 +128,15 @@ public class Constants {
 				PhotoInformationCache.ZIP_CACHE.mkdirs();
 			}
 		}
+	}
+
+	public static void initSavedDirs() {
+		PhotoInformationCache.SAVED_VIDEO_DIR = new File(Environment.getExternalStorageDirectory(), PhotoInformationCache.SAVE_DIR_VIDEO_PATH);
+		if (!PhotoInformationCache.SAVED_VIDEO_DIR.exists())
+			PhotoInformationCache.SAVED_VIDEO_DIR.mkdirs();
+		PhotoInformationCache.SAVED_PHOTO_DIR = new File(Environment.getExternalStorageDirectory(), PhotoInformationCache.SAVE_DIR_PHOTO_PATH);
+		if (!PhotoInformationCache.SAVED_PHOTO_DIR.exists())
+			PhotoInformationCache.SAVED_PHOTO_DIR.mkdirs();
 	}
 
 	private static void initScreenWidthHeight(Activity context) {
@@ -314,7 +323,11 @@ public class Constants {
 
 		public static File SEND_CACHE;
 		public static File ZIP_CACHE;
+		public static File SAVED_VIDEO_DIR;
+		public static File SAVED_PHOTO_DIR;
 		public static final String UNZIP_SUFFIX = "_unzip";
+		public static final String SAVE_DIR_VIDEO_PATH = "friendMe/video";
+		public static final String SAVE_DIR_PHOTO_PATH = "friendMe/photo";
 	}
 
 	public static class FriendAddType {
@@ -410,6 +423,6 @@ public class Constants {
 			"ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM", "MD", "MA", "MZ", "NE", "PW", "WS",
 			"SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM", "YE", "IQ", "JO", "DZ", "AF", "ET", "AD",
 			"AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH", "QA", "KM", "CI", "HR", "KE", "LV", "LS", "LU",
-			"RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM", "HK" ,"TW"};
+			"RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM", "HK", "TW" };
 
 }
