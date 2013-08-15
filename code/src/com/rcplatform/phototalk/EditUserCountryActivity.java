@@ -20,6 +20,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,7 +48,6 @@ public class EditUserCountryActivity extends BaseActivity implements OnClickList
 	private List<CountryHolder> oldCountry = new ArrayList<CountryHolder>();
 	private List<CountryHolder> countryList = new ArrayList<CountryHolder>();
 	public static final String RESULT_KEY_COUNTRY = "countryCode";
-
 	public static final String PARAM_KEY_PAGE_FROM = "pagefrom";
 
 	@Override
@@ -88,6 +88,17 @@ public class EditUserCountryActivity extends BaseActivity implements OnClickList
 		}
 		Collections.sort(oldCountry, new ReverseSort());
 		countryList = oldCountry;
+		CountryHolder otherCountry = new CountryHolder();
+		String otherCode = getString(R.string.other_country);
+		String otherName=getString(R.string.other_country_name);
+		if (userCountryCode != null && userCountryCode.equals(otherCode)) {
+			otherCountry.isSelect = true;
+		} else {
+			otherCountry.isSelect = false;
+		}
+		otherCountry.name = otherName;
+		otherCountry.code = otherCode;
+		countryList.add(otherCountry);
 
 	}
 
@@ -146,6 +157,21 @@ public class EditUserCountryActivity extends BaseActivity implements OnClickList
 				activityFinish();
 			}
 		});
+	}
+
+	private View getFooterView() {
+		View footerView = getLayoutInflater().inflate(R.layout.country_list_item, null);
+		ImageView countryFlag = (ImageView) footerView.findViewById(R.id.country_flag_view);
+		TextView countryName = (TextView) footerView.findViewById(R.id.country_name);
+		Button selectBtn = (Button) footerView.findViewById(R.id.select_btn);
+		String countryCode = getString(R.string.other_country);
+		countryName.setText(countryCode);
+		if (countryCode.equals(userCountryCode)) {
+			selectBtn.setVisibility(View.VISIBLE);
+		} else {
+			selectBtn.setVisibility(View.GONE);
+		}
+		return footerView;
 	}
 
 	public void activityFinish() {

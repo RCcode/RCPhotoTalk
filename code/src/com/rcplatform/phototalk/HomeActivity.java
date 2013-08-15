@@ -219,6 +219,8 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 		} else if (startMode == ApplicationStartMode.APPLICATION_START_TAKE_PHOTO) {
 			EventUtil.Main_Photo.rcpt_takephotobutton(baseContext);
 			startActivity(new Intent(HomeActivity.this, TakePhotoActivity.class));
+		} else if (startMode == ApplicationStartMode.APPLICATION_START_DRIFT) {
+			startActivity(DriftInformationActivity.class);
 		}
 	}
 

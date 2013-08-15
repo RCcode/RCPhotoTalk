@@ -342,6 +342,8 @@ public class Constants {
 
 		public static final int APPLICATION_START_TAKE_PHOTO = 2;
 
+		public static final int APPLICATION_START_DRIFT = 3;
+
 		public static final String APPLICATION_START_KEY = "app_start";
 
 		public static final int APPLCATION_START_NORMAL = -1;
@@ -423,6 +425,6 @@ public class Constants {
 			"ZW", "CM", "KW", "CK", "LA", "LB", "LT", "LY", "LI", "MG", "MV", "ML", "MH", "MU", "MR", "BD", "FM", "MM", "MD", "MA", "MZ", "NE", "PW", "WS",
 			"SL", "SC", "LC", "SZ", "SD", "SB", "SO", "TH", "TZ", "TN", "VU", "BN", "UG", "SG", "HU", "SY", "JM", "YE", "IQ", "JO", "DZ", "AF", "ET", "AD",
 			"AO", "BB", "PY", "BY", "BZ", "BF", "BI", "EC", "FJ", "CV", "GM", "KZ", "HT", "HN", "DJ", "KH", "QA", "KM", "CI", "HR", "KE", "LV", "LS", "LU",
-			"RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM", "HK", "TW" };
+			"RW", "MT", "MW", "MN", "PE", "NA", "NR", "NP", "NU", "SK", "SI", "SR", "TM", "GT", "VE", "UY", "UZ", "TJ", "EH", "AM", "ZM", "HK", "TW"};
 
 }

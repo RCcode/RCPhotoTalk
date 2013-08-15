@@ -48,7 +48,7 @@ public class NotificationSender {
 		notification.contentView.setTextViewText(R.id.gcm_decs, notifyText);
 		notification.tickerText = notifyText;
 		notification.when = System.currentTimeMillis();
-		notification.flags = Notification.FLAG_AUTO_CANCEL;
+		notification.flags = Notification.FLAG_NO_CLEAR;
 		if (contentIntent != null) {
 			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 			notification.contentIntent = pendingIntent;

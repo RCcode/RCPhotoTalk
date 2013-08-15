@@ -2,7 +2,6 @@ package com.rcplatform.phototalk.utils;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,8 +16,6 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 
 import android.app.ActivityManager;
-import android.app.AlertDialog.Builder;
-import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -55,7 +52,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.rcplatform.phototalk.R;
 import com.rcplatform.phototalk.bean.AppInfo;
 import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.UserInfo;
@@ -611,7 +607,6 @@ public class Utils {
 			timeZone = TimeZone.getDefault();
 		}
 		return timeZone.getRawOffset() / (60 * 60 * 1000);
-
 	}
 
 	public static void createNewFile(String path) {
@@ -707,7 +702,6 @@ public class Utils {
 				bitmap = BitmapFactory.decodeStream(is);
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return bitmap;

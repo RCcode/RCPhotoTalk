@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnShowListener;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -115,6 +116,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	private ViewFlipper pager;
 	private GestureDetector mGestureDetector;
 	private static final String USERDRIFT = "userDrift";
+
 	static enum DriftShowMode {
 		ALL, MY_COUNTRY;
 	}
@@ -262,6 +264,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		});
 		mGestureDetector.setIsLongpressEnabled(true);
 	}
+
 	private void closePaper() {
 		AlphaAnimation animation = new AlphaAnimation(1.0f, 0.0f);
 		animation.setDuration(500);
@@ -269,6 +272,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		pager.setVisibility(View.GONE);
 		PrefsUtils.User.setDriftUsed(DriftInformationActivity.this, USERDRIFT);
 	}
+
 	private OnItemClickListener driftListItemClickListener = new OnItemClickListener() {
 
 		@Override
@@ -288,7 +292,6 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			}
 		}
 	};
-
 
 	private void showFriendDetail(DriftInformation information) {
 		Friend friend = null;
@@ -726,6 +729,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 			fishInformation();
 			break;
 		case R.id.btn_throw_drift:
+			if (RCPlatformTextUtil.isEmpty(getCurrentUser().getCountry())) {
+				showSetCountryDialog(REQUEST_KEY_COUNTRY_CHOOSE_THROW);
+				return;
+			}
 			if (PrefsUtils.User.isFirstTimeChooseDriftRange(this, getCurrentUserRcId())) {
 				showCountryConfirmDialog(REQUEST_KEY_COUNTRY_CHOOSE_THROW);
 			} else
@@ -829,6 +836,11 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void chooseMyCountry() {
+		if (RCPlatformTextUtil.isEmpty(getCurrentUser().getCountry())) {
+			showSetCountryDialog(REQUEST_KEY_COUNTRY_CHOOSE_FISH_RANGE);
+			return;
+		}
+
 		if (PrefsUtils.User.isFirstTimeChooseDriftRange(this, getCurrentUserRcId())) {
 			showCountryConfirmDialog(REQUEST_KEY_COUNTRY_CHOOSE_FISH_RANGE);
 		} else {
@@ -849,6 +861,23 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 				}
 			}).setNegativeButton(R.string.cancel, null).setMessage(R.string.throw_dialog_msg).setTitle(R.string.throw_dialog_title).create();
 		throwDialog.show();
+	}
+
+	private void showSetCountryDialog(final int requestCode) {
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				PrefsUtils.User.setDriftRangeCheese(DriftInformationActivity.this, getCurrentUserRcId());
+				switch (which) {
+				case DialogInterface.BUTTON_NEGATIVE:
+					startCountryChooseActivity(requestCode);
+					break;
+				}
+			}
+		};
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setMessage(R.string.set_country_first).setNegativeButton(R.string.ok, listener).create();
+		dialog.show();
 	}
 
 	private void showCountryConfirmDialog(final int requestCode) {
@@ -872,7 +901,10 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 		};
 		View dialogView = getLayoutInflater().inflate(R.layout.confirm_country_dialog, null);
 		ImageView ivCountry = (ImageView) dialogView.findViewById(R.id.iv_country);
-		ivCountry.setImageBitmap(Utils.getAssetCountryFlag(this, getCurrentUser().getCountry()));
+		Bitmap countryBitmap=Utils.getAssetCountryFlag(this, getCurrentUser().getCountry());
+		if(countryBitmap==null)
+			countryBitmap=Utils.getAssetCountryFlag(this, getString(R.string.other_country));
+		ivCountry.setImageBitmap(countryBitmap);
 		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(this).setTitle(R.string.confirm_user_country).setPositiveButton(R.string.ok, listener)
 				.setNegativeButton(R.string.change_country, listener).setView(dialogView).create();
 		dialog.show();
