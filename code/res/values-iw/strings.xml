@@ -228,4 +228,21 @@
     <string name="show_send_drift">הועלה</string>
     <string name="show_receive_drift">התקבל</string>
     <string name="add_friend_success">נוסף.</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">וידיאו לחברים חדשים</string>
+    <string name="sending_video_to">וידיאו אל %1$s</string>
+    <string name="send_success">נשלח בהצלחה</string>
+    <string name="send_video_fail">השליחה נכשלה - נסה שנית</string>
+    <string name="comment_title">אנא מדרג את היישום</string>
+    <string name="comment_message">תודה שהשתמשת ביישום FriendMe! אנא הקדש לנו דקה מזמנך כדי לתת תיון לחווית השימוש ביישום הזה שבחנות.  תודה על שהקדשת מזמנך!</string>
+    <string name="auto_bind_dialog_msg">הוסף את מספר הטלפון הנייד שלך וכן יוכלו חבריך למצוא אותך הקלות! שלח לנו מסרון כדי לקשר את מספרך לחשבונך - המסרונים מחויבים בתעריף רשת רגיל.</string>
+    <string name="press_input_text">טפח כדי להוסיף טקסט</string>
+    <string name="set_drift_range">הגדר טווח חיפוש</string>
+    <string name="all_world">בכל רחבי העולם</string>
+    <string name="my_country">הארץ שלי</string>
+    <string name="confirm_user_country">אשר את הארץ</string>
+    <string name="confirm_user_country_attention">הערה: תוכל לתקן את שם הארץ בפרופיל</string>
+    <string name="change_country">תקן</string>
+    <string name="set_country_first">הגדר תחילה את ארצך</string>
+    <string name="icon_name">לכידת F.Me</string>
 </resources>

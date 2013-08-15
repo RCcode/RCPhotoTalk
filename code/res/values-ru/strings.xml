@@ -229,4 +229,21 @@
     <string name="show_send_drift">Выгружено</string>
     <string name="show_receive_drift">Получено</string>
     <string name="add_friend_success">Добавлен</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">Видео новым друзьям </string>
+    <string name="sending_video_to">Видео для %1$s</string>
+    <string name="send_success">Отправлено успешно</string>
+    <string name="send_video_fail">Не удалось отправить, попробуйте еще раз</string>
+    <string name="comment_title">Оцените приложение</string>
+    <string name="comment_message">Спасибо, что пользуетесь FriendMe! Пожалуйста, уделите минутку, чтобы дать свою оценку этому приложению в магазине. Заранее спасибо!</string>
+    <string name="auto_bind_dialog_msg">Добавьте номер своего мобильного телефона, чтобы друзья всегда могли легко вас найти! Оправьте нам SMS, чтобы подключить номер к учетной записи (стоимость сообщения тарифицируется по обычным тарифам оператора связи).</string>
+    <string name="press_input_text">Дотроньтесь, чтобы добавить текст</string>
+    <string name="set_drift_range">Установить диапазон поиска</string>
+    <string name="all_world">По всему миру</string>
+    <string name="my_country">Моя страна</string>
+    <string name="confirm_user_country">Подтвердите страну</string>
+    <string name="confirm_user_country_attention">Примечание: страну можно изменить в профиле</string>
+    <string name="change_country">Изменить</string>
+    <string name="set_country_first">Сначала установите страну</string>
+    <string name="icon_name">Съемка F.Me</string>
 </resources>

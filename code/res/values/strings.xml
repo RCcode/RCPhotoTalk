@@ -235,7 +235,6 @@
 
     <!-- 编辑图片页面 -->
     <string name="saving">正在保存...</string>
-    <string name="send_success">发送成功</string>
     <string name="save_fail">保存失败</string>
     <!-- 发送图片时选择好友页面 -->
     <string name="please_select_contact">请选择联系人</string>
@@ -383,8 +382,6 @@
     <!-- 漂流瓶对话框 -->
     <string name="havenot_throw_today">今天还没有扔瓶子</string>
     <string name="go_to_comment">去评价</string>
-    <string name="comment_message">感谢你使用FriendMe，请花点时间给我进行评价，谢谢你对我们的支持。</string>
-    <string name="comment_title">给我们进行评价</string>
     <!-- v2.0 -->
     <string name="know_strangers">Make new friends</string>
     <string name="new_init_message">New to version 2.0 - now you can make friends from all over the world!</string>
@@ -404,21 +401,25 @@
     <string name="show_receive_drift">Received</string>
     <string name="add_friend_success">Added</string>
 
-    <!-- friendMe New Text -->
+    <!-- Friend Me 2.3 -->
 
-    <string name="sending_to_stranger">发送视频到结识新朋友</string>
-    <string name="sending_video_to">发送视频给%1$s</string>
-    <string name="auto_bind_dialog_msg">连接你的手机号码以便你的朋友可以找到你！发送短信来绑定手机号，会收取正常的短信费用。</string>
-    <string name="set_drift_range">设置捞取范围</string>
-    <string name="all_world">全世界</string>
-    <string name="my_country">我的国家</string>
-    <string name="confirm_user_country">确认你的国家</string>
-    <string name="change_country">修改</string>
-    <string name="confirm_user_country_attention">提示：你可以在个人资料中修改自己的国家</string>
-    <string name="press_input_text">点击添加文字</string>
-	<string name="icon_name">F.Me摄像</string>
-	<string name="set_country_first">请先设置所在的国家</string>
-	<string name="other_country">othercountry</string>
-	<string name="other_country_name">OtherCountry</string>
-	<string name="send_video_fail">发送失败，请重试</string>
+    <string name="sending_to_stranger">Video to new friends</string>
+    <string name="sending_video_to">Video to %1$s</string>
+    <string name="send_success">Sent successfully</string>
+    <string name="send_video_fail">Failed to send - please try again</string>
+    <string name="comment_title">Please rate this app</string>
+    <string name="comment_message">Thanks for using FriendMe! Please spare a moment to rate your experience of this app in the store. Thank you for your time!</string>
+    <string name="auto_bind_dialog_msg">Add your mobile phone number to help friends find you more easily! Send us an SMS to connect your number to your account - messages are charged at the normal network rate.</string>
+    <string name="press_input_text">Tap to add text</string>
+    <string name="set_drift_range">Set search range</string>
+    <string name="all_world">All over the world</string>
+    <string name="my_country">My country</string>
+    <string name="confirm_user_country">Confirm your country</string>
+    <string name="confirm_user_country_attention">Note: you can modify your country in your profile</string>
+    <string name="change_country">Modify</string>
+    <string name="set_country_first">Please set your country first</string>
+    <string name="icon_name">F.Me Capture</string>
+    <string name="other_country">othercountry</string>
+    <string name="other_country_name">Other Country</string>
+
 </resources>

@@ -227,4 +227,21 @@
     <string name="show_send_drift">업로드 완료</string>
     <string name="show_receive_drift">수신 완료</string>
     <string name="add_friend_success">추가 완료</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">새 친구에게 동영상 전송</string>
+    <string name="sending_video_to">%1$s에게 동영상 전송</string>
+    <string name="send_success">전송 성공</string>
+    <string name="send_video_fail">전송 실패 - 다시 시도하십시오.</string>
+    <string name="comment_title">이 앱의 등급을 매겨 주십시오.</string>
+    <string name="comment_message">FriendMe를 사용해 주셔서 감사합니다! 잠시 시간을 내어 스토어에서 이 앱의 사용 만족도를 평가해 주십시오. 소중한 시간을 내 주셔서 감사합니다!</string>
+    <string name="auto_bind_dialog_msg">휴대전화 번호를 추가하면 친구들이 귀하를 보다 쉽게 찾을 수 있습니다! 전화번호를 계정에 연결하려면 저희에게 SMS를 보내주십시오. 메시지 전송 시 일반 네트워크 요금에 따라 이용료가 부가됩니다.</string>
+    <string name="press_input_text">텍스트를 추가하려면 누르십시오.</string>
+    <string name="set_drift_range">검색 범위 설정</string>
+    <string name="all_world">전세계</string>
+    <string name="my_country">사용자 국가</string>
+    <string name="confirm_user_country">국가 확인</string>
+    <string name="confirm_user_country_attention">주: 프로필에서 국가를 수정할 수 있습니다.</string>
+    <string name="change_country">수정</string>
+    <string name="set_country_first">먼저 국가를 설정하십시오.</string>
+    <string name="icon_name">F.Me 캡처</string>
 </resources>

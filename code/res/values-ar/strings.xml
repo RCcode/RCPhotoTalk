@@ -227,4 +227,21 @@
     <string name="show_send_drift">المودع</string>
     <string name="show_receive_drift">المستلم</string>
     <string name="add_friend_success">تمت الإضافة.</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">فيديو إلى أصدقاء جدد</string>
+    <string name="sending_video_to">فيديو إلى %1$s</string>
+    <string name="send_success">تم الإرسال بنجاح</string>
+    <string name="send_video_fail">فشل الإرسال - يرجى المحاولة مرة أخرى</string>
+    <string name="comment_title">يرجى تقييم هذا التطبيق</string>
+    <string name="comment_message">شكرًا على استخدام FriendMe! يرجى قضاء دقيقة لتقييم تجربتك لهذا التطبيق في المتجر. شكرًا على وقتك!</string>
+    <string name="auto_bind_dialog_msg">أضف رقم هاتفك الجوال لمساعدة أصدقائك في العثور عليك بسهولة! أرسل لنا رسالة نصية لربط رقمك بحسابك – يتم تحميل تكلفة الرسائل بسعر الشبكة العادي.</string>
+    <string name="press_input_text">اضغط لإضافة نص</string>
+    <string name="set_drift_range">حدد نطاق البحث</string>
+    <string name="all_world">كافة أنحاء العالم</string>
+    <string name="my_country">بلدي</string>
+    <string name="confirm_user_country">تأكيد بلدك</string>
+    <string name="confirm_user_country_attention">ملاحظة: يمكنك تعديل بلدك في ملفك التعريف الخاص بك</string>
+    <string name="change_country">تعديل</string>
+    <string name="set_country_first">يرجى تحديد بلدك أولاً</string>
+    <string name="icon_name">التقاط F.Me</string>
 </resources>

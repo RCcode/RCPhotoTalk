@@ -229,4 +229,21 @@
     <string name="show_send_drift">Diunggah</string>
     <string name="show_receive_drift">Diterima</string>
     <string name="add_friend_success">Ditambahkan</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">Kirim video ke teman baru</string>
+    <string name="sending_video_to">Kirim video ke %1$s</string>
+    <string name="send_success">Berhasil dikirim</string>
+    <string name="send_video_fail">Tidak bisa mengirim - mohon coba lagi</string>
+    <string name="comment_title">Beri peringkat aplikasi ini</string>
+    <string name="comment_message">Terima kasih telah menggunakan FriendMe! Luangkan waktu sejenak di store untuk menilai pengalaman Anda menggunakan aplikasi ini. Terima kasih atas waktu Anda!</string>
+    <string name="auto_bind_dialog_msg">Tambahkan nomor ponsel sehingga teman-teman lebih mudah menemukan Anda! Kirim SMS untuk menghubungkan nomor itu ke akun Anda - dengan tarif SMS normal.</string>
+    <string name="press_input_text">Ketuk untuk menambahkan teks</string>
+    <string name="set_drift_range">Setel batasan pencarian</string>
+    <string name="all_world">Di seluruh dunia</string>
+    <string name="my_country">Negara saya</string>
+    <string name="confirm_user_country">Konfirmasikan negara Anda</string>
+    <string name="confirm_user_country_attention">Catata: Negara Anda bisa diubah di profil</string>
+    <string name="change_country">Ubah</string>
+    <string name="set_country_first">Pilih negara Anda terlebih dahulu</string>
+    <string name="icon_name">F.Me tangkap</string>
 </resources>

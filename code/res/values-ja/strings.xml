@@ -230,4 +230,21 @@
     <string name="show_send_drift">アップロード済み</string>
     <string name="show_receive_drift">受信済み</string>
     <string name="add_friend_success">追加完了</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">新しい友だちにビデオ送信</string>
+    <string name="sending_video_to">%1$s にビデオ送信</string>
+    <string name="send_success">送信完了</string>
+    <string name="send_video_fail">送信失敗 - やり直してください</string>
+    <string name="comment_title">このアプリを評価してください</string>
+    <string name="comment_message">FriendMe! をご利用いただきありがとうございます。ストアでのこのアプリの使用について評価してください。ご協力ありがとうございます。</string>
+    <string name="auto_bind_dialog_msg">携帯番号を追加すればお友だちからあなたが検索されやすくなります。SMSを送信していただければ、あなたの番号をアカウントに接続します。メッセージには通常のネットワーク料金がかかります。</string>
+    <string name="press_input_text">タップしてテキストを追加</string>
+    <string name="set_drift_range">検索範囲の設定</string>
+    <string name="all_world">世界中</string>
+    <string name="my_country">国内</string>
+    <string name="confirm_user_country">国の確認</string>
+    <string name="confirm_user_country_attention">注意：国の設定はご自分のプロフィールで変更できます</string>
+    <string name="change_country">変更</string>
+    <string name="set_country_first">国を先に設定してください</string>
+    <string name="icon_name">F.Me キャプチャ</string>
 </resources>

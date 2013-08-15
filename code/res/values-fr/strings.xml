@@ -27,7 +27,6 @@
     <string name="ok">OK</string>
     <string name="registe_email_error">Erreur de format d’e-mail</string>
     <string name="register_password_error">Saisissez un mot de passe comprenant 6 à 20 caractères</string>
-
     <string name="login_title_login_bubble_text">Identifiant</string>
     <string name="login_username_hint">E-mail,RCID</string>
     <string name="login_forget_psw_hint">Mot de passe oublié</string>
@@ -192,24 +191,20 @@
     <string name="list_me">%1$s(moi)</string>
     <string name="net_error">Échec, réessayez ultérieurement</string>
     <string name="no_net">Aucune connexion réseau</string>
-    
-    
+
     <!-- 1.1 NEW TEXT -->
     <string name="contact">contacts</string>
     <string name="search">Rechercher</string>
     <string name="invite">Inviter</string>
-    
-
     <string name="twitter">Twitter</string>
     <string name="googleplus">Google+</string>
     <string name="gmail">Gmail</string>
-    
     <string name="share_title">Partager sur Twitter</string>
     <string name="search_friend_from_contacts">Trouver des amis dans les contacts</string>
     <string name="search_friend_from_local">Trouver des amis sur %1$s</string>
     <string name="search_friend">Trouver des amis par E-mail ou RCID</string>
     <string name="search_friend_from">Inviter des amis via %1$s</string>
-   	<string name="join_message">Me retrouver sur #FriendMe, une application de messagerie privée avec photo et son. Mon ID : %1$s. Obtenez-la ici http://rctalk.me</string>
+    <string name="join_message">Me retrouver sur #FriendMe, une application de messagerie privée avec photo et son. Mon ID : %1$s. Obtenez-la ici http://rctalk.me</string>
     <string name="invite_message">Hé ! J\'aimerais vous envoyer une photo privée sur #FriendMe. Obtenez-la ici http://rctalk.me et ajoutez mon ID %1$s</string>
     <string name="invite_your_friends">Inviter vos amis à rejoindre FriendMe ?</string>
     <!-- v2.0 -->
@@ -229,4 +224,21 @@
     <string name="show_send_drift">Chargé</string>
     <string name="show_receive_drift">Reçu</string>
     <string name="add_friend_success">Ajouté</string>
+    <!-- Friend Me 2.3 -->
+
+    <string name="sending_to_stranger">Vidéo à de nouveaux amis</string>
+    <string name="sending_video_to">vidéo à %1$s</string>
+    <string name="send_success">Envoi réussi</string>
+    <string name="send_video_fail">Échec de l\'envoi - veuillez réessayer</string>
+    <string name="comment_title">Veuillez noter cette application</string>
+    <string name="auto_bind_dialog_msg">Ajoutez votre numéro de mobile pour aider vos amis à vous retrouver plus facilement. Envoyez-nous un SMS pour connecter votre numéro à votre compte - les messages sont facturés au tarif réseau normal.</string>
+    <string name="press_input_text">Tapez pour ajouter du texte</string>
+    <string name="set_drift_range">Configurer la plage de recherche</string>
+    <string name="all_world">Partout dans le monde</string>
+    <string name="my_country">Mon pays</string>
+    <string name="confirm_user_country">Confirmez votre pays</string>
+    <string name="confirm_user_country_attention">Remarque : vous pouvez modifier votre pays dans votre profil</string>
+    <string name="change_country">Modifier</string>
+    <string name="icon_name">Capture F.Me</string>
+
 </resources>

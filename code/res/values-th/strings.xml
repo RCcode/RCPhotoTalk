@@ -234,4 +234,21 @@
     <string name="show_send_drift">อัปโหลดแล้ว</string>
     <string name="show_receive_drift">รับแล้ว</string>
     <string name="add_friend_success">เพิ่มแล้ว</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">ส่งวิดีโอให้กับเพื่อนใหม่</string>
+    <string name="sending_video_to">ส่งวิดีโอให้กับ %1$s</string>
+    <string name="send_success">ส่งสำเร็จแล้ว</string>
+    <string name="send_video_fail">ส่งไม่สำเร็จ โปรดลองอีกครั้ง</string>
+    <string name="comment_title">โปรดให้คะแนนแอปนี้</string>
+    <string name="comment_message">ขอบคุณสำหรับการใช้งาน FriendMe! โปรดสละเวลาสักครู่เพื่อให้คะแนนประสบการณ์ในการใช้งานแอปนี้ของคุณใน Store ขอบคุณที่กรุณาสละเวลา!</string>
+    <string name="auto_bind_dialog_msg">เพิ่มหมายเลขโทรศัพท์มือถือของคุณ เพื่อช่วยให้เพื่อน ๆ ค้นหาคุณพบได้ง่ายขึ้น! ส่ง SMS ถึงเรา เพื่อเชื่อมโยงโทรศัพท์ของคุณกับบัญชีผู้ใช้ของคุณ คุณจะต้องชำระค่าบริการส่งข้อความตามอัตราค่าบริการเครือข่ายตามปกติ</string>
+    <string name="press_input_text">แตะเพื่อเพิ่มข้อความ</string>
+    <string name="set_drift_range">กำหนดช่วงการค้นหา</string>
+    <string name="all_world">ทั่วโลก</string>
+    <string name="my_country">ประเทศของฉัน</string>
+    <string name="confirm_user_country">ยืนยันประเทศของคุณ</string>
+    <string name="confirm_user_country_attention">หมายเหตุ: คุณสามารถปรับเปลี่ยนประเทศของคุณได้ในโปรไฟล์ของคุณ</string>
+    <string name="change_country">ปรับเปลี่ยน</string>
+    <string name="set_country_first">โปรดกำหนดประเทศของคุณก่อน</string>
+    <string name="icon_name">การจับภาพ F.Me</string>
 </resources>

@@ -230,4 +230,21 @@
     <string name="show_send_drift">Caricate</string>
     <string name="show_receive_drift">Ricevute</string>
     <string name="add_friend_success">Aggiunto</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">Video per nuovi amici</string>
+    <string name="sending_video_to">Video per %1$s</string>
+    <string name="send_success">Inviato</string>
+    <string name="send_video_fail">Impossibile inviare - Riprova</string>
+    <string name="comment_title">Dai un punteggio a questa app</string>
+    <string name="comment_message">Grazie per aver usato FriendMe! Vai allapp store e dai un punteggio a questa app. Grazie per laiuto!</string>
+    <string name="auto_bind_dialog_msg">Aggiunti il tuo numero di cellulare, così i tuoi amici potranno trovarti! Inviaci un SMS per collegare il numero al tuo account: i messaggi sono gratuti, serve solo la connessione alla rete.</string>
+    <string name="press_input_text">Tocca per aggiungere il testo</string>
+    <string name="set_drift_range">Imposta intervallo di ricerca</string>
+    <string name="all_world">Tutto il mondo</string>
+    <string name="my_country">Il mio paese</string>
+    <string name="confirm_user_country">Conferma il paese</string>
+    <string name="confirm_user_country_attention">Nota: puoi modificare il paese nel tuo profilo</string>
+    <string name="change_country">Modifica</string>
+    <string name="set_country_first">Prima imposta il paese</string>
+    <string name="icon_name">Acquisizione F.Me</string>
 </resources>

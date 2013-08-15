@@ -228,4 +228,21 @@
     <string name="show_send_drift">发出的</string>
     <string name="show_receive_drift">收到的</string>
     <string name="add_friend_success">已添加</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">发送视频到结识新朋友</string>
+    <string name="sending_video_to">发送视频给%1$s</string>
+    <string name="send_success">发送成功</string>
+    <string name="send_video_fail">发送失败，请重试</string>
+    <string name="comment_title">给我们进行评价</string>
+    <string name="comment_message">感谢你使用FriendMe，请花点时间给我进行评价，谢谢你对我们的支持。</string>
+    <string name="auto_bind_dialog_msg">连接你的手机号码以便你的朋友可以找到你！发送短信来绑定手机号，会收取正常的短信费用。</string>
+    <string name="press_input_text">点击添加文字</string>
+    <string name="set_drift_range">设置捞取范围</string>
+    <string name="all_world">全世界</string>
+    <string name="my_country">我的国家</string>
+    <string name="confirm_user_country">确认你的国家</string>
+    <string name="confirm_user_country_attention">提示：你可以在个人资料中修改自己的国家</string>
+    <string name="change_country">修改</string>
+    <string name="set_country_first">请先设置所在的国家</string>
+    <string name="icon_name">F.Me摄像</string>
 </resources>

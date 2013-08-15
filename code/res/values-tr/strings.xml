@@ -232,4 +232,20 @@
     <string name="show_send_drift">Karşıya yüklendi</string>
     <string name="show_receive_drift">Alındı</string>
     <string name="add_friend_success">Eklendi</string>
+    <!-- Friend Me 2.3 -->
+    <string name="sending_to_stranger">Yeni arkadaşlara video</string>
+    <string name="send_success">Başarıyla gönderildi.</string>
+    <string name="send_video_fail">Gönderme başarısız oldu - lütfen tekrar deneyin.</string>
+    <string name="comment_title">Lütfen bu uygulamayı oylayın</string>
+    <string name="comment_message">FriendMe kullandığınız için teşekkür ederiz! Lütfen mağazada uygulama deneyiminizi oylamak için bize biraz zaman ayırın.Teşekkürler!</string>
+    <string name="auto_bind_dialog_msg">Arkadaşlarınızı daha kolayca bulmak için telefon numaranızı ekleyin. Telefon numaranızı hesabınıza bağlamak için bize bir SMS gönderin - mesajlar normal ağ üzerinden ücretlendirilir.</string>
+    <string name="press_input_text">Metin eklemek için dokunun</string>
+    <string name="set_drift_range">Arama aralığı ayarlayın</string>
+    <string name="all_world">Dünya çapında</string>
+    <string name="my_country">Ülkem</string>
+    <string name="confirm_user_country">Ülkenizi onaylayın</string>
+    <string name="confirm_user_country_attention">Not: ülkenizi profilinizde değiştirebilirsiniz</string>
+    <string name="change_country">Değiştir</string>
+    <string name="set_country_first">Lütfen önce ülkenizi ayarlayın</string>
+    <string name="icon_name">F.Me Yakala</string>
 </resources>
