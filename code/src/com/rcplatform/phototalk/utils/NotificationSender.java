@@ -39,7 +39,27 @@ public class NotificationSender {
 		};
 	};
 
-	public void sendNotification(String notifyTitle, String notifyText, int drawableId, Intent contentIntent, int notificationId) {
+	public void sendNotification(String notifyTitle, String notifyText, int drawableId, Intent contentIntent, int notificationId, boolean cancelAble) {
+		Notification notification = new Notification();
+		notification.icon = drawableId;
+		notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
+		notification.contentView.setImageViewResource(R.id.gcm_image, drawableId);
+		notification.contentView.setTextViewText(R.id.gcm_title, notifyTitle);
+		notification.contentView.setTextViewText(R.id.gcm_decs, notifyText);
+		notification.tickerText = notifyText;
+		notification.when = System.currentTimeMillis();
+		if (!cancelAble)
+			notification.flags = Notification.FLAG_NO_CLEAR;
+		else
+			notification.flags = Notification.FLAG_AUTO_CANCEL;
+		if (contentIntent != null) {
+			PendingIntent pendingIntent = PendingIntent.getActivity(context, notificationId, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			notification.contentIntent = pendingIntent;
+		}
+		mManager.notify(notificationId, notification);
+	}
+
+	public void sendNotification(String notifyTitle, String notifyText, int drawableId, PendingIntent contentIntent, int notificationId) {
 		Notification notification = new Notification();
 		notification.icon = drawableId;
 		notification.contentView = new RemoteViews(context.getPackageName(), R.layout.gcm_notification);
@@ -50,7 +70,7 @@ public class NotificationSender {
 		notification.when = System.currentTimeMillis();
 		notification.flags = Notification.FLAG_NO_CLEAR;
 		if (contentIntent != null) {
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent pendingIntent = contentIntent;
 			notification.contentIntent = pendingIntent;
 		}
 		mManager.notify(notificationId, notification);

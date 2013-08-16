@@ -339,6 +339,8 @@ public class EditPictureActivity extends BaseActivity {
 		setEditMode();
 		initRecordPreviewViews();
 		showInputAttention();
+		if (informationCate == InformationCategory.VIDEO)
+			videoView.start();
 
 	}
 
@@ -435,12 +437,11 @@ public class EditPictureActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onPause() {
-		super.onPause();
+	protected void onStop() {
+		super.onStop();
 		if (videoView != null && videoView.isPlaying())
 			videoView.pause();
 	}
-
 	private void initPhotoPreviewViews() {
 	}
 
@@ -462,8 +463,6 @@ public class EditPictureActivity extends BaseActivity {
 	protected void onResume() {
 		super.onResume();
 		mEditableViewGroup.setLastLayout();
-		if (informationCate == InformationCategory.VIDEO)
-			videoView.start();
 	}
 
 	private void createViewCache() {

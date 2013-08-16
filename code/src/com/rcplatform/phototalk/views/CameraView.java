@@ -95,6 +95,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	public static interface OnVideoRecordListener {
+		public void onRecordPrepare();
+
 		public void onRecordStart(String cacheFilePath);
 
 		public void onRecordEnd(String cacheFilePath, int videoLength);
@@ -551,6 +553,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	private File tempFile;
 
 	public void startVideoRecord() {
+		if (videoRecordListener != null)
+			videoRecordListener.onRecordPrepare();
 		Thread thread = new Thread() {
 			public void run() {
 				try {
@@ -660,11 +664,16 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			processVideoListener(VideoRecordState.END);
 		} catch (Exception e) {
 			e.printStackTrace();
-			mMediaRecorder.release();
+			releaseRecorder();
 			processVideoListener(VideoRecordState.FAIL);
 		}
 	}
-
+	private void releaseRecorder(){
+		if (mMediaRecorder != null) {
+			mMediaRecorder.release();
+			mMediaRecorder = null;
+		}
+	}
 	private ProgressDialog loadingDialog;
 
 	private void processVideoListener(VideoRecordState state) {

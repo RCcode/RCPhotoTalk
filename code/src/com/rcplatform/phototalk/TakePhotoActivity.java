@@ -112,14 +112,20 @@ public class TakePhotoActivity extends Activity {
 		mButtonTake.setTag(TAKE_ON_CLICK);
 		btnTakeVideo = findViewById(R.id.btn_take_video);
 		btnTakeVideo.setOnClickListener(new OnClickListener() {
+			private long lastClickTime;
+			private long MIN_RECORD_TIME = 1500;
 
 			@Override
 			public void onClick(View v) {
-				isRecordingVideo = !isRecordingVideo;
-				if (isRecordingVideo) {
-					mCameraView.startVideoRecord();
-				} else {
-					mCameraView.stopRecord();
+				long currentTime = System.currentTimeMillis();
+				if ((currentTime - lastClickTime) > MIN_RECORD_TIME) {
+					lastClickTime = currentTime;
+					isRecordingVideo = !isRecordingVideo;
+					if (isRecordingVideo) {
+						mCameraView.startVideoRecord();
+					} else {
+						mCameraView.stopRecord();
+					}
 				}
 			}
 		});
@@ -174,6 +180,7 @@ public class TakePhotoActivity extends Activity {
 			@Override
 			public void onRecordFail() {
 				endVideoRecord();
+				DialogUtil.showToast(TakePhotoActivity.this, R.string.record_too_short, Toast.LENGTH_SHORT);
 			}
 
 			@Override
@@ -181,10 +188,20 @@ public class TakePhotoActivity extends Activity {
 				endVideoRecord();
 				startEditActivity(cacheFilePath, videoLength);
 			}
+
+			@Override
+			public void onRecordPrepare() {
+				prepareVideoRecord();
+			}
 		});
 	}
 
+	private void prepareVideoRecord() {
+		btnTakeVideo.setEnabled(false);
+	}
+
 	private void startVideoRecord() {
+		btnTakeVideo.setEnabled(true);
 		startVideoRecordFrameAnimation();
 		videoProgressView.startAnimation(0, 360, Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
 		linearVCChange.setVisibility(View.GONE);

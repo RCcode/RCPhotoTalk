@@ -74,6 +74,7 @@ public class PhotoTalkUtils {
 		friend.setBackground(userInfo.getBackground());
 		friend.setFriend(true);
 		friend.setNickName(userInfo.getNickName());
+		friend.setCountry(userInfo.getCountry());
 		friend.setLetter(RCPlatformTextUtil.getLetter(userInfo.getNickName()));
 		return friend;
 	}
@@ -202,13 +203,14 @@ public class PhotoTalkUtils {
 		intent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLICATION_START_TAKE_PHOTO);
 		return intent;
 	}
-	
-	public static Intent getNotificationDriftInformationIntent(Context context){
+
+	public static Intent getNotificationDriftInformationIntent(Context context) {
 		Intent intent = new Intent(context, WelcomeActivity.class);
 		intent.putExtra(Constants.ApplicationStartMode.APPLICATION_START_KEY, Constants.ApplicationStartMode.APPLICATION_START_DRIFT);
 		return intent;
 	}
-	public static Intent getNotificationNormalIntent(Context context){
+
+	public static Intent getNotificationNormalIntent(Context context) {
 		Intent intent = new Intent(context, WelcomeActivity.class);
 		return intent;
 	}

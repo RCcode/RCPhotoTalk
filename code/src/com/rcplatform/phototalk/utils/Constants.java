@@ -305,7 +305,11 @@ public class Constants {
 		public static final String ACTION_GCM_MESSAGE = "com.rcplatform.phototalk.action.GCM_MESSAGE";
 
 		public static final String ACTION_TIGASE_STATE_CHANGE = "com.rcplatform.phototalk.action.TIGASE_STATE_CHANGE";
-
+		
+		/**
+		 * 重发消息
+		 */
+		public static final String ACTION_RESEND_INFORMATION="com.rcplatform.phototalk.action.RESEND_INFORMATION";
 	}
 
 	public static class Provider {

@@ -40,8 +40,9 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendFail(mFlag);
 		DriftInformationPageController.getInstance().onDriftInformationSendFail(mFlag);
 		int notificationId = SendingInformationManager.getInstance().getDriftNotificationId();
-		NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger), mContext.getString(R.string.send_video_fail),
-				R.drawable.ic_launcher, PhotoTalkUtils.getNotificationDriftInformationIntent(mContext), notificationId);
+		NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger),
+				mContext.getString(R.string.send_video_fail), R.drawable.ic_launcher, PhotoTalkUtils.getNotificationDriftInformationIntent(mContext),
+				notificationId, true);
 	}
 
 	@Override
@@ -54,8 +55,8 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 			if (informationCate == InformationCategory.VIDEO) {
 				int notificationId = SendingInformationManager.getInstance().getDriftNotificationId();
 				NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger),
-						mContext.getString(R.string.send_success), R.drawable.ic_launcher, PhotoTalkUtils.getNotificationDriftInformationIntent(mContext), notificationId
-						);
+						mContext.getString(R.string.send_success), R.drawable.ic_launcher, PhotoTalkUtils.getNotificationDriftInformationIntent(mContext),
+						notificationId, false);
 				NotificationSender.getInstance(mContext).cancelNotification(notificationId, Constants.TimeMillins.SEND_SUCCESS_NOTIFICATION_SHOW_TIME);
 			}
 			PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendSuccess(flag, picId);
