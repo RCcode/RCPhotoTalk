@@ -39,10 +39,12 @@ public class ThrowDriftResponseHandler implements RCPlatformResponseHandler {
 	public void onFailure(int errorCode, String content) {
 		PhotoTalkDatabaseFactory.getDatabase().updateDriftInformationSendFail(mFlag);
 		DriftInformationPageController.getInstance().onDriftInformationSendFail(mFlag);
-		int notificationId = SendingInformationManager.getInstance().getDriftNotificationId();
-		NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger),
-				mContext.getString(R.string.send_video_fail), R.drawable.ic_launcher, PhotoTalkUtils.getNotificationDriftInformationIntent(mContext),
-				notificationId, true);
+		if (informationCate == InformationCategory.VIDEO) {
+			int notificationId = SendingInformationManager.getInstance().getDriftNotificationId();
+			NotificationSender.getInstance(mContext).sendNotification(mContext.getString(R.string.sending_to_stranger),
+					mContext.getString(R.string.send_video_fail), R.drawable.ic_launcher, PhotoTalkUtils.getNotificationDriftInformationIntent(mContext),
+					notificationId, true);
+		}
 	}
 
 	@Override
