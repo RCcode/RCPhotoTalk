@@ -273,6 +273,8 @@ public class LogicUtils {
 		}
 		final StringBuilder sbNotifyTitle = new StringBuilder();
 		for (Friend friend : friends) {
+			if (Friend.DRIFT_FRIEND_RCID.equals(friend.getRcId()))
+				continue;
 			sbNotifyTitle.append(friend.getNickName()).append(",");
 		}
 		// 发送给好友并扔漂流瓶

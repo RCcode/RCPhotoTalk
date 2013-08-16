@@ -12,6 +12,8 @@ public class Friend implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final int FRIEND_ADDED = 1;
 	public static final int FRIEND_NOT_ADDED = 0;
+	
+	public static final String DRIFT_FRIEND_RCID="-1";
 
 	public Friend(String nick, String cellPhone, String headUrl) {
 		this.nickName = nick;
