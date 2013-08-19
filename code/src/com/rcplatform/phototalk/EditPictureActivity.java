@@ -18,6 +18,7 @@ import android.graphics.Paint;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnErrorListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -108,6 +109,8 @@ public class EditPictureActivity extends BaseActivity {
 	private static final int SET_LIMIT = 400;
 
 	public static final String PARAM_KEY_BACK_PAGE = "backpage";
+	protected static final int MAX_RETRY_PLAY_TIME = 5;
+	protected static final int RETRY_PLAY_VIDEO = 500;
 
 	private EditPictureView mEditePicView;
 
@@ -339,9 +342,6 @@ public class EditPictureActivity extends BaseActivity {
 		setEditMode();
 		initRecordPreviewViews();
 		showInputAttention();
-		if (informationCate == InformationCategory.VIDEO)
-			videoView.start();
-
 	}
 
 	private void showInputAttention() {
@@ -437,13 +437,21 @@ public class EditPictureActivity extends BaseActivity {
 	}
 
 	@Override
-	protected void onStop() {
-		super.onStop();
+	protected void onPause() {
 		if (videoView != null && videoView.isPlaying())
 			videoView.pause();
+		super.onPause();
 	}
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+	}
+
 	private void initPhotoPreviewViews() {
 	}
+
+	private int retryPlayTime = 0;
 
 	private void initVideoPreviewViews() {
 		videoView = (VideoView) findViewById(R.id.vv_preview);
@@ -452,6 +460,21 @@ public class EditPictureActivity extends BaseActivity {
 			@Override
 			public void onCompletion(MediaPlayer mp) {
 				mp.start();
+			}
+		});
+		videoView.setOnErrorListener(new OnErrorListener() {
+
+			@Override
+			public boolean onError(MediaPlayer mp, int what, int extra) {
+				if (extra == MediaPlayer.MEDIA_ERROR_UNSUPPORTED)
+					showConfirmDialog("not support");
+				else {
+					if (retryPlayTime <= MAX_RETRY_PLAY_TIME) {
+						LogUtil.e("i will retry play video");
+						handler.sendEmptyMessageDelayed(RETRY_PLAY_VIDEO,1000);
+					}
+				}
+				return true;
 			}
 		});
 		videoView.setVideoURI(Uri.parse(videoPath));
@@ -463,6 +486,8 @@ public class EditPictureActivity extends BaseActivity {
 	protected void onResume() {
 		super.onResume();
 		mEditableViewGroup.setLastLayout();
+		if (informationCate == InformationCategory.VIDEO)
+			videoView.start();
 	}
 
 	private void createViewCache() {
@@ -885,6 +910,11 @@ public class EditPictureActivity extends BaseActivity {
 		public void handleMessage(android.os.Message msg) {
 			dissmissLoadingDialog();
 			switch (msg.what) {
+			case RETRY_PLAY_VIDEO:
+				retryPlayTime++;
+				videoView.setVideoURI(Uri.parse(videoPath));
+				videoView.start();
+				break;
 			case SAVE_SUCCESS:
 				// setSaveable(false);
 				mEditableViewGroup.setDrawingCacheEnabled(false);

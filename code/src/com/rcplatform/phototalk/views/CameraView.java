@@ -81,8 +81,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 
 	private int videoLength;
 
-	private static final int VIDEO_WIDTH = 640;
-	private static final int VIDEO_HEIGHT = 480;
+//	private static final int VIDEO_WIDTH = 640;
+//	private static final int VIDEO_HEIGHT = 480;
 
 	private Size mVideoSize;
 
@@ -455,16 +455,19 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 						w = 800;
 					}
 				}
-				mVideoSize = getOptimalPreviewSize(parameters.getSupportedVideoSizes(), VIDEO_WIDTH, VIDEO_HEIGHT);
-
+				mVideoSize = getOptimalPreviewSize(parameters.getSupportedVideoSizes(), Constants.SCREEN_HEIGHT,Constants.SCREEN_WIDTH);
 				Size previewSize = getOptimalPreviewSize(parameters.getSupportedPreviewSizes(), h, w);
-				if (!isBackFace) {
-					if (mVideoSize != null)
-						parameters.setPreviewSize(mVideoSize.width, mVideoSize.height);
-				} else {
-					if (previewSize != null)
-						parameters.setPreviewSize(previewSize.width, previewSize.height);
-				}
+				// if (!isBackFace)
+				if (mVideoSize != null) {
+					parameters.setPreviewSize(mVideoSize.width, mVideoSize.height);
+					previewSize=mVideoSize;
+				} else
+					parameters.setPreviewSize(previewSize.width, previewSize.height);
+				// } else {
+				// if (previewSize != null)
+				// parameters.setPreviewSize(previewSize.width,
+				// previewSize.height);
+				// }
 
 				Size pictureSize = getOptimalPictureSize(parameters.getSupportedPictureSizes(), h, w);
 				if (pictureSize != null)
@@ -480,6 +483,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 				int width = w;
 				int previewWidth = height;
 				int previewHeight = width;
+
 				if (previewSize != null) {
 					previewWidth = previewSize.height;
 					previewHeight = previewSize.width;
@@ -578,7 +582,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					if (mVideoSize != null)
 						mMediaRecorder.setVideoSize(mVideoSize.width, mVideoSize.height);
 					else
-						mMediaRecorder.setVideoSize(VIDEO_WIDTH, VIDEO_HEIGHT);
+						mMediaRecorder.setVideoSize(Constants.SCREEN_HEIGHT, Constants.SCREEN_WIDTH);
 					// else
 					// mMediaRecorder.setVideoSize(paramCamcorderProfile.videoFrameWidth,
 					// paramCamcorderProfile.videoFrameHeight);
@@ -668,12 +672,14 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 			processVideoListener(VideoRecordState.FAIL);
 		}
 	}
-	private void releaseRecorder(){
+
+	private void releaseRecorder() {
 		if (mMediaRecorder != null) {
 			mMediaRecorder.release();
 			mMediaRecorder = null;
 		}
 	}
+
 	private ProgressDialog loadingDialog;
 
 	private void processVideoListener(VideoRecordState state) {

@@ -113,7 +113,7 @@ public class Constants {
 		userApps.putAll(Utils.getRCPlatformAppUsers(context));
 	}
 
-	private static void initTempFileDir(Context context) {
+	public static void initTempFileDir(Context context) {
 
 		if (Utils.isExternalStorageUsable()) {
 			initSavedDirs();

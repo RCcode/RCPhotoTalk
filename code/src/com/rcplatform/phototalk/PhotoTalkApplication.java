@@ -134,45 +134,21 @@ public class PhotoTalkApplication extends Application {
 	}
 
 	public String getSendFileCachePath() {
-//		String imagePath = "";
-//		String sdUrl =getFilesDir().getPath()+"/temp";
-//		File file = new File(sdUrl);
-//		if (!file.exists()) {
-//			file.mkdir();
-//		}
-//		imagePath = file.getAbsolutePath();
-//		return imagePath;
 		if (Utils.isExternalStorageUsable()) {
+			if (Constants.PhotoInformationCache.SEND_CACHE == null)
+				Constants.initTempFileDir(this);
 			return Constants.PhotoInformationCache.SEND_CACHE.getPath();
 		}
 		return null;
 	}
 
 	public String getSendZipFileCachePath() {
-//		String imagePath = "";
-//		String sdUrl = getFilesDir().getPath()+"/zip";
-//		File file = new File(sdUrl);
-//		if (!file.exists()) {
-//			file.mkdir();
-//		}
-//		imagePath = file.getPath();
-//		return imagePath;
 		if (Utils.isExternalStorageUsable()) {
+			if (Constants.PhotoInformationCache.ZIP_CACHE == null)
+				Constants.initTempFileDir(this);
 			return Constants.PhotoInformationCache.ZIP_CACHE.getPath();
 		}
 		return null;
-	}
-
-	public String getCameraPath() {
-		String imagePath = "";
-		boolean sdCardExist = Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); // 判断sd卡是否存在
-		if (sdCardExist) {
-			// 获取根目录
-			imagePath = "/sdcard/DCIM/Camera/photoTalk_" + System.currentTimeMillis() + ".jpg";
-		} else {
-			imagePath = "/stystem/DCIM/Camera/photoTalk_" + System.currentTimeMillis() + ".jpg";
-		}
-		return imagePath;
 	}
 
 	public void deleteSendFileCache(String fileName) {
