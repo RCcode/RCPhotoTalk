@@ -199,6 +199,9 @@ public class HomeActivity extends MenuBaseActivity implements SnapShowListener, 
 				if (which == DialogInterface.BUTTON_POSITIVE) {
 					PrefsUtils.User.setAutoBind(HomeActivity.this, getCurrentUserRcId());
 					getPhotoTalkApplication().getService().startBindPhone();
+					EventUtil.Main_Photo.rcpt_sendsms(getApplicationContext());
+				} else if (which == DialogInterface.BUTTON_NEGATIVE) {
+					EventUtil.Main_Photo.rcpt_cancelsms(getApplicationContext());
 				}
 			}
 		};

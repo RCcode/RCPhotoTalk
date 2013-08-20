@@ -137,7 +137,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		initCamera();
 	}
 
-	public void clearVideoTempFile() {
+	public void clearTempFile() {
 		if (tempFile != null && tempFile.exists())
 			tempFile.delete();
 	}
@@ -566,7 +566,7 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 					// tempFile = new
 					// File(Environment.getExternalStorageDirectory(),
 					// "video.3gp");
-					clearVideoTempFile();
+					clearTempFile();
 					CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 					mCamera.unlock();
 					if (mMediaRecorder == null)

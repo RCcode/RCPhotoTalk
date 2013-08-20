@@ -17,14 +17,19 @@ import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.rcplatform.phototalk.bean.Friend;
 import com.rcplatform.phototalk.bean.InformationCategory;
+import com.rcplatform.phototalk.bean.InformationClassification;
+import com.rcplatform.phototalk.bean.InformationType;
+import com.rcplatform.phototalk.drift.DriftInformationActivity;
 import com.rcplatform.phototalk.umeng.EventUtil;
 import com.rcplatform.phototalk.utils.Constants;
 import com.rcplatform.phototalk.utils.DialogUtil;
+import com.rcplatform.phototalk.utils.PhotoTalkUtils;
 import com.rcplatform.phototalk.utils.Utils;
 import com.rcplatform.phototalk.views.CameraView;
 import com.rcplatform.phototalk.views.CameraView.OnVideoRecordListener;
@@ -79,6 +84,7 @@ public class TakePhotoActivity extends Activity {
 
 	private View iconCamera;
 	private View iconVideo;
+	private int informationClassification;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +94,7 @@ public class TakePhotoActivity extends Activity {
 			finish();
 			return;
 		}
+		initData();
 		ctx = this;
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -120,9 +127,9 @@ public class TakePhotoActivity extends Activity {
 				long currentTime = System.currentTimeMillis();
 				if ((currentTime - lastClickTime) > MIN_RECORD_TIME) {
 					lastClickTime = currentTime;
-					isRecordingVideo = !isRecordingVideo;
-					if (isRecordingVideo) {
+					if (!isRecordingVideo()) {
 						mCameraView.startVideoRecord();
+						recordTakeVideoEvent();
 					} else {
 						mCameraView.stopRecord();
 					}
@@ -134,6 +141,7 @@ public class TakePhotoActivity extends Activity {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				mCameraView.clearTempFile();
 				TakeMode targetMode;
 				if (isChecked) {
 					targetMode = TakeMode.VIDEO;
@@ -156,6 +164,42 @@ public class TakePhotoActivity extends Activity {
 		iconCamera.setOnClickListener(clickListener);
 		iconVideo.setOnClickListener(clickListener);
 
+	}
+
+	private void recordTakeVideoEvent() {
+		switch (informationClassification) {
+		case InformationClassification.TYPE_DRIFT:
+
+			EventUtil.Make_New_Friends.rcpt_newfriends_video(getApplicationContext());
+			break;
+		case InformationClassification.TYPE_NORMAL:
+			EventUtil.Main_Photo.rcpt_takevideo(getApplicationContext());
+			break;
+		}
+	}
+
+	private void recordTakePhotoEvent() {
+		switch (informationClassification) {
+		case InformationClassification.TYPE_DRIFT:
+			EventUtil.Make_New_Friends.rcpt_newfriends_photo(getApplicationContext());
+			break;
+		case InformationClassification.TYPE_NORMAL:
+			EventUtil.Main_Photo.rcpt_takephoto(ctx);
+			break;
+		}
+	}
+
+	private void initData() {
+		Friend friend = (Friend) getIntent().getSerializableExtra(DriftInformationActivity.PARAM_FRIEND);
+		if (friend != null && friend.equals(PhotoTalkUtils.getDriftFriend())) {
+			informationClassification = InformationClassification.TYPE_DRIFT;
+		} else {
+			informationClassification = InformationClassification.TYPE_NORMAL;
+		}
+	}
+
+	private boolean isRecordingVideo() {
+		return isRecordingVideo;
 	}
 
 	private void startVideoRecordFrameAnimation() {
@@ -201,6 +245,7 @@ public class TakePhotoActivity extends Activity {
 	}
 
 	private void startVideoRecord() {
+		isRecordingVideo = true;
 		btnTakeVideo.setEnabled(true);
 		startVideoRecordFrameAnimation();
 		videoProgressView.startAnimation(0, 360, Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
@@ -230,8 +275,8 @@ public class TakePhotoActivity extends Activity {
 			int tag = (Integer) v.getTag();
 			switch (tag) {
 			case TAKE_ON_CLICK:
-				EventUtil.Main_Photo.rcpt_takephoto(ctx);
 				mCameraView.takePhoto();
+				recordTakePhotoEvent();
 				break;
 			case CHANGE_CAMERA_ON_CLICK:
 				mCameraView.changeCamera();
@@ -335,7 +380,7 @@ public class TakePhotoActivity extends Activity {
 		mButtonOpenFlashLight.setVisibility(View.VISIBLE);
 		mButtonTake.setVisibility(View.VISIBLE);
 		btnTakeVideo.setVisibility(View.GONE);
-		mCameraView.clearVideoTempFile();
+		// mCameraView.clearTempFile();
 	}
 
 	private void changeToTakeVideo() {
