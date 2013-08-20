@@ -314,6 +314,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void searchFriend(Friend friend, final DriftInformation information) {
+		EventUtil.Make_New_Friends.rcpt_newfriends_userdetail(getApplicationContext());
 		startFriendDetailActivity(friend, information);
 	}
 
@@ -770,6 +771,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void fishInformation() {
+		EventUtil.Make_New_Friends.rcpt_pick(getApplicationContext());
 		String currentRcId = getCurrentUser().getRcId();
 		if (LogicUtils.isAttentionThrowDrift(this, currentRcId)) {
 			showThrowDriftDialog();
@@ -803,6 +805,7 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 	}
 
 	private void throwInformation() {
+		EventUtil.Make_New_Friends.rcpt_drop(getApplicationContext());
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", PhotoTalkUtils.getDriftFriend());
 		intent.putExtra(EditPictureActivity.PARAM_KEY_BACK_PAGE, DriftInformationActivity.class);
@@ -825,14 +828,17 @@ public class DriftInformationActivity extends BaseActivity implements SnapShowLi
 						switch (which) {
 						case 0:
 							changeShowMode(DriftShowMode.ALL);
+							EventUtil.Make_New_Friends.rcpt_world(getApplicationContext());
 							break;
 						case 1:
 							chooseMyCountry();
+							EventUtil.Make_New_Friends.rcpt_mycountry(getApplicationContext());
 							break;
 						}
 					}
 				}).create();
 		dialog.show();
+		EventUtil.Make_New_Friends.rcpt_countryfilter(getApplicationContext());
 	}
 
 	private void chooseMyCountry() {

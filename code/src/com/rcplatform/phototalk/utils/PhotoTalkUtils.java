@@ -162,13 +162,24 @@ public class PhotoTalkUtils {
 	}
 
 	public static void showCommentAttentionDialog(final Context context) {
-		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(context).setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+		DialogInterface.OnClickListener listener = new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Utils.searchAppInGooglePlay(context, context.getPackageName());
+				switch (which) {
+				case DialogInterface.BUTTON_POSITIVE:
+					Utils.searchAppInGooglePlay(context, context.getPackageName());
+					EventUtil.Main_Photo.rcpt_rateusnow(context);
+					break;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					EventUtil.Main_Photo.rcpt_cancelrate(context);
+					break;
+				}
 			}
-		}).setTitle(R.string.comment_title).setNegativeButton(R.string.cancel, null).setMessage(R.string.comment_message).create();
+		};
+		AlertDialog dialog = DialogUtil.getAlertDialogBuilder(context).setPositiveButton(R.string.ok, listener).setTitle(R.string.comment_title)
+				.setNegativeButton(R.string.cancel, listener).setMessage(R.string.comment_message).create();
 		dialog.show();
 	}
 

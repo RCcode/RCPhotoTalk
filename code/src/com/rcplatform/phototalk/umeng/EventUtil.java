@@ -107,8 +107,8 @@ public class EventUtil {
 		static public void rcpt_success_instagram(Context ctx) {
 			MobclickAgent.onEvent(ctx, "Register_Login_Invite", "rcpt_success_instagram");
 		}
-		
-		static public void rcpt_invite_from_package(Context ctx,String packageName) {
+
+		static public void rcpt_invite_from_package(Context ctx, String packageName) {
 			MobclickAgent.onEvent(ctx, "Register_Login_Invite", packageName);
 		}
 
@@ -125,7 +125,7 @@ public class EventUtil {
 		static public void rcpt_photoview(Context ctx) {
 			onEvent(ctx, "rcpt_photoview");
 		}
-		
+
 		static public void rcpt_makenewfriends(Context ctx) {
 			onEvent(ctx, "rcpt_makenewfriends");
 		}
@@ -227,6 +227,26 @@ public class EventUtil {
 			onEvent(ctx, "rcpt_phonepop_later");
 		}
 
+		// new event
+		static public void rcpt_sendsms(Context ctx) {
+			onEvent(ctx, "rcpt_sendsms");
+		}
+
+		static public void rcpt_cancelsms(Context ctx) {
+			onEvent(ctx, "rcpt_cancelsms");
+		}
+
+		static public void rcpt_rateusnow(Context ctx) {
+			onEvent(ctx, "rcpt_rateusnow");
+		}
+
+		static public void rcpt_cancelrate(Context ctx) {
+			onEvent(ctx, "rcpt_cancelrate");
+		}
+
+		static public void rcpt_takevideo(Context ctx) {
+			onEvent(ctx, "rcpt_takevideo");
+		}
 	}
 
 	public static class Friends_Addfriends {
@@ -391,5 +411,57 @@ public class EventUtil {
 			onEvent(ctx, "rcpt_feedback");
 		}
 
+	}
+	/**
+	 * 结识陌生人的事件
+	 * @author zhaonan
+	 *
+	 */
+	public static class Make_New_Friends {
+		private static final String EVENT_NAME = "Make_New_Friends";
+
+		private static void onEvent(Context ctx, String label) {
+			MobclickAgent.onEvent(ctx, EVENT_NAME, label);
+		}
+
+		static public void rcpt_drop(Context ctx) {
+			onEvent(ctx, "rcpt_drop");
+		}
+
+		static public void rcpt_pick(Context ctx) {
+			onEvent(ctx, "rcpt_pick");
+		}
+
+		static public void rcpt_countryfilter(Context ctx) {
+			onEvent(ctx, "rcpt_countryfilter");
+		}
+
+		static public void rcpt_mycountry(Context ctx) {
+			onEvent(ctx, "rcpt_mycountry");
+		}
+
+		static public void rcpt_world(Context ctx) {
+			onEvent(ctx, "rcpt_world");
+		}
+
+		static public void rcpt_newfriends_video(Context ctx) {
+			onEvent(ctx, "rcpt_newfriends_video");
+		}
+
+		static public void rcpt_newfriends_photo(Context ctx) {
+			onEvent(ctx, "rcpt_newfriends_photo");
+		}
+
+		static public void rcpt_newfriends_userdetail(Context ctx) {
+			onEvent(ctx, "rcpt_newfriends_userdetail");
+		}
+
+		static public void rcpt_newfriends_quickreply(Context ctx) {
+			onEvent(ctx, "rcpt_newfriends_quickreply");
+		}
+
+		static public void rcpt_newfriends_addfriends(Context ctx) {
+			onEvent(ctx, "rcpt_newfriends_addfriends");
+		}
 	}
 }

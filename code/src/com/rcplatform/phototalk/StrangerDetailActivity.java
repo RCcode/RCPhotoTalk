@@ -146,6 +146,7 @@ public class StrangerDetailActivity extends BaseActivity {
 
 			@Override
 			public void onClick(View v) {
+				EventUtil.Make_New_Friends.rcpt_newfriends_addfriends(getApplicationContext());
 				if (!isFromStangerPage) {
 					showLoadingDialog(false);
 					new AddFriendTask(StrangerDetailActivity.this,
@@ -294,6 +295,7 @@ public class StrangerDetailActivity extends BaseActivity {
 		Intent intent = new Intent(this, TakePhotoActivity.class);
 		intent.putExtra("friend", mFriend);
 		if (!mFriend.isFriend()) {
+			EventUtil.Make_New_Friends.rcpt_newfriends_quickreply(getApplicationContext());
 			intent.putExtra("photoType", InformationClassification.TYPE_DRIFT);
 			if (information != null) {
 				intent.putExtra(EditPictureActivity.PARAM_KEY_PIC_ID,
