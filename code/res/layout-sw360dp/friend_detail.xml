@@ -50,8 +50,8 @@
                     android:src="@drawable/default_head" />
                  <ImageView
                     android:id="@+id/iv_country_flag"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_width="@dimen/user_detail_country_width"
+                    android:layout_height="@dimen/user_detail_country_width" />
             </RelativeLayout>
 
             <LinearLayout
