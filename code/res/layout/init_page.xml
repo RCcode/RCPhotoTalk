@@ -33,6 +33,7 @@
         android:layout_marginBottom="8dp"
         android:text="@string/init_message_title_one"
         android:textColor="#FFFFFF"
+        android:visibility="invisible"
         android:textSize="22sp"
         android:textStyle="bold" />
     <!-- android:textColor="#FF4000" -->

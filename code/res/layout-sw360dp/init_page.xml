@@ -34,7 +34,8 @@
         android:text="@string/init_message_title_one"
         android:textColor="#FFFFFF"
         android:textSize="24sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:visibility="invisible" />
     <!-- android:textColor="#FF4000" -->
 
     <TextView
@@ -68,7 +69,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/init_btn_bottom"
         android:orientation="horizontal" >
-
 
         <Button
             android:id="@+id/init_page_login_button"
