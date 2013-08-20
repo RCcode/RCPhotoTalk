@@ -8,7 +8,6 @@
     <string name="init_page_login">RC User Login</string>
     <string name="init_page_signup">New RC User</string>
     <string name="init_message_title_one">Share the moment</string>
-    <string name="init_message_text_one">Share every special moment in your life</string>
     <string name="init_message_title_two">Photo editing</string>
     <string name="init_message_text_two">Make photos more interesting with audio and graffiti</string>
     <string name="init_message_title_three">Timed deletion</string>
@@ -183,7 +182,6 @@
     <!-- gcm -->
     <string name="gcm_message">You have %1$d new message(s)</string>
     <string name="gcm_friend">Someone added you as a friend</string>
-    <string name="friend_detail_send_photo_hint_text">Send Photo</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">cancel</string>
@@ -198,7 +196,7 @@
     <string name="app_name">FriendMe</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="version">v2.2</string>
+    <string name="version">v2.3</string>
     <string name="my_friends_new">新的好友</string>
 
     <!-- 添加好友页面 -->
@@ -385,13 +383,8 @@
     <!-- v2.0 -->
     <string name="know_strangers">Make new friends</string>
     <string name="new_init_message">New to version 2.0 - now you can make friends from all over the world!</string>
-    <string name="show_init_message_1">Upload your best self-portraits and pictures to make new friends!</string>
-    <string name="show_init_message_2">See random photos from others，share messages and pictures with fun people around the world!</string>
     <string name="drift_show_time">%1$d views</string>
     <string name="country">Nationality</string>
-    <string name="throw_dialog_title">Please upload a photo first.</string>
-    <string name="throw_dialog_msg">The more interesting photos you upload, the more new friends you\'ll make!</string>
-    <string name="fish_over">No photos yet, please upload more of your own!</string>
     <string name="reply">Reply</string>
     <string name="report">Report</string>
     <string name="report_success">Report successful</string>
@@ -422,5 +415,12 @@
     <string name="other_country">othercountry</string>
     <string name="other_country_name">Other Country</string>
     <string name="record_too_short">record time too short</string>
+    <string name="show_init_message_1">Upload your photo or video to make new friends!</string>
+    <string name="show_init_message_2">See random messages from others，share messages with fun people around the world!</string>
+    <string name="throw_dialog_title">Please upload a photo or video first.</string>
+    <string name="fish_over">No messages yet, please upload more of your own!</string>
+    <string name="throw_dialog_msg">The more interesting photos or videos you upload, the more new friends you\'ll make!</string>
 
+    <string name="friend_detail_send_photo_hint_text">Send Message</string>
+    <string name="init_message_text_one">Make New Friends, Private Messaging</string>
 </resources>

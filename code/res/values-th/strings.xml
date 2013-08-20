@@ -8,7 +8,6 @@
     <string name="init_page_login">ผู้ใช้ RC เข้าสู่ระบบ</string>
     <string name="init_page_signup">ผู้ใช้ RC ใหม่</string>
     <string name="init_message_title_one">แบ่งปันช่วงเวลาดี ๆ</string>
-    <string name="init_message_text_one">แบ่งปันทุกช่วงเวลาพิเศษในชีวิตของคุณ</string>
     <string name="init_message_title_two">การแก้ไขภาพถ่าย</string>
     <string name="init_message_text_two">ทำให้ภาพถ่ายของคุณน่าสนใจมากขึ้น ด้วยการใส่เสียงและภาพวาดลายเส้น</string>
     <string name="init_message_title_three">การลบตามเวลาที่กำหนด</string>
@@ -185,7 +184,6 @@
     <!-- gcm -->
     <string name="gcm_message">คุณมีข้อความใหม่ %1$d ข้อความ</string>
     <string name="gcm_friend">มีคนเพิ่มคุณเป็นเพื่อน</string>
-    <string name="friend_detail_send_photo_hint_text">ส่งภาพถ่าย</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">ยกเลิก</string>
@@ -251,4 +249,6 @@
     <string name="change_country">ปรับเปลี่ยน</string>
     <string name="set_country_first">โปรดกำหนดประเทศของคุณก่อน</string>
     <string name="icon_name">การจับภาพ F.Me</string>
+    <string name="friend_detail_send_photo_hint_text">ส่งข้อความ</string>
+    <string name="init_message_text_one">ผูกมิตรกับเพื่อนใหม่ การรับส่งข้อความส่วนตัว</string>
 </resources>

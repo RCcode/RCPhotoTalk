@@ -8,7 +8,6 @@
     <string name="init_page_login">RC उपयोगकर्ता लॉगइन</string>
     <string name="init_page_signup">नया RC उपयोगकर्ता</string>
     <string name="init_message_title_one">अपने पल साझा करें</string>
-    <string name="init_message_text_one">अपने जीवन का हर ख़ास पल साझा करें</string>
     <string name="init_message_title_two">फ़ोटो संपादन</string>
     <string name="init_message_text_two">ऑडियो और भित्ति-चित्रण के साथ फ़ोटो और अधिक रोचक बनाएँ</string>
     <string name="init_message_title_three">समयबद्ध हटाना</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">आपका %1$d नया संदेश है(हैं)</string>
     <string name="gcm_friend">किसी ने आपको मित्र के रूप में जोड़ा है</string>
-    <string name="friend_detail_send_photo_hint_text">फ़ोटो भेजें</string>
     <!-- 对话框&提示 -->
     <string name="cancel">रद्द करें</string>
     <string name="login_account_error">अमान्य खाता या पासवर्ड</string>
@@ -245,4 +243,6 @@
     <string name="change_country">संशोधित करें</string>
     <string name="set_country_first">कृपया पहले अपना देश सेट करें</string>
     <string name="icon_name">F.Me कैप्चर</string>
+    <string name="friend_detail_send_photo_hint_text">संदेश भेजें</string>
+    <string name="init_message_text_one">नए मित्र बनाएँ, निजी संदेश-सेवा</string>
 </resources>

@@ -8,7 +8,6 @@
     <string name="init_page_login">تسجيل دخول مستخدم RC</string>
     <string name="init_page_signup">مستخدم RC جديد</string>
     <string name="init_message_title_one">مشاركة اللحظة</string>
-    <string name="init_message_text_one">شارك جميع اللحظات المميزة في حياتك</string>
     <string name="init_message_title_two">تحرير الصور</string>
     <string name="init_message_text_two">اجعل الصور أكثر روعة باستخدام الصوت والجرافيتي</string>
     <string name="init_message_title_three">حذف بعد انتهاء الوقت المحدد</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">لديك %1$d رسالة/رسائل جديدة</string>
     <string name="gcm_friend">قام أحد الأشخاص بإضافتك كصديق</string>
-    <string name="friend_detail_send_photo_hint_text">إرسال صورة</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">إلغاء</string>
@@ -244,4 +242,6 @@
     <string name="change_country">تعديل</string>
     <string name="set_country_first">يرجى تحديد بلدك أولاً</string>
     <string name="icon_name">التقاط F.Me</string>
+    <string name="friend_detail_send_photo_hint_text">إرسال رسالة</string>
+    <string name="init_message_text_one">كوِّن أصدقاء جدد، مراسلة خاصة</string>
 </resources>

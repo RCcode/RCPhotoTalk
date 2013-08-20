@@ -8,7 +8,6 @@
     <string name="init_page_login">RC כניסת משתמש</string>
     <string name="init_page_signup">משתמש RC חדש</string>
     <string name="init_message_title_one">שתף את הרגע</string>
-    <string name="init_message_text_one">שתף רגעים מיוחדים מאוד בחייך</string>
     <string name="init_message_title_two">עריכת תמונה</string>
     <string name="init_message_text_two">הוסף עניין לתמונות עם שמע וגרפיקה</string>
     <string name="init_message_title_three">מחיקה מתוזמנת</string>
@@ -183,7 +182,6 @@
     <!-- gcm -->
     <string name="gcm_message">מחכות לך %1$d הודעות חדשות</string>
     <string name="gcm_friend">מישהו הוסיף אותך כחבר</string>
-    <string name="friend_detail_send_photo_hint_text">שלח תמונה</string>
     <!-- 对话框&提示 -->
     <string name="cancel">לבטל</string>
     <string name="login_account_error">חשבון או סיסמה שגויים</string>
@@ -245,4 +243,6 @@
     <string name="change_country">תקן</string>
     <string name="set_country_first">הגדר תחילה את ארצך</string>
     <string name="icon_name">לכידת F.Me</string>
+    <string name="friend_detail_send_photo_hint_text">שלח הודעה</string>
+    <string name="init_message_text_one">מצא חברים חדשים, מיסור פרטי</string>
 </resources>

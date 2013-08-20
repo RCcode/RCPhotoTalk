@@ -8,7 +8,6 @@
     <string name="init_page_login">RC用户登录</string>
     <string name="init_page_signup">注册新账号</string>
     <string name="init_message_title_one">分享瞬间</string>
-    <string name="init_message_text_one">分享生活中每一个精彩的瞬间</string>
     <string name="init_message_title_two">照片处理</string>
     <string name="init_message_text_two">用语音、涂鸦使照片更有趣</string>
     <string name="init_message_title_three">限时销毁</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">你有%1$d条信息</string>
     <string name="gcm_friend">有人加你为好友</string>
-    <string name="friend_detail_send_photo_hint_text">发照片</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">取消</string>
@@ -213,13 +211,8 @@
     <!-- v2.0 -->
     <string name="know_strangers">结交新朋友</string>
     <string name="new_init_message">v2.0新功能-现在你可以结识来自全世界的朋友！</string>
-    <string name="show_init_message_1">发布自己或有趣的照片来结识新的朋友。</string>
-    <string name="show_init_message_2">随机获取别人的照片，与全世界有趣的人沟通与分享乐趣</string>
     <string name="drift_show_time">%1$d人已看过</string>
     <string name="country">国家</string>
-    <string name="throw_dialog_title">请先发一张自己的照片。</string>
-    <string name="throw_dialog_msg">发些自拍或有趣的照片能吸引更多人的回复并容易结识新朋友。</string>
-    <string name="fish_over">暂时没有照片可以获取，先发张照片吧。</string>
     <string name="reply">回复</string>
     <string name="report">举报</string>
     <string name="report_success">举报成功</string>
@@ -245,4 +238,11 @@
     <string name="change_country">修改</string>
     <string name="set_country_first">请先设置所在的国家</string>
     <string name="icon_name">F.Me摄像</string>
+    <string name="show_init_message_1">发布自己或有趣的照片和视频来结识新的朋友。</string>
+    <string name="show_init_message_2">随机获取别人的照片或视频，与全世界有趣的人沟通与分享乐趣</string>
+    <string name="throw_dialog_title">请先发一张自己的照片或视频。</string>
+    <string name="throw_dialog_msg">发些自拍或有趣的照片和视频能吸引更多人的回复并容易结识新朋友。</string>
+    <string name="fish_over">暂时没有内容可以获取，自己发一个。</string>
+    <string name="friend_detail_send_photo_hint_text">发消息</string>
+    <string name="init_message_text_one">结识新朋友</string>
 </resources>

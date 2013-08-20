@@ -8,7 +8,6 @@
     <string name="init_page_login">Identifiant</string>
     <string name="init_page_signup">Nouvel util.</string>
     <string name="init_message_title_one">Partagez l’instant</string>
-    <string name="init_message_text_one">Partagez tous les moments forts de votre vie</string>
     <string name="init_message_title_two">Édition photo</string>
     <string name="init_message_text_two">Rendez vos photos plus attractives grâce au son et aux graffitis</string>
     <string name="init_message_title_three">Suppression minutée</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">Vous avez %1$d nouveau(x) message(s)</string>
     <string name="gcm_friend">Quelqu’un vous a ajouté comme ami</string>
-    <string name="friend_detail_send_photo_hint_text">Envoyer une Photo</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">résilier</string>
@@ -241,4 +239,6 @@
     <string name="change_country">Modifier</string>
     <string name="icon_name">Capture F.Me</string>
 
+    <string name="friend_detail_send_photo_hint_text">Envoyer un message</string>
+    <string name="init_message_text_one">Nouveaux amis, messages privés</string>
 </resources>

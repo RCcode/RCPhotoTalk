@@ -8,7 +8,6 @@
     <string name="init_page_login">Accesso User RC</string>
     <string name="init_page_signup">Nuovo User RC</string>
     <string name="init_message_title_one">Condividi l’attimo</string>
-    <string name="init_message_text_one">Condividi i momenti speciali della tua vita</string>
     <string name="init_message_title_two">Editing delle foto</string>
     <string name="init_message_text_two">Rendi le tue foto più interessanti con audio e disegni</string>
     <string name="init_message_title_three">Eliminazione a tempo</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">Hai %1$d nuovi messaggi</string>
     <string name="gcm_friend">Hai una richiesta di amicizia</string>
-    <string name="friend_detail_send_photo_hint_text">Invia foto</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">annullare</string>
@@ -247,4 +245,6 @@
     <string name="change_country">Modifica</string>
     <string name="set_country_first">Prima imposta il paese</string>
     <string name="icon_name">Acquisizione F.Me</string>
+    <string name="friend_detail_send_photo_hint_text">Invia un messaggio</string>
+    <string name="init_message_text_one">Trova gli amici, messaggi privati</string>
 </resources>

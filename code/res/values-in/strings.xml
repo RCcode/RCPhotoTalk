@@ -8,7 +8,6 @@
     <string name="init_page_login">Login p’guna RC</string>
     <string name="init_page_signup">P’guna RC baru</string>
     <string name="init_message_title_one">Berbagi momen</string>
-    <string name="init_message_text_one">Berbagi momen spesial dalam hidup Anda</string>
     <string name="init_message_title_two">Pengeditan foto</string>
     <string name="init_message_text_two">Jadikan foto lebih menarik dengan audio dan grafiti</string>
     <string name="init_message_title_three">Penghapusan berdasarkan waktu</string>
@@ -183,7 +182,6 @@
     <!-- gcm -->
     <string name="gcm_message">Anda mempunyai %1$d pesan baru</string>
     <string name="gcm_friend">Seseorang menambah Anda sbg teman</string>
-    <string name="friend_detail_send_photo_hint_text">Kirim foto</string>
     <!-- 对话框&提示 -->
     <string name="cancel">membatalkanें</string>
     <string name="login_account_error">Akun atau sandi tidak valid</string>
@@ -246,4 +244,6 @@
     <string name="change_country">Ubah</string>
     <string name="set_country_first">Pilih negara Anda terlebih dahulu</string>
     <string name="icon_name">F.Me tangkap</string>
+    <string name="friend_detail_send_photo_hint_text">Kirim pesan</string>
+    <string name="init_message_text_one">Teman Baru, Pesan Pribadi</string>
 </resources>
