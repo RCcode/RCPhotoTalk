@@ -8,7 +8,6 @@
     <string name="init_page_login">RCユーザーログイン</string>
     <string name="init_page_signup">新規RCユーザー</string>
     <string name="init_message_title_one">時を共有</string>
-    <string name="init_message_text_one">人生で大事な瞬間を共有</string>
     <string name="init_message_title_two">写真編集</string>
     <string name="init_message_text_two">音声と文字で楽しい写真を作る</string>
     <string name="init_message_title_three">自動削除</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">%1$d通の新着規メッセージ</string>
     <string name="gcm_friend">あなたをお友人に追加した人がいます</string>
-    <string name="friend_detail_send_photo_hint_text">写真送信</string>
     <!-- 对话框&提示 -->
     <string name="cancel">キャンセル</string>
     <string name="login_account_error">アカウントまたはパスワードが正しくありません</string>
@@ -247,4 +245,6 @@
     <string name="change_country">変更</string>
     <string name="set_country_first">国を先に設定してください</string>
     <string name="icon_name">F.Me キャプチャ</string>
+    <string name="friend_detail_send_photo_hint_text">メッセージを送信</string>
+    <string name="init_message_text_one">新しい友達を作って、プライベートメッセージングを</string>
 </resources>

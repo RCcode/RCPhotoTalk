@@ -8,7 +8,6 @@
     <string name="init_page_login">RC用戶登錄</string>
     <string name="init_page_signup">註冊新帳號</string>
     <string name="init_message_title_one">分享瞬間</string>
-    <string name="init_message_text_one">分享生活中每一個精彩的瞬間</string>
     <string name="init_message_title_two">照片處理</string>
     <string name="init_message_text_two">用語音、塗鴉使照片更有趣</string>
     <string name="init_message_title_three">限時銷毀</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">你有%1$d條信息</string>
     <string name="gcm_friend">有人加你為好友</string>
-    <string name="friend_detail_send_photo_hint_text">發照片</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">取消</string>
@@ -211,13 +209,8 @@
     <!-- v2.0 -->
     <string name="know_strangers">結交新朋友</string>
     <string name="new_init_message">新功能V2.0 - 現在你可以結識來自全世界的朋友！</string>
-    <string name="show_init_message_1">發布自己或有趣的照片來結識新的朋友。</string>
-    <string name="show_init_message_2">隨機獲取別人的照片，與全世界有趣的人溝通與分享樂趣</string>
     <string name="drift_show_time">%1$d人已看過</string>
     <string name="country">國家</string>
-    <string name="throw_dialog_title">請先發一張自己的照片。</string>
-    <string name="throw_dialog_msg">發些自拍或有趣的照片能吸引更多人的回复並容易結識新朋友。</string>
-    <string name="fish_over">暫時沒有照片可以獲取，先發張照片吧。</string>
     <string name="reply">回复</string>
     <string name="report">舉報</string>
     <string name="report_success">舉報成功</string>
@@ -233,7 +226,7 @@
     <string name="send_video_fail">發送失敗，請重試</string>
     <string name="comment_title">給我們進行評價</string>
     <string name="comment_message">感謝你使用FriendMe，請花點時間給我進行評價，謝謝你對我們的支持。</string>
-    <string name="auto_bind_dialog_msg">連接你的手機號碼以便你的朋友可以找到你！發送短信來綁定手機號，會收取正常的短信費用。</string>
+    <string name="auto_bind_dialog_msg">連接你的手機號碼以便你的朋友可以找到你！發送短信來綁定手機號，會收取正常的短信費用。</string>
     <string name="press_input_text">點擊添加文字</string>
     <string name="set_drift_range">設置撈取範圍</string>
     <string name="all_world">全世界</string>
@@ -243,4 +236,11 @@
     <string name="change_country">修改</string>
     <string name="set_country_first">請先設置所在的國家</string>
     <string name="icon_name">F.Me攝像</string>
+    <string name="show_init_message_1">發布自己或有趣的照片和視頻來結識新的朋友。</string>
+    <string name="show_init_message_2">隨機獲取別人的照片或視頻，與全世界有趣的人溝通與分享樂趣</string>
+    <string name="throw_dialog_title">請先發一張自己的照片或視頻。</string>
+    <string name="throw_dialog_msg">發些自拍或有趣的照片和視頻能吸引更多人的回复並容易結識新朋友。</string>
+    <string name="fish_over">暫時沒有內容可以獲取，自己發一個。</string>
+    <string name="friend_detail_send_photo_hint_text">發消息</string>
+    <string name="init_message_text_one">結識新朋友</string>
 </resources>

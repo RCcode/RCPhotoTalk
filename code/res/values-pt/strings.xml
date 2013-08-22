@@ -8,7 +8,6 @@
     <string name="init_page_login">Login de Usuário RC</string>
     <string name="init_page_signup">Novo Usuário</string>
     <string name="init_message_title_one">Compartilhe momentos</string>
-    <string name="init_message_text_one">Compartilhe momentos especiais na sua vida</string>
     <string name="init_message_title_two">Edição de Fotos</string>
     <string name="init_message_text_two">Torne fotos mais interessantes com áudio e grafite</string>
     <string name="init_message_title_three">Exclusão temporizada</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">Você tem %1$d novas mensagens</string>
     <string name="gcm_friend">Alguém adicionou você como um amigo</string>
-    <string name="friend_detail_send_photo_hint_text">Enviar foto</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">cancelar</string>
@@ -243,4 +241,6 @@
     <string name="change_country">Modificar</string>
     <string name="set_country_first">Por favor, primeiro defina o seu país </string>
     <string name="icon_name">F.Me Capturar</string>
+    <string name="friend_detail_send_photo_hint_text">Enviar mensagem</string>
+    <string name="init_message_text_one">Faça novos amigos, msn pessoal</string>
 </resources>

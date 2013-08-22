@@ -8,7 +8,6 @@
     <string name="init_page_login">RC 사용자 로그인</string>
     <string name="init_page_signup">새 RC 사용자</string>
     <string name="init_message_title_one">소중한 순간 공유하기</string>
-    <string name="init_message_text_one">인생의 특별한 순간순간을 공유해 보세요</string>
     <string name="init_message_title_two">사진 편집</string>
     <string name="init_message_text_two">오디오와 그래피티로 사진을 보다 재미있게 꾸며 보세요</string>
     <string name="init_message_title_three">제한 시간 적용 삭제</string>
@@ -183,7 +182,6 @@
     <!-- gcm -->
     <string name="gcm_message">새 메시지%1$d개가 있습니다</string>
     <string name="gcm_friend">다른 사람이 사용자를 친구로 추가했습니다</string>
-    <string name="friend_detail_send_photo_hint_text">사진 보내기</string>
     <string name="cancel">취소</string>
     <string name="login_account_error">잘못된 계정 또는 암호</string>
     <string name="long_long_ago">오래 전</string>
@@ -244,4 +242,6 @@
     <string name="change_country">수정</string>
     <string name="set_country_first">먼저 국가를 설정하십시오.</string>
     <string name="icon_name">F.Me 캡처</string>
+    <string name="friend_detail_send_photo_hint_text">메시지 보내기</string>
+    <string name="init_message_text_one">새로운 친구 만들기, 비공개 메시지 전송</string>
 </resources>

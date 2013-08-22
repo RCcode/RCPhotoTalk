@@ -8,7 +8,6 @@
     <string name="init_page_login">RC Kul Ot Açma -</string>
     <string name="init_page_signup">Yeni RC Kul.</string>
     <string name="init_message_title_one">Anı paylaşın</string>
-    <string name="init_message_text_one">Yaşamınızdaki her özel anı paylaşın</string>
     <string name="init_message_title_two">Fotoğraf düzenleme</string>
     <string name="init_message_text_two">Ses ve grafiti ile fotoğrafları daha ilginç hale getirin</string>
     <string name="init_message_title_three">Zaman sınırlı silme</string>
@@ -183,7 +182,6 @@
     <!-- gcm -->
     <string name="gcm_message">%1$d yeni mesajınız var</string>
     <string name="gcm_friend">Birisi sizi arkadaş olarak ekledi</string>
-    <string name="friend_detail_send_photo_hint_text">Fotoğraf gönder</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">iptal</string>
@@ -248,4 +246,6 @@
     <string name="change_country">Değiştir</string>
     <string name="set_country_first">Lütfen önce ülkenizi ayarlayın</string>
     <string name="icon_name">F.Me Yakala</string>
+    <string name="friend_detail_send_photo_hint_text">Mesaj gönder</string>
+    <string name="init_message_text_one">Arkadaşlar Edinin, Özel Mesajlaşma</string>
 </resources>

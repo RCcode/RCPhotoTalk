@@ -8,7 +8,6 @@
     <string name="init_page_login">RC-Anmeldung</string>
     <string name="init_page_signup">Neuer RC-Nutzer</string>
     <string name="init_message_title_one">Teilen Sie den Augenblick</string>
-    <string name="init_message_text_one">Teilen Sie besondere Momente in Ihrem Leben mit Freunden</string>
     <string name="init_message_title_two">Fotobearbeitung</string>
     <string name="init_message_text_two">Machen Sie Ihre Fotos mit Audio und Graffiti interessanter</string>
     <string name="init_message_title_three">Geplantes Löschen</string>
@@ -182,7 +181,6 @@
     <!-- gcm -->
     <string name="gcm_message">Sie haben %1$d neue Nachricht(en)</string>
     <string name="gcm_friend">Jemand hat Sie als Freund hinzugefügt</string>
-    <string name="friend_detail_send_photo_hint_text">Foto senden</string>
 
     <!-- 对话框&提示 -->
     <string name="cancel">stornieren</string>
@@ -247,4 +245,6 @@
     <string name="change_country">Ändern</string>
     <string name="set_country_first">Bitte stellen Sie erst Ihr Land ein</string>
     <string name="icon_name">F. Me. Aufzeichnung</string>
+    <string name="friend_detail_send_photo_hint_text">Nachricht senden</string>
+    <string name="init_message_text_one">Neue Freunde, private Messages</string>
 </resources>
