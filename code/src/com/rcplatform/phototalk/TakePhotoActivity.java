@@ -212,6 +212,7 @@ public class TakePhotoActivity extends Activity {
 
 	private void initCamera() {
 		mCameraView = (CameraView) findViewById(R.id.sf_camera_view);
+		mCameraView.clearTempFile();
 		mCameraView.setMaxVideoRecordTime(Constants.TimeMillins.MAX_VIDEO_RECORD_TIME);
 		mCameraView.setTakeOnSuccess(takeOnSuccess);
 		mCameraView.setOnVideoRecordListener(new OnVideoRecordListener() {

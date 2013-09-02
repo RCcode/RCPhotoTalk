@@ -52,7 +52,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 
 	public static final String PARAM_KEY_HASVOICE = "hasvoice";
 	public static final String PARAM_KEY_HASGRAF = "hasgraf";
-	public static final String PARAM_KEY_HASTEXT="hastext";
+	public static final String PARAM_KEY_HASTEXT = "hastext";
 	public static final String PARAM_KEY_INFORMATION_CATE = "informationcate";
 	public static final String PARAM_KEY_VIDEO_PATH = "videopath";
 
@@ -90,7 +90,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private EditText etSearch;
 	private boolean hasVoice = false;
 	private boolean hasGraf = false;
-	private boolean hasText=false;
+	private boolean hasText = false;
 	private CheckBox cbStrange;
 	private boolean sendToStrange = false;
 	private Friend driftFriend = PhotoTalkUtils.getDriftFriend();
@@ -105,7 +105,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 		}
 		hasVoice = getIntent().getBooleanExtra(PARAM_KEY_HASVOICE, false);
 		hasGraf = getIntent().getBooleanExtra(PARAM_KEY_HASGRAF, false);
-		hasText=getIntent().getBooleanExtra(PARAM_KEY_HASTEXT, false);
+		hasText = getIntent().getBooleanExtra(PARAM_KEY_HASTEXT, false);
 		setContentView(R.layout.select_friends_list_view);
 		// 缓存要发送的图片
 		initData();
@@ -246,6 +246,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
+			LogicUtils.checkZipDir(app.getSendZipFileCachePath(), informationCate,hasGraf);
 			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {
@@ -340,7 +341,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 			friends.add(PhotoTalkUtils.getDriftFriend());
 			InformationPageController.getInstance().onDriftThrowed();
 		}
-		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf,hasText, InformationClassification.TYPE_NORMAL, informationCate);
+		LogicUtils.sendPhoto(this, timeLimit, friends, file, hasVoice, hasGraf, hasText, InformationClassification.TYPE_NORMAL, informationCate);
 	}
 
 	@Override

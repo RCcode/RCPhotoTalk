@@ -471,7 +471,7 @@ public class EditPictureActivity extends BaseActivity {
 				else {
 					if (retryPlayTime <= MAX_RETRY_PLAY_TIME) {
 						LogUtil.e("i will retry play video");
-						handler.sendEmptyMessageDelayed(RETRY_PLAY_VIDEO,1000);
+						handler.sendEmptyMessageDelayed(RETRY_PLAY_VIDEO, 1000);
 					}
 				}
 				return true;
@@ -981,6 +981,7 @@ public class EditPictureActivity extends BaseActivity {
 		String tempPath = null;
 
 		try {
+			LogicUtils.checkZipDir(app.getSendZipFileCachePath(), informationCate,mEditePicView.hasDrawed());
 			tempPath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempPath);
 		} catch (Exception e) {

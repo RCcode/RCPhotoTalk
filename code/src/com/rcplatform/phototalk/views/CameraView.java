@@ -20,9 +20,7 @@ import android.hardware.Camera.Size;
 import android.media.AudioManager;
 import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
-import android.media.MediaRecorder.VideoSource;
 import android.os.Build;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -138,8 +136,12 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 	}
 
 	public void clearTempFile() {
-		if (tempFile != null && tempFile.exists())
-			tempFile.delete();
+		File zipDir=new File(app.getSendFileCachePath());
+		if(zipDir.exists()){
+			for(File tempFile:zipDir.listFiles()){
+				tempFile.delete();
+			}
+		}
 	}
 
 	@Override
@@ -562,11 +564,8 @@ public class CameraView extends ViewGroup implements SurfaceHolder.Callback {
 		Thread thread = new Thread() {
 			public void run() {
 				try {
-					tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
-					// tempFile = new
-					// File(Environment.getExternalStorageDirectory(),
-					// "video.3gp");
 					clearTempFile();
+					tempFile = new File(new File(app.getSendFileCachePath()), "video.3gp");
 					CamcorderProfile paramCamcorderProfile = CamcorderProfile.get(CamcorderProfile.QUALITY_480P);
 					mCamera.unlock();
 					if (mMediaRecorder == null)

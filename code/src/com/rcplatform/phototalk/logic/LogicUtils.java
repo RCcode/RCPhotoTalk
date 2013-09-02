@@ -462,4 +462,35 @@ public class LogicUtils {
 		showInformationStateNofitication(context, notificationTitle, context.getString(R.string.send_success), flag, notificationId, intent, false);
 		NotificationSender.getInstance(context).cancelNotification(notificationId, Constants.TimeMillins.SEND_SUCCESS_NOTIFICATION_SHOW_TIME);
 	}
+
+	public static void checkZipDir(String path, int informationCate, boolean isGraf) {
+		File zipDir = new File(path);
+		File[] files = zipDir.listFiles();
+		for (File file : files) {
+			if (isZipFileDirty(file, informationCate, isGraf))
+				file.delete();
+		}
+	}
+
+	private static boolean isZipFileDirty(File file, int informationCate, boolean isGraf) {
+		boolean isDirty = false;
+		switch (informationCate) {
+		case InformationCategory.VIDEO:
+			if (isGraf) {
+				if (file.getName().endsWith(Constants.AUDIO_FORMAT))
+					isDirty = true;
+			} else {
+				if (file.getName().endsWith(Constants.IMAGE_FORMAT) || file.getName().endsWith(Constants.AUDIO_FORMAT)) {
+					isDirty = true;
+				}
+			}
+			break;
+		default:
+			if (file.getName().endsWith(Constants.VIDEO_FORMAT)) {
+				isDirty = true;
+			}
+			break;
+		}
+		return isDirty;
+	}
 }
