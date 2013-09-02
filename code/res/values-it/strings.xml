@@ -244,7 +244,7 @@
     <string name="confirm_user_country_attention">Nota: puoi modificare il paese nel tuo profilo</string>
     <string name="change_country">Modifica</string>
     <string name="set_country_first">Prima imposta il paese</string>
-    <string name="icon_name">Acquisizione F.Me</string>
+    <string name="icon_name">Acquisizione FriendMe</string>
     <string name="friend_detail_send_photo_hint_text">Invia un messaggio</string>
     <string name="init_message_text_one">Trova gli amici, messaggi privati</string>
 </resources>

@@ -244,7 +244,7 @@
     <string name="confirm_user_country_attention">注意：国の設定はご自分のプロフィールで変更できます</string>
     <string name="change_country">変更</string>
     <string name="set_country_first">国を先に設定してください</string>
-    <string name="icon_name">F.Me キャプチャ</string>
+    <string name="icon_name">FriendMe キャプチャ</string>
     <string name="friend_detail_send_photo_hint_text">メッセージを送信</string>
     <string name="init_message_text_one">新しい友達を作って、プライベートメッセージングを</string>
 </resources>

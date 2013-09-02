@@ -463,20 +463,20 @@ public class LogicUtils {
 		NotificationSender.getInstance(context).cancelNotification(notificationId, Constants.TimeMillins.SEND_SUCCESS_NOTIFICATION_SHOW_TIME);
 	}
 
-	public static void checkZipDir(String path, int informationCate, boolean isGraf) {
+	public static void checkZipDir(String path, int informationCate, boolean isGraf,boolean isText) {
 		File zipDir = new File(path);
 		File[] files = zipDir.listFiles();
 		for (File file : files) {
-			if (isZipFileDirty(file, informationCate, isGraf))
+			if (isZipFileDirty(file, informationCate, isGraf,isText))
 				file.delete();
 		}
 	}
 
-	private static boolean isZipFileDirty(File file, int informationCate, boolean isGraf) {
+	private static boolean isZipFileDirty(File file, int informationCate, boolean isGraf,boolean isText) {
 		boolean isDirty = false;
 		switch (informationCate) {
 		case InformationCategory.VIDEO:
-			if (isGraf) {
+			if (isGraf||isText) {
 				if (file.getName().endsWith(Constants.AUDIO_FORMAT))
 					isDirty = true;
 			} else {

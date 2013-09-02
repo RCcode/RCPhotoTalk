@@ -243,7 +243,7 @@
     <string name="confirm_user_country_attention">Catata: Negara Anda bisa diubah di profil</string>
     <string name="change_country">Ubah</string>
     <string name="set_country_first">Pilih negara Anda terlebih dahulu</string>
-    <string name="icon_name">F.Me tangkap</string>
+    <string name="icon_name">FriendMe tangkap</string>
     <string name="friend_detail_send_photo_hint_text">Kirim pesan</string>
     <string name="init_message_text_one">Teman Baru, Pesan Pribadi</string>
 </resources>

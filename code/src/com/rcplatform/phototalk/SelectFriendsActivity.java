@@ -246,7 +246,7 @@ public class SelectFriendsActivity extends BaseActivity implements OnClickListen
 	private void catchBitampOnSDC() {
 		// 创建一个临时的隐藏文件夹
 		try {
-			LogicUtils.checkZipDir(app.getSendZipFileCachePath(), informationCate,hasGraf);
+			LogicUtils.checkZipDir(app.getSendZipFileCachePath(), informationCate, hasGraf, hasText);
 			tempFilePath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempFilePath);
 		} catch (Exception e) {

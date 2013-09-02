@@ -241,7 +241,7 @@
     <string name="confirm_user_country_attention">ملاحظة: يمكنك تعديل بلدك في ملفك التعريف الخاص بك</string>
     <string name="change_country">تعديل</string>
     <string name="set_country_first">يرجى تحديد بلدك أولاً</string>
-    <string name="icon_name">التقاط F.Me</string>
+    <string name="icon_name">التقاط FriendMe</string>
     <string name="friend_detail_send_photo_hint_text">إرسال رسالة</string>
     <string name="init_message_text_one">كوِّن أصدقاء جدد، مراسلة خاصة</string>
 </resources>

@@ -235,7 +235,7 @@
     <string name="confirm_user_country_attention">Note: you can modify your country in your profile</string>
     <string name="change_country">Modify</string>
     <string name="set_country_first">Please set your country first</string>
-    <string name="icon_name">F.Me Capture</string>
+    <string name="icon_name">FriendMe Capture</string>
     <string name="show_init_message_1">Upload your photo or video to make new friends!</string>
     <string name="show_init_message_2">See random messages from others，share messages with fun people around the world!</string>
     <string name="throw_dialog_title">Please upload a photo or video first.</string>

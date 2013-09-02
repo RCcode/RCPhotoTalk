@@ -243,7 +243,7 @@
     <string name="confirm_user_country_attention">Примечание: страну можно изменить в профиле</string>
     <string name="change_country">Изменить</string>
     <string name="set_country_first">Сначала установите страну</string>
-    <string name="icon_name">Съемка F.Me</string>
+    <string name="icon_name">Съемка FriendMe</string>
     <string name="friend_detail_send_photo_hint_text">Отправить сообщение</string>
     <string name="init_message_text_one">Новые друзья, общение наедиине</string>
 </resources>

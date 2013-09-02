@@ -245,7 +245,7 @@
     <string name="confirm_user_country_attention">Nota: puede modificar su país en su perfil</string>
     <string name="change_country">Modificar</string>
     <string name="set_country_first">Configure primero su país</string>
-    <string name="icon_name">Captura de F.Me</string>
+    <string name="icon_name">Captura de FriendMe</string>
     <string name="friend_detail_send_photo_hint_text">Enviar mensaje</string>
     <string name="init_message_text_one">Nuevos amigos, mensaj. Privada</string>
 </resources>

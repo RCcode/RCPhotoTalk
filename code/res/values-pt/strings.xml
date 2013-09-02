@@ -240,7 +240,7 @@
     <string name="confirm_user_country_attention">Observação: você pode modificar o país em seu perfil</string>
     <string name="change_country">Modificar</string>
     <string name="set_country_first">Por favor, primeiro defina o seu país </string>
-    <string name="icon_name">F.Me Capturar</string>
+    <string name="icon_name">FriendMe Capturar</string>
     <string name="friend_detail_send_photo_hint_text">Enviar mensagem</string>
     <string name="init_message_text_one">Faça novos amigos, msn pessoal</string>
 </resources>

@@ -237,7 +237,7 @@
     <string name="confirm_user_country">Confirmez votre pays</string>
     <string name="confirm_user_country_attention">Remarque : vous pouvez modifier votre pays dans votre profil</string>
     <string name="change_country">Modifier</string>
-    <string name="icon_name">Capture F.Me</string>
+    <string name="icon_name">Capture FriendMe</string>
 
     <string name="friend_detail_send_photo_hint_text">Envoyer un message</string>
     <string name="init_message_text_one">Nouveaux amis, messages privés</string>

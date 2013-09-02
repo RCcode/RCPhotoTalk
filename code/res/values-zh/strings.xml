@@ -237,7 +237,7 @@
     <string name="confirm_user_country_attention">提示：你可以在个人资料中修改自己的国家</string>
     <string name="change_country">修改</string>
     <string name="set_country_first">请先设置所在的国家</string>
-    <string name="icon_name">F.Me摄像</string>
+    <string name="icon_name">FriendMe摄像</string>
     <string name="show_init_message_1">发布自己或有趣的照片和视频来结识新的朋友。</string>
     <string name="show_init_message_2">随机获取别人的照片或视频，与全世界有趣的人沟通与分享乐趣</string>
     <string name="throw_dialog_title">请先发一张自己的照片或视频。</string>

@@ -242,7 +242,7 @@
     <string name="confirm_user_country_attention">टिप्पणी: आप अपनी प्रोफ़ाइल में अपना देश संशोधित कर सकते हैं</string>
     <string name="change_country">संशोधित करें</string>
     <string name="set_country_first">कृपया पहले अपना देश सेट करें</string>
-    <string name="icon_name">F.Me कैप्चर</string>
+    <string name="icon_name">FriendMe कैप्चर</string>
     <string name="friend_detail_send_photo_hint_text">संदेश भेजें</string>
     <string name="init_message_text_one">नए मित्र बनाएँ, निजी संदेश-सेवा</string>
 </resources>

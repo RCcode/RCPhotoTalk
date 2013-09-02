@@ -248,7 +248,7 @@
     <string name="confirm_user_country_attention">หมายเหตุ: คุณสามารถปรับเปลี่ยนประเทศของคุณได้ในโปรไฟล์ของคุณ</string>
     <string name="change_country">ปรับเปลี่ยน</string>
     <string name="set_country_first">โปรดกำหนดประเทศของคุณก่อน</string>
-    <string name="icon_name">การจับภาพ F.Me</string>
+    <string name="icon_name">การจับภาพ FriendMe</string>
     <string name="friend_detail_send_photo_hint_text">ส่งข้อความ</string>
     <string name="init_message_text_one">ผูกมิตรกับเพื่อนใหม่ การรับส่งข้อความส่วนตัว</string>
 </resources>

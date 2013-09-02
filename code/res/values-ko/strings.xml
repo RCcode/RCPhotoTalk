@@ -241,7 +241,7 @@
     <string name="confirm_user_country_attention">주: 프로필에서 국가를 수정할 수 있습니다.</string>
     <string name="change_country">수정</string>
     <string name="set_country_first">먼저 국가를 설정하십시오.</string>
-    <string name="icon_name">F.Me 캡처</string>
+    <string name="icon_name">FriendMe 캡처</string>
     <string name="friend_detail_send_photo_hint_text">메시지 보내기</string>
     <string name="init_message_text_one">새로운 친구 만들기, 비공개 메시지 전송</string>
 </resources>

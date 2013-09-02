@@ -981,7 +981,7 @@ public class EditPictureActivity extends BaseActivity {
 		String tempPath = null;
 
 		try {
-			LogicUtils.checkZipDir(app.getSendZipFileCachePath(), informationCate,mEditePicView.hasDrawed());
+			LogicUtils.checkZipDir(app.getSendZipFileCachePath(), informationCate,mEditePicView.hasDrawed(), hasText());
 			tempPath = app.getSendZipFileCachePath() + "/" + System.currentTimeMillis() + ".zip";
 			ZipUtil.ZipFolder(app.getSendFileCachePath(), tempPath);
 		} catch (Exception e) {

@@ -411,7 +411,7 @@
     <string name="confirm_user_country_attention">Note: you can modify your country in your profile</string>
     <string name="change_country">Modify</string>
     <string name="set_country_first">Please set your country first</string>
-    <string name="icon_name">F.Me Capture</string>
+    <string name="icon_name">FriendMe Capture</string>
     <string name="other_country">othercountry</string>
     <string name="other_country_name">Other Country</string>
     <string name="record_too_short">record time too short</string>

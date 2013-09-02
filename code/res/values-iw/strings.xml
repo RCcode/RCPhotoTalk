@@ -242,7 +242,7 @@
     <string name="confirm_user_country_attention">הערה: תוכל לתקן את שם הארץ בפרופיל</string>
     <string name="change_country">תקן</string>
     <string name="set_country_first">הגדר תחילה את ארצך</string>
-    <string name="icon_name">לכידת F.Me</string>
+    <string name="icon_name">לכידת FriendMe</string>
     <string name="friend_detail_send_photo_hint_text">שלח הודעה</string>
     <string name="init_message_text_one">מצא חברים חדשים, מיסור פרטי</string>
 </resources>

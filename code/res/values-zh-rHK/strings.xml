@@ -240,7 +240,7 @@
     <string name="confirm_user_country_attention">提示：你可以在個人資料中修改自己的國家</string>
     <string name="change_country">修改</string>
     <string name="set_country_first">請先設置所在的國家</string>
-    <string name="icon_name">F.Me攝像</string>
+    <string name="icon_name">FriendMe攝像</string>
     <string name="show_init_message_1">發布自己或有趣的照片和視頻來結識新的朋友。</string>
     <string name="show_init_message_2">隨機獲取別人的照片或視頻，與全世界有趣的人溝通與分享樂趣</string>
     <string name="throw_dialog_title">請先發一張自己的照片或視頻。</string>
